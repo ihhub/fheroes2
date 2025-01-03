@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SETTINGS_H
-#define H2SETTINGS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -38,6 +37,8 @@
 
 class IStreamBase;
 class OStreamBase;
+
+inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
 {
@@ -335,7 +336,7 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    void SetProgramPath( const char * );
+    void SetProgramPath( const char * path );
 
     static std::string GetVersion();
 
@@ -362,7 +363,7 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
 
-    std::string path_program;
+    std::string _programPath;
 
     std::string _gameLanguage;
     // Not saved in the config file or savefile
@@ -392,5 +393,3 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
 IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
-
-#endif

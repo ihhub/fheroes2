@@ -1,0 +1,34 @@
+name: CodeChecker
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  codechecker:
+    name: CodeChecker
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies and codechecker
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev clang-tools-18
+        python -m venv ~/.python-venv
+        ~/.python-venv/bin/pip install codechecker
+    - name: Prepare compile_commands.json
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - name: Analyze
+      run: |
+        export PATH=$HOME/.python-venv/bin:$PATH
+        CodeChecker analyze --analyzers clangsa --ctu-all --ctu-ast-mode load-from-pch --output codechecker-output --ignore .codechecker-ignore build/compile_commands.json
+    - name: Display results
+      run: |
+        export PATH=$HOME/.python-venv/bin:$PATH
+        CodeChecker parse --print-steps codechecker-output

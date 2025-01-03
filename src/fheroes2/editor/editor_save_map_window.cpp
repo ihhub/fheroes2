@@ -26,6 +26,7 @@
 #include <ctime>
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -104,7 +105,7 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
@@ -146,7 +147,7 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
-        std::string mapFileName( System::GetBasename( info.filename ) );
+        std::string mapFileName( System::GetFileName( info.filename ) );
         assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
@@ -194,7 +195,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName )
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -234,7 +235,7 @@ namespace Editor
             mapName = fileName;
         }
 
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite(), language );
         const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );
@@ -352,7 +353,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName );
+                    fheroes2::openVirtualKeyboard( fileName, 255 );
                 }
 
                 charInsertPos = fileName.size();
@@ -376,15 +377,17 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
+
                 // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, 17, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
                     }
 
                     mapName = std::move( editableMapName );
-                    mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
+                    mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
@@ -399,9 +402,9 @@ namespace Editor
 
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+                msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
 

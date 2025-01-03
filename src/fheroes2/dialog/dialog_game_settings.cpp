@@ -35,7 +35,6 @@
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "game_mainmenu_ui.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -44,6 +43,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
@@ -135,13 +135,14 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                                dialog.height() + fheroes2::borderWidthPx );
 
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -166,8 +167,9 @@ namespace
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
-        okayButton.draw();
+        fheroes2::ButtonSprite buttonOk( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
+
+        buttonOk.draw();
 
         display.render();
 
@@ -175,14 +177,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -223,7 +220,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
                                                    0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -262,7 +259,7 @@ namespace fheroes2
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );

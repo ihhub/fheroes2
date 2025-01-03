@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef AGG_FILE_H
-#define AGG_FILE_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -54,26 +53,19 @@ namespace fheroes2
 
     struct ICNHeader
     {
-        ICNHeader()
-            : offsetX( 0 )
-            , offsetY( 0 )
-            , width( 0 )
-            , height( 0 )
-            , animationFrames( 0 )
-            , offsetData( 0 )
-        {}
-
-        int16_t offsetX;
-        int16_t offsetY;
-        uint16_t width;
-        uint16_t height;
-        uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-        uint32_t offsetData;
+        int16_t offsetX{ 0 };
+        int16_t offsetY{ 0 };
+        uint16_t width{ 0 };
+        uint16_t height{ 0 };
+        // Used for adventure map animations, this can replace ICN::AnimationFrame.
+        // The frames count is always a modulus of 32 (only 5 bits are used): for animations with more than 31 frames the value is ( totalFrames - 32 ).
+        // TODO: Find a way to detect that 32 was deducted from the animationFrames value if it is possible.
+        // When the 6th bit in animationFrames is set then it is Monochromatic ICN image.
+        uint8_t animationFrames{ 0 };
+        uint32_t offsetData{ 0 };
     };
 
     uint32_t calculateAggFilenameHash( const std::string_view str );
 }
 
 IStreamBase & operator>>( IStreamBase & stream, fheroes2::ICNHeader & icn );
-
-#endif

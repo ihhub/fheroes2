@@ -62,9 +62,9 @@
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
-#include "tools.h"
 
 namespace
 {
@@ -558,8 +558,7 @@ namespace EventProcessing
 
         static void setEventProcessingState( const uint32_t eventType, const bool enable )
         {
-            const auto [dummy, inserted] = eventTypeStatus.emplace( eventType );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = eventTypeStatus.emplace( eventType ); !inserted ) {
                 assert( 0 );
             }
 
@@ -1035,9 +1034,23 @@ namespace EventProcessing
         static void onTouchEvent( LocalEvent & eventHandler, const SDL_TouchFingerEvent & event )
         {
 #if defined( TARGET_PS_VITA )
-            if ( event.touchId != 0 ) {
-                // Ignore rear touchpad on PS Vita
-                return;
+            {
+                // PS Vita has two touchpads: front and rear. The ID of the front touchpad must match the value of
+                // 'SDL_TouchID' used in the 'SDL_AddTouch()' call in the 'VITA_InitTouch()' function in this SDL2
+                // source file: video/vita/SDL_vitatouch.c.
+                constexpr SDL_TouchID frontTouchpadDeviceID
+                {
+#if SDL_VERSION_ATLEAST( 2, 30, 7 )
+                    1
+#else
+                    0
+#endif
+                };
+
+                // Use only front touchpad on PS Vita.
+                if ( event.touchId != frontTouchpadDeviceID ) {
+                    return;
+                }
             }
 #endif
 

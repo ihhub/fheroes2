@@ -20,9 +20,11 @@
 
 #include "ui_font.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 #include <initializer_list>
 
 #include "game_language.h"
@@ -1413,6 +1415,10 @@ namespace
 
             size_t offset = 0;
 
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 6 );
+
             // E with 2 dots on top.
             font[168 - 32].resize( font[37 + offset].width(), font[37 + offset].height() + 3 );
             font[168 - 32].reset();
@@ -1889,6 +1895,10 @@ namespace
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
             size_t offset = 0;
+
+            // ' (right single quotation mark)
+            font[146 - 32] = font[44 - 32];
+            font[146 - 32].setPosition( font[146 - 32].x(), font[146 - 32].y() - 4 );
 
             // E with 2 dots on top.
             font[168 - 32].resize( font[37].width(), font[37].height() + 2 );
@@ -3386,7 +3396,7 @@ namespace
             updateSmallFontLetterShadow( font[252 - 32] );
         }
     }
-
+    // Turkish uses CP1254
     void generateCP1254Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -5267,7 +5277,7 @@ namespace
         fheroes2::SetPixel( released[109], offset + 7, offset + 11, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[109], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // '
+        // ' (right single quotation mark)
         released[114].resize( 3 + offset * 2, 4 + offset * 2 );
         released[114].reset();
         fheroes2::DrawLine( released[114], { offset + 1, offset + 0 }, { offset + 1, offset + 2 }, buttonGoodReleasedColor );
@@ -5637,7 +5647,7 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 214 } ) {
+        for ( const int & charCode : { 196, 197, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
@@ -5786,6 +5796,71 @@ namespace
         released[218 - 32].reset();
         fheroes2::Copy( released[85 - 32], 0, 0, released[218 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
         fheroes2::DrawLine( released[218 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // U with diaeresis.
+        released[220 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 2 );
+        released[220 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 2, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::SetPixel( released[220 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
+    }
+    void generateGoodCP1254ButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
+        const fheroes2::Sprite firstSprite{ released[0] };
+        released.insert( released.end(), 160, firstSprite );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        for ( const int & charCode : { 214, 220, 221 } ) {
+            released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
+        }
+
+        // Offset G with breve.
+        released[208 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+
+        // C with cedilla.
+        released[199 - 32].resize( released[67 - 32].width(), released[67 - 32].height() + 3 );
+        released[199 - 32].reset();
+        fheroes2::Copy( released[67 - 32], 0, 0, released[199 - 32], 0, 0, released[67 - 32].width(), released[67 - 32].height() );
+        fheroes2::DrawLine( released[199 - 32], { offset + 5, offset + 10 }, { offset + 6, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[199 - 32], { offset + 4, offset + 12 }, { offset + 5, offset + 12 }, buttonGoodReleasedColor );
+
+        // G with breve.
+        released[208 - 32].resize( released[71 - 32].width(), released[71 - 32].height() + 3 );
+        released[208 - 32].reset();
+        fheroes2::Copy( released[71 - 32], 0, 0, released[208 - 32], 0, 3, released[71 - 32].width(), released[71 - 32].height() );
+        fheroes2::DrawLine( released[208 - 32], { offset + 3, offset + 0 }, { offset + 4, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+
+        // O with diaeresis.
+        released[214 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 2 );
+        released[214 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[214 - 32], 0, 2, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::SetPixel( released[214 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
+
+        // U with diaeresis.
+        released[220 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 2 );
+        released[220 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 2, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::SetPixel( released[220 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
+
+        // I with dot above.
+        released[221 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 2 );
+        released[221 - 32].reset();
+        fheroes2::Copy( released[73 - 32], 0, 0, released[221 - 32], 0, 2, released[73 - 32].width(), released[73 - 32].height() );
+        fheroes2::SetPixel( released[221 - 32], offset + 2, offset + 0, buttonGoodReleasedColor );
+
+        // S with cedilla.
+        released[222 - 32].resize( released[83 - 32].width(), released[83 - 32].height() + 3 );
+        released[222 - 32].reset();
+        fheroes2::Copy( released[83 - 32], 0, 0, released[222 - 32], 0, 0, released[83 - 32].width(), released[83 - 32].height() );
+        fheroes2::DrawLine( released[222 - 32], { offset + 4, offset + 10 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[222 - 32], { offset + 3, offset + 12 }, { offset + 4, offset + 12 }, buttonGoodReleasedColor );
     }
 }
 
@@ -5841,6 +5916,10 @@ namespace fheroes2
         icnVsSprite[ICN::GRAY_FONT].clear();
         icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
         icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        icnVsSprite[ICN::GOLDEN_GRADIENT_FONT].clear();
+        icnVsSprite[ICN::GOLDEN_GRADIENT_LARGE_FONT].clear();
+        icnVsSprite[ICN::SILVER_GRADIENT_FONT].clear();
+        icnVsSprite[ICN::SILVER_GRADIENT_LARGE_FONT].clear();
     }
 
     bool isAlphabetSupported( const SupportedLanguage language )
@@ -5915,7 +5994,7 @@ namespace fheroes2
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Turkish:
-            // generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Vietnamese:
             // generateGoodCP1258ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
@@ -6002,5 +6081,44 @@ namespace fheroes2
         fheroes2::Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
         icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
         updateSmallFontLetterShadow( icnVsSprite[75] );
+    }
+
+    void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor )
+    {
+        assert( !image.singleLayer() );
+
+        if ( image.width() < 2 || image.height() < 2 ) {
+            return;
+        }
+
+        const int32_t height = image.height();
+        const int32_t width = image.width();
+
+        uint8_t * imageY = image.image();
+        uint8_t * transformY = image.transform();
+
+        const int32_t centerY = std::max( 1, ( height / 2 ) - height % 2 );
+        const uint8_t dColor = outsideColor - insideColor;
+
+        for ( int32_t row = 0; row < height; ++row, imageY += width, transformY += width ) {
+            const int32_t heightScale = ( dColor * std::abs( centerY - row ) ) / centerY;
+            const uint8_t color = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
+
+            uint8_t * imageX = imageY;
+            const uint8_t * imageXEnd = imageX + width;
+            uint8_t * transformX = transformY;
+
+            for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
+                if ( *transformX == 0 ) {
+                    // 21 is the pixel limit of shadows in Base white Font
+                    if ( *imageX < 21 ) {
+                        *imageX = color;
+                    }
+                    else {
+                        *transformX = 1;
+                    }
+                }
+            }
+        }
     }
 }

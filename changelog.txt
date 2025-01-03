@@ -1,3 +1,148 @@
+version 1.1.5 (30 December 2024)
+- add 3 new variants of the Observation Tower object
+- show Monster and Artifact names in the popup dialog of the Editor
+- show the minus sign for the numeric keypad only if a range allows the use of negative values
+- fix Spell Scroll artifact horizontal position on the Adventure Map
+- update the Portuguese translation
+- update the Swedish translation
+- fix the spell cost displayed in the quick info window when a hero has an artifact that reduces this cost
+- add the ability to set Secondary Skills in Witch's Hut inside the Editor
+- fix the mouse interaction in the Editor's spell selection and castle properties windows
+- fix cursor positioning with non-English characters and improve positioning at the end of the line
+- display a description of the mechanics of right-clicking on devices with touch input
+- fix assertion while loading different maps in the Editor
+- add the ability to edit spells in Pyramid inside the Editor
+- add the ability to set the amount in the Resource object in the Editor
+- add the ability to set spells in Shrine in the Editor
+- add a new variant of Stone Liths object
+- update the Russian translation
+- show a warning dialog upon map file loading failure
+- fix spell randomization logic for Artifacts and the Adventure Map objects
+- fix text input cursor setting for multi-line text input with many spaces at the line end
+- fix scrollbars being shifted while changing resolution on the Adventure Map
+- reset the damage info popup when spellcasting is cancelled
+- fix a bug when picking up an object whose type does not match its sprite on the map
+- update the Hungarian translation
+- add range values for default experience within the Editor
+- add missing CP1254 button letters
+- fix French and German ultimate staff sprite with PoL assets
+- updated the Czech translation
+- update the Turkish translation
+- improve the castle reinforcement logic for AI
+- synchronize the maximum allowed number of characters for input and the Virtual Keyboard
+- fix PS Vita touchpad usage
+- add file support for non-quite-POSIX-compliant filesystems (such as Amiga FS)
+- put several dialog box headers in order
+- enable the number input dialog for the recruitment window
+- use the platform-dependent byte order for the SDL audio format
+
+version 1.1.4 (27 November 2024)
+- add Virtual Numpad support for integer inputs
+- add new Lean-To object variant
+- update the Czech translation
+- add Belarusian language support for the Virtual Keyboard
+- improve & speed up the translation-related logic
+- update the German translation related to the Price of Loyalty Campaign
+- update the Swedish translation
+- update initial passability logic
+- fix the attack value estimation for a Hypnotized unit with the ALL_ADJACENT_CELL_MELEE_ATTACK ability
+- improve the retreat logic for archers
+- update the Portuguese Translation
+- fix overlapping text in the High Scores dialog
+- add support of Evil interface for the Scenario Information dialog
+- fix the penalty calculation for enemy units that can evade the engagement during battle
+- fix passability for several objects on maps made the original Editor
+- center Magic Book artifact on the Adventure Map
+- speed up ICN image decoding
+- do not download the wing32.dll for HoMM2 demo version
+- add u with two dots to buttons and translate and improve German buttons
+
+version 1.1.3 (23 October 2024)
+- fix invalid behavior and crash during interaction with whirlpools by heroes on boats
+- fix French small font i with circumflex
+- add Czech Virtual Keyboard support
+- fix rendering of overlapped UI elements
+- shorten map title when too long in several places
+- add missing popup dialogs to buttons within View World mode
+- update the Hungarian translation
+- speed up language switching I/O operations
+- update the Swedish translation
+- fix Sorceress Statue construction fade-in animation
+- fix map titles not being cleared when changing map
+- add language support for fh2m map format
+- update the Portuguese translation
+- use an original image to draw hexagons on the battlefield
+- improve Dismiss button for French and Spanish languages
+- fix event handling for dialogs in No Interface mode
+- improve error handling for I/O operations
+- increase most of object selection windows in the Editor by 50 pixels 
+- update army information after battle before showing any dialogs
+- add missing sand animation for hourglass while waiting for a turn
+- speed up AI calculations on the Adventure Map
+- improve AI decision making while using Dimension Door spell
+- ease object requirements while erasing them in the Editor
+- split long phrases into two lines for battle log
+- fix blinking arrow cursor during scrolling in Editor
+- properly show damage info pop-up dialog for 2-hex monsters during battle
+- make default knowledge value for random hero 1
+- fix inability to erase monsters on the map under certain conditions within the Editor
+- fix the triggering of invalid drag events for the game area when casting certain spells
+- fix out of mini-map mouse dragging behavior in the Editor
+- update the Russian translation
+- add vertical gradient fonts
+- add a popup dialog to the list of resolutions
+- allow to resize vertical buttons for translations
+- fix issues with non-English path detection on Windows
+- center sprites and text in adventure map treasure chest dialog
+- do not discard area selection while moving mouse out of the map in the Editor
+- fix a crash while trying to distribute an army with 1 unit
+
+version 1.1.2 (15 September 2024)
+- preserve the order of artifacts when adding the Spell Book to the artifacts bag
+- update the Portuguese translation
+- speed up MIDI file processing
+- update the German translation
+- update visited status for Tree of Knowledge object
+- update New Secondary Skill dialog
+- add an extra check to verify the game resources not being corrupted
+- update the Hungarian translation
+- limit the use of the Summon Boat by AI for the original maps
+- do not create an undo action in the Editor if nothing was changed for an object
+- allow to undo any castle modifications in the Editor
+- improve AI castle protection logic on the Adventure Map
+- render mirrored troop in dialog properly
+- update resources before showing construction animation inside castle dialog
+- update the Swedish translation
+- fix the audio playback and distance calculation in the 3D Audio mode
+- fix Cliff Nest glowing pixel
+- update Earthquake spell animation and improve its logic to allow bridge and nearby towers demolition
+- disable mouse popup for empty space in map selection window
+- fix AI heroes ignoring patrol limit
+- AI should determine best skill when leveling up heroes
+- update hero spell points indicator after the battle and before performing defeated opponent fade animation
+- fix creature and header overlap in recruit window
+- fix map special conditions render after drop list is closed
+- implement alliances in the Editor
+- fix original maps bottom layer (hacky) placed resources and artifacts
+- add Backslash character to normal and small fonts
+- add missed Small Cliff (Dirt terrain) to the Landscape Miscellaneous objects in the Editor
+- add Ukrainian language virtual keyboard
+- fix inability to save maps within the Editor for some installations
+- add monster statistics popup window inside the Editor monster information dialog
+- Android Toolset: add Russian translation for FH2M file manager
+- fix Anti-Magic spell description
+- update the Polish translation
+- fix mini-map updates while picking up certain objects on the Adventure Map
+- fix invalid animation while picking up an artifact hidden by another object on the Adventure Map
+- remove scouting & movement bonuses for AI-controlled players
+- fix rendering issues in mine selection dialog for the Editor
+- allow to input "/", "*", "-", "+" and "." from the keypad
+- add new River Deltas objects
+- add Slovak virtual keyboard support
+- update the Russian translation
+- fix lagging input controls on some devices
+- AI: properly evaluate the enemy heroes defending the castles
+
 version 1.1.1 (13 July 2024)
 - update the Russian translation
 - properly set tile information upon placing a new object

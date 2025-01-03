@@ -1,5 +1,5 @@
 # Russian translation of fheroes2
-# Copyright (C) 2021 - 2023 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2021 - 2024 fheroes2 team <fhomm2@gmail.com>
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-04 11:59+0000\n"
-"PO-Revision-Date: 2024-07-14 13:40+0300\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -325,6 +325,9 @@ msgstr "СЛУХИ"
 msgid "EVENTS"
 msgstr "СОБЫТИЯ"
 
+msgid "LANGUAGE"
+msgstr "ЯЗЫК"
+
 msgid "Warrior"
 msgstr "Воин"
 
@@ -494,6 +497,9 @@ msgid ""
 "combat spells."
 msgstr ""
 "Сфера Отрицания лишила возможности использовать любые заклинания в битве."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr "Вы не можете произносить заклинания без героя на Вашей стороне."
 
 msgid "You have already cast a spell this round."
 msgstr "Вы уже использовали магию на этом ходу."
@@ -2632,9 +2638,9 @@ msgid ""
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
-"Гильдия воров предоставляет информацию о врагах. Также, Гильдия воров даёт "
-"разведывательную информацию о вражеских городах. Дополнительные гильдии дают "
-"больше информации."
+"Гильдия воров предоставляет информацию об игроках и разведывательную "
+"информацию о вражеских городах. Дополнительные гильдии дают больше "
+"информации."
 
 msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Таверна повышает мораль защитников замка на 1."
@@ -3237,6 +3243,9 @@ msgstr "Устанавливает скорость прокрутки окна 
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
+msgid "Select Language:"
+msgstr "Выберите язык:"
+
 msgid "Click to choose the selected language."
 msgstr "Нажмите, чтобы применить выбранный язык интерфейса игры."
 
@@ -3416,6 +3425,26 @@ msgstr "Выбрать максимальное количество сущес�
 msgid "Select only 1 monster to be recruited."
 msgstr "Выбрать всего 1 существо для найма."
 
+msgid "Select this game resolution."
+msgstr "Выбрать данное разрешение экрана."
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+"Выбор данного разрешения экрана установит увеличенное исходное разрешение "
+"(%{resolution}) в масштабе согласно множителю, указанному в скобках "
+"(%{scale}).\n"
+"\n"
+"Разрешение с целочисленным множителем (2.0x, 3.0x и т. д.) обычно смотрится "
+"лучше, поскольку пиксели кратно масштабируются как в горизонтальном, так и в "
+"вертикальном направлениях."
+
 msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
 
@@ -3467,8 +3496,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Вы действительно хотите удалить файл:"
 
-msgid "Warning!"
-msgstr "Внимание!"
+msgid "Warning"
+msgstr "Внимание"
 
 msgid "Click to save the current game."
 msgstr "Нажмите, чтобы сохранить текущую игру."
@@ -3630,6 +3659,15 @@ msgstr "Цена верности"
 
 msgid "Resurrection"
 msgstr "Возрождение"
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Язык:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -4075,6 +4113,9 @@ msgstr "Выйти из редактора карт."
 msgid "Input %{object} text"
 msgstr "%{object}: введите текст"
 
+msgid "Set %{resource-type} Count"
+msgstr "%{resource-type}: введите количество"
+
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Установить радиус появления великого артефакта"
 
@@ -4107,12 +4148,11 @@ msgid "The map is corrupted."
 msgstr "Карта повреждена."
 
 msgid "Unable to locate data directory to save the map."
-msgstr "Не удалось найти папку для сохранения карты."
+msgstr "Не удалось найти папку с данными для сохранения карты."
 
 msgid "Unable to create a directory to save the map."
 msgstr "Невозможно создать папку для сохранения карты."
 
-#, fuzzy
 msgid "Unable to locate a directory to save the map."
 msgstr "Не удалось найти папку для сохранения карты."
 
@@ -4404,9 +4444,6 @@ msgstr "Вернуться в главное меню редактора кар�
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
 
-msgid "Warning"
-msgstr "Внимание"
-
 msgid "[%{pos}]: %{race} hero"
 msgstr "[%{pos}]: герой - %{race}"
 
@@ -4429,7 +4466,7 @@ msgid "None."
 msgstr "Нет."
 
 msgid "One side defeats another."
-msgstr "Одна сторона побеждает другую."
+msgstr "Один союз побеждает других."
 
 msgid "Accumulate gold."
 msgstr "Накопить золото."
@@ -4437,25 +4474,20 @@ msgstr "Накопить золото."
 msgid "Run out of time."
 msgstr "Не успеть вовремя."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " союз"
+msgstr "1-ый"
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " союз"
+msgstr "2-ой"
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " союз"
+msgstr "3-ий"
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " союз"
+msgstr "4-ый"
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " союз"
+msgstr "5-ый"
 
 msgid "Special Loss Condition"
 msgstr "Особое условие поражения"
@@ -4469,13 +4501,11 @@ msgstr "Разрешить обычную победу"
 msgid "Allow this condition also for AI"
 msgstr "Применять условие и к ИИ"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " союз"
+msgstr "Задать союзы игроков:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " союз"
+msgstr "{%number} союз: "
 
 msgid "Gold:"
 msgstr "Золото:"
@@ -4497,15 +4527,14 @@ msgstr ""
 "победы."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "Поместить игрока цвета %{color} в %{alliance} союз"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
 msgstr ""
-"Если этот флажок установлен, то это событие произойдёт для игрока-человека, "
-"если его цвет %{color}."
+"Если этот флажок установлен, то в %{alliance} союз будет помещён %{color} "
+"игрок."
 
 msgid "Days:"
 msgstr "Дней:"
@@ -4530,18 +4559,27 @@ msgstr "Сложность карты"
 msgid "Map Description"
 msgstr "Описание карты"
 
-msgid "Change Map Name"
-msgstr "Изменить название карты"
-
-msgid "Change Map Description"
-msgstr "Изменить описание карты"
-
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
 msgstr ""
 "Введённое описание карты превышает максимально допустимый размер в 5 строк. "
 "Оно будет сокращено до размера текстового поля описания карты."
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+"Текущий язык карты - %{oldLanguage}. Вы собираетесь сменить его на "
+"%{newLanguage}, после чего некоторые сообщения могут отображаться "
+"некорректно. Вы хотите продолжить?"
+
+msgid "Change Map Name"
+msgstr "Изменить название карты"
+
+msgid "Change Map Description"
+msgstr "Изменить описание карты"
 
 msgid "Click to accept the changes made."
 msgstr "Нажмите, чтобы применить внесённые изменения."
@@ -4557,6 +4595,9 @@ msgstr "Нажмите, чтобы отредактировать календа
 
 msgid "Events"
 msgstr "События"
+
+msgid "Click to change the language of the map."
+msgstr "Изменить язык, используемый на карте."
 
 msgid "Click to change your map name."
 msgstr "Нажмите, чтобы изменить название Вашей карты."
@@ -5322,6 +5363,10 @@ msgstr "улучшить существо"
 msgid "hotkey|dismiss hero or troop"
 msgstr "уволить героя или существо"
 
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "улучшить существо"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5421,49 +5466,36 @@ msgstr "Сетевая игра с несколькими игроками-лю�
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Команда fheroes2 Resurrection представляет"
 
-msgid "Greetings!"
-msgstr "Добро пожаловать!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!"
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+"\n"
+"\n"
+"Чтобы сымитировать нажатие правой кнопки мыши на сенсорном экране, для "
+"получения информации о различных объектах в игре, Вам нужно сначала нажать "
+"на интересующий объект, а затем, удерживая нажатие, коснуться любого другого "
+"места на экране вторым пальцем. Удерживая второй палец, вы можете убрать "
+"первый с экрана и продолжить просмотр информации об объекте."
+
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!\n"
+"\n"
+"\n"
 "Перед началом игры, пожалуйста, выберите разрешение экрана."
 
-msgid "Please Remember"
-msgstr "Запомните"
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-"Вы всегда можете изменить язык, разрешение экрана или настройки игры, нажав "
-"на "
-
-msgid "door"
-msgstr "дверь"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr " в левой части главного меню или с помощью кнопки "
-
-msgid " button from the "
-msgstr ", расположенной в меню "
-
-msgid "NEW GAME"
-msgstr "НОВАЯ ИГРА"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
-".\n"
-"\n"
-"Желаем Вам приятной игры!"
+msgid "Greetings!"
+msgstr "Добро пожаловать!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
@@ -6178,6 +6210,16 @@ msgstr "ПРОБЕЛ"
 msgid "Keyboard|ABC"
 msgstr "АБВ"
 
+msgid "The entered value is invalid."
+msgstr "Введено некорректное значение."
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
+"Введённое значение находится за пределами допустимого диапазона.\n"
+"Оно должно быть не менее %{minValue} и не более %{maxValue}."
+
 msgid "Kingdom Income"
 msgstr "Доход королевства"
 
@@ -6655,7 +6697,7 @@ msgstr ""
 "каким-то непонятным соображениям решила, что %{skill} Вам пригодится."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
-msgstr "Выпив свежей воды Вы получаете бонус удачи в следующем бою."
+msgstr "Выпив свежей воды, Вы получаете бонус удачи в следующем бою."
 
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Вы пьёте из фонтана, но ничего не происходит."
@@ -7730,13 +7772,18 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+"Сфинкс загадал Вам следующую загадку:\n"
+"\n"
+"'"
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
-"Сфинкс загадал Вам следующую загадку: \n"
-"\n"
-"'%{riddle}'\n"
+"'\n"
 "\n"
 "Ваш ответ?"
 
@@ -8679,6 +8726,12 @@ msgstr "Молниеносная"
 msgid "speed|Instant"
 msgstr "Мгновенная"
 
+msgid "Click this button to adjust the level of zoom."
+msgstr "Нажмите эту кнопку, чтобы изменить коэффициент масштабирования."
+
+msgid "Zoom"
+msgstr "Масштаб"
+
 msgid "week|Squirrel"
 msgstr "Белки"
 
@@ -8998,7 +9051,7 @@ msgid "Mossy Rock"
 msgstr "Мшистая скала"
 
 msgid "Watch Tower"
-msgstr "Обзорная башня"
+msgstr "Сторожевая вышка"
 
 msgid "Tree House"
 msgstr "Домик на дереве"
@@ -9667,7 +9720,10 @@ msgid "% immunity to %{spell} spell"
 msgstr "% устойчивости к заклинанию %{spell}"
 
 msgid "% damage from Elemental spells"
-msgstr "% урона от заклинаний"
+msgstr "% урона от заклинаний стихий"
+
+msgid "% damage from %{spell} spell"
+msgstr "% урона от заклинания %{spell}"
 
 msgid "% chance to Dispel beneficial spells"
 msgstr "% шанс развеять полезные заклинания"
@@ -9735,20 +9791,41 @@ msgstr "Элементаль"
 msgid "No Morale"
 msgstr "Нет морали"
 
-msgid "200% damage from Fire spells"
-msgstr "200% урона от заклинаний огня"
+msgid "Earth creature"
+msgstr "Земное существо"
 
-msgid "200% damage from Cold spells"
-msgstr "200% урона от заклинаний холода"
+msgid "Air creature"
+msgstr "Воздушное существо"
 
-msgid "% damage from %{spell} spell"
-msgstr "% урона от заклинания %{spell}"
+msgid "Fire creature"
+msgstr "Огненное существо"
 
-msgid "% immunity to "
-msgstr "% невосприимчивости к "
+msgid "Water creature"
+msgstr "Водное существо"
+
+msgid "Double damage from Fire spells"
+msgstr "Двойной урон от заклинаний огня"
+
+msgid "Double damage from Cold spells"
+msgstr "Двойной урон от заклинаний холода"
+
+msgid "Double damage from Earth creatures"
+msgstr "Двойной урон от земных существ"
+
+msgid "Double damage from Air creatures"
+msgstr "Двойной урон от воздушных существ"
+
+msgid "Double damage from Fire creatures"
+msgstr "Двойной урон от огненных существ"
+
+msgid "Double damage from Water creatures"
+msgstr "Двойной урон от водных существ"
 
 msgid "Lightning"
 msgstr "Молния"
+
+msgid "% immunity to "
+msgstr "% невосприимчивости к "
 
 msgid "% damage from "
 msgstr "% урона от "
@@ -11431,7 +11508,6 @@ msgstr "Экзорцизм"
 msgid "Anti-Magic"
 msgstr "Антимагия"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
 msgstr "Защищает выбранный отряд от действия всех заклинаний."
 
@@ -11905,6 +11981,40 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Please Remember"
+#~ msgstr "Запомните"
+
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr ""
+#~ "Вы всегда можете изменить язык, разрешение экрана или настройки игры, "
+#~ "нажав на "
+
+#~ msgid "door"
+#~ msgstr "дверь"
+
+#~ msgid " on the left side of the Main Menu, or with the "
+#~ msgstr " в левой части главного меню или с помощью кнопки "
+
+#~ msgid " button from the "
+#~ msgstr ", расположенной в меню "
+
+#~ msgid "NEW GAME"
+#~ msgstr "НОВАЯ ИГРА"
+
+#~ msgid ""
+#~ " menu. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ ".\n"
+#~ "\n"
+#~ "Желаем Вам приятной игры!"
+
+#~ msgid "Warning!"
+#~ msgstr "Внимание!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Болванка 1"

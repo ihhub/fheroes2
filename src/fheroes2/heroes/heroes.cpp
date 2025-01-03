@@ -23,6 +23,7 @@
 
 #include "heroes.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -30,7 +31,6 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
@@ -45,7 +45,6 @@
 #include "direction.h"
 #include "game_io.h"
 #include "game_static.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
 #include "image.h"
@@ -561,7 +560,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
         // An empty name can be set in the original Editor which is wrong.
-        std::string temp = dataStream.toString( 13 );
+        std::string temp = dataStream.getString( 13 );
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
@@ -885,7 +884,7 @@ double Heroes::getMeetingValue( const Heroes & receivingHero ) const
 
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
-    const uint32_t canFit = HEROESMAXARTIFACT - receivingHero.bag_artifacts.CountArtifacts();
+    const uint32_t canFit = BagArtifacts::maxCapacity - receivingHero.bag_artifacts.CountArtifacts();
 
     double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
@@ -904,7 +903,7 @@ int Heroes::GetAttack() const
 int Heroes::GetAttack( std::string * strs ) const
 {
     int result = attack + GetAttackModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 int Heroes::GetDefense() const
@@ -915,7 +914,7 @@ int Heroes::GetDefense() const
 int Heroes::GetDefense( std::string * strs ) const
 {
     int result = defense + GetDefenseModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 int Heroes::GetPower() const
@@ -926,7 +925,7 @@ int Heroes::GetPower() const
 int Heroes::GetPower( std::string * strs ) const
 {
     const int result = power + GetPowerModificator( strs );
-    return result < 1 ? 1 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 1, 255 );
 }
 
 int Heroes::GetKnowledge() const
@@ -937,7 +936,7 @@ int Heroes::GetKnowledge() const
 int Heroes::GetKnowledge( std::string * strs ) const
 {
     int result = knowledge + GetKnowledgeModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    return std::clamp( result, 0, 255 );
 }
 
 void Heroes::IncreasePrimarySkill( int skill )
@@ -1133,7 +1132,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         army.Reset( false );
     }
 
-    world.GetTiles( pt.x, pt.y ).setHero( this );
+    world.getTile( pt.x, pt.y ).setHero( this );
 
     kingdom.AddHero( this );
     // Update the set of recruits in the kingdom
@@ -1265,10 +1264,10 @@ Castle * Heroes::inCastleMutable() const
     return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
-bool Heroes::isVisited( const Maps::Tiles & tile, Visit::Type type ) const
+bool Heroes::isVisited( const Maps::Tile & tile, Visit::Type type ) const
 {
     const int32_t index = tile.GetIndex();
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
@@ -1288,8 +1287,8 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
 
 void Heroes::SetVisited( int32_t index, Visit::Type type )
 {
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const Maps::Tile & tile = world.getTile( index );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, objectType );
@@ -1301,8 +1300,8 @@ void Heroes::SetVisited( int32_t index, Visit::Type type )
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( false );
+    const Maps::Tile & tile = world.getTile( tileIndex );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
@@ -1313,8 +1312,8 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 
 void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
 {
-    const Maps::Tiles & tile = world.GetTiles( index );
-    const uint32_t uid = tile.GetObjectUID();
+    const Maps::Tile & tile = world.getTile( index );
+    const uint32_t uid = tile.getMainObjectPart()._uid;
     int wide = 0;
 
     switch ( objectType ) {
@@ -1331,9 +1330,9 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
         break;
     }
 
-    if ( tile.GetObject( false ) == objectType && wide ) {
+    if ( tile.getMainObjectType( false ) == objectType && wide ) {
         for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
+            if ( Maps::isValidAbsIndex( ii ) && world.getTile( ii ).getMainObjectPart()._uid == uid )
                 SetVisited( ii, type );
     }
 }
@@ -1624,7 +1623,7 @@ bool Heroes::isMoveEnabled() const
 
 bool Heroes::CanMove() const
 {
-    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    const Maps::Tile & tile = world.getTile( GetIndex() );
     return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
@@ -1703,7 +1702,7 @@ uint32_t Heroes::GetSecondarySkillValue( int skill ) const
 
 bool Heroes::HasMaxSecondarySkill() const
 {
-    return HEROESMAXSKILL <= secondary_skills.Count();
+    return maxNumOfSecSkills <= secondary_skills.Count();
 }
 
 int Heroes::GetLevelSkill( int skill ) const
@@ -1907,7 +1906,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
         return false;
     }
 
-    if ( path.isValidForMovement() && !ignorePath ) {
+    if ( !ignorePath && path.isValidForMovement() ) {
         return path.hasAllowedSteps();
     }
 
@@ -1953,7 +1952,7 @@ void Heroes::Dismiss( int reason )
     }
     SetColor( Color::NONE );
 
-    world.GetTiles( GetIndex() ).setHero( nullptr );
+    world.getTile( GetIndex() ).setHero( nullptr );
     SetIndex( -1 );
 
     modes = 0;
@@ -2027,9 +2026,9 @@ void Heroes::Move2Dest( const int32_t dstIndex )
         return;
     }
 
-    world.GetTiles( currentIndex ).setHero( nullptr );
+    world.getTile( currentIndex ).setHero( nullptr );
     SetIndex( dstIndex );
-    world.GetTiles( dstIndex ).setHero( this );
+    world.getTile( dstIndex ).setHero( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
@@ -2037,7 +2036,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
     if ( isValidId( id ) )
         switch ( type ) {
         case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            return fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
@@ -2047,7 +2046,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
                 return iter->second;
             }
 
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( id ), 0 );
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 
@@ -2134,7 +2133,7 @@ std::string Heroes::String() const
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
-       << "save object     : " << MP2::StringObject( world.GetTiles( GetIndex() ).GetObject( false ) ) << std::endl
+       << "save object     : " << MP2::StringObject( world.getTile( GetIndex() ).getMainObjectType( false ) ) << std::endl
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( CUSTOM ) ? "CUSTOM," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" )
        << std::endl;
 
@@ -2145,7 +2144,7 @@ std::string Heroes::String() const
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
         for ( const auto & info : visit_object ) {
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
+            os << MP2::StringObject( info.second ) << "(" << info.first << "), ";
         }
 
         os << std::endl;
@@ -2226,98 +2225,61 @@ double Heroes::getAIMinimumJoiningArmyStrength() const
     return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
 }
 
-AllHeroes::~AllHeroes()
-{
-    clear();
-}
-
 void AllHeroes::Init()
 {
-    clear();
+    Clear();
 
-    reserve( Heroes::HEROES_COUNT );
+    _heroes.reserve( Heroes::HEROES_COUNT );
 
-    push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
 
     for ( const int race : std::array<int, 6>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR } ) {
         const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
         assert( minHeroId <= maxHeroId );
 
         for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
-            push_back( new Heroes( hid, race ) );
+            _heroes.emplace_back( std::make_unique<Heroes>( hid, race ) );
         }
     }
 
     // SW campaign
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ROLAND, Race::WZRD, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::CORLAGON, Race::KNGT, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ELIZA, Race::SORC, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::HALTON, Race::KNGT, 5000 ) );
+    _heroes.emplace_back( std::make_unique<Heroes>( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
     if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5000 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5000 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::SOLMYR, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DAINWIN, Race::WRLK, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::MOG, Race::NECR, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::JOSEPH, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::CEALLACH, Race::KNGT, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::MARTINE, Race::SORC, 5000 ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::JARKONAS, Race::BARB, 5000 ) );
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
         for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i ) {
-            push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+            _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
         }
     }
 
     if ( IS_DEVEL() ) {
-        push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::DEBUG_HERO, Race::WRLK ) );
     }
     else {
-        push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+        _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
-    assert( size() == Heroes::HEROES_COUNT );
-}
-
-void AllHeroes::clear()
-{
-    std::for_each( begin(), end(), []( Heroes * hero ) {
-        assert( hero != nullptr );
-
-        delete hero;
-    } );
-
-    std::vector<Heroes *>::clear();
-}
-
-Heroes * VecHeroes::Get( int hid ) const
-{
-    if ( !Heroes::isValidId( hid ) ) {
-        return nullptr;
-    }
-
-    return ( *this )[hid];
-}
-
-Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
-{
-    for ( Heroes * hero : *this ) {
-        assert( hero != nullptr );
-        if ( hero->isPosition( center ) ) {
-            return hero;
-        }
-    }
-
-    return nullptr;
+    assert( _heroes.size() == Heroes::HEROES_COUNT );
 }
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
@@ -2395,31 +2357,98 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
     std::vector<int> heroesForHireNotRecruits = heroesForHire;
 
     heroesForHireNotRecruits.erase( std::remove_if( heroesForHireNotRecruits.begin(), heroesForHireNotRecruits.end(),
-                                                    [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
+                                                    [this]( const int heroID ) {
+                                                        assert( heroID >= 0 && static_cast<size_t>( heroID ) < _heroes.size() && _heroes[heroID] );
+
+                                                        return _heroes[heroID]->Modes( Heroes::RECRUIT );
+                                                    } ),
                                     heroesForHireNotRecruits.end() );
 
-    if ( !heroesForHireNotRecruits.empty() ) {
-        return at( Rand::Get( heroesForHireNotRecruits ) );
+    // If there are no heroes who are not yet available for recruitment, then allow heroes to be available for recruitment in several kingdoms at the same time
+    const int heroID = heroesForHireNotRecruits.empty() ? Rand::Get( heroesForHire ) : Rand::Get( heroesForHireNotRecruits );
+    assert( heroID >= 0 && static_cast<size_t>( heroID ) < _heroes.size() && _heroes[heroID] );
+
+    return _heroes[heroID].get();
+}
+
+Heroes * AllHeroes::Get( const int hid ) const
+{
+    if ( !Heroes::isValidId( hid ) ) {
+        return nullptr;
     }
 
-    // There are no heroes who are not yet available for recruitment, allow heroes to be available for recruitment in several kingdoms at the same time
-    return at( Rand::Get( heroesForHire ) );
+    assert( hid >= 0 && static_cast<size_t>( hid ) < _heroes.size() && _heroes[hid] );
+
+    return _heroes[hid].get();
+}
+
+Heroes * AllHeroes::Get( const fheroes2::Point & center ) const
+{
+    for ( Heroes * hero : *this ) {
+        assert( hero != nullptr );
+
+        if ( hero->isPosition( center ) ) {
+            return hero;
+        }
+    }
+
+    return nullptr;
 }
 
 void AllHeroes::Scout( int colors ) const
 {
     for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );
-        if ( colors & hero->GetColor() ) {
-            hero->Scout( hero->GetIndex() );
+
+        if ( !( hero->GetColor() & colors ) ) {
+            continue;
         }
+
+        hero->Scout( hero->GetIndex() );
     }
+}
+
+void AllHeroes::ResetModes( const uint32_t modes ) const
+{
+    std::for_each( begin(), end(), [modes]( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ResetModes( modes );
+    } );
+}
+
+void AllHeroes::NewDay() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewDay();
+    } );
+}
+
+void AllHeroes::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewWeek();
+    } );
+}
+
+void AllHeroes::NewMonth() const
+{
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        hero->ActionNewMonth();
+    } );
 }
 
 Heroes * AllHeroes::FromJail( int32_t index ) const
 {
     for ( Heroes * hero : *this ) {
         assert( hero != nullptr );
+
         if ( hero->Modes( Heroes::JAIL ) && index == hero->GetIndex() ) {
             return hero;
         }
@@ -2430,37 +2459,43 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes )
 {
-    stream << static_cast<uint32_t>( heroes.size() );
+    stream.put32( static_cast<uint32_t>( heroes.size() ) );
 
-    for ( const Heroes * hero : heroes ) {
+    std::for_each( heroes.begin(), heroes.end(), [&stream]( const Heroes * hero ) {
         assert( hero != nullptr );
+
         stream << hero->GetID();
-    }
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
 {
-    uint32_t size;
-    stream >> size;
+    const uint32_t size = stream.get32();
 
     heroes.clear();
+    heroes.reserve( size );
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        int32_t hid;
+        int32_t hid{ -1 };
         stream >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
             // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE. UNKNOWN hero shouldn't exist!
             if ( hid == 72 || !Heroes::isValidId( hid + 1 ) ) {
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
             Heroes * hero = world.GetHeroes( hid + 1 );
             if ( hero == nullptr ) {
-                // Most likely save file is corrupted.
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
@@ -2468,12 +2503,17 @@ IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes )
         }
         else {
             if ( !Heroes::isValidId( hid ) ) {
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
             Heroes * hero = world.GetHeroes( hid );
             if ( hero == nullptr ) {
-                // Most likely save file is corrupted.
+                // Most likely the save file is corrupted.
+                stream.setFail();
+
                 continue;
             }
 
@@ -2493,11 +2533,8 @@ OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero )
     stream << base;
 
     // Heroes
-    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-
-    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
-                  << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
-                  << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
+    return stream << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race << hero._objectTypeUnderHero
+                  << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
@@ -2533,9 +2570,6 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
         }
     }
 
-    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
-
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
@@ -2554,11 +2588,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
         }
     }
     else {
-        ObjectTypeUnderHeroType temp = 0;
-
-        stream >> temp;
-
-        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        stream >> hero._objectTypeUnderHero;
     }
 
     stream >> hero.path >> hero.direction >> hero.sprite_index;
@@ -2578,44 +2608,55 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     stream >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
+
     return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes )
 {
-    stream << static_cast<uint32_t>( heroes.size() );
+    stream.put32( static_cast<uint32_t>( heroes._heroes.size() ) );
 
-    for ( Heroes * const & hero : heroes ) {
+    std::for_each( heroes.begin(), heroes.end(), [&stream]( const Heroes * hero ) {
+        assert( hero != nullptr );
+
         stream << *hero;
-    }
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes )
 {
-    uint32_t size;
-    stream >> size;
+    std::vector<std::unique_ptr<Heroes>> & heroesRef = heroes._heroes;
 
-    heroes.clear();
-    heroes.resize( size, nullptr );
+    const uint32_t size = stream.get32();
+
+    heroesRef.clear();
+    heroesRef.reserve( size );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         // Before FORMAT_VERSION_1010_RELEASE UNKNOWN hero was last while now it is first.
         // In order to preserve the original order of heroes we have to do the below trick.
-        for ( size_t i = 1; i < heroes.size(); ++i ) {
-            heroes[i] = new Heroes();
-            stream >> *heroes[i];
-        }
+        if ( size > 0 ) {
+            heroesRef.emplace_back( std::make_unique<Heroes>() );
 
-        heroes[0] = new Heroes();
-        stream >> *heroes[0];
+            for ( uint32_t i = 1; i < size; ++i ) {
+                auto hero = std::make_unique<Heroes>();
+                stream >> *hero;
+
+                heroesRef.emplace_back( std::move( hero ) );
+            }
+
+            stream >> *( heroesRef[0] );
+        }
     }
     else {
-        for ( Heroes *& hero : heroes ) {
-            hero = new Heroes();
+        for ( uint32_t i = 0; i < size; ++i ) {
+            auto hero = std::make_unique<Heroes>();
             stream >> *hero;
+
+            heroesRef.emplace_back( std::move( hero ) );
         }
     }
 

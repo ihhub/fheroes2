@@ -33,7 +33,6 @@
 #include "dialog_selectitems.h"
 #include "editor_interface.h"
 #include "editor_options.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
 #include "image.h"
@@ -47,6 +46,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
@@ -313,8 +313,8 @@ namespace Interface
         // Editor panel consists of 3 instrument button rows, instrument panel and 2 system button rows.
         // Each button row is 36 pixels height.
         const fheroes2::Display & display = fheroes2::Display::instance();
-        const int32_t instrumentPanelWidth = display.width() - displayX - BORDERWIDTH;
-        const int32_t bottomBorderOffset = ( display.height() > fheroes2::Display::DEFAULT_HEIGHT + BORDERWIDTH ) ? BORDERWIDTH : 0;
+        const int32_t instrumentPanelWidth = display.width() - displayX - fheroes2::borderWidthPx;
+        const int32_t bottomBorderOffset = ( display.height() > fheroes2::Display::DEFAULT_HEIGHT + fheroes2::borderWidthPx ) ? fheroes2::borderWidthPx : 0;
         const int32_t instrumentPanelHeight = display.height() - displayY - fheroes2::AGG::GetICN( ICN::EDITBTNS, 0 ).height() * 5 - bottomBorderOffset;
 
         _instrumentPanelBackground = makeInstrumentPanelBackground( instrumentPanelWidth, instrumentPanelHeight );
@@ -878,7 +878,7 @@ namespace Interface
                         return;
                     }
 
-                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
+                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.getTile( tileIndex ).GetGround() );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
                 } );

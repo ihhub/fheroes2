@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,7 +39,6 @@
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -52,6 +52,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -63,12 +64,13 @@ namespace
 
     const fheroes2::Size messageArea{ 300, 210 };
     const int32_t elementOffset{ 9 };
-    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
+    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2 - 3 * elementOffset - messageArea.width };
 }
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                             const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
@@ -79,7 +81,7 @@ namespace Editor
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 140, true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2, messageArea.height + 140, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         int32_t offsetY = dialogRoi.y + elementOffset;
@@ -98,7 +100,7 @@ namespace Editor
 
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+        text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
         const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
@@ -293,11 +295,12 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true, true ) ) {
+                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();
-                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
+                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
                     text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }

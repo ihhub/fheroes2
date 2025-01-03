@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_ITEMSBAR_H
-#define H2INTERFACE_ITEMSBAR_H
+#pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <utility>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "localevent.h"
 
@@ -180,10 +178,6 @@ namespace Interface
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
-        std::vector<Item *> items;
-
-        std::vector<int32_t> _customItemsCountInRow;
-
         virtual void SetContentItems()
         {
             // Do nothing.
@@ -195,11 +189,6 @@ namespace Interface
         }
 
         ItemsIterator GetEndItemIter()
-        {
-            return items.end();
-        }
-
-        virtual ItemsIterator GetCurItemIter()
         {
             return items.end();
         }
@@ -270,6 +259,9 @@ namespace Interface
 
             return { items.end(), {} };
         }
+
+        std::vector<Item *> items;
+        std::vector<int32_t> _customItemsCountInRow;
 
     private:
         void calculateItemsPos()
@@ -455,15 +447,12 @@ namespace Interface
         using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
         using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
-        ItemsIterator topItem;
-        ItemIterPos curItemPos;
-
-        ItemsIterator GetCurItemIter() override
+        ItemsIterator GetCurItemIter()
         {
             return curItemPos.first;
         }
 
-        void SetContentItems() override
+        void SetContentItems() final
         {
             ResetSelected();
         }
@@ -587,7 +576,8 @@ namespace Interface
 
             return false;
         }
+
+        ItemsIterator topItem;
+        ItemIterPos curItemPos;
     };
 }
-
-#endif

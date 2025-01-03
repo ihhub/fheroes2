@@ -56,8 +56,10 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_kingdom.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -99,18 +101,18 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     const fheroes2::Text heroDescriptionText( std::move( str ), fheroes2::FontType::normalWhite() );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), fheroes2::boxAreaWidthPx );
 
-    const int32_t dialogHeight = recruitHeroText.height( BOXAREA_WIDTH ) + spacer + portrait_frame.height() + spacer + heroDescriptionText.height( BOXAREA_WIDTH )
-                                 + spacer + rbs.GetArea().height;
+    const int32_t dialogHeight = recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer + portrait_frame.height() + spacer
+                                 + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer + rbs.GetArea().height;
 
     const Dialog::FrameBox box( dialogHeight, true );
     const fheroes2::Rect & dialogRoi = box.GetArea();
 
-    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, BOXAREA_WIDTH, display );
+    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, fheroes2::boxAreaWidthPx, display );
 
     // portrait and frame
-    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( BOXAREA_WIDTH ) + spacer };
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( fheroes2::boxAreaWidthPx ) + spacer };
     fheroes2::Blit( portrait_frame, display, pos.x, pos.y );
 
     const fheroes2::Rect heroPortraitArea( pos.x, pos.y, portrait_frame.width(), portrait_frame.height() );
@@ -119,9 +121,9 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     hero->PortraitRedraw( pos.x, pos.y, PORT_BIG, display );
 
     pos.y += portrait_frame.height() + spacer;
-    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, BOXAREA_WIDTH, display );
+    heroDescriptionText.draw( dialogRoi.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( BOXAREA_WIDTH ) + spacer );
+    rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -147,8 +149,8 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( buttonOkay.isEnabled() && ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
             return Dialog::OK;
@@ -176,13 +178,13 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     return Dialog::CANCEL;
 }
 
-int Castle::DialogBuyCastle( bool buttons ) const
+int Castle::DialogBuyCastle( const bool hasButtons /* = true */ ) const
 {
     const BuildingInfo info( *this, BUILD_CASTLE );
-    return info.DialogBuyBuilding( buttons ) ? Dialog::OK : Dialog::CANCEL;
+    return info.DialogBuyBuilding( hasButtons ) ? Dialog::OK : Dialog::CANCEL;
 }
 
-Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwellingTobuild )
+Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwellingTobuild )
 {
     if ( !isBuild( BUILD_CASTLE ) ) {
         // It is not possible to open this dialog without a built castle!
@@ -203,7 +205,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -283,7 +286,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
+    const bool isSkipTavernInteraction = ( Race::NECR == _race ) && ( conf.getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();
@@ -374,35 +377,35 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.y = cur_pt.y + 170;
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetAttack() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetDefense() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetPower() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetPower() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         dst_pt.y += skillOffsetY;
         text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.set( std::to_string( captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.set( std::to_string( _captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
         text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         fheroes2::Copy( spriteSpreadArmyFormat, 0, 0, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y, rectSpreadArmyFormat.width, rectSpreadArmyFormat.height );
         fheroes2::Copy( spriteGroupedArmyFormat, 0, 0, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y, rectGroupedArmyFormat.width,
                         rectGroupedArmyFormat.height );
 
-        if ( army.isSpreadFormation() ) {
+        if ( _army.isSpreadFormation() ) {
             cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
         }
         else {
@@ -467,12 +470,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::Button buttonPrevCastle( cur_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
-    const fheroes2::Rect buttonPrevCastleArea( buttonPrevCastle.area() );
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t statusBarWidth = bar.width();
-    dst_pt.x = cur_pt.x + buttonPrevCastleArea.width;
+    dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
     fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, statusBarWidth, bar.height() );
 
     StatusBar statusBar;
@@ -483,13 +485,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
-    const fheroes2::Rect buttonNextCastleArea( buttonNextCastle.area() );
 
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_EXIT_TOWN, 0, 1 );
-    const fheroes2::Rect buttonExitArea( buttonExit.area() );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -502,7 +502,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     // redraw resource panel
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
-    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExitArea.y - rectResource.y - 3 );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
     auto recruitHeroDialog = [this, &buttonExit]( Heroes * hero ) {
         const fheroes2::ButtonRestorer exitRestorer( buttonExit );
@@ -518,23 +518,23 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExitArea ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
         if ( buttonPrevCastle.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonPrevCastleArea ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
+            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) );
 
-            if ( le.MouseClickLeft( buttonPrevCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
+            if ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::PrevConstructionWindow;
             }
         }
         if ( buttonNextCastle.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonNextCastleArea ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
+            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) );
 
-            if ( le.MouseClickLeft( buttonNextCastleArea ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
+            if ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::NextConstructionWindow;
             }
         }
@@ -546,7 +546,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         else if ( le.isMouseRightButtonPressedInArea( resActiveArea ) ) {
             fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonExitArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseCursorPosInArea( dwelling1.GetArea() ) && dwelling1.QueueEventProcessing( buttonExit ) ) {
@@ -578,7 +578,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             return ConstructionDialogResult::Build;
         }
         if ( !isSkipTavernInteraction && le.isMouseCursorPosInArea( buildingTavern.GetArea() ) && buildingTavern.QueueEventProcessing( buttonExit ) ) {
-            dwellingTobuild = ( Race::NECR == race ? BUILD_SHRINE : BUILD_TAVERN );
+            dwellingTobuild = ( Race::NECR == _race ? BUILD_SHRINE : BUILD_TAVERN );
             return ConstructionDialogResult::Build;
         }
         if ( le.isMouseCursorPosInArea( buildingThievesGuild.GetArea() ) && buildingThievesGuild.QueueEventProcessing( buttonExit ) ) {
@@ -635,15 +635,15 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
 
         if ( isCaptainBuilt ) {
-            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !_army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( true );
+                _army.SetSpreadFormation( true );
             }
-            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
+            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && _army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
                 display.render( armyFormatRenderRect );
-                army.SetSpreadFormation( false );
+                _army.SetSpreadFormation( false );
             }
             else if ( le.isMouseRightButtonPressedInArea( rectSpreadArmyFormat ) ) {
                 fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
@@ -656,22 +656,22 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         // Right click
         if ( hero1 && le.isMouseRightButtonPressedInArea( rectHero1 ) ) {
             LocalEvent::Get().reset();
-            hero1->OpenDialog( true, true, false, false, false, false );
+            hero1->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.isMouseRightButtonPressedInArea( rectHero2 ) ) {
             LocalEvent::Get().reset();
-            hero2->OpenDialog( true, true, false, false, false, false );
+            hero2->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonNextCastleArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastleArea ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
         }
 
@@ -738,14 +738,14 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
         else if ( isCaptainBuilt && le.isMouseCursorPosInArea( rectGroupedArmyFormat ) )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
-        else if ( le.isMouseCursorPosInArea( buttonExitArea ) )
+        else if ( le.isMouseCursorPosInArea( buttonExit.area() ) )
             statusBar.ShowMessage( _( "Exit Castle Options" ) );
         else if ( le.isMouseCursorPosInArea( resActiveArea ) )
             statusBar.ShowMessage( _( "Show Income" ) );
-        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastleArea ) ) {
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
             statusBar.ShowMessage( _( "Show previous town" ) );
         }
-        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastleArea ) ) {
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
             statusBar.ShowMessage( _( "Show next town" ) );
         }
         else {

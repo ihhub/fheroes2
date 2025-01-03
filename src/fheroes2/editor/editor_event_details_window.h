@@ -26,7 +26,13 @@ namespace Maps::Map_Format
     struct AdventureMapEventMetadata;
 }
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors );
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                             const fheroes2::SupportedLanguage language );
 }

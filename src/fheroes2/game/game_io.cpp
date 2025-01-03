@@ -147,7 +147,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // End-of-data marker
     dataStream << SAV2ID3;
-    if ( dataStream.fail() || !Compression::writeIntoFileStream( fileStream, dataStream ) ) {
+    if ( dataStream.fail() || !Compression::zipStreamBuf( dataStream, fileStream ) ) {
         return false;
     }
 
@@ -228,7 +228,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     RWStreamBuf dataStream;
     dataStream.setBigendian( true );
 
-    if ( !Compression::readFromFileStream( fileStream, dataStream ) ) {
+    if ( !Compression::unzipStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
@@ -267,7 +267,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     // Settings should contain the full path to the current map file, if this map is available
-    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapInfo().filename ) );
+    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetFileName( conf.getCurrentMapInfo().filename ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );

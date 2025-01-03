@@ -59,7 +59,7 @@ namespace
         return key;
     }
 
-    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+    template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
     bool convertToInt( const std::string_view str, T & intValue )
     {
         const char * first = str.data();
@@ -83,10 +83,8 @@ bool TinyConfig::Load( const std::string & cfile )
         return false;
     }
 
-    std::vector<std::string> rows = StringSplit( sf.toString(), '\n' );
-
-    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
-        std::string str = StringTrim( *it );
+    for ( const std::string & line : StringSplit( sf.getString(), '\n' ) ) {
+        std::string str = StringTrim( line );
 
         if ( str.empty() || str[0] == comment ) {
             continue;
@@ -100,8 +98,7 @@ bool TinyConfig::Load( const std::string & cfile )
         const std::string key = ModifyKey( StringTrim( str.substr( 0, pos ) ) );
         const std::string val = StringTrim( str.substr( pos + 1, str.length() - pos - 1 ) );
 
-        const auto [dummy, inserted] = emplace( key, val );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = emplace( key, val ); !inserted ) {
             ERROR_LOG( "Duplicate key '" << key << "' was found when reading the config file " << cfile )
         }
     }

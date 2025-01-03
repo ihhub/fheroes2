@@ -73,7 +73,8 @@ namespace
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
 #endif
-        uint16_t format = AUDIO_S16;
+        // Signed 16-bit samples with platform-dependent byte order
+        uint16_t format = AUDIO_S16SYS;
         // Stereo audio support
         int channels = 2;
 #if defined( ANDROID )
@@ -246,7 +247,7 @@ namespace
             if ( std::holds_alternative<std::string>( _source ) ) {
                 const std::string & file = std::get<std::string>( _source );
 
-                std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> result( Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() ), Mix_FreeMusic );
+                std::unique_ptr<Mix_Music, void ( * )( Mix_Music * )> result( Mix_LoadMUS( System::encLocalToUTF8( file ).c_str() ), Mix_FreeMusic );
                 if ( !result ) {
                     ERROR_LOG( "Failed to create a music track from file " << file << ". The error: " << Mix_GetError() )
                 }
@@ -1096,7 +1097,7 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
         filePaths.pop_back();
     }
 
-    if ( Mix_SetSoundFonts( System::FileNameToUTF8( filePaths ).c_str() ) == 0 ) {
+    if ( Mix_SetSoundFonts( System::encLocalToUTF8( filePaths ).c_str() ) == 0 ) {
         ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }

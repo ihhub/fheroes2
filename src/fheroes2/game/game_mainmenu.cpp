@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -58,7 +59,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -67,6 +67,7 @@ namespace
     {
         uint32_t frame;
         fheroes2::Button & button;
+        const fheroes2::Rect & buttonArea;
         bool isOver;
         bool wasOver;
     };
@@ -231,40 +232,33 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // image background
     fheroes2::drawMainMenuScreen();
+
     if ( isFirstGameRun ) {
         // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
         fheroes2::validateFadeInAndRender();
 
-        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
 
-        if ( System::isHandheldDevice() ) {
+        {
+            std::string body( _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ) );
+
+            if ( System::isTouchInputAvailable() ) {
+                body += _(
+                    "\n\nTo simulate a right-click with a touch to get info on various items, you need to first touch and keep touching on the item of interest and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen and keep viewing the information on the item." );
+            }
+
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
-            fheroes2::showStandardTextMessage( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ), Dialog::OK );
-        }
-        else {
-            fheroes2::showStandardTextMessage(
-                _( "Greetings!" ),
-                _( "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\nBefore starting the game, please select a game resolution." ), Dialog::OK );
-            const bool isResolutionChanged = Dialog::SelectResolution();
-            if ( isResolutionChanged ) {
+            if ( !System::isHandheldDevice() ) {
+                body += _( "\n\nBefore starting the game, please select a game resolution." );
+            }
+
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), std::move( body ), Dialog::OK );
+
+            if ( !System::isHandheldDevice() && Dialog::SelectResolution() ) {
                 fheroes2::drawMainMenuScreen();
             }
         }
-
-        fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
-
-        fheroes2::MultiFontText body;
-        body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of the Main Menu, or with the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "CONFIG" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " button from the " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "NEW GAME" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " menu. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
-
-        fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
         conf.Save( Settings::configFileName );
@@ -284,7 +278,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
-    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
+    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, 0 ) );
     fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
 
     buttonNewGame.draw();
@@ -309,12 +303,14 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     const bool isPOLPresent = conf.isPriceOfLoyaltySupported();
 
-    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false }, ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
-                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
-                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, buttonNewGame.area(), false, false },
+                                     ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, buttonLoadGame.area(), false, false },
+                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, buttonHighScores.area(), false, false },
+                                     ButtonInfo{ CREDITS_DEFAULT, buttonCredits, buttonCredits.area(), false, false },
+                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, buttonQuit.area(), false, false } };
 
     if ( isPOLPresent ) {
-        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false } );
+        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, buttonEditor.area(), false, false } );
     }
 
     for ( size_t i = 0; le.hasMouseMoved() && i < buttons.size(); ++i ) {
@@ -337,22 +333,17 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
         bool redrawScreen = false;
 
-        for ( size_t i = 0; i < buttons.size(); ++i ) {
-            buttons[i].wasOver = buttons[i].isOver;
+        for ( ButtonInfo & button : buttons ) {
+            button.wasOver = button.isOver;
 
-            if ( le.isMouseLeftButtonPressedInArea( buttons[i].button.area() ) ) {
-                buttons[i].button.drawOnPress();
-            }
-            else {
-                buttons[i].button.drawOnRelease();
-            }
+            button.button.drawOnState( le.isMouseLeftButtonPressedInArea( button.buttonArea ) );
 
-            buttons[i].isOver = le.isMouseCursorPosInArea( buttons[i].button.area() );
+            button.isOver = le.isMouseCursorPosInArea( button.buttonArea );
 
-            if ( buttons[i].isOver != buttons[i].wasOver ) {
-                uint32_t frame = buttons[i].frame;
+            if ( button.isOver != button.wasOver ) {
+                uint32_t frame = button.frame;
 
-                if ( buttons[i].isOver && !buttons[i].wasOver )
+                if ( button.isOver && !button.wasOver )
                     ++frame;
 
                 if ( !redrawScreen ) {
@@ -393,29 +384,38 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
+
+        if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info
-        if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) )
+        if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGame.area() ) )
-            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonCredits.area() ) )
-            fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonHighScores.area() ) )
-            fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
-        else if ( le.isMouseRightButtonPressedInArea( buttonNewGame.area() ) )
-            fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
-        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditor.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( settingsArea ) )
+        else if ( le.isMouseRightButtonPressedInArea( buttonLoadGame.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonCredits.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonHighScores.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonNewGame.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
+        }
+        else if ( isPOLPresent && le.isMouseRightButtonPressedInArea( buttonEditor.area() ) ) {
+            {
+                fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
+            }
+        }
+        else if ( le.isMouseRightButtonPressedInArea( settingsArea ) ) {
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
+        }
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
-            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
+            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.isMouseCursorPosInArea( settingsArea ) ) {

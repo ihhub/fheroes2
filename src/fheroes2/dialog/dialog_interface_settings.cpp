@@ -26,8 +26,8 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -36,6 +36,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 
@@ -158,12 +159,13 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                                dialog.height() + fheroes2::borderWidthPx );
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -183,13 +185,14 @@ namespace
         drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        okayButton.draw();
+        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+        buttonOk.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            okayButton.draw();
+            buttonOk.draw();
             display.render( emptyDialogRestorer.rect() );
         };
 
@@ -199,14 +202,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
@@ -253,7 +251,7 @@ namespace
             if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -276,6 +274,8 @@ namespace fheroes2
 {
     bool openInterfaceSettingsDialog( const std::function<void()> & updateUI )
     {
+        const CursorRestorer cursorRestorer( true, ::Cursor::POINTER );
+
         Settings & conf = Settings::Get();
 
         bool saveConfiguration = false;

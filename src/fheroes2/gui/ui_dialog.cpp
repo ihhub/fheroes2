@@ -46,6 +46,8 @@
 #include "screen.h"
 #include "spell_info.h"
 #include "ui_button.h"
+#include "ui_constants.h"
+#include "ui_keyboard.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 
@@ -97,11 +99,11 @@ namespace fheroes2
         // setup cursor
         const CursorRestorer cursorRestorer( isProperDialog, cusorTheme );
 
-        const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
+        const int32_t headerHeight = header.empty() ? 0 : header.height( fheroes2::boxAreaWidthPx ) + textOffsetY;
 
         int overallTextHeight = headerHeight;
 
-        const int32_t bodyTextHeight = body.height( BOXAREA_WIDTH );
+        const int32_t bodyTextHeight = body.height( fheroes2::boxAreaWidthPx );
         if ( bodyTextHeight > 0 ) {
             overallTextHeight += bodyTextHeight + textOffsetY;
         }
@@ -127,7 +129,7 @@ namespace fheroes2
 
                 ++elementId;
             }
-            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= BOXAREA_WIDTH ) {
+            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= fheroes2::boxAreaWidthPx ) {
                 rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
                 rowHeight.back() = std::max( rowHeight.back(), element->area().height );
 
@@ -165,8 +167,8 @@ namespace fheroes2
         const Rect & pos = box.GetArea();
 
         Display & display = Display::instance();
-        header.draw( pos.x, pos.y + textOffsetY, BOXAREA_WIDTH, display );
-        body.draw( pos.x, pos.y + textOffsetY + headerHeight, BOXAREA_WIDTH, display );
+        header.draw( pos.x, pos.y + textOffsetY, fheroes2::boxAreaWidthPx, display );
+        body.draw( pos.x, pos.y + textOffsetY + headerHeight, fheroes2::boxAreaWidthPx, display );
 
         elementHeight = overallTextHeight + textOffsetY;
         if ( bodyTextHeight > 0 ) {
@@ -193,7 +195,7 @@ namespace fheroes2
             const int32_t currentRowElementCount = rowElementCount[currentRowId];
             const int32_t currentRowMaxElementWidth = rowMaxElementWidth[currentRowId];
 
-            const int32_t emptyWidth = BOXAREA_WIDTH - currentRowElementCount * currentRowMaxElementWidth;
+            const int32_t emptyWidth = fheroes2::boxAreaWidthPx - currentRowElementCount * currentRowMaxElementWidth;
             const int32_t offsetBetweenElements = emptyWidth / ( currentRowElementCount + 1 );
 
             const int32_t widthOffset = offsetBetweenElements + currentRowElementIndex * ( currentRowMaxElementWidth + offsetBetweenElements );
@@ -257,12 +259,12 @@ namespace fheroes2
         : _text( text )
     {
         // Text always occupies the whole width of the dialog.
-        _area = { BOXAREA_WIDTH, _text->height( BOXAREA_WIDTH ) };
+        _area = { fheroes2::boxAreaWidthPx, _text->height( fheroes2::boxAreaWidthPx ) };
     }
 
     void TextDialogElement::draw( Image & output, const Point & offset ) const
     {
-        _text->draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+        _text->draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
     }
 
     void TextDialogElement::processEvents( const Point & /* offset */ ) const
@@ -338,22 +340,33 @@ namespace fheroes2
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( std::move( text ) )
     {
-        const Text quantityText( _text, FontType::smallWhite() );
-
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
+
+        if ( _text.empty() ) {
+            _area = { icn.width(), icn.height() };
+        }
+        else {
+            const Text quantityText( _text, FontType::smallWhite() );
+            _area = { std::max( icn.width(), quantityText.width() ), icn.height() + textOffsetFromElement + quantityText.height() };
+        }
     }
 
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
     {
         const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
-        const Text quantityText( _text, FontType::smallWhite() );
 
-        const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
+        if ( _text.empty() ) {
+            Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
+        }
+        else {
+            const Text quantityText( _text, FontType::smallWhite() );
 
-        Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
+            const int32_t maxWidth = std::max( icn.width(), quantityText.width() );
 
-        quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
+            Blit( icn, 0, 0, output, offset.x + ( maxWidth - icn.width() ) / 2, offset.y, icn.width(), icn.height() );
+
+            quantityText.draw( offset.x + ( maxWidth - quantityText.width() ) / 2, offset.y + icn.height() + textOffsetFromElement, output );
+        }
     }
 
     void ResourceDialogElement::processEvents( const Point & offset ) const
@@ -418,7 +431,7 @@ namespace fheroes2
         assert( spell.isValid() );
 
         std::string spellText( _spell.GetName() );
-        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        const uint32_t spellPoints = _spell.spellPoints( _hero );
         if ( spellPoints > 0 ) {
             spellText += " [" + std::to_string( spellPoints ) + ']';
         }
@@ -432,7 +445,7 @@ namespace fheroes2
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
         std::string spellText( _spell.GetName() );
-        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        const uint32_t spellPoints = _spell.spellPoints( _hero );
         if ( spellPoints > 0 ) {
             spellText += " [" + std::to_string( spellPoints ) + ']';
         }
@@ -731,7 +744,7 @@ namespace fheroes2
             }
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
+        const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -760,7 +773,7 @@ namespace fheroes2
         return false;
     }
 
-    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset,
+    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point & animationPositionOffset,
                                                                 const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
         , _staticImage( std::move( staticImage ) )
@@ -780,7 +793,7 @@ namespace fheroes2
             Blit( _staticImage, 0, 0, output, offset.x, offset.y, _staticImage.width(), _staticImage.height() );
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
+        const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -904,6 +917,13 @@ namespace fheroes2
 
         if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
             _value -= _step;
+            return true;
+        }
+
+        if ( le.MouseClickLeft( _editBox ) ) {
+            openVirtualNumpad( _value, _minimum, _maximum );
+            assert( _value >= _minimum && _value <= _maximum );
+
             return true;
         }
 

@@ -1,0 +1,49 @@
+{
+    "config": {
+        "default": true,
+        "heading-style": {
+            "style": "atx"
+        },
+        "ul-style": {
+            "style": "asterisk"
+        },
+        "no-trailing-spaces": {
+            "strict": true
+        },
+        "line-length": {
+            "code_block_line_length": 170,
+            "heading_line_length": 170,
+            "line_length": 170
+        },
+        "no-inline-html": {
+            "allowed_elements": [
+                "a",
+                "details",
+                "img",
+                "p",
+                "summary"
+            ]
+        },
+        "code-block-style": {
+            "style": "fenced"
+        },
+        "code-fence-style": {
+            "style": "backtick"
+        },
+        "emphasis-style": {
+            "style": "underscore"
+        },
+        "strong-style": {
+            "style": "asterisk"
+        },
+        "table-pipe-style": {
+            "style": "leading_and_trailing"
+        }
+    },
+    "globs": [
+        "**/*.md"
+    ],
+    "ignores": [
+        "cmake/README_findsdl2.md"
+    ]
+}

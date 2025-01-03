@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_BOARD_H
-#define H2BATTLE_BOARD_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -33,13 +32,9 @@
 #include "battle_cell.h"
 #include "math_base.h"
 
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
-
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Battle
@@ -60,6 +55,13 @@ namespace Battle
     class Board : public std::vector<Cell>
     {
     public:
+        // Width of the battlefield, measured in cells
+        static constexpr int widthInCells{ 11 };
+        // Height of the battlefield, measured in cells
+        static constexpr int heightInCells{ 9 };
+        // Total number of cells on the battlefield
+        static constexpr int sizeInCells{ widthInCells * heightInCells };
+
         Board();
         Board( const Board & ) = delete;
 
@@ -72,7 +74,7 @@ namespace Battle
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
 
-        void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
+        void SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();
@@ -132,5 +134,3 @@ namespace Battle
         void SetCobjObject( const int icn, const uint32_t dst );
     };
 }
-
-#endif

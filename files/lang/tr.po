@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-04 11:59+0000\n"
-"PO-Revision-Date: 2022-10-01 20:20+0300\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.5\n"
 
 msgid ""
 "BATTLE\n"
@@ -29,182 +29,207 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"YENİ\n"
+"OYUN"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"OYUNU\n"
+"KAYDET"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"OYUNU\n"
+"YÜKLE"
 
 msgid "INFO"
-msgstr ""
+msgstr "BİLGİ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ÇIKIŞ"
 
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
+"YENİ\n"
+"HARİTA"
 
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
+"HARİTAYI\n"
+"KAYDET"
 
 msgid ""
 "LOAD\n"
 "MAP"
 msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "İPTAL"
 
 msgid "OKAY"
-msgstr ""
+msgstr "TAMAM"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "TAMAM"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "KABUL"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "REDDET"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ÖĞREN"
 
 msgid "TRADE"
-msgstr ""
+msgstr "TAKAS"
 
 msgid "YES"
-msgstr ""
+msgstr "EVET"
 
 msgid "NO"
-msgstr ""
+msgstr "HAYIR"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ÇIKIŞ"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "ÇIKIŞ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "BIRAK"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "GELİŞTİR"
 
 msgid "RESTART"
-msgstr ""
+msgstr "TEKRARLA"
 
 msgid "HEROES"
-msgstr ""
+msgstr "KAHRAMANLAR"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"KASABALAR/\n"
+"KALELER"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "X-L"
 
 msgid "ALL"
-msgstr ""
+msgstr "HEPSİ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "SEÇ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"STANDART\n"
+"OYUN"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"HİKAYE\n"
+"OYUNU"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"ÇOK\n"
+"OYUNCULU\n"
+"OYUN"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "AYARLAR"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ORİJİNAL\n"
+"HİKAYE"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"EKLENTİ\n"
+"HİKAYESİ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "SIRAYLA OYNAMA"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 OYUNCU"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 OYUNCU"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 OYUNCU"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 OYUNCU"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 OYUNCU"
 
 msgid "GIFT"
 msgstr "HEDİYE"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAKS"
 
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "İNTROYU İZLE"
 
 msgid "MIN"
 msgstr "MİN"
 
 msgid "RESET"
-msgstr ""
+msgstr "SIFIRLA"
 
 msgid "START"
-msgstr ""
+msgstr "BAŞLA"
 
 msgid "CASTLE"
-msgstr ""
+msgstr "KALE"
 
 msgid "TOWN"
-msgstr ""
+msgstr "KASABA"
 
 msgid "RESTRICT"
-msgstr ""
+msgstr "KISITLA"
 
 msgid ""
 "D\n"
@@ -215,6 +240,11 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"B\n"
+"I\n"
+"R\n"
+"A\n"
+"K"
 
 msgid ""
 "E\n"
@@ -222,6 +252,11 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"Ç\n"
+"I\n"
+"K\n"
+"I\n"
+"Ş"
 
 msgid ""
 "P\n"
@@ -231,6 +266,13 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"D\n"
+"E\n"
+"V\n"
+"R\n"
+"İ\n"
+"Y\n"
+"E"
 
 msgid ""
 "C\n"
@@ -242,6 +284,12 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"H\n"
+"İ\n"
+"K\n"
+"A\n"
+"Y\n"
+"E"
 
 msgid ""
 "S\n"
@@ -253,12 +301,23 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"T"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "SÖYLENTİLER"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ETKİNLİKLER"
+
+msgid "LANGUAGE"
+msgstr "DİL"
 
 msgid "Warrior"
 msgstr "Savaşçı"
@@ -366,19 +425,20 @@ msgid "All %{race} troops +1"
 msgstr "Bütün %{race} askerler +1"
 
 msgid "NeutralRaceTroops|Neutral"
-msgstr ""
+msgstr "Tarafsız"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Birlikleri %{count} hizala -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
-msgstr "Gruptaki bazı ölümsüzler -1"
+msgstr "Gruptaki bazı undeadler -1"
 
 msgid ""
 "Default\n"
 "troop"
 msgstr ""
+"Varsayılan\n"
+"askerler"
 
 msgid "View %{name}"
 msgstr "Görünüm %{name}"
@@ -404,9 +464,8 @@ msgstr "Son birlik hareket ettirilemiyor"
 msgid "Move the %{name}"
 msgstr "%{name} 'i hareket ettir"
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "%{monster} vur"
+msgstr "%{monster} sayısını ayarla"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -429,29 +488,29 @@ msgstr ""
 "Bu savaşta İnkar Alanı Eseri aktif, bütün savaş büyülerini devre dışı "
 "bırakıyor."
 
+msgid "You cannot cast spells without a commanding hero."
+msgstr "Yöneten bir kahraman olmadan büyü kullanamazsın."
+
 msgid "You have already cast a spell this round."
 msgstr "Bu turda zaten bir büyü yaptın."
 
-#, fuzzy
 msgid "That spell will have no effect!"
-msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
+msgstr "Bu büyünün etkisi olmayacak!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Savaş başına yalnızca bir tür elemental çağırabilirsiniz."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
 
-#, fuzzy
 msgid ""
 "The Moat reduces the defense skill of troops trapped in it by %{count} and "
 "restricts their movement range."
 msgstr ""
 "Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
-"hızını  -%{count} düşürüyor."
+"hızını %{count} düşürüyor."
 
 msgid "Speed: %{speed}"
 msgstr "Hız: %{speed}"
@@ -465,15 +524,14 @@ msgstr "Kapalı"
 msgid "On"
 msgstr "Açık"
 
-#, fuzzy
 msgid "Turn Order"
-msgstr "Ordu Düzeni"
+msgstr "Sıra sırası"
 
 msgid "Auto Spell Casting"
 msgstr "Otomatik Büyü Yapma"
 
 msgid "Grid"
-msgstr "Kafes"
+msgstr "Izgara"
 
 msgid "Shadow Movement"
 msgstr "Gölge Hareketi"
@@ -482,26 +540,25 @@ msgid "Shadow Cursor"
 msgstr "Gölge İmleci"
 
 msgid "Audio"
-msgstr ""
+msgstr "Ses"
 
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 msgid "Configure"
-msgstr ""
+msgstr "Ayarla"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Kısayollar"
 
 msgid "Damage Info"
-msgstr ""
+msgstr "Hasar Bilgisi"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
+msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -534,26 +591,25 @@ msgstr ""
 "kapatın."
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Oyunun ses ayarını değiştir."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr ""
+msgstr "Oyunda bulunan tüm kısayol tuşlarını kontrol edin ve yapılandırın."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
+msgstr "Savaş sırasında hasar bilgisini görüntülemek için akif edin."
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Bu menüden çık."
 
 msgid "Okay"
-msgstr ""
+msgstr "Tamam"
 
 msgid "The enemy has surrendered!"
 msgstr "Düşman teslim oldu!"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr ""
+msgstr "Korkaklıkları onlara %{gold} altına mal oldu."
 
 msgid "The enemy has fled!"
 msgstr "Düşman kaçtı!"
@@ -570,13 +626,11 @@ msgstr "Korkak %{name} savaştan kaçtı."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} düşmana teslim oldu, ve utanç içinde ayrıldı."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Kuvvetleriniz acı bir yenilgiye uğradı, ve %{name} davanızı terk etti."
+msgstr "Birliğiniz acı bir yenilgiye uğradı, ve %{name} sizi terk etti."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat."
-msgstr "Kuvvetleriniz acı bir yenilgiye uğradı."
+msgstr "Birliğiniz acı bir yenilgiye uğradı."
 
 msgid "Battlefield Casualties"
 msgstr "Savaş Alanı Kayıpları"
@@ -588,14 +642,13 @@ msgid "Defender"
 msgstr "Savunan"
 
 msgid "Click to leave the battle results."
-msgstr ""
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
 
-#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgstr "Savaşı manuel modda bbaşlatmak için tıklayın."
 
 msgid "Restart"
-msgstr ""
+msgstr "Tekrarla"
 
 msgid "You have captured an enemy artifact!"
 msgstr "Bir düşman eseri ele geçirdiniz!"
@@ -613,7 +666,7 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Karanlık büyücülük sanatlarını uygulayarak, %{canavar} olarak hizmetinize "
+"Karanlık büyücülük sanatlarını uygulayarak, %{monster} olarak hizmetinize "
 "geri dönmek için düşmanın ölülerinin %{count} kadarını çağırabilirsiniz."
 
 msgid "%{name} the %{race}"
@@ -680,7 +733,6 @@ msgstr ""
 "almanız için hazır olacak, ancak kahramanın yalnızca acemi bir kahramanın "
 "güçleri olacak."
 
-#, fuzzy
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again. The cost "
@@ -688,7 +740,8 @@ msgid ""
 "in the army."
 msgstr ""
 "Teslim olmak Altın'a mal olur. Ancak fidyeyi öderseniz, kahraman ve hayatta "
-"kalan tüm yaratıkları yeniden askere alınabilir."
+"kalan tüm yaratıkları yeniden askere alınabilir. Teslim olmanın maliyeti, "
+"orduda kalan geçici olmayan birliklerin toplam maliyetinin yarısı kadardır."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
@@ -812,14 +865,12 @@ msgstr "Mesaj Çubuğu"
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Geri çekilmek istediğine emin misin?"
+msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
-#, fuzzy
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
 msgstr[0] "%{name} sırasını geçti."
@@ -840,11 +891,10 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} yok oldu."
 msgstr[1] "%{count} %{defender} yok oldu."
 
-#, fuzzy
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "Ayna görüntüsü oluşturuldu."
-msgstr[1] "Ayna görüntüsü oluşturuldu."
+msgstr[0] "1 ruh dahil edildi."
+msgstr[1] "%{count} ruh dahil edildi."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -854,7 +904,6 @@ msgstr[1] ""
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "%{monster}: [%{src}] buradan [%{dst}] buraya hareket ettirdi."
 
-#, fuzzy
 msgid "The %{name} resists the spell!"
 msgid_plural "The %{name} resist the spell!"
 msgstr[0] "%{name} büyüye direndi!"
@@ -884,37 +933,31 @@ msgstr "%{spell}  büyüsü bir yaşayan canavara %{damage} hasar verdi."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell}  büyüsü bütün yaşayan canavarlara %{damage} hasar verdi."
 
-#, fuzzy
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
-msgstr[0] "%{attacker}' saldırısı %{target}'ı kör etti!"
-msgstr[1] "%{attacker}' saldırısı %{target}'ı kör etti!"
+msgstr[0] "%{attacker}'ın saldırısı %{target}'ı kör etti!"
+msgstr[1] "%{attacker}'ların saldırısı %{target}'ı kör etti!"
 
-#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr[0] "%{attacker}'ın bakışları %{target}'ı taşa çevirdi!"
-msgstr[1] "%{attacker}'ın bakışları %{target}'ı taşa çevirdi!"
+msgstr[1] "%{attacker}'ların bakışları %{target}'ı taşa çevirdi!"
 
-#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
 msgstr[0] "%{attacker}'ın laneti %{target}'in üzerine geldi!"
-msgstr[1] "%{attacker}'ın laneti %{target}'in üzerine geldi!"
+msgstr[1] "%{attacker}'ların laneti %{target}'in üzerine geldi!"
 
-#, fuzzy
 msgid "The %{target} is paralyzed by the %{attacker}!"
 msgid_plural "The %{target} are paralyzed by the %{attacker}!"
-msgstr[0] "%{attacker}' saldırısı %{target}'ı sakatladı!"
-msgstr[1] "%{attacker}' saldırısı %{target}'ı sakatladı!"
+msgstr[0] "%{attacker}'ın saldırısı %{target}'ı sakatladı!"
+msgstr[1] "%{attacker}'ın saldırısı %{target}'ları sakatladı!"
 
-#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] "%{attacker} %{target} üzerindeki tüm iyi büyüleri yok etti!"
 msgstr[1] "%{attacker} %{target} üzerindeki tüm iyi büyüleri yok etti!"
 
-#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
 msgstr[0] "%{attacker} %{target}'a %{spell} uyguladı!"
@@ -941,7 +984,6 @@ msgstr "Ayna görüntüsü oluşturuldu."
 msgid "The mirror image is destroyed!"
 msgstr "Ayna görüntüsü yok edildi!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Otomatik savaşı kesmek istediğine emin misin?"
 
@@ -985,27 +1027,25 @@ msgid "AI"
 msgstr "Bilgisayar"
 
 msgid "Start"
-msgstr ""
+msgstr "Başla"
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Savaşa geri dön."
+msgstr "Savaşı başlat."
 
 msgid "Exit"
-msgstr ""
+msgstr "Çıkış"
 
 msgid "Reset"
-msgstr ""
+msgstr "Sıfırla"
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Varsayılan ayarlara sıfırla."
 
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{race1} %{name1}"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Canavarlar"
@@ -1025,14 +1065,13 @@ msgstr "%{name} %{count} Okçu gücüyle ateş ediyor"
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "Ayna görüntüsü yok edildi!"
+msgstr "%{name} yok edildi."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{count} tane %{name} ölümden uyandı!"
+msgstr[1] "%{count} tane %{name} ölümden uyandı!"
 
 msgid "Dwarven Alliance"
 msgstr "Cüce İttifakı"
@@ -1047,7 +1086,7 @@ msgid "Ogre Alliance"
 msgstr "Dev İttifakı"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Cücekaçıran"
 
 msgid "Dragon Alliance"
 msgstr "Ejderha İttifakı"
@@ -1056,34 +1095,34 @@ msgid "Elven Alliance"
 msgstr "Elf İttifakı"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger yenildi"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Wayward Oğlu"
 
 msgid "Uncle Ivan"
 msgstr "Ivan Amca"
 
 msgid "Annexation"
-msgstr ""
+msgstr "İlhak"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Silahların Gücü"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Cüceleri Kurtar"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Carator Madenleri"
 
 msgid "Turning Point"
 msgstr "Dönüm Noktası"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Savunucu"
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Corlagon'un Savunması"
 
 msgid "The Crown"
 msgstr "Taç"
@@ -1095,7 +1134,7 @@ msgid "Betrayal"
 msgstr "İhanet"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Son Adalet"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -1103,29 +1142,44 @@ msgid ""
 "will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland, kardeşine karşı isyan savaşını başlatmak için kalesinin yakınındaki "
+"lordları yenmenize ihtiyaç duyuyor. Birbirleriyle müttefik değiller, bu "
+"yüzden zamanlarının çoğunu birbirleriyle savaşarak geçirecekler. Tüm "
+"kalelerini ve kahramanlarını yendiğinizde zafer sizindir."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Yerel lordlar Roland'a bağlılık yemini etmeyi reddediyor ve bastırılmaları "
+"gerekiyor. Zengin ve güçlüler, bu yüzden zorlu bir mücadeleye hazır olun. "
+"Kazanmak için tüm düşman kalelerini ele geçirin."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Göreviniz Cüceleri Archibald'ın güçlerine karşı savunmaktır. Kazanmak için "
+"tüm düşman kasabalarını ve kalelerini ele geçirin ve tüm cüce kasabalarını "
+"bir kerede kaybetmemeye dikkat edin, aksi takdirde düşman kazanmış olur."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Kaynaklar ve hazine için dört müttefik düşmanla düz bir mücadelede karşı "
+"karşıya geleceksin. Zafer için tüm düşman kalelerini ele geçir."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Düşmanlarınız size karşı müttefik ve yakınınızda başlıyor, bu yüzden "
+"savaşmaya hazır olun. Kazanmak için bu küçük vadideki dört kalenin hepsini "
+"ele geçirmeniz gerekecek."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -1133,6 +1187,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Noraston'daki Büyücüler Loncası, Archibald'ın müttefiklerinden gelen bir "
+"saldırıya karşı Roland'ın yardımını istedi. Kazanmak için tüm düşman "
+"kalelerini ele geçirin ve Noraston'u kaybetmeyin, yoksa senaryoyu "
+"kaybedersiniz. (İpucu: Okyanustaki bir adada düşman kalesi var.)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -1140,11 +1198,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Mümkün olduğunca büyük bir ordu toplayın ve düşman kalesini 8 hafta içinde "
+"ele geçirin. Karşınızda yalnızca bir düşman var, ancak düşman kalesine "
+"ulaşmak için uzun bir yol kat etmelisiniz. Bu senaryonun sonunda ordunuzda "
+"bulunan herhangi bir birlik, son savaşta sizinle olacak."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Archibald'ın kahramanları bulmadan önce Tacı bulun. Roland, Archibald'a "
+"karşı son savaşta Taca ihtiyaç duyacaktır."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -1152,44 +1216,53 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Üç müttefik düşman önünüzde duruyor ve zafer, Lord Corlagon da dahil. Roland "
+"kuzeybatıdaki bir kalede ve düşmana yenilirse kaybedeceksiniz. Lord "
+"Corlagon'u yakalamanın, final senaryosunda size karşı savaşmamasını "
+"sağlayacağını unutmayın."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Bu son savaş. Hem siz hem de düşmanınız tepeden tırnağa silahlanmış "
+"durumdasınız ve hepsi size karşı müttefik. Savaşı bitirmek için Archibald'ı "
+"yakalayın!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Taraf değiştirmek, düşmanın kalesine karşı üç kale bırakır. Bu savaş, "
+"savaşın geri kalanında karşılaşacağınız en kolay savaş olacak...hain."
 
 msgid "Barbarian Wars"
-msgstr ""
+msgstr "Barbar savaşları"
 
 msgid "First Blood"
-msgstr ""
+msgstr "İlk Kan"
 
 msgid "Necromancers"
-msgstr ""
+msgstr "Nekromansörler"
 
 msgid "Slay the Dwarves"
-msgstr ""
+msgstr "Cüceleri öldür"
 
 msgid "Country Lords"
-msgstr ""
+msgstr "Ülke Lordları"
 
 msgid "Dragon Master"
-msgstr ""
+msgstr "Ejderha Ustası"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "İsyan"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Kıyamet"
 
 msgid "Greater Glory"
-msgstr ""
+msgstr "Büyük Zafer"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
@@ -1197,6 +1270,10 @@ msgid ""
 "fighting amongst themselves. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Kral Archibald, bu bölgedeki üç düşmanı yenmenizi istiyor. Birbirleriyle "
+"müttefik değiller, bu yüzden enerjilerinin çoğunu kendi aralarında savaşarak "
+"geçirecekler. Tüm düşman kalelerine sahip olduğunuzda ve savaşacak kahraman "
+"kalmadığında kazanacaksınız."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1204,6 +1281,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Kuzeydeki barbar kabileleri fethederek birleştirmelisiniz. Önceki görevde "
+"olduğu gibi, düşman size karşı müttefik değil, ancak emrinde daha fazla "
+"kaynak var. Tüm düşman kalelerine sahip olduğunuzda ve savaşacak kahraman "
+"kalmadığında kazanacaksınız."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1211,6 +1292,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"İyiliksever büyücüler Necromancer'ların kalesini ele geçirdi. Zafere ulaşmak "
+"için onu geri almalısınız. Güçlü bir orduyla başlasanız da, bir kalenizin "
+"olmadığını ve 7 gün içinde bir tane almanız gerektiğini, aksi takdirde bu "
+"savaşı kaybedeceğinizi unutmayın. (İpucu: En yakın kale güneydoğudadır.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1218,18 +1303,29 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Cücelerin Kral Archibald'ın planlarına müdahale edebilmeleri için "
+"fethedilmeleri gerekiyor. Roland'ın güçlerinin birden fazla kahramanı ve "
+"başlamak için birçok kasabası var, bu yüzden birden fazla yönden saldırıya "
+"hazır olun. Zaferi elde etmek için tüm düşman kasabalarını ve kalelerini ele "
+"geçirmelisiniz."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Roland'ın güçlerinin önderlik ettiği bir köylü isyanını bastırmalısınız. "
+"Hepsi size karşı müttefik, ancak size yardım edecek deneyimli bir kahraman "
+"olan Lord Corlagon var. Kazanmak için tüm düşman kalelerini ele geçirin."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"Bu görevde size karşı müttefik olan iki düşman var. İkisi de iyi silahlanmış "
+"ve sizi adalarından çıkarmaya çalışıyorlar. Onlardan kaçının ve kazanmak "
+"için Dragon City'yi ele geçirin."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -1237,56 +1333,71 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Emriniz, Roland'a hizmet etmeye yemin etmiş olan ülke lordlarını "
+"fethetmektir. Tüm düşman kaleleri size karşı birleşmiştir. Kaleniz olmadan "
+"başladığınız için, haftanın sonundan önce bir kale ele geçirmek için acele "
+"etmelisiniz. Zafer için tüm düşman kalelerini ele geçirin."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Roland'ın kahramanları bulmadan önce Tacı bulun. Archibald, Roland'a karşı "
+"son savaşta Taç'a ihtiyaç duyacaktır."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Bu son savaş. Hem siz hem de düşmanınız tepeden tırnağa silahlanmış "
+"durumdasınız ve hepsi size karşı müttefik. Savaşı kazanmak için Roland'ı "
+"yakalayın ve Archibald'ı savaşta kaybetmemeye dikkat edin!"
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Ok'un Uçuşu"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Kaos Adası"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Boşluk"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Yükseliş"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Kuzey Işıkları"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "İhanet'in Sonu"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Yolsuzluğun Kalbi"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Dev'in Geçişi"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"İmparatorluğa bu bölgede faaliyet gösterebilmesi için gerekli olanakları "
+"sağlamak amacıyla, asi yerel beyleri kontrol altına alın."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Bu alandaki tüm muhalefeti ortadan kaldırın. Daha sonra eserin ilk parçası "
+"sizin olacak."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Kuzeydoğudaki büyücüler isyan ediyor! İmparatorluğun iyiliği için dağlara "
+"giderken onların zayıf ayaklanmasını bastırmalısın."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1294,42 +1405,55 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Kraeger, sizin gelişinize hazırlık yaptıktan sonra, görevinizi engellemek "
+"için bir nekromansör gücü ayarladı. Üçüncü haftanın ilk gününden önce "
+"Scabsdale kalesini ele geçirmelisiniz, aksi takdirde Nekromansörler sizin "
+"için çok güçlü olacak."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Bu bölgedeki barbar despot henüz sizin varlığınızdan habersiz. Keşfedilmeden "
+"ve saldırıya uğramadan önce hemen güçlerinizi toplayın! Tüm düşman güçlerini "
+"bastırarak bölgeyi güvence altına alın."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"İmparatorluk bu bölgede zayıf. Bu bölgedeki tüm güçleri tamamen alt "
+"edemeyeceksiniz, bu yüzden misilleme saldırıları başlamadan önce elinizden "
+"geleni alın. Unutmayın, gerçek amacınız Anduran Miğferi'ni ele geçirmek."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "İmparatorluğun iyiliği için Kraeger'ı ortadan kaldırın."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Sonunda, İmparatorluğu nekromanserin kötülüğünden kurtarma fırsatına ve "
+"olanaklarına sahipsin. Onları tamamen yok et ve sonsuza dek bir kahraman "
+"olarak anılacaksın."
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Sınır Kasabaları"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Fethet ve Birleştir"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Çılgın Amca Ivan"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Wayward oğlu"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Fildişi Kapılar"
 
 msgid "The Elven Lands"
 msgstr "Elf Diyarları"
@@ -1338,66 +1462,88 @@ msgid "The Epic Battle"
 msgstr "Epik Savaş"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Güney Savaşı"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Tüm düşman kabileleri fethedin ve birleştirin. Tüm torunların atası olan "
+"kahraman Jarkonas'ı kaybetmeyin."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Rakibiniz Harondale Krallığı, sınırınızdaki zayıf kasabalara saldırıyor! İlk "
+"saldırılarından kurtulun ve onları tamamen ezin!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"İnatçı oğlunuz Joseph'i bulun, onun ıssız topraklarda yaşadığı söyleniyor. "
+"Üçüncü ayın ilk gününden önce yapın, aksi takdirde ailenize hiçbir faydası "
+"olmayacaktır."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be of no help to your kingdom."
 msgstr ""
+"Çılgın amcan Ivan'ı kurtar. Dördüncü ayın ilk gününden önce onu bul yoksa "
+"krallığına hiçbir faydası olmayacak."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Krallığınızın güney sınırına saldıran barbarları yok edin! Düşmüş "
+"kasabalarınızı kurtarın ve ardından orman krallığını istila edin. Hiçbir "
+"düşmanı ayakta bırakmayın."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "İhanet sonucu düşen Fildişi Kapılar kalesini geri al."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Elflerin gözüne gir. Ağaçların kesilmesine izin vermeyecekler, bu yüzden "
+"sana her 2 haftada bir odun göndereceğiz. Görevini yedinci ayın ilk gününden "
+"önce tamamlamalısın, yoksa krallık kesinlikle düşecek.Elflerin gözüne gir. "
+"Ağaçların kesilmesine izin vermeyecekler, bu yüzden sana her 2 haftada bir "
+"odun göndereceğiz. Görevini yedinci ayın ilk gününden önce tamamlamalısın, "
+"yoksa krallık kesinlikle düşecek."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Bu, rakip krallığınız Harondale'e karşı son savaşınız. Herkesi ortadan "
+"kaldırın ve kahraman Jarkonas VI'yı kaybetmeyin."
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Büyücülük Pınarı"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Güç'ün Sonu"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Ebedi Parşömenler"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Örtülü Adalar"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Göreviniz büyülü Shrouded Isles'daki savaşan büyücüleri yenmektir. Bu görevi "
+"tamamlamak size rakiplerinize karşı bir mücadele şansı verecektir."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
@@ -1583,7 +1729,7 @@ msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
 msgid "campaignBonus|Gauntlets"
-msgstr ""
+msgstr "Eldivenler"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
@@ -1619,7 +1765,7 @@ msgid "campaignBonus|Tax Lien"
 msgstr ""
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Yıldırım Topuzu"
 
 msgid "campaignBonus|Traveler's Boots"
 msgstr ""
@@ -1761,7 +1907,7 @@ msgstr ""
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
-msgstr ""
+msgstr "Krallık senaryonun başında ekstradan %{amount} %{resource} alacaktır."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
@@ -1826,17 +1972,14 @@ msgstr ""
 msgid "This building has been disabled."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
-msgstr "%{name} 'i hareket ettir"
+msgstr "%{name} karşılanamıyor."
 
-#, fuzzy
 msgid "The %{name} is already built."
-msgstr "Ayna görüntüsü yok edildi!"
+msgstr "%{name} zaten inşa edildi."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
-msgstr "%{name} 'i hareket ettir"
+msgstr "%{name} inşa edilemiyor."
 
 msgid "Build %{name}."
 msgstr ""
@@ -2063,9 +2206,8 @@ msgstr ""
 msgid "Cannot recruit - you have too many Heroes."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford a Hero."
-msgstr "Son birlik hareket ettirilemiyor"
+msgstr "Kahraman karşılanamıyor."
 
 msgid "There is no room in the garrison for this army."
 msgstr ""
@@ -2200,55 +2342,55 @@ msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Kara Kule"
 
 msgid "Library"
 msgstr "Kütüphane"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Meyve bahçesi"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Habitat"
 
 msgid "Pen"
-msgstr ""
+msgstr "Ağıl"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Dökümhane"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Dökümhane Geliştir"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Uçurum Yuvası"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Fildişi kule"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Fildişi kule Geliştir"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Bulut Kalesi"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Bulut Kalesi Geliştir"
 
 msgid "Storm"
-msgstr ""
+msgstr "Yıldırım"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Kafatası Yığını"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Kazı"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Mezarlık"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Mezarlığı Geliştir"
 
 msgid "Upg. Pyramid"
 msgstr ""
@@ -2372,49 +2514,49 @@ msgid ""
 msgstr ""
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Hırsızlar Loncası"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Meyhane"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Liman"
 
 msgid "Well"
-msgstr ""
+msgstr "Su Kuyusu"
 
 msgid "Statue"
-msgstr ""
+msgstr "Heykel"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Market"
 
 msgid "Moat"
-msgstr ""
+msgstr "Hendek"
 
 msgid "Castle"
-msgstr ""
+msgstr "Kale"
 
 msgid "Tent"
-msgstr ""
+msgstr "Çadır"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Kaptanın Karargahı"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Büyücü Loncası, Level 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Büyücü Loncası, Level 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Büyücü Loncası, Level 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Büyücü Loncası, Level 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Büyücü Loncası, Level 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2773,230 +2915,245 @@ msgid "Need: "
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Yeni Oyun"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Tek yada Çoklu bir oyun başlat."
 
 msgid "Load Game"
-msgstr ""
+msgstr "Oyunu Yükle"
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Önceden kaydedilmiş bir oyunu yükle."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Oyunu Kaydet"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Şu anki oyunu kaydet."
 
 msgid "Quit"
-msgstr ""
+msgstr "Çıkış"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Heroes of Might and Magic II'den çık."
 
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafikler"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Siyah & Beyaz"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Fare İmleci"
 
 msgid "Color"
-msgstr ""
+msgstr "Renkli"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Yazı Desteği"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Oyunun dilini değiştir."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Oyunun dilini seç"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Oyunun grafik ayarlarını değiş."
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr ""
+msgstr "Renkli imleci aç ya da kapat. Bu sadece estetik bir seçimdir."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Oyun içindeki pencereler ve olaylar hakkında ek bilgi çıkışı sağlamak için "
+"metin desteği modunu açın/kapatın."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Harita\n"
+"Zorluğu"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Oyun\n"
+"Zorluğu"
 
 msgid "Rating"
-msgstr ""
+msgstr "Derecelendirme"
 
 msgid "Map Size"
-msgstr ""
+msgstr "Harita Boyu"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Rakipler"
 
 msgid "Class"
-msgstr ""
+msgstr "Sınıf"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Zafer\n"
+"Şartları"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Yenilgi\n"
+"Şartları"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Önce alıcıları seçin!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "%{resource} seçemezsin!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "%{resource} sayısını seç:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Alıcıları Seçin"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Paranız"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Planlanmış Hediye"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "%{name}'dan hediye"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Çözünürlük"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Tam Ekran"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Modu"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Pencere"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "Dikey Eşitleme"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Sistem Seçenekleri"
+msgstr "Sistem Bilgisi"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "Oyunun çözünürlüğünü değiş."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Oyunun çözünürlüğünü seç"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Tam ve pencereli ekran arasında geçiş yap."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
-msgstr ""
+msgstr "Dikey eşitleme ayarı bazı monitörlerde yırtılma sorununu çözer."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "FPS ve zaman hakkında ekstra bilgi göster."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Kısayol: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Kategori: "
 
 msgid "Event: "
-msgstr ""
+msgstr "Etkinlik: "
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Kısayollar:"
 
 msgid "Evil"
-msgstr ""
+msgstr "Şeytani"
 
 msgid "Good"
-msgstr ""
+msgstr "İyi"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Arayüz Tipi"
 
 msgid "Hide"
-msgstr ""
+msgstr "Gizle"
 
 msgid "Show"
-msgstr ""
+msgstr "Göster"
 
 msgid "Interface"
-msgstr ""
+msgstr "Arayüz"
 
 msgid "Slow"
-msgstr ""
+msgstr "Yavaş"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "Fast"
-msgstr ""
+msgstr "Hızlı"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Çok Hızlı"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Kaydırma Hızı"
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Arayüz görünürlüğünü değiştirin."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Pencereyi kaydırma hızını ayarlar."
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Oyunun dilini seç:"
+
+msgid "Select Language:"
+msgstr "Dil Seç:"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Seçili dili seçmek için tıklayın."
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} level kazandı."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "%{skill} öğrendin."
 
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
 msgstr ""
+"%{name} level kazandı.\n"
+"\n"
+"%{skill} +1"
 
 msgid ""
 "You may learn either:\n"
@@ -3004,14 +3161,19 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr ""
+"Ya %{skill1}\n"
+"ya da\n"
+"%{skill2} öğrenebilirsin."
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
+"Lütfen kaliteli ürünlerimizi inceleyin. Bir takas teklif etmek isterseniz, "
+"takas etmek istediğiniz ve takas etmek istediğiniz ürünlere tıklayın."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
@@ -3054,9 +3216,8 @@ msgstr ""
 msgid "already learned"
 msgstr ""
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Bilgi"
+msgstr "ücretsiz"
 
 msgid "already claimed"
 msgstr ""
@@ -3145,6 +3306,19 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+msgid "Select this game resolution."
+msgstr ""
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr ""
 
@@ -3190,8 +3364,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
-msgid "Warning!"
-msgstr ""
+msgid "Warning"
+msgstr "Uyarı"
 
 msgid "Click to save the current game."
 msgstr ""
@@ -3232,9 +3406,8 @@ msgstr ""
 msgid "Click to start placing the selected hero."
 msgstr ""
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "%{name} %{race}"
+msgstr "%{color} %{race}"
 
 msgid "You will place"
 msgstr ""
@@ -3245,13 +3418,11 @@ msgstr ""
 msgid "Click to select this color."
 msgstr ""
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Büyü hedefini seç"
+msgstr "Defineyi seç:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Büyü hedefini seç"
+msgstr "Okyanus Hedefini Seç:"
 
 msgid "Castle/town placing"
 msgstr ""
@@ -3353,6 +3524,12 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Resurrection"
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3764,10 +3941,10 @@ msgid "Create a new map from scratch."
 msgstr ""
 
 msgid "New Map"
-msgstr ""
+msgstr "Yeni Harita"
 
 msgid "Load Map"
-msgstr ""
+msgstr "Harita Yükle"
 
 msgid "Load an existing map."
 msgstr ""
@@ -3783,6 +3960,10 @@ msgstr ""
 
 msgid "Input %{object} text"
 msgstr ""
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "%{monster} sayısını ayarla"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
@@ -3868,7 +4049,7 @@ msgid "Rocks"
 msgstr ""
 
 msgid "Trees"
-msgstr ""
+msgstr "Ağaçlar"
 
 msgid "Water Objects"
 msgstr ""
@@ -4093,9 +4274,6 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
-msgid "Warning"
-msgstr "Uyarı"
-
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
 msgstr "%{name} %{race}"
@@ -4218,15 +4396,21 @@ msgstr ""
 msgid "Map Description"
 msgstr ""
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 #, fuzzy
@@ -4246,6 +4430,10 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Events"
 msgstr ""
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Click to change your map name."
 msgstr ""
@@ -4475,7 +4663,7 @@ msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
 msgid "Days spent"
-msgstr ""
+msgstr "Geçen Günler"
 
 msgid "The number of days spent on this campaign."
 msgstr ""
@@ -4728,7 +4916,7 @@ msgid "hotkey|hot seat game"
 msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "sadece savaş oyunu"
 
 msgid "hotkey|choose the original campaign"
 msgstr ""
@@ -4991,6 +5179,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5087,41 +5278,25 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
-msgid "Greetings!"
-msgstr ""
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 
-msgid "Please Remember"
-msgstr ""
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-msgid "NEW GAME"
-msgstr ""
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -5196,7 +5371,7 @@ msgid ""
 msgstr ""
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Sadece Savaş"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
@@ -5376,7 +5551,7 @@ msgid "Major Event!"
 msgstr ""
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Senaryo:"
 
 msgid "Game Difficulty:"
 msgstr ""
@@ -5394,7 +5569,7 @@ msgid "Click here to select which scenario to play."
 msgstr ""
 
 msgid "Scenario"
-msgstr ""
+msgstr "Senaryo"
 
 msgid "Game Difficulty"
 msgstr ""
@@ -5587,7 +5762,7 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Çıkmak istediğine emin misin?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -5731,6 +5906,14 @@ msgid "Keyboard|SPACE"
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
 
 msgid "Kingdom Income"
@@ -6937,7 +7120,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -7778,6 +7965,12 @@ msgid "speed|Blazing"
 msgstr ""
 
 msgid "speed|Instant"
+msgstr ""
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
 msgstr ""
 
 msgid "week|Squirrel"
@@ -8767,6 +8960,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -8833,19 +9029,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "

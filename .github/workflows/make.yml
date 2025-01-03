@@ -34,14 +34,14 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
@@ -79,18 +79,18 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
-          os: ubuntu-latest
+          os: ubuntu-22.04
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -102,7 +102,7 @@ jobs:
             CXX: aarch64-linux-gnu-g++
             AR: aarch64-linux-gnu-ar
         - name: macOS SDL2
-          os: macos-12
+          os: macos-13
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -124,14 +124,14 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
@@ -171,14 +171,15 @@ jobs:
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-    - name: Build
+    - name: Build (Linux)
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
-        make -j 2
+        make -j "$(nproc)"
       env: ${{ matrix.config.env }}
-    - name: Create app bundle
+    - name: Build (MacOS)
       if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
-        make -j 2 bundle
+        make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
@@ -249,7 +250,7 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/vitasdk/vdpm
         cd vdpm
-        export PATH="$VITASDK/bin:$PATH"
+        export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
         ./install-all.sh
         rm -rf ~/.vitasdk-cache
@@ -263,8 +264,8 @@ jobs:
         fi
     - name: Build
       run: |
-        export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j 2
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -312,14 +313,14 @@ jobs:
         sudo apt-get -y install gettext p7zip-full
     - name: Build
       run: |
-        export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j 2
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        make -f Makefile.switch -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo

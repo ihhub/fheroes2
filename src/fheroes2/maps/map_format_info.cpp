@@ -22,7 +22,6 @@
 
 #include <array>
 #include <cstddef>
-#include <type_traits>
 
 #include "serialize.h"
 #include "zzlib.h"
@@ -58,8 +57,8 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata );
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata );
 }
 
 namespace
@@ -73,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 5 };
+    constexpr uint16_t currentSupportedVersion{ 8 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -161,14 +160,65 @@ namespace
         }
     }
 
+    void convertFromV5ToV6( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 5, "Remove this function." );
+
+        if ( map.version > 5 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 17 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add new Lean-To object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
+
+    void convertFromV6ToV7( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 6, "Remove this function." );
+
+        if ( map.version > 6 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 38 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add new Stone Liths object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
+
+    void convertFromV7ToV8( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 7, "Remove this function." );
+
+        if ( map.version > 7 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 43 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 3 position "down" to add new Observation Tower variants.
+                    objInfo.index += 3;
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language )
-               << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
 
         return !stream.fail();
     }
@@ -189,14 +239,7 @@ namespace
             return false;
         }
 
-        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
-        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
-        LanguageUnderlyingType language;
-
-        stream >> language;
-        map.language = static_cast<fheroes2::SupportedLanguage>( language );
-
-        stream >> map.name >> map.description;
+        stream >> map.mainLanguage >> map.name >> map.description;
 
         return !stream.fail();
     }
@@ -213,9 +256,9 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata;
 
-        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
         stream.putRaw( temp.data(), temp.size() );
 
@@ -234,14 +277,14 @@ namespace
         decompressed.setBigendian( true );
 
         {
-            std::vector<uint8_t> temp = stream.getRaw();
+            std::vector<uint8_t> temp = stream.getRaw( 0 );
             if ( temp.empty() ) {
                 // This is a corrupted file.
                 map = {};
                 return false;
             }
 
-            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            const std::vector<uint8_t> decompressedData = Compression::unzipData( temp.data(), temp.size() );
             if ( decompressedData.empty() ) {
                 // This is a corrupted file.
                 map = {};
@@ -262,12 +305,14 @@ namespace
         }
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.shrineMetadata;
+            >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
 
-        static_assert( minimumSupportedVersion <= 2, "Remove the following function call." );
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
         convertFromV4ToV5( map );
+        convertFromV5ToV6( map );
+        convertFromV6ToV7( map );
+        convertFromV7ToV8( map );
 
         return !stream.fail();
     }
@@ -277,22 +322,12 @@ namespace Maps::Map_Format
 {
     OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object )
     {
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
-
-        return stream << object.id << static_cast<GroupUnderlyingType>( object.group ) << object.index;
+        return stream << object.id << object.group << object.index;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, TileObjectInfo & object )
     {
-        stream >> object.id;
-
-        using GroupUnderlyingType = std::underlying_type_t<decltype( object.group )>;
-        GroupUnderlyingType group;
-        stream >> group;
-
-        object.group = static_cast<ObjectGroup>( group );
-
-        return stream >> object.index;
+        return stream >> object.id >> object.group >> object.index;
     }
 
     OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )
@@ -389,14 +424,14 @@ namespace Maps::Map_Format
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata )
     {
-        return stream << metadata.allowedSpells;
+        return stream << metadata.selectedItems;
     }
 
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata )
     {
-        return stream >> metadata.allowedSpells;
+        return stream >> metadata.selectedItems;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

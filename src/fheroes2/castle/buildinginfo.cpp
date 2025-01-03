@@ -51,6 +51,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 
@@ -252,7 +253,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const BuildingType b )
 
     // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();
         area.height = sprite.height();
     }
@@ -329,15 +330,15 @@ void BuildingInfo::RedrawCaptain() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     if ( _status == BuildingStatus::ALREADY_BUILT ) {
-        const fheroes2::Sprite & captainSprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0 );
+        const fheroes2::Sprite & captainSprite = fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), 1 );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( castle.GetColor() ), 0 );
 
         fheroes2::Blit( captainSprite, display, area.x, area.y );
         const fheroes2::Point flagOffset = GetFlagOffset( castle.GetRace() );
         fheroes2::Blit( flag, display, area.x + flagOffset.x, area.y + flagOffset.y );
     }
     else {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 0 ), display, area.x, area.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), 0 ), display, area.x, area.y );
     }
 
     // indicator
@@ -385,7 +386,7 @@ void BuildingInfo::Redraw() const
         return;
     }
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
 
     // indicator
     if ( _status == BuildingStatus::ALREADY_BUILT ) {
@@ -478,39 +479,26 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     int32_t requirementHeight = 0;
     if ( requirementsPresent ) {
-        requirementHeight = requirementTitle.height() + requirementText.height( BOXAREA_WIDTH ) + elementOffset;
+        requirementHeight = requirementTitle.height() + requirementText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     }
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), fheroes2::boxAreaWidthPx );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
-    const int32_t totalDialogHeight
-        = elementOffset + buildingFrame.height() + elementOffset + descriptionText.height( BOXAREA_WIDTH ) + elementOffset + requirementHeight + rbs.GetArea().height;
+    const int32_t totalDialogHeight = elementOffset + buildingFrame.height() + elementOffset + descriptionText.height( fheroes2::boxAreaWidthPx ) + elementOffset
+                                      + requirementHeight + rbs.GetArea().height;
 
     const Dialog::FrameBox dialogFrame( totalDialogHeight, buttons );
     const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    fheroes2::Point pos{ dialogRoi.x, dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height() };
-    fheroes2::Button buttonOkay( pos.x, pos.y, buttonOkayIcnID, 0, 1 );
-
-    const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-
-    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
-    fheroes2::Button buttonCancel( pos.x, pos.y, buttonCancelIcnID, 0, 1 );
-
-    pos.x = dialogRoi.x + ( dialogRoi.width - buildingFrame.width() ) / 2;
-    pos.y = dialogRoi.y + elementOffset;
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - buildingFrame.width() ) / 2, pos.y = dialogRoi.y + elementOffset };
 
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
     const fheroes2::Sprite & buildingImage
-        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
+        = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
@@ -522,49 +510,68 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     pos.x = dialogRoi.x;
     pos.y = dialogRoi.y + elementOffset + buildingFrame.height() + elementOffset;
-    descriptionText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    descriptionText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-    pos.y += descriptionText.height( BOXAREA_WIDTH ) + elementOffset;
+    pos.y += descriptionText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     if ( requirementsPresent ) {
         pos.x = dialogRoi.x + ( dialogRoi.width - requirementTitle.width() ) / 2;
         requirementTitle.draw( pos.x, pos.y + 2, display );
 
         pos.x = dialogRoi.x;
         pos.y += requirementTitle.height();
-        requirementText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+        requirementText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
 
-        pos.y += requirementText.height( BOXAREA_WIDTH ) + elementOffset;
+        pos.y += requirementText.height( fheroes2::boxAreaWidthPx ) + elementOffset;
     }
 
     rbs.SetPos( pos.x, pos.y );
     rbs.Redraw();
 
-    if ( buttons ) {
-        if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
-            buttonOkay.disable();
+    LocalEvent & le = LocalEvent::Get();
+
+    if ( !buttons ) {
+        // This is a case when this dialog was called by the right mouse button press.
+
+        display.render();
+
+        while ( le.HandleEvents() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
         }
 
-        buttonOkay.draw();
-        buttonCancel.draw();
+        return false;
     }
-    else {
-        buttonOkay.disable();
-        buttonOkay.hide();
 
-        buttonCancel.disable();
-        buttonCancel.hide();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+
+    pos.x = dialogRoi.x;
+    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height();
+
+    fheroes2::Button buttonOkay( pos.x, pos.y, buttonOkayIcnID, 0, 1 );
+
+    const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
+    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
+    fheroes2::Button buttonCancel( pos.x, pos.y, buttonCancelIcnID, 0, 1 );
+
+    if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
+        buttonOkay.disable();
     }
+
+    buttonOkay.draw();
+    buttonCancel.draw();
 
     display.render();
 
-    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        if ( !buttons && !le.isMouseRightButtonPressed() ) {
-            break;
+        if ( buttonOkay.isEnabled() ) {
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
         }
 
-        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return true;
@@ -574,10 +581,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
             break;
         }
 
-        if ( buttonOkay.isVisible() && le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), GetConditionDescription(), Dialog::ZERO );
         }
-        else if ( buttonCancel.isVisible() && le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }
@@ -720,9 +727,9 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( BuildingStatus::NEED_CASTLE ), Dialog::OK );
     else {
-        const BuildingInfo dwelling( castle, static_cast<BuildingType>( dwType ) );
+        const BuildingInfo _dwelling( castle, static_cast<BuildingType>( dwType ) );
 
-        if ( dwelling.DialogBuyBuilding( true ) ) {
+        if ( _dwelling.DialogBuyBuilding( true ) ) {
             AudioManager::PlaySound( M82::BUILDTWN );
             castle.BuyBuilding( dwType );
         }

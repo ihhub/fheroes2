@@ -28,12 +28,10 @@
 #include <cassert>
 #include <cstddef>
 #include <sstream>
-#include <type_traits>
 
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps.h"
@@ -47,8 +45,7 @@
 
 namespace
 {
-    const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = { nullptr };
+    std::array<Player *, maxNumOfPlayers + 1> playersArray{};
     int humanColors{ Color::NONE };
 
     enum
@@ -270,13 +267,10 @@ IStreamBase & operator>>( IStreamBase & stream, Focus & focus )
 
 OStreamBase & operator<<( OStreamBase & stream, const Player & player )
 {
-    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
-
     const BitModes & modes = player;
 
-    stream << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
-           << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
-    return stream;
+    return stream << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << player._aiPersonality
+                  << player._handicapStatus;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Player & player )
@@ -291,27 +285,12 @@ IStreamBase & operator>>( IStreamBase & stream, Player & player )
         stream >> temp;
     }
 
-    stream >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
-
-    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
-    static_assert( std::is_same_v<AIPersonalityUnderlyingType, int>, "Type of _aiPersonality has been changed, check the logic below" );
-
-    AIPersonalityUnderlyingType aiPersonality;
-    stream >> aiPersonality;
-
-    player._aiPersonality = static_cast<AI::Personality>( aiPersonality );
-
-    uint8_t handicapStatusInt;
-    stream >> handicapStatusInt;
-
-    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
-
-    return stream;
+    return stream >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus >> player._aiPersonality >> player._handicapStatus;
 }
 
 Players::Players()
 {
-    reserve( KINGDOMMAX );
+    reserve( maxNumOfPlayers );
 }
 
 Players::~Players()
@@ -321,15 +300,13 @@ Players::~Players()
 
 void Players::clear()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Player * player ) { delete player; } );
 
     std::vector<Player *>::clear();
 
-    for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
-        _players[ii] = nullptr;
-
     _currentColor = Color::NONE;
+
+    playersArray = {};
     humanColors = Color::NONE;
 }
 
@@ -341,7 +318,7 @@ void Players::Init( int colors )
 
     for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
         push_back( new Player( *it ) );
-        _players[Color::GetIndex( *it )] = back();
+        playersArray[Color::GetIndex( *it )] = back();
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
@@ -374,7 +351,7 @@ void Players::Init( const Maps::FileInfo & fi )
             first = player;
 
         push_back( player );
-        _players[Color::GetIndex( color )] = back();
+        playersArray[Color::GetIndex( color )] = back();
     }
 
     if ( first )
@@ -385,13 +362,12 @@ void Players::Init( const Maps::FileInfo & fi )
 
 void Players::Set( const int color, Player * player )
 {
-    assert( color >= 0 && color < playersSize );
-    _players[color] = player;
+    playersArray[Color::GetIndex( color )] = player;
 }
 
 Player * Players::Get( int color )
 {
-    return _players[Color::GetIndex( color )];
+    return playersArray[Color::GetIndex( color )];
 }
 
 bool Players::isFriends( int player, int colors )
@@ -589,28 +565,33 @@ OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 {
     stream << players.GetColors() << players.getCurrentColor();
 
-    for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
-        stream << ( **it );
+    std::for_each( players.begin(), players.end(), [&stream]( const Player * player ) {
+        assert( player != nullptr );
+
+        stream << *player;
+    } );
 
     return stream;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
-    int colors;
-    int current;
+    int colors{ 0 };
+    int current{ 0 };
     stream >> colors >> current;
 
     players.clear();
     players.setCurrentColor( current );
-    const Colors vcolors( colors );
 
-    for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
+    const Colors vcolors( colors );
+    std::for_each( vcolors.begin(), vcolors.end(), [&stream, &players]( const int /* color */ ) {
         Player * player = new Player();
         stream >> *player;
-        Players::Set( Color::GetIndex( player->GetColor() ), player );
+
+        Players::Set( player->GetColor(), player );
+
         players.push_back( player );
-    }
+    } );
 
     return stream;
 }

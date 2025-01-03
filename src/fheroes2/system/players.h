@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2PLAYERS_H
-#define H2PLAYERS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -44,7 +43,9 @@ namespace Maps
 class Castle;
 class Heroes;
 
-// control_t
+// Maximum number of players on the map
+inline constexpr int maxNumOfPlayers{ 6 };
+
 enum
 {
     CONTROL_NONE = 0,
@@ -273,5 +274,3 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const Players & players );
 IStreamBase & operator>>( IStreamBase & stream, Players & players );
-
-#endif

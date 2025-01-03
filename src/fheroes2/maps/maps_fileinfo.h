@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,17 +20,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPSFILEINFO_H
-#define H2MAPSFILEINFO_H
+
+#pragma once
 
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
+#include "game_language.h"
 #include "math_base.h"
+#include "players.h"
 
 class IStreamBase;
 class OStreamBase;
@@ -144,6 +146,19 @@ namespace Maps
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
 
+        // Only Resurrection Maps contain supported language.
+        std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
+        {
+            if ( version == GameVersion::RESURRECTION ) {
+                return mainLanguage;
+            }
+
+            return {};
+        }
+
+        // This method is mostly used for Text Support mode or debug purposes.
+        std::string getSummary() const;
+
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
@@ -170,8 +185,8 @@ namespace Maps
         uint16_t height;
         uint8_t difficulty;
 
-        std::array<uint8_t, KINGDOMMAX> races;
-        std::array<uint8_t, KINGDOMMAX> unions;
+        std::array<uint8_t, maxNumOfPlayers> races;
+        std::array<uint8_t, maxNumOfPlayers> unions;
 
         uint8_t kingdomColors;
         uint8_t colorsAvailableForHumans;
@@ -201,6 +216,10 @@ namespace Maps
         uint32_t worldWeek;
         uint32_t worldMonth;
 
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
+
     private:
         void FillUnions( const int side1Colors, const int side2Colors );
     };
@@ -219,5 +238,3 @@ namespace Maps
     // Only for RESURRECTION map files.
     MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
-
-#endif

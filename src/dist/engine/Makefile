@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,17 +18,23 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-AR := arm-vita-eabi-gcc-ar
-CC := arm-vita-eabi-gcc
-CXX := arm-vita-eabi-g++
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
+endif
 
-# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
-CCFLAGS := $(CCFLAGS) -I$(VITASDK)/arm-vita-eabi/include -mcpu=cortex-a9 -mfpu=neon -fgraphite-identity -floop-nest-optimize -fno-lto -fno-tree-slp-vectorize
-LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib -Wl,--sort-common -Wl,--whole-archive -Wl,--no-whole-archive -Wl,-q
-# Common flags (for both C and C++ compilers) for fheroes2 only
-CCFLAGS_FH2 := -DTARGET_PS_VITA
+SOURCEDIR := ../../engine
 
-SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2
-SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2_mixer -lSDL2 -lvita2d -lScePower_stub -lSceAudioIn_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub \
-                                           -lSceDisplay_stub -lSceGxm_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lSceMotion_stub -lFLAC -lmikmod \
-                                           -lmodplug -lmpg123 -lvorbisfile -lvorbis -lopusfile -lopus -logg -lxmp
+.PHONY: all clean
+
+all: libengine.a
+
+libengine.a: $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SOURCEDIR)/*.cpp)))
+	$(AR) crvs $@ $^
+
+%.o: $(SOURCEDIR)/%.cpp
+	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
+
+include $(wildcard *.d)
+
+clean:
+	rm -f *.d *.o libengine.a

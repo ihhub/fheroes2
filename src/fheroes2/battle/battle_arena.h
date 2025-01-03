@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ARENA_H
-#define H2BATTLE_ARENA_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -116,10 +115,11 @@ namespace Battle
 
         Result & GetResult();
 
+        HeroBase * GetCommander1() const;
+        HeroBase * GetCommander2() const;
+
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1() const;
-        const HeroBase * GetCommander2() const;
         const HeroBase * GetCurrentCommander() const;
 
         Force & GetForce1() const;
@@ -141,10 +141,10 @@ namespace Battle
         Unit * GetTroopUID( uint32_t );
         const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells() const;
+        const SpellStorage & GetUsedSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
-        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
+        int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
@@ -202,10 +202,21 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
-        bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
-        const Unit * GraveyardLastTroop( const int32_t index ) const;
-        std::vector<const Unit *> GetGraveyardTroops( const int32_t index ) const;
-        Indexes GraveyardOccupiedCells() const;
+        bool isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const;
+
+        Indexes getCellsOccupiedByGraveyard() const;
+        std::vector<const Unit *> getGraveyardUnits( const int32_t index ) const;
+
+        // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
+        const Unit * getLastUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be potentially affected by any resurrection
+        // spell during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
+        // during the current turn, or nullptr if there is no such unit.
+        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -324,8 +335,8 @@ namespace Battle
         std::unique_ptr<Interface> _interface;
         Result result_game;
 
-        Graveyard graveyard;
-        SpellStorage usage_spells;
+        Graveyard _graveyard;
+        SpellStorage _usedSpells;
 
         Board board;
         BattlePathfinder _battlePathfinder;
@@ -352,5 +363,3 @@ namespace Battle
 
     Arena * GetArena();
 }
-
-#endif

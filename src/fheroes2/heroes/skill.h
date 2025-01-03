@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SKILL_H
-#define H2SKILL_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -37,6 +36,11 @@ class HeroBase;
 
 namespace Skill
 {
+    // Total number of primary skills available in the game
+    inline constexpr int numOfPrimarySkills{ 4 };
+    // Total number of secondary skills available in the game
+    inline constexpr int numOfSecondarySkills{ 14 };
+
     class Secondary;
 
     int GetLeadershipModifiers( int level, std::string * strs );
@@ -118,7 +122,6 @@ namespace Skill
         // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
-        static int RandForWitchsHut();
         static const char * String( int );
     };
 
@@ -126,13 +129,7 @@ namespace Skill
     {
     public:
         SecSkills();
-        explicit SecSkills( int race );
-        SecSkills( const SecSkills & ) = delete;
-
-        ~SecSkills() = default;
-
-        SecSkills & operator=( const SecSkills & ) = delete;
-        SecSkills & operator=( SecSkills && ) = default;
+        explicit SecSkills( const int race );
 
         int Count() const;
         int GetLevel( int skill ) const;
@@ -151,7 +148,6 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    private:
         friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
         friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
@@ -159,7 +155,6 @@ namespace Skill
     class Primary
     {
     public:
-        Primary();
         virtual ~Primary() = default;
 
         enum
@@ -198,10 +193,10 @@ namespace Skill
         friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
         friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
-        int attack;
-        int defense;
-        int power;
-        int knowledge;
+        int attack{ 0 };
+        int defense{ 0 };
+        int power{ 0 };
+        int knowledge{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
@@ -210,4 +205,3 @@ namespace Skill
     OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
     IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
-#endif

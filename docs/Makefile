@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -37,7 +37,7 @@ endif
 .PHONY: all clean
 
 all:
-	@sed -e '$(SEDEX)' fheroes2.6.in > fheroes2.6
+	sed -e '$(SEDEX)' fheroes2.6.in > fheroes2.6
 
 clean:
-	@rm -f fheroes2.6
+	rm -f fheroes2.6

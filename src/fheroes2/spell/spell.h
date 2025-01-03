@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,13 +20,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPELL_H
-#define H2SPELL_H
+
+#pragma once
 
 #include <cstdint>
 #include <vector>
-
-#define DEFAULT_SPELL_DURATION 3
 
 class IStreamBase;
 class OStreamBase;
@@ -227,6 +225,22 @@ public:
         return id == COLDRAY || id == COLDRING;
     }
 
+    bool isElementalSpell() const
+    {
+        switch ( id ) {
+        case COLDRAY:
+        case COLDRING:
+        case FIREBALL:
+        case FIREBLAST:
+        case LIGHTNINGBOLT:
+        case CHAINLIGHTNING:
+        case ELEMENTALSTORM:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     bool isBuiltinOnly() const
     {
         return id == PETRIFY;
@@ -237,9 +251,7 @@ public:
     // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
-    static Spell Rand( const int level, const bool isAdventure );
-    static Spell RandCombat( const int level );
-    static Spell RandAdventure( const int level );
+    static Spell getRandomSpell( const int level );
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
@@ -253,5 +265,3 @@ private:
 
     int id;
 };
-
-#endif

@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CAPTAIN_H
-#define H2CAPTAIN_H
+
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -35,7 +35,8 @@ class Castle;
 class Captain final : public HeroBase
 {
 public:
-    explicit Captain( Castle & );
+    explicit Captain( Castle & castle );
+
     Captain( const Captain & ) = delete;
 
     ~Captain() override = default;
@@ -87,5 +88,3 @@ private:
 
     Castle & home;
 };
-
-#endif

@@ -46,7 +46,7 @@ int Dialog::BuyBoat( bool enable )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), fheroes2::boxAreaWidthPx );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATWIND, 0 );
     fheroes2::Text text{ _( "Build a new ship:" ), fheroes2::FontType::normalWhite() };
@@ -96,15 +96,19 @@ int Dialog::BuyBoat( bool enable )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( buttonOkay.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        if ( buttonOkay.isEnabled() ) {
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
+        }
 
-        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) )
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+
+        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
             return Dialog::OK;
+        }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             return Dialog::CANCEL;
+        }
     }
 
     return Dialog::ZERO;

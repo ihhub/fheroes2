@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-04 11:59+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -283,6 +283,9 @@ msgstr ""
 msgid "EVENTS"
 msgstr ""
 
+msgid "LANGUAGE"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Ваяр"
 
@@ -450,6 +453,9 @@ msgstr "Загавор няўдалы!"
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
+msgstr ""
+
+msgid "You cannot cast spells without a commanding hero."
 msgstr ""
 
 msgid "You have already cast a spell this round."
@@ -3054,6 +3060,10 @@ msgstr ""
 msgid "Select Game Language:"
 msgstr "Мова"
 
+#, fuzzy
+msgid "Select Language:"
+msgstr "Мова"
+
 msgid "Click to choose the selected language."
 msgstr "Пстрыкні, каб ухваліць выбар мовы."
 
@@ -3219,6 +3229,20 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
+#, fuzzy
+msgid "Select this game resolution."
+msgstr "Раздзяленне экрана"
+
+msgid ""
+"Selecting this resolution will set a resolution that is scaled from the "
+"original resolution (%{resolution}) by multiplying it with the number in the "
+"brackets (%{scale}).\n"
+"\n"
+"A resolution with a clean integer number (2.0x, 3.0x etc.) will usually look "
+"better because the pixels are upscaled evenly in both horizontal and "
+"vertical directions."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Абряры раздзяленне экранa:"
 
@@ -3265,8 +3289,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
-msgid "Warning!"
-msgstr ""
+msgid "Warning"
+msgstr "Увага"
 
 msgid "Click to save the current game."
 msgstr ""
@@ -3451,6 +3475,13 @@ msgstr "Кошт вернасці"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Раздзяленне экрана"
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Мова"
 
 msgid "Lose all your heroes and towns."
 msgstr "Страціціь усіх герояў і гарады."
@@ -3894,6 +3925,12 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr ""
+"Некалькі\n"
+"%{monster}"
+
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
@@ -4216,9 +4253,6 @@ msgstr "Вярнуцца ў галоўнае меню."
 msgid "No maps available!"
 msgstr ""
 
-msgid "Warning"
-msgstr "Увага"
-
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
 msgstr "%{color} гулец"
@@ -4344,17 +4378,23 @@ msgstr "Складанасць мапы:"
 msgid "Map Description"
 msgstr "Апісанне"
 
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Апісанне"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4373,6 +4413,10 @@ msgstr "Пстрыкні, каб ухваліць абранае раздзял�
 
 msgid "Events"
 msgstr ""
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Змяніць мову гульні."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5144,6 +5188,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5239,45 +5286,27 @@ msgstr "Супрацьстаянне некалькіх асобаў на адн
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team прадстаўляе"
 
-msgid "Greetings!"
-msgstr ""
-
 #, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Выйсці з Heroes of Might and Magic II."
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr "Выйсці з Heroes of Might and Magic II."
 
-msgid "Please Remember"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Змяніць мову, раздзяленне экрана і налады гульні."
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-#, fuzzy
-msgid "NEW GAME"
-msgstr "НОВАЯ"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -5912,6 +5941,14 @@ msgid "Keyboard|SPACE"
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
 
 msgid "Kingdom Income"
@@ -7121,7 +7158,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -7970,6 +8011,12 @@ msgstr "Нястрымная"
 
 msgid "speed|Instant"
 msgstr "Імгненная"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr ""
@@ -8964,6 +9011,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9030,19 +9080,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
@@ -10826,3 +10897,13 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Змяніць мову, раздзяленне экрана і налады гульні."
+
+#, fuzzy
+#~ msgid "NEW GAME"
+#~ msgstr "НОВАЯ"

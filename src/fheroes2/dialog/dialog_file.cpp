@@ -28,7 +28,6 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -36,6 +35,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_window.h"
 
@@ -52,8 +52,8 @@ namespace
         const int32_t totalDialogHeight = 252;
 
         // Prepare restorer of the adventure map when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - BORDERWIDTH ) / 2, ( display.height() - totalDialogHeight + BORDERWIDTH ) / 2,
-                                      totalDialogWidth, totalDialogHeight );
+        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - fheroes2::borderWidthPx ) / 2,
+                                      ( display.height() - totalDialogHeight + fheroes2::borderWidthPx ) / 2, totalDialogWidth, totalDialogHeight );
 
         fheroes2::StandardWindow background( 289, 204, true, display );
 
@@ -87,11 +87,11 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonNew.area() ) ? buttonNew.drawOnPress() : buttonNew.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) ? buttonLoad.drawOnPress() : buttonLoad.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonSave.area() ) ? buttonSave.drawOnPress() : buttonSave.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
+            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
+            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
+            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
@@ -111,7 +111,8 @@ namespace
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
-            else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+
+            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
@@ -121,7 +122,8 @@ namespace
                 result = fheroes2::GameMode::CANCEL;
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {

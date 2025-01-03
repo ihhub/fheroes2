@@ -29,7 +29,6 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -42,6 +41,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -101,28 +101,29 @@ namespace
         const fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
         const int spacer = 10;
 
-        const Dialog::FrameBox box( box1.height( BOXAREA_WIDTH ) + spacer + box2.height( BOXAREA_WIDTH ) + 10 + sprite_frame.height(), true );
+        const Dialog::FrameBox box( box1.height( fheroes2::boxAreaWidthPx ) + spacer + box2.height( fheroes2::boxAreaWidthPx ) + 10 + sprite_frame.height(), true );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
 
         fheroes2::Point pt;
         pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).width() - 20;
         pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button button_learn1( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        fheroes2::Button buttonLearnLeft( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
         pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
         pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button button_learn2( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        fheroes2::Button buttonLearnRight( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
         const fheroes2::Rect & boxArea = box.GetArea();
         fheroes2::Point pos( boxArea.x, boxArea.y );
 
-        box1.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
-        pos.y += box1.height( BOXAREA_WIDTH ) + spacer;
+        box1.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
+        pos.y += box1.height( fheroes2::boxAreaWidthPx ) + spacer;
 
-        box2.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
-        pos.y += box2.height( BOXAREA_WIDTH ) + spacer;
+        box2.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
+        pos.y += box2.height( fheroes2::boxAreaWidthPx ) + spacer;
 
         // sprite1
         pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;
@@ -154,36 +155,36 @@ namespace
         pt.y = box.GetArea().y + box.GetArea().height - 35;
 
         const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-        fheroes2::ButtonSprite button_hero
+        fheroes2::ButtonSprite buttonHero
             = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
-        text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), fheroes2::FontType::normalWhite() );
+        text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ), fheroes2::FontType::normalWhite() );
         text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 15, display );
 
-        button_learn1.draw();
-        button_learn2.draw();
-        button_hero.draw();
+        buttonLearnLeft.draw();
+        buttonLearnRight.draw();
+        buttonHero.draw();
 
         display.render();
         LocalEvent & le = LocalEvent::Get();
 
         // message loop
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( button_learn1.area() ) ? button_learn1.drawOnPress() : button_learn1.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
+            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeft.area() ) );
+            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRight.area() ) );
+            buttonHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHero.area() ) );
 
-            if ( le.MouseClickLeft( button_learn1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+            if ( le.MouseClickLeft( buttonLearnLeft.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
                 return sec1.Skill();
             }
 
-            if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+            if ( le.MouseClickLeft( buttonLearnRight.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
                 return sec2.Skill();
             }
 
-            if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( le.MouseClickLeft( buttonHero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 LocalEvent::Get().reset();
-                hero.OpenDialog( false, true, true, true, true, false );
+                hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
             }
 
@@ -202,7 +203,7 @@ namespace
                 fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
                 display.render();
             }
-            else if ( le.isMouseRightButtonPressedInArea( button_hero.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonHero.area() ) ) {
                 fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
             }
         }

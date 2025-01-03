@@ -91,7 +91,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
         _gameArea.SetRedraw();
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
@@ -108,7 +108,7 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
     }
 
     const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
-    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+    const Maps::Tile & tile = world.getTile( dstIndex );
 
     if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
         return;
@@ -132,7 +132,7 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 
 void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
 {
-    Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
+    Heroes * selectedHero = world.getTile( tileIndex ).getHero();
     if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
         return;
     }
@@ -211,7 +211,7 @@ void Interface::AdventureMap::EventKingdomInfo() const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
 
-    iconsPanel.SetRedraw();
+    _iconsPanel.setRedraw();
 }
 
 void Interface::AdventureMap::EventCastSpell()
@@ -408,7 +408,7 @@ void Interface::AdventureMap::EventSwitchHeroSleeping()
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         setRedraw( REDRAW_HEROES );
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
 }
 
@@ -439,7 +439,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
@@ -547,7 +547,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
         }
         else {
             conf.SetShowButtons( true );
-            buttonsArea.SetRedraw();
+            _buttonsPanel.setRedraw();
         }
     }
 }
@@ -563,7 +563,7 @@ void Interface::AdventureMap::EventSwitchShowStatus() const
         }
         else {
             conf.SetShowStatus( true );
-            _statusWindow.SetRedraw();
+            _statusPanel.setRedraw();
         }
     }
 }
@@ -579,7 +579,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetRedraw();
+            _iconsPanel.setRedraw();
         }
     }
 }

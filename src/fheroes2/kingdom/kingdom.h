@@ -20,10 +20,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2KINGDOM_H
-#define H2KINGDOM_H
+
+#pragma once
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <list>
@@ -31,7 +32,6 @@
 
 #include "bitmodes.h"
 #include "castle.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
@@ -52,7 +52,7 @@ namespace MP2
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Kingdom : public BitModes, public Control
@@ -60,7 +60,7 @@ class Kingdom : public BitModes, public Control
 public:
     enum
     {
-        // UNDEF      = 0x0001,
+        // UNUSED = 0x0001,
         IDENTIFYHERO = 0x0002,
         // UNUSED = 0x0004,
         KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
@@ -77,7 +77,14 @@ public:
     };
 
     Kingdom();
+
+    Kingdom( const Kingdom & ) = delete;
+    Kingdom( Kingdom && ) = default;
+
     ~Kingdom() override = default;
+
+    Kingdom & operator=( const Kingdom & ) = delete;
+    Kingdom & operator=( Kingdom && ) = default;
 
     void Init( const int clr );
     void clear();
@@ -181,10 +188,10 @@ public:
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
-    bool isVisited( const Maps::Tiles & ) const;
+    bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+    bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
 
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;
@@ -244,13 +251,13 @@ public:
     void NewWeek();
     void NewMonth();
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( const int color );
+    const Kingdom & GetKingdom( const int color ) const;
 
     int GetNotLossColors() const;
-    int FindWins( int ) const;
+    int FindWins( const int cond ) const;
 
-    void AddHeroes( const AllHeroes & );
+    void AddHeroes( const AllHeroes & heroes );
     void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
@@ -261,8 +268,5 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj );
     friend IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj );
 
-    static constexpr uint32_t _size = KINGDOMMAX + 1;
-    Kingdom kingdoms[_size];
+    std::array<Kingdom, maxNumOfPlayers + 1> _kingdoms;
 };
-
-#endif

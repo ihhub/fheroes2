@@ -34,7 +34,7 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     enum class ObjectGroup : uint8_t;
 }
@@ -144,11 +144,11 @@ namespace Interface
             // Do nothing.
         }
 
-        bool _setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        bool _setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void _handleObjectMouseLeftClick( Maps::Tiles & tile );
+        void _handleObjectMouseLeftClick( Maps::Tile & tile );
 
         void _validateObjectsOnTerrainUpdate();
 
@@ -161,7 +161,7 @@ namespace Interface
 
         EditorPanel _editorPanel;
 
-        int32_t _selectedTile{ -1 };
+        int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
         std::function<void( const int32_t )> _cursorUpdater;

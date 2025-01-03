@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_OBJECTS_H
-#define H2MAPS_OBJECTS_H
+
+#pragma once
 
 #include <cstdint>
 #include <initializer_list>
@@ -30,7 +30,6 @@
 #include <vector>
 
 #include "artifact.h"
-#include "mp2.h"
 #include "position.h"
 #include "resource.h"
 
@@ -40,19 +39,7 @@ class OStreamBase;
 class MapObjectSimple : public MapPosition
 {
 public:
-    explicit MapObjectSimple( const int objectType = MP2::OBJ_NONE )
-        : uid( 0 )
-        , type( objectType )
-    {
-        // Do nothing.
-    }
-
-    ~MapObjectSimple() override = default;
-
-    int GetType() const
-    {
-        return type;
-    }
+    MapObjectSimple() = default;
 
     uint32_t GetUID() const
     {
@@ -74,17 +61,12 @@ protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
     friend IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
 
-    uint32_t uid;
-    int type;
+    uint32_t uid{ 0 };
 };
 
 struct MapEvent : public MapObjectSimple
 {
-    MapEvent()
-        : MapObjectSimple( MP2::OBJ_EVENT )
-    {
-        // Do nothing.
-    }
+    MapEvent() = default;
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
@@ -110,11 +92,7 @@ struct MapEvent : public MapObjectSimple
 
 struct MapSphinx : public MapObjectSimple
 {
-    MapSphinx()
-        : MapObjectSimple( MP2::OBJ_SPHINX )
-    {
-        // Do nothing.
-    }
+    MapSphinx() = default;
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
@@ -160,11 +138,7 @@ struct MapSphinx : public MapObjectSimple
 
 struct MapSign : public MapObjectSimple
 {
-    MapSign()
-        : MapObjectSimple( MP2::OBJ_SIGN )
-    {
-        // Do nothing.
-    }
+    MapSign() = default;
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
@@ -172,9 +146,6 @@ struct MapSign : public MapObjectSimple
 
     std::string message;
 };
-
-OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
-IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj );
@@ -184,5 +155,3 @@ IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj );
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj );
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj );
-
-#endif

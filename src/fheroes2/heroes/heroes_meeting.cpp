@@ -39,7 +39,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -54,6 +53,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -159,7 +159,7 @@ class MeetingArtifactBar : public ArtifactsBar
 public:
     using ArtifactsBar::RedrawItem;
 
-    explicit MeetingArtifactBar( const Heroes * hero )
+    explicit MeetingArtifactBar( Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
@@ -346,11 +346,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
 
     // The original resources do not have such animated buttons so we have to create those.
-    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
-    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 319, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 319, display );
+    fheroes2::ButtonSprite swapArmies = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 268, display );
 
-    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
-    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 311, 223, 8 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 311, 223, 8 );
 
     // army
     dst_pt.x = cur_pt.x + 36;
@@ -393,8 +394,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.Redraw( display );
 
     fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
-    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
-    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 384, display );
+    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 426, display );
+    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 426, display );
+    fheroes2::ButtonSprite swapArtifacts = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 361, display );
 
     // button exit
     dst_pt.x = cur_pt.x + 280;
@@ -403,8 +405,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
+    swapArmies.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
+    swapArtifacts.draw();
     buttonExit.draw();
 
     // Fade-in heroes meeting dialog. Use half fade if game resolution is not 640x480.
@@ -418,7 +422,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
@@ -428,9 +432,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapArmies.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+            swapArmies.drawOnPress();
+        }
         else {
             moveArmyToHero1.drawOnRelease();
             moveArmyToHero2.drawOnRelease();
+            swapArmies.drawOnRelease();
         }
 
         if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
@@ -441,9 +449,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapArtifacts.area() ) ) {
+            swapArtifacts.drawOnPress();
+        }
         else {
             moveArtifactsToHero1.drawOnRelease();
             moveArtifactsToHero2.drawOnRelease();
+            swapArtifacts.drawOnRelease();
         }
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
@@ -527,7 +539,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             // so the engine thinks that we are opening there was now window before to fade-out.
             // We also have to cache the display image to properly restore it after closing hero dialog.
 
-            const fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
+            const fheroes2::Rect restorerRoi( cur_pt.x - 2 * fheroes2::borderWidthPx, cur_pt.y - fheroes2::borderWidthPx, src_rt.width + 3 * fheroes2::borderWidthPx,
+                                              src_rt.height + 3 * fheroes2::borderWidthPx );
             fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
             // If game display resolution is 640x480 then all fade effects are done in 'OpenHeroesDialog()' except fade-in after dialog close.
@@ -615,6 +628,23 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
+        else if ( le.MouseClickLeft( swapArmies.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+            GetArmy().SwapTroops( otherHero.GetArmy() );
+
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            display.render();
+        }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
             moveArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
@@ -644,6 +674,31 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
+            BagArtifacts temp;
+
+            moveArtifacts( GetBagArtifacts(), temp );
+            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
+            moveArtifacts( temp, otherHero.GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
+
+            backPrimary.restore();
+
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 

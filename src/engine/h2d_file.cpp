@@ -216,6 +216,6 @@ namespace fheroes2
         stream.putRaw( image.image(), imageSize );
         stream.putRaw( image.transform(), imageSize );
 
-        return writer.add( name, stream.getRaw() );
+        return writer.add( name, stream.getRaw( 0 ) );
     }
 }
