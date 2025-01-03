@@ -540,6 +540,8 @@ namespace
         // Either there is no need to resume music playback, or the resumption failed. Let's try to
         // start the playback from the beginning.
         if ( returnCode != 0 ) {
+            track->setPosition( 0 );
+
             returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
 
             if ( returnCode != 0 ) {
