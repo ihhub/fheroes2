@@ -23,8 +23,6 @@
 #include <cassert>
 #include <memory>
 
-#include "logging.h"
-
 namespace
 {
 #ifdef __EMSCRIPTEN__
