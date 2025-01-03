@@ -3211,8 +3211,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Text title( _( "Automatic Battle Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-    fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+    const fheroes2::Text title( _( "Automatic Battle Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+    const fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -3272,8 +3272,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
-                                               _( "The battle will be resolved instantly by the computer from the current state.\n\nThis cannot be reverted." ),
-                                               Dialog::ZERO );
+                                               _( "Instantly resolves the battle by the computer from the current state.\n\nThis cannot be reverted." ), Dialog::ZERO );
         }
     }
 }
