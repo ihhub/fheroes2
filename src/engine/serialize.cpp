@@ -421,7 +421,9 @@ void StreamFile::close()
     _file.reset();
 
 #ifdef __EMSCRIPTEN__
-    EM_ASM( FS.syncfs( err = > err && console.warn( "FS.syncfs() error:", err ) ) );
+    // clang-format off
+    EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
+    // clang-format on
 #endif
 }
 
