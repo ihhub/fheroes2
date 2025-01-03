@@ -97,7 +97,7 @@ android/app/src/main/assets/files/
 # Mac magic folders
 .DS_Store
 
-#web build artifacts
+# Web build artifacts
 *.wasm
 *.wasm.map
 fheroes2.js
