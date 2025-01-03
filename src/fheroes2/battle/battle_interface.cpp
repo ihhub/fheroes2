@@ -682,9 +682,9 @@ namespace Battle
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax, area.y + area.height - 11 ) );
 
-            const fheroes2::Rect & buttonPgUpArea = buttonPgUp.area();
+            const fheroes2::Rect & buttonPgUpArea = _buttonPgUp.area();
 
-            _scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUpArea.y + buttonPgUpArea.height ) - 7;
+            _scrollbarSliderAreaLength = _buttonPgDn.area().y - ( buttonPgUpArea.y + buttonPgUpArea.height ) - 7;
 
             setScrollBarArea( { ax + 5, buttonPgUpArea.y + buttonPgUpArea.height + 3, 12, _scrollbarSliderAreaLength } );
 
@@ -774,9 +774,9 @@ namespace Battle
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Rect & buttonPgUpArea = buttonPgUp.area();
+            const fheroes2::Rect & buttonPgUpArea = _buttonPgUp.area();
             const int32_t buttonPgUpBottom = buttonPgUpArea.y + buttonPgUpArea.height;
-            const int32_t buttonPgDnAreaY = buttonPgDn.area().y;
+            const int32_t buttonPgDnAreaY = _buttonPgDn.area().y;
 
             const int32_t ax = buttonPgUpArea.x;
             const int32_t ah = buttonPgDnAreaY - buttonPgUpBottom;
@@ -1218,7 +1218,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     // cover
     const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const Maps::Tile & tile = world.getTile( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -1277,8 +1277,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
-    btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
+    _buttonAuto.setICNInfo( ICN::TEXTBAR, 4, 5 );
+    _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
     if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
@@ -1294,13 +1294,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect settingsRect = btn_settings.area();
-    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - btn_auto.area().height;
-    btn_auto.setPosition( area.x, satusOffsetY );
-    btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
+    const fheroes2::Rect & settingsRect = _buttonSettings.area();
+    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - _buttonAuto.area().height;
+    _buttonAuto.setPosition( area.x, satusOffsetY );
+    _buttonSettings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
-    btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
+    _buttonSkip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    _buttonSkip.setPosition( area.x + area.width - _buttonSkip.area().width, area.y + area.height - _buttonSkip.area().height );
 
     status.setPosition( area.x + settingsRect.width, satusOffsetY );
 
@@ -1472,9 +1472,9 @@ void Battle::Interface::RedrawInterface()
 {
     status.redraw( fheroes2::Display::instance() );
 
-    btn_auto.draw();
-    btn_settings.draw();
-    btn_skip.draw();
+    _buttonAuto.draw();
+    _buttonSettings.draw();
+    _buttonSkip.draw();
 
     popup.redraw();
 
@@ -2864,7 +2864,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         cursor.SetThemes( Cursor::POINTER );
         _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() );
     }
-    else if ( le.isMouseCursorPosInArea( btn_auto.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Enable auto combat" );
         ButtonAutoAction( unit, actions );
@@ -2873,7 +2873,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
-    else if ( le.isMouseCursorPosInArea( btn_settings.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Customize system options" );
         ButtonSettingsAction();
@@ -2882,7 +2882,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
-    else if ( le.isMouseCursorPosInArea( btn_skip.area() ) ) {
+    else if ( le.isMouseCursorPosInArea( _buttonSkip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
         ButtonSkipAction( actions );
@@ -3167,9 +3167,9 @@ void Battle::Interface::_openBattleSettingsDialog()
 
 void Battle::Interface::EventShowOptions()
 {
-    btn_settings.drawOnPress();
+    _buttonSettings.drawOnPress();
     _openBattleSettingsDialog();
-    btn_settings.drawOnRelease();
+    _buttonSettings.drawOnRelease();
     humanturn_redraw = true;
 }
 
@@ -3256,9 +3256,9 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
+    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
 
-    if ( le.MouseClickLeft( btn_auto.area() ) ) {
+    if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
         OpenAutoModeDialog( unit, actions );
     }
 }
@@ -3267,9 +3267,9 @@ void Battle::Interface::ButtonSettingsAction()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
+    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
 
-    if ( le.MouseClickLeft( btn_settings.area() ) ) {
+    if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
         _openBattleSettingsDialog();
 
         humanturn_redraw = true;
@@ -3280,9 +3280,9 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    le.isMouseLeftButtonPressedInArea( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
+    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
 
-    if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
+    if ( le.MouseClickLeft( _buttonSkip.area() ) && _currentUnit ) {
         actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }

@@ -72,11 +72,11 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const int32_t buttonsYPosition = box.GetArea().y + box.GetArea().height - buttonYesSprite.height();
     const int32_t buttonYesXPosition = box.GetArea().x + box.GetArea().width / 2 - buttonYesSprite.width() - 20;
 
-    fheroes2::Button button_yes( buttonYesXPosition, buttonsYPosition, buttonYesIcnID, 0, 1 );
+    fheroes2::Button buttonYes( buttonYesXPosition, buttonsYPosition, buttonYesIcnID, 0, 1 );
 
     const int32_t buttonNoXPosition = box.GetArea().x + box.GetArea().width / 2 + 20;
 
-    fheroes2::Button button_no( buttonNoXPosition, buttonsYPosition, buttonNoIcnID, 0, 1 );
+    fheroes2::Button buttonNo( buttonNoXPosition, buttonsYPosition, buttonNoIcnID, 0, 1 );
 
     fheroes2::Rect pos = box.GetArea();
 
@@ -107,8 +107,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
               fheroes2::FontType::smallWhite() );
     text.draw( pos.x + sprite_expr.width() / 2 - text.width() / 2, pos.y + 4, display );
 
-    button_yes.draw();
-    button_no.draw();
+    buttonYes.draw();
+    buttonNo.draw();
 
     display.render();
     LocalEvent & le = LocalEvent::Get();
@@ -116,14 +116,14 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
+        buttonYes.drawOnState( le.isMouseLeftButtonPressedInArea( buttonYes.area() ) );
+        buttonNo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNo.area() ) );
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button_yes.area() ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonYes.area() ) ) {
             result = true;
             break;
         }
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( button_no.area() ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonNo.area() ) ) {
             result = false;
             break;
         }

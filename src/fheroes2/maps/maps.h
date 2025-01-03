@@ -41,9 +41,9 @@ using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
-    struct TilesAddon;
+    struct ObjectPart;
 
-    enum mapsize_t : int
+    enum MapSize : int
     {
         ZERO = 0,
         SMALL = 36,
@@ -95,7 +95,7 @@ namespace Maps
     Indexes GetObjectPositions( const MP2::MapObjectType objectType );
 
     // This is a very slow function by performance. Use it only while loading a map.
-    std::vector<std::pair<int32_t, const TilesAddon *>> getObjectParts( const MP2::MapObjectType objectType );
+    std::vector<std::pair<int32_t, const ObjectPart *>> getObjectParts( const MP2::MapObjectType objectType );
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 

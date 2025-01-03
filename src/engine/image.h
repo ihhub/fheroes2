@@ -37,6 +37,7 @@ namespace fheroes2
     public:
         Image() = default;
         Image( const int32_t width_, const int32_t height_ );
+
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -115,6 +116,7 @@ namespace fheroes2
         Sprite() = default;
         Sprite( const int32_t width_, const int32_t height_, const int32_t x_ = 0, const int32_t y_ = 0 );
         Sprite( const Image & image, const int32_t x_ = 0, const int32_t y_ = 0 );
+
         Sprite( const Sprite & sprite ) = default;
         Sprite( Sprite && sprite ) noexcept;
 
@@ -231,6 +233,7 @@ namespace fheroes2
 
     // draw one image onto another
     void Blit( const Image & in, Image & out, const bool flip = false );
+    void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 

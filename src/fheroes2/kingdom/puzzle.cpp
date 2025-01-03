@@ -120,7 +120,7 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
@@ -177,6 +177,7 @@ namespace
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+
         buttonExit.draw();
 
         drawPuzzle( pzl, sf, fheroes2::borderWidthPx, fheroes2::borderWidthPx );
@@ -190,7 +191,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -268,7 +269,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

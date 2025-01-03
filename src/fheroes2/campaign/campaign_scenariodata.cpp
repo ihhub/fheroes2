@@ -622,7 +622,7 @@ namespace
             const ListFiles files = Settings::FindFiles( "maps", "", false );
 
             for ( const std::string & file : files ) {
-                result.try_emplace( StringLower( System::GetBasename( file ) ), file );
+                result.try_emplace( StringLower( System::GetFileName( file ) ), file );
             }
 
             return result;

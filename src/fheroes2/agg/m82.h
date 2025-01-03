@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,7 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace M82
@@ -357,7 +357,7 @@ namespace M82
     int FromSpell( const int spellID );
 
     // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
-    SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
+    SoundType getAdventureMapTileSound( const Maps::Tile & tile );
 }
 
 #endif

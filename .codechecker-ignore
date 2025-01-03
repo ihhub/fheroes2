@@ -1,0 +1,4 @@
+# LLVM header
+# cetintrin.h:49:10: 1st function call argument is an uninitialized value [core.CallAndMessage]
+#   return __builtin_ia32_rdsspd(t);
+-/usr/lib/llvm-18/lib/clang/18/include/cetintrin.h

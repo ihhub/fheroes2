@@ -362,7 +362,7 @@ std::string Route::Path::String() const
     output += ", to: ";
     output += std::to_string( dstIndex );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dstIndex ) ? world.GetTiles( dstIndex ).GetObject() : MP2::OBJ_NONE );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dstIndex ) ? world.getTile( dstIndex ).getMainObjectType() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {

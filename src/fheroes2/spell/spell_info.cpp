@@ -328,7 +328,7 @@ namespace fheroes2
         }
 
         const int32_t heroTileIdx = hero.GetIndex();
-        const int heroTilePassability = world.GetTiles( heroTileIdx ).GetPassable();
+        const int heroTilePassability = world.getTile( heroTileIdx ).GetPassable();
 
         std::vector<int32_t> possibleBoatPositions;
         possibleBoatPositions.reserve( 8 );
@@ -341,8 +341,8 @@ namespace fheroes2
                 continue;
             }
 
-            const Maps::Tiles & tile = world.GetTiles( tileIdx );
-            if ( !tile.isWater() || tile.GetObject() != MP2::OBJ_NONE ) {
+            const Maps::Tile & tile = world.getTile( tileIdx );
+            if ( !tile.isWater() || tile.getMainObjectType() != MP2::OBJ_NONE ) {
                 continue;
             }
 
@@ -382,7 +382,7 @@ namespace fheroes2
             // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
             // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
             if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
-                     const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
+                     const int boatColor = world.getTile( boatSource ).getBoatOwnerColor();
 
                      // Boats belonging to the hero's kingdom can always be summoned
                      if ( boatColor == heroColor ) {
@@ -417,6 +417,6 @@ namespace fheroes2
     bool isHeroNearWater( const Heroes & hero )
     {
         const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
-        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.GetTiles( tileId ).isWater(); } );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.getTile( tileId ).isWater(); } );
     }
 }

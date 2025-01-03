@@ -1144,6 +1144,11 @@ namespace fheroes2
         Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );
     }
 
+    void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip /* = false */ )
+    {
+        Blit( in, 0, 0, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height, flip );
+    }
+
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip /* = false */ )
     {
         Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
