@@ -53,11 +53,10 @@ namespace MultiThreading
         // Notify the worker thread about a new task. The _mutex should be acquired while calling this method.
         void notifyWorker();
 
-        // Prepare a task which requires mutex lock. Returns true if more tasks are available.
+        // Prepare the next task. The _mutex will be acquired while calling this method. Returns true if more tasks are available.
         virtual bool prepareTask() = 0;
 
-        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are
-        // done for this call.
+        // Execute the next task. NOTE WELL: the _mutex will NOT be acquired while calling this method.
         virtual void executeTask() = 0;
 
     private:

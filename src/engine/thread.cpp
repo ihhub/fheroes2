@@ -22,16 +22,46 @@
 
 #include <cassert>
 #include <memory>
+
 #include "logging.h"
+
+namespace
+{
+#ifdef __EMSCRIPTEN__
+    class MutexUnlocker
+    {
+    public:
+        explicit MutexUnlocker( std::mutex & mutex )
+            : _mutex( mutex )
+        {
+            _mutex.unlock();
+        }
+
+        MutexUnlocker( const MutexUnlocker & ) = delete;
+
+        ~MutexUnlocker()
+        {
+            _mutex.lock();
+        }
+
+        MutexUnlocker & operator=( const MutexUnlocker & ) = delete;
+
+    private:
+        std::mutex & _mutex;
+    };
+#endif
+}
 
 namespace MultiThreading
 {
     void AsyncManager::createWorker()
     {
-#if !defined( __EMSCRIPTEN__ ) // disable pthread for web target
+        // Emscripten has no pthread support. The worker thread should not be started.
+#ifndef __EMSCRIPTEN__
         if ( !_worker ) {
             _runFlag = true;
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
+
             {
                 std::unique_lock<std::mutex> lock( _mutex );
 
@@ -43,6 +73,10 @@ namespace MultiThreading
 
     void AsyncManager::stopWorker()
     {
+#ifdef __EMSCRIPTEN__
+        // Emscripten has no pthread support. The worker thread should not be running here.
+        assert( !_worker );
+#else
         if ( _worker ) {
             {
                 const std::scoped_lock<std::mutex> lock( _mutex );
@@ -56,19 +90,32 @@ namespace MultiThreading
             _worker->join();
             _worker.reset();
         }
+#endif
     }
 
     void AsyncManager::notifyWorker()
     {
         _runFlag = true;
-#if !defined( __EMSCRIPTEN__ )
-        _workerNotification.notify_all();
-#else
-        if ( this->_exitFlag ) return;
-        const bool moreTasks = this->prepareTask();
-        if ( !moreTasks ) this->_runFlag = false;
 
-        this->executeTask();
+        // Emscripten has no pthread support, so instead of passing tasks to the worker thread, we will process them immediately in the current thread.
+#ifdef __EMSCRIPTEN__
+        assert( !_exitFlag );
+
+        while ( _runFlag ) {
+            const bool moreTasks = prepareTask();
+            if ( !moreTasks ) {
+                _runFlag = false;
+            }
+
+            {
+                // In accordance with the contract, the _mutex should NOT be acquired while calling the executeTask().
+                MutexUnlocker unlocker( _mutex );
+
+                executeTask();
+            }
+        }
+#else
+        _workerNotification.notify_all();
 #endif
     }
 
