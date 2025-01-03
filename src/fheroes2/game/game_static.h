@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMESTATIC_H
-#define H2GAMESTATIC_H
+#pragma once
 
 #include <cstdint>
+#include <vector>
 
 namespace MP2
 {
@@ -35,7 +35,6 @@ namespace Skill
 {
     struct FactionProperties;
     struct SecondarySkillValuesPerLevel;
-    struct SecondarySkillValues;
 }
 
 class Heroes;
@@ -71,11 +70,10 @@ namespace GameStatic
 
     const Skill::FactionProperties * GetFactionProperties( const int race );
     const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
-    const Skill::SecondarySkillValues * GetSecondarySkillValuesForWitchsHut();
+
+    const std::vector<int32_t> & getSecondarySkillsForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
     bool isHeroWorthyToVisitXanadu( const Heroes & hero );
 }
-
-#endif

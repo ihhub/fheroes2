@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MP2_H
-#define H2MP2_H
+
+#pragma once
 
 #include <cstdint>
 
@@ -546,5 +546,3 @@ namespace MP2
     // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
     bool doesObjectContainMetadata( const MP2::MapObjectType type );
 }
-
-#endif

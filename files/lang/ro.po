@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3939,6 +3939,10 @@ msgstr ""
 msgid "Input %{object} text"
 msgstr ""
 
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Trage în %{monster}"
+
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
 
@@ -5161,6 +5165,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5255,46 +5262,31 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Echipa fheroes2 Resurrection prezintă"
 
-msgid "Greetings!"
-msgstr ""
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Bine ați venit în Heroes of Might and Magic II (îmbunătățit de motorul "
 "fheroes2)!"
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Bine ați venit în Heroes of Might and Magic II (îmbunătățit de motorul "
 "fheroes2)!\n"
 "Înainte de a începe jocul, selectați rezoluția dorită."
 
-msgid "Please Remember"
-msgstr ""
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-msgid "NEW GAME"
-msgstr ""
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -8981,6 +8973,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9047,19 +9042,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "

@@ -27,7 +27,6 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
 ![Vietnamese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_vi.json)
 
-
 ## Adding new translations/localizations
 
 If you want to add a new localization, you will first need to add it to the `SupportedLanguage` list/enumeration in the source code.
@@ -36,25 +35,21 @@ language abbreviations. Then to have font support, you will have to specify what
 the language to the font generation code found in `src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
 been implemented, then code for that will need to be written.
 
-
 ## Editing translations - Before you start
 
-Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used 
-for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating. 
+Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used
+for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating.
 After you finish your work, and you are ready to share it, you will have to prepare a pull request.
-
 
 ### Forking the fheroes2 repository
 
 A fork is your copy of the fheroes2 repository. It gives you a safe environment to prepare and test your changes.
 You can read here how to [**create a fork**](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
-
 ### Translation editing software
 
 We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to
 edit translations. Currently all implemented languages adhere to a standardized font encoding/charset.
-
 
 ## Editing translations - For the first time or again
 
@@ -87,6 +82,7 @@ Once the translation files have been modified, for Linux/MacOS run the `make` co
 machine object (MO) binary files which can be used by the fheroes2 engine.
 
 For example, for the German PO file, `de.po`, the following would be the command:
+
 ```bash
 make de.mo
 ```
@@ -109,17 +105,16 @@ set to.
 For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1251. Later when submitting
 a pull request with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
 
-
 ### Sharing your translation work
 
-When you are satisfied with your work, you can proceed with sharing it. The first step is to commit your work into the branch you made of 
+When you are satisfied with your work, you can proceed with sharing it. The first step is to commit your work into the branch you made of
 your own fheroes2 fork. Then, create a pull request that proposes to introduce your changes into the fheroes2 repository.
 
-How to [**commit**](https://github.com/git-guides/git-commit). 
+How to [**commit**](https://github.com/git-guides/git-commit).
 
 How to [**create a pull request from your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 
-The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of 
+The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of
 your work, I.E. "Update the Slovak translation".
 
 <details>
@@ -141,13 +136,12 @@ example creature names or castle buildings.
 
 </details>
 
-
 ## Updating PO templates and translatable strings in PO files
 
-Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text. If for whatever
-reason you still need to update strings locally, this can be achieved by running the command below in `src/dist` to generate a new portable
-object template (POT) file. Windows users will need to set up an environment that lets them run `make`, like Windows Subsystem for Linux (WSL)
-or [**Cygwin**](https://www.cygwin.com/)/[**MSYS2**](https://www.msys2.org/).
+Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text. If for whatever reason
+you still need to update strings locally, this can be achieved by running the command below in `src/dist/fheroes2` to generate a new portable object
+template (POT) file. Windows users will need to set up an environment that lets them run `make`, like Windows Subsystem for Linux (WSL) or
+[**Cygwin**](https://www.cygwin.com/)/[**MSYS2**](https://www.msys2.org/).
 
 ```bash
 make pot

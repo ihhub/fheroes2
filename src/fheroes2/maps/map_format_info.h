@@ -248,9 +248,9 @@ namespace Maps::Map_Format
         }
     };
 
-    struct ShrineMetadata
+    struct SelectionObjectMetadata
     {
-        std::vector<int32_t> allowedSpells;
+        std::vector<int32_t> selectedItems;
     };
 
     struct DailyEvent
@@ -329,7 +329,7 @@ namespace Maps::Map_Format
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
-        std::map<uint32_t, ShrineMetadata> shrineMetadata;
+        std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

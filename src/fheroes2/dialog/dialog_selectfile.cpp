@@ -112,7 +112,8 @@ namespace
 
         fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
         // Do not ignore spaces at the end.
-        currentFilename.fitToOneRow( maxFileNameWidth, false );
+        currentFilename.keepLineTrailingSpaces();
+        currentFilename.fitToOneRow( maxFileNameWidth );
 
         currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
     }
@@ -198,7 +199,8 @@ namespace
         dsty += 2;
 
         fheroes2::Text text{ std::move( savname ), font };
-        text.fitToOneRow( maxFileNameWidth, false );
+        text.keepLineTrailingSpaces();
+        text.fitToOneRow( maxFileNameWidth );
         text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
 
         redrawDateTime( display, info.timestamp, dstx + maxFileNameWidth + 9, dsty, font );

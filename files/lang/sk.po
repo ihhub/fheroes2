@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2024-12-30 14:34+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4178,6 +4178,10 @@ msgid "Input %{object} text"
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Streľ do: %{monster}"
+
+#, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Náhodný ultimátny artefakt"
 
@@ -5490,6 +5494,10 @@ msgstr "povýš jednotku"
 msgid "hotkey|dismiss hero or troop"
 msgstr "prepusti jednotku alebo hrdinu"
 
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "povýš jednotku"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5593,49 +5601,29 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Tím fheroes2 Resurrection uvádza"
 
-msgid "Greetings!"
-msgstr "Zdravím ťa!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2!"
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2! Pred "
 "spustením hry si vyber rozlíšenie."
 
-msgid "Please Remember"
-msgstr "Nezabudni, prosím"
-
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Rozlíšenie hry si vždy môžeš zmeniť kliknutím na "
-
-msgid "door"
-msgstr "dvere"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-#, fuzzy
-msgid "NEW GAME"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
+msgid "Greetings!"
+msgstr "Zdravím ťa!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9882,6 +9870,9 @@ msgstr "% imunity voči kúzlu %{spell}"
 msgid "% damage from Elemental spells"
 msgstr "% poškodenia od elementálnych kúziel"
 
+msgid "% damage from %{spell} spell"
+msgstr "% poškodenia od kúzla %{spell}"
+
 msgid "% chance to Dispel beneficial spells"
 msgstr "% šanca na rozptýlenie prospešných kúziel"
 
@@ -9948,20 +9939,51 @@ msgstr "Elementál"
 msgid "No Morale"
 msgstr "Žiadna morálka"
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Jazero s vodou"
+
+#, fuzzy
+msgid "Double damage from Fire spells"
 msgstr "Dvojité poškodenie od kúziel ohňa"
 
-msgid "200% damage from Cold spells"
+#, fuzzy
+msgid "Double damage from Cold spells"
 msgstr "Dvojité poškodenie od kúziel chladu"
 
-msgid "% damage from %{spell} spell"
-msgstr "% poškodenia od kúzla %{spell}"
+#, fuzzy
+msgid "Double damage from Earth creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
-msgid "% immunity to "
-msgstr "% imunity voči: "
+#, fuzzy
+msgid "Double damage from Air creatures"
+msgstr "Dvojité poškodenie nemŕtvym"
+
+#, fuzzy
+msgid "Double damage from Fire creatures"
+msgstr "Dvojité poškodenie od kúziel ohňa"
+
+#, fuzzy
+msgid "Double damage from Water creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
 msgid "Lightning"
 msgstr "Blesk"
+
+msgid "% immunity to "
+msgstr "% imunity voči: "
 
 msgid "% damage from "
 msgstr "% poškodenie od: "
@@ -12136,6 +12158,24 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Please Remember"
+#~ msgstr "Nezabudni, prosím"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Rozlíšenie hry si vždy môžeš zmeniť kliknutím na "
+
+#~ msgid "door"
+#~ msgstr "dvere"
+
+#, fuzzy
+#~ msgid "NEW GAME"
+#~ msgstr ""
+#~ "NOVÁ\n"
+#~ "HRA"
 
 #~ msgid "Warning!"
 #~ msgstr "Pozor!"

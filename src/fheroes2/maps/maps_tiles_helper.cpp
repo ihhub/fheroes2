@@ -39,6 +39,7 @@
 #include "castle.h"
 #include "color.h"
 #include "direction.h"
+#include "game_static.h"
 #include "ground.h"
 #include "logging.h"
 #include "map_object_info.h"
@@ -1955,25 +1956,49 @@ namespace Maps
         case MP2::OBJ_WITCHS_HUT:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Skill::Secondary::RandForWitchsHut();
+            static_assert( Skill::Secondary::UNKNOWN == 0, "You are breaking the logic by changing the Skill::Secondary::UNKNOWN value!" );
+            if ( tile.metadata()[0] != Skill::Secondary::UNKNOWN ) {
+                // The skill has been set externally.
+                break;
+            }
+
+            tile.metadata()[0] = Rand::Get( GameStatic::getSecondarySkillsForWitchsHut() );
             break;
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID();
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
+
+            setSpellOnTile( tile, Spell::getRandomSpell( 1 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID();
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
+
+            setSpellOnTile( tile, Spell::getRandomSpell( 2 ).GetID() );
             break;
 
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
             assert( isFirstLoad );
 
-            tile.metadata()[0] = Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID();
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
+
+            setSpellOnTile( tile, Spell::getRandomSpell( 3 ).GetID() );
             break;
 
         case MP2::OBJ_SKELETON: {
@@ -2097,6 +2122,11 @@ namespace Maps
                         break;
                     }
                 }
+            }
+
+            if ( ( tile.metadata()[0] & Resource::ALL ) != 0 && tile.metadata()[1] > 0 ) {
+                // The resource was set externally.
+                break;
             }
 
             uint32_t count = 0;
@@ -2260,7 +2290,24 @@ namespace Maps
             assert( isFirstLoad );
 
             if ( tile.isWater() ) {
-                tile.setMainObjectType( MP2::OBJ_SEA_CHEST );
+                // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
+                // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
+                if ( removeObjectFromTileByType( tile, MP2::OBJ_TREASURE_CHEST ) ) {
+                    const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+
+                    for ( size_t i = 0; i < objects.size(); ++i ) {
+                        if ( objects[i].objectType == MP2::OBJ_SEA_CHEST ) {
+                            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
+                            setObjectOnTile( tile, objectInfo, true );
+
+                            break;
+                        }
+                    }
+                }
+                else {
+                    tile.setMainObjectType( MP2::OBJ_SEA_CHEST );
+                }
+
                 updateObjectInfoTile( tile, isFirstLoad );
                 return;
             }
@@ -2361,9 +2408,14 @@ namespace Maps
         case MP2::OBJ_PYRAMID: {
             assert( isFirstLoad );
 
+            static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
+            if ( tile.metadata()[0] != Spell::NONE ) {
+                // The spell has been set externally.
+                break;
+            }
+
             // Random spell of level 5.
-            const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
-            setSpellOnTile( tile, spell.GetID() );
+            setSpellOnTile( tile, Spell::getRandomSpell( 5 ).GetID() );
             break;
         }
 
@@ -3048,13 +3100,6 @@ namespace Maps
             setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
             // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
             setMonsterCountOnTile( tile, 0 );
-            return true;
-        case MP2::OBJ_RESOURCE:
-            // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
-            if ( !placeObjectOnTile( tile, info ) ) {
-                return false;
-            }
-            setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
             return true;
         case MP2::OBJ_ARTIFACT:
             if ( !placeObjectOnTile( tile, info ) ) {

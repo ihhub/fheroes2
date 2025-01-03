@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MONSTER_INFO_H
-#define H2MONSTER_INFO_H
+#pragma once
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "resource.h"
@@ -34,14 +34,18 @@ namespace fheroes2
 
     enum class MonsterAbilityType : int
     {
-        // Basic abilities.
+        // Basic abilities (usually not shown in the unit description).
         NONE,
         DOUBLE_HEX_SIZE,
         FLYING,
         DRAGON,
+        EARTH_CREATURE,
+        AIR_CREATURE,
+        FIRE_CREATURE,
+        WATER_CREATURE,
+        // Advanced abilities (shown in the unit description).
         UNDEAD,
         ELEMENTAL,
-        // Advanced abilities.
         DOUBLE_SHOOTING,
         DOUBLE_MELEE_ATTACK,
         DOUBLE_DAMAGE_TO_UNDEAD,
@@ -52,6 +56,7 @@ namespace fheroes2
         COLD_SPELL_IMMUNITY,
         IMMUNE_TO_CERTAIN_SPELL,
         ELEMENTAL_SPELL_DAMAGE_REDUCTION,
+        CERTAIN_SPELL_DAMAGE_REDUCTION,
         SPELL_CASTER,
         HP_REGENERATION,
         TWO_CELL_MELEE_ATTACK,
@@ -68,11 +73,15 @@ namespace fheroes2
 
     enum class MonsterWeaknessType : int
     {
-        // Basic abilities.
+        // Basic weaknesses (usually not shown in the unit description).
         NONE,
-        // Advanced abilities.
-        EXTRA_DAMAGE_FROM_FIRE_SPELL,
-        EXTRA_DAMAGE_FROM_COLD_SPELL,
+        DOUBLE_DAMAGE_FROM_EARTH_CREATURES,
+        DOUBLE_DAMAGE_FROM_AIR_CREATURES,
+        DOUBLE_DAMAGE_FROM_FIRE_CREATURES,
+        DOUBLE_DAMAGE_FROM_WATER_CREATURES,
+        // Advanced weaknesses (shown in the unit description).
+        DOUBLE_DAMAGE_FROM_FIRE_SPELLS,
+        DOUBLE_DAMAGE_FROM_COLD_SPELLS,
         EXTRA_DAMAGE_FROM_CERTAIN_SPELL
     };
 
@@ -82,17 +91,26 @@ namespace fheroes2
             : type( type_ )
             , percentage( 0 )
             , value( 0 )
-        {}
+        {
+            // Do nothing.
+        }
 
         MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
-        {}
-
-        bool operator==( const MonsterAbility & another ) const
         {
-            return type == another.type;
+            // Do nothing.
+        }
+
+        bool operator==( const MonsterAbilityType anotherType ) const
+        {
+            return type == anotherType;
+        }
+
+        bool operator==( const std::pair<MonsterAbilityType, uint32_t> & typeValuePair ) const
+        {
+            return type == typeValuePair.first && value == typeValuePair.second;
         }
 
         MonsterAbilityType type;
@@ -108,17 +126,31 @@ namespace fheroes2
             : type( type_ )
             , percentage( 0 )
             , value( 0 )
-        {}
+        {
+            // Do nothing.
+        }
 
         explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         bool operator<( const MonsterWeakness & another ) const
         {
             return type < another.type || ( type == another.type && value < another.value );
+        }
+
+        bool operator==( const MonsterWeaknessType anotherType ) const
+        {
+            return type == anotherType;
+        }
+
+        bool operator==( const std::pair<MonsterWeaknessType, uint32_t> & typeValuePair ) const
+        {
+            return type == typeValuePair.first && value == typeValuePair.second;
         }
 
         MonsterWeaknessType type;
@@ -177,7 +209,9 @@ namespace fheroes2
             , sounds( sounds_ )
             , battleStats( battleStats_ )
             , generalStats( generalStats_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         int icnId;
 
@@ -192,13 +226,15 @@ namespace fheroes2
 
     const MonsterData & getMonsterData( const int monsterId );
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbilities );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicWeaknesses );
 
     std::string getMonsterDescription( const int monsterId ); // To be utilized in future.
 
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
+
+    bool isAbilityPresent( const std::vector<MonsterAbility> & abilities, const MonsterAbilityType abilityType );
+    bool isWeaknessPresent( const std::vector<MonsterWeakness> & weaknesses, const MonsterWeaknessType weaknessType );
 }
-#endif

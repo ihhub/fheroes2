@@ -3232,6 +3232,125 @@ namespace
 
             return true;
         }
+        case ICN::SWAP_ARROWS_CIRCULAR: {
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0 );
+
+            const int32_t width = 47;
+            const int32_t height = 42;
+            fheroes2::Image out;
+            out.resize( width, height );
+            out.reset();
+
+            // Rotate arrow heads.
+            const int32_t arrowTipToShaftLength = 18;
+            const int32_t arrowHeadWidth = 20;
+
+            fheroes2::Image rotatedArrow;
+            rotatedArrow.resize( arrowHeadWidth, arrowTipToShaftLength );
+            rotatedArrow.reset();
+            for ( int x = 0; x < arrowTipToShaftLength; ++x ) {
+                for ( int y = 0; y < arrowHeadWidth; ++y ) {
+                    Copy( original, x + ( original.width() - arrowTipToShaftLength ), y, rotatedArrow, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
+                }
+            }
+
+            fheroes2::Copy( Flip( rotatedArrow, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
+            fheroes2::Copy( Flip( rotatedArrow, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
+
+            // Rotate arrow ends.
+            const int32_t arrowEndHeight = 11;
+            const int32_t arrowEndWidth = 9;
+
+            rotatedArrow.resize( arrowEndWidth, arrowEndHeight );
+            rotatedArrow.reset();
+
+            for ( int x = 0; x < arrowEndHeight; ++x ) {
+                for ( int y = 0; y < arrowEndWidth; ++y ) {
+                    Copy( original, x + 2, y + 5, rotatedArrow, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
+                }
+            }
+
+            // Clean black corner.
+            fheroes2::Copy( original, 0, 0, rotatedArrow, 0, rotatedArrow.height() - 1, 1, 1 );
+
+            fheroes2::Copy( rotatedArrow, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
+            fheroes2::Copy( Flip( rotatedArrow, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
+
+            // Add straight shafts.
+            Copy( original, 5, 5, out, 13, 0, 21, 10 );
+            Copy( original, 5, 5, out, 12, 32, 22, 10 );
+
+            // Lower arrow.
+            // Fix overlaps.
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::DrawLine( out, { out.width() - 13, out.height() - 6 }, { out.width() - 12, out.height() - 6 }, 109 );
+            fheroes2::SetPixel( out, 12, out.height() - 10, 119 );
+            fheroes2::SetPixel( out, out.width() - 14, out.height() - 10, 119 );
+
+            // Lower right corner.
+            Copy( original, 5, 10, out, out.width() - 13, out.height() - 5, 4, 5 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 4 }, { out.width() - 9, out.height() - 1 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 5 }, { out.width() - 9, out.height() - 2 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 7, out.height() - 5 }, { out.width() - 9, out.height() - 3 }, 129 );
+            fheroes2::DrawLine( out, { out.width() - 8, out.height() - 5 }, { out.width() - 9, out.height() - 4 }, 123 );
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::SetPixel( out, out.width() - 11, out.height() - 6, 112 );
+
+            // Lower left corner.
+            Copy( original, 5, 9, out, 9, out.height() - 6, 3, 6 );
+            Copy( rotatedArrow, 0, 0, out, 5, out.height() - 7, 4, 2 );
+            fheroes2::DrawLine( out, { 5, out.height() - 5 }, { 8, out.height() - 2 }, 129 );
+            fheroes2::DrawLine( out, { 6, out.height() - 5 }, { 8, out.height() - 3 }, 123 );
+            fheroes2::DrawLine( out, { 7, out.height() - 5 }, { 8, out.height() - 4 }, 119 );
+            fheroes2::SetPixel( out, 8, out.height() - 5, 116 );
+            fheroes2::SetPixel( out, 9, out.height() - 6, 112 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 14, out.height() - 15 }, { 14, out.height() - 11 }, 59 );
+
+            // Upper arrow.
+            // Upper left corner.
+            fheroes2::Copy( out, 15, 0, out, 9, 0, 4, 5 );
+            fheroes2::Copy( out, 21, 5, out, 11, 5, 3, 2 );
+            fheroes2::DrawLine( out, { 8, 1 }, { 5, 4 }, 129 );
+            fheroes2::DrawLine( out, { 8, 2 }, { 6, 4 }, 119 );
+            fheroes2::DrawLine( out, { 8, 3 }, { 7, 4 }, 114 );
+            fheroes2::SetPixel( out, 8, 4, 112 );
+            fheroes2::SetPixel( out, 9, 4, 112 );
+
+            // Upper right corner.
+            fheroes2::Copy( out, 21, 0, out, 33, 0, 3, 6 );
+            fheroes2::Copy( out, 36, 7, out, 36, 5, 5, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 34, 1, out, 36, 1, 1, 3 );
+            fheroes2::DrawLine( out, { 36, 0 }, { 40, 4 }, 129 );
+            fheroes2::DrawLine( out, { 37, 2 }, { 38, 3 }, 119 );
+            fheroes2::DrawLine( out, { 36, 4 }, { 37, 3 }, 113 );
+
+            // Fix overlap.
+            fheroes2::DrawLine( out, { 33, 8 }, { 33, 9 }, 123 );
+            fheroes2::SetPixel( out, 32, 9, 129 );
+            fheroes2::SetPixel( out, 13, 9, 129 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 10, 22 }, { 18, 14 }, 59 );
+            fheroes2::DrawLine( out, { 11, 22 }, { 19, 14 }, 59 );
+            fheroes2::DrawLine( out, { 34, 17 }, { 40, 17 }, 59 );
+            fheroes2::DrawLine( out, { 41, 5 }, { 41, 16 }, 59 );
+            fheroes2::SetPixel( out, 40, 16, 59 );
+            fheroes2::Copy( original, 0, 0, out, 1, 12, 4, 1 );
+            fheroes2::Copy( original, 0, 0, out, 15, 12, 5, 1 );
+
+            // Make pressed state.
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = out;
+            _icnVsSprite[id][1] = _icnVsSprite[id][0];
+            _icnVsSprite[id][1].setPosition( -1, 1 );
+            ApplyPalette( _icnVsSprite[id][1], 4 );
+
+            return true;
+        }
         case ICN::EDITBTNS:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
@@ -4247,7 +4366,14 @@ namespace
         case ICN::OBJNARTI:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 206 ) {
-                // If we have the Price of Loyalty assets we make a map sprite for the Magic Book artifact.
+                // These are the Price of Loyalty assets.
+
+                // Spell Scroll has an invalid offset by X axis.
+                if ( _icnVsSprite[id][173].width() == 21 ) {
+                    _icnVsSprite[id][173].setPosition( 2, _icnVsSprite[id][173].y() );
+                }
+
+                // Make a map sprite for the Magic Book artifact.
                 _icnVsSprite[id].resize( 208 );
 
                 // Magic book sprite shadow.
@@ -5100,14 +5226,53 @@ namespace
             LoadOriginalICN( id );
             auto & images = _icnVsSprite[id];
             if ( images.size() == 218 ) {
-                // Add 2 extra river deltas. Each delta has 7 parts.
-                images.resize( 218 + 14 );
+                // Expand the existing set of Adventure Map objects:
+                // - 2 extra River Delta objects. Each object has 7 image parts.
+                // - 1 new Stone Liths with 3 image parts.
+                // - 3 new variants of Observation Tower object. In total, 6 new image parts.
+                images.resize( 218 + ( 7 * 2 ) + 3 + 6 );
 
+                // 2 River Deltas.
                 for ( size_t i = 0; i < 14; ++i ) {
                     images[218 + i].resize( images[i].height(), images[i].width() );
                     fheroes2::Transpose( images[i], images[218 + i] );
                     images[218 + i].setPosition( images[i].y(), images[i].x() );
                 }
+
+                // 1 Stone Liths.
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "circular_stone_liths_center.image", temp );
+
+                images[232].resize( 32, 32 );
+                images[232].reset();
+                Copy( temp, 0, 0, images[232], 0, 0, temp.width(), temp.height() );
+                Copy( images[116], 0, temp.height(), images[232], 0, temp.height(), images[116].width(), images[116].height() - temp.height() );
+
+                fheroes2::h2d::readImage( "circular_stone_liths_left.image", images[233] );
+                fheroes2::h2d::readImage( "circular_stone_liths_top.image", images[234] );
+
+                // Generic Observation Tower.
+                images[235] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_generic_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[235], 0, temp.y() - images[235].y(), temp.width(), temp.height() );
+
+                // Desert Observation Tower.
+                images[236] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_desert_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[236], 0, temp.y() - images[236].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_desert_right_part.image", images[237] );
+
+                // Snow Observation Tower.
+                images[238] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_snow_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[238], 0, temp.y() - images[238].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_snow_right_part.image", images[239] );
+
+                images[240] = images[198];
+                fheroes2::h2d::readImage( "observation_tower_snow_top_part.image", temp );
+                Blit( temp, 0, 0, images[240], 0, 0, temp.width(), temp.height() );
             }
 
             return true;

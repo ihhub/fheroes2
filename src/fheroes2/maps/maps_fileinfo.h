@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPSFILEINFO_H
-#define H2MAPSFILEINFO_H
+
+#pragma once
 
 #include <algorithm>
 #include <array>
@@ -156,6 +156,9 @@ namespace Maps
             return {};
         }
 
+        // This method is mostly used for Text Support mode or debug purposes.
+        std::string getSummary() const;
+
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
@@ -235,5 +238,3 @@ namespace Maps
     // Only for RESURRECTION map files.
     MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
-
-#endif
