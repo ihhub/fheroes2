@@ -188,7 +188,11 @@ namespace
                                                 ICN::BUTTON_EVENTS_GOOD,
                                                 ICN::BUTTON_EVENTS_EVIL,
                                                 ICN::BUTTON_LANGUAGE_GOOD,
-                                                ICN::BUTTON_LANGUAGE_EVIL };
+                                                ICN::BUTTON_LANGUAGE_EVIL,
+                                                ICN::BUTTON_AUTO_COMBAT_GOOD,
+                                                ICN::BUTTON_AUTO_COMBAT_EVIL,
+                                                ICN::BUTTON_AUTO_RESOLVE_GOOD,
+                                                ICN::BUTTON_AUTO_RESOLVE_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -2127,6 +2131,28 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_AUTO_COMBAT_GOOD:
+        case ICN::BUTTON_AUTO_COMBAT_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_COMBAT_EVIL );
+
+            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO-\nCOMBAT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::UNIFORMBAK_EVIL: ICN::UNIFORMBAK_GOOD );
+
+            break;
+        }
+        case ICN::BUTTON_AUTO_RESOLVE_GOOD:
+        case ICN::BUTTON_AUTO_RESOLVE_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_RESOLVE_EVIL );
+
+            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO-\nRESOLVE" ),
+                                  isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
+
+            break;
+        }
         default:
             // You're calling this function for non-specified ICN id. Check your logic!
             // Did you add a new image for one language without generating a default
@@ -2839,6 +2865,10 @@ namespace
         case ICN::BUTTON_EVENTS_EVIL:
         case ICN::BUTTON_LANGUAGE_GOOD:
         case ICN::BUTTON_LANGUAGE_EVIL:
+        case ICN::BUTTON_AUTO_COMBAT_GOOD:
+        case ICN::BUTTON_AUTO_COMBAT_EVIL:
+        case ICN::BUTTON_AUTO_RESOLVE_GOOD:
+        case ICN::BUTTON_AUTO_RESOLVE_EVIL:
             generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:
