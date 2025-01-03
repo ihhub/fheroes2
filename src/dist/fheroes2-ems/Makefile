@@ -37,13 +37,7 @@ VPATH := $(SOURCEDIRS)
 all: fheroes2.js
 
 fheroes2.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
-	xgettext -d fheroes2.js --language=JavaScript -F -k_ -k_n:1,2 -o fheroes2.pot $(sort $(SOURCES))
-	$(MAKE) -C ../../../files/lang
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
-	rm -f *.d *.o *.tmp *.pot~ *.pot
-	mkdir -p dist
-	mv -f fheroes2.* dist
-	cp ../../../files/web/dist/* dist
 
 %.o: %.cpp
 	$(CXX) -c -MD $< $(addprefix -I, $(SOURCEDIRS)) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
@@ -51,5 +45,4 @@ fheroes2.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o fheroes2.js fheroes2.wasm fheroes2.wasm.* fheroes2.data fheroes2.pot fheroes2.pot~
-	rm -rf dist
+	rm -f *.d *.o fheroes2.data fheroes2.js fheroes2.wasm

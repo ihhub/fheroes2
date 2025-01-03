@@ -342,3 +342,38 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+  make-emscripten:
+    name: Make (Emscripten)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker run --rm -v "$(pwd):/src" -e FHEROES2_STRICT_COMPILATION=ON emscripten/emsdk:3.1.74 \
+            sh -c "apt-get -y update && apt-get -y install gettext && emmake make -f Makefile.emscripten -j \"$(nproc)\""
+    - name: Create package
+      run: |
+        # Translations and H2D files are already included in fheroes2.data
+        7z a -bb1 -tzip -- fheroes2_emscripten.zip LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+    - uses: actions/upload-artifact@v4
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_emscripten.zip
+        path: fheroes2_emscripten.zip
+        if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_emscripten.zip
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Emscripten build (latest commit)
+        tag: fheroes2-emscripten-sdl2_dev
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true

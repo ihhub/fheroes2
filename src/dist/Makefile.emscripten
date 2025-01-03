@@ -18,20 +18,25 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-# Options:
-#
-# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
-# FHEROES2_WITH_DEBUG: build in debug mode
-# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
+CCFLAGS := $(filter-out -pthread,$(CCFLAGS)) \
+	--use-port=sdl2 \
+	--use-port=sdl2_mixer \
+	--use-port=zlib \
+	-Wno-variadic-macro-arguments-omitted
 
-PROJECT_NAME := fheroes2
-PROJECT_VERSION := $(file < version.txt)
+LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
+	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
+	--preload-file ../../../files/lang/@/files/lang/ \
+	--preload-file ../../../files/soundfonts/fheroes2.sf3@/files/soundfonts/fheroes2.sf3 \
+	-sASYNCIFY \
+	-sASYNCIFY_STACK_SIZE=20480 \
+	-sENVIRONMENT=web \
+	-sINITIAL_MEMORY=128mb \
+	-sNO_DISABLE_EXCEPTION_CATCHING \
+	-sSTACK_SIZE=262144 \
+	-lidbfs.js
 
-.PHONY: all clean
-
-all:
-	$(MAKE) -C src/dist PLATFORM=web
-
-clean:
-	$(MAKE) -C src/dist PLATFORM=web clean
-	$(MAKE) -C files/lang clean
+ifdef FHEROES2_WITH_DEBUG
+LDFLAGS := $(LDFLAGS) -gsource-map
+CCFLAGS := $(CCFLAGS) -gsource-map
+endif
