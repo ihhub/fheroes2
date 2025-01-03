@@ -47,10 +47,6 @@
 #include "world.h"
 #include "zzlib.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
 namespace
 {
     const std::string autoSaveName{ "AUTOSAVE" };
@@ -158,11 +154,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     if ( !autoSave ) {
         Game::SetLastSaveName( filePath );
     }
-#ifdef __EMSCRIPTEN__
-    EM_ASM(
-        FS.syncfs( err => err && console.warn( "Error saving:", err ) )
-    );
-#endif
+
     return true;
 }
 

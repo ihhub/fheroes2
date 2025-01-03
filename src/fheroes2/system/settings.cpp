@@ -47,10 +47,6 @@
 #include "ui_language.h"
 #include "version.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
 
@@ -352,21 +348,15 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
-
-    std::fstream file;
-    file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
-    if ( !file ) {
+    StreamFile fileStream;
+    if ( !fileStream.open( System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName ), "w" ) ) {
         return false;
     }
 
-    const std::string & data = String();
-    file.write( data.data(), data.size() );
-#ifdef __EMSCRIPTEN__
-    EM_ASM(
-        FS.syncfs( err => err && console.warn( "Error saving:", err ) )
-    );
-#endif
+    const std::string data = String();
+
+    fileStream.putRaw( data.data(), data.size() );
+
     return true;
 }
 

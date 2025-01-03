@@ -29,6 +29,10 @@
 #include <string>
 #include <string_view>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include "logging.h"
 
 namespace
@@ -395,6 +399,11 @@ std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
     return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
 }
 
+StreamFile::~StreamFile()
+{
+    close();
+}
+
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
@@ -410,6 +419,10 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
 void StreamFile::close()
 {
     _file.reset();
+
+#ifdef __EMSCRIPTEN__
+    EM_ASM( FS.syncfs( err = > err && console.warn( "FS.syncfs() error:", err ) ) );
+#endif
 }
 
 size_t StreamFile::size()

@@ -43,6 +43,7 @@
 #include "localevent.h"
 #include "logging.h"
 #include "players.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
@@ -50,10 +51,6 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
 
 namespace
 {
@@ -456,22 +453,17 @@ void Game::HotKeysLoad( const std::string & filename )
 
 void Game::HotKeySave()
 {
-    // Save the latest information into the file.
     const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
 
-    std::fstream file( filename.data(), std::fstream::out | std::fstream::trunc );
-    if ( !file ) {
-        ERROR_LOG( "Unable to open hotkey settings file " << filename )
+    StreamFile fileStream;
+    if ( !fileStream.open( filename, "w" ) ) {
+        ERROR_LOG( "Unable to open the hotkey settings file " << filename )
         return;
     }
 
-    const std::string & data = getHotKeyFileContent();
-    file.write( data.data(), data.size() );
-#ifdef __EMSCRIPTEN__
-    EM_ASM(
-        FS.syncfs( err => err && console.warn( "Error saving:", err ) )
-    );
-#endif
+    const std::string data = getHotKeyFileContent();
+
+    fileStream.putRaw( data.data(), data.size() );
 }
 
 void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )

@@ -597,7 +597,7 @@ public:
 
     StreamFile( const StreamFile & ) = delete;
 
-    ~StreamFile() override = default;
+    ~StreamFile() override;
 
     StreamFile & operator=( const StreamFile & ) = delete;
 
