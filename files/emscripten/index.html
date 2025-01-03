@@ -3,11 +3,19 @@
   <title>fheroes2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+  <!-- progress.js {{  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progress.min.js" integrity="sha512-CklrzCqwODBOEJHJq73SZrgWC7xcxssgg5M1xokosfDDz2/nLTCuMDyc51gbJtb8DriV4EYjJSlklPH5Ejn9XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progressjs.min.css" integrity="sha512-ovRFHsWpnYUBNZd/8CmbaWAKBDO8xb0l5Y8PdIae1O5RXO2QyU3CZGNzuYuE0CQHKazIzWMQpnTn26WpPjexfw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- }} progress.js -->
+
   <style>
-      body { margin: 0; height: 0; font-family: "Roboto", serif;}
+      @font-face {
+          font-family: 'Heroes2-pixed';
+          src: url('heroes2-pixed.otf') format('opentype'),
+          url('heroes2-pixed.ttf') format('truetype');
+      }
+      body { margin: 0; height: 0; font-family: 'Heroes2-pixed', serif;}
       #canvas {
           height: 100vh;
           width: 100vw;
@@ -23,15 +31,9 @@
           position: absolute;
           color: #fff;
           font-size: 30px;
-          text-stroke: 1px #000;
-          -webkit-text-stroke: 1px #000;
           height: 100vh;
           width: 100vw;
-      }
-      #launcher {
           display: none;
-          text-stroke: 1px #fff;
-          -webkit-text-stroke: 1px #fff;
       }
       #uploader input[type=file] {
           display: none
@@ -47,9 +49,20 @@
       #uploader label span {
           padding: 10vh 0 0 0;
           display: block;
+          text-shadow: #FC0 4px 0 10px;
       }
       #launcher button {
           font-size: 30px;
+          color: #fff;
+          font-family: 'Heroes2-pixed', serif;
+          text-shadow: #FC0 1px 0 10px;
+          background: url(data:image/jpeg;base64,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);
+          border-radius: 5px;
+          padding: 3px 10px;
+      }
+      #launcher button:hover {
+          box-shadow: 0 0 20px 2px #FC0;
+          cursor: pointer;
       }
       #launcher .buttons {
           text-align: center;
@@ -80,11 +93,6 @@
 <script>
     const S_IFMT = 61440; /* 0x0170000 type of file */
     const S_IFDIR = 16384;  /* 0x0040000 directory */
-    const progressBar = progressJs("#canvas").setOptions({
-        theme: 'blueOverlayRadiusWithPercentBar',
-        overlayMode: true,
-        considerTransition: true
-    });
     const canvas = document.querySelector('canvas');
     canvas.oncontextmenu = event => event.preventDefault();
     Object.assign(window, { Module: {
@@ -100,12 +108,16 @@
                     FS.syncfs(true, (err) => {
                         if (err) throw err;
                         try {
-                            if (Object.keys(FS.lookupPath(`${ENV.FHEROES2_DATA}`)).length === 0) return;
-                            document.querySelector('#uploader').style.display = 'none';
-                            document.querySelector('#launcher').style.display = 'block';
+                            if (Object.keys(FS.lookupPath(`${ENV.FHEROES2_DATA}`)).length === 0) {
+                                Module.show('#uploader');
+                            }
+                            else {
+                                Module.show('#launcher');
+                            }
                         }
                         catch (ignore) {
                             FS.mkdir(`${ENV.FHEROES2_DATA}`);
+                            Module.show('#uploader');
                         }
                     });
                 },
@@ -119,13 +131,16 @@
                             requiredFiles.some(rq => path.toLocaleLowerCase().endsWith(rq.toLocaleLowerCase()))).length === 2;
                         if (!requiredResolved) return Module.clearInput('wrong directory');
                         const whitListed = ['data', 'heroes2', 'maps', 'music'];
-                        files.filter(file => {
+                        const filtered = files.filter(file => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             if (fileName.startsWith('.')) return false;
                             return path
                                 .map(folder => folder.toLocaleLowerCase())
                                 .some(folder => whitListed.includes(folder))
-                        }).reduce((uploaded, file, _ignore, queue) => {
+                        });
+                        Module.show('nothing');
+                        const progressBarImport = progressJs().start();
+                        filtered.reduce((uploaded, file, _ignore, queue) => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             const [ignore, ...relativePath] = path.reverse();
                             Module.mkdirWithParents(`${ENV.FHEROES2_DATA}/${relativePath.join('/')}`);
@@ -137,11 +152,12 @@
                                     encoding: 'binary'
                                 });
                                 uploaded.push(file);
+                                progressBarImport.set(Math.round(uploaded.length / queue.length * 100))
                                 if (uploaded.length === queue.length) {
+                                    progressBarImport.end();
                                     FS.syncfs(false, err => {
                                         if (err) return Module.clearInput('Failed to sync FS');
-                                        document.querySelector('#uploader').style.display = 'none';
-                                        document.querySelector('#launcher').style.display = 'block';
+                                        Module.show('#launcher');
                                     })
                                 }
                             });
@@ -151,6 +167,18 @@
                     })
                 }
             ],
+            progressBarMain: progressJs("#canvas").setOptions({
+                theme: 'blueOverlayRadiusWithPercentBar',
+                overlayMode: true,
+                considerTransition: true
+            }),
+            show: selector => {
+                document.querySelector('#uploader').style.display = 'none';
+                document.querySelector('#launcher').style.display = 'none';
+                if (document.querySelector(selector)) {
+                    document.querySelector(selector).style.display = 'block';
+                }
+            },
             clearInput: (msg = '') => {
                 document.querySelector('input[type=file]').value = null;
                 msg && alert(msg);
@@ -178,28 +206,26 @@
             },
             startGame: () => {
                 removeRunDependency('syncfs');
-                document.querySelector('#uploader').style.display = 'none';
-                document.querySelector('#launcher').style.display = 'none';
+                Module.show('game')
             },
             deleteFiles: () => {
                 if (false === confirm('Are you sure?')) return;
                 Module.clearPath(ENV.FHEROES2_DATA);
                 FS.syncfs(false, ignore => {});
                 Module.clearInput();
-                document.querySelector('#uploader').style.display = 'block';
-                document.querySelector('#launcher').style.display = 'none';
+                Module.show('#uploader')
             },
             setStatus: status => {
                 const dlProgressRE = /(?<progress>\d+)\/(?<total>\d+)/ig;
                 if (!status || !dlProgressRE.test(status)) {
-                    if ((status ?? '').startsWith('Downloading data')) progressBar.start();
+                    if ((status ?? '').startsWith('Downloading data')) Module.progressBarMain.start();
                     return;
                 }
                 dlProgressRE.lastIndex = 0;
                 const {groups: {progress, total}} = [...status.matchAll(dlProgressRE)][0];
                 const done = Math.round(progress / total * 100);
-                progressBar.set(done);
-                if (100 === done) progressBar.end();
+                Module.progressBarMain.set(done);
+                if (100 === done) Module.progressBarMain.end();
             },
             canvas
         }
