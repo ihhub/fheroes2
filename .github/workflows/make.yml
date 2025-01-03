@@ -342,3 +342,39 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+  make-web:
+    name: Make (Web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker run --rm -v $(pwd):/src emscripten/emsdk:3.1.74 sh -c "apt update && apt install -y gettext && emmake make -f Makefile.web"
+      env:
+        FHEROES2_STRICT_COMPILATION: ON
+    - name: Create package
+      run: |
+        # Translations and H2D files are already included in fheroes2.vpk
+        7z a -bb1 -tzip -- fheroes2_web.zip LICENSE changelog.txt src/dist/web/dist ./docs/README.txt
+    - uses: actions/upload-artifact@v4
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_web.zip
+        path: fheroes2_web.zip
+        if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_web.zip
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Web build (latest commit)
+        tag: fheroes2-web-sdl2_dev
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
