@@ -399,11 +399,6 @@ std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
     return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
 }
 
-StreamFile::~StreamFile()
-{
-    close();
-}
-
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
@@ -419,12 +414,6 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
 void StreamFile::close()
 {
     _file.reset();
-
-#ifdef __EMSCRIPTEN__
-    // clang-format off
-    EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
-    // clang-format on
-#endif
 }
 
 size_t StreamFile::size()
@@ -636,4 +625,17 @@ std::string StreamFile::getString( const size_t size /* = 0 */ )
     const std::vector<uint8_t> buf = getRaw( size );
 
     return { buf.begin(), std::find( buf.begin(), buf.end(), 0 ) };
+}
+
+int StreamFile::closeFile( std::FILE * f )
+{
+    const int res = std::fclose( f );
+
+#ifdef __EMSCRIPTEN__
+    // clang-format off
+    EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
+    // clang-format on
+#endif
+
+    return res;
 }

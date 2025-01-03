@@ -597,7 +597,7 @@ public:
 
     StreamFile( const StreamFile & ) = delete;
 
-    ~StreamFile() override;
+    ~StreamFile() override = default;
 
     StreamFile & operator=( const StreamFile & ) = delete;
 
@@ -669,7 +669,9 @@ private:
         }
     }
 
-    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, []( std::FILE * f ) { return std::fclose( f ); } };
+    static int closeFile( std::FILE * f );
+
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, closeFile };
 };
 
 namespace fheroes2
