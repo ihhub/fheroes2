@@ -3247,8 +3247,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         autoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombat.area() ) );
         cancel.drawOnState( le.isMouseLeftButtonPressedInArea( cancel.area() ) );
 
-        // To-do: add right-click infos for the buttons.
-
         if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
@@ -3262,6 +3260,19 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         if ( !actions.empty() ) {
             return;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( cancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Auto Combat" ),
+                                               _( "Lets the computer play out the battle for you.\n\nYou can interrupt it at any time by pressing any key." ),
+                                               Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
+                                               _( "The battle will be resolved instantly by the computer from the current state.\n\nThis cannot be reverted." ), Dialog::ZERO );
         }
     }
 }
