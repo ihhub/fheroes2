@@ -122,7 +122,9 @@
                         files.filter(file => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             if (fileName.startsWith('.')) return false;
-                            return path.some(folder => whitListed.includes(folder))
+                            return path
+                                .map(folder => folder.toLocaleLowerCase())
+                                .some(folder => whitListed.includes(folder))
                         }).reduce((uploaded, file, _ignore, queue) => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             const [ignore, ...relativePath] = path.reverse();
