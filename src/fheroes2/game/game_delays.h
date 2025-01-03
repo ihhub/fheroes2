@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAME_DELAYS_H
-#define H2GAME_DELAYS_H
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -103,5 +102,3 @@ namespace Game
     // Custom delay must never be called in this function.
     uint64_t getAnimationDelayValue( const DelayType delayType );
 }
-
-#endif
