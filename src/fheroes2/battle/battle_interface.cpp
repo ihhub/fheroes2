@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -3205,6 +3205,78 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
     humanturn_exit = true;
 }
 
+void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    const fheroes2::Text title( _( "Automatic Battle Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+    const fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
+    const int autoResolveButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD;
+    const int cancelButtonICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
+    const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
+
+    const Dialog::FrameBox box( title.height( title.width() ) + 7 + header.height( header.width() ) + 7 + autoResolveButtonReleased.height() + 15, true );
+    const fheroes2::Rect roiArea = box.GetArea();
+
+    fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - cancelButtonReleased.width() / 2, roiArea.y + roiArea.height - 25, cancelButtonICN, 0, 1 );
+
+    const int32_t buttonPlacementYOffset = roiArea.y + title.height( roiArea.width ) + 7 + header.height( roiArea.width ) + 7;
+
+    fheroes2::ButtonSprite autoCombat( roiArea.x, buttonPlacementYOffset, fheroes2::AGG::GetICN( autoCombatButtonICN, 0 ),
+                                       fheroes2::AGG::GetICN( autoCombatButtonICN, 1 ) );
+    fheroes2::ButtonSprite autoResolve( roiArea.x + roiArea.width - autoResolveButtonReleased.width(), buttonPlacementYOffset, autoResolveButtonReleased,
+                                        fheroes2::AGG::GetICN( autoResolveButtonICN, 1 ) );
+
+    header.draw( roiArea.x, roiArea.y + title.height( roiArea.width ) + 7, roiArea.width, display );
+    title.draw( roiArea.x, roiArea.y, roiArea.width, display );
+    cancel.draw();
+    autoResolve.draw();
+    autoCombat.draw();
+    display.render();
+
+    while ( le.HandleEvents() ) {
+        autoResolve.drawOnState( le.isMouseLeftButtonPressedInArea( autoResolve.area() ) );
+        autoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombat.area() ) );
+        cancel.drawOnState( le.isMouseLeftButtonPressedInArea( cancel.area() ) );
+
+        if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return;
+        }
+        if ( le.MouseClickLeft( autoResolve.area() ) ) {
+            EventAutoFinish( actions );
+            display.render( roiArea );
+        }
+        if ( le.MouseClickLeft( autoCombat.area() ) ) {
+            EventStartAutoBattle( unit, actions );
+            display.render( roiArea );
+        }
+        if ( !actions.empty() ) {
+            return;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( cancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Auto Combat" ),
+                                               _( "Lets the computer play out the battle for you.\n\nYou can interrupt this at any time by pressing any key." ),
+                                               Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
+                                               _( "Instantly resolves the battle by the computer from the current state.\n\nThis cannot be reverted." ), Dialog::ZERO );
+        }
+    }
+}
+
 void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -3212,7 +3284,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
 
     if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
-        EventStartAutoBattle( unit, actions );
+        OpenAutoModeDialog( unit, actions );
     }
 }
 
