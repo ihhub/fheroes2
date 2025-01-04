@@ -254,6 +254,8 @@ namespace
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_NOTHING_SPECIAL:
+        case MP2::OBJ_OASIS:
+        case MP2::OBJ_NON_ACTION_OASIS:
             return true;
         default:
             break;
@@ -694,6 +696,9 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // If this assertion blows up then you are calling this method more than once!
+    assert( _tilePassabilityDirections == getTileIndependentPassability() );
+
     // Verify the neighboring tiles.
     // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
@@ -712,20 +717,18 @@ void Maps::Tile::updatePassability()
         }
     }
 
+    if ( getTileIndependentPassability() == DIRECTION_ALL ) {
+        // This tile is free of objects. Its passability must not be affected by any other objects.
+        return;
+    }
+
+    // If this assertion blows up then something is really off for the passability logic!
+    assert( !isShadow() && !isPassabilityTransparent() );
+
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = getMainObjectType( false );
     if ( MP2::isOffGameActionObject( objectType ) ) {
         // This is an action object. Action object passability is not affected by other objects.
-        return;
-    }
-
-    if ( isShadow() ) {
-        // The whole tile contains only shadow object parts. All shadows do not affect passability.
-        return;
-    }
-
-    if ( isPassabilityTransparent() ) {
-        // This object does not affect passability.
         return;
     }
 
@@ -766,10 +769,9 @@ void Maps::Tile::updatePassability()
         }
     }
 
-    // If the tile below has an unblocked passability to top, we should ignore it.
-    if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
-        return;
-    }
+    // Even thought the passability of the tile below can be not blocked from the top,
+    // in the original game such a requirement is ignored.
+    // So, we have to follow the same logic.
 
     // Count how many objects are there excluding shadows, roads and river streams.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
@@ -782,16 +784,20 @@ void Maps::Tile::updatePassability()
 
     const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
 
-    if ( !singleObjectTile && !isDetachedObject() ) {
+    // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
+    if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
+         && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
         const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
         if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
-                _tilePassabilityDirections &= ~Direction::BOTTOM;
-            }
-            else {
-                _tilePassabilityDirections = 0;
+            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
+                if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
+                    _tilePassabilityDirections &= ~Direction::BOTTOM;
+                }
+                else {
+                    _tilePassabilityDirections = 0;
+                }
             }
         }
         else if ( isShortObject( bottomTileObjectType )
