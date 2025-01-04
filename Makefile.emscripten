@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2025                                             #
+#   Copyright (C) 2025                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -24,45 +24,20 @@
 # FHEROES2_WITH_DEBUG: build in debug mode
 # FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
-PROJECT_TITLE := fheroes2
-PROJECT_TITLEID := FHOMM0002
-PROJECT_VERSION := $(file < version.txt)
+.PHONY: all clean translations
 
-.PHONY: all clean fheroes2.vpk param.sfo fheroes2.elf translations
+all: fheroes2.js
 
-all: fheroes2.vpk
+fheroes2.js: translations
+	$(MAKE) -C src/dist PLATFORM=emscripten
+	cp src/dist/fheroes2-ems/fheroes2.data .
+	cp src/dist/fheroes2-ems/fheroes2.js .
+	cp src/dist/fheroes2-ems/fheroes2.wasm .
 
-fheroes2.vpk: eboot.bin param.sfo translations
-	vita-pack-vpk -s param.sfo -b eboot.bin \
-		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
-		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
-		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
-		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
-		--add files/data=files/data \
-		--add files/lang/vita_temp=files/lang \
-		fheroes2.vpk
-	rm -r files/lang/vita_temp
-
-translations: fheroes2.elf
+translations:
 	$(MAKE) -C files/lang
-	mkdir -p files/lang/vita_temp
-	cp files/lang/*.mo files/lang/vita_temp
-
-eboot.bin: fheroes2.velf
-	vita-make-fself fheroes2.velf eboot.bin
-
-param.sfo:
-	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" -s APP_VER="$(PROJECT_VERSION)" "$(PROJECT_TITLE)" param.sfo
-
-fheroes2.velf: fheroes2.elf
-	arm-vita-eabi-strip -g $<
-	vita-elf-create $< $@
-
-fheroes2.elf:
-	$(MAKE) -C src/dist PLATFORM=vita
-	cp src/dist/fheroes2/fheroes2 fheroes2.elf
 
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo
+	rm -f fheroes2.data fheroes2.js fheroes2.wasm

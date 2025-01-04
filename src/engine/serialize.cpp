@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,10 @@
 #include <ostream>
 #include <string>
 #include <string_view>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 #include "logging.h"
 
@@ -621,4 +625,18 @@ std::string StreamFile::getString( const size_t size /* = 0 */ )
     const std::vector<uint8_t> buf = getRaw( size );
 
     return { buf.begin(), std::find( buf.begin(), buf.end(), 0 ) };
+}
+
+int StreamFile::closeFile( std::FILE * f )
+{
+    const int res = std::fclose( f );
+
+#ifdef __EMSCRIPTEN__
+    // The following code is not C++ code, but JavaScript code.
+    // clang-format off
+    EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
+    // clang-format on
+#endif
+
+    return res;
 }

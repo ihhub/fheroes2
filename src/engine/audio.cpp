@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -540,6 +540,8 @@ namespace
         // Either there is no need to resume music playback, or the resumption failed. Let's try to
         // start the playback from the beginning.
         if ( returnCode != 0 ) {
+            track->setPosition( 0 );
+
             returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
 
             if ( returnCode != 0 ) {
