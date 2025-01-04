@@ -37,6 +37,6 @@ LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	-lidbfs.js
 
 ifdef FHEROES2_WITH_DEBUG
-LDFLAGS := $(LDFLAGS) -gsource-map
 CCFLAGS := $(CCFLAGS) -gsource-map
+LDFLAGS := $(LDFLAGS) -gsource-map
 endif
