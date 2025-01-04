@@ -178,7 +178,7 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     else if ( _buttonHeroMovement.isEnabled() && le.MouseClickLeft( _heroMovementRect ) ) {
         res = _interface.EventHeroMovement();
     }
-    else if ( _buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( _heroMovementRect ) ) {
+    else if ( le.MouseLongPressLeft( _heroMovementRect ) ) {
         _interface.EventResetHeroPath();
     }
     else if ( le.MouseClickLeft( _kingdomRect ) ) {
