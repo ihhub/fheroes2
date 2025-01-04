@@ -30,7 +30,11 @@
 #include <string_view>
 
 #ifdef __EMSCRIPTEN__
+#include <cstdio>
+
 #include <emscripten.h>
+#include <errno.h>
+#include <fcntl.h>
 #endif
 
 #include "logging.h"
@@ -629,13 +633,37 @@ std::string StreamFile::getString( const size_t size /* = 0 */ )
 
 int StreamFile::closeFile( std::FILE * f )
 {
+#ifdef __EMSCRIPTEN__
+    const bool needSyncFS = [f]() {
+        static_assert( O_WRONLY > 0 && O_RDWR > 0 );
+
+        const int fn = fileno( f );
+        if ( fn < 0 ) {
+            ERROR_LOG( "fileno() error: " << errno )
+            return false;
+        }
+
+        const int flags = fcntl( fn, F_GETFL );
+        if ( flags < 0 ) {
+            ERROR_LOG( "fcntl() error: " << errno )
+            return false;
+        }
+
+        return ( flags & O_WRONLY ) || ( flags & O_RDWR );
+    }();
+#endif
+
     const int res = std::fclose( f );
 
 #ifdef __EMSCRIPTEN__
-    // The following code is not C++ code, but JavaScript code.
-    // clang-format off
-    EM_ASM( FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) ) );
-    // clang-format on
+    if ( needSyncFS ) {
+        EM_ASM(
+            // The following code is not C++ code, but JavaScript code.
+            // clang-format off
+            FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) )
+            // clang-format on
+        );
+    }
 #endif
 
     return res;
