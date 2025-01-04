@@ -35,6 +35,8 @@
 #include <emscripten.h>
 #include <errno.h>
 #include <fcntl.h>
+
+#include "tools.h"
 #endif
 
 #include "logging.h"
@@ -635,7 +637,7 @@ int StreamFile::closeFile( std::FILE * f )
 {
 #ifdef __EMSCRIPTEN__
     const bool needSyncFS = [f]() {
-        static_assert( O_WRONLY > 0 && O_RDWR > 0 );
+        static_assert( CountBits( O_WRONLY ) == 1 && CountBits( O_RDWR ) == 1 );
 
         const int fn = fileno( f );
         if ( fn < 0 ) {
