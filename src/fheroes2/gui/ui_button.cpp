@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -425,37 +425,58 @@ namespace fheroes2
         Point offset;
 
         switch ( buttonTypes ) {
-        case Dialog::YES | Dialog::NO:
-            offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+        case Dialog::YES | Dialog::NO: {
+            const Sprite & yesButtonSprite = AGG::GetICN( buttonYesIcnID, 0 );
+            const Sprite & noButtonSprite = AGG::GetICN( buttonNoIcnID, 0 );
+
+            const int32_t horizontalFreeSpace = area.width - yesButtonSprite.width() - noButtonSprite.width();
+            const int32_t padding = horizontalFreeSpace / 4;
+            assert( horizontalFreeSpace > 0 );
+
+            offset.x = area.x + padding;
+            offset.y = area.y + area.height - yesButtonSprite.height();
             createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            offset.x = area.x + area.width - noButtonSprite.width() - padding;
+            offset.y = area.y + area.height - noButtonSprite.height();
             createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
+        }
 
-        case Dialog::OK | Dialog::CANCEL:
-            offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+        case Dialog::OK | Dialog::CANCEL: {
+            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
+            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+            const int32_t horizontalFreeSpace = area.width - okayButtonSprite.width() - cancelButtonSprite.width();
+            const int32_t padding = horizontalFreeSpace / 4;
+            assert( horizontalFreeSpace > 0 );
+
+            offset.x = area.x + padding;
+            offset.y = area.y + area.height - okayButtonSprite.height();
             createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            offset.x = area.x + area.width - cancelButtonSprite.width() - padding;
+            offset.y = area.y + area.height - cancelButtonSprite.height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
+        }
 
-        case Dialog::OK:
-            offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+        case Dialog::OK: {
+            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
+
+            offset.x = area.x + ( area.width - okayButtonSprite.width() ) / 2;
+            offset.y = area.y + area.height - okayButtonSprite.height();
             createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
             break;
+        }
 
-        case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+        case Dialog::CANCEL: {
+            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+
+            offset.x = area.x + ( area.width - cancelButtonSprite.width() ) / 2;
+            offset.y = area.y + area.height - cancelButtonSprite.height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
+        }
 
         default:
             break;
