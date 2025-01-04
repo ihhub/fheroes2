@@ -92,7 +92,7 @@ android/.idea
 android/.gradle
 
 # Automatically created Android assets
-android/app/src/main/assets/files/
+android/app/src/main/assets/
 
 # Mac magic folders
 .DS_Store

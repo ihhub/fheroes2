@@ -27,12 +27,13 @@ CCFLAGS := $(filter-out -pthread,$(CCFLAGS)) \
 LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
 	--preload-file ../../../files/lang/@/files/lang/ \
-	--preload-file ../../../files/soundfonts/fheroes2.sf3@/files/soundfonts/fheroes2.sf3 \
+	--preload-file ../../../files/timidity/@/etc/ \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=20480 \
 	-sENVIRONMENT=web \
 	-sINITIAL_MEMORY=128mb \
 	-sNO_DISABLE_EXCEPTION_CATCHING \
+	-sSDL2_MIXER_FORMATS=mid,mp3,ogg \
 	-sSTACK_SIZE=262144 \
 	-lidbfs.js
 
