@@ -807,8 +807,7 @@ void Maps::Tile::updatePassability()
         }
 
         if ( isShortObject( bottomTileObjectType )
-                  || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
-                       && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+             || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
             // If this assertion blows up then the above checks are invalid!
             assert( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 );
         }
