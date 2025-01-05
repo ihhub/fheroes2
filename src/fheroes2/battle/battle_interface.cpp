@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -6501,7 +6501,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         assert( spell.isCombat() );
 
                         if ( arena.isDisableCastSpell( spell, &msg ) ) {
-                            fheroes2::showStandardTextMessage( "", msg, Dialog::OK );
+                            fheroes2::showStandardTextMessage( spell.GetName(), msg, Dialog::OK );
                         }
                         else {
                             std::string error;
