@@ -237,7 +237,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "interface type" ) ) {
-        std::string interfaceType = config.StrParams( "interface type" );
+        const std::string interfaceType = config.StrParams( "interface type" );
         if ( interfaceType == "Good" ) {
             setInterfaceType( InterfaceType::GOOD );
         }
