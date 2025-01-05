@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
@@ -930,11 +931,13 @@ bool Settings::isEvilInterfaceEnabled() const
                 return race == Race::WRLK || race == Race::NECR || race == Race::BARB;
             }
         }
-        return false;
+        break;
     }
     default:
         assert( 0 );
     }
+
+    return false;
 }
 
 bool Settings::isEditorAnimationEnabled() const

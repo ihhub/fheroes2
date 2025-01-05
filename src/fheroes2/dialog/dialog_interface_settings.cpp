@@ -81,6 +81,8 @@ namespace
             value = _( "Evil" );
             break;
         default:
+            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 15 );
+            value = _( "Dynamic" );
             assert( 0 );
         }
 

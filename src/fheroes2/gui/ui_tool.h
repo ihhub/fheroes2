@@ -31,10 +31,11 @@
 
 #include "image.h"
 #include "math_base.h"
-#include "settings.h"
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"
+
+enum InterfaceType : uint8_t;
 
 namespace fheroes2
 {
