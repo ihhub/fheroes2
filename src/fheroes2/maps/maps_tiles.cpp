@@ -790,24 +790,29 @@ void Maps::Tile::updatePassability()
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
         if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 ) {
-                if ( isShortObject( bottomTileObjectType ) || isShortObject( correctedObjectType ) ) {
-                    _tilePassabilityDirections &= ~Direction::BOTTOM;
-                }
-                else {
-                    _tilePassabilityDirections = 0;
-                    return;
-                }
+            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
+                // This is an action object with unrestricted access from top.
+
+                // Only main action object parts can have unrestricted access.
+                assert( MP2::isOffGameActionObject( bottomTileObjectType ) );
+                return;
             }
+
+            if ( !isShortObject( bottomTileObjectType ) && !isShortObject( correctedObjectType ) ) {
+                // Since the object on the tile below is considered as tall we must mark this tile as impassable.
+                _tilePassabilityDirections = 0;
+            }
+
+            return;
         }
-        else if ( isShortObject( bottomTileObjectType )
-                  || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
-                       && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-            _tilePassabilityDirections &= ~Direction::BOTTOM;
+
+        if ( isShortObject( bottomTileObjectType )
+             || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+            // If this assertion blows up then the above checks are invalid!
+            assert( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) == 0 );
         }
         else {
             _tilePassabilityDirections = 0;
-            return;
         }
     }
 }
