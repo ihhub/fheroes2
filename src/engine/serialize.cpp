@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,16 @@
 #include <ostream>
 #include <string>
 #include <string_view>
+
+#ifdef __EMSCRIPTEN__
+#include <cstdio>
+
+#include <emscripten.h>
+#include <errno.h>
+#include <fcntl.h>
+
+#include "tools.h"
+#endif
 
 #include "logging.h"
 
@@ -621,4 +631,42 @@ std::string StreamFile::getString( const size_t size /* = 0 */ )
     const std::vector<uint8_t> buf = getRaw( size );
 
     return { buf.begin(), std::find( buf.begin(), buf.end(), 0 ) };
+}
+
+int StreamFile::closeFile( std::FILE * f )
+{
+#ifdef __EMSCRIPTEN__
+    const bool needSyncFS = [f]() {
+        static_assert( CountBits( O_WRONLY ) == 1 && CountBits( O_RDWR ) == 1 );
+
+        const int fn = fileno( f );
+        if ( fn < 0 ) {
+            ERROR_LOG( "fileno() error: " << errno )
+            return false;
+        }
+
+        const int flags = fcntl( fn, F_GETFL );
+        if ( flags < 0 ) {
+            ERROR_LOG( "fcntl() error: " << errno )
+            return false;
+        }
+
+        return ( flags & O_WRONLY ) || ( flags & O_RDWR );
+    }();
+#endif
+
+    const int res = std::fclose( f );
+
+#ifdef __EMSCRIPTEN__
+    if ( needSyncFS ) {
+        EM_ASM(
+            // The following code is not C++ code, but JavaScript code.
+            // clang-format off
+            FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) )
+            // clang-format on
+        );
+    }
+#endif
+
+    return res;
 }
