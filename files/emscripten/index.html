@@ -3,19 +3,11 @@
   <title>fheroes2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- progress.js {{  -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progress.min.js" integrity="sha512-CklrzCqwODBOEJHJq73SZrgWC7xcxssgg5M1xokosfDDz2/nLTCuMDyc51gbJtb8DriV4EYjJSlklPH5Ejn9XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progressjs.min.css" integrity="sha512-ovRFHsWpnYUBNZd/8CmbaWAKBDO8xb0l5Y8PdIae1O5RXO2QyU3CZGNzuYuE0CQHKazIzWMQpnTn26WpPjexfw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- }} progress.js -->
-
   <style>
-      @font-face {
-          font-family: 'Heroes2-pixed';
-          src: url('heroes2-pixed.otf') format('opentype'),
-          url('heroes2-pixed.ttf') format('truetype');
-      }
-      body { margin: 0; height: 0; font-family: 'Heroes2-pixed', serif;}
+      body { margin: 0; height: 0; font-family: "Roboto", serif;}
       #canvas {
           height: 100vh;
           width: 100vw;
@@ -31,9 +23,15 @@
           position: absolute;
           color: #fff;
           font-size: 30px;
+          text-stroke: 1px #000;
+          -webkit-text-stroke: 1px #000;
           height: 100vh;
           width: 100vw;
+      }
+      #launcher {
           display: none;
+          text-stroke: 1px #fff;
+          -webkit-text-stroke: 1px #fff;
       }
       #uploader input[type=file] {
           display: none
@@ -49,20 +47,9 @@
       #uploader label span {
           padding: 10vh 0 0 0;
           display: block;
-          text-shadow: #FC0 4px 0 10px;
       }
       #launcher button {
           font-size: 30px;
-          color: #fff;
-          font-family: 'Heroes2-pixed', serif;
-          text-shadow: #FC0 1px 0 10px;
-          background: #5d2b0a;
-          border-radius: 5px;
-          padding: 3px 10px;
-      }
-      #launcher button:hover {
-          box-shadow: 0 0 20px 2px #FC0;
-          cursor: pointer;
       }
       #launcher .buttons {
           text-align: center;
@@ -93,6 +80,11 @@
 <script>
     const S_IFMT = 61440; /* 0x0170000 type of file */
     const S_IFDIR = 16384;  /* 0x0040000 directory */
+    const progressBar = progressJs("#canvas").setOptions({
+        theme: 'blueOverlayRadiusWithPercentBar',
+        overlayMode: true,
+        considerTransition: true
+    });
     const canvas = document.querySelector('canvas');
     canvas.oncontextmenu = event => event.preventDefault();
     Object.assign(window, { Module: {
@@ -108,16 +100,12 @@
                     FS.syncfs(true, (err) => {
                         if (err) throw err;
                         try {
-                            if (Object.keys(FS.lookupPath(`${ENV.FHEROES2_DATA}`)).length === 0) {
-                                Module.show('#uploader');
-                            }
-                            else {
-                                Module.show('#launcher');
-                            }
+                            if (Object.keys(FS.lookupPath(`${ENV.FHEROES2_DATA}`)).length === 0) return;
+                            document.querySelector('#uploader').style.display = 'none';
+                            document.querySelector('#launcher').style.display = 'block';
                         }
                         catch (ignore) {
                             FS.mkdir(`${ENV.FHEROES2_DATA}`);
-                            Module.show('#uploader');
                         }
                     });
                 },
@@ -131,16 +119,13 @@
                             requiredFiles.some(rq => path.toLocaleLowerCase().endsWith(rq.toLocaleLowerCase()))).length === 2;
                         if (!requiredResolved) return Module.clearInput('wrong directory');
                         const whitListed = ['data', 'heroes2', 'maps', 'music'];
-                        const filtered = files.filter(file => {
+                        files.filter(file => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             if (fileName.startsWith('.')) return false;
                             return path
                                 .map(folder => folder.toLocaleLowerCase())
                                 .some(folder => whitListed.includes(folder))
-                        });
-                        Module.show('nothing');
-                        const progressBarImport = progressJs().start();
-                        filtered.reduce((uploaded, file, _ignore, queue) => {
+                        }).reduce((uploaded, file, _ignore, queue) => {
                             const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
                             const [ignore, ...relativePath] = path.reverse();
                             Module.mkdirWithParents(`${ENV.FHEROES2_DATA}/${relativePath.join('/')}`);
@@ -152,12 +137,11 @@
                                     encoding: 'binary'
                                 });
                                 uploaded.push(file);
-                                progressBarImport.set(Math.round(uploaded.length / queue.length * 100))
                                 if (uploaded.length === queue.length) {
-                                    progressBarImport.end();
                                     FS.syncfs(false, err => {
                                         if (err) return Module.clearInput('Failed to sync FS');
-                                        Module.show('#launcher');
+                                        document.querySelector('#uploader').style.display = 'none';
+                                        document.querySelector('#launcher').style.display = 'block';
                                     })
                                 }
                             });
@@ -167,18 +151,6 @@
                     })
                 }
             ],
-            progressBarMain: progressJs("#canvas").setOptions({
-                theme: 'blueOverlayRadiusWithPercentBar',
-                overlayMode: true,
-                considerTransition: true
-            }),
-            show: selector => {
-                document.querySelector('#uploader').style.display = 'none';
-                document.querySelector('#launcher').style.display = 'none';
-                if (document.querySelector(selector)) {
-                    document.querySelector(selector).style.display = 'block';
-                }
-            },
             clearInput: (msg = '') => {
                 document.querySelector('input[type=file]').value = null;
                 msg && alert(msg);
@@ -206,26 +178,28 @@
             },
             startGame: () => {
                 removeRunDependency('syncfs');
-                Module.show('game')
+                document.querySelector('#uploader').style.display = 'none';
+                document.querySelector('#launcher').style.display = 'none';
             },
             deleteFiles: () => {
                 if (false === confirm('Are you sure?')) return;
                 Module.clearPath(ENV.FHEROES2_DATA);
                 FS.syncfs(false, ignore => {});
                 Module.clearInput();
-                Module.show('#uploader')
+                document.querySelector('#uploader').style.display = 'block';
+                document.querySelector('#launcher').style.display = 'none';
             },
             setStatus: status => {
                 const dlProgressRE = /(?<progress>\d+)\/(?<total>\d+)/ig;
                 if (!status || !dlProgressRE.test(status)) {
-                    if ((status ?? '').startsWith('Downloading data')) Module.progressBarMain.start();
+                    if ((status ?? '').startsWith('Downloading data')) progressBar.start();
                     return;
                 }
                 dlProgressRE.lastIndex = 0;
                 const {groups: {progress, total}} = [...status.matchAll(dlProgressRE)][0];
                 const done = Math.round(progress / total * 100);
-                Module.progressBarMain.set(done);
-                if (100 === done) Module.progressBarMain.end();
+                progressBar.set(done);
+                if (100 === done) progressBar.end();
             },
             canvas
         }
