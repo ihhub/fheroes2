@@ -719,6 +719,9 @@ void Maps::Tile::updatePassability()
 
     if ( getTileIndependentPassability() == DIRECTION_ALL ) {
         // This tile is free of objects. Its passability must not be affected by any other objects.
+        //
+        // The original game does not consider this case and it is actually a bug
+        // as some tiles in the original game are marked inaccessible while no object exists on them.
         return;
     }
 
