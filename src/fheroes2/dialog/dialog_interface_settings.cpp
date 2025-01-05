@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,18 +63,28 @@ namespace
     void drawInterfaceType( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
+        const InterfaceType interfaceType = conf.getInterfaceType();
 
+        const fheroes2::Sprite * interfaceThemeIcon;
         std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
+        switch ( interfaceType ) {
+        case DYNAMIC:
+            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 15 );
+            value = _( "Dynamic" );
+            break;
+        case GOOD:
+            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
             value = _( "Good" );
+            break;
+        case EVIL:
+            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 17 );
+            value = _( "Evil" );
+            break;
+        default:
+            assert( 0 );
         }
 
-        fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, *interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
@@ -287,7 +297,7 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                conf.setInterfaceType( static_cast<InterfaceType>( ( conf.getInterfaceType() + 1 ) % ( InterfaceType::DYNAMIC + 1 ) ) );
                 updateUI();
                 saveConfiguration = true;
 

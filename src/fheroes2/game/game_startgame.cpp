@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -784,6 +784,13 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
+                    conf.SetCurrentColor( playerColor );
+                    if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                        reset();
+                        redraw( Interface::REDRAW_RADAR );
+                        redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+                    }
+
                     if ( isHotSeatGame ) {
                         _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
@@ -803,8 +810,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
-
-                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 

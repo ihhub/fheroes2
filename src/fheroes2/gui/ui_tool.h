@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,7 @@
 
 #include "image.h"
 #include "math_base.h"
+#include "settings.h"
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"
@@ -174,7 +175,7 @@ namespace fheroes2
     struct GameInterfaceTypeRestorer
     {
         GameInterfaceTypeRestorer() = delete;
-        explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
+        explicit GameInterfaceTypeRestorer( const InterfaceType interfaceType_ );
 
         GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
 
@@ -182,8 +183,8 @@ namespace fheroes2
 
         GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
 
-        const bool isEvilInterface;
-        const bool isOriginalEvilInterface;
+        const InterfaceType interfaceType;
+        const InterfaceType originalInterfaceType;
     };
 
     // Fade display image colors to grayscale part of default game palette.
