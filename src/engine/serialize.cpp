@@ -659,12 +659,22 @@ int StreamFile::closeFile( std::FILE * f )
 
 #ifdef __EMSCRIPTEN__
     if ( needSyncFS ) {
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wvariadic-macro-arguments-omitted"
+#endif
+
         EM_ASM(
             // The following code is not C++ code, but JavaScript code.
             // clang-format off
             FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) )
             // clang-format on
         );
+
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
     }
 #endif
 

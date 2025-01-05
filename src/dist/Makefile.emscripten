@@ -21,8 +21,7 @@
 CCFLAGS := $(filter-out -pthread,$(CCFLAGS)) \
 	--use-port=sdl2 \
 	--use-port=sdl2_mixer \
-	--use-port=zlib \
-	-Wno-variadic-macro-arguments-omitted
+	--use-port=zlib
 
 LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \

@@ -23,9 +23,9 @@
 #include <cassert>
 #include <memory>
 
+#ifdef __EMSCRIPTEN__
 namespace
 {
-#ifdef __EMSCRIPTEN__
     class MutexUnlocker
     {
     public:
@@ -47,8 +47,8 @@ namespace
     private:
         std::mutex & _mutex;
     };
-#endif
 }
+#endif
 
 namespace MultiThreading
 {
