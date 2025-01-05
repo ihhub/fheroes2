@@ -1292,8 +1292,26 @@ void Maps::Tile::_updateRoadFlag()
     }
 }
 
-void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
+void Maps::Tile::fixMP2MapTileObjects( Tile & tile )
 {
+    const auto fixMandrakeObjectPart = []( Maps::ObjectPart & part ) {
+        if ( part.icnType != MP2::OBJ_ICN_TYPE_OBJNSWMP ) {
+            return;
+        }
+
+        if ( part.icnIndex == 131 || part.icnIndex == 137 ) {
+            part.layerType = Maps::OBJECT_LAYER;
+        }
+        else if ( part.icnIndex == 130 || part.icnIndex == 136 ) {
+            part.layerType = Maps::SHADOW_LAYER;
+        }
+    };
+
+    fixMandrakeObjectPart( tile.getMainObjectPart() );
+    for ( auto & part : tile.getGroundObjectParts() ) {
+        fixMandrakeObjectPart( part );
+    }
+
     const MP2::MapObjectType originalObjectType = tile.getMainObjectType( false );
 
     // Left tile of a skeleton on Desert should be marked as non-action tile.

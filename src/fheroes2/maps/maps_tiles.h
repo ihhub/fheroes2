@@ -328,8 +328,8 @@ namespace Maps
             _fogDirection = fogDirection;
         }
 
-        // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixMP2MapTileObjectType( Tile & tile );
+        // Some tiles have objects being set. This is due to original Editor issues.
+        static void fixMP2MapTileObjects( Tile & tile );
 
         static int32_t getIndexOfMainTile( const Tile & tile );
 
