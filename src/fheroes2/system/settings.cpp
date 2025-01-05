@@ -920,15 +920,13 @@ bool Settings::isEvilInterfaceEnabled() const
             return false;
 
         if ( player->isControlHuman() ) {
-            const int race = player->GetRace();
-            return race == Race::WRLK || race == Race::NECR || race == Race::BARB;
+            return Race::isEvilRace( player->GetRace() );
         }
 
         // Keep the UI of the last player during the AI turn
         for ( auto iter = Settings::Get().GetPlayers().rbegin(); iter < Settings::Get().GetPlayers().rend(); ++iter ) {
             if ( *iter && ( *iter )->isControlHuman() ) {
-                const int race = ( *iter )->GetRace();
-                return race == Race::WRLK || race == Race::NECR || race == Race::BARB;
+                return Race::isEvilRace( ( *iter )->GetRace() );
             }
         }
         break;

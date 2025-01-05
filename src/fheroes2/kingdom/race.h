@@ -53,4 +53,5 @@ namespace Race
     int getPreviousRace( const int race );
 
     bool isMagicalRace( const int race );
+    bool isEvilRace( const int race );
 }

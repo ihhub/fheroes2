@@ -126,6 +126,27 @@ bool Race::isMagicalRace( const int race )
     return false;
 }
 
+bool Race::isEvilRace( const int race )
+{
+    switch ( race ) {
+    case BARB:
+    case WRLK:
+    case NECR:
+        return true;
+    case KNGT:
+    case SORC:
+    case WZRD:
+    case MULT:
+    case RAND:
+        return false;
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return false;
+}
+
 uint8_t Race::IndexToRace( const int index )
 {
     switch ( index ) {
