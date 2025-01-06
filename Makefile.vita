@@ -27,7 +27,8 @@
 PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
 # Version should be in XX.YY format
-PROJECT_VERSION := $(shell printf %02d.%02d "$$(cat version.txt | cut -f1 -d.)" "$$(cat version.txt | cut -f2 -d.)")
+PROJECT_VERSION := $(strip $(shell printf %02d.%02d "$$(cat version.txt | cut -s -f1 -d.)" "$$(cat version.txt | cut -s -f2 -d.)") \
+                           $(and $(filter-out 0,$(.SHELLSTATUS)),$(error Invalid version syntax)))
 
 .PHONY: all clean fheroes2.vpk param.sfo fheroes2.elf translations
 
