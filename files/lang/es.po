@@ -2475,7 +2475,7 @@ msgid "Upg. Dwelling 5"
 msgstr "Actu. Morada 5"
 
 msgid "Dwelling 6"
-msgstr "Medianos"
+msgstr "Morada 6"
 
 msgid "Upg. Dwelling 6"
 msgstr "Actu. Morada 6"
