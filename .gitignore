@@ -98,8 +98,7 @@ android/app/src/main/assets/
 .DS_Store
 
 # Web build artifacts
-*.wasm
-*.wasm.map
-fheroes2.js
 fheroes2.data
-src/dist/web/dist/*
+fheroes2.js
+fheroes2.wasm
+fheroes2.wasm.map
