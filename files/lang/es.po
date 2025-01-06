@@ -868,7 +868,7 @@ msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
-"Se omite la criatura actual. La criatura actual termina su turno y no puede "
+"Salta la criatura actual. La criatura actual termina su turno y no puede "
 "volver a jugar hasta la siguiente ronda."
 
 msgid "View Captain's options"
