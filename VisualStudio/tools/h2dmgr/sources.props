@@ -12,6 +12,7 @@
     <ClCompile Include="h2dmgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\engine\agg_file.h" />
     <ClInclude Include="..\engine\h2d_file.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_palette.h" />
