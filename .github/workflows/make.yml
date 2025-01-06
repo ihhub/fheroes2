@@ -365,6 +365,7 @@ jobs:
       run: |
         # Translations and H2D files are already included in fheroes2.data
         7z a -bb1 -tzip -- fheroes2_emscripten.zip LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+        7z a -bb1 -tzip -- fheroes2_emscripten.module.zip LICENSE changelog.txt fheroes2.module.data fheroes2.module.js fheroes2.module.wasm ./docs/README.txt
     - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:

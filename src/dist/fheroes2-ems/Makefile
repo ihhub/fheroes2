@@ -34,10 +34,16 @@ VPATH := $(SOURCEDIRS)
 
 .PHONY: all clean
 
-all: fheroes2.js
+all: fheroes2.js fheroes2.module.js
 
 fheroes2.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
+
+fheroes2.module.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS) \
+		-sMODULARIZE \
+		-sEXPORTED_RUNTIME_METHODS=FS,ENV \
+		-sEXPORT_NAME=fheroes2
 
 %.o: %.cpp
 	$(CXX) -c -MD $< $(addprefix -I, $(SOURCEDIRS)) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
@@ -45,4 +51,5 @@ fheroes2.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o fheroes2.data fheroes2.js fheroes2.wasm
+	rm -f *.d *.o fheroes2.data fheroes2.js fheroes2.wasm \
+	fheroes2.module.data fheroes2.module.js fheroes2.module.wasm

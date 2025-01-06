@@ -101,5 +101,7 @@ android/app/src/main/assets/
 *.wasm
 *.wasm.map
 fheroes2.js
+fheroes2.module.js
 fheroes2.data
+fheroes2.module.data
 src/dist/web/dist/*
