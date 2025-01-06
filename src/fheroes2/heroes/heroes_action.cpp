@@ -2466,7 +2466,6 @@ namespace
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, Color::UNUSED );
-                tile.SetObjectPassable( true );
 
                 if ( fheroes2::showStandardTextMessage( title, victoryMsg, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                     const Troop troop = getTroopFromTile( tile );

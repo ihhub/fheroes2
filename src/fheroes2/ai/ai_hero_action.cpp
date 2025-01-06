@@ -1479,7 +1479,6 @@ namespace
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, Color::UNUSED );
-                tile.SetObjectPassable( true );
             }
             else {
                 AIBattleLose( hero, res, true );
