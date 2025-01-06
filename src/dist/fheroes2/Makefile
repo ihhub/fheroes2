@@ -18,12 +18,6 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifeq ($(PLATFORM),emscripten)
-	TARGET := fheroes2.js
-else
-	TARGET := fheroes2
-endif
-
 DEPLIBS := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../../engine
 
@@ -57,4 +51,4 @@ fheroes2.pot: $(SOURCES)
 include $(wildcard *.d)
 
 clean:
-	-rm -f *.d *.o fheroes2 fheroes2.data fheroes2.js fheroes2.wasm fheroes2.pot fheroes2.pot~
+	-rm -f *.d *.o fheroes2 fheroes2.*

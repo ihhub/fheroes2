@@ -18,6 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+TARGET := fheroes2.js
+
 CCFLAGS := $(filter-out -pthread,$(CCFLAGS)) \
 	--use-port=sdl2 \
 	--use-port=sdl2_mixer \

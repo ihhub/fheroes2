@@ -81,6 +81,14 @@ endif
 include Makefile.$(PLATFORM)
 
 #
+# Name of the main target executable file
+# This name can be platform-specific (and can already be defined in a platform-specific Makefile)
+#
+ifeq ($(origin TARGET),undefined)
+TARGET := fheroes2
+endif
+
+#
 # Build options for third-party libraries
 #
 
@@ -150,7 +158,7 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS TARGET
 
 .PHONY: all clean
 
