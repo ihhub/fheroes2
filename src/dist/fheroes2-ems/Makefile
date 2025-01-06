@@ -42,6 +42,7 @@ fheroes2.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 fheroes2.module.js: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS) \
 		-sMODULARIZE \
+		-sEXPORTED_RUNTIME_METHODS=callMain \
 		-sEXPORT_ALL \
 		-sEXPORT_NAME=fheroes2
 
