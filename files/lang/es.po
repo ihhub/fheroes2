@@ -613,8 +613,7 @@ msgstr ""
 
 msgid "Change the audio settings of the game."
 msgstr ""
-"Comprueba y configura todas las teclas de acceso rápido presentes en el "
-"juego."
+"Cambiar la configuración de audio del juego."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -845,7 +844,7 @@ msgid "Enable auto combat"
 msgstr "Combate automático"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr "Allows the computer to fight out the battle for you."
+msgstr "Permite que la CPU luche la batalla por ti."
 
 msgid "Auto Combat"
 msgstr "Combate Automático"
@@ -863,7 +862,7 @@ msgid "Skip this unit"
 msgstr "Saltar el turno de esta unidad"
 
 msgid "Skip"
-msgstr "Omitir"
+msgstr "Saltar"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
@@ -1163,7 +1162,7 @@ msgid "Turning Point"
 msgstr "Momento Crucial"
 
 msgid "scenarioName|Defender"
-msgstr "scenarioName|Defender"
+msgstr "Defender"
 
 msgid "Corlagon's Defense"
 msgstr "Defensa de Corlagon"
@@ -3218,7 +3217,7 @@ msgid "Normal"
 msgstr "Normal"
 
 msgid "Fast"
-msgstr "Rápdo"
+msgstr "Rápido"
 
 msgid "Very Fast"
 msgstr "Muy rápido"
@@ -4059,7 +4058,7 @@ msgid "Edit Event"
 msgstr "Editar evento"
 
 msgid "Edit an existing event."
-msgstr "Edit an existing event."
+msgstr ""
 
 msgid "Delete Event"
 msgstr "Eliminar evento"
