@@ -23,7 +23,8 @@ TARGET := fheroes2.js
 CCFLAGS := $(filter-out -pthread,$(CCFLAGS)) \
 	--use-port=sdl2 \
 	--use-port=sdl2_mixer \
-	--use-port=zlib
+	--use-port=zlib \
+	-sSDL2_MIXER_FORMATS=mid,mp3,ogg
 
 LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
