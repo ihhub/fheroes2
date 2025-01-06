@@ -2447,52 +2447,41 @@ msgstr "Nada especial"
 msgid "Horde Building"
 msgstr "Edificio de la Horda"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Medianos"
+msgstr "Morada 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Medianos"
+msgstr "Morada 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Medianos"
+msgstr "Actu. Morada 2"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Medianos"
+msgstr "Morada 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Medianos"
+msgstr "Actu. Morada 3"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Medianos"
+msgstr "Morada 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Medianos"
+msgstr "Actu. Morada 4"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Medianos"
+msgstr "Morada 5"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Medianos"
+msgstr "Actu. Morada 5"
 
-#, fuzzy
 msgid "Dwelling 6"
 msgstr "Medianos"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Medianos"
+msgstr "Actu. Morada 6"
 
 msgid "2x Upg. Dwelling 6"
-msgstr "Actu. Vivienda 6"
+msgstr "2x Actu. Morada 6"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
