@@ -40,4 +40,4 @@ translations:
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2.data fheroes2.js fheroes2.wasm
+	-rm -f fheroes2.data fheroes2.js fheroes2.wasm

@@ -57,4 +57,4 @@ fheroes2.pot: $(SOURCES)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o fheroes2 fheroes2.data fheroes2.js fheroes2.wasm fheroes2.pot fheroes2.pot~
+	-rm -f *.d *.o fheroes2 fheroes2.data fheroes2.js fheroes2.wasm fheroes2.pot fheroes2.pot~
