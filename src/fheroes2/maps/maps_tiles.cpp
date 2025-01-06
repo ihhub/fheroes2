@@ -373,21 +373,40 @@ namespace
         return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta.icnType ), ta.icnIndex );
     }
 
-    void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os )
+    void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os, const bool isGroundLayer )
     {
         os << "UID             : " << part._uid << std::endl
            << "ICN object type : " << static_cast<int>( part.icnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part.icnType ) ) << ")"
            << std::endl
-           << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl
-           << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl
-           << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
+           << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl;
+
+        if ( isGroundLayer || ( part.layerType == Maps::OBJECT_LAYER ) ) {
+           os << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+        }
+        else {
+            os << "!!! INVALID !!! layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+        }
+
+        os << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
+
+        if ( ( part == Maps::ObjectPart{} ) ) {
+            return;
+        }
+
+        const auto * partInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( partInfo == nullptr ) {
+            os << "!!! Unknown object part !!!" << std::endl;
+            return;
+        }
+
+        os << "MP2 object type : " << static_cast<int>( partInfo->objectType ) << " (" << MP2::StringObject( partInfo->objectType ) << ")" << std::endl;
     }
 
-    std::string getObjectPartInfo( const Maps::ObjectPart & part, const int lvl )
+    std::string getObjectPartInfo( const Maps::ObjectPart & part, const bool isGroundLayer )
     {
         std::ostringstream os;
-        os << "--------- Level " << lvl << " --------" << std::endl;
-        getObjectPartInfo( part, os );
+        os << "--------- " << ( isGroundLayer ? "Ground" : "Top" ) << " layer --------" << std::endl;
+        getObjectPartInfo( part, os, isGroundLayer );
         return os.str();
     }
 }
@@ -927,11 +946,8 @@ std::string Maps::Tile::String() const
     os << "******* Tile info *******" << std::endl
        << "Tile index      : " << _index << ", "
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
-       << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl;
-
-    getObjectPartInfo( _mainObjectPart, os );
-
-    os << "region          : " << _region << std::endl
+       << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
+       << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
        << "ground img index: " << _terrainImageIndex << ", image flags: " << static_cast<int>( _terrainFlags ) << std::endl
        << "passable from   : " << ( _tilePassabilityDirections ? Direction::String( _tilePassabilityDirections ) : "nowhere" ) << std::endl
@@ -939,37 +955,48 @@ std::string Maps::Tile::String() const
        << "metadata value 2: " << _metadata[1] << std::endl
        << "metadata value 3: " << _metadata[2] << std::endl;
 
-    if ( objectType == MP2::OBJ_BOAT )
+    if ( objectType == MP2::OBJ_BOAT ) {
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
+    }
+
+    os << "--------- Main object part --------" << std::endl;
+    getObjectPartInfo( _mainObjectPart, os, true );
 
     for ( const auto & part : _groundObjectPart ) {
-        os << getObjectPartInfo( part, 1 );
+        os << getObjectPartInfo( part, true );
     }
 
     for ( const auto & part : _topObjectPart ) {
-        os << getObjectPartInfo( part, 2 );
+        os << getObjectPartInfo( part, false );
     }
 
     os << "--- Extra information ---" << std::endl;
 
     switch ( objectType ) {
+    case MP2::OBJ_ABANDONED_MINE:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_GENIE_LAMP:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_MONSTER:
+    case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREE_CITY:
-    case MP2::OBJ_WAGON_CAMP:
-    case MP2::OBJ_DESERT_TENT:
-    case MP2::OBJ_TROLL_BRIDGE:
-    case MP2::OBJ_DRAGON_CITY:
-    case MP2::OBJ_CITY_OF_DEAD:
-    case MP2::OBJ_WATCH_TOWER:
-    case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_CAVE:
     case MP2::OBJ_TREE_HOUSE:
-    case MP2::OBJ_ARCHER_HOUSE:
-    case MP2::OBJ_GOBLIN_HUT:
-    case MP2::OBJ_DWARF_COTTAGE:
-    case MP2::OBJ_HALFLING_HOLE:
-    case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_MONSTER:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_ALTAR:
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HERO: {
