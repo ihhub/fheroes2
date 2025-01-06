@@ -1162,7 +1162,7 @@ msgid "Turning Point"
 msgstr "Momento Crucial"
 
 msgid "scenarioName|Defender"
-msgstr "Defender"
+msgstr "Defensor"
 
 msgid "Corlagon's Defense"
 msgstr "Defensa de Corlagon"
