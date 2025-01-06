@@ -381,7 +381,7 @@ namespace
            << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl;
 
         if ( isGroundLayer || ( part.layerType == Maps::OBJECT_LAYER ) ) {
-           os << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+            os << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
         }
         else {
             os << "!!! INVALID !!! layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
