@@ -32,7 +32,7 @@ fheroes2.js: translations
 	$(MAKE) -C src/dist PLATFORM=emscripten
 	cp src/dist/fheroes2/fheroes2.data .
 	cp src/dist/fheroes2/fheroes2.js .
-	# The fheroes2.wasm.map file can also be generated in debug mode
+# The fheroes2.wasm.map file can also be generated in debug mode
 	cp src/dist/fheroes2/fheroes2.wasm* .
 
 translations:
