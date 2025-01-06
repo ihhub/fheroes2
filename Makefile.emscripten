@@ -30,9 +30,9 @@ all: fheroes2.js
 
 fheroes2.js: translations
 	$(MAKE) -C src/dist PLATFORM=emscripten
-	cp src/dist/fheroes2-ems/fheroes2.data .
-	cp src/dist/fheroes2-ems/fheroes2.js .
-	cp src/dist/fheroes2-ems/fheroes2.wasm .
+	cp src/dist/fheroes2/fheroes2.data .
+	cp src/dist/fheroes2/fheroes2.js .
+	cp src/dist/fheroes2/fheroes2.wasm .
 
 translations:
 	$(MAKE) -C files/lang

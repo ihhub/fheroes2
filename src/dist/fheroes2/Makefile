@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,6 +18,12 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+ifeq ($(PLATFORM),emscripten)
+	TARGET := fheroes2.js
+else
+	TARGET := fheroes2
+endif
+
 DEPLIBS := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../../engine
 
@@ -34,11 +40,11 @@ VPATH := $(SOURCEDIRS)
 
 .PHONY: all pot clean
 
-all: fheroes2 pot
+all: $(TARGET) pot
 
 pot: fheroes2.pot
 
-fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
+$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 fheroes2.pot: $(SOURCES)
@@ -51,4 +57,4 @@ fheroes2.pot: $(SOURCES)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o fheroes2 fheroes2.pot fheroes2.pot~
+	rm -f *.d *.o fheroes2 fheroes2.data fheroes2.js fheroes2.wasm fheroes2.pot fheroes2.pot~
