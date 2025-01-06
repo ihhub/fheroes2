@@ -389,7 +389,7 @@ namespace
 
         os << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
 
-        if ( ( part == Maps::ObjectPart{} ) ) {
+        if ( part == Maps::ObjectPart{} ) {
             return;
         }
 
