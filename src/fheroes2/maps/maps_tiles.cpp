@@ -944,11 +944,10 @@ std::string Maps::Tile::String() const
     const MP2::MapObjectType objectType = getMainObjectType();
 
     os << "******* Tile info *******" << std::endl
-       << "Tile index      : " << _index << ", "
-       << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
+       << "index           : " << _index << ", " << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
-       << "region          : " << _region << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
+       << "region Id       : " << _region << std::endl
+       << "ground type     : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
        << "ground img index: " << _terrainImageIndex << ", image flags: " << static_cast<int>( _terrainFlags ) << std::endl
        << "passable from   : " << ( _tilePassabilityDirections ? Direction::String( _tilePassabilityDirections ) : "nowhere" ) << std::endl
        << "metadata value 1: " << _metadata[0] << std::endl
@@ -970,7 +969,14 @@ std::string Maps::Tile::String() const
         os << getObjectPartInfo( part, false );
     }
 
-    os << "--- Extra information ---" << std::endl;
+    bool isExtraInfoPresent = false;
+
+    const auto addExtraInfoLine = [&isExtraInfoPresent, &os]() {
+        if ( !isExtraInfoPresent ) {
+            isExtraInfoPresent = true;
+            os << "--- Extra information ---" << std::endl;
+        }
+    };
 
     switch ( objectType ) {
     case MP2::OBJ_ABANDONED_MINE:
@@ -997,24 +1003,36 @@ std::string Maps::Tile::String() const
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_WATER_ALTAR:
+        addExtraInfoLine();
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HERO: {
+        addExtraInfoLine();
         const Heroes * hero = getHero();
-        if ( hero )
+        if ( hero ) {
             os << hero->String();
+        }
+        else {
+            os << "!!! INVALID OBJECT TYPE !!!";
+        }
         break;
     }
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
+        addExtraInfoLine();
         const Castle * castle = world.getCastle( GetCenter() );
-        if ( castle )
+        if ( castle ) {
             os << castle->String();
+        }
+        else {
+            os << "!!! INVALID OBJECT TYPE !!!";
+        }
         break;
     }
     default: {
         const MapsIndexes & v = getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
+            addExtraInfoLine();
             os << "protection      : ";
             for ( const int32_t index : v ) {
                 os << index << ", ";
@@ -1026,6 +1044,7 @@ std::string Maps::Tile::String() const
     }
 
     if ( MP2::isCaptureObject( getMainObjectType( false ) ) ) {
+        addExtraInfoLine();
         const CapturedObject & co = world.GetCapturedObject( _index );
 
         os << "capture color   : " << Color::String( co.objCol.second ) << std::endl;
