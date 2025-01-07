@@ -282,7 +282,7 @@ msgid ""
 "R\n"
 "O\n"
 "L"
-msgstr "RUMORES"
+msgstr ""
 
 msgid ""
 "C\n"
@@ -322,7 +322,7 @@ msgstr ""
 "R"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "RUMORES"
 
 msgid "EVENTS"
 msgstr "EVENTOS"
