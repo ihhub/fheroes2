@@ -384,7 +384,7 @@ namespace
             os << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
         }
         else {
-            os << "!!! INVALID !!! layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+            os << "!!! INVALID !!! layer type : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
         }
 
         os << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
@@ -395,7 +395,7 @@ namespace
 
         const auto * partInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
         if ( partInfo == nullptr ) {
-            os << "!!! Unknown object part !!!" << std::endl;
+            os << "!!! UNKNOWN OBJECT PART !!!" << std::endl;
             return;
         }
 
