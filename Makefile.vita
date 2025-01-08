@@ -41,7 +41,7 @@ fheroes2.vpk: eboot.bin param.sfo translations
 		--add files/data=files/data \
 		--add files/lang/vita_temp=files/lang \
 		fheroes2.vpk
-	rm -r files/lang/vita_temp
+	rm -rf files/lang/vita_temp
 
 translations: fheroes2.elf
 	$(MAKE) -C files/lang
@@ -65,4 +65,4 @@ fheroes2.elf:
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo
+	-rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo

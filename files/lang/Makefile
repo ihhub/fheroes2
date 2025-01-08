@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2024                                                    #
+#   Copyright (C) 2024 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -65,4 +65,4 @@ ro.mo: ro.po
 	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | $(ICONV) -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
-	rm -f *.mo *.po~
+	-rm -f *.mo *.po~

@@ -30,9 +30,10 @@ all: fheroes2.js
 
 fheroes2.js: translations
 	$(MAKE) -C src/dist PLATFORM=emscripten
-	cp src/dist/fheroes2-ems/fheroes2.data .
-	cp src/dist/fheroes2-ems/fheroes2.js .
-	cp src/dist/fheroes2-ems/fheroes2.wasm .
+	cp src/dist/fheroes2/fheroes2.data .
+	cp src/dist/fheroes2/fheroes2.js .
+# The fheroes2.wasm.map file can also be generated in debug mode
+	cp src/dist/fheroes2/fheroes2.wasm* .
 
 translations:
 	$(MAKE) -C files/lang
@@ -40,4 +41,4 @@ translations:
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2.data fheroes2.js fheroes2.wasm
+	-rm -f fheroes2.data fheroes2.js fheroes2.wasm*
