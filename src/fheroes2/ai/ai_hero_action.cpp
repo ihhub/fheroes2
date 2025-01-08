@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1479,7 +1479,6 @@ namespace
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, Color::UNUSED );
-                tile.SetObjectPassable( true );
             }
             else {
                 AIBattleLose( hero, res, true );

@@ -283,8 +283,6 @@ namespace Maps
 
         void ClearFog( const int colors );
 
-        void SetObjectPassable( bool pass );
-
         const std::array<uint32_t, 3> & metadata() const
         {
             return _metadata;

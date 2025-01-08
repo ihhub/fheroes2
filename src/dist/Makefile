@@ -81,6 +81,14 @@ endif
 include Makefile.$(PLATFORM)
 
 #
+# Name of the main target executable file
+# This name can be platform-specific (and can already be defined in a platform-specific Makefile)
+#
+ifeq ($(origin TARGET),undefined)
+TARGET := fheroes2
+endif
+
+#
 # Build options for third-party libraries
 #
 
@@ -150,7 +158,7 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS TARGET
 
 .PHONY: all clean
 
@@ -159,23 +167,13 @@ ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)" CPPFLAGS="$(CPPFLAGS_TP)"
 endif
 	$(MAKE) -C engine
-ifeq ($(PLATFORM),emscripten)
-	$(MAKE) -C fheroes2-ems
-else
 	$(MAKE) -C fheroes2
-endif
 ifdef FHEROES2_WITH_TOOLS
 	$(MAKE) -C tools
 endif
 
 clean:
-ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker clean
-endif
 	$(MAKE) -C engine clean
-ifeq ($(PLATFORM),emscripten)
-	$(MAKE) -C fheroes2-ems clean
-else
 	$(MAKE) -C fheroes2 clean
-endif
 	$(MAKE) -C tools clean
