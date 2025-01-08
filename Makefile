@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -60,4 +60,4 @@ endif
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -rf fheroes2 fheroes2.app
+	-rm -rf fheroes2 fheroes2.app

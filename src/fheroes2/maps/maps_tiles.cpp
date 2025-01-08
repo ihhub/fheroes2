@@ -1085,18 +1085,6 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
     return ( direction & _tilePassabilityDirections ) != 0;
 }
 
-void Maps::Tile::SetObjectPassable( bool pass )
-{
-    if ( getMainObjectType( false ) == MP2::OBJ_TROLL_BRIDGE ) {
-        if ( pass ) {
-            _tilePassabilityDirections |= Direction::TOP_LEFT;
-        }
-        else {
-            _tilePassabilityDirections &= ~Direction::TOP_LEFT;
-        }
-    }
-}
-
 bool Maps::Tile::isStream() const
 {
     for ( const auto & part : _groundObjectPart ) {
