@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1205,17 +1205,12 @@ int Army::GetMoraleModificator( std::string * strs ) const
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
-    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
-            allUndead = allUndead && troop->isUndead();
         }
-
-    if ( allUndead )
-        return Morale::NORMAL;
 
     int result = Morale::NORMAL;
 
