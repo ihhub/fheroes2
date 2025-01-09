@@ -20,11 +20,13 @@
 
 TARGET := fheroes2.js
 
+SDL2_MIXER_FORMATS := mid,mp3
+
 CCFLAGS := $(CCFLAGS) \
 	--use-port=sdl2 \
 	--use-port=sdl2_mixer \
 	--use-port=zlib \
-	-sSDL2_MIXER_FORMATS=mid,mp3,ogg
+	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS)
 
 LDFLAGS := $(LDFLAGS) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
@@ -36,7 +38,7 @@ LDFLAGS := $(LDFLAGS) \
 	-sINITIAL_MEMORY=128mb \
 	-sNO_DISABLE_EXCEPTION_CATCHING \
 	-sPTHREAD_POOL_SIZE=8 \
-	-sSDL2_MIXER_FORMATS=mid,mp3,ogg \
+	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
 	-sSTACK_SIZE=262144 \
 	-lidbfs.js
 
