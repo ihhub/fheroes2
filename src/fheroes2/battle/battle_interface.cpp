@@ -3268,12 +3268,14 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
             std::string msg = _( "Allows the computer to fight out the battle for you." );
             msg += "\n\n";
-            msg += _( "You can interrupt this at any time by pressing any key." );
+            msg += _( "autoBattle|This can be interrupted at any time by pressing any key." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
-                                               _( "Instantly resolves the battle by the computer from the current state.\n\nThis cannot be reverted." ), Dialog::ZERO );
+            std::string msg = _( "Instantly resolves the battle by the computer from the current state." );
+            msg += "\n\n";
+            msg += _( "autoResolve|This cannot be reverted." );
+            fheroes2::showStandardTextMessage( _( "Auto Resolve" ), msg, Dialog::ZERO );
         }
     }
 }
