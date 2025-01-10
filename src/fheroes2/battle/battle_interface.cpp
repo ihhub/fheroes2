@@ -2900,7 +2900,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
         msg = _( "Skip this unit" );
 
-        if ( le.MouseClickLeft( _buttonSkip.area() ) && _currentUnit ) {
+        if ( le.MouseClickLeft( _buttonSkip.area() ) ) {
+            assert( _currentUnit != nullptr );
+
             actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
 
             humanturn_exit = true;
