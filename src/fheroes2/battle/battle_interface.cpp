@@ -3266,9 +3266,10 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Auto Combat" ),
-                                               _( "Lets the computer play out the battle for you.\n\nYou can interrupt this at any time by pressing any key." ),
-                                               Dialog::ZERO );
+            std::string msg = _( "Allows the computer to fight out the battle for you." );
+            msg += "\n\n";
+            msg += _( "You can interrupt this at any time by pressing any key." );
+            fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Auto Resolve" ),
