@@ -2,7 +2,7 @@
 
 ## Current status of this port
 
-Please note that this port is currently just an **experiment**. It may experience various problems, crash, or even not work at all in a particular browser.
+Please note that this port is currently still **experimental**. You may experience various problems, crashes, or it not even working at all in particular browsers.
 
 ## Building
 
@@ -65,4 +65,4 @@ fheroes2.wasm
 fheroes2.wasm.map (if fheroes2 has been built in debug mode)
 ```
 
-If you want to use the stock launcher (pretty basic at the moment), then also copy all the files from `files/emscripten` to the same directory.
+If you want to use the stock launcher (pretty basic at the moment), then you will also need to copy all the files from `files/emscripten` to the same directory.
