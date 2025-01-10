@@ -724,7 +724,6 @@ namespace fheroes2
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
 
         // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
-        // TODO: Remove the need for the argument once width() has been improved to handle this.
         const int32_t textWidth = releasedText.width( maximumTextArea.width );
         assert( textWidth > 0 );
 
