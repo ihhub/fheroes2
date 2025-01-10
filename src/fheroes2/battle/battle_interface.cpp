@@ -3272,7 +3272,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
-            std::string msg = _( "Instantly resolves the battle by the computer from the current state." );
+            std::string msg = _( "Instantly resolves the battle from the current state." );
             msg += "\n\n";
             msg += _( "autoResolve|This cannot be reverted." );
             fheroes2::showStandardTextMessage( _( "Auto Resolve" ), msg, Dialog::ZERO );
