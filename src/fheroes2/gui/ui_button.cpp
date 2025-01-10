@@ -173,6 +173,28 @@ namespace
 
         return output;
     }
+    void addButtonShine( fheroes2::Sprite & buttonImage, const int emptyButtonIcnID )
+    {
+        const bool isGoodButton = ( emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON );
+        if ( isGoodButton || emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON ) {
+            const uint8_t firstColor = 10;
+            const uint8_t secondColor = isGoodButton ? 38 : 15;
+            const uint8_t lastColor = isGoodButton ? 39 : 16;
+            // Left side shine
+            fheroes2::SetPixel( buttonImage, 11, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, 13, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, 9, 6, firstColor );
+            fheroes2::SetPixel( buttonImage, 10, 5, secondColor );
+            fheroes2::SetPixel( buttonImage, 12, 5, secondColor );
+            fheroes2::SetPixel( buttonImage, 8, 7, lastColor );
+            fheroes2::SetPixel( buttonImage, 15, 4, lastColor );
+            // Right-side shine
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 9, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 7, 4, firstColor );
+            fheroes2::DrawLine( buttonImage, { buttonImage.width() - 10, 5 }, { buttonImage.width() - 11, 6 }, secondColor );
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 8, 5, secondColor );
+        }
+    }
 
     void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, fheroes2::Point & textAreaBorders, fheroes2::Size & minimumTextArea,
                                   fheroes2::Size & maximumTextArea, fheroes2::Size & backgroundBorders, fheroes2::Point & releasedOffset,
@@ -766,6 +788,9 @@ namespace fheroes2
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
+        }
+        if ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) {
+            addButtonShine( released, emptyButtonIcnID );
         }
 
         const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
