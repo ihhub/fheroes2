@@ -6576,7 +6576,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         assert( spell.isCombat() );
 
                         if ( arena.isDisableCastSpell( spell, &msg ) ) {
-                            fheroes2::showStandardTextMessage( "", msg, Dialog::OK );
+                            fheroes2::showStandardTextMessage( spell.GetName(), msg, Dialog::OK );
                         }
                         else {
                             std::string error;
