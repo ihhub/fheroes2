@@ -44,6 +44,8 @@ LDFLAGS := $(LDFLAGS) \
 	-sPTHREAD_POOL_SIZE=8 \
 	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
 	-sSTACK_SIZE=256kb \
+	-lGL \
+	-lhtml5 \
 	-lidbfs.js
 
 ifdef FHEROES2_WITH_DEBUG
