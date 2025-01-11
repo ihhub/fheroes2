@@ -33,6 +33,7 @@ LDFLAGS := $(LDFLAGS) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
 	--preload-file ../../../files/lang/@/files/lang/ \
 	--preload-file ../../../files/timidity/@/etc/ \
+	-sALLOW_BLOCKING_ON_MAIN_THREAD \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=32768 \
