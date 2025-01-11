@@ -26,7 +26,8 @@ CCFLAGS := $(CCFLAGS) \
 	--use-port=sdl2 \
 	--use-port=sdl2_mixer \
 	--use-port=zlib \
-	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS)
+	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
+	-sSTRICT
 
 LDFLAGS := $(LDFLAGS) \
 	-Wno-pthreads-mem-growth \
@@ -44,6 +45,7 @@ LDFLAGS := $(LDFLAGS) \
 	-sPTHREAD_POOL_SIZE=8 \
 	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
 	-sSTACK_SIZE=256kb \
+	-sSTRICT \
 	-lGL \
 	-lhtml5 \
 	-lidbfs.js
@@ -54,9 +56,4 @@ LDFLAGS := $(LDFLAGS) -gsource-map
 else
 CCFLAGS := $(CCFLAGS) -flto
 LDFLAGS := $(LDFLAGS) -flto
-endif
-
-ifdef FHEROES2_STRICT_COMPILATION
-CCFLAGS := $(CCFLAGS) -sSTRICT
-LDFLAGS := $(LDFLAGS) -sSTRICT
 endif
