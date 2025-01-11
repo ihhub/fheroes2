@@ -32,10 +32,10 @@ emmake make -f Makefile.emscripten
 If you want to specify some additional ad hoc build parameters, you can use the appropriate environment variables for this, for example:
 
 ```sh
-FHEROES2_WITH_DEBUG=ON LDFLAGS="-sMODULARIZE -sEXPORTED_RUNTIME_METHODS=run -sEXPORT_NAME=fheroes2" emmake make -f Makefile.emscripten
+FHEROES2_WITH_THREADS=ON LDFLAGS="-sMODULARIZE -sEXPORTED_RUNTIME_METHODS=run -sEXPORT_NAME=fheroes2" emmake make -f Makefile.emscripten
 ```
 
-will build fheroes2 in debug mode with additional parameters to create a module.
+will build fheroes2 with multithreading support and with additional parameters to create a module.
 
 ## Running the Wasm port on a web server
 
