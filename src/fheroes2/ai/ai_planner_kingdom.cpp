@@ -772,8 +772,8 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     updateKingdomBudget( kingdom );
 
-    uint32_t progressStatus = 1;
-    status.drawAITurnProgress( progressStatus );
+    uint32_t currentProgressValue = 1;
+    status.drawAITurnProgress( currentProgressValue );
 
     std::set<int> castlesInDanger;
     std::vector<AICastle> sortedCastleList;
@@ -804,9 +804,9 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         // If AI has less than three heroes at the start of the turn we assume
         // that he will buy another one in this turn and allow progress to increase only for 2 points.
         uint32_t const endProgressValue
-            = ( progressStatus == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( progressStatus + 2U, 9U );
+            = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
 
-        bool moreTaskForHeroes = HeroesTurn( heroes, progressStatus, endProgressValue );
+        bool moreTaskForHeroes = HeroesTurn( heroes, currentProgressValue, endProgressValue );
 
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {

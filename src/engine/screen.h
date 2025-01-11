@@ -196,13 +196,14 @@ namespace fheroes2
 
         ~Display() override = default;
 
-        // Render a full frame on screen.
+        // Render an entire frame on screen.
         void render()
         {
             render( { 0, 0, width(), height() } );
         }
 
-        void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
+        // Render a part of frame on screen.
+        void render( const Rect & roi );
 
         // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );

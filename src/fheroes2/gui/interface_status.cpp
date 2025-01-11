@@ -489,15 +489,16 @@ void Interface::StatusPanel::TimerEventProcessing()
 
 void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
 {
+    // Pump the event queue to update the position of the software-emulated mouse cursor,
+    // feed the music player by another music chunk on some platforms (e.g. WebAssembly), etc.
+    LocalEvent::Get().HandleEvents( false );
+
     const bool updateProgress = ( progressValue != _aiTurnProgress );
     const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );
 
     if ( !updateProgress && !isMapAnimation ) {
         return;
     }
-
-    // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
-    LocalEvent::Get().HandleEvents( false );
 
     if ( updateProgress ) {
         if ( progressValue == 0 ) {
