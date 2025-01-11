@@ -35,7 +35,7 @@ If you want to specify some additional ad hoc build parameters, you can use the 
 FHEROES2_WITH_THREADS=ON LDFLAGS="-sMODULARIZE -sEXPORTED_RUNTIME_METHODS=run -sEXPORT_NAME=fheroes2" emmake make -f Makefile.emscripten
 ```
 
-will build fheroes2 with multithreading support and with additional parameters to create a module.
+will build fheroes2 with multithreading support, as well as with additional parameters for creating a module.
 
 ## Running the Wasm port on a web server
 
