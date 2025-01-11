@@ -46,4 +46,7 @@ LDFLAGS := $(LDFLAGS) \
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -gsource-map
 LDFLAGS := $(LDFLAGS) -gsource-map
+else
+CCFLAGS := $(CCFLAGS) -flto
+LDFLAGS := $(LDFLAGS) -flto
 endif
