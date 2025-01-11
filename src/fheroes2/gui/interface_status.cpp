@@ -489,8 +489,9 @@ void Interface::StatusPanel::TimerEventProcessing()
 
 void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
 {
-    // Pump the event queue to update the position of the software-emulated mouse cursor,
-    // feed the music player by another music chunk on some platforms (e.g. WebAssembly), etc.
+    // Even if there is no need to draw anything, we still need to pump the event queue to
+    // update the position of the software-emulated mouse cursor, feed the music player by
+    // another music chunk on some platforms (e.g. WebAssembly), etc.
     LocalEvent::Get().HandleEvents( false );
 
     const bool updateProgress = ( progressValue != _aiTurnProgress );
