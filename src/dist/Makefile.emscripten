@@ -29,6 +29,7 @@ CCFLAGS := $(CCFLAGS) \
 	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS)
 
 LDFLAGS := $(LDFLAGS) \
+	-Wno-pthreads-mem-growth \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
 	--preload-file ../../../files/lang/@/files/lang/ \
 	--preload-file ../../../files/timidity/@/etc/ \
