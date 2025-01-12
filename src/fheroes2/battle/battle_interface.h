@@ -423,9 +423,6 @@ namespace Battle
         void EventStartAutoBattle( const Unit & unit, Actions & actions );
         void EventAutoFinish( Actions & actions );
         void EventShowOptions();
-        void ButtonAutoAction( const Unit & unit, Actions & actions );
-        void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & actions );
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
