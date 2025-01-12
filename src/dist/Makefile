@@ -82,8 +82,9 @@ include Makefile.$(PLATFORM)
 
 #
 # Name of the main target executable file
-# This name can be platform-specific (and can already be defined in a platform-specific Makefile)
 #
+
+# This name can be platform-specific (and can already be defined in a platform-specific Makefile)
 ifeq ($(origin TARGET),undefined)
 TARGET := fheroes2
 endif
