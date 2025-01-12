@@ -1259,10 +1259,10 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
     }
 
 #ifdef __EMSCRIPTEN__
-    // When a WebAssembly app is running in a browser, the sleep time is used to perform various "background" operations on the main thread (such as
-    // feeding the audio streams). Therefore, it is preferable to always force the main thread to fall asleep, otherwise, for example, the following
-    // deadlock is possible: the main thread waits in a loop for an audio playback to finish, but it never finishes because new chunks are not feeded
-    // to it, because the main thread never goes to sleep.
+    // When a WebAssembly app is running in a browser, the sleep time is used to perform various "background" operations on the main thread (such
+    // as feeding the audio streams) by yielding to the browser's event loop using the Emscripten Asyncify mechanism. Therefore, it is preferable
+    // to always force the main thread to fall asleep, otherwise, for example, the following deadlock is possible: the main thread waits in a loop
+    // for an audio playback to finish, but it never finishes because new chunks are not feeded to it, because the main thread never goes to sleep.
     EventProcessing::EventEngine::sleep( globalLoopSleepTime );
 #endif
 
