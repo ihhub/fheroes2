@@ -1612,6 +1612,8 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop )
 {
     if ( !troop.isValid() ) {
+        assert( 0 );
+
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 
@@ -1692,7 +1694,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     }
 
     if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
-        // ... surely flee from us
+        // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 
