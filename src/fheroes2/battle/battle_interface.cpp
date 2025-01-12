@@ -3207,11 +3207,9 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
 
 void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
 {
-    LocalEvent & le = LocalEvent::Get();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Text title( _( "Automatic Battle Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+    const fheroes2::Text title( _( "Automatic Battle" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
     const fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -3223,55 +3221,63 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
-    const Dialog::FrameBox box( title.height( title.width() ) + 7 + header.height( header.width() ) + 7 + autoResolveButtonReleased.height() + 15, true );
-    const fheroes2::Rect roiArea = box.GetArea();
+    fheroes2::StandardWindow background( 289,
+                                         7 + title.height( title.width() ) + 7 + header.height( header.width() ) + 7 + autoResolveButtonReleased.height() + 7
+                                             + cancelButtonReleased.height() + 15,
+                                         true, display );
 
-    fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - cancelButtonReleased.width() / 2, roiArea.y + roiArea.height - 25, cancelButtonICN, 0, 1 );
+    fheroes2::Button buttonAutoCombat;
+    fheroes2::Button buttonAutoResolve;
+    fheroes2::Button buttonCancel;
 
-    const int32_t buttonPlacementYOffset = roiArea.y + title.height( roiArea.width ) + 7 + header.height( roiArea.width ) + 7;
+    const int32_t largeButtonsXOffset = 30;
+    const int32_t largeButtonsYOffset = 15;
 
-    fheroes2::ButtonSprite autoCombat( roiArea.x, buttonPlacementYOffset, fheroes2::AGG::GetICN( autoCombatButtonICN, 0 ),
-                                       fheroes2::AGG::GetICN( autoCombatButtonICN, 1 ) );
-    fheroes2::ButtonSprite autoResolve( roiArea.x + roiArea.width - autoResolveButtonReleased.width(), buttonPlacementYOffset, autoResolveButtonReleased,
-                                        fheroes2::AGG::GetICN( autoResolveButtonICN, 1 ) );
+    background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { largeButtonsXOffset, 0 },
+                             fheroes2::StandardWindow::Padding::CENTER_LEFT );
+    background.renderButton( buttonAutoResolve, isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD, 0, 1, { largeButtonsXOffset, 0 },
+                             fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+    background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    header.draw( roiArea.x, roiArea.y + title.height( roiArea.width ) + 7, roiArea.width, display );
-    title.draw( roiArea.x, roiArea.y, roiArea.width, display );
-    cancel.draw();
-    autoResolve.draw();
-    autoCombat.draw();
-    display.render();
+    const fheroes2::Rect roiArea = background.activeArea();
+
+    header.draw( roiArea.x, roiArea.y + 7 + title.height( roiArea.width ) + 7, roiArea.width, display );
+    title.draw( roiArea.x, roiArea.y + 7, roiArea.width, display );
+
+    display.render( background.totalArea() );
+    LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        autoResolve.drawOnState( le.isMouseLeftButtonPressedInArea( autoResolve.area() ) );
-        autoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombat.area() ) );
-        cancel.drawOnState( le.isMouseLeftButtonPressedInArea( cancel.area() ) );
+        buttonAutoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoCombat.area() ) );
+        buttonAutoResolve.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoResolve.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-        if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        if ( le.MouseClickLeft( autoResolve.area() ) ) {
-            EventAutoFinish( actions );
+        else if ( le.MouseClickLeft( buttonAutoCombat.area() ) ) {
+            EventStartAutoBattle( unit, actions );
             display.render( roiArea );
         }
-        if ( le.MouseClickLeft( autoCombat.area() ) ) {
-            EventStartAutoBattle( unit, actions );
+        else if ( le.MouseClickLeft( buttonAutoResolve.area() ) ) {
+            EventAutoFinish( actions );
             display.render( roiArea );
         }
         if ( !actions.empty() ) {
             return;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( cancel.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( autoCombat.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
             std::string msg = _( "Allows the computer to fight out the battle for you." );
             msg += "\n\n";
             msg += _( "autoBattle|This can be interrupted at any time by pressing any key." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( autoResolve.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonAutoResolve.area() ) ) {
             std::string msg = _( "Instantly resolves the battle from the current state." );
             msg += "\n\n";
             msg += _( "autoResolve|This cannot be reverted." );
