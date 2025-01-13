@@ -2872,13 +2872,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
-        msg = _( "Enable auto combat" );
+        msg = _( "Automatic battle modes" );
 
         if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
-            EventStartAutoBattle( unit, actions );
+            OpenAutoModeDialog( unit, actions );
         }
         else if ( le.isMouseRightButtonPressed() ) {
-            fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Automatic Battle" ), _( "Choose between solving the battle through Auto Combat or Auto Resolve." ), Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
@@ -3228,9 +3228,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Text title( _( "Automatic Battle" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
-    const fheroes2::Text header( _( "Choose an automatic battle mode:" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
@@ -3241,12 +3238,16 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
-    const int32_t largeButtonsXOffset = 30;
-    const int32_t largeButtonsYOffset = 15;
+    const int32_t autoButtonsXOffset = 20;
+    const int32_t autoButtonsYOffset = 15;
+    const int32_t titleYOffset = 16;
+    const int32_t buttonSeparation = 37;
 
-    const int32_t backgroundWidth = largeButtonsXOffset + autoResolveButtonReleased.width() + 17 + autoCombatButtonReleased.width() + largeButtonsXOffset;
-    const int32_t backgroundHeight = 7 + title.height( backgroundWidth ) + 7 + header.height( backgroundWidth ) + 7 + autoResolveButtonReleased.height() + 7
-                                     + cancelButtonReleased.height() + largeButtonsYOffset;
+    const fheroes2::Text title( _( "Automatic Battle" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+    const int32_t backgroundWidth = autoButtonsXOffset * 2 + autoResolveButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
+    const int32_t backgroundHeight
+        = titleYOffset + title.height( backgroundWidth ) + autoResolveButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
 
     fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
 
@@ -3254,17 +3255,16 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     fheroes2::Button buttonAutoResolve;
     fheroes2::Button buttonCancel;
 
-    background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { largeButtonsXOffset, 0 },
+    background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
                              fheroes2::StandardWindow::Padding::CENTER_LEFT );
-    background.renderButton( buttonAutoResolve, isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD, 0, 1, { largeButtonsXOffset, 0 },
+    background.renderButton( buttonAutoResolve, isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD, 0, 1, { autoButtonsXOffset, 0 },
                              fheroes2::StandardWindow::Padding::CENTER_RIGHT );
     background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
     const fheroes2::Rect roiArea = background.activeArea();
+    title.draw( roiArea.x, roiArea.y + titleYOffset, backgroundWidth, display );
 
-    title.draw( roiArea.x, roiArea.y + 7, backgroundWidth, display );
-    header.draw( roiArea.x, roiArea.y + 7 + title.height( backgroundWidth) + 7, backgroundWidth, display );
     display.render( background.totalArea() );
     LocalEvent & le = LocalEvent::Get();
 
@@ -3278,11 +3278,9 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         else if ( le.MouseClickLeft( buttonAutoCombat.area() ) ) {
             EventStartAutoBattle( unit, actions );
-            display.render( roiArea );
         }
         else if ( le.MouseClickLeft( buttonAutoResolve.area() ) ) {
             EventAutoFinish( actions );
-            display.render( roiArea );
         }
         if ( !actions.empty() ) {
             return;
@@ -3294,7 +3292,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
             std::string msg = _( "Allows the computer to fight out the battle for you." );
             msg += "\n\n";
-            msg += _( "autoCombat|This can be interrupted at any time by pressing any key." );
+            msg += _( "autoCombat|This can be interrupted at any time by pressing the Auto Combat hotkey, or by a right- or left-click." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoResolve.area() ) ) {
