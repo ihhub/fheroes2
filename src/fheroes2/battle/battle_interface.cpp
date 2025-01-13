@@ -2878,7 +2878,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             OpenAutoModeDialog( unit, actions );
         }
         else if ( le.isMouseRightButtonPressed() ) {
-            fheroes2::showStandardTextMessage( _( "Automatic Battle" ), _( "Choose whether to fight out the battle through Auto Combat or Auto Resolve." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Automatic Battle" ), _( "Choose whether to fight out the battle through Auto Combat or Auto Resolve." ),
+                                               Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
@@ -3292,7 +3293,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
             std::string msg = _( "Allows the computer to fight out the battle for you." );
             msg += "\n\n";
-            msg += _( "autoCombat|This can be interrupted at any point by either pressing the Auto Combat hotkey or the default cancel key, or by right- or left-clicking anywhere." );
+            msg += _(
+                "autoCombat|This can be interrupted at any point by either pressing the Auto Combat hotkey or the default cancel key, or by right- or left-clicking anywhere." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoResolve.area() ) ) {
