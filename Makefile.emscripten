@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2025                                             #
+#   Copyright (C) 2025                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,23 +18,27 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifndef FHEROES2_WITH_SYSTEM_SMACKER
-CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
-endif
+# Options:
+#
+# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
+# FHEROES2_WITH_DEBUG: build in debug mode
+# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
-SOURCEDIR := ../../engine
+.PHONY: all clean translations
 
-.PHONY: all clean
+all: fheroes2.js
 
-all: libengine.a
+fheroes2.js: translations
+	$(MAKE) -C src/dist PLATFORM=emscripten
+	cp src/dist/fheroes2/fheroes2.data .
+	cp src/dist/fheroes2/fheroes2.js .
+# The fheroes2.wasm.map file can also be generated in debug mode
+	cp src/dist/fheroes2/fheroes2.wasm* .
 
-libengine.a: $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SOURCEDIR)/*.cpp)))
-	$(AR) crvs $@ $^
-
-%.o: $(SOURCEDIR)/%.cpp
-	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
-
-include $(wildcard *.d)
+translations:
+	$(MAKE) -C files/lang
 
 clean:
-	-rm -f *.d *.o libengine.a
+	$(MAKE) -C src/dist clean
+	$(MAKE) -C files/lang clean
+	-rm -f fheroes2.data fheroes2.js fheroes2.wasm*

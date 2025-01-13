@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -81,6 +81,14 @@ endif
 include Makefile.$(PLATFORM)
 
 #
+# Name of the main target executable file
+# This name can be platform-specific (and can already be defined in a platform-specific Makefile)
+#
+ifeq ($(origin TARGET),undefined)
+TARGET := fheroes2
+endif
+
+#
 # Build options for third-party libraries
 #
 
@@ -150,7 +158,7 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS TARGET
 
 .PHONY: all clean
 
@@ -165,9 +173,7 @@ ifdef FHEROES2_WITH_TOOLS
 endif
 
 clean:
-ifndef FHEROES2_WITH_SYSTEM_SMACKER
 	$(MAKE) -C thirdparty/libsmacker clean
-endif
 	$(MAKE) -C engine clean
 	$(MAKE) -C fheroes2 clean
 	$(MAKE) -C tools clean

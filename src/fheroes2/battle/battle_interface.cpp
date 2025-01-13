@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -2787,6 +2787,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
+    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
+    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
+    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
+
     if ( le.isAnyKeyPressed() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
@@ -2867,28 +2871,43 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Enable auto combat" );
-        ButtonAutoAction( unit, actions );
 
-        if ( le.isMouseRightButtonPressed() ) {
+        msg = _( "Enable auto combat" );
+
+        if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
+            EventStartAutoBattle( unit, actions );
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Customize system options" );
-        ButtonSettingsAction();
 
-        if ( le.isMouseRightButtonPressed() ) {
+        msg = _( "Customize system options" );
+
+        if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
+            _openBattleSettingsDialog();
+
+            humanturn_redraw = true;
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSkip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Skip this unit" );
-        ButtonSkipAction( actions );
 
-        if ( le.isMouseRightButtonPressed() ) {
+        msg = _( "Skip this unit" );
+
+        if ( le.MouseClickLeft( _buttonSkip.area() ) ) {
+            assert( _currentUnit != nullptr );
+
+            actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
+
+            humanturn_exit = true;
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Skip" ),
                                                _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
                                                Dialog::ZERO );
@@ -3203,42 +3222,6 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
 
     humanturn_redraw = true;
     humanturn_exit = true;
-}
-
-void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
-
-    if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
-        EventStartAutoBattle( unit, actions );
-    }
-}
-
-void Battle::Interface::ButtonSettingsAction()
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
-
-    if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
-        _openBattleSettingsDialog();
-
-        humanturn_redraw = true;
-    }
-}
-
-void Battle::Interface::ButtonSkipAction( Actions & actions )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
-
-    if ( le.MouseClickLeft( _buttonSkip.area() ) && _currentUnit ) {
-        actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
-        humanturn_exit = true;
-    }
 }
 
 void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
@@ -6501,7 +6484,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         assert( spell.isCombat() );
 
                         if ( arena.isDisableCastSpell( spell, &msg ) ) {
-                            fheroes2::showStandardTextMessage( "", msg, Dialog::OK );
+                            fheroes2::showStandardTextMessage( spell.GetName(), msg, Dialog::OK );
                         }
                         else {
                             std::string error;

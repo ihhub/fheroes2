@@ -99,6 +99,14 @@ tasks.register('copyH2D', Copy) {
     into 'src/main/assets/files/data'
 }
 
+tasks.register('copyTimidity', Copy) {
+    from('../../files/timidity') {
+        include 'instruments/*.pat'
+        include 'timidity.cfg'
+    }
+    into 'src/main/assets'
+}
+
 tasks.register('copyTranslations', Copy) {
     from('../../files/lang') {
         include '*.mo'
@@ -107,5 +115,5 @@ tasks.register('copyTranslations', Copy) {
 }
 
 preBuild {
-    dependsOn copyH2D, copyTranslations
+    dependsOn copyH2D, copyTimidity, copyTranslations
 }
