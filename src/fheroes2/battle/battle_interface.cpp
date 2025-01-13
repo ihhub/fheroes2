@@ -3219,19 +3219,21 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const int cancelButtonICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
     const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
+    const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
-    fheroes2::StandardWindow background( 289,
-                                         7 + title.height( title.width() ) + 7 + header.height( header.width() ) + 7 + autoResolveButtonReleased.height() + 7
-                                             + cancelButtonReleased.height() + 15,
-                                         true, display );
+    const int32_t largeButtonsXOffset = 30;
+    const int32_t largeButtonsYOffset = 15;
+
+    const int32_t backgroundWidth = largeButtonsXOffset + autoResolveButtonReleased.width() + 17 + autoCombatButtonReleased.width() + largeButtonsXOffset;
+    const int32_t backgroundHeight = 7 + title.height( backgroundWidth ) + 7 + header.height( backgroundWidth ) + 7 + autoResolveButtonReleased.height() + 7
+                                     + cancelButtonReleased.height() + largeButtonsYOffset;
+
+    fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
 
     fheroes2::Button buttonAutoCombat;
     fheroes2::Button buttonAutoResolve;
     fheroes2::Button buttonCancel;
-
-    const int32_t largeButtonsXOffset = 30;
-    const int32_t largeButtonsYOffset = 15;
 
     background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { largeButtonsXOffset, 0 },
                              fheroes2::StandardWindow::Padding::CENTER_LEFT );
@@ -3242,9 +3244,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     const fheroes2::Rect roiArea = background.activeArea();
 
-    header.draw( roiArea.x, roiArea.y + 7 + title.height( roiArea.width ) + 7, roiArea.width, display );
-    title.draw( roiArea.x, roiArea.y + 7, roiArea.width, display );
-
+    title.draw( roiArea.x, roiArea.y + 7, backgroundWidth, display );
+    header.draw( roiArea.x, roiArea.y + 7 + title.height( backgroundWidth) + 7, backgroundWidth, display );
     display.render( background.totalArea() );
     LocalEvent & le = LocalEvent::Get();
 
@@ -3274,7 +3275,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
             std::string msg = _( "Allows the computer to fight out the battle for you." );
             msg += "\n\n";
-            msg += _( "autoBattle|This can be interrupted at any time by pressing any key." );
+            msg += _( "autoCombat|This can be interrupted at any time by pressing any key." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoResolve.area() ) ) {
