@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,9 @@
 #include "dialog.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "pal.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -149,12 +151,22 @@ void MoraleIndicator::Redraw()
         _description.append( modificators );
     }
 
+    uint32_t spriteInx = 7;
+    if ( _morale < Morale::NORMAL ) {
+        spriteInx = 5;
+    }
+    else if ( _morale > Morale::NORMAL ) {
+        spriteInx = 4;
+    }
+
+    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::HSICONS, spriteInx );
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
         _description.append( "\n\n" );
         _description.append( _( "Entire army is undead, so morale does not apply." ) );
+        fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
     }
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _morale ? 5 : ( 0 < _morale ? 4 : 7 ) ) );
     const int32_t inter = 6;
     int32_t count = ( 0 == _morale ? 1 : std::abs( _morale ) );
     int32_t cx = _area.x + ( _area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
