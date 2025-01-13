@@ -5118,7 +5118,7 @@ namespace
 
             return true;
         }
-        case ICN::EMPTY_INTERFACE_BUTTON_GOOD: 
+        case ICN::EMPTY_INTERFACE_BUTTON_GOOD:
         case ICN::EMPTY_INTERFACE_BUTTON_EVIL: {
             const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
             loadICN( originalId );
@@ -5128,8 +5128,6 @@ namespace
             Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
 
             // Get the button's icon colors.
-            const uint8_t mainReleasedColor = _icnVsSprite[originalId][2].image()[7 * 36 + 26];
-            const uint8_t mainPressedColor = _icnVsSprite[originalId][3].image()[8 * 36 + 25];
             const uint8_t backgroundReleasedColor = _icnVsSprite[originalId][2].image()[1 * 36 + 5];
             const uint8_t backgroundPressedColor = _icnVsSprite[originalId][3].image()[5 * 36 + 6];
 
