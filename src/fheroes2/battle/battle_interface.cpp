@@ -3276,7 +3276,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        else if ( le.MouseClickLeft( buttonAutoCombat.area() ) ) {
+        if ( le.MouseClickLeft( buttonAutoCombat.area() ) ) {
             EventStartAutoBattle( unit, actions );
         }
         else if ( le.MouseClickLeft( buttonAutoResolve.area() ) ) {
