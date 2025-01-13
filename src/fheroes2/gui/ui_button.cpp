@@ -778,7 +778,7 @@ namespace fheroes2
         const int32_t textHeight = releasedText.height( textAreaWidth );
         assert( textHeight > 0 );
 
-        // Add extra y margin for multilined texts on normal buttons
+        // Add extra y-margin for multi-lined texts on normal buttons.
         if ( ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) && textHeight > 17 ) {
             textAreaMargins.y += 16;
         }
