@@ -4256,7 +4256,9 @@ namespace
                  && _icnVsSprite[id][3].height() == 36 ) {
                 // Add hero action button and inactive button released and pressed.
                 _icnVsSprite[id].resize( 20 );
-                const int emptyButtonId = ( id == ICN::ADVBTNS ) ? ICN::EMPTY_INTERFACE_BUTTON_GOOD : ICN::EMPTY_INTERFACE_BUTTON_EVIL;
+                const bool isGoodButton = id == ICN::ADVBTNS;
+                const int emptyButtonId = isGoodButton ? ICN::EMPTY_INTERFACE_BUTTON_GOOD : ICN::EMPTY_INTERFACE_BUTTON_EVIL;
+
                 Copy( fheroes2::AGG::GetICN( emptyButtonId, 0 ), _icnVsSprite[id][16] );
                 Copy( fheroes2::AGG::GetICN( emptyButtonId, 1 ), _icnVsSprite[id][17] );
                 Copy( fheroes2::AGG::GetICN( emptyButtonId, 0 ), _icnVsSprite[id][18] );
@@ -4320,9 +4322,13 @@ namespace
                 Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
 
                 // Generate inactive horse icon.
+                const uint8_t firstShadingColor = 46;
+                const uint8_t secondShadingColor = 43;
+                const uint8_t thirdShadingColor = 39;
+
                 // Upper body.
                 Copy( _icnVsSprite[id][2], 22, 5, _icnVsSprite[id][18], 22, 4, 10, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 31, 13, 43 );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 31, 13, secondShadingColor );
                 Fill( _icnVsSprite[id][18], 12, 13, 15, 5, mainReleasedColor );
                 Fill( _icnVsSprite[id][18], 12, 18, 5, 2, mainReleasedColor );
                 Fill( _icnVsSprite[id][18], 22, 18, 5, 2, mainReleasedColor );
@@ -4331,8 +4337,8 @@ namespace
                 // Copy one leg 4 times.
                 Copy( _icnVsSprite[id][2], 13, 22, _icnVsSprite[id][18], 11, 22, 4, 6 );
                 fheroes2::SetPixel( _icnVsSprite[id][18], 11, 24, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 14, 24, 43 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 14, 27, 43 );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 14, 24, secondShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 14, 27, secondShadingColor );
                 Fill( _icnVsSprite[id][18], 12, 20, 2, 2, mainReleasedColor );
 
                 Copy( _icnVsSprite[id][18], 11, 21, _icnVsSprite[id][18], 21, 21, 4, 7 );
@@ -4352,36 +4358,71 @@ namespace
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 8, 20 }, { 9, 20 }, mainReleasedColor );
 
                 // Shading.
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 27, 13 }, { 27, 20 }, 46 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 21, 11 }, { 20, 12 }, 46 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 19, 12 }, { 17, 12 }, 43 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 20, 11, 43 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 16, 12 }, { 12, 12 }, 46 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 12, 43 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 11, 13 }, { 9, 15 }, 46 );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 27, 13 }, { 27, 20 }, firstShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 21, 11 }, { 20, 12 }, firstShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 19, 12 }, { 17, 12 }, secondShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 20, 11, secondShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 16, 12 }, { 12, 12 }, firstShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 12, secondShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 11, 13 }, { 9, 15 }, firstShadingColor );
                 fheroes2::SetPixel( _icnVsSprite[id][18], 10, 13, 38 );
                 fheroes2::SetPixel( _icnVsSprite[id][18], 9, 14, 10 );
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 8, 15 }, { 8, 18 }, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 7, 18, 43 );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 7, 18, secondShadingColor );
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 6, 19 }, { 8, 21 }, 10 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 6, 20 }, { 7, 21 }, 39 );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 6, 20 }, { 7, 21 }, thirdShadingColor );
                 fheroes2::SetPixel( _icnVsSprite[id][18], 9, 21, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 10, 20, 39 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 16, 46 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 17, 43 );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 10, 20, thirdShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 16, firstShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 11, 17, secondShadingColor );
                 fheroes2::SetPixel( _icnVsSprite[id][18], 11, 21, 10 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 14, 20 }, { 14, 21 }, 39 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 17, 19 }, { 17, 20 }, 46 );
-                fheroes2::DrawLine( _icnVsSprite[id][18], { 18, 18 }, { 20, 18 }, 46 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 21, 19, 46 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 18, 19, 39 );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 14, 20 }, { 14, 21 }, thirdShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 17, 19 }, { 17, 20 }, firstShadingColor );
+                fheroes2::DrawLine( _icnVsSprite[id][18], { 18, 18 }, { 20, 18 }, firstShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 21, 19, firstShadingColor );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 18, 19, thirdShadingColor );
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 19, 19 }, { 20, 19 }, 10 );
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 21, 20 }, { 21, 21 }, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 24, 20, 39 );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 24, 20, thirdShadingColor );
 
                 // Clean up button border.
                 fheroes2::DrawLine( _icnVsSprite[id][18], { 23, 4 }, { 22, 5 }, 10 );
-                fheroes2::SetPixel( _icnVsSprite[id][18], 22, 4, 41 );
+                const uint8_t backgroundReleasedColor = getButtonFillingColor( true, true );
+                fheroes2::SetPixel( _icnVsSprite[id][18], 22, 4, backgroundReleasedColor );
+
+                // Make pressed state.
+                fheroes2::Image pressedHorse( 26, 24 );
+                const uint8_t backgroundPressedColor = getButtonFillingColor( false, true );
+                Fill( pressedHorse, 0, 0, 26, 24, backgroundPressedColor );
+                Copy( _icnVsSprite[id][18], 6, 11, pressedHorse, 0, 7, 22, 17 );
+                Copy( _icnVsSprite[id][18], 24, 4, pressedHorse, 18, 0, 8, 10 );
+                Copy( _icnVsSprite[id][18], 22, 8, pressedHorse, 16, 4, 2, 3 );
+                
+
+                fheroes2::ReplaceColorId( pressedHorse, mainReleasedColor, mainPressedColor );
+                fheroes2::Save( pressedHorse, "horse.png", 96 );
+                fheroes2::ReplaceColorId( pressedHorse, backgroundReleasedColor, backgroundPressedColor );
+                fheroes2::ReplaceColorId( pressedHorse, 10, 40 );
+                fheroes2::ReplaceColorId( pressedHorse, firstShadingColor, firstShadingColor + 4 ); // 46
+                fheroes2::ReplaceColorId( pressedHorse, secondShadingColor, secondShadingColor + 4 ); // 43
+                fheroes2::ReplaceColorId( pressedHorse, thirdShadingColor, thirdShadingColor + 4 ); // 39
+                fheroes2::ReplaceColorId( pressedHorse, 42, 46 );
+                fheroes2::ReplaceColorId( pressedHorse, 38, 42 );
+                
+
+                Copy( pressedHorse, 0, 0, _icnVsSprite[id][19], 5, 5, 26, 24 );
+                // Fix left border.
+                fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 5 }, { 5, 19 }, 44 );
+                fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 21 }, { 5, 28 }, 44 );
+
+                if ( !isGoodButton ) {
+                    fheroes2::ApplyPalette( _icnVsSprite[id][18], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][19], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                    fheroes2::ReplaceColorId( pressedHorse, 16, 42 );
+                }
+                
+                fheroes2::Save( _icnVsSprite[id][18], "horse_icon.png", 96 );
+                fheroes2::Save( _icnVsSprite[id][19], "pressed_horse_icon.png", 96 );
             }
             return true;
         case ICN::ARTFX:
