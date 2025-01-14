@@ -104,9 +104,9 @@ namespace Battle
         void Turns();
         bool BattleValid() const;
 
-        bool AutoBattleInProgress() const;
-        bool EnemyOfAIHasAutoBattleInProgress() const;
-        bool CanToggleAutoBattle() const;
+        bool AutoCombatInProgress() const;
+        bool EnemyOfAIHasAutoCombatInProgress() const;
+        bool CanToggleAutoCombat() const;
 
         uint32_t GetTurnNumber() const
         {
@@ -284,8 +284,8 @@ namespace Battle
         void ApplyActionSpellCast( Command & cmd );
         void ApplyActionTower( Command & cmd );
         void ApplyActionCatapult( Command & cmd );
-        void ApplyActionAutoSwitch( Command & cmd );
-        void ApplyActionAutoFinish( const Command & cmd );
+        void ApplyActionToggleAutoCombat( Command & cmd );
+        void ApplyActionInstantCombat( const Command & cmd );
 
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
@@ -343,8 +343,8 @@ namespace Battle
         int _covrIcnId{ ICN::UNKNOWN };
 
         uint32_t _turnNumber{ 0 };
-        // A set of colors of players for whom the auto-battle mode is enabled
-        int _autoBattleColors{ 0 };
+        // A set of colors of players for whom the auto combat mode is enabled
+        int _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other

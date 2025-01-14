@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,8 +136,8 @@ namespace Game
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
-        BATTLE_AUTO_SWITCH,
-        BATTLE_AUTO_FINISH,
+        BATTLE_TOGGLE_AUTO_COMBAT,
+        BATTLE_INSTANT_COMBAT,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,

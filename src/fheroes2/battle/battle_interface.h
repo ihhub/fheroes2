@@ -414,14 +414,14 @@ namespace Battle
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
-        void InterruptAutoBattleIfRequested( LocalEvent & le );
+        void InterruptAutoCombatIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
         void _openBattleSettingsDialog();
-        void EventStartAutoBattle( const Unit & unit, Actions & actions );
-        void EventAutoFinish( Actions & actions );
+        void EventStartAutoCombat( const Unit & unit, Actions & actions );
+        void EventInstantCombat( Actions & actions );
         void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
@@ -459,7 +459,7 @@ namespace Battle
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
 
-        int _interruptAutoBattleForColor{ 0 };
+        int _interruptAutoCombatForColor{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
