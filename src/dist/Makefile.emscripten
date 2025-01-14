@@ -52,7 +52,7 @@ CCFLAGS := $(CCFLAGS) -gsource-map
 LDFLAGS := $(LDFLAGS) -gsource-map
 else
 CCFLAGS := $(CCFLAGS) -flto
-LDFLAGS := $(LDFLAGS) -flto
+LDFLAGS := $(LDFLAGS) -O3 -flto
 endif
 
 ifdef FHEROES2_WITH_THREADS
