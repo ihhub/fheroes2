@@ -713,6 +713,9 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // If this assertion blows up then you are calling this method more than once!
+    assert( _tilePassabilityDirections == getTileIndependentPassability() );
+
     // Verify the neighboring tiles.
     // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
