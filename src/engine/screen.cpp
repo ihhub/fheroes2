@@ -948,20 +948,13 @@ namespace
         {
             _isVSyncEnabled = enable;
 
-            if ( _window != nullptr ) {
-                // We do not need to rebuild window but renderer only.
-                if ( _texture != nullptr ) {
-                    SDL_DestroyTexture( _texture );
-                    _texture = nullptr;
-                }
+            if ( _renderer == nullptr ) {
+                return;
+            }
 
-                if ( _renderer != nullptr ) {
-                    SDL_DestroyRenderer( _renderer );
-                    _renderer = nullptr;
-                }
-
-                const fheroes2::Display & display = fheroes2::Display::instance();
-                _createRenderer( display.width(), display.height() );
+            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
+                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
+                                        << ", description: " << SDL_GetError() )
             }
         }
 
@@ -1018,21 +1011,11 @@ namespace
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
-            if ( _surface == nullptr )
-                return;
-
-            if ( _texture == nullptr ) {
-                if ( _renderer != nullptr )
-                    SDL_DestroyRenderer( _renderer );
-
-                // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-                _renderer = SDL_CreateRenderer( _window, _driverIndex, renderFlags() );
-                if ( _renderer == nullptr ) {
-                    ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
-                }
-
+            if ( _surface == nullptr ) {
                 return;
             }
+
+            assert( _renderer != nullptr && _texture != nullptr );
 
             copyImageToSurface( display, _surface, roi );
 
@@ -1120,10 +1103,10 @@ namespace
             SDL_RendererInfo rendererInfo;
             _driverIndex = -1;
 
-            const uint32_t renderingFlags = renderFlags();
-
             const int driverCount = SDL_GetNumRenderDrivers();
             if ( driverCount >= 0 ) {
+                const uint32_t requiredFlags = SDL_RENDERER_ACCELERATED;
+
                 for ( int driverId = 0; driverId < driverCount; ++driverId ) {
                     int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
                     if ( returnCode < 0 ) {
@@ -1131,7 +1114,7 @@ namespace
                         continue;
                     }
 
-                    if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                    if ( ( rendererInfo.flags & requiredFlags ) != requiredFlags ) {
                         continue;
                     }
 
@@ -1171,7 +1154,61 @@ namespace
 
             _createPalette();
 
-            return _createRenderer( resolutionInfo.gameWidth, resolutionInfo.gameHeight );
+            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
+            _renderer = SDL_CreateRenderer( _window, _driverIndex, SDL_RENDERER_ACCELERATED );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                    << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
+                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
+                                        << ", description: " << SDL_GetError() )
+            }
+
+            if ( const int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            if ( const int returnCode = SDL_SetRenderTarget( _renderer, nullptr ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
+            }
+
+            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
+            }
+
+            if ( const int returnCode = SDL_RenderSetLogicalSize( _renderer, resolutionInfo.gameWidth, resolutionInfo.gameHeight ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to create logical size of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                               << " size. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            if ( _texture == nullptr ) {
+                ERROR_LOG( "Failed to create a texture from a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                           << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            if ( !_retrieveWindowInfo() ) {
+                clear();
+                return false;
+            }
+
+            _toggleMouseCaptureMode();
+
+            return true;
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
@@ -1191,15 +1228,6 @@ namespace
         bool isMouseCursorActive() const override
         {
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
-        }
-
-        uint32_t renderFlags() const
-        {
-            if ( _isVSyncEnabled ) {
-                return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-            }
-
-            return SDL_RENDERER_ACCELERATED;
         }
 
         void _createPalette()
@@ -1267,63 +1295,6 @@ namespace
             else {
                 SDL_SetWindowGrab( _window, SDL_FALSE );
             }
-        }
-
-        bool _createRenderer( const int32_t width_, const int32_t height_ )
-        {
-            const uint32_t renderingFlags = renderFlags();
-
-            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
-            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
-            }
-
-            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
-            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
-            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
-            }
-
-            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
-                                                               << ", description: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
-            if ( _texture == nullptr ) {
-                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            if ( !_retrieveWindowInfo() ) {
-                clear();
-                return false;
-            }
-
-            _toggleMouseCaptureMode();
-
-            return true;
         }
 
         void _syncFullScreen()
