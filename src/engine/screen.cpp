@@ -1260,6 +1260,8 @@ namespace
 
         void _toggleVSync()
         {
+            assert( _renderer != nullptr );
+
             if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
                 ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
                                         << ", description: " << SDL_GetError() )
@@ -1268,6 +1270,8 @@ namespace
 
         void _toggleMouseCaptureMode()
         {
+            assert( _window != nullptr );
+
             // To properly support fullscreen mode on devices with multiple displays or devices with notch,
             // it is important to lock the mouse in the application window area.
             SDL_SetWindowGrab( _window, isFullScreen() ? SDL_TRUE : SDL_FALSE );
@@ -1275,11 +1279,13 @@ namespace
 
         void _syncFullScreen()
         {
-            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
-                BaseRenderEngine::toggleFullScreen();
-
-                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
+            if ( isFullScreen() == BaseRenderEngine::isFullScreen() ) {
+                return;
             }
+
+            BaseRenderEngine::toggleFullScreen();
+
+            assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
         }
     };
 #endif
