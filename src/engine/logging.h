@@ -117,7 +117,7 @@ namespace Logging
     {                                                                                                                                                                    \
         std::ostringstream oss;                                                                                                                                          \
         oss << x << std::endl;                                                                                                                                           \
-        sceClibPrintf( oss.str().c_str() );                                                                                                                              \
+        sceClibPrintf( "%s", oss.str().c_str() );                                                                                                                        \
     }
 #elif defined( MACOS_APP_BUNDLE )
 #include <syslog.h>
