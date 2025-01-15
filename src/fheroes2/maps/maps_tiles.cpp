@@ -794,7 +794,7 @@ void Maps::Tile::updatePassability()
         }
     }
 
-    // If the tile below contains an action object and it has access from top, nothing we need to change for passability
+    // If the tile below contains an action object and it allows access from top, nothing we need to change for passability
     // as the object below does not affect it.
     const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
     if ( MP2::isOffGameActionObject( bottomTileObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
