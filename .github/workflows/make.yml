@@ -12,7 +12,7 @@ jobs:
       matrix:
         config:
         - name: Linux x86-64 SDL2 Release
-          os: ubuntu-20.04
+          os: ubuntu-22.04
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
