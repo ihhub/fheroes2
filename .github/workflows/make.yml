@@ -401,6 +401,7 @@ jobs:
         emmake make -f Makefile.emscripten -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
+        FHEROES2_WITH_THREADS: ON
     - name: Create package
       run: |
         # Translations and H2D files are already included in fheroes2.data
