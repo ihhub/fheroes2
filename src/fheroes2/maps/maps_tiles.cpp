@@ -254,6 +254,8 @@ namespace
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_NOTHING_SPECIAL:
+        case MP2::OBJ_OASIS:
+        case MP2::OBJ_NON_ACTION_OASIS:
             return true;
         default:
             break;
@@ -713,6 +715,9 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // If this assertion blows up then you are calling this method more than once!
+    assert( _tilePassabilityDirections == getTileIndependentPassability() );
+
     // Verify the neighboring tiles.
     // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
@@ -731,26 +736,21 @@ void Maps::Tile::updatePassability()
         }
     }
 
+    if ( getTileIndependentPassability() == DIRECTION_ALL ) {
+        // This tile is free of objects. Its passability must not be affected by any other objects.
+        //
+        // The original game does not consider this case and it is actually a bug
+        // as some tiles in the original game are marked inaccessible while no object exists on them.
+        return;
+    }
+
+    // If this assertion blows up then something is really off for the passability logic!
+    assert( !isShadow() && !isPassabilityTransparent() );
+
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = getMainObjectType( false );
     if ( MP2::isOffGameActionObject( objectType ) ) {
         // This is an action object. Action object passability is not affected by other objects.
-        return;
-    }
-
-    if ( isShadow() ) {
-        // The whole tile contains only shadow object parts. All shadows do not affect passability.
-        return;
-    }
-
-    if ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        // The main object part is not set. Ignore the tile.
-        // TODO: this is wrong as tiles can have object parts at the ground layer. Fix it!
-        return;
-    }
-
-    if ( _mainObjectPart.isPassabilityTransparent() ) {
-        // This object does not affect passability.
         return;
     }
 
@@ -790,6 +790,10 @@ void Maps::Tile::updatePassability()
             return;
         }
     }
+
+    // Even thought the passability of the tile below can be not blocked from the top,
+    // in the original game such a requirement is ignored.
+    // So, we have to follow the same logic.
 
     // Count how many objects are there excluding shadows, roads and river streams.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
@@ -1088,7 +1092,7 @@ bool Maps::Tile::isPassabilityTransparent() const
         }
     }
 
-    return _mainObjectPart.isPassabilityTransparent();
+    return _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainObjectPart.isPassabilityTransparent();
 }
 
 bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const
@@ -1323,8 +1327,26 @@ void Maps::Tile::_updateRoadFlag()
     }
 }
 
-void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
+void Maps::Tile::fixMP2MapTileObjects( Tile & tile )
 {
+    const auto fixMandrakeObjectPart = []( Maps::ObjectPart & part ) {
+        if ( part.icnType != MP2::OBJ_ICN_TYPE_OBJNSWMP ) {
+            return;
+        }
+
+        if ( part.icnIndex == 131 || part.icnIndex == 137 ) {
+            part.layerType = Maps::OBJECT_LAYER;
+        }
+        else if ( part.icnIndex == 130 || part.icnIndex == 136 ) {
+            part.layerType = Maps::SHADOW_LAYER;
+        }
+    };
+
+    fixMandrakeObjectPart( tile.getMainObjectPart() );
+    for ( auto & part : tile.getGroundObjectParts() ) {
+        fixMandrakeObjectPart( part );
+    }
+
     const MP2::MapObjectType originalObjectType = tile.getMainObjectType( false );
 
     // Left tile of a skeleton on Desert should be marked as non-action tile.
@@ -1340,6 +1362,8 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
          && ( tile._mainObjectPart.icnIndex == 105 || tile._mainObjectPart.icnIndex == 106 ) ) {
         tile._topObjectPart.emplace_back();
         std::swap( tile._topObjectPart.back(), tile._mainObjectPart );
+        // Sorting ground object parts is a must after making the main object part empty!
+        tile.sortObjectParts();
 
         return;
     }

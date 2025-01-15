@@ -1258,7 +1258,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects )
 {
     for ( Maps::Tile & tile : vec_tiles ) {
-        Maps::Tile::fixMP2MapTileObjectType( tile );
+        Maps::Tile::fixMP2MapTileObjects( tile );
 
         if ( !updateTileMetadata( tile, tile.getMainObjectType(), checkPoLObjects ) ) {
             ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
