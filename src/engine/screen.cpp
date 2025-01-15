@@ -1084,8 +1084,7 @@ namespace
             SDL_RendererInfo rendererInfo;
             _driverIndex = -1;
 
-            const int driverCount = SDL_GetNumRenderDrivers();
-            if ( driverCount >= 0 ) {
+            if ( const int driverCount = SDL_GetNumRenderDrivers(); driverCount >= 0 ) {
                 const uint32_t requiredFlags = SDL_RENDERER_ACCELERATED;
 
                 for ( int driverId = 0; driverId < driverCount; ++driverId ) {
