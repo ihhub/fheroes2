@@ -937,10 +937,7 @@ namespace
                 return;
             }
 
-            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
-                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
-                                        << ", description: " << SDL_GetError() )
-            }
+            _toggleVSync();
         }
 
     private:
@@ -1143,11 +1140,6 @@ namespace
                 return false;
             }
 
-            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
-                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
-                                        << ", description: " << SDL_GetError() )
-            }
-
             if ( const int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE ); returnCode < 0 ) {
                 ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
@@ -1187,6 +1179,7 @@ namespace
             }
 
             _toggleMouseCaptureMode();
+            _toggleVSync();
 
             return true;
         }
@@ -1265,16 +1258,19 @@ namespace
             return true;
         }
 
+        void _toggleVSync()
+        {
+            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
+                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
+                                        << ", description: " << SDL_GetError() )
+            }
+        }
+
         void _toggleMouseCaptureMode()
         {
             // To properly support fullscreen mode on devices with multiple displays or devices with notch,
             // it is important to lock the mouse in the application window area.
-            if ( isFullScreen() ) {
-                SDL_SetWindowGrab( _window, SDL_TRUE );
-            }
-            else {
-                SDL_SetWindowGrab( _window, SDL_FALSE );
-            }
+            SDL_SetWindowGrab( _window, isFullScreen() ? SDL_TRUE : SDL_FALSE );
         }
 
         void _syncFullScreen()
