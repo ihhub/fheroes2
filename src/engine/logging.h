@@ -115,33 +115,33 @@ namespace Logging
 #include <psp2/kernel/clib.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        std::ostringstream oss;                                                                                                                                          \
-        oss << x << std::endl;                                                                                                                                           \
-        sceClibPrintf( "%s", oss.str().c_str() );                                                                                                                        \
+        std::ostringstream _log_strstream; /* The name was chosen on purpose to avoid name collisions with outer code blocks. */                                         \
+        _log_strstream << x << std::endl;                                                                                                                                \
+        sceClibPrintf( "%s", _log_strstream.str().c_str() );                                                                                                             \
     }
 #elif defined( MACOS_APP_BUNDLE )
 #include <syslog.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        std::ostringstream oss;                                                                                                                                          \
-        oss << x;                                                                                                                                                        \
-        syslog( LOG_WARNING, "fheroes2_log: %s", oss.str().c_str() );                                                                                                    \
+        std::ostringstream _log_strstream; /* The name was chosen on purpose to avoid name collisions with outer code blocks. */                                         \
+        _log_strstream << x;                                                                                                                                             \
+        syslog( LOG_WARNING, "fheroes2_log: %s", _log_strstream.str().c_str() );                                                                                         \
     }
 #elif defined( ANDROID )
 #include <android/log.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        std::ostringstream oss;                                                                                                                                          \
-        oss << x;                                                                                                                                                        \
-        __android_log_print( ANDROID_LOG_INFO, "fheroes2", "%s", oss.str().c_str() );                                                                                    \
+        std::ostringstream _log_strstream; /* The name was chosen on purpose to avoid name collisions with outer code blocks. */                                         \
+        _log_strstream << x;                                                                                                                                             \
+        __android_log_print( ANDROID_LOG_INFO, "fheroes2", "%s", _log_strstream.str().c_str() );                                                                         \
     }
 #elif defined( __EMSCRIPTEN__ )
 #include <emscripten/console.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        std::ostringstream oss;                                                                                                                                          \
-        oss << x;                                                                                                                                                        \
-        emscripten_out( oss.str().c_str() );                                                                                                                             \
+        std::ostringstream _log_strstream; /* The name was chosen on purpose to avoid name collisions with outer code blocks. */                                         \
+        _log_strstream << x;                                                                                                                                             \
+        emscripten_out( _log_strstream.str().c_str() );                                                                                                                  \
     }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
