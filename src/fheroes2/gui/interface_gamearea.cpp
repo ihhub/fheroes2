@@ -473,8 +473,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     TileUnfitRenderObjectInfo tileUnfit;
 
-    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
-
     // TODO: Dragon City with Object ICN Type OBJ_ICN_TYPE_OBJNMUL2 and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
 
@@ -694,6 +692,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Draw hero's route. It should be drawn on top of everything.
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
+
+    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
     if ( drawRoutes && ( currentHero != nullptr ) && currentHero->GetPath().isShow() ) {
         const Route::Path & path = currentHero->GetPath();
