@@ -815,9 +815,8 @@ namespace
             }
 
             uint32_t flags = SDL_GetWindowFlags( _window );
-            if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-                flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-                flags &= ~SDL_WINDOW_FULLSCREEN;
+            if ( flags & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) ) {
+                flags &= ~( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP );
             }
             else {
 #if defined( _WIN32 )
@@ -830,14 +829,6 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
-
-                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
-
-                const fheroes2::Display & display = fheroes2::Display::instance();
-                if ( display.width() != 0 && display.height() != 0 ) {
-                    assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
-                    SDL_SetWindowSize( _window, display.screenSize().width, display.screenSize().height );
-                }
             }
 
             const int returnCode = SDL_SetWindowFullscreen( _window, flags );
@@ -846,23 +837,17 @@ namespace
             }
 
             _syncFullScreen();
-
-            if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
-                SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
-            }
-
             _retrieveWindowInfo();
-
             _toggleMouseCaptureMode();
         }
 
         bool isFullScreen() const override
         {
-            if ( _window == nullptr )
+            if ( _window == nullptr ) {
                 return BaseRenderEngine::isFullScreen();
+            }
 
-            const uint32_t flags = SDL_GetWindowFlags( _window );
-            return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
+            return ( SDL_GetWindowFlags( _window ) & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) );
         }
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
@@ -970,8 +955,6 @@ namespace
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
 
-        fheroes2::Size _windowedSize;
-
         bool _isVSyncEnabled{ false };
 
         RenderEngine() = default;
@@ -1003,8 +986,6 @@ namespace
                 SDL_FreeSurface( _surface );
                 _surface = nullptr;
             }
-
-            _windowedSize = fheroes2::Size();
 
             _driverIndex = -1;
         }
