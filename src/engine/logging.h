@@ -143,7 +143,8 @@ namespace Logging
         _log_strstream << x;                                                                                                                                             \
         emscripten_out( _log_strstream.str().c_str() );                                                                                                                  \
     }
-#else // Default: log to STDERR
+#else
+// Default: log to stderr
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         std::cerr << x << std::endl;                                                                                                                                     \
