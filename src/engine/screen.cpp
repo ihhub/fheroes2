@@ -46,6 +46,7 @@
 #include <SDL_render.h>
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
+#include <SDL_version.h>
 #include <SDL_video.h>
 
 // Managing compiler warnings for SDL headers
@@ -1261,6 +1262,10 @@ namespace
         void _toggleVSync()
         {
             assert( _renderer != nullptr );
+
+#if !SDL_VERSION_ATLEAST( 2, 0, 18 )
+#error SDL_RenderSetVSync() is only supported starting with SDL 2.0.18
+#endif
 
             if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
                 ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
