@@ -2878,7 +2878,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             OpenAutoModeDialog( unit, actions );
         }
         else if ( le.isMouseRightButtonPressed() ) {
-            fheroes2::showStandardTextMessage( _( "Automatic Combat" ), _( "Choose whether to fight out the battle through Auto Combat or Auto Resolve." ),
+            fheroes2::showStandardTextMessage( _( "Automatic Combat Modes" ), _( "Choose whether to proceed the combat in auto combat mode or in quick combat mode." ),
                                                Dialog::ZERO );
         }
     }
@@ -3231,8 +3231,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
-    const int autoResolveButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD;
-    const int cancelButtonICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+    const int autoResolveButtonICN = isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD;
+    const int cancelButtonICN = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
 
     const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
     const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
@@ -3243,7 +3243,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const int32_t titleYOffset = 16;
     const int32_t buttonSeparation = 37;
 
-    const fheroes2::Text title( _( "Automatic Combat" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+    const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
     const int32_t backgroundWidth = autoButtonsXOffset * 2 + autoResolveButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
     const int32_t backgroundHeight
@@ -3252,12 +3252,12 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
 
     fheroes2::Button buttonAutoCombat;
-    fheroes2::Button buttonAutoResolve;
+    fheroes2::Button buttonQuickCombat;
     fheroes2::Button buttonCancel;
 
     background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
                              fheroes2::StandardWindow::Padding::CENTER_LEFT );
-    background.renderButton( buttonAutoResolve, isEvilInterface ? ICN::BUTTON_AUTO_RESOLVE_EVIL : ICN::BUTTON_AUTO_RESOLVE_GOOD, 0, 1, { autoButtonsXOffset, 0 },
+    background.renderButton( buttonQuickCombat, isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
                              fheroes2::StandardWindow::Padding::CENTER_RIGHT );
     background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
@@ -3270,7 +3270,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     while ( le.HandleEvents() ) {
         buttonAutoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoCombat.area() ) );
-        buttonAutoResolve.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoResolve.area() ) );
+        buttonQuickCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuickCombat.area() ) );
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -3279,7 +3279,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         if ( le.MouseClickLeft( buttonAutoCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
             EventStartAutoCombat( unit, actions );
         }
-        else if ( le.MouseClickLeft( buttonAutoResolve.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_INSTANT_COMBAT ) ) {
+        else if ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_INSTANT_COMBAT ) ) {
             EventInstantCombat( actions );
         }
         if ( !actions.empty() ) {
@@ -3290,17 +3290,17 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
-            std::string msg = _( "Allows the computer to fight out the battle for you." );
+            std::string msg = _( "The computer continues the combat for you at the currently set combat speed." );
             msg += "\n\n";
             msg += _(
-                "autoCombat|This can be interrupted at any point by either pressing the Auto Combat hotkey or the default cancel key, or by right- or left-clicking anywhere." );
+                "autoCombat|This can be interrupted at any moment by pressing the Auto Combat hotkey or the default Cancel key, or by left or right clicking anywhere on the game screen." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonAutoResolve.area() ) ) {
-            std::string msg = _( "Instantly resolves the battle from the current state." );
+        else if ( le.isMouseRightButtonPressedInArea( buttonQuickCombat.area() ) ) {
+            std::string msg = _( "The combat is quickly resolved from the current state." );
             msg += "\n\n";
-            msg += _( "autoResolve|This cannot be reverted." );
-            fheroes2::showStandardTextMessage( _( "Auto Resolve" ), msg, Dialog::ZERO );
+            msg += _( "quickCombat|This action cannot be undone once executed." );
+            fheroes2::showStandardTextMessage( _( "Quick Combat" ), msg, Dialog::ZERO );
         }
     }
 }

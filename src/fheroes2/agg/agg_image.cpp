@@ -2148,7 +2148,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_RESOLVE_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO\nRESOLVE" ),
+            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
                                   isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
