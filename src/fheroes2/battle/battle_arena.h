@@ -285,7 +285,7 @@ namespace Battle
         void ApplyActionTower( Command & cmd );
         void ApplyActionCatapult( Command & cmd );
         void ApplyActionToggleAutoCombat( Command & cmd );
-        void ApplyActionInstantCombat( const Command & cmd );
+        void ApplyActionQuickCombat( const Command & cmd );
 
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );

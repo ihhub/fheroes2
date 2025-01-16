@@ -1370,7 +1370,7 @@ void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionInstantCombat( const Command & /* cmd */ )
+void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 {
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();

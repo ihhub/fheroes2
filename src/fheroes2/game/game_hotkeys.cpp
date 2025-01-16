@@ -441,7 +441,7 @@ void Game::HotKeysLoad( const std::string & filename )
                         }
                     }
                     else if ( eventName == std::string_view( "quick combat" ) ) {
-                        value = config.StrParams( "resolve the battle in quick combat mode" );
+                        value = config.StrParams( "finish the battle in auto mode" );
                         if ( value.empty() ) {
                             continue;
                         }
