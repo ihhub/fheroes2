@@ -1585,8 +1585,8 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
         ++w.heroIdAsLossCondition;
     }
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1_1106_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE_1_1106_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1106_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1106_RELEASE ) {
         // Update flags for Mine and Lighthouse captured objects.
         for ( const auto & [tileIndex, object] : w.map_captureobj ) {
             if ( object.objCol.first == MP2::OBJ_MINE ) {
