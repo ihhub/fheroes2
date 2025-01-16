@@ -3227,8 +3227,6 @@ void Battle::Interface::EventInstantCombat( Actions & actions )
 
 void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
@@ -3250,6 +3248,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const int32_t backgroundHeight
         = titleYOffset + title.height( backgroundWidth ) + autoResolveButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
 
     fheroes2::Button buttonAutoCombat;

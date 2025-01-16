@@ -173,6 +173,7 @@ namespace
 
         return output;
     }
+
     void addButtonShine( fheroes2::Sprite & buttonImage, const int emptyButtonIcnID )
     {
         const bool isGoodButton = ( emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON );
