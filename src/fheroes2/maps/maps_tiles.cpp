@@ -713,6 +713,9 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // If this assertion blows up then you are calling this method more than once!
+    assert( _tilePassabilityDirections == getTileIndependentPassability() );
+
     // Verify the neighboring tiles.
     // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
@@ -791,6 +794,13 @@ void Maps::Tile::updatePassability()
         }
     }
 
+    // If the tile below contains an action object and it allows access from top, nothing we need to change for passability
+    // as the object below does not affect it.
+    const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
+    if ( MP2::isOffGameActionObject( bottomTileObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
+        return;
+    }
+
     // Count how many objects are there excluding shadows, roads and river streams.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
         if ( isObjectPartShadow( part ) ) {
@@ -805,18 +815,9 @@ void Maps::Tile::updatePassability()
     // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
     if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
          && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
-        const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
         if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
-                // This is an action object with unrestricted access from top.
-
-                // Only main action object parts can have unrestricted access.
-                assert( MP2::isOffGameActionObject( bottomTileObjectType ) );
-                return;
-            }
-
             if ( !isShortObject( bottomTileObjectType ) && !isShortObject( correctedObjectType ) ) {
                 // Since the object on the tile below is considered as tall we must mark this tile as impassable.
                 _tilePassabilityDirections = 0;
