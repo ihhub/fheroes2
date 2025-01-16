@@ -189,6 +189,9 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
         else if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
         }
+        else if ( hero->GetPath().isValidForMovement() ) {
+            EventResetHeroPath();
+        }
     }
 
     return fheroes2::GameMode::CANCEL;

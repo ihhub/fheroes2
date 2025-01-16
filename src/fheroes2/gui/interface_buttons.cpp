@@ -244,8 +244,8 @@ void Interface::ButtonsPanel::_setButtonStatus()
         _buttonHeroMovement.enable();
     }
     else if ( currentHero && currentHero->GetPath().isValidForMovement() ) {
-        _buttonHeroMovement.setICNIndexes( 2, 3 );
-        _buttonHeroMovement.disable();
+        _buttonHeroMovement.setICNIndexes( 18, 19 );
+        _buttonHeroMovement.enable();
     }
     else {
         _buttonHeroMovement.setICNIndexes( 18, 19 );
