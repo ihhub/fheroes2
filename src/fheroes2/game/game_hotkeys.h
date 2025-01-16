@@ -45,6 +45,7 @@ namespace Game
 
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
+
 #if defined( WITH_DEBUG )
         // This hotkey is only for debug mode.
         DEBUG_TOGGLE_DEVELOPER_MODE,

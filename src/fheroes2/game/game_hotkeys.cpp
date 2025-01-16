@@ -106,6 +106,7 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle fullscreen" ), fheroes2::Key::KEY_F4 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle text support mode" ), fheroes2::Key::KEY_F10 };
+
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
@@ -486,6 +487,9 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.Save( Settings::configFileName );
     }
 #if defined( WITH_DEBUG )
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )].key ) {
+        Logging::setDebugLevel( DBG_DEVEL ^ Logging::getDebugLevel() );
+    }
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
         static bool recursiveCall = false;
 
@@ -536,9 +540,6 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
                 }
             }
         }
-    }
-    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )].key ) {
-        Logging::setDebugLevel( DBG_DEVEL ^ Logging::getDebugLevel() );
     }
 #endif
 }
