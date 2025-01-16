@@ -191,8 +191,8 @@ namespace
                                                 ICN::BUTTON_LANGUAGE_EVIL,
                                                 ICN::BUTTON_AUTO_COMBAT_GOOD,
                                                 ICN::BUTTON_AUTO_COMBAT_EVIL,
-                                                ICN::BUTTON_AUTO_RESOLVE_GOOD,
-                                                ICN::BUTTON_AUTO_RESOLVE_EVIL };
+                                                ICN::BUTTON_QUICK_COMBAT_GOOD,
+                                                ICN::BUTTON_QUICK_COMBAT_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -2142,11 +2142,11 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_AUTO_RESOLVE_GOOD:
-        case ICN::BUTTON_AUTO_RESOLVE_EVIL: {
+        case ICN::BUTTON_QUICK_COMBAT_GOOD:
+        case ICN::BUTTON_QUICK_COMBAT_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_RESOLVE_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_QUICK_COMBAT_EVIL );
 
             getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
                                   isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
@@ -2867,8 +2867,8 @@ namespace
         case ICN::BUTTON_LANGUAGE_EVIL:
         case ICN::BUTTON_AUTO_COMBAT_GOOD:
         case ICN::BUTTON_AUTO_COMBAT_EVIL:
-        case ICN::BUTTON_AUTO_RESOLVE_GOOD:
-        case ICN::BUTTON_AUTO_RESOLVE_EVIL:
+        case ICN::BUTTON_QUICK_COMBAT_GOOD:
+        case ICN::BUTTON_QUICK_COMBAT_EVIL:
             generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:
