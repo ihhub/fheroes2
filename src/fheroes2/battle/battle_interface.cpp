@@ -2805,7 +2805,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
             EventStartAutoCombat( unit, actions );
         }
-        // Instantly finish the battle in auto mode
+        // Resolve the combat in quick combat mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
             EventQuickCombat( actions );
         }
@@ -3230,10 +3230,10 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
-    const int autoResolveButtonICN = isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD;
+    const int quickCombatButtonICN = isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD;
     const int cancelButtonICN = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
 
-    const fheroes2::Sprite & autoResolveButtonReleased = fheroes2::AGG::GetICN( autoResolveButtonICN, 0 );
+    const fheroes2::Sprite & quickCombatButtonReleased = fheroes2::AGG::GetICN( quickCombatButtonICN, 0 );
     const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
@@ -3244,9 +3244,9 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
-    const int32_t backgroundWidth = autoButtonsXOffset * 2 + autoResolveButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
+    const int32_t backgroundWidth = autoButtonsXOffset * 2 + quickCombatButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
     const int32_t backgroundHeight
-        = titleYOffset + title.height( backgroundWidth ) + autoResolveButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
+        = titleYOffset + title.height( backgroundWidth ) + quickCombatButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
