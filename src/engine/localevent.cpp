@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1237,16 +1237,19 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
     renderRoi = fheroes2::getBoundaryRect( renderRoi, _mouseCursorRenderArea );
 
+    static_assert( globalLoopSleepTime == 1, "Since you have changed the sleep time, make sure that the sleep does not last too long." );
+
     if ( sleepAfterEventProcessing ) {
         if ( renderRoi != fheroes2::Rect() ) {
             display.render( renderRoi );
         }
 
+#ifndef __EMSCRIPTEN__
         // Make sure not to delay any further if the processing time within this function was more than the expected waiting time.
         if ( eventProcessingTimer.getMs() < globalLoopSleepTime ) {
-            static_assert( globalLoopSleepTime == 1, "Make sure that you sleep for the difference between times since you change the sleep time." );
             EventProcessing::EventEngine::sleep( globalLoopSleepTime );
         }
+#endif
     }
     else {
         // Since rendering is going to be just after the call of this method we need to update rendering area only.
@@ -1254,6 +1257,14 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             display.updateNextRenderRoi( renderRoi );
         }
     }
+
+#ifdef __EMSCRIPTEN__
+    // When a WebAssembly app is running in a browser, the sleep time is used to perform various "background" operations on the main thread (such
+    // as feeding the audio streams) by yielding to the browser's event loop using the Emscripten Asyncify mechanism. Therefore, it is preferable
+    // to always force the main thread to fall asleep, otherwise, for example, the following deadlock is possible: the main thread waits in a loop
+    // for an audio playback to finish, but it never finishes because new chunks are not feeded to it, because the main thread never goes to sleep.
+    EventProcessing::EventEngine::sleep( globalLoopSleepTime );
+#endif
 
     return true;
 }
