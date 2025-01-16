@@ -3202,7 +3202,7 @@ void Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actio
     assert( arena.CanToggleAutoCombat() );
     assert( !arena.AutoCombatInProgress() );
 
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable auto combat?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable the auto combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
         return;
     }
 
@@ -3214,7 +3214,7 @@ void Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actio
 
 void Battle::Interface::EventInstantCombat( Actions & actions )
 {
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to finish the battle instantly in auto mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
         return;
     }
 
@@ -6530,7 +6530,7 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
     // Right now there should be no pending auto combat interruptions.
     assert( _interruptAutoCombatForColor == 0 );
 
-    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat?" ), Dialog::YES | Dialog::NO );
+    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat mode?" ), Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
         _interruptAutoCombatForColor = color;
     }
