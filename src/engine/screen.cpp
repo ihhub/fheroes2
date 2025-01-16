@@ -1264,7 +1264,7 @@ namespace
             assert( _renderer != nullptr );
 
 #if !SDL_VERSION_ATLEAST( 2, 0, 18 )
-#error SDL_RenderSetVSync() is only supported starting with SDL 2.0.18
+#error SDL_RenderSetVSync() is only supported since SDL 2.0.18
 #endif
 
             if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
