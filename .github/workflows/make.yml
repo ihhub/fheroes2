@@ -54,15 +54,12 @@ jobs:
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_ASAN: ON
         - name: Linux ARM64 SDL2 Release
-          os: ubuntu-22.04
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          os: ubuntu-22.04-arm
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
-            CC: aarch64-linux-gnu-gcc
-            CXX: aarch64-linux-gnu-g++
-            AR: aarch64-linux-gnu-ar
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
@@ -90,17 +87,14 @@ jobs:
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
-          os: ubuntu-22.04
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          os: ubuntu-24.04-arm
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_TSAN: ON
-            CC: aarch64-linux-gnu-gcc
-            CXX: aarch64-linux-gnu-g++
-            AR: aarch64-linux-gnu-ar
         - name: macOS SDL2
           os: macos-13
           dependencies: sdl2 sdl2_mixer sdl2_image
@@ -152,16 +146,6 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
-        if [[ "${{ matrix.config.name }}" == *ARM64* ]]
-        then
-          sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
-          sudo dpkg --add-architecture arm64
-          sudo sh -c '. /etc/os-release;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse" > /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;'
-        fi
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
