@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -46,6 +46,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -1582,6 +1583,36 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++w.heroIdAsWinCondition;
         ++w.heroIdAsLossCondition;
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1_1106_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE_1_1106_RELEASE ) {
+        // Update flags for Mine and Lighthouse captured objects.
+        for ( const auto & [tileIndex, object] : w.map_captureobj ) {
+            if ( object.objCol.first == MP2::OBJ_MINE ) {
+                // Update Mine flag.
+                if ( object.GetColor() != Color::NONE ) {
+                    // Remove old flag parts.
+                    int32_t topIndex = tileIndex - w.width;
+                    if ( topIndex >= 0 ) {
+                        // Remove top tile flag part.
+                        w.vec_tiles[topIndex].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
+                    }
+                    if ( ( topIndex % w.width ) < ( w.width - 1 ) ) {
+                        // Remove top-right tile flag part.
+                        ++topIndex;
+                        w.vec_tiles[topIndex].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
+                    }
+
+                    // Set new flag.
+                    w.vec_tiles[tileIndex].setOwnershipFlag( MP2::OBJ_MINE, object.GetColor() );
+                }
+            }
+            else if ( object.objCol.first == MP2::OBJ_LIGHTHOUSE && object.GetColor() != Color::NONE ) {
+                // Update Lighthouse flag parts.
+                w.vec_tiles[tileIndex].setOwnershipFlag( MP2::OBJ_LIGHTHOUSE, object.GetColor() );
+            }
+        }
     }
 
     stream >> w.map_objects >> w._seed;

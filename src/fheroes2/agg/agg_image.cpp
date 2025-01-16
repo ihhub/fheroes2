@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -4668,28 +4668,18 @@ namespace
             return true;
         case ICN::FLAG32:
             LoadOriginalICN( id );
-            // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
-            // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
-            // This helps to solve the problem with rendering order.
-            _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
-            for ( int32_t i = 14; i < 14 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
+            if ( _icnVsSprite[id].size() == 49 ) {
+                // Shift and crop the Lighthouse flags to properly render them on the Adventure map.
+                _icnVsSprite[id].resize( 49 + 7 * 2 );
+                for ( size_t i = 42; i < 42 + 7; ++i ) {
+                    const fheroes2::Sprite & original = _icnVsSprite[id][i];
 
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+                    _icnVsSprite[id][i + 7] = Crop( original, 0, 0, -original.x(), original.height() );
+                    _icnVsSprite[id][i + 7].setPosition( 32 + original.x(), original.y() );
 
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
-            }
-
-            for ( int32_t i = 42; i < 42 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
-
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
-
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                    _icnVsSprite[id][i + 7 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 7 + 7].setPosition( 0, original.y() );
+                }
             }
             return true;
         case ICN::SHADOW32:
