@@ -2806,8 +2806,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             EventStartAutoCombat( unit, actions );
         }
         // Instantly finish the battle in auto mode
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_INSTANT_COMBAT ) ) {
-            EventInstantCombat( actions );
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
+            EventQuickCombat( actions );
         }
         // Cast the spell
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
@@ -3212,14 +3212,14 @@ void Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actio
     humanturn_exit = true;
 }
 
-void Battle::Interface::EventInstantCombat( Actions & actions )
+void Battle::Interface::EventQuickCombat( Actions & actions )
 {
     if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO )
          != Dialog::YES ) {
         return;
     }
 
-    actions.emplace_back( Command::INSTANT_COMBAT );
+    actions.emplace_back( Command::QUICK_COMBAT );
 
     humanturn_redraw = true;
     humanturn_exit = true;
@@ -3279,8 +3279,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         if ( le.MouseClickLeft( buttonAutoCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
             EventStartAutoCombat( unit, actions );
         }
-        else if ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_INSTANT_COMBAT ) ) {
-            EventInstantCombat( actions );
+        else if ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
+            EventQuickCombat( actions );
         }
         if ( !actions.empty() ) {
             return;

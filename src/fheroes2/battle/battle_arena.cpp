@@ -1438,7 +1438,7 @@ bool Battle::Arena::AutoCombatInProgress() const
     }
 
     if ( _autoCombatColors & GetCurrentColor() ) {
-        // Auto combat mode cannot be enabled for a player controlled by AI
+        // Auto combat mode cannot be enabled for a player controlled by the AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
         return true;

@@ -659,7 +659,7 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     // We have gone beyond the limit on the number of turns without deaths and have to stop
     if ( _numberOfRemainingTurnsWithoutDeaths == 0 ) {
-        // If this is an auto combat (and not the instant combat, because the battle UI is present), then turn it off until the end of the battle
+        // If this is an auto combat (and not a quick combat, because the battle UI is present), then turn it off until the end of the battle
         if ( arena.AutoCombatInProgress() && Battle::Arena::GetInterface() != nullptr ) {
             assert( arena.CanToggleAutoCombat() );
 
@@ -711,7 +711,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 return Outcome::ContinueBattle;
             }
 
-            // Human-controlled heroes should not retreat or surrender during auto/instant combat
+            // Human-controlled heroes should not retreat or surrender during auto/quick combat
             if ( actualHero->isControlHuman() ) {
                 return Outcome::ContinueBattle;
             }

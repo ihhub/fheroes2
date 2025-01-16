@@ -272,8 +272,8 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|surrender during battle" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle auto combat mode" ), fheroes2::Key::KEY_A };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_INSTANT_COMBAT )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|instant combat" ), fheroes2::Key::KEY_Q };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_QUICK_COMBAT )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|quick combat" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|battle options" ), fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )]
@@ -440,8 +440,8 @@ void Game::HotKeysLoad( const std::string & filename )
                             continue;
                         }
                     }
-                    else if ( eventName == std::string_view( "instant combat" ) ) {
-                        value = config.StrParams( "finish the battle in auto mode" );
+                    else if ( eventName == std::string_view( "quick combat" ) ) {
+                        value = config.StrParams( "resolve the battle in quick combat mode" );
                         if ( value.empty() ) {
                             continue;
                         }

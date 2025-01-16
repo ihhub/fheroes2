@@ -64,7 +64,7 @@ uint32_t Battle::Command::updateSeed( uint32_t seed ) const
 
     // These commands should never affect the seed generation
     case CommandType::TOGGLE_AUTO_COMBAT:
-    case CommandType::INSTANT_COMBAT:
+    case CommandType::QUICK_COMBAT:
         break;
 
     default:

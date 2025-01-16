@@ -427,8 +427,8 @@ void Battle::Arena::ApplyAction( Command & cmd )
     case CommandType::TOGGLE_AUTO_COMBAT:
         ApplyActionToggleAutoCombat( cmd );
         break;
-    case CommandType::INSTANT_COMBAT:
-        ApplyActionInstantCombat( cmd );
+    case CommandType::QUICK_COMBAT:
+        ApplyActionQuickCombat( cmd );
         break;
 
     default:

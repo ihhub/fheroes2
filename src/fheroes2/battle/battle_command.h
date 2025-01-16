@@ -47,7 +47,7 @@ namespace Battle
         SURRENDER,
         SKIP,
         TOGGLE_AUTO_COMBAT,
-        INSTANT_COMBAT
+        QUICK_COMBAT
     };
 
     class Command final : public std::vector<int>
@@ -63,7 +63,7 @@ namespace Battle
         static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
         static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
         static constexpr std::integral_constant<CommandType, CommandType::TOGGLE_AUTO_COMBAT> TOGGLE_AUTO_COMBAT{};
-        static constexpr std::integral_constant<CommandType, CommandType::INSTANT_COMBAT> INSTANT_COMBAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::QUICK_COMBAT> QUICK_COMBAT{};
 
         template <CommandType cmd, typename... Types>
         explicit Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
