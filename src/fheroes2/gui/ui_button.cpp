@@ -181,7 +181,7 @@ namespace
             const uint8_t firstColor = 10;
             const uint8_t secondColor = isGoodButton ? 38 : 15;
             const uint8_t lastColor = isGoodButton ? 39 : 16;
-            // Left side shine
+            // Left-side shine
             fheroes2::SetPixel( buttonImage, 11, 4, firstColor );
             fheroes2::SetPixel( buttonImage, 13, 4, firstColor );
             fheroes2::SetPixel( buttonImage, 9, 6, firstColor );
