@@ -613,6 +613,8 @@ namespace EventProcessing
                 return SDLK_AMPERSAND;
             case fheroes2::Key::KEY_QUOTE:
                 return SDLK_QUOTE;
+            case fheroes2::Key::KEY_BACKQUOTE:
+                return SDLK_BACKQUOTE;
             case fheroes2::Key::KEY_LEFT_PARENTHESIS:
                 return SDLK_LEFTPAREN;
             case fheroes2::Key::KEY_RIGHT_PARENTHESIS:

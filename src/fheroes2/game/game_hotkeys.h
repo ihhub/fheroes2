@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,6 +45,10 @@ namespace Game
 
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode.
+        DEBUG_TOGGLE_DEVELOPER_MODE,
+#endif
 
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
