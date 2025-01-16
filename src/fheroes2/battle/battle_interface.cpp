@@ -3214,7 +3214,8 @@ void Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actio
 
 void Battle::Interface::EventInstantCombat( Actions & actions )
 {
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO )
+         != Dialog::YES ) {
         return;
     }
 
