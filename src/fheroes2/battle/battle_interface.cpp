@@ -2878,7 +2878,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             OpenAutoModeDialog( unit, actions );
         }
         else if ( le.isMouseRightButtonPressed() ) {
-            fheroes2::showStandardTextMessage( _( "Automatic Combat Modes" ), _( "Choose whether to proceed the combat in auto combat mode or in quick combat mode." ),
+            fheroes2::showStandardTextMessage( _( "Automatic Combat Modes" ), _( "Choose between proceeding the combat in auto combat mode or in quick combat mode." ),
                                                Dialog::ZERO );
         }
     }
