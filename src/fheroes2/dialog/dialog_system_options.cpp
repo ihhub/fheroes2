@@ -184,7 +184,7 @@ namespace
         const Settings & conf = Settings::Get();
         if ( conf.BattleAutoResolve() ) {
             const bool spellcast = conf.BattleAutoSpellcast();
-            std::string value = spellcast ? _( "Quick Combat" ) : _( "Quick, No Spells" );
+            std::string value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
             fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), std::move( value ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
