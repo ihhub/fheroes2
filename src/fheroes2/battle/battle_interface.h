@@ -420,8 +420,8 @@ namespace Battle
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
         void _openBattleSettingsDialog();
-        void EventStartAutoCombat( const Unit & unit, Actions & actions );
-        void EventQuickCombat( Actions & actions );
+        bool EventStartAutoCombat( const Unit & unit, Actions & actions );
+        bool EventQuickCombat( Actions & actions );
         void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
