@@ -1597,15 +1597,14 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
             if ( object.objCol.first == MP2::OBJ_MINE ) {
                 // Update Mine flag.
                 // Remove old flag parts.
-                int32_t topIndex = tileIndex - w.width;
+                const int32_t topIndex = tileIndex - w.width;
                 if ( topIndex >= 0 ) {
                     // Remove top tile flag part.
                     w.vec_tiles[topIndex].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
                 }
                 if ( ( topIndex % w.width ) < ( w.width - 1 ) ) {
                     // Remove top-right tile flag part.
-                    ++topIndex;
-                    w.vec_tiles[topIndex].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
+                    w.vec_tiles[topIndex + 1].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
                 }
 
                 // Set new flag.
