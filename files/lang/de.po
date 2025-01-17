@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-17 02:20+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5248,6 +5248,10 @@ msgid "hotkey|toggle fullscreen"
 msgstr "Vollbild umschalten"
 
 msgid "hotkey|toggle text support mode"
+msgstr "Textunterstützungsmodus umschalten"
+
+#, fuzzy
+msgid "hotkey|toggle developer mode"
 msgstr "Textunterstützungsmodus umschalten"
 
 msgid "hotkey|new game"
