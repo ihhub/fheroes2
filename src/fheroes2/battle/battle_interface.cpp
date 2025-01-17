@@ -3280,7 +3280,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             EventStartAutoCombat( unit, actions );
             return;
         }
-        else if ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
+        if ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
             EventQuickCombat( actions );
             return;
         }
