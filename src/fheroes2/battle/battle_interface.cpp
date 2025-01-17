@@ -3232,6 +3232,7 @@ bool Battle::Interface::EventQuickCombat( Actions & actions )
 void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
 {
     Cursor::Get().SetThemes( Cursor::POINTER );
+
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
