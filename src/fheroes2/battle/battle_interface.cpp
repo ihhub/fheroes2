@@ -3290,14 +3290,14 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
-            std::string msg = _( "The computer continues the combat for you at the currently set combat speed." );
+            std::string msg = _( "The computer continues the combat for you." );
             msg += "\n\n";
             msg += _(
                 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat hotkey or the default Cancel key, or by performing a left or right click anywhere on the game screen." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonQuickCombat.area() ) ) {
-            std::string msg = _( "The combat is resolved from the current state and ended." );
+            std::string msg = _( "The combat is resolved from the current state." );
             msg += "\n\n";
             msg += _( "quickCombat|This cannot be undone." );
             fheroes2::showStandardTextMessage( _( "Quick Combat" ), msg, Dialog::ZERO );
