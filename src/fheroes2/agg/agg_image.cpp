@@ -4313,7 +4313,7 @@ namespace
                 updateShadow( actionCursor, { 2, -2 }, 4, true );
                 Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
 
-                auto makeWhiteningTransformSolidWhite = []( fheroes2::Image & icon, const size_t size ) {
+                auto makeWhiteningTransformSolidWhite = []( fheroes2::Image & icon, const int32_t size ) {
                     for ( int32_t i = 0; i < size; ++i ) {
                         if ( icon.transform()[i] == 6U ) {
                             // Disable whitening transform and set white color.
