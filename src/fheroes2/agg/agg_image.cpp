@@ -4666,22 +4666,24 @@ namespace
                 original = std::move( temp );
             }
             return true;
-        case ICN::FLAG32:
+        case ICN::FLAG32: {
             LoadOriginalICN( id );
-            if ( _icnVsSprite[id].size() == 49 ) {
+            auto & flagImages = _icnVsSprite[id];
+            if ( flagImages.size() == 49 ) {
                 // Shift and crop the Lighthouse flags to properly render them on the Adventure map.
-                _icnVsSprite[id].resize( 49 + 7 * 2 );
+                flagImages.resize( 49 + 7 * 2 );
                 for ( size_t i = 42; i < 42 + 7; ++i ) {
-                    const fheroes2::Sprite & original = _icnVsSprite[id][i];
+                    const fheroes2::Sprite & original = flagImages[i];
 
-                    _icnVsSprite[id][i + 7] = Crop( original, 0, 0, -original.x(), original.height() );
-                    _icnVsSprite[id][i + 7].setPosition( 32 + original.x(), original.y() );
+                    flagImages[i + 7] = Crop( original, 0, 0, -original.x(), original.height() );
+                    flagImages[i + 7].setPosition( 32 + original.x(), original.y() );
 
-                    _icnVsSprite[id][i + 7 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
-                    _icnVsSprite[id][i + 7 + 7].setPosition( 0, original.y() );
+                    flagImages[i + 7 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    flagImages[i + 7 + 7].setPosition( 0, original.y() );
                 }
             }
             return true;
+        }
         case ICN::SHADOW32:
             LoadOriginalICN( id );
             // The shadow sprite of hero needs to be shifted to match the hero sprite.
