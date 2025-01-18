@@ -830,14 +830,32 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+
+                // If the window size was manually changed to a non-standard one (which does not correspond to any of the resolutions supported by the display),
+                // then after switching to full-screen mode, the in-game display area may not take up the entire screen and black bars will remain on the sides
+                // of the screen. In this case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used
+                // under the hood. To avoid this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the
+                // window size to the size of the in-game display area before switching to the full-screen mode.
+                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
+
+                if ( const fheroes2::Display & display = fheroes2::Display::instance(); display.width() != 0 && display.height() != 0 ) {
+                    assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
+
+                    SDL_SetWindowSize( _window, display.screenSize().width, display.screenSize().height );
+                }
             }
 
-            const int returnCode = SDL_SetWindowFullscreen( _window, flags );
-            if ( returnCode < 0 ) {
+            if ( const int returnCode = SDL_SetWindowFullscreen( _window, flags ); returnCode < 0 ) {
                 ERROR_LOG( "Failed to set fullscreen mode flags. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
             _syncFullScreen();
+
+            // If the full-screen mode has been turned off, then restore the remembered window size.
+            if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+                SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
+            }
+
             _retrieveWindowInfo();
             _toggleMouseCaptureMode();
         }
@@ -954,6 +972,8 @@ namespace
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
 
+        fheroes2::Size _windowedSize;
+
         bool _isVSyncEnabled{ false };
 
         RenderEngine() = default;
@@ -987,6 +1007,7 @@ namespace
             }
 
             _driverIndex = -1;
+            _windowedSize = {};
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
