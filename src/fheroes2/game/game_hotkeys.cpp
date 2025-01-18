@@ -31,6 +31,7 @@
 #include <map>
 #include <set>
 #include <sstream>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -274,10 +275,10 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|retreat from battle" ), fheroes2::Key::KEY_R };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SURRENDER )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|surrender during battle" ), fheroes2::Key::KEY_S };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle battle auto mode" ), fheroes2::Key::KEY_A };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_FINISH )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|finish the battle in auto mode" ), fheroes2::Key::KEY_Q };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle auto combat mode" ), fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_QUICK_COMBAT )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|quick combat" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|battle options" ), fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )]
@@ -437,7 +438,22 @@ void Game::HotKeysLoad( const std::string & filename )
                 const char * eventName = _( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
-                    continue;
+                    // TODO: remove this temporary workaround
+                    if ( eventName == std::string_view( "toggle auto combat mode" ) ) {
+                        value = config.StrParams( "toggle battle auto mode" );
+                        if ( value.empty() ) {
+                            continue;
+                        }
+                    }
+                    else if ( eventName == std::string_view( "quick combat" ) ) {
+                        value = config.StrParams( "finish the battle in auto mode" );
+                        if ( value.empty() ) {
+                            continue;
+                        }
+                    }
+                    else {
+                        continue;
+                    }
                 }
 
                 value = StringUpper( value );

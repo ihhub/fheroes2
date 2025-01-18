@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -362,7 +362,6 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         castle = nullptr;
     }
 
-    // init interface
     if ( isShowInterface ) {
         _interface = std::make_unique<Interface>( *this, tileIndex );
         board.SetArea( _interface->GetArea() );
@@ -372,12 +371,12 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         _interface->SetOrderOfUnits( _orderOfUnits );
     }
     else {
-        // no interface - force auto battle mode for human player
+        // There is no interface - force the auto combat mode for the human player
         if ( army1.isControlHuman() ) {
-            _autoBattleColors |= army1.GetColor();
+            _autoCombatColors |= army1.GetColor();
         }
         if ( army2.isControlHuman() ) {
-            _autoBattleColors |= army2.GetColor();
+            _autoCombatColors |= army2.GetColor();
         }
     }
 
@@ -484,8 +483,8 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
-            // therefore should be handled first, before any other actions. Just skip the rest of the branches.
+            // Pending actions from the user interface (such as toggling the auto combat on/off) have "already occurred"
+            // and therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
         else if ( _currentUnit->GetSpeed() == Speed::STANDING ) {
             // Unit has either finished its turn, is dead, or has become immovable due to some spell. Even if the
@@ -506,7 +505,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoCombatColors ) ) {
                 AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
@@ -1432,14 +1431,14 @@ Battle::Result & Battle::Arena::GetResult()
     return result_game;
 }
 
-bool Battle::Arena::AutoBattleInProgress() const
+bool Battle::Arena::AutoCombatInProgress() const
 {
     if ( _currentUnit == nullptr ) {
         return false;
     }
 
-    if ( _autoBattleColors & GetCurrentColor() ) {
-        // Auto battle mode cannot be enabled for a player controlled by AI
+    if ( _autoCombatColors & GetCurrentColor() ) {
+        // Auto combat mode cannot be enabled for a player controlled by the AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
         return true;
@@ -1448,7 +1447,7 @@ bool Battle::Arena::AutoBattleInProgress() const
     return false;
 }
 
-bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+bool Battle::Arena::EnemyOfAIHasAutoCombatInProgress() const
 {
     if ( _currentUnit == nullptr ) {
         return false;
@@ -1464,10 +1463,10 @@ bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
         return false;
     }
 
-    return ( _autoBattleColors & enemyForce.GetColor() );
+    return ( _autoCombatColors & enemyForce.GetColor() );
 }
 
-bool Battle::Arena::CanToggleAutoBattle() const
+bool Battle::Arena::CanToggleAutoCombat() const
 {
     if ( _currentUnit == nullptr ) {
         return false;

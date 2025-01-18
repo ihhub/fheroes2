@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -659,13 +659,13 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     // We have gone beyond the limit on the number of turns without deaths and have to stop
     if ( _numberOfRemainingTurnsWithoutDeaths == 0 ) {
-        // If this is an auto battle (and not the instant battle, because the battle UI is present), then turn it off until the end of the battle
-        if ( arena.AutoBattleInProgress() && Battle::Arena::GetInterface() != nullptr ) {
-            assert( arena.CanToggleAutoBattle() );
+        // If this is an auto combat (and not a quick combat, because the battle UI is present), then turn it off until the end of the battle
+        if ( arena.AutoCombatInProgress() && Battle::Arena::GetInterface() != nullptr ) {
+            assert( arena.CanToggleAutoCombat() );
 
-            actions.emplace_back( Battle::Command::AUTO_SWITCH, currentColor );
+            actions.emplace_back( Battle::Command::TOGGLE_AUTO_COMBAT, currentColor );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto battle is turned off" )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto combat is turned off" )
         }
         // Otherwise the attacker's hero should retreat
         else {
@@ -711,7 +711,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 return Outcome::ContinueBattle;
             }
 
-            // Human-controlled heroes should not retreat or surrender during auto/instant battles
+            // Human-controlled heroes should not retreat or surrender during auto/quick combat
             if ( actualHero->isControlHuman() ) {
                 return Outcome::ContinueBattle;
             }
