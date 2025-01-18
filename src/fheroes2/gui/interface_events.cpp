@@ -197,7 +197,7 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 void Interface::AdventureMap::EventResetHeroPath()
 {
     Heroes * hero = GetFocusHeroes();
-    if ( hero == nullptr ) {
+    if ( hero == nullptr || !hero->GetPath().isValidForMovement() ) {
         return;
     }
 

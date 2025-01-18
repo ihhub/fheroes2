@@ -178,7 +178,7 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     else if ( _buttonHeroMovement.isEnabled() && le.MouseClickLeft( _heroMovementRect ) ) {
         res = _interface.EventHeroMovement();
     }
-    else if ( le.MouseLongPressLeft( _heroMovementRect ) ) {
+    else if ( _buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( _heroMovementRect ) ) {
         _interface.EventResetHeroPath();
     }
     else if ( le.MouseClickLeft( _kingdomRect ) ) {
@@ -236,18 +236,22 @@ void Interface::ButtonsPanel::_setButtonStatus()
     Heroes * currentHero = GetFocusHeroes();
 
     if ( currentHero && currentHero->GetPath().isValidForMovement() && currentHero->MayStillMove( false, true ) ) {
+        // Move button: to move the hero by the specified path.
         _buttonHeroMovement.setICNIndexes( 2, 3 );
         _buttonHeroMovement.enable();
     }
     else if ( currentHero && MP2::isInGameActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+        // Action button: to visit the action object hero is standing on.
         _buttonHeroMovement.setICNIndexes( 16, 17 );
         _buttonHeroMovement.enable();
     }
     else if ( currentHero && currentHero->GetPath().isValidForMovement() ) {
+        // Inactive button: to show the hero's path can be reset.
         _buttonHeroMovement.setICNIndexes( 18, 19 );
         _buttonHeroMovement.enable();
     }
     else {
+        // Inactive button (disabled): to show that the hero as no path specified.
         _buttonHeroMovement.setICNIndexes( 18, 19 );
         _buttonHeroMovement.disable();
     }
