@@ -831,11 +831,11 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
-                // If the window size was manually changed to a non-standard one (which does not correspond to any of the resolutions supported by the display),
-                // then after switching to full-screen mode, the in-game display area may not take up the entire screen and black bars will remain on the sides
-                // of the screen. In this case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used
-                // under the hood. To avoid this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the
-                // window size to the size of the in-game display area before switching to the full-screen mode.
+                // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
+                // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
+                // case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used under the hood. To avoid
+                // this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the window size to the size of
+                // the in-game display area before switching to the full-screen mode.
                 SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
 
                 if ( const fheroes2::Display & display = fheroes2::Display::instance(); display.width() != 0 && display.height() != 0 ) {
