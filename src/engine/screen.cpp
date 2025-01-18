@@ -848,7 +848,8 @@ namespace
                 return BaseRenderEngine::isFullScreen();
             }
 
-            return ( SDL_GetWindowFlags( _window ) & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) );
+            const uint32_t flags = SDL_GetWindowFlags( _window );
+            return ( flags & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) );
         }
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
