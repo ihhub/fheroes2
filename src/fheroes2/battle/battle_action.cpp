@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -424,11 +424,11 @@ void Battle::Arena::ApplyAction( Command & cmd )
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::AUTO_SWITCH:
-        ApplyActionAutoSwitch( cmd );
+    case CommandType::TOGGLE_AUTO_COMBAT:
+        ApplyActionToggleAutoCombat( cmd );
         break;
-    case CommandType::AUTO_FINISH:
-        ApplyActionAutoFinish( cmd );
+    case CommandType::QUICK_COMBAT:
+        ApplyActionQuickCombat( cmd );
         break;
 
     default:
@@ -1325,7 +1325,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
+void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
 {
     const auto checkParameters = []( const int color ) {
         const Arena * arena = GetArena();
@@ -1355,22 +1355,22 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
         return;
     }
 
-    _autoBattleColors ^= color;
+    _autoCombatColors ^= color;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoCombatColors & color ) ? "on" : "off" ) )
 
     if ( _interface ) {
         const Player * player = Players::Get( color );
         assert( player );
 
-        std::string msg = ( _autoBattleColors & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
+        std::string msg = ( _autoCombatColors & color ) ? _( "%{name} has turned on the auto combat" ) : _( "%{name} has turned off the auto combat" );
         StringReplace( msg, "%{name}", player->GetName() );
 
         _interface->setStatus( msg, true );
     }
 }
 
-void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
+void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 {
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();
@@ -1391,10 +1391,10 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_HUMAN ) {
-        _autoBattleColors |= army1Color;
+        _autoCombatColors |= army1Color;
     }
     if ( army2Control & CONTROL_HUMAN ) {
-        _autoBattleColors |= army2Color;
+        _autoCombatColors |= army2Color;
     }
 
     _interface.reset();

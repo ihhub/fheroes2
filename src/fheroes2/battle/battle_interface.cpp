@@ -2693,10 +2693,10 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
 void Battle::Interface::getPendingActions( Actions & actions )
 {
-    if ( _interruptAutoBattleForColor ) {
-        actions.emplace_back( Command::AUTO_SWITCH, _interruptAutoBattleForColor );
+    if ( _interruptAutoCombatForColor ) {
+        actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, _interruptAutoCombatForColor );
 
-        _interruptAutoBattleForColor = 0;
+        _interruptAutoCombatForColor = 0;
     }
 }
 
@@ -2787,6 +2787,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
+    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
+    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
+    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
+
     if ( le.isAnyKeyPressed() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
@@ -2797,13 +2801,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
-        // Switch the auto battle mode on
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventStartAutoBattle( unit, actions );
+        // Switch the auto combat mode on
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
+            EventStartAutoCombat( unit, actions );
         }
-        // Finish the battle in auto mode
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
-            EventAutoFinish( actions );
+        // Resolve the combat in quick combat mode
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
+            EventQuickCombat( actions );
         }
         // Cast the spell
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
@@ -2867,28 +2871,44 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Enable auto combat" );
-        ButtonAutoAction( unit, actions );
 
-        if ( le.isMouseRightButtonPressed() ) {
-            fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
+        msg = _( "Automatic combat modes" );
+
+        if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
+            OpenAutoModeDialog( unit, actions );
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
+            fheroes2::showStandardTextMessage( _( "Automatic Combat Modes" ), _( "Choose between proceeding the combat in auto combat mode or in quick combat mode." ),
+                                               Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSettings.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Customize system options" );
-        ButtonSettingsAction();
 
-        if ( le.isMouseRightButtonPressed() ) {
+        msg = _( "Customize system options" );
+
+        if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
+            _openBattleSettingsDialog();
+
+            humanturn_redraw = true;
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
     else if ( le.isMouseCursorPosInArea( _buttonSkip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Skip this unit" );
-        ButtonSkipAction( actions );
 
-        if ( le.isMouseRightButtonPressed() ) {
+        msg = _( "Skip this unit" );
+
+        if ( le.MouseClickLeft( _buttonSkip.area() ) ) {
+            assert( _currentUnit != nullptr );
+
+            actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
+
+            humanturn_exit = true;
+        }
+        else if ( le.isMouseRightButtonPressed() ) {
             fheroes2::showStandardTextMessage( _( "Skip" ),
                                                _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
                                                Dialog::ZERO );
@@ -3176,68 +3196,116 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
+bool Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actions )
 {
     // TODO: remove these temporary assertions
-    assert( arena.CanToggleAutoBattle() );
-    assert( !arena.AutoBattleInProgress() );
+    assert( arena.CanToggleAutoCombat() );
+    assert( !arena.AutoCombatInProgress() );
 
-    int startAutoBattle = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable auto combat?" ), Dialog::YES | Dialog::NO );
-    if ( startAutoBattle != Dialog::YES ) {
-        return;
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable the auto combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+        return false;
     }
 
-    actions.emplace_back( Command::AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
+    actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, unit.GetCurrentOrArmyColor() );
 
     humanturn_redraw = true;
     humanturn_exit = true;
+
+    return true;
 }
 
-void Battle::Interface::EventAutoFinish( Actions & actions )
+bool Battle::Interface::EventQuickCombat( Actions & actions )
 {
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to finish the battle in auto mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
-        return;
+    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO )
+         != Dialog::YES ) {
+        return false;
     }
 
-    actions.emplace_back( Command::AUTO_FINISH );
+    actions.emplace_back( Command::QUICK_COMBAT );
 
     humanturn_redraw = true;
     humanturn_exit = true;
+
+    return true;
 }
 
-void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
+void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
 {
+    Cursor::Get().SetThemes( Cursor::POINTER );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
+    const int quickCombatButtonICN = isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD;
+    const int cancelButtonICN = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+
+    const fheroes2::Sprite & quickCombatButtonReleased = fheroes2::AGG::GetICN( quickCombatButtonICN, 0 );
+    const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
+    const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
+
+    const int32_t autoButtonsXOffset = 20;
+    const int32_t autoButtonsYOffset = 15;
+    const int32_t titleYOffset = 16;
+    const int32_t buttonSeparation = 37;
+
+    const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+    const int32_t backgroundWidth = autoButtonsXOffset * 2 + quickCombatButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
+    const int32_t backgroundHeight
+        = titleYOffset + title.height( backgroundWidth ) + quickCombatButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
+
+    fheroes2::Button buttonAutoCombat;
+    fheroes2::Button buttonQuickCombat;
+    fheroes2::Button buttonCancel;
+
+    background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
+                             fheroes2::StandardWindow::Padding::CENTER_LEFT );
+    background.renderButton( buttonQuickCombat, isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
+                             fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+    background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+    const fheroes2::Rect roiArea = background.activeArea();
+    title.draw( roiArea.x, roiArea.y + titleYOffset, backgroundWidth, display );
+
+    display.render( background.totalArea() );
     LocalEvent & le = LocalEvent::Get();
 
-    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
+    while ( le.HandleEvents() ) {
+        buttonAutoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoCombat.area() ) );
+        buttonQuickCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuickCombat.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-    if ( le.MouseClickLeft( _buttonAuto.area() ) ) {
-        EventStartAutoBattle( unit, actions );
-    }
-}
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return;
+        }
+        if ( ( le.MouseClickLeft( buttonAutoCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
+             && EventStartAutoCombat( unit, actions ) ) {
+            return;
+        }
+        if ( ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
+            return;
+        }
 
-void Battle::Interface::ButtonSettingsAction()
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
-
-    if ( le.MouseClickLeft( _buttonSettings.area() ) ) {
-        _openBattleSettingsDialog();
-
-        humanturn_redraw = true;
-    }
-}
-
-void Battle::Interface::ButtonSkipAction( Actions & actions )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
-
-    if ( le.MouseClickLeft( _buttonSkip.area() ) && _currentUnit ) {
-        actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
-        humanturn_exit = true;
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
+            std::string msg = _( "The computer continues the combat for you." );
+            msg += "\n\n";
+            msg += _(
+                "autoCombat|This can be interrupted at any moment by pressing the Auto Combat hotkey or the default Cancel key, or by performing a left or right click anywhere on the game screen." );
+            fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonQuickCombat.area() ) ) {
+            std::string msg = _( "The combat is resolved from the current state." );
+            msg += "\n\n";
+            msg += _( "quickCombat|This cannot be undone." );
+            fheroes2::showStandardTextMessage( _( "Quick Combat" ), msg, Dialog::ZERO );
+        }
     }
 }
 
@@ -6436,39 +6504,39 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         }
     }
 
-    // Check if auto battle interruption was requested.
-    InterruptAutoBattleIfRequested( le );
+    // Check if auto combat interruption was requested.
+    InterruptAutoCombatIfRequested( le );
 }
 
-void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
+void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
 {
     // Interrupt only if automation is currently on.
-    if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
+    if ( !arena.AutoCombatInProgress() && !arena.EnemyOfAIHasAutoCombatInProgress() ) {
         return;
     }
 
-    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
+    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT )
          && !Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         return;
     }
 
-    // Identify which color requested the auto battle interrupt.
+    // Identify which color requested the auto combat interruption.
     int color = arena.GetCurrentColor();
     if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
         color = arena.GetOppositeColor( color );
     }
 
     // The battle interruption is already scheduled, no need for the dialog.
-    if ( color == _interruptAutoBattleForColor ) {
+    if ( color == _interruptAutoCombatForColor ) {
         return;
     }
 
-    // Right now there should be no pending auto battle interruptions.
-    assert( _interruptAutoBattleForColor == 0 );
+    // Right now there should be no pending auto combat interruptions.
+    assert( _interruptAutoCombatForColor == 0 );
 
-    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat?" ), Dialog::YES | Dialog::NO );
+    const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat mode?" ), Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
-        _interruptAutoBattleForColor = color;
+        _interruptAutoCombatForColor = color;
     }
 }
 

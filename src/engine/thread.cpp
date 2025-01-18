@@ -23,7 +23,7 @@
 #include <cassert>
 #include <memory>
 
-#ifdef __EMSCRIPTEN__
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
 namespace
 {
     class MutexUnlocker
@@ -54,8 +54,7 @@ namespace MultiThreading
 {
     void AsyncManager::createWorker()
     {
-        // Emscripten has no pthread support. The worker thread should not be started.
-#ifndef __EMSCRIPTEN__
+#if !defined( __EMSCRIPTEN__ ) || defined( __EMSCRIPTEN_PTHREADS__ )
         if ( !_worker ) {
             _runFlag = true;
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
@@ -71,8 +70,7 @@ namespace MultiThreading
 
     void AsyncManager::stopWorker()
     {
-#ifdef __EMSCRIPTEN__
-        // Emscripten has no pthread support. The worker thread should not be running here.
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
         assert( !_worker );
 #else
         if ( _worker ) {
@@ -95,8 +93,7 @@ namespace MultiThreading
     {
         _runFlag = true;
 
-        // Emscripten has no pthread support, so instead of passing tasks to the worker thread, we will process them immediately in the current thread.
-#ifdef __EMSCRIPTEN__
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
         assert( !_exitFlag );
 
         while ( _runFlag ) {
@@ -106,7 +103,8 @@ namespace MultiThreading
             }
 
             {
-                // In accordance with the contract, the _mutex should NOT be acquired while calling the executeTask().
+                // In accordance with the contract, the _mutex should NOT be acquired while
+                // calling the executeTask() - even if its acquisition is in fact a snake oil.
                 MutexUnlocker unlocker( _mutex );
 
                 executeTask();

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -323,6 +323,16 @@ msgstr "UDÁLOSTI"
 msgid "LANGUAGE"
 msgstr "JAZYK"
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Válečník"
 
@@ -477,10 +487,12 @@ msgstr[0] "%{name} ničí polovinu nepřátelských jednotek!"
 msgstr[1] "%{name} ničí polovinu nepřátelských jednotek!"
 msgstr[2] "%{name} ničí polovinu nepřátelských jednotek!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} vypnul automatickou bitvu"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} zapnul automatickou bitvu"
 
 msgid "Spell failed!"
@@ -809,14 +821,18 @@ msgstr "Zobrazit informace o Katapultu"
 msgid "Ballista"
 msgstr "Katapult"
 
-msgid "Enable auto combat"
-msgstr "Zapnout automatický boj"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Umožňuje počítači vybojovat bitvu za tebe."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Automatický boj"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Automatický boj"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Upravit systémové nastavení"
@@ -864,11 +880,36 @@ msgstr "Pruh zpráv"
 msgid "Shows the results of individual monster's actions."
 msgstr "Zobrazuje následky počínání jednotlivých jednotek."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Chceš zapnout automatický boj?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Umožňuje počítači vybojovat bitvu za tebe."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Automatický boj"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Automatický boj"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -997,7 +1038,8 @@ msgstr "Zrcadlová jednotka byla vytvořena."
 msgid "The mirror image is destroyed!"
 msgstr "Zrcadlová jednotka byla zničena!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Chceš přerušit automatický boj?"
 
 msgid "Error"
@@ -3743,7 +3785,8 @@ msgstr "Auto, Bez kouzel"
 msgid "Battles"
 msgstr "Bitvy"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Ručně"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5000,6 +5043,10 @@ msgstr "Přepnout na celou obrazovku"
 msgid "hotkey|toggle text support mode"
 msgstr "Přepnout režim podpory textu"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Přepnout režim podpory textu"
+
 msgid "hotkey|new game"
 msgstr "Nová hra"
 
@@ -5234,11 +5281,13 @@ msgstr "Ústup z bitvy"
 msgid "hotkey|surrender during battle"
 msgstr "Kapitulace během bitvy"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Přepnout automatický boj"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Dokončit boj v automatickém režimu"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Ukončit"
 
 msgid "hotkey|battle options"
 msgstr "Možnosti bitvy"
@@ -11859,6 +11908,12 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Zapnout automatický boj"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Dokončit boj v automatickém režimu"
 
 #~ msgid "Please Remember"
 #~ msgstr "Prosím pamatujte"
