@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-17 02:20+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -263,6 +263,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Strijder"
 
@@ -416,10 +426,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} vernietigd helft van de veihandelijke troepen!"
 msgstr[1] "%{name} vernietigd helft van de veihandelijke troepen!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} heeft de automatische wedstrijd uitgezet"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} heeft de automatische wedstrijd aangezet!"
 
 msgid "Spell failed!"
@@ -770,14 +782,18 @@ msgstr "Ballista-info bekijken"
 msgid "Ballista"
 msgstr "Ballista"
 
-msgid "Enable auto combat"
-msgstr "Automatische gevechten inschakelen"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Hiermee kan de computer de strijd voor je uitvechten."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Automatisch Vechten"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Automatisch Vechten"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Systeem instellingen aanpassen"
@@ -826,12 +842,36 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Toont de resultaten van de acties van individuele monsters."
 
 #, fuzzy
-msgid "Are you sure you want to enable auto combat?"
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Weet je zeker dat je je wilt terugtrekken?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Hiermee kan de computer de strijd voor je uitvechten."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Automatisch Vechten"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Automatisch Vechten"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -956,7 +996,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Het spiegelbeeld is vernietigd!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Weet je zeker dat je het automatisch vechten wilt onderbreken?"
 
 msgid "Error"
@@ -3690,7 +3730,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5172,13 +5212,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
-
 #, fuzzy
-msgid "hotkey|finish the battle in auto mode"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Systeem instellingen aanpassen"
+
+msgid "hotkey|quick combat"
 msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -10905,3 +10944,11 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Automatische gevechten inschakelen"
+
+#, fuzzy
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr ""
+#~ "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-17 02:20+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -325,6 +325,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Войн"
 
@@ -480,10 +490,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} унищожава половината вражески войски!"
 msgstr[1] "%{name} унищожи половината вражески войски!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} е изключил автоматичната битка"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} включи автоматичната битка"
 
 msgid "Spell failed!"
@@ -824,14 +836,18 @@ msgstr "Виж информация за Катапулт"
 msgid "Ballista"
 msgstr "Катапулта"
 
-msgid "Enable auto combat"
-msgstr "Включи на автоматична битка"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Позволява на компютъра да води битката вместо теб."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Авто Сражение"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Авто Сражение"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Персонализирай системните опции"
@@ -879,11 +895,36 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Позволява на компютъра да води битката вместо теб."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Авто Сражение"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Авто Сражение"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1007,7 +1048,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Error"
@@ -3859,7 +3900,8 @@ msgstr "Авто, без магий"
 msgid "Battles"
 msgstr "Сражения"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Ръчно"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5463,11 +5505,13 @@ msgstr "отстъпление от битка"
 msgid "hotkey|surrender during battle"
 msgstr "капитулация по време на битка"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "превключи автоматичния режим на битка"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "завърши битката в автоматичен режим"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "напусни"
 
 msgid "hotkey|battle options"
 msgstr "опции на битка"
@@ -12260,6 +12304,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Включи на автоматична битка"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "завърши битката в автоматичен режим"
 
 #~ msgid "Please Remember"
 #~ msgstr "Моля, запомни"

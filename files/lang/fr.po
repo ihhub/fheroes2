@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-17 02:20+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -323,6 +323,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Guerrier"
 
@@ -477,10 +487,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "La troupe de %{name} décime la troupe ennemie !"
 msgstr[1] "Les %{name} déciment la troupe ennemie !"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} a désactivé le combat auto"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} a activé le combat auto"
 
 msgid "Spell failed!"
@@ -823,14 +835,18 @@ msgstr "Voir les infos de la baliste"
 msgid "Ballista"
 msgstr "Baliste"
 
-msgid "Enable auto combat"
-msgstr "Activer le combat automatique"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "L'ordinateur joue le combat à votre place."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Combat Auto"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Combat Auto"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Modifier les options système"
@@ -878,11 +894,36 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Voulez-vous vraiment activer le combat automatique ?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "L'ordinateur joue le combat à votre place."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Combat Auto"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Combat Auto"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1007,7 +1048,8 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Voulez-vous vraiment interrompre le combat auto ?"
 
 msgid "Error"
@@ -3845,7 +3887,8 @@ msgstr "Auto sans magie"
 msgid "Battles"
 msgstr "Batailles"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuelles"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5439,11 +5482,13 @@ msgstr "Retraite"
 msgid "hotkey|surrender during battle"
 msgstr "Reddition"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Activer/désactiver le mode combat auto"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Finir la bataille en mode auto"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Quitter"
 
 msgid "hotkey|battle options"
 msgstr "Options de bataille"
@@ -12278,6 +12323,12 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Activer le combat automatique"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Finir la bataille en mode auto"
 
 #~ msgid "Please Remember"
 #~ msgstr "N'oubliez pas"
