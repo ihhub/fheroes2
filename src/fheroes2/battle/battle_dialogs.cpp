@@ -179,6 +179,31 @@ namespace
         std::queue<LoopedAnimation> _queue;
     };
 
+    void setupAnimation( fheroes2::Display & display, const fheroes2::Rect & animationRoi, LoopedAnimationSequence & sequence )
+    {
+        sequence.push( ICN::WINCMBT, true ); // needs specific for battle summary
+        const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
+        const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
+        Copy( sequenceBase, 0, 0, display, animationRoi.x, animationRoi.y, sequenceBase.width(), sequenceBase.height() );
+        fheroes2::Blit( sequenceStart, display, animationRoi.x + sequenceStart.x(), animationRoi.y + sequenceStart.y() );
+    }
+
+    void updateAnimation( fheroes2::Display & display, int & lastSequence, LoopedAnimationSequence & sequence, const fheroes2::Rect & animationRoi )
+    {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+            if ( lastSequence != sequence.id() ) {
+                lastSequence = sequence.id();
+                const fheroes2::Sprite & base = fheroes2::AGG::GetICN( lastSequence, 0 );
+
+                Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
+            }
+            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
+
+            fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
+            display.render( animationRoi );
+        }
+    }
+
     enum class DialogAction : int
     {
         Open,
@@ -556,11 +581,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         sequence.push( ICN::UNKNOWN, false );
     }
 
-    // Setup animation
-    const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
-    const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
-    Copy( sequenceBase, 0, 0, display, animationRoi.x, animationRoi.y, sequenceBase.width(), sequenceBase.height() );
-    fheroes2::Blit( sequenceStart, display, animationRoi.x + sequenceStart.x(), animationRoi.y + sequenceStart.y() );
+    setupAnimation( display, animationRoi, sequence );
 
     const fheroes2::Rect summaryRoi( roi.x + 11, roi.y + bsTextYOffset, roi.width - 22, roi.height - bsTextYOffset );
     fheroes2::ImageRestorer summaryBackground( display, summaryRoi.x, summaryRoi.y, roi.width, summaryRoi.height );
@@ -686,19 +707,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             }
         }
 
-        // Animation
-        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-            if ( sequenceId != sequence.id() ) {
-                sequenceId = sequence.id();
-                const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
-
-                Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
-            }
-            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
-
-            fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
-            display.render( animationRoi );
-        }
+        updateAnimation( display, sequenceId, sequence, animationRoi );
     }
 
     // Free memory because RESTART button is not used more.
@@ -813,19 +822,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 }
 
-                // Animation
-                if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-                    if ( sequenceId != sequence.id() ) {
-                        sequenceId = sequence.id();
-                        const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
-
-                        Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
-                    }
-                    const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
-
-                    fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
-                    display.render( animationRoi );
-                }
+                updateAnimation( display, sequenceId, sequence, animationRoi );
             }
         }
     }
@@ -849,13 +846,8 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     const fheroes2::Rect animationRoi( roi.x + ( ( roi.width - animationBorderRoi.width ) / 2 ) + 4, roi.y + 20, animationBorderRoi.width, animationBorderRoi.height );
     Copy( originalBorderImage, animationBorderRoi.x, animationBorderRoi.y, display, animationRoi.x - 4, animationRoi.y - 4, animationRoi.width, animationRoi.height );
 
-    // Setup animation
     LoopedAnimationSequence sequence;
-    sequence.push( ICN::WINCMBT, true );
-    const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
-    const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
-    Copy( sequenceBase, 0, 0, display, animationRoi.x, animationRoi.y, sequenceBase.width(), sequenceBase.height() );
-    fheroes2::Blit( sequenceStart, display, animationRoi.x + sequenceStart.x(), animationRoi.y + sequenceStart.y() );
+    setupAnimation( display, animationRoi, sequence );
 
     // Text stuff
     int yOffset = animationRoi.y + animationRoi.height + 8;
@@ -902,19 +894,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
             break;
         }
 
-        // Animation
-        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-            if ( sequenceId != sequence.id() ) {
-                sequenceId = sequence.id();
-                const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
-
-                Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
-            }
-            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
-
-            fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
-            display.render( animationRoi );
-        }
+        updateAnimation( display, sequenceId, sequence, animationRoi );
     }
 }
 
