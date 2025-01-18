@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -310,6 +310,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -465,10 +475,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "Troppen med 1 %{name} halverte fiendestyrken!"
 msgstr[1] "Troppen med %{name} halverte fiendestyrken!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} slo av autotrekk"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} slo på autotrekk"
 
 msgid "Spell failed!"
@@ -820,14 +832,18 @@ msgstr "Vis info om ballisten"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Skru på autokamp"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Lar datamaskinen gjøre trekkene for deg."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Autokamp"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Autokamp"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Skreddersy systeminnstillinger"
@@ -875,11 +891,36 @@ msgstr "Kamplogg"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Er du sikker på at du ønsker å skru på autokamp?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Lar datamaskinen gjøre trekkene for deg."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Autokamp"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Autokamp"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1013,7 +1054,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Er du sikker på at du vil avbryte de automatiske trekkene?"
 
 msgid "Error"
@@ -3902,7 +3943,8 @@ msgstr "Data, ingen magi"
 msgid "Battles"
 msgstr "Kampstyring"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5263,6 +5305,10 @@ msgstr "Fullskjerm"
 msgid "hotkey|toggle text support mode"
 msgstr "Tekstmodus"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Tekstmodus"
+
 msgid "hotkey|new game"
 msgstr "Nytt parti"
 
@@ -5506,11 +5552,13 @@ msgstr "Trekk tilbake fra kamp"
 msgid "hotkey|surrender during battle"
 msgstr "Overgivelse i kamp"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Slå på/av automatiske trekk i kamp"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Fullfør kamp med autotrekk"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Avslutt"
 
 msgid "hotkey|battle options"
 msgstr "Kampvalg"
@@ -12471,6 +12519,12 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Skru på autokamp"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Fullfør kamp med autotrekk"
 
 #~ msgid "Please Remember"
 #~ msgstr "Merk"

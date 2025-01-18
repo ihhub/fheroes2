@@ -31,6 +31,7 @@
 #include <map>
 #include <set>
 #include <sstream>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -106,6 +107,11 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle fullscreen" ), fheroes2::Key::KEY_F4 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle text support mode" ), fheroes2::Key::KEY_F10 };
+
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )]
+            = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
+#endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|new game" ), fheroes2::Key::KEY_N };
@@ -269,10 +275,10 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|retreat from battle" ), fheroes2::Key::KEY_R };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SURRENDER )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|surrender during battle" ), fheroes2::Key::KEY_S };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle battle auto mode" ), fheroes2::Key::KEY_A };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_FINISH )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|finish the battle in auto mode" ), fheroes2::Key::KEY_Q };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle auto combat mode" ), fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_QUICK_COMBAT )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|quick combat" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|battle options" ), fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )]
@@ -432,7 +438,22 @@ void Game::HotKeysLoad( const std::string & filename )
                 const char * eventName = _( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
-                    continue;
+                    // TODO: remove this temporary workaround
+                    if ( eventName == std::string_view( "toggle auto combat mode" ) ) {
+                        value = config.StrParams( "toggle battle auto mode" );
+                        if ( value.empty() ) {
+                            continue;
+                        }
+                    }
+                    else if ( eventName == std::string_view( "quick combat" ) ) {
+                        value = config.StrParams( "finish the battle in auto mode" );
+                        if ( value.empty() ) {
+                            continue;
+                        }
+                    }
+                    else {
+                        continue;
+                    }
                 }
 
                 value = StringUpper( value );
@@ -482,6 +503,9 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.Save( Settings::configFileName );
     }
 #if defined( WITH_DEBUG )
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )].key ) {
+        Logging::setDebugLevel( DBG_DEVEL ^ Logging::getDebugLevel() );
+    }
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
         static bool recursiveCall = false;
 
