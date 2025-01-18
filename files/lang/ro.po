@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-17 02:20+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -317,6 +317,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Războinic"
 
@@ -471,10 +481,12 @@ msgstr[0] "%{name} distruge jumătate din trupele inamice!"
 msgstr[1] "%{name} distrug jumătate din trupele inamice!"
 msgstr[2] "%{name} distrug jumătate din trupele inamice!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} a oprit lupta automată"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} a pornit lupta automată"
 
 msgid "Spell failed!"
@@ -824,14 +836,18 @@ msgstr "Vezi informații despre Ballista"
 msgid "Ballista"
 msgstr "Ballista"
 
-msgid "Enable auto combat"
-msgstr "Activează lupta automată"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Permite computerului să lupte în locul tău."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Luptă automată"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Luptă automată"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Personalizează opțiunile sistemului"
@@ -879,11 +895,36 @@ msgstr "Bara de mesaje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Afișează rezultatele acțiunilor individuale ale monștrilor."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Sigur vreți să activați lupta automată?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Permite computerului să lupte în locul tău."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Luptă automată"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Luptă automată"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1020,7 +1061,8 @@ msgstr "Se creează o imagine în oglindă."
 msgid "The mirror image is destroyed!"
 msgstr "Imaginea în oglindă este distrusă!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Sigur vreți să întrerupeți lupta automată?"
 
 msgid "Error"
@@ -3625,7 +3667,8 @@ msgstr "Auto, fără vrăji"
 msgid "Battles"
 msgstr "Bătălii"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuale"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5096,11 +5139,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
+msgstr "Personalizează opțiunile sistemului"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "terminați lupta în mod automat"
+msgid "hotkey|quick combat"
+msgstr ""
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -10854,3 +10898,9 @@ msgstr ""
 "Verificați cea mai nouă versiune a jocului la\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Activează lupta automată"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "terminați lupta în mod automat"
