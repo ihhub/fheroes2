@@ -94,8 +94,6 @@ namespace
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_SMALL_OKAY_GOOD,
                                                 ICN::BUTTON_SMALL_OKAY_EVIL,
-                                                ICN::BUTTON_SMALLER_OKAY_GOOD,
-                                                ICN::BUTTON_SMALLER_OKAY_EVIL,
                                                 ICN::BUTTON_SMALL_ACCEPT_GOOD,
                                                 ICN::BUTTON_SMALL_ACCEPT_EVIL,
                                                 ICN::BUTTON_SMALL_DECLINE_GOOD,
@@ -906,12 +904,10 @@ namespace
             break;
         }
         case ICN::BUTTON_SMALL_OKAY_GOOD:
-        case ICN::BUTTON_SMALL_OKAY_EVIL:
-        case ICN::BUTTON_SMALLER_OKAY_GOOD:
-        case ICN::BUTTON_SMALLER_OKAY_EVIL: {
+        case ICN::BUTTON_SMALL_OKAY_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
             const bool isSameResourceAsLanguage = useOriginalResources();
 
             if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) ) {
@@ -923,20 +919,9 @@ namespace
 
                 break;
             }
-            if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 1 );
-                break;
-            }
 
-            int32_t textWidth = 86;
-            const char * text = gettext_noop( "OKAY" );
-            if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
-                textWidth = 70;
-                text = gettext_noop( "smallerButton|OKAY" );
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, text, isEvilInterface );
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], _( "OKAY" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -2772,8 +2757,6 @@ namespace
         case ICN::BUTTON_SMALL_CANCEL_EVIL:
         case ICN::BUTTON_SMALL_OKAY_GOOD:
         case ICN::BUTTON_SMALL_OKAY_EVIL:
-        case ICN::BUTTON_SMALLER_OKAY_GOOD:
-        case ICN::BUTTON_SMALLER_OKAY_EVIL:
         case ICN::BUTTON_SMALL_ACCEPT_GOOD:
         case ICN::BUTTON_SMALL_ACCEPT_EVIL:
         case ICN::BUTTON_SMALL_DECLINE_GOOD:
