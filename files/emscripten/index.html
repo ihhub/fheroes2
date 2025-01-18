@@ -160,6 +160,7 @@
                 catch (ignore) {
                     parts.reduce((p, part) => {
                         p = [...p, part];
+                        if (!part) return p;
                         try { FS.lookupPath(p.join('/')) }
                         catch (ignore) { FS.mkdir(p.join('/')) }
                         return p;
