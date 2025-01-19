@@ -1072,7 +1072,7 @@ namespace
             }
 #endif
 
-            uint32_t flags = SDL_WINDOW_SHOWN;
+            uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -1085,8 +1085,6 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
             }
-
-            flags |= SDL_WINDOW_RESIZABLE;
 
             _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
                                         resolutionInfo.screenHeight, flags );
