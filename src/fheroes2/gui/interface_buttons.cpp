@@ -182,7 +182,13 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     // has valid path not to trigger the '_mouseButtonLongPressDelay'.
     // The inlined 'isMouseLeftButtonPressedInArea()' method is called not to call 'isValidForMovement()'
     // method every time this button is enabled.
-    else if ( _buttonHeroMovement.isEnabled() && le.isMouseLeftButtonPressedInArea( _heroMovementRect ) && GetFocusHeroes()->GetPath().isValidForMovement()
+    else if ( _buttonHeroMovement.isEnabled() && le.isMouseLeftButtonPressedInArea( _heroMovementRect ) &&
+              []() {
+                  const Heroes * currentHero = GetFocusHeroes();
+                  assert( currentHero != nullptr );
+
+                  return currentHero->GetPath().isValidForMovement();
+              }()
               && le.MouseLongPressLeft( _heroMovementRect ) ) {
         _interface.EventResetHeroPath();
     }
