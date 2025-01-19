@@ -4426,7 +4426,6 @@ namespace
                     fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 5 }, { 5, 19 }, 44 );
                     fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 21 }, { 5, 28 }, 44 );
                 }
-                fheroes2::Save( releasedInactiveHorse, "releasedInactiveHorse.png", 96 );
             }
             return true;
         case ICN::ARTFX:
