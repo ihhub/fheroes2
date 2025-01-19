@@ -1291,6 +1291,12 @@ namespace fheroes2
 
     void Copy( const Image & in, Image & out )
     {
+        if ( !out.singleLayer() && !in.singleLayer() ) {
+            // Both images have transform layer. Copy using the assignment operator.
+            out = in;
+            return;
+        }
+
         const int32_t width = in.width();
         const int32_t height = in.height();
 
@@ -1299,17 +1305,14 @@ namespace fheroes2
         // We do a full copy of an image.
         const size_t size = static_cast<size_t>( width ) * height;
         if ( out.singleLayer() ) {
-            // Copy only image layer.
+            // Copy only image layer. Input image can be single- or double-layer.
             memcpy( out.image(), in.image(), size );
         }
-        else if ( in.singleLayer() ) {
+        else {
+            assert( in.singleLayer() );
             // Copy image layer and set transform to non-transparent mode.
             memcpy( out.image(), in.image(), size );
             memset( out.transform(), static_cast<uint8_t>( 0 ), size );
-        }
-        else {
-            // Copy both image and transform layers.
-            memcpy( out.image(), in.image(), size * 2 );
         }
     }
 
