@@ -1476,11 +1476,15 @@ namespace fheroes2
 
     BaseRenderEngine & engine()
     {
+        assert( Display::instance()._engine );
+
         return *( Display::instance()._engine );
     }
 
     Cursor & cursor()
     {
+        assert( Display::instance()._cursor );
+
         return *( Display::instance()._cursor );
     }
 }
