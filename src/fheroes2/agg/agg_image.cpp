@@ -3303,10 +3303,6 @@ namespace
                     _icnVsSprite[id][35 + i] = released;
                     _icnVsSprite[id][35 + 1 + i] = pressed;
                 }
-                _icnVsSprite[id][39] = std::move( released );
-                _icnVsSprite[id][40] = std::move( pressed );
-                _icnVsSprite[id][41] = std::move( released );
-                _icnVsSprite[id][42] = std::move( pressed );
                 _icnVsSprite[id][43] = std::move( released );
                 _icnVsSprite[id][44] = std::move( pressed );
 
@@ -3320,18 +3316,18 @@ namespace
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::MONS32, 11 ), 39, 29, _icnVsSprite[id][39], _icnVsSprite[id][40] );
 
                 // Undo and Redo buttons.
-                fheroes2::Image undoImage( 22, 16 );
+                fheroes2::Image undoImage( 19, 13 );
                 undoImage.reset();
                 const int mainColor = 56;
-                fheroes2::SetPixel( undoImage, 1, 8, mainColor );
-                for ( int x = 2; x < 8; ++x ) {
-                    fheroes2::DrawLine( undoImage, { x, 9 - x }, { x, 7 + x }, mainColor );
+                fheroes2::SetPixel( undoImage, 0, 6, mainColor );
+                for ( int x = 1; x < 7; ++x ) {
+                    fheroes2::DrawLine( undoImage, { x, 6 - x }, { x, 6 + x }, mainColor );
                 }
-                fheroes2::Fill( undoImage, 8, 6, 8, 4, mainColor );
-                fheroes2::Fill( undoImage, 15, 7, 3, 4, mainColor );
+                fheroes2::Fill( undoImage, 7, 4, 8, 4, mainColor );
+                fheroes2::Fill( undoImage, 14, 5, 3, 4, mainColor );
+                fheroes2::Fill( undoImage, 16, 6, 2, 4, mainColor );
                 fheroes2::Fill( undoImage, 17, 8, 2, 4, mainColor );
-                fheroes2::Fill( undoImage, 18, 10, 2, 4, mainColor );
-                fheroes2::SetPixel( undoImage, 19, 14, mainColor );
+                fheroes2::SetPixel( undoImage, 18, 12, mainColor );
                 drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
                 drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
             }
