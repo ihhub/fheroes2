@@ -4326,7 +4326,7 @@ namespace
                 fheroes2::Sprite & releasedInactiveHorse = _icnVsSprite[id][18];
                 Copy( emptyButtonReleased, releasedInactiveHorse );
 
-                const uint8_t firstShadingColor = isGoodButton ? 46 : 25;
+                const uint8_t mainShadingColor = isGoodButton ? 46 : 25;
                 const uint8_t secondShadingColor = isGoodButton ? 43 : 18;
                 const uint8_t thirdShadingColor = isGoodButton ? 39 : 15;
                 const uint8_t fourthShadingColor = isGoodButton ? 42 : 16;
@@ -4364,13 +4364,13 @@ namespace
                 fheroes2::DrawLine( releasedInactiveHorse, { 8, 20 }, { 9, 20 }, mainReleasedColor );
 
                 // Shading.
-                fheroes2::DrawLine( releasedInactiveHorse, { 27, 13 }, { 27, 20 }, firstShadingColor );
-                fheroes2::DrawLine( releasedInactiveHorse, { 21, 11 }, { 20, 12 }, firstShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 27, 13 }, { 27, 20 }, mainShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 21, 11 }, { 20, 12 }, mainShadingColor );
                 fheroes2::DrawLine( releasedInactiveHorse, { 19, 12 }, { 17, 12 }, secondShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 20, 11, secondShadingColor );
-                fheroes2::DrawLine( releasedInactiveHorse, { 16, 12 }, { 12, 12 }, firstShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 16, 12 }, { 12, 12 }, mainShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 11, 12, secondShadingColor );
-                fheroes2::DrawLine( releasedInactiveHorse, { 11, 13 }, { 9, 15 }, firstShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 11, 13 }, { 9, 15 }, mainShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 10, 13, fifthShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 9, 14, 10 );
                 fheroes2::DrawLine( releasedInactiveHorse, { 8, 15 }, { 8, 18 }, 10 );
@@ -4379,13 +4379,13 @@ namespace
                 fheroes2::DrawLine( releasedInactiveHorse, { 6, 20 }, { 7, 21 }, thirdShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 9, 21, 10 );
                 fheroes2::SetPixel( releasedInactiveHorse, 10, 20, thirdShadingColor );
-                fheroes2::SetPixel( releasedInactiveHorse, 11, 16, firstShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 16, mainShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 11, 17, secondShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 11, 21, 10 );
                 fheroes2::DrawLine( releasedInactiveHorse, { 14, 20 }, { 14, 21 }, thirdShadingColor );
-                fheroes2::DrawLine( releasedInactiveHorse, { 17, 19 }, { 17, 20 }, firstShadingColor );
-                fheroes2::DrawLine( releasedInactiveHorse, { 18, 18 }, { 20, 18 }, firstShadingColor );
-                fheroes2::SetPixel( releasedInactiveHorse, 21, 19, firstShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 17, 19 }, { 17, 20 }, mainShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 18, 18 }, { 20, 18 }, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 21, 19, mainShadingColor );
                 fheroes2::SetPixel( releasedInactiveHorse, 18, 19, thirdShadingColor );
                 fheroes2::DrawLine( releasedInactiveHorse, { 19, 19 }, { 20, 19 }, 10 );
                 fheroes2::DrawLine( releasedInactiveHorse, { 21, 20 }, { 21, 21 }, 10 );
@@ -4412,7 +4412,7 @@ namespace
                 fheroes2::ReplaceColorId( buttonImage, mainReleasedColor, mainPressedColor );
                 const uint8_t pressedColorOffset = isGoodButton ? 4 : 6;
                 fheroes2::ReplaceColorId( buttonImage, backgroundReleasedColor, backgroundPressedColor );
-                fheroes2::ReplaceColorId( buttonImage, firstShadingColor, firstShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, mainShadingColor, mainShadingColor + pressedColorOffset );
                 fheroes2::ReplaceColorId( buttonImage, secondShadingColor, secondShadingColor + pressedColorOffset );
                 fheroes2::ReplaceColorId( buttonImage, thirdShadingColor, thirdShadingColor + pressedColorOffset );
                 fheroes2::ReplaceColorId( buttonImage, fourthShadingColor, fourthShadingColor + pressedColorOffset );
@@ -4426,6 +4426,7 @@ namespace
                     fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 5 }, { 5, 19 }, 44 );
                     fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 21 }, { 5, 28 }, 44 );
                 }
+                fheroes2::Save( releasedInactiveHorse, "releasedInactiveHorse.png", 96 );
             }
             return true;
         case ICN::ARTFX:
