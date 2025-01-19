@@ -3385,7 +3385,7 @@ namespace
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
                 // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
-                _icnVsSprite[id].resize( 41 );
+                _icnVsSprite[id].resize( 45 );
 
                 // First make clean button sprites (pressed and released).
                 fheroes2::Sprite released = fheroes2::AGG::GetICN( ICN::EDITBTNS, 4 );
@@ -3394,12 +3394,16 @@ namespace
                 Fill( released, 16, 6, 18, 24, 41U );
                 Fill( pressed, 16, 7, 17, 23, 46U );
 
-                for ( size_t i = 0; i < 4; i += 2 ) {
+                for ( size_t i = 0; i < 8; i += 2 ) {
                     _icnVsSprite[id][35 + i] = released;
                     _icnVsSprite[id][35 + 1 + i] = pressed;
                 }
                 _icnVsSprite[id][39] = std::move( released );
                 _icnVsSprite[id][40] = std::move( pressed );
+                _icnVsSprite[id][41] = std::move( released );
+                _icnVsSprite[id][42] = std::move( pressed );
+                _icnVsSprite[id][43] = std::move( released );
+                _icnVsSprite[id][44] = std::move( pressed );
 
                 // Adventure objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
@@ -3409,6 +3413,22 @@ namespace
 
                 // Monsters objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::MONS32, 11 ), 39, 29, _icnVsSprite[id][39], _icnVsSprite[id][40] );
+
+                // Undo and Redo buttons.
+                fheroes2::Image undoImage( 22, 16 );
+                undoImage.reset();
+                const int mainColor = 56;
+                fheroes2::SetPixel( undoImage, 1, 8, mainColor );
+                for ( int x = 2; x < 8; ++x ) {
+                    fheroes2::DrawLine( undoImage, { x, 9 - x }, { x, 7 + x }, mainColor );
+                }
+                fheroes2::Fill( undoImage, 8, 6, 8, 4, mainColor );
+                fheroes2::Fill( undoImage, 15, 7, 3, 4, mainColor );
+                fheroes2::Fill( undoImage, 17, 8, 2, 4, mainColor );
+                fheroes2::Fill( undoImage, 18, 10, 2, 4, mainColor );
+                fheroes2::SetPixel( undoImage, 19, 14, mainColor );
+                drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
+                drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
             }
             return true;
         case ICN::EDITBTNS_EVIL: {
