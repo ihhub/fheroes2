@@ -180,9 +180,9 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     }
     // The 'MouseLongPressLeft()' for '_heroMovementRect' should be called only if current hero
     // has valid path not to trigger the '_mouseButtonLongPressDelay'.
-    // The inlined 'isMouseLeftButtonPressed()' method is called not to call 'isValidForMovement()'
+    // The inlined 'isMouseLeftButtonPressedInArea()' method is called not to call 'isValidForMovement()'
     // method every time this button is enabled.
-    else if ( _buttonHeroMovement.isEnabled() && le.isMouseLeftButtonPressed() && GetFocusHeroes()->GetPath().isValidForMovement()
+    else if ( _buttonHeroMovement.isEnabled() && le.isMouseLeftButtonPressedInArea( _heroMovementRect ) && GetFocusHeroes()->GetPath().isValidForMovement()
               && le.MouseLongPressLeft( _heroMovementRect ) ) {
         _interface.EventResetHeroPath();
     }
