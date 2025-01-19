@@ -387,13 +387,34 @@ namespace
 
     // This class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
     // and then restore these offsets within the scope of the code
-    class ButtonFontOffsetRestorer
+    class ButtonFontOffsetRestorer final
     {
     public:
-        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
+        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
+            : _font( font )
+        {
+            _originalXOffsets.reserve( _font.size() );
+
+            for ( fheroes2::Sprite & characterSprite : _font ) {
+                _originalXOffsets.emplace_back( characterSprite.x() );
+                characterSprite.setPosition( offsetX, characterSprite.y() );
+            }
+        }
+
         ButtonFontOffsetRestorer( const ButtonFontOffsetRestorer & ) = delete;
 
-        ~ButtonFontOffsetRestorer();
+        ~ButtonFontOffsetRestorer()
+        {
+            if ( _originalXOffsets.size() != _font.size() ) {
+                // If this assertion blows up then something is wrong with the fonts as they must have the same size.
+                assert( 0 );
+                return;
+            }
+
+            for ( size_t i = 0; i < _font.size(); ++i ) {
+                _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
+            }
+        }
 
         ButtonFontOffsetRestorer & operator=( const ButtonFontOffsetRestorer & ) = delete;
 
@@ -401,30 +422,6 @@ namespace
         std::vector<fheroes2::Sprite> & _font;
         std::vector<int32_t> _originalXOffsets;
     };
-
-    ButtonFontOffsetRestorer::ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
-        : _font( font )
-    {
-        _originalXOffsets.reserve( _font.size() );
-
-        for ( fheroes2::Sprite & characterSprite : _font ) {
-            _originalXOffsets.emplace_back( characterSprite.x() );
-            characterSprite.setPosition( offsetX, characterSprite.y() );
-        }
-    }
-
-    ButtonFontOffsetRestorer::~ButtonFontOffsetRestorer()
-    {
-        if ( _originalXOffsets.size() != _font.size() ) {
-            // If this assertion blows up then something is wrong with the fonts as they must have the same size.
-            assert( 0 );
-            return;
-        }
-
-        for ( size_t i = 0; i < _font.size(); ++i ) {
-            _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
-        }
-    }
 
     void invertTransparency( fheroes2::Image & image )
     {
@@ -2153,6 +2150,28 @@ namespace
 
             break;
         }
+        case ICN::DISMISS_HERO_DISABLED_BUTTON:
+        case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
+            _icnVsSprite[id].resize( 1 );
+
+            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+
+            const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+            const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            output = released;
+
+            fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+            fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+
+            fheroes2::Blit( common, output );
+            break;
+        }
         default:
             // You're calling this function for non-specified ICN id. Check your logic!
             // Did you add a new image for one language without generating a default
@@ -2518,6 +2537,12 @@ namespace
         // Call LoadOriginalICN() function only if you are handling the same ICN.
         // If you need to load a different ICN use loadICN() function.
 
+        // Some images contain text. This text should be adapted to a chosen language.
+        if ( isLanguageDependentIcnId( id ) ) {
+            generateLanguageSpecificImages( id );
+            return true;
+        }
+
         switch ( id ) {
         case ICN::ROUTERED:
             CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
@@ -2750,126 +2775,6 @@ namespace
                     ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
                 }
             }
-            return true;
-        case ICN::BUYMAX:
-        case ICN::BUTTON_NEW_GAME_GOOD:
-        case ICN::BUTTON_NEW_GAME_EVIL:
-        case ICN::BUTTON_SAVE_GAME_GOOD:
-        case ICN::BUTTON_SAVE_GAME_EVIL:
-        case ICN::BUTTON_LOAD_GAME_GOOD:
-        case ICN::BUTTON_LOAD_GAME_EVIL:
-        case ICN::BUTTON_INFO_GOOD:
-        case ICN::BUTTON_INFO_EVIL:
-        case ICN::BUTTON_QUIT_GOOD:
-        case ICN::BUTTON_QUIT_EVIL:
-        case ICN::BUTTON_NEW_MAP_EVIL:
-        case ICN::BUTTON_NEW_MAP_GOOD:
-        case ICN::BUTTON_SAVE_MAP_EVIL:
-        case ICN::BUTTON_SAVE_MAP_GOOD:
-        case ICN::BUTTON_LOAD_MAP_EVIL:
-        case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_SMALL_CANCEL_GOOD:
-        case ICN::BUTTON_SMALL_CANCEL_EVIL:
-        case ICN::BUTTON_SMALL_OKAY_GOOD:
-        case ICN::BUTTON_SMALL_OKAY_EVIL:
-        case ICN::BUTTON_SMALLER_OKAY_GOOD:
-        case ICN::BUTTON_SMALLER_OKAY_EVIL:
-        case ICN::BUTTON_SMALL_ACCEPT_GOOD:
-        case ICN::BUTTON_SMALL_ACCEPT_EVIL:
-        case ICN::BUTTON_SMALL_DECLINE_GOOD:
-        case ICN::BUTTON_SMALL_DECLINE_EVIL:
-        case ICN::BUTTON_SMALL_LEARN_GOOD:
-        case ICN::BUTTON_SMALL_LEARN_EVIL:
-        case ICN::BUTTON_SMALL_TRADE_GOOD:
-        case ICN::BUTTON_SMALL_TRADE_EVIL:
-        case ICN::BUTTON_SMALL_YES_GOOD:
-        case ICN::BUTTON_SMALL_YES_EVIL:
-        case ICN::BUTTON_SMALL_NO_GOOD:
-        case ICN::BUTTON_SMALL_NO_EVIL:
-        case ICN::BUTTON_SMALL_EXIT_GOOD:
-        case ICN::BUTTON_SMALL_EXIT_EVIL:
-        case ICN::BUTTON_EXIT_HEROES_MEETING:
-        case ICN::BUTTON_EXIT_TOWN:
-        case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL:
-        case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_EVIL:
-        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
-        case ICN::BUTTON_SMALL_UPGRADE_EVIL:
-        case ICN::BUTTON_SMALL_RESTART_GOOD:
-        case ICN::BUTTON_SMALL_RESTART_EVIL:
-        case ICN::BUTTON_KINGDOM_EXIT:
-        case ICN::BUTTON_KINGDOM_HEROES:
-        case ICN::BUTTON_KINGDOM_TOWNS:
-        case ICN::BUTTON_MAPSIZE_SMALL:
-        case ICN::BUTTON_MAPSIZE_MEDIUM:
-        case ICN::BUTTON_MAPSIZE_LARGE:
-        case ICN::BUTTON_MAPSIZE_XLARGE:
-        case ICN::BUTTON_MAPSIZE_ALL:
-        case ICN::BUTTON_MAP_SELECT_GOOD:
-        case ICN::BUTTON_MAP_SELECT_EVIL:
-        case ICN::BUTTON_STANDARD_GAME:
-        case ICN::BUTTON_CAMPAIGN_GAME:
-        case ICN::BUTTON_MULTIPLAYER_GAME:
-        case ICN::BUTTON_LARGE_CANCEL:
-        case ICN::BUTTON_LARGE_CONFIG:
-        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
-        case ICN::BUTTON_EXPANSION_CAMPAIGN:
-        case ICN::BUTTON_HOT_SEAT:
-        case ICN::BUTTON_2_PLAYERS:
-        case ICN::BUTTON_3_PLAYERS:
-        case ICN::BUTTON_4_PLAYERS:
-        case ICN::BUTTON_5_PLAYERS:
-        case ICN::BUTTON_6_PLAYERS:
-        case ICN::BTNBATTLEONLY:
-        case ICN::BTNGIFT_GOOD:
-        case ICN::BTNGIFT_EVIL:
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_MAX_BUTTON:
-        case ICN::UNIFORM_GOOD_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_OKAY_BUTTON:
-        case ICN::UNIFORM_EVIL_OKAY_BUTTON:
-        case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
-        case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
-        case ICN::UNIFORM_GOOD_EXIT_BUTTON:
-        case ICN::UNIFORM_EVIL_EXIT_BUTTON:
-        case ICN::BUTTON_SMALL_MIN_GOOD:
-        case ICN::BUTTON_SMALL_MIN_EVIL:
-        case ICN::BUTTON_SMALL_MAX_GOOD:
-        case ICN::BUTTON_SMALL_MAX_EVIL:
-        case ICN::BUTTON_EXIT_GOOD:
-        case ICN::BUTTON_RESET_GOOD:
-        case ICN::BUTTON_START_GOOD:
-        case ICN::BUTTON_CASTLE_GOOD:
-        case ICN::BUTTON_CASTLE_EVIL:
-        case ICN::BUTTON_TOWN_GOOD:
-        case ICN::BUTTON_TOWN_EVIL:
-        case ICN::BUTTON_RESTRICT_GOOD:
-        case ICN::BUTTON_RESTRICT_EVIL:
-        case ICN::BUTTON_GUILDWELL_EXIT:
-        case ICN::GOOD_CAMPAIGN_BUTTONS:
-        case ICN::EVIL_CAMPAIGN_BUTTONS:
-        case ICN::POL_CAMPAIGN_BUTTONS:
-        case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
-        case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
-        case ICN::BUTTON_VERTICAL_DISMISS:
-        case ICN::BUTTON_VERTICAL_EXIT:
-        case ICN::BUTTON_VERTICAL_PATROL:
-        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
-        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
-        case ICN::BUTTON_RUMORS_GOOD:
-        case ICN::BUTTON_RUMORS_EVIL:
-        case ICN::BUTTON_EVENTS_GOOD:
-        case ICN::BUTTON_EVENTS_EVIL:
-        case ICN::BUTTON_LANGUAGE_GOOD:
-        case ICN::BUTTON_LANGUAGE_EVIL:
-        case ICN::BUTTON_AUTO_COMBAT_GOOD:
-        case ICN::BUTTON_AUTO_COMBAT_EVIL:
-        case ICN::BUTTON_QUICK_COMBAT_GOOD:
-        case ICN::BUTTON_QUICK_COMBAT_EVIL:
-            generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:
             LoadOriginalICN( id );
@@ -3869,28 +3774,6 @@ namespace
             populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 28 ), digits,
                                  isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
 
-            return true;
-        }
-        case ICN::DISMISS_HERO_DISABLED_BUTTON:
-        case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
-            _icnVsSprite[id].resize( 1 );
-
-            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
-
-            const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-            const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
-
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            output = released;
-
-            ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-
-            fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
-            common = FilterOnePixelNoise( common );
-            common = FilterOnePixelNoise( common );
-            common = FilterOnePixelNoise( common );
-
-            Blit( common, output );
             return true;
         }
         case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
