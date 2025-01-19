@@ -194,12 +194,10 @@ namespace
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
                                                 ICN::BUTTON_QUICK_COMBAT_EVIL };
 
-#ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
     {
         return languageDependentIcnId.count( id ) > 0;
     }
-#endif
 
     bool useOriginalResources()
     {
