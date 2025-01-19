@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -59,19 +59,9 @@ find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
 
-# TODO: Modern versions of SDL2* packages provide the CMake config files that define the SDL2::SDL2, SDL2_mixer::SDL2_mixer and SDL2_image::SDL2_image
-# TODO: imported targets, but older versions do not. To solve this problem, we have to use FindSDL2*.cmake modules from the cmake/ subdirectory and
-# TODO: define aliases for imported targets provided by these modules.
-
-# TODO: remove this alias and module from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_mixer
-add_library(${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer ALIAS ${USE_SDL_VERSION}::Mixer)
-
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
-
-	# TODO: remove this alias and module from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_image
-	add_library(${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image ALIAS ${USE_SDL_VERSION}::Image)
 endif(ENABLE_IMAGE)
 
 #
