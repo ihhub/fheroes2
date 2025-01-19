@@ -52,6 +52,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -68,7 +69,7 @@ namespace
     };
 
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 36, 47 };
+    const fheroes2::Point optionOffset{ 20, 31 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -204,20 +205,14 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
+        const int backgroundIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
+        const int32_t width = fheroes2::AGG::GetICN( backgroundIcnId, 0 ).width();
+        const int32_t height = fheroes2::AGG::GetICN( backgroundIcnId, 0 ).height();
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
+        fheroes2::StandardWindow background( width - 32, height - 32, true, display );
 
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
-                                                dialog.height() + fheroes2::borderWidthPx );
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
-        fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
-
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+        const fheroes2::Rect windowRoi = background.activeArea();
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -244,10 +239,9 @@ namespace
 
         drawOptions();
 
-        const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
-        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-
-        buttonOk.draw();
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
