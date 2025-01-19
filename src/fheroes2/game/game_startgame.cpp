@@ -735,6 +735,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
+
+        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+            reset();
+            redraw( Interface::REDRAW_RADAR );
+            redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+        }
     }
 
     while ( res == fheroes2::GameMode::END_TURN ) {
@@ -785,13 +791,14 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     AudioManager::ResetAudio();
 
                     conf.SetCurrentColor( playerColor );
-                    if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
-                        reset();
-                        redraw( Interface::REDRAW_RADAR );
-                        redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
-                    }
 
                     if ( isHotSeatGame ) {
+                        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                            reset();
+                            redraw( Interface::REDRAW_RADAR );
+                            redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+                        }
+
                         _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 

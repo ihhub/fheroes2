@@ -65,28 +65,29 @@ namespace
         const Settings & conf = Settings::Get();
         const InterfaceType interfaceType = conf.getInterfaceType();
 
-        const fheroes2::Sprite * interfaceThemeIcon;
+        uint32_t icnInx;
         std::string value;
         switch ( interfaceType ) {
         case DYNAMIC:
-            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 15 );
+            icnInx = 15;
             value = _( "Dynamic" );
             break;
         case GOOD:
-            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
+            icnInx = 16;
             value = _( "Good" );
             break;
         case EVIL:
-            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 17 );
+            icnInx = 17;
             value = _( "Evil" );
             break;
         default:
-            interfaceThemeIcon = &fheroes2::AGG::GetICN( ICN::SPANEL, 15 );
+            icnInx = 15;
             value = _( "Dynamic" );
             assert( 0 );
         }
 
-        fheroes2::drawOption( optionRoi, *interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
@@ -299,7 +300,7 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                conf.setInterfaceType( static_cast<InterfaceType>( ( conf.getInterfaceType() + 1 ) % ( InterfaceType::DYNAMIC + 1 ) ) );
+                conf.setInterfaceType( static_cast<InterfaceType>( ( conf.getInterfaceType() + 1 ) % InterfaceType::COUNT ) );
                 updateUI();
                 saveConfiguration = true;
 

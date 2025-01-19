@@ -69,6 +69,7 @@ enum InterfaceType : uint8_t
     GOOD = 0,
     EVIL = 1,
     DYNAMIC = 2,
+    COUNT
 };
 
 class Settings
