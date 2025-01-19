@@ -1128,6 +1128,11 @@ namespace ICN
         BUTTON_LANGUAGE_GOOD,
         BUTTON_LANGUAGE_EVIL,
 
+        BUTTON_AUTO_COMBAT_GOOD,
+        BUTTON_AUTO_COMBAT_EVIL,
+        BUTTON_QUICK_COMBAT_GOOD,
+        BUTTON_QUICK_COMBAT_EVIL,
+
         SCENIBKG_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
