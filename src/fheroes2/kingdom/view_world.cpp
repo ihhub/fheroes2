@@ -624,7 +624,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     renderProcessor.stopColorCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
-    Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
+    Interface::Radar radar( interface.getRadar(), display );
 
     Interface::GameArea & gameArea = interface.getGameArea();
     const fheroes2::Rect & worldMapROI = gameArea.GetVisibleTileROI();
@@ -653,6 +653,22 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
 
     if ( !interface.isEditor() ) {
         DrawObjectsIcons( color, mode, cache );
+    }
+    else if ( display.height() == fheroes2::Display::DEFAULT_HEIGHT ) {
+        // Fix borders for Editor if screen height is 480 pixels.
+        const fheroes2::Sprite & borderSprite = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+
+        const int32_t offsetX = 480;
+        const int32_t stepY = 304;
+        fheroes2::Rect borderRoi( display.width() - borderSprite.width() + offsetX, 160, 144, 17 );
+
+        fheroes2::Copy( borderSprite, offsetX, borderRoi.y, display, borderRoi );
+        borderRoi.y += stepY;
+        fheroes2::Copy( borderSprite, offsetX, borderRoi.y, display, borderRoi );
+
+        borderRoi.y -= stepY;
+        borderRoi.height += stepY;
+        display.updateNextRenderRoi( borderRoi );
     }
 
     // We need to draw interface borders only if game interface is turned off on Adventure map.
