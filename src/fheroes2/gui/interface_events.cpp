@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -197,7 +197,7 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 void Interface::AdventureMap::EventResetHeroPath()
 {
     Heroes * hero = GetFocusHeroes();
-    if ( hero == nullptr || !hero->GetPath().isValidForMovement() ) {
+    if ( hero == nullptr ) {
         return;
     }
 
