@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <array>
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 
 #include "math_base.h"
 #include "settings.h"
