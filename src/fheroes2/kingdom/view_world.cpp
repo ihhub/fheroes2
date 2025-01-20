@@ -197,7 +197,7 @@ namespace
         {
             cachedImages.resize( zoomLevels );
 
-            for ( int32_t i = 0; i < zoomLevels; ++i ) {
+            for ( size_t i = 0; i < zoomLevels; ++i ) {
                 cachedImages[i]._disableTransformLayer();
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
             }
@@ -245,7 +245,7 @@ namespace
                     gameArea.SetCenterInPixels( { x * fheroes2::tileWidthPx + redrawAreaCenterX, y * fheroes2::tileWidthPx + redrawAreaCenterY } );
                     gameArea.Redraw( temporaryImg, drawingFlags );
 
-                    for ( int32_t i = 0; i < zoomLevels; ++i ) {
+                    for ( size_t i = 0; i < zoomLevels; ++i ) {
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i],
                                           y * tileSizePerZoomLevel[i], blockSizeX * tileSizePerZoomLevel[i], blockSizeY * tileSizePerZoomLevel[i] );
                     }
