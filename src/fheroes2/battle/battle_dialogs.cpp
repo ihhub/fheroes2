@@ -270,34 +270,21 @@ namespace
     DialogAction openBattleOptionDialog( bool & saveConfiguration )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        LocalEvent & le = LocalEvent::Get();
-        Settings & conf = Settings::Get();
 
         // Set the cursor image. This dialog is called from the battlefield and does not require a cursor restorer.
         // Battlefield event processor will set the appropriate cursor after this dialog is closed.
         Cursor::Get().SetThemes( Cursor::POINTER );
 
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
-
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
-
-        const fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
-                                            dialog.height() + fheroes2::borderWidthPx );
-        const fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
-
-        fheroes2::Fill( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height, 0 );
-        fheroes2::Blit( dialogShadow, display, pos_rt.x - fheroes2::borderWidthPx, pos_rt.y + fheroes2::borderWidthPx );
-        fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+        const fheroes2::Rect windowRoi = background.activeArea();
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
 
         const fheroes2::Sprite & panelSprite = fheroes2::AGG::GetICN( ICN::CSPANEL, 0 );
         const int32_t panelWidth = panelSprite.width();
         const int32_t panelHeight = panelSprite.height();
 
-        const fheroes2::Point optionOffset( 36 + pos_rt.x, 47 + pos_rt.y );
+        const fheroes2::Point optionOffset( windowRoi.x + 20, windowRoi.y + 31 );
         const fheroes2::Point optionStep( 92, 110 );
 
         std::vector<fheroes2::Rect> optionAreas;
@@ -309,17 +296,20 @@ namespace
             }
         }
 
-        const fheroes2::Point buttonOffset( 112 + pos_rt.x, 362 + pos_rt.y );
-        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        buttonOkay.draw();
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         RedrawBattleSettings( optionAreas );
 
         display.render();
 
+        LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
             bool redrawScreen = false;
 
@@ -403,19 +393,18 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( optionAreas[8] ) ) {
                 fheroes2::showStandardTextMessage( _( "Damage Info" ), _( "Toggle to display damage information during the battle." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOkay.area() ) ) {
+            if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
                 break;
             }
 
             if ( redrawScreen ) {
-                fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+                emptyDialogRestorer.restore();
                 RedrawBattleSettings( optionAreas );
-                buttonOkay.draw();
-                display.render();
+                display.render( emptyDialogRestorer.rect() );
 
                 saveConfiguration = true;
             }
