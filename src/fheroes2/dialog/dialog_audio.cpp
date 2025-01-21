@@ -42,6 +42,7 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -109,27 +110,16 @@ namespace Dialog
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+        fheroes2::StandardWindow background( 289, 272, true, display );
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
+        const fheroes2::Rect windowRoi = background.activeArea();
 
-        const fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
-                                            dialog.height() + fheroes2::borderWidthPx );
-        const fheroes2::Rect dialogArea( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
-
-        fheroes2::Fill( display, dialogArea.x, dialogArea.y, dialogArea.width, dialogArea.height, 0 );
-        fheroes2::Blit( dialogShadow, display, dialogArea.x - fheroes2::borderWidthPx, dialogArea.y + fheroes2::borderWidthPx );
-        fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
 
         const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
-        const fheroes2::Point optionOffset( 69 + dialogArea.x, 47 + dialogArea.y );
+        const fheroes2::Point optionOffset( windowRoi.x + 53, windowRoi.y + 31 );
         const fheroes2::Point optionStep( 118, 110 );
 
         std::vector<fheroes2::Rect> roi;
@@ -145,11 +135,13 @@ namespace Dialog
         const fheroes2::Rect & audio3D = roi[3];
 
         drawDialog( roi );
+        
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const fheroes2::Point buttonOffset( 112 + dialogArea.x, 252 + dialogArea.y );
-        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-
-        buttonOkay.draw();
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         display.render();
 
@@ -157,9 +149,9 @@ namespace Dialog
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
@@ -250,14 +242,13 @@ namespace Dialog
             else if ( le.isMouseRightButtonPressedInArea( audio3D ) ) {
                 fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
             if ( haveSettingsChanged ) {
-                fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
+                emptyDialogRestorer.restore();
                 drawDialog( roi );
-                buttonOkay.draw();
                 display.render();
 
                 saveConfig = true;
