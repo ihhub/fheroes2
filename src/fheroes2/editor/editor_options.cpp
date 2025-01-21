@@ -132,8 +132,6 @@ namespace
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
-        const fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
-
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowAudioRoi( audioRoi + windowRoi.getPosition() );
