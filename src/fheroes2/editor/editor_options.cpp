@@ -129,9 +129,6 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
         fheroes2::StandardWindow background( 289, 272, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
@@ -155,6 +152,9 @@ namespace
         };
 
         drawOptions();
+
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Button buttonOk;
         const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
