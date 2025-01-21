@@ -1208,34 +1208,15 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, int colo
     }
 
     switch ( objectType ) {
-    case MP2::OBJ_MAGIC_GARDEN:
-        objectSpriteIndex += 128 + 14;
-        updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );
-        objectSpriteIndex += 7;
-        if ( isValidDirection( _index, Direction::RIGHT ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );
-        }
+    case MP2::OBJ_MINE: {
+        objectSpriteIndex += 14;
+        Tile & tile = world.getTile( _index );
+        tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
         break;
+    }
 
-    case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_MINE:
-        objectSpriteIndex += 128 + 14;
-        if ( isValidDirection( _index, Direction::TOP ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::TOP ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
-        }
-
-        objectSpriteIndex += 7;
-        if ( isValidDirection( _index, Direction::TOP_RIGHT ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
-        }
-        break;
-
-    case MP2::OBJ_WINDMILL:
     case MP2::OBJ_LIGHTHOUSE:
-        objectSpriteIndex += 128 + 42;
+        objectSpriteIndex += 49;
         if ( isValidDirection( _index, Direction::LEFT ) ) {
             Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
             tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );

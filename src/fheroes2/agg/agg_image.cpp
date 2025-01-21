@@ -4577,32 +4577,24 @@ namespace
                 original = std::move( temp );
             }
             return true;
-        case ICN::FLAG32:
+        case ICN::FLAG32: {
             LoadOriginalICN( id );
-            // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
-            // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
-            // This helps to solve the problem with rendering order.
-            _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
-            for ( int32_t i = 14; i < 14 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
+            auto & flagImages = _icnVsSprite[id];
+            if ( flagImages.size() == 49 ) {
+                // Shift and crop the Lighthouse flags to properly render them on the Adventure map.
+                flagImages.resize( 49 + 7 * 2 );
+                for ( size_t i = 42; i < 42 + 7; ++i ) {
+                    const fheroes2::Sprite & original = flagImages[i];
 
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+                    flagImages[i + 7] = Crop( original, 0, 0, -original.x(), original.height() );
+                    flagImages[i + 7].setPosition( 32 + original.x(), original.y() );
 
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
-            }
-
-            for ( int32_t i = 42; i < 42 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
-
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
-
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                    flagImages[i + 7 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    flagImages[i + 7 + 7].setPosition( 0, original.y() );
+                }
             }
             return true;
+        }
         case ICN::SHADOW32:
             LoadOriginalICN( id );
             // The shadow sprite of hero needs to be shifted to match the hero sprite.
