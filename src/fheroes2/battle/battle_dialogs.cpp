@@ -77,7 +77,6 @@ namespace
 {
     // DialogBattleSummary text related values
     const int bsTextWidth = 303;
-    const int bsTextXOffset = 25;
     const int bsTextYOffset = 160;
     const int bsTextIndent = 30;
 
@@ -860,7 +859,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     StringReplace( msg, "%{count}", raiseCount );
     StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
 
-    fheroes2::Text messageBox( msg, fheroes2::FontType::normalWhite() );
+    const fheroes2::Text messageBox( msg, fheroes2::FontType::normalWhite() );
     yOffset += bsTextIndent;
     const int32_t messageWidth = roi.width - 22;
     messageBox.draw( roi.x + 11, yOffset, messageWidth, display );
