@@ -65,7 +65,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
