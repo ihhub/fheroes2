@@ -24,33 +24,10 @@
 
 OStreamBase & operator<<( OStreamBase & stream, const fheroes2::LocalizedString & string )
 {
-    stream << string.text;
-
-    stream << string.language.has_value();
-
-    if ( string.language.has_value() ) {
-        stream << string.language.value();
-    }
-
-    return stream;
+    return stream << string.text << string.language;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, fheroes2::LocalizedString & string )
 {
-    stream >> string.text;
-
-    bool hasValue = false;
-    stream >> hasValue;
-
-    if ( hasValue ) {
-        fheroes2::SupportedLanguage language;
-
-        stream >> language;
-        string.language = language;
-    }
-    else {
-        string.language.reset();
-    }
-
-    return stream;
+    return stream >> string.text >> string.language;
 }
