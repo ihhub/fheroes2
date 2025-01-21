@@ -238,7 +238,7 @@ namespace
         const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
             display.render( emptyDialogRestorer.rect() );
