@@ -204,11 +204,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const int backgroundIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
-        const int32_t width = fheroes2::AGG::GetICN( backgroundIcnId, 0 ).width();
-        const int32_t height = fheroes2::AGG::GetICN( backgroundIcnId, 0 ).height();
-
-        fheroes2::StandardWindow background( width - 32, height - 32, true, display );
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
