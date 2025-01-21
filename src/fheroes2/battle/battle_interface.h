@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_INTERFACE_H
-#define H2BATTLE_INTERFACE_H
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -415,18 +414,16 @@ namespace Battle
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
-        void InterruptAutoBattleIfRequested( LocalEvent & le );
+        void InterruptAutoCombatIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
         void _openBattleSettingsDialog();
-        void EventStartAutoBattle( const Unit & unit, Actions & actions );
-        void EventAutoFinish( Actions & actions );
+        bool EventStartAutoCombat( const Unit & unit, Actions & actions );
+        bool EventQuickCombat( Actions & actions );
+        void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
-        void ButtonAutoAction( const Unit & unit, Actions & actions );
-        void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & actions );
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
@@ -462,7 +459,7 @@ namespace Battle
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
 
-        int _interruptAutoBattleForColor{ 0 };
+        int _interruptAutoCombatForColor{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
@@ -619,5 +616,3 @@ namespace Battle
         };
     };
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -57,10 +57,10 @@ public:
 
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop * itbeg, const Troop * itend );
-    void Assign( const Troops & );
-    void Insert( const Troops & );
-    void PushBack( const Monster &, uint32_t );
+    void Assign( const Troop * troopsBegin, const Troop * troopsEnd );
+    void Assign( const Troops & troops );
+    void Insert( const Troops & troops );
+    void PushBack( const Monster & mons, const uint32_t count );
     void PopBack();
 
     size_t Size() const
@@ -172,7 +172,7 @@ public:
 
     static void SwapTroops( Troop &, Troop & );
 
-    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tile &, const Troop & );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
@@ -228,8 +228,12 @@ public:
 
     void JoinStrongestFromArmy( Army & giver );
 
-    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    // Implements the necessary logic to move unit stacks from army to army in the heroes meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
+    // Implements the necessary logic to swap all unit stacks from an army to another army in the heroes meeting dialog and in the
+    // castle dialog - provided that there is at least one occupied slot in the castle garrison. It's the caller's responsibility
+    // to ensure that this is indeed the case.
+    void SwapTroops( Army & from );
 
     void SetSpreadFormation( const bool spread )
     {

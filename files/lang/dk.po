@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -317,6 +317,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -470,10 +480,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} udsletter halvdelen af fjendens tropper!"
 msgstr[1] "%{name} udsletter halvdelen af fjendens tropper!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} har deaktiveret automatisk kamp"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} har aktiveret automatisk kamp"
 
 msgid "Spell failed!"
@@ -810,14 +822,18 @@ msgstr "Se Ballistens info"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Aktiver Autokamp"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillader computeren at udkæmpe kampen for dig."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Autokamp"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Autokamp"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Tilpas systemindstillinger"
@@ -865,11 +881,36 @@ msgstr "Beskedlinje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Er du sikker på, at du vil aktivere autokamp?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på, at du vil færdiggøre denne kamp automatisk?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Tillader computeren at udkæmpe kampen for dig."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Autokamp"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Autokamp"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -996,7 +1037,8 @@ msgstr "Spejlbilledet er skabt."
 msgid "The mirror image is destroyed!"
 msgstr "Spejlbilledet er ødelagt!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Er du sikker på, du vil afbryde autokamp-tilstand?"
 
 msgid "Error"
@@ -3824,7 +3866,8 @@ msgstr "Auto, ingen magi"
 msgid "Battles"
 msgstr "Kamp"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuelt"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4150,6 +4193,10 @@ msgstr "Forlad korteditoren."
 
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Indstil antal %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
@@ -5130,6 +5177,10 @@ msgstr "Fuldskærm"
 msgid "hotkey|toggle text support mode"
 msgstr "Tekstunderstøttelsestilstand"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Tekstunderstøttelsestilstand"
+
 msgid "hotkey|new game"
 msgstr "Nyt spil"
 
@@ -5365,11 +5416,13 @@ msgstr "Tilbagetog fra kamp"
 msgid "hotkey|surrender during battle"
 msgstr "Overgivelse i kamp"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Autokamp (til/fra)"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Færdiggør kampen automatisk"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Forlad"
 
 msgid "hotkey|battle options"
 msgstr "Kampindstillinger"
@@ -5436,6 +5489,10 @@ msgstr "Opgradér trop"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "Bortvis helt eller trop"
+
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "Opgradér trop"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -5538,50 +5595,30 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Teamet bag fheroes2 Resurrection præsenterer"
 
-msgid "Greetings!"
-msgstr "Vær hilset!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren!"
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren!\n"
 "Vælg venligst den ønskede spilopløsning, før du starter et spil."
 
-msgid "Please Remember"
-msgstr "Husk venligst"
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-"Du kan altid ændre sprog, spilopløsning eller -indstillinger ved at klikke "
-"på "
-
-msgid "door"
-msgstr "døren"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr " på venstre side a hovedmenuen, eller med denne "
-
-msgid " button from the "
-msgstr " knap fra "
-
-msgid "NEW GAME"
-msgstr "NYT SPIL"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
-" menu. \n"
-"\n"
-"Nyd spillet!"
+msgid "Greetings!"
+msgstr "Vær hilset!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9823,6 +9860,9 @@ msgstr "% immunitet overfor %{spell} besværgelse"
 msgid "% damage from Elemental spells"
 msgstr "% skade af elementalbesværgelser"
 
+msgid "% damage from %{spell} spell"
+msgstr "% skade af %{spell} besværgelsen"
+
 msgid "% chance to Dispel beneficial spells"
 msgstr "% chance, for at fordrive gavnlige besværgelser"
 
@@ -9889,20 +9929,51 @@ msgstr "Elementalt"
 msgid "No Morale"
 msgstr "Ingen moral"
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Rekruttér væsener"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Rekruttér væsener"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Rekruttér væsener"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Indsø"
+
+#, fuzzy
+msgid "Double damage from Fire spells"
 msgstr "200% skade af ildbesværgelser"
 
-msgid "200% damage from Cold spells"
+#, fuzzy
+msgid "Double damage from Cold spells"
 msgstr "200% skade af koldbesværgelser"
 
-msgid "% damage from %{spell} spell"
-msgstr "% skade af %{spell} besværgelsen"
+#, fuzzy
+msgid "Double damage from Earth creatures"
+msgstr "Fjerner alle magiske besværgelser fra samtlige tropper."
 
-msgid "% immunity to "
-msgstr "% immunitet overfor "
+#, fuzzy
+msgid "Double damage from Air creatures"
+msgstr "Dobbelt skade til udøde"
+
+#, fuzzy
+msgid "Double damage from Fire creatures"
+msgstr "200% skade af ildbesværgelser"
+
+#, fuzzy
+msgid "Double damage from Water creatures"
+msgstr "Fjerner alle magiske besværgelser fra samtlige tropper."
 
 msgid "Lightning"
 msgstr "Lyn"
+
+msgid "% immunity to "
+msgstr "% immunitet overfor "
 
 msgid "% damage from "
 msgstr "% skade af "
@@ -12106,6 +12177,43 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Aktiver Autokamp"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Færdiggør kampen automatisk"
+
+#~ msgid "Please Remember"
+#~ msgstr "Husk venligst"
+
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr ""
+#~ "Du kan altid ændre sprog, spilopløsning eller -indstillinger ved at "
+#~ "klikke på "
+
+#~ msgid "door"
+#~ msgstr "døren"
+
+#~ msgid " on the left side of the Main Menu, or with the "
+#~ msgstr " på venstre side a hovedmenuen, eller med denne "
+
+#~ msgid " button from the "
+#~ msgstr " knap fra "
+
+#~ msgid "NEW GAME"
+#~ msgstr "NYT SPIL"
+
+#~ msgid ""
+#~ " menu. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " menu. \n"
+#~ "\n"
+#~ "Nyd spillet!"
 
 #~ msgid "Warning!"
 #~ msgstr "Advarsel!"

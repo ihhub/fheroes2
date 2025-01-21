@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -319,6 +319,16 @@ msgstr "ETKİNLİKLER"
 msgid "LANGUAGE"
 msgstr "DİL"
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Savaşçı"
 
@@ -472,10 +482,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} düşman birliklerinin yarısını yok etti!"
 msgstr[1] "%{name} düşman birliklerinin yarısını yok etti!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} otomatik savaşı kapattı"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} otomatik savaşı açtı"
 
 msgid "Spell failed!"
@@ -810,14 +822,18 @@ msgstr "Mancınık bilgilerini görüntüle"
 msgid "Ballista"
 msgstr "Mancınık"
 
-msgid "Enable auto combat"
-msgstr "Otomatik savacı aç"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Bilgisayarın sizin için savaşmasına izin verir."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Otomatik savaş"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Otomatik savaş"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Sistem seçeneklerini özelleştirin"
@@ -865,11 +881,36 @@ msgstr "Mesaj Çubuğu"
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Bilgisayarın sizin için savaşmasına izin verir."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Otomatik savaş"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Otomatik savaş"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -984,7 +1025,8 @@ msgstr "Ayna görüntüsü oluşturuldu."
 msgid "The mirror image is destroyed!"
 msgstr "Ayna görüntüsü yok edildi!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Otomatik savaşı kesmek istediğine emin misin?"
 
 msgid "Error"
@@ -3650,7 +3692,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3960,6 +4002,10 @@ msgstr ""
 
 msgid "Input %{object} text"
 msgstr ""
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "%{monster} sayısını ayarla"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
@@ -4862,6 +4908,9 @@ msgstr ""
 msgid "hotkey|toggle text support mode"
 msgstr ""
 
+msgid "hotkey|toggle developer mode"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5102,12 +5151,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
-
 #, fuzzy
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Sistem seçeneklerini özelleştirin"
+
+msgid "hotkey|quick combat"
+msgstr ""
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -5173,6 +5222,9 @@ msgid "hotkey|upgrade troop"
 msgstr ""
 
 msgid "hotkey|dismiss hero or troop"
+msgstr ""
+
+msgid "hotkey|exchange all troops"
 msgstr ""
 
 msgid ""
@@ -5271,41 +5323,25 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
-msgid "Greetings!"
-msgstr ""
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 
-msgid "Please Remember"
-msgstr ""
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-msgid "NEW GAME"
-msgstr ""
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -8969,6 +9005,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9035,19 +9074,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
@@ -10821,3 +10881,10 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Otomatik savacı aç"
+
+#, fuzzy
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"

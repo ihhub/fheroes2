@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -191,7 +191,7 @@ namespace
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), _( "combatMode|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -416,11 +416,16 @@ namespace fheroes2
         auto redrawAdventureMap = []() {
             Interface::AdventureMap & adventureMap = Interface::AdventureMap::Get();
 
-            adventureMap.reset();
             // Since radar interface has a restorer we must redraw it first to avoid the restorer do some nasty work.
             adventureMap.redraw( Interface::REDRAW_RADAR );
 
             adventureMap.redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebildAdventureMap = [&redrawAdventureMap]() {
+            Interface::AdventureMap::Get().reset();
+
+            redrawAdventureMap();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -445,13 +450,15 @@ namespace fheroes2
                                                        Dialog::OK );
                 }
 
+                // We can redraw only status window as it is the only place that has text but to be safe let's redraw everything.
                 redrawAdventureMap();
+
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
@@ -466,7 +473,7 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceSettings:
-                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;

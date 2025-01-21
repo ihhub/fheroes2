@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ICN_H
-#define H2ICN_H
+#pragma once
 
 #include <cstdint>
 
@@ -944,6 +943,7 @@ namespace ICN
         SILVER_GRADIENT_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
+        SWAP_ARROWS_CIRCULAR,
 
         COLOR_CURSOR_ADVENTURE_MAP,
         MONO_CURSOR_ADVENTURE_MAP,
@@ -1004,6 +1004,8 @@ namespace ICN
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
         EMPTY_MAP_SELECT_BUTTON,
+        EMPTY_INTERFACE_BUTTON_GOOD,
+        EMPTY_INTERFACE_BUTTON_EVIL,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1126,6 +1128,11 @@ namespace ICN
         BUTTON_LANGUAGE_GOOD,
         BUTTON_LANGUAGE_EVIL,
 
+        BUTTON_AUTO_COMBAT_GOOD,
+        BUTTON_AUTO_COMBAT_EVIL,
+        BUTTON_QUICK_COMBAT_GOOD,
+        BUTTON_QUICK_COMBAT_EVIL,
+
         SCENIBKG_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
@@ -1142,5 +1149,3 @@ namespace ICN
 
     int getFlagIcnId( const int color );
 }
-
-#endif

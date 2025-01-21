@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef AGG_FILE_H
-#define AGG_FILE_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -70,5 +69,3 @@ namespace fheroes2
 }
 
 IStreamBase & operator>>( IStreamBase & stream, fheroes2::ICNHeader & icn );
-
-#endif

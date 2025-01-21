@@ -118,6 +118,8 @@
     <ClCompile Include="src\fheroes2\editor\editor_options.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_rumor_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_save_map_window.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_secondary_skill_selection.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_spell_selection.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_sphinx_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_ui_helper.cpp" />
     <ClCompile Include="src\fheroes2\editor\history_manager.cpp" />
@@ -328,6 +330,8 @@
     <ClInclude Include="src\fheroes2\editor\editor_options.h" />
     <ClInclude Include="src\fheroes2\editor\editor_rumor_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_save_map_window.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_secondary_skill_selection.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_spell_selection.h" />
     <ClInclude Include="src\fheroes2\editor\editor_sphinx_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_ui_helper.h" />
     <ClInclude Include="src\fheroes2\editor\history_manager.h" />

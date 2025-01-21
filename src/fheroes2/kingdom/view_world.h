@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2VIEWWORLD_H
-#define H2VIEWWORLD_H
+#pragma once
 
-#include <array>
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 
 #include "math_base.h"
 #include "settings.h"
@@ -53,7 +53,7 @@ public:
     class ZoomROIs
     {
     public:
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels );
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels, const size_t zoomLevels );
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
@@ -84,9 +84,7 @@ public:
 
         ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
         fheroes2::Point _center;
-        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
+        std::vector<fheroes2::Rect> _roiForZoomLevels;
         fheroes2::Rect _visibleROI;
     };
 };
-
-#endif

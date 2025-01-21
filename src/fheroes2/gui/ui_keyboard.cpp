@@ -106,7 +106,8 @@ namespace
         LowerCase,
         UpperCase,
         AlphaNumeric,
-        Numeric
+        SignedNumeric,
+        UnsignedNumeric
     };
 
     class KeyboardRenderer
@@ -407,7 +408,8 @@ namespace
             buttonLetters = getAlphaNumericCharacterLayout( language );
             returnLetters = buttonLetters;
             break;
-        case LayoutType::Numeric:
+        case LayoutType::SignedNumeric:
+        case LayoutType::UnsignedNumeric:
             buttonLetters = getNumericCharacterLayout();
             returnLetters = buttonLetters;
             break;
@@ -470,7 +472,7 @@ namespace
     }
 
     void addExtraStandardButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface,
-                                  const bool isExtraLanguageSupported, const fheroes2::SupportedLanguage /* unused */ )
+                                  const bool isExtraLanguageSupported )
     {
         auto & lastButtonRow = buttons.emplace_back();
 
@@ -538,7 +540,7 @@ namespace
                 return DialogAction::Backspace;
             } );
             break;
-        case LayoutType::Numeric:
+        case LayoutType::SignedNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
@@ -546,6 +548,28 @@ namespace
                 renderer.swapSign();
                 return DialogAction::AddLetter;
             } );
+
+            lastButtonRow.emplace_back( "0", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.insertCharacter( '0' );
+                return DialogAction::AddLetter;
+            } );
+
+            lastButtonRow.emplace_back( "\x7F", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            lastButtonRow.back().button.hide();
+
+            lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                renderer.removeCharacter();
+                return DialogAction::Backspace;
+            } );
+            break;
+        case LayoutType::UnsignedNumeric:
+            lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow.back().button.hide();
+
+            lastButtonRow.emplace_back( "-", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "0", getDefaultButtonWidth( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( '0' );
@@ -579,7 +603,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported, language );
+            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
             break;
         default:
             assert( 0 );
@@ -712,7 +736,9 @@ namespace
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
 
-        const int32_t windowWidth = ( layoutType == LayoutType::Numeric ) ? numpadWindowWidth : defaultWindowWidth;
+        const bool isNumericOnlyLayout = ( layoutType == LayoutType::SignedNumeric ) || ( layoutType == LayoutType::UnsignedNumeric );
+
+        const int32_t windowWidth = isNumericOnlyLayout ? numpadWindowWidth : defaultWindowWidth;
 
         const bool isResized = renderer.resize(
             { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
@@ -856,8 +882,10 @@ namespace fheroes2
         // Lets limit to 11 digits: minus and 10 digits for INT32_MIN
         KeyboardRenderer renderer( Display::instance(), strValue, 10, Settings::Get().isEvilInterfaceEnabled() );
 
+        const LayoutType layoutType = ( minValue < 0 ) ? LayoutType::SignedNumeric : LayoutType::UnsignedNumeric;
+
         while ( action != DialogAction::Close ) {
-            action = processVirtualKeyboardEvent( LayoutType::Numeric, SupportedLanguage::English, false, renderer );
+            action = processVirtualKeyboardEvent( layoutType, SupportedLanguage::English, false, renderer );
             switch ( action ) {
             case DialogAction::AddLetter:
             case DialogAction::AlphaNumeric:

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -221,18 +221,29 @@ namespace
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
-    void runActionObjectFadeOutAnumation( const Maps::Tile & tile, const MP2::MapObjectType objectType )
+    void runActionObjectFadeOutAnimation( const Maps::Tile & tile, const MP2::MapObjectType objectType )
     {
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
+        // There are original hacked maps (or made with exploitation of the original Editor's bugs) that have wrong object type in relation to its image sprite.
+        // So, we also search for object ID by checking if the object is an action type because one tile can have only one action object.
+        MP2::MapObjectType actualObjectType = MP2::OBJ_NONE;
+        const bool isActionObject = MP2::isInGameActionObject( objectType );
+
+        if ( const MP2::MapObjectType mainObjectType = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
+             mainObjectType == objectType || ( isActionObject && MP2::isInGameActionObject( mainObjectType ) ) ) {
             objectUID = tile.getMainObjectPart()._uid;
+
+            actualObjectType = mainObjectType;
         }
         else {
             // In maps made by the original map editor the action object can be in the ground layer.
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                if ( const MP2::MapObjectType partObjectType = Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex );
+                     partObjectType == objectType || ( isActionObject && MP2::isInGameActionObject( partObjectType ) ) ) {
                     objectUID = iter->_uid;
+
+                    actualObjectType = partObjectType;
                     break;
                 }
             }
@@ -242,6 +253,12 @@ namespace
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( objectUID, tile.GetIndex(), objectType ) );
+
+        // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
+        if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
+            // Remove an object by its actual sprite type.
+            removeObjectFromTileByType( tile, actualObjectType );
+        }
 
         // Update radar in the place of the removed object.
         I.getRadar().SetRenderArea( { Maps::GetPoint( tile.GetIndex() ), { 1, 1 } } );
@@ -259,7 +276,7 @@ namespace
                 if ( remove && recruit == troop.GetCount() ) {
                     Game::PlayPickupSound();
 
-                    runActionObjectFadeOutAnumation( tile, tile.getMainObjectType() );
+                    runActionObjectFadeOutAnimation( tile, tile.getMainObjectType() );
 
                     resetObjectMetadata( tile );
                 }
@@ -453,7 +470,7 @@ namespace
 
             assert( tile.getMainObjectType() == MP2::OBJ_MONSTER );
 
-            runActionObjectFadeOutAnumation( tile, MP2::OBJ_MONSTER );
+            runActionObjectFadeOutAnimation( tile, MP2::OBJ_MONSTER );
 
             resetObjectMetadata( tile );
         }
@@ -723,8 +740,6 @@ namespace
 
         Maps::Tile & tile = world.getTile( dst_index );
 
-        Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
             fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), ( sign ? sign->message : "No message provided" ), Dialog::OK );
@@ -741,6 +756,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
                 I.getStatusPanel().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
@@ -750,7 +766,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -950,7 +966,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -1571,7 +1587,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -1754,7 +1770,7 @@ namespace
 
             assert( tile.getMainObjectType() == MP2::OBJ_ARTIFACT );
 
-            runActionObjectFadeOutAnumation( tile, MP2::OBJ_ARTIFACT );
+            runActionObjectFadeOutAnimation( tile, MP2::OBJ_ARTIFACT );
 
             resetObjectMetadata( tile );
         }
@@ -1858,7 +1874,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        runActionObjectFadeOutAnumation( tile, objectType );
+        runActionObjectFadeOutAnimation( tile, objectType );
 
         resetObjectMetadata( tile );
     }
@@ -2450,7 +2466,6 @@ namespace
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, Color::UNUSED );
-                tile.SetObjectPassable( true );
 
                 if ( fheroes2::showStandardTextMessage( title, victoryMsg, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                     const Troop troop = getTroopFromTile( tile );
@@ -3308,7 +3323,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            runActionObjectFadeOutAnumation( tile, objectType );
+            runActionObjectFadeOutAnimation( tile, objectType );
 
             // TODO: add hero fading in animation together with jail animation.
             Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3563,7 +3578,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            runActionObjectFadeOutAnumation( tile, objectType );
+            runActionObjectFadeOutAnimation( tile, objectType );
         }
         else {
             fheroes2::showStandardTextMessage(

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2025-01-18 04:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -325,6 +325,16 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Войн"
 
@@ -480,10 +490,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} унищожава половината вражески войски!"
 msgstr[1] "%{name} унищожи половината вражески войски!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} е изключил автоматичната битка"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} включи автоматичната битка"
 
 msgid "Spell failed!"
@@ -824,14 +836,18 @@ msgstr "Виж информация за Катапулт"
 msgid "Ballista"
 msgstr "Катапулта"
 
-msgid "Enable auto combat"
-msgstr "Включи на автоматична битка"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Позволява на компютъра да води битката вместо теб."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Авто Сражение"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Авто Сражение"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Персонализирай системните опции"
@@ -879,11 +895,36 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Позволява на компютъра да води битката вместо теб."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Авто Сражение"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Авто Сражение"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1007,7 +1048,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Error"
@@ -3859,7 +3900,8 @@ msgstr "Авто, без магий"
 msgid "Battles"
 msgstr "Сражения"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Ръчно"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4199,6 +4241,10 @@ msgstr "Излез от редактора на карти."
 
 msgid "Input %{object} text"
 msgstr ""
+
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Застреляй %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -5215,6 +5261,10 @@ msgstr "превключване на цял екран"
 msgid "hotkey|toggle text support mode"
 msgstr "превключване потдръжка на текст"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "превключване потдръжка на текст"
+
 msgid "hotkey|new game"
 msgstr "нова игра"
 
@@ -5455,11 +5505,13 @@ msgstr "отстъпление от битка"
 msgid "hotkey|surrender during battle"
 msgstr "капитулация по време на битка"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "превключи автоматичния режим на битка"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "завърши битката в автоматичен режим"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "напусни"
 
 msgid "hotkey|battle options"
 msgstr "опции на битка"
@@ -5526,6 +5578,10 @@ msgstr "надгради войските"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "отпрати герой или войска"
+
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "надгради войските"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -5628,52 +5684,30 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Отбор възкрeсяване представя"
 
-msgid "Greetings!"
-msgstr "Поздравления!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2!"
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
 "Преди да започнеш играта, моля избери разделителна способност на играта."
 
-msgid "Please Remember"
-msgstr "Моля, запомни"
-
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-"Винаги можеш да промениш разделителната способност на играта, като щракнеш "
-"върху "
-
-msgid "door"
-msgstr "вратата"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-#, fuzzy
-msgid "NEW GAME"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
+msgid "Greetings!"
+msgstr "Поздравления!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9954,6 +9988,9 @@ msgstr "% имунитет към %{spell} магия"
 msgid "% damage from Elemental spells"
 msgstr "% щети от магии на елементал"
 
+msgid "% damage from %{spell} spell"
+msgstr "% щети от %{spell} заклинание"
+
 msgid "% chance to Dispel beneficial spells"
 msgstr "% шанс за отблъскване на полезни заклинания"
 
@@ -10020,20 +10057,51 @@ msgstr "Елементал"
 msgid "No Morale"
 msgstr "Без морал"
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Вербувай същества"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Вербувай същества"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Вербувай същества"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Водно езеро"
+
+#, fuzzy
+msgid "Double damage from Fire spells"
 msgstr "200% щети от огнени магии"
 
-msgid "200% damage from Cold spells"
+#, fuzzy
+msgid "Double damage from Cold spells"
 msgstr "200% щети от студени магии"
 
-msgid "% damage from %{spell} spell"
-msgstr "% щети от %{spell} заклинание"
+#, fuzzy
+msgid "Double damage from Earth creatures"
+msgstr "Премахва всички магически заклинания от всички същества."
 
-msgid "% immunity to "
-msgstr "% имунитет към "
+#, fuzzy
+msgid "Double damage from Air creatures"
+msgstr "Двойни щети на Немъртвеца"
+
+#, fuzzy
+msgid "Double damage from Fire creatures"
+msgstr "200% щети от огнени магии"
+
+#, fuzzy
+msgid "Double damage from Water creatures"
+msgstr "Премахва всички магически заклинания от всички същества."
 
 msgid "Lightning"
 msgstr "Светкавица"
+
+msgid "% immunity to "
+msgstr "% имунитет към "
 
 msgid "% damage from "
 msgstr "% щети от "
@@ -12236,6 +12304,32 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Включи на автоматична битка"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "завърши битката в автоматичен режим"
+
+#~ msgid "Please Remember"
+#~ msgstr "Моля, запомни"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr ""
+#~ "Винаги можеш да промениш разделителната способност на играта, като "
+#~ "щракнеш върху "
+
+#~ msgid "door"
+#~ msgstr "вратата"
+
+#, fuzzy
+#~ msgid "NEW GAME"
+#~ msgstr ""
+#~ "НОВА\n"
+#~ "ИГРА"
 
 #~ msgid "Warning!"
 #~ msgstr "Внимание!"
