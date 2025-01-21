@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@ enum SaveFileFormat : uint16_t
     // !!! IMPORTANT !!!
     // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
     // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
+    FORMAT_VERSION_1106_RELEASE = 10026,
     FORMAT_VERSION_1104_RELEASE = 10025,
     FORMAT_VERSION_1103_RELEASE = 10024,
     FORMAT_VERSION_PRE2_1103_RELEASE = 10023,
@@ -46,5 +47,5 @@ enum SaveFileFormat : uint16_t
 
     LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_1005_RELEASE,
 
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_1104_RELEASE
+    CURRENT_FORMAT_VERSION = FORMAT_VERSION_1106_RELEASE
 };
