@@ -199,9 +199,6 @@ namespace
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::StandardWindow background( 289, 382, true, display );
@@ -234,6 +231,9 @@ namespace
 
         drawOptions();
 
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
         fheroes2::Button buttonOk;
         const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
@@ -241,7 +241,6 @@ namespace
         const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            buttonOk.draw();
             display.render( emptyDialogRestorer.rect() );
         };
 
