@@ -134,7 +134,7 @@ namespace Dialog
         const fheroes2::Rect & audio3D = roi[3];
 
         drawDialog( roi );
-        
+
         Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
