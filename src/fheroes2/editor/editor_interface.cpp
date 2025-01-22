@@ -1397,7 +1397,7 @@ namespace Interface
 
                         action.commit();
                     }
-                    else if ( Artifact( objectInfo.metadata[0] ).isValid() ) {
+                    else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
                         fheroes2::ArtifactDialogElement( objectInfo.metadata[0] ).showPopup( Dialog::OK );
                     }
                     else {
