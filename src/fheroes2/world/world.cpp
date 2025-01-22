@@ -27,6 +27,7 @@
 #include <array>
 #include <cassert>
 #include <limits>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <tuple>
@@ -708,7 +709,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> World::getCurrentRumor() const
+fheroes2::LocalizedString World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
