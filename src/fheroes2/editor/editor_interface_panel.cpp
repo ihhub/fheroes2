@@ -1201,7 +1201,7 @@ namespace Interface
         }
         else if ( _buttonRedo.isEnabled() && le.MouseClickLeft( _rectRedo ) ) {
             _interface.redoAction();
-            // TODO: Disable Redo button when there is no actions left to redo.
+            // TODO: Disable Redo button when there are no actions left to redo.
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             EditorInterface::Get().openMapSpecificationsDialog();
