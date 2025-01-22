@@ -421,10 +421,7 @@ namespace
         }
     };
 #endif
-}
 
-namespace
-{
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
@@ -583,10 +580,7 @@ namespace
             }
         }
     };
-}
 
-namespace
-{
 #if defined( TARGET_PS_VITA )
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
