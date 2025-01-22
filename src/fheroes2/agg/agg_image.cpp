@@ -3323,13 +3323,18 @@ namespace
                 for ( int x = 1; x < 7; ++x ) {
                     fheroes2::DrawLine( undoImage, { x, 6 - x }, { x, 6 + x }, mainColor );
                 }
-                fheroes2::Fill( undoImage, 7, 4, 8, 4, mainColor );
-                fheroes2::Fill( undoImage, 14, 5, 3, 4, mainColor );
+                fheroes2::Fill( undoImage, 7, 4, 9, 5, mainColor );
+                fheroes2::SetPixel( undoImage, 16, 5, mainColor );
                 fheroes2::Fill( undoImage, 16, 6, 2, 4, mainColor );
                 fheroes2::Fill( undoImage, 17, 8, 2, 4, mainColor );
                 fheroes2::SetPixel( undoImage, 18, 12, mainColor );
                 drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
                 drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
+                // Fix shadow pixel
+                fheroes2::SetPixel( _icnVsSprite[id][43], 28, 12, 42 );
+                // Add aliasing
+                fheroes2::SetPixel( _icnVsSprite[id][41], 33, 20, 52 );
+                fheroes2::DrawLine( _icnVsSprite[id][41], { 34, 21 }, { 34, 22 }, 52 );
             }
             return true;
         case ICN::EDITBTNS_EVIL: {
