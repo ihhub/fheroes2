@@ -158,7 +158,7 @@ namespace
         fileNameText.fitToOneRow( maxFileNameWidth - 40 );
         fileNameText.draw( posX + 44, posY + 2, display );
 
-        const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.kingdomColors ) + 19 );
+        const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.availablePlayerColors ) + 19 );
         const fheroes2::Sprite & racesCount = fheroes2::AGG::GetICN( ICN::REQUESTS, racesCountIcnIndex );
         fheroes2::Copy( racesCount, 0, 0, display, posX + 6, posY, racesCount.width(), racesCount.height() );
 
