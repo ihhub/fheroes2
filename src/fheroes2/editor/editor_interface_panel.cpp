@@ -1197,7 +1197,7 @@ namespace Interface
         }
         else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
             _interface.undoAction();
-            // TODO: Disable Undo button when there is no actions left to undo.
+            // TODO: Disable Undo button when there are no actions left to undo.
         }
         else if ( _buttonRedo.isEnabled() && le.MouseClickLeft( _rectRedo ) ) {
             _interface.redoAction();
