@@ -516,8 +516,8 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
 
     const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
 
-    // The retaliatory damage of a blinded unit is halved
-    return ( Modes( SP_BLIND ) ? retaliatoryDamage * ( Spell( Spell::BLIND ).ExtraValue() / 100.0 ) : retaliatoryDamage );
+    // The retaliatory damage of a blinded unit is reduced
+    return ( Modes( SP_BLIND ) ? retaliatoryDamage / ( 100 / Spell( Spell::BLIND ).ExtraValue() ) : retaliatoryDamage );
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
