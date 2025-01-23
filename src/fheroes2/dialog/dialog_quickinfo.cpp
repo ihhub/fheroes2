@@ -718,19 +718,22 @@ namespace
 
         const bool isActiveHero = ( activeHero != nullptr );
 
-        std::string message;
         // hero's name
+        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
+        std::string heroName = hero.GetName();
+        fheroes2::Text text( heroName, smallWhite );
+        // hero's level
         if ( isFullInfo && isActiveHero ) {
-            message = _( "%{name} (Level %{level})" );
-            StringReplace( message, "%{name}", hero.GetName() );
-            StringReplace( message, "%{level}", activeHero->GetLevel() );
-        }
-        else {
-            message = hero.GetName();
+            std::string heroLevel = _( "heroQuickInfo|(Level %{level})" );
+            StringReplace( heroLevel, "%{level}", activeHero->GetLevel() );
+            const fheroes2::Text levelText( heroLevel, smallWhite );
+            // if Identify Hero has been cast then we want to know the hero's level rather than name.
+            const uint32_t boxShadowAndBorder = 39;
+            text.fitToOneRow( box.width() - boxShadowAndBorder - levelText.width() );
+            const std::string fittedText = text.text() + " " + heroLevel;
+            text.set( fittedText, smallWhite );
         }
 
-        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-        fheroes2::Text text( message, smallWhite );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y = cur_rt.y + 2;
         text.draw( dst_pt.x, dst_pt.y, display );
