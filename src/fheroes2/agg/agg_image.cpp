@@ -3330,8 +3330,9 @@ namespace
                 fheroes2::SetPixel( undoImage, 18, 12, mainColor );
                 drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
                 drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
-                // Fix shadow pixel
+                // Fix shadow pixels
                 fheroes2::SetPixel( _icnVsSprite[id][43], 28, 12, 42 );
+                fheroes2::SetPixel( _icnVsSprite[id][43], 17, 18, 47 );
                 // Add aliasing
                 fheroes2::SetPixel( _icnVsSprite[id][41], 33, 20, 52 );
                 fheroes2::DrawLine( _icnVsSprite[id][41], { 34, 21 }, { 34, 22 }, 52 );
