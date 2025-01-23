@@ -3331,15 +3331,15 @@ namespace
                 drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
                 drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
                 // Fix shadow pixels
-                fheroes2::SetPixel( _icnVsSprite[id][43], 28, 12, 41 );
-                fheroes2::SetPixel( _icnVsSprite[id][44], 27, 13, 46 );
-                fheroes2::SetPixel( _icnVsSprite[id][43], 17, 18, 47 );
-                fheroes2::SetPixel( _icnVsSprite[id][44], 16, 19, 52 );
+                fheroes2::SetPixel( _icnVsSprite[id][43], 28, 11, 41 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 27, 12, 46 );
+                fheroes2::SetPixel( _icnVsSprite[id][43], 17, 17, 47 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 16, 18, 52 );
                 // Add aliasing
-                fheroes2::SetPixel( _icnVsSprite[id][41], 33, 20, 52 );
-                fheroes2::DrawLine( _icnVsSprite[id][41], { 34, 21 }, { 34, 22 }, 52 );
-                fheroes2::SetPixel( _icnVsSprite[id][42], 32, 21, 53 );
-                fheroes2::DrawLine( _icnVsSprite[id][42], { 33, 22 }, { 33, 23 }, 53 );
+                fheroes2::SetPixel( _icnVsSprite[id][41], 33, 19, 52 );
+                fheroes2::DrawLine( _icnVsSprite[id][41], { 34, 20 }, { 34, 21 }, 52 );
+                fheroes2::SetPixel( _icnVsSprite[id][42], 32, 20, 53 );
+                fheroes2::DrawLine( _icnVsSprite[id][42], { 33, 21 }, { 33, 22 }, 53 );
             }
             return true;
         case ICN::EDITBTNS_EVIL: {
