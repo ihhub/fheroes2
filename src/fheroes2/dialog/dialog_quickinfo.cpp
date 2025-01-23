@@ -720,8 +720,7 @@ namespace
 
         // hero's name
         const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-        std::string heroName = hero.GetName();
-        fheroes2::Text text( heroName, smallWhite );
+        fheroes2::Text text( hero.GetName(), smallWhite );
         // hero's level
         if ( isFullInfo && isActiveHero ) {
             std::string heroLevel = _( "heroQuickInfo|(Level %{level})" );
