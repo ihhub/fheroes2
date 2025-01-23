@@ -727,7 +727,7 @@ namespace
             StringReplace( heroLevel, "%{level}", activeHero->GetLevel() );
             const fheroes2::Text levelText( heroLevel, smallWhite );
             // if Identify Hero has been cast then we want to know the hero's level rather than name.
-            const uint32_t boxShadowAndBorder = 39;
+            const int32_t boxShadowAndBorder = 39;
             text.fitToOneRow( box.width() - boxShadowAndBorder - levelText.width() );
             const std::string fittedText = text.text() + " " + heroLevel;
             text.set( fittedText, smallWhite );
