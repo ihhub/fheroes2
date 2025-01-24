@@ -189,6 +189,12 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
         else if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
         }
+        else if ( !hero->MayStillMove( false, true ) ) {
+            fheroes2::
+                showStandardTextMessage( "",
+                                         "The hero's army cannot be expected to move anymore this day. Let them rest for a night and they will be able to move again.",
+                                         Dialog::OK );
+        }
     }
 
     return fheroes2::GameMode::CANCEL;
