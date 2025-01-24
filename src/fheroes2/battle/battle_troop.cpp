@@ -516,8 +516,15 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
 
     const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
 
+    if ( !Modes( SP_BLIND ) ) {
+        return retaliatoryDamage;
+    }
+
     // The retaliatory damage of a blinded unit is reduced
-    return ( Modes( SP_BLIND ) ? ( retaliatoryDamage * ( 100 - Spell( Spell::BLIND ).ExtraValue() ) ) / 100 : retaliatoryDamage );
+    const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+    assert( reductionPercent <= 100 );
+
+    return retaliatoryDamage * ( 100 - reductionPercent ) / 100;
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
@@ -560,12 +567,15 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         }
     }
 
-    // The retaliatory damage of a blinded unit is halved
+    // The retaliatory damage of a blinded unit is reduced
     if ( _blindRetaliation ) {
         // Petrified units cannot attack, respectively, there should be no retaliation
         assert( !enemy.Modes( SP_STONE ) );
 
-        dmg = ( dmg * ( 100 - Spell( Spell::BLIND ).ExtraValue() ) ) / 100;
+        const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+        assert( reductionPercent <= 100 );
+
+        dmg = dmg * ( 100 - reductionPercent ) / 100;
     }
 
     // A petrified unit takes only half of the damage
