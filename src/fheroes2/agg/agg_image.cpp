@@ -576,9 +576,9 @@ namespace
         // Draw the image on the button.
         const int32_t offsetX = ( pressedSprite.width() - newImage.width() ) / 2;
         const int32_t offsetY = ( pressedSprite.height() - newImage.height() ) / 2;
-        fheroes2::Blit( newImage, pressedSprite, offsetX + 2, offsetY );
+        fheroes2::Blit( newImage, pressedSprite, offsetX + 1, offsetY );
         fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
-        fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY - 1 );
+        fheroes2::Blit( newImage, releasedSprite, offsetX + 2, offsetY - 1 );
     }
 
     void loadICN( const int id );
