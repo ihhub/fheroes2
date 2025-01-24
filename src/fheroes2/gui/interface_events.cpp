@@ -190,10 +190,8 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
             return EventDefaultAction();
         }
         else if ( !hero->MayStillMove( false, true ) ) {
-            fheroes2::
-                showStandardTextMessage( "",
-                                         "The hero's army cannot be expected to move anymore this day. Let them rest for a night and they will be able to move again.",
-                                         Dialog::OK );
+            fheroes2::showStandardTextMessage( "", "The hero's army is exhausted and cannot move anymore today. A night's rest will replenish the movement points.",
+                                               Dialog::OK );
         }
     }
 
