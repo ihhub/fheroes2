@@ -484,7 +484,7 @@ namespace fheroes2
 
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
-        constexpr size_t DISTANCE_TO_SIDE = 4;
+        constexpr size_t curosorToBorderDistance = 4;
 
         assert( maxWidth > 0 );
         if ( maxWidth <= 0 || _text.empty() ) {
@@ -500,7 +500,7 @@ namespace fheroes2
         }
 
         // If the cursor is to the left of the textBox
-        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - DISTANCE_TO_SIDE ) ), 0 );
+        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - curosorToBorderDistance ) ), 0 );
 
         // If some characters were deleted and we have space for new characters.
         while ( _textOffset > 0 ) {
@@ -516,7 +516,7 @@ namespace fheroes2
         // If the cursor is to the right of the Textbox
         int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
                                                           static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
-        while ( _textOffset + maxCharacterCount <= _cursorPosition + DISTANCE_TO_SIDE && _textOffset + maxCharacterCount < _text.size() ) {
+        while ( _textOffset + maxCharacterCount <= _cursorPosition + curosorToBorderDistance && _textOffset + maxCharacterCount < _text.size() ) {
             ++_textOffset;
             maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
                                                       charHandler, maxWidth );
