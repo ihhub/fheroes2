@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -133,8 +133,10 @@ namespace
         fheroes2::Blit( sprite_skill1, display, pos.x, pos.y + 3 );
 
         fheroes2::Text text{ Skill::Secondary::String( sec1.Skill() ), fheroes2::FontType::smallWhite() };
+        text.fitToOneRow( sprite_skill1.width() );
         text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + 7, display );
         text.set( Skill::Level::String( sec1.Level() ), fheroes2::FontType::smallWhite() );
+        text.fitToOneRow( sprite_skill1.width() );
         text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + sprite_skill1.height() - 10, display );
 
         // sprite2
@@ -145,9 +147,11 @@ namespace
         const fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
         fheroes2::Blit( sprite_skill2, display, pos.x, pos.y + 3 );
         // text
-        const fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
+        fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
+        name_skill2.fitToOneRow( sprite_skill2.width() );
         name_skill2.draw( pos.x + ( sprite_skill2.width() - name_skill2.width() ) / 2, pos.y + 7, display );
-        const fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
+        fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
+        name_level2.fitToOneRow( sprite_skill2.width() );
         name_level2.draw( pos.x + ( sprite_skill2.width() - name_level2.width() ) / 2, pos.y + sprite_skill2.height() - 10, display );
 
         // hero button
