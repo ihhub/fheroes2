@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:06+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -11466,11 +11466,14 @@ msgstr "Tömeges lassítás"
 msgid "Slows all enemies to half movement rate."
 msgstr "Felezi az összes ellenség sebességét."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
-
 msgid "spell|Blind"
 msgstr "Vakítás"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
 
 msgid "Bless"
 msgstr "Áldás"

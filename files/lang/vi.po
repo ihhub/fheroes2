@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:06+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -11796,11 +11796,14 @@ msgstr "Chậm Rộng"
 msgid "Slows all enemies to half movement rate."
 msgstr "Làm chậm tất cả kẻ địch xuống một nửa tốc độ di chuyển."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Che mờ mắt của sinh vật bị ảnh hưởng, ngăn chúng di chuyển."
-
 msgid "spell|Blind"
 msgstr "Mù"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Che mờ mắt của sinh vật bị ảnh hưởng, ngăn chúng di chuyển."
 
 msgid "Bless"
 msgstr "Cầu nguyện"

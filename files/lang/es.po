@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:06+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -11371,11 +11371,14 @@ msgstr "Ralentizar en Masas"
 msgid "Slows all enemies to half movement rate."
 msgstr "Ralentiza a todos los enemigas a la mitad del movimiento."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
-
 msgid "spell|Blind"
 msgstr "Cegar"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
 
 msgid "Bless"
 msgstr "Bendecir"
