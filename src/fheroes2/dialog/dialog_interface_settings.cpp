@@ -65,12 +65,10 @@ namespace
         const Settings & conf = Settings::Get();
         const InterfaceType interfaceType = conf.getInterfaceType();
 
-        uint32_t icnInx;
-        std::string value;
+        uint32_t icnInx = 15;
+        std::string value = _( "Dynamic" );
         switch ( interfaceType ) {
         case DYNAMIC:
-            icnInx = 15;
-            value = _( "Dynamic" );
             break;
         case GOOD:
             icnInx = 16;
@@ -81,8 +79,6 @@ namespace
             value = _( "Evil" );
             break;
         default:
-            icnInx = 15;
-            value = _( "Dynamic" );
             assert( 0 );
         }
 
