@@ -66,9 +66,10 @@ namespace
         const InterfaceType interfaceType = conf.getInterfaceType();
 
         uint32_t icnInx = 15;
-        std::string value = _( "Dynamic" );
+        std::string value;
         switch ( interfaceType ) {
         case DYNAMIC:
+            value = _( "Dynamic" );
             break;
         case GOOD:
             icnInx = 16;
