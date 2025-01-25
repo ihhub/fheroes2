@@ -35,7 +35,6 @@
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
-#include "logging.h"
 #include "pal.h"
 #include "race.h"
 #include "render_processor.h"
