@@ -484,6 +484,8 @@ namespace fheroes2
 
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
+        constexpr size_t DISTANCE_TO_SIDE = 4;
+
         assert( maxWidth > 0 );
         if ( maxWidth <= 0 || _text.empty() ) {
             return;
@@ -498,7 +500,7 @@ namespace fheroes2
         }
 
         // If the cursor is to the left of the textBox
-        _textOffset = std::min( _textOffset, _cursorPosition );
+        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - DISTANCE_TO_SIDE ) ), 0 );
 
         // If some characters were deleted and we have space for new characters.
         while ( _textOffset > 0 ) {
@@ -514,13 +516,42 @@ namespace fheroes2
         // If the cursor is to the right of the Textbox
         int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
                                                           static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
-        while ( _textOffset + maxCharacterCount <= _cursorPosition ) {
+        while ( _textOffset + maxCharacterCount <= _cursorPosition + DISTANCE_TO_SIDE && _textOffset + maxCharacterCount < _text.size() ) {
             ++_textOffset;
             maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
                                                       charHandler, maxWidth );
         }
 
+        const size_t originalTextSize = _text.size();
         _text = _text.substr( _textOffset, maxCharacterCount );
+
+        const std::string truncatedEnding( "..." );
+        const int32_t truncationSymbolWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
+
+        // Insert truncation symbol at the beginning if required.
+        if ( _textOffset != 0 ) {
+            const int32_t nbCharactersToReplace
+                = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, truncationSymbolWidth );
+            _text.erase( 0, nbCharactersToReplace );
+            _text.insert( 0, truncatedEnding );
+        }
+
+        // Insert truncation symbol at the end if required
+        if ( _text.size() + _textOffset < originalTextSize ) {
+            int totalWidth = 0;
+            int nbChars = 0;
+            for ( auto iter = _text.rbegin(); iter < _text.rend(); ++iter ) {
+                if ( totalWidth < truncationSymbolWidth ) {
+                    const int32_t charWidth = charHandler.getWidth( *iter );
+                    totalWidth += charWidth;
+                    ++nbChars;
+                }
+            }
+
+            _text.erase( _text.size() - nbChars, nbChars );
+            _text.insert( _text.size(), truncatedEnding );
+        }
     }
 
     void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
