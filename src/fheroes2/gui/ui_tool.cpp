@@ -35,6 +35,7 @@
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
+#include "logging.h"
 #include "pal.h"
 #include "race.h"
 #include "render_processor.h"
@@ -665,7 +666,7 @@ namespace fheroes2
             return 0;
         }
 
-        const std::string_view textToCheck = { fullText.data(), fullText.size() - textInput.getOffset() };
+        const std::string_view textToCheck = { fullText.data() + textInput.getOffset(), fullText.size() - textInput.getOffset() };
         const int32_t textStartOffsetX = std::max( 0, ( textRoi.width - textInput.width() ) / 2 );
         return fheroes2::getTextInputCursorPosition( textToCheck, textInput.getFontType(), currentTextCursorPosition, pointerCursorOffset.x,
                                                      textRoi.x + textStartOffsetX )
