@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:34+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4594,6 +4594,12 @@ msgid "Undo"
 msgstr "Angre"
 
 msgid "Undo your last action."
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -11947,13 +11953,16 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Reduserer alle fiender ned til halvparten av skrittene deres."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
+msgstr "Forblinding"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 "Tåkelegger øynene til den påvirkede krigeren slik at den ikke får til å "
 "flytte seg."
-
-msgid "spell|Blind"
-msgstr "Forblinding"
 
 msgid "Bless"
 msgstr "Velsignelse"
