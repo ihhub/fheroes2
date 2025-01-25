@@ -574,9 +574,9 @@ namespace
         // Draw the image on the button.
         const int32_t offsetX = ( pressedSprite.width() - newImage.width() ) / 2;
         const int32_t offsetY = ( pressedSprite.height() - newImage.height() ) / 2;
-        fheroes2::Blit( newImage, pressedSprite, offsetX + 2, offsetY + 1 );
+        fheroes2::Blit( newImage, pressedSprite, offsetX + 1, offsetY );
         fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
-        fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY );
+        fheroes2::Blit( newImage, releasedSprite, offsetX + 2, offsetY - 1 );
     }
 
     void loadICN( const int id );
@@ -3288,7 +3288,7 @@ namespace
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
                 // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
-                _icnVsSprite[id].resize( 41 );
+                _icnVsSprite[id].resize( 45 );
 
                 // First make clean button sprites (pressed and released).
                 fheroes2::Sprite released = fheroes2::AGG::GetICN( ICN::EDITBTNS, 4 );
@@ -3297,12 +3297,12 @@ namespace
                 Fill( released, 16, 6, 18, 24, 41U );
                 Fill( pressed, 16, 7, 17, 23, 46U );
 
-                for ( size_t i = 0; i < 4; i += 2 ) {
+                for ( size_t i = 0; i < 8; i += 2 ) {
                     _icnVsSprite[id][35 + i] = released;
                     _icnVsSprite[id][35 + 1 + i] = pressed;
                 }
-                _icnVsSprite[id][39] = std::move( released );
-                _icnVsSprite[id][40] = std::move( pressed );
+                _icnVsSprite[id][43] = std::move( released );
+                _icnVsSprite[id][44] = std::move( pressed );
 
                 // Adventure objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
@@ -3312,6 +3312,32 @@ namespace
 
                 // Monsters objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::MONS32, 11 ), 39, 29, _icnVsSprite[id][39], _icnVsSprite[id][40] );
+
+                // Undo and Redo buttons.
+                fheroes2::Image undoImage( 19, 13 );
+                undoImage.reset();
+                const int mainColor = 56;
+                fheroes2::SetPixel( undoImage, 0, 6, mainColor );
+                for ( int x = 1; x < 7; ++x ) {
+                    fheroes2::DrawLine( undoImage, { x, 6 - x }, { x, 6 + x }, mainColor );
+                }
+                fheroes2::Fill( undoImage, 7, 4, 9, 5, mainColor );
+                fheroes2::SetPixel( undoImage, 16, 5, mainColor );
+                fheroes2::Fill( undoImage, 16, 6, 2, 4, mainColor );
+                fheroes2::Fill( undoImage, 17, 8, 2, 4, mainColor );
+                fheroes2::SetPixel( undoImage, 18, 12, mainColor );
+                drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
+                drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
+                // Fix shadow pixels
+                fheroes2::SetPixel( _icnVsSprite[id][43], 27, 11, 41 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 26, 12, 46 );
+                fheroes2::SetPixel( _icnVsSprite[id][43], 16, 17, 47 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 15, 18, 52 );
+                // Add aliasing
+                fheroes2::SetPixel( _icnVsSprite[id][41], 32, 19, 52 );
+                fheroes2::DrawLine( _icnVsSprite[id][41], { 33, 20 }, { 33, 21 }, 52 );
+                fheroes2::SetPixel( _icnVsSprite[id][42], 31, 20, 53 );
+                fheroes2::DrawLine( _icnVsSprite[id][42], { 32, 21 }, { 32, 22 }, 53 );
             }
             return true;
         case ICN::EDITBTNS_EVIL: {
