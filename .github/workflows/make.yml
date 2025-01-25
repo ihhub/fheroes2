@@ -335,7 +335,7 @@ jobs:
           package_name: fheroes2_emscripten_mt.zip
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
-    container: emscripten/emsdk:4.0.0
+    container: emscripten/emsdk:latest
     timeout-minutes: 30
     defaults:
       run:
