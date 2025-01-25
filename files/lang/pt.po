@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:34+0000\n"
 "PO-Revision-Date: 2024-12-23 08:39-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4438,6 +4438,13 @@ msgid "Undo"
 msgstr "Desfazer"
 
 msgid "Undo your last action."
+msgstr "Desfazer sua última ação."
+
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
 msgstr "Desfazer sua última ação."
 
 msgid "Edit map title, description, and other general information."
@@ -11579,11 +11586,14 @@ msgstr "Lentidão Coletiva"
 msgid "Slows all enemies to half movement rate."
 msgstr "Reduz a velocidade de movimento de todos os inimigos pela metade."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Embaça os olhos das criaturas afetadas, impedindo-as de se moverem."
-
 msgid "spell|Blind"
 msgstr "Cegar"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Embaça os olhos das criaturas afetadas, impedindo-as de se moverem."
 
 msgid "Bless"
 msgstr "Bênção"

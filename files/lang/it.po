@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:34+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4338,6 +4338,12 @@ msgid "Undo"
 msgstr ""
 
 msgid "Undo your last action."
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -10729,11 +10735,14 @@ msgid "Slows all enemies to half movement rate."
 msgstr ""
 "Dimezza la distanza di spostamento e la velocità di tutte le unità nemiche."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Acceca l'unità prescelta, inibendola di fare il suo turno."
-
 msgid "spell|Blind"
 msgstr "Blind"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Acceca l'unità prescelta, inibendola di fare il suo turno."
 
 msgid "Bless"
 msgstr "Bless"
