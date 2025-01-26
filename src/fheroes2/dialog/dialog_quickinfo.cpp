@@ -725,12 +725,11 @@ namespace
         if ( isFullInfo && isActiveHero ) {
             std::string heroLevel = _( "heroQuickInfo|(Level %{level})" );
             StringReplace( heroLevel, "%{level}", activeHero->GetLevel() );
-            const fheroes2::Text levelText( heroLevel, smallWhite );
+            heroLevel.insert( 0, " " );
             // if Identify Hero has been cast then we want to know the hero's level rather than name.
             const int32_t boxShadowAndBorder = 39;
-            text.fitToOneRow( box.width() - boxShadowAndBorder - levelText.width() );
-            const std::string fittedText = text.text() + " " + heroLevel;
-            text.set( fittedText, smallWhite );
+            text.fitToOneRow( box.width() - boxShadowAndBorder - fheroes2::Text{ heroLevel, smallWhite }.width() );
+            text.set( text.text() + heroLevel, smallWhite );
         }
 
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
