@@ -3220,9 +3220,8 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Atsitiktinė pilis"
+msgstr ""
 
 #, fuzzy
 msgid "Attack:"

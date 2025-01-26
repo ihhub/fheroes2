@@ -3459,9 +3459,8 @@ msgstr "Obrońcy:"
 msgid "Unknown"
 msgstr "Nieznany"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "%{name} (poziom %{level})"
+msgstr "(poziom %{level})"
 
 msgid "Attack:"
 msgstr "Atak:"
@@ -12341,12 +12340,6 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OK"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (poziom %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Automatyczna walka"

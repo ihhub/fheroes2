@@ -10887,9 +10887,6 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "TAMAM"
-
 #~ msgid "Enable auto combat"
 #~ msgstr "Otomatik savacı aç"
 

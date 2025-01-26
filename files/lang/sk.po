@@ -3449,9 +3449,8 @@ msgstr "Obrancovia:"
 msgid "Unknown"
 msgstr "Neznáme"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "%{name} na úrovni %{level}"
+msgstr "na úrovni %{level}"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -12213,12 +12212,6 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OK"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} na úrovni %{level}"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Povoľ automatizovaný boj"

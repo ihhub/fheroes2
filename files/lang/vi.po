@@ -3454,9 +3454,8 @@ msgstr "Bên thủ:"
 msgid "Unknown"
 msgstr "Không biết"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "%{name} (Cấp độ %{level})"
+msgstr "(Cấp độ %{level})"
 
 msgid "Attack:"
 msgstr "Tấn công:"
@@ -12342,12 +12341,6 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "ĐƯỢC"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (Cấp độ %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Kích hoạt tự động chiến đấu"

@@ -10904,9 +10904,6 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OKAY"
-
 #~ msgid "Enable auto combat"
 #~ msgstr "Activează lupta automată"
 

@@ -3396,9 +3396,8 @@ msgstr "Védők:"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Véletlenszerű hős (%{level}. szint)"
+msgstr "(%{level}. szint)"
 
 msgid "Attack:"
 msgstr "Támadóerő:"
@@ -11994,12 +11993,6 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OK"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (%{level}. szint)"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Automatikus harc bekapcsolása"

@@ -3459,9 +3459,8 @@ msgstr "Forsvarere:"
 msgid "Unknown"
 msgstr "Ukendt"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Tilfældig helt (Level %{level})"
+msgstr "(Level %{level})"
 
 msgid "Attack:"
 msgstr "Angreb:"
@@ -12185,12 +12184,6 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OK"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (Level %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Aktiver Autokamp"

@@ -3395,9 +3395,8 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Slumpad hjälte (Nivå %{level})"
+msgstr "(nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -12010,12 +12009,6 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "OKEJ"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (nivå %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Aktivera autom. strid"

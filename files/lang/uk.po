@@ -80,6 +80,7 @@ msgstr ""
 msgid "CANCEL"
 msgstr "СКАСУВАТИ"
 
+# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
 msgid "OKAY"
 msgstr "ГАРАЗД"
 
@@ -3408,9 +3409,8 @@ msgstr "Захисники:"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Випадковий герой (Рівень %{level})"
+msgstr "(Рівень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -12040,13 +12040,6 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "ГАРАЗД"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (Рівень %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Увімкнути автобій"

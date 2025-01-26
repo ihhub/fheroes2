@@ -3422,9 +3422,8 @@ msgstr "Защитники:"
 msgid "Unknown"
 msgstr "Неизвестный"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "Случайный герой (Уровень %{level})"
+msgstr "(Уровень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -12038,12 +12037,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "smallerButton|OKAY"
-#~ msgstr "ОК"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (Уровень %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Включить автобитву"

@@ -3279,9 +3279,8 @@ msgstr "Difensori:"
 msgid "Unknown"
 msgstr "Sconosciuta"
 
-#, fuzzy
 msgid "heroQuickInfo|(Level %{level})"
-msgstr "%{name} (Livello %{level})"
+msgstr "(Livello %{level})"
 
 #, fuzzy
 msgid "Attack:"
@@ -11292,9 +11291,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "%{name} (Level %{level})"
-#~ msgstr "%{name} (Livello %{level})"
 
 #, fuzzy
 #~ msgid "hotkey|finish the battle in auto mode"
