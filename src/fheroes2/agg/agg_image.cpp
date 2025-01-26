@@ -194,12 +194,10 @@ namespace
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
                                                 ICN::BUTTON_QUICK_COMBAT_EVIL };
 
-#ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
     {
         return languageDependentIcnId.count( id ) > 0;
     }
-#endif
 
     bool useOriginalResources()
     {
@@ -387,13 +385,34 @@ namespace
 
     // This class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
     // and then restore these offsets within the scope of the code
-    class ButtonFontOffsetRestorer
+    class ButtonFontOffsetRestorer final
     {
     public:
-        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
+        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
+            : _font( font )
+        {
+            _originalXOffsets.reserve( _font.size() );
+
+            for ( fheroes2::Sprite & characterSprite : _font ) {
+                _originalXOffsets.emplace_back( characterSprite.x() );
+                characterSprite.setPosition( offsetX, characterSprite.y() );
+            }
+        }
+
         ButtonFontOffsetRestorer( const ButtonFontOffsetRestorer & ) = delete;
 
-        ~ButtonFontOffsetRestorer();
+        ~ButtonFontOffsetRestorer()
+        {
+            if ( _originalXOffsets.size() != _font.size() ) {
+                // If this assertion blows up then something is wrong with the fonts as they must have the same size.
+                assert( 0 );
+                return;
+            }
+
+            for ( size_t i = 0; i < _font.size(); ++i ) {
+                _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
+            }
+        }
 
         ButtonFontOffsetRestorer & operator=( const ButtonFontOffsetRestorer & ) = delete;
 
@@ -401,30 +420,6 @@ namespace
         std::vector<fheroes2::Sprite> & _font;
         std::vector<int32_t> _originalXOffsets;
     };
-
-    ButtonFontOffsetRestorer::ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
-        : _font( font )
-    {
-        _originalXOffsets.reserve( _font.size() );
-
-        for ( fheroes2::Sprite & characterSprite : _font ) {
-            _originalXOffsets.emplace_back( characterSprite.x() );
-            characterSprite.setPosition( offsetX, characterSprite.y() );
-        }
-    }
-
-    ButtonFontOffsetRestorer::~ButtonFontOffsetRestorer()
-    {
-        if ( _originalXOffsets.size() != _font.size() ) {
-            // If this assertion blows up then something is wrong with the fonts as they must have the same size.
-            assert( 0 );
-            return;
-        }
-
-        for ( size_t i = 0; i < _font.size(); ++i ) {
-            _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
-        }
-    }
 
     void invertTransparency( fheroes2::Image & image )
     {
@@ -579,9 +574,9 @@ namespace
         // Draw the image on the button.
         const int32_t offsetX = ( pressedSprite.width() - newImage.width() ) / 2;
         const int32_t offsetY = ( pressedSprite.height() - newImage.height() ) / 2;
-        fheroes2::Blit( newImage, pressedSprite, offsetX + 2, offsetY + 1 );
+        fheroes2::Blit( newImage, pressedSprite, offsetX + 1, offsetY );
         fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
-        fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY );
+        fheroes2::Blit( newImage, releasedSprite, offsetX + 2, offsetY - 1 );
     }
 
     void loadICN( const int id );
@@ -2153,6 +2148,28 @@ namespace
 
             break;
         }
+        case ICN::DISMISS_HERO_DISABLED_BUTTON:
+        case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
+            _icnVsSprite[id].resize( 1 );
+
+            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+
+            const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+            const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            output = released;
+
+            fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+            fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+
+            fheroes2::Blit( common, output );
+            break;
+        }
         default:
             // You're calling this function for non-specified ICN id. Check your logic!
             // Did you add a new image for one language without generating a default
@@ -2518,6 +2535,12 @@ namespace
         // Call LoadOriginalICN() function only if you are handling the same ICN.
         // If you need to load a different ICN use loadICN() function.
 
+        // Some images contain text. This text should be adapted to a chosen language.
+        if ( isLanguageDependentIcnId( id ) ) {
+            generateLanguageSpecificImages( id );
+            return true;
+        }
+
         switch ( id ) {
         case ICN::ROUTERED:
             CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
@@ -2750,126 +2773,6 @@ namespace
                     ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
                 }
             }
-            return true;
-        case ICN::BUYMAX:
-        case ICN::BUTTON_NEW_GAME_GOOD:
-        case ICN::BUTTON_NEW_GAME_EVIL:
-        case ICN::BUTTON_SAVE_GAME_GOOD:
-        case ICN::BUTTON_SAVE_GAME_EVIL:
-        case ICN::BUTTON_LOAD_GAME_GOOD:
-        case ICN::BUTTON_LOAD_GAME_EVIL:
-        case ICN::BUTTON_INFO_GOOD:
-        case ICN::BUTTON_INFO_EVIL:
-        case ICN::BUTTON_QUIT_GOOD:
-        case ICN::BUTTON_QUIT_EVIL:
-        case ICN::BUTTON_NEW_MAP_EVIL:
-        case ICN::BUTTON_NEW_MAP_GOOD:
-        case ICN::BUTTON_SAVE_MAP_EVIL:
-        case ICN::BUTTON_SAVE_MAP_GOOD:
-        case ICN::BUTTON_LOAD_MAP_EVIL:
-        case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_SMALL_CANCEL_GOOD:
-        case ICN::BUTTON_SMALL_CANCEL_EVIL:
-        case ICN::BUTTON_SMALL_OKAY_GOOD:
-        case ICN::BUTTON_SMALL_OKAY_EVIL:
-        case ICN::BUTTON_SMALLER_OKAY_GOOD:
-        case ICN::BUTTON_SMALLER_OKAY_EVIL:
-        case ICN::BUTTON_SMALL_ACCEPT_GOOD:
-        case ICN::BUTTON_SMALL_ACCEPT_EVIL:
-        case ICN::BUTTON_SMALL_DECLINE_GOOD:
-        case ICN::BUTTON_SMALL_DECLINE_EVIL:
-        case ICN::BUTTON_SMALL_LEARN_GOOD:
-        case ICN::BUTTON_SMALL_LEARN_EVIL:
-        case ICN::BUTTON_SMALL_TRADE_GOOD:
-        case ICN::BUTTON_SMALL_TRADE_EVIL:
-        case ICN::BUTTON_SMALL_YES_GOOD:
-        case ICN::BUTTON_SMALL_YES_EVIL:
-        case ICN::BUTTON_SMALL_NO_GOOD:
-        case ICN::BUTTON_SMALL_NO_EVIL:
-        case ICN::BUTTON_SMALL_EXIT_GOOD:
-        case ICN::BUTTON_SMALL_EXIT_EVIL:
-        case ICN::BUTTON_EXIT_HEROES_MEETING:
-        case ICN::BUTTON_EXIT_TOWN:
-        case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL:
-        case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_EVIL:
-        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
-        case ICN::BUTTON_SMALL_UPGRADE_EVIL:
-        case ICN::BUTTON_SMALL_RESTART_GOOD:
-        case ICN::BUTTON_SMALL_RESTART_EVIL:
-        case ICN::BUTTON_KINGDOM_EXIT:
-        case ICN::BUTTON_KINGDOM_HEROES:
-        case ICN::BUTTON_KINGDOM_TOWNS:
-        case ICN::BUTTON_MAPSIZE_SMALL:
-        case ICN::BUTTON_MAPSIZE_MEDIUM:
-        case ICN::BUTTON_MAPSIZE_LARGE:
-        case ICN::BUTTON_MAPSIZE_XLARGE:
-        case ICN::BUTTON_MAPSIZE_ALL:
-        case ICN::BUTTON_MAP_SELECT_GOOD:
-        case ICN::BUTTON_MAP_SELECT_EVIL:
-        case ICN::BUTTON_STANDARD_GAME:
-        case ICN::BUTTON_CAMPAIGN_GAME:
-        case ICN::BUTTON_MULTIPLAYER_GAME:
-        case ICN::BUTTON_LARGE_CANCEL:
-        case ICN::BUTTON_LARGE_CONFIG:
-        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
-        case ICN::BUTTON_EXPANSION_CAMPAIGN:
-        case ICN::BUTTON_HOT_SEAT:
-        case ICN::BUTTON_2_PLAYERS:
-        case ICN::BUTTON_3_PLAYERS:
-        case ICN::BUTTON_4_PLAYERS:
-        case ICN::BUTTON_5_PLAYERS:
-        case ICN::BUTTON_6_PLAYERS:
-        case ICN::BTNBATTLEONLY:
-        case ICN::BTNGIFT_GOOD:
-        case ICN::BTNGIFT_EVIL:
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_MAX_BUTTON:
-        case ICN::UNIFORM_GOOD_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_OKAY_BUTTON:
-        case ICN::UNIFORM_EVIL_OKAY_BUTTON:
-        case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
-        case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
-        case ICN::UNIFORM_GOOD_EXIT_BUTTON:
-        case ICN::UNIFORM_EVIL_EXIT_BUTTON:
-        case ICN::BUTTON_SMALL_MIN_GOOD:
-        case ICN::BUTTON_SMALL_MIN_EVIL:
-        case ICN::BUTTON_SMALL_MAX_GOOD:
-        case ICN::BUTTON_SMALL_MAX_EVIL:
-        case ICN::BUTTON_EXIT_GOOD:
-        case ICN::BUTTON_RESET_GOOD:
-        case ICN::BUTTON_START_GOOD:
-        case ICN::BUTTON_CASTLE_GOOD:
-        case ICN::BUTTON_CASTLE_EVIL:
-        case ICN::BUTTON_TOWN_GOOD:
-        case ICN::BUTTON_TOWN_EVIL:
-        case ICN::BUTTON_RESTRICT_GOOD:
-        case ICN::BUTTON_RESTRICT_EVIL:
-        case ICN::BUTTON_GUILDWELL_EXIT:
-        case ICN::GOOD_CAMPAIGN_BUTTONS:
-        case ICN::EVIL_CAMPAIGN_BUTTONS:
-        case ICN::POL_CAMPAIGN_BUTTONS:
-        case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
-        case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
-        case ICN::BUTTON_VERTICAL_DISMISS:
-        case ICN::BUTTON_VERTICAL_EXIT:
-        case ICN::BUTTON_VERTICAL_PATROL:
-        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
-        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
-        case ICN::BUTTON_RUMORS_GOOD:
-        case ICN::BUTTON_RUMORS_EVIL:
-        case ICN::BUTTON_EVENTS_GOOD:
-        case ICN::BUTTON_EVENTS_EVIL:
-        case ICN::BUTTON_LANGUAGE_GOOD:
-        case ICN::BUTTON_LANGUAGE_EVIL:
-        case ICN::BUTTON_AUTO_COMBAT_GOOD:
-        case ICN::BUTTON_AUTO_COMBAT_EVIL:
-        case ICN::BUTTON_QUICK_COMBAT_GOOD:
-        case ICN::BUTTON_QUICK_COMBAT_EVIL:
-            generateLanguageSpecificImages( id );
             return true;
         case ICN::PHOENIX:
             LoadOriginalICN( id );
@@ -3385,7 +3288,7 @@ namespace
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
                 // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
-                _icnVsSprite[id].resize( 41 );
+                _icnVsSprite[id].resize( 45 );
 
                 // First make clean button sprites (pressed and released).
                 fheroes2::Sprite released = fheroes2::AGG::GetICN( ICN::EDITBTNS, 4 );
@@ -3394,12 +3297,12 @@ namespace
                 Fill( released, 16, 6, 18, 24, 41U );
                 Fill( pressed, 16, 7, 17, 23, 46U );
 
-                for ( size_t i = 0; i < 4; i += 2 ) {
+                for ( size_t i = 0; i < 8; i += 2 ) {
                     _icnVsSprite[id][35 + i] = released;
                     _icnVsSprite[id][35 + 1 + i] = pressed;
                 }
-                _icnVsSprite[id][39] = std::move( released );
-                _icnVsSprite[id][40] = std::move( pressed );
+                _icnVsSprite[id][43] = std::move( released );
+                _icnVsSprite[id][44] = std::move( pressed );
 
                 // Adventure objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
@@ -3409,6 +3312,32 @@ namespace
 
                 // Monsters objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::MONS32, 11 ), 39, 29, _icnVsSprite[id][39], _icnVsSprite[id][40] );
+
+                // Undo and Redo buttons.
+                fheroes2::Image undoImage( 19, 13 );
+                undoImage.reset();
+                const int mainColor = 56;
+                fheroes2::SetPixel( undoImage, 0, 6, mainColor );
+                for ( int x = 1; x < 7; ++x ) {
+                    fheroes2::DrawLine( undoImage, { x, 6 - x }, { x, 6 + x }, mainColor );
+                }
+                fheroes2::Fill( undoImage, 7, 4, 9, 5, mainColor );
+                fheroes2::SetPixel( undoImage, 16, 5, mainColor );
+                fheroes2::Fill( undoImage, 16, 6, 2, 4, mainColor );
+                fheroes2::Fill( undoImage, 17, 8, 2, 4, mainColor );
+                fheroes2::SetPixel( undoImage, 18, 12, mainColor );
+                drawImageOnButton( undoImage, 39, 29, _icnVsSprite[id][41], _icnVsSprite[id][42] );
+                drawImageOnButton( fheroes2::Flip( undoImage, true, false ), 39, 29, _icnVsSprite[id][43], _icnVsSprite[id][44] );
+                // Fix shadow pixels
+                fheroes2::SetPixel( _icnVsSprite[id][43], 27, 11, 41 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 26, 12, 46 );
+                fheroes2::SetPixel( _icnVsSprite[id][43], 16, 17, 47 );
+                fheroes2::SetPixel( _icnVsSprite[id][44], 15, 18, 52 );
+                // Add aliasing
+                fheroes2::SetPixel( _icnVsSprite[id][41], 32, 19, 52 );
+                fheroes2::DrawLine( _icnVsSprite[id][41], { 33, 20 }, { 33, 21 }, 52 );
+                fheroes2::SetPixel( _icnVsSprite[id][42], 31, 20, 53 );
+                fheroes2::DrawLine( _icnVsSprite[id][42], { 32, 21 }, { 32, 22 }, 53 );
             }
             return true;
         case ICN::EDITBTNS_EVIL: {
@@ -3851,28 +3780,6 @@ namespace
 
             return true;
         }
-        case ICN::DISMISS_HERO_DISABLED_BUTTON:
-        case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
-            _icnVsSprite[id].resize( 1 );
-
-            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
-
-            const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-            const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
-
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            output = released;
-
-            ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-
-            fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
-            common = FilterOnePixelNoise( common );
-            common = FilterOnePixelNoise( common );
-            common = FilterOnePixelNoise( common );
-
-            Blit( common, output );
-            return true;
-        }
         case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
             _icnVsSprite[id].resize( 1 );
             fheroes2::Sprite & output = _icnVsSprite[id][0];
@@ -4284,77 +4191,178 @@ namespace
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 16 && _icnVsSprite[id][2].width() == 36 && _icnVsSprite[id][2].height() == 36 && _icnVsSprite[id][3].width() == 36
                  && _icnVsSprite[id][3].height() == 36 ) {
-                // Add hero action button released and pressed.
-                _icnVsSprite[id].resize( 18 );
-                Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
-                Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
-
-                // Get the button's icon colors.
-                const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
-                const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
-                const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
-                const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
-
-                // Clean-up the buttons' background
-                Fill( _icnVsSprite[id][16], 23, 5, 8, 5, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][16], 8, 10, 24, 8, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][16], 6, 18, 24, 10, backgroundReleasedColor );
-                Fill( _icnVsSprite[id][17], 22, 6, 8, 5, backgroundPressedColor );
-                Fill( _icnVsSprite[id][17], 7, 11, 24, 8, backgroundPressedColor );
-                Fill( _icnVsSprite[id][17], 5, 19, 24, 10, backgroundPressedColor );
+                // Add hero action button and inactive button released and pressed.
+                _icnVsSprite[id].resize( 20 );
+                const bool isGoodButton = id == ICN::ADVBTNS;
+                const int emptyButtonId = isGoodButton ? ICN::EMPTY_INTERFACE_BUTTON_GOOD : ICN::EMPTY_INTERFACE_BUTTON_EVIL;
 
                 // Get the action cursor and prepare it for button. We make it a little smaller.
                 const fheroes2::Sprite & originalActionCursor = fheroes2::AGG::GetICN( ICN::ADVMCO, 9 );
                 const int32_t actionCursorWidth = originalActionCursor.width() - 1;
                 const int32_t actionCursorHeight = originalActionCursor.height() - 3;
-                fheroes2::Image actionCursor( actionCursorWidth, actionCursorHeight );
-                actionCursor.reset();
+                fheroes2::Image buttonImage( actionCursorWidth, actionCursorHeight );
+                buttonImage.reset();
 
                 // Head.
-                Copy( originalActionCursor, 19, 1, actionCursor, 17, 2, 8, 5 );
-                Copy( originalActionCursor, 16, 7, actionCursor, 14, 7, 12, 2 );
-                actionCursor.transform()[15 + 7 * actionCursorWidth] = 1U;
+                Copy( originalActionCursor, 19, 1, buttonImage, 17, 2, 8, 5 );
+                Copy( originalActionCursor, 16, 7, buttonImage, 14, 7, 12, 2 );
+                buttonImage.transform()[15 + 7 * actionCursorWidth] = 1U;
                 // Tail.
-                Copy( originalActionCursor, 1, 10, actionCursor, 1, 9, 12, 11 );
+                Copy( originalActionCursor, 1, 10, buttonImage, 1, 9, 12, 11 );
                 // Middle part.
-                Copy( originalActionCursor, 14, 10, actionCursor, 13, 9, 1, 11 );
+                Copy( originalActionCursor, 14, 10, buttonImage, 13, 9, 1, 11 );
                 // Front legs.
-                Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
+                Copy( originalActionCursor, 16, 10, buttonImage, 14, 9, 13, 11 );
                 // Hind legs.
-                Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
+                Copy( originalActionCursor, 7, 22, buttonImage, 7, 19, 7, 7 );
+
+                // Get the button's icon colors.
+                const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
+                const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
 
                 // Make contour transparent and the horse figure filled with solid color.
                 const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
                 for ( int32_t i = 0; i < actionCursorSize; ++i ) {
-                    if ( actionCursor.transform()[i] == 1U ) {
+                    if ( buttonImage.transform()[i] == 1U ) {
                         // Skip transparent pixel.
                         continue;
                     }
-                    if ( actionCursor.image()[i] < 152U ) {
+                    if ( buttonImage.image()[i] < 152U ) {
                         // It is the contour color, make it transparent.
-                        actionCursor.transform()[i] = 1U;
+                        buttonImage.transform()[i] = 1U;
                     }
                     else {
-                        actionCursor.image()[i] = mainPressedColor;
+                        buttonImage.image()[i] = mainPressedColor;
                     }
                 }
 
                 // Add shadows to the horse image.
-                updateShadow( actionCursor, { 1, -1 }, 2, true );
-                updateShadow( actionCursor, { -1, 1 }, 6, true );
-                updateShadow( actionCursor, { 2, -2 }, 4, true );
-                Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
+                updateShadow( buttonImage, { 1, -1 }, 2, true );
+                updateShadow( buttonImage, { -1, 1 }, 6, true );
+                updateShadow( buttonImage, { 2, -2 }, 4, true );
+
+                const fheroes2::Sprite & emptyButtonPressed = fheroes2::AGG::GetICN( emptyButtonId, 1 );
+                Copy( emptyButtonPressed, _icnVsSprite[id][17] );
+                Blit( buttonImage, _icnVsSprite[id][17], 4, 4 );
 
                 // Replace colors for the released button.
                 for ( int32_t i = 0; i < actionCursorSize; ++i ) {
-                    if ( actionCursor.transform()[i] == 6U ) {
+                    if ( buttonImage.transform()[i] == 6U ) {
                         // Disable whitening transform and set white color.
-                        actionCursor.transform()[i] = 0U;
-                        actionCursor.image()[i] = 10U;
+                        buttonImage.transform()[i] = 0U;
+                        buttonImage.image()[i] = 10U;
                     }
                 }
-                ReplaceColorId( actionCursor, mainPressedColor, mainReleasedColor );
-                Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
+                ReplaceColorId( buttonImage, mainPressedColor, mainReleasedColor );
+
+                const fheroes2::Sprite & emptyButtonReleased = fheroes2::AGG::GetICN( emptyButtonId, 0 );
+                Copy( emptyButtonReleased, _icnVsSprite[id][16] );
+                Blit( buttonImage, _icnVsSprite[id][16], 5, 3 );
+
+                // Generate inactive horse icon.
+                fheroes2::Sprite & releasedInactiveHorse = _icnVsSprite[id][18];
+                Copy( emptyButtonReleased, releasedInactiveHorse );
+
+                const uint8_t mainShadingColor = isGoodButton ? 46 : 25;
+                const uint8_t secondShadingColor = isGoodButton ? 43 : 18;
+                const uint8_t thirdShadingColor = isGoodButton ? 39 : 15;
+                const uint8_t fourthShadingColor = isGoodButton ? 42 : 16;
+                const uint8_t fifthShadingColor = isGoodButton ? 38 : 14;
+
+                // Upper body.
+                Copy( _icnVsSprite[id][2], 22, 5, releasedInactiveHorse, 22, 4, 10, 10 );
+                fheroes2::SetPixel( releasedInactiveHorse, 31, 13, secondShadingColor );
+                Fill( releasedInactiveHorse, 12, 13, 15, 5, mainReleasedColor );
+                Fill( releasedInactiveHorse, 12, 18, 5, 2, mainReleasedColor );
+                Fill( releasedInactiveHorse, 22, 18, 5, 2, mainReleasedColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 21, 12, mainReleasedColor );
+
+                // Copy one leg 4 times.
+                Copy( _icnVsSprite[id][2], 13, 22, releasedInactiveHorse, 11, 22, 4, 6 );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 24, 10 );
+                fheroes2::SetPixel( releasedInactiveHorse, 14, 24, secondShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 14, 27, secondShadingColor );
+                Fill( releasedInactiveHorse, 12, 20, 2, 2, mainReleasedColor );
+
+                Copy( releasedInactiveHorse, 11, 21, releasedInactiveHorse, 21, 21, 4, 7 );
+                Copy( releasedInactiveHorse, 11, 21, releasedInactiveHorse, 24, 20, 4, 7 );
+                Copy( releasedInactiveHorse, 11, 21, releasedInactiveHorse, 14, 20, 4, 7 );
+                fheroes2::SetPixel( releasedInactiveHorse, 24, 27, fourthShadingColor );
+
+                fheroes2::SetPixel( releasedInactiveHorse, 17, 18, mainReleasedColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 21, 18, mainReleasedColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 22, 20 }, { 23, 20 }, mainReleasedColor );
+
+                // Tail.
+                fheroes2::DrawLine( releasedInactiveHorse, { 11, 14 }, { 10, 15 }, mainReleasedColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 15, mainReleasedColor );
+                Fill( releasedInactiveHorse, 9, 16, 2, 4, mainReleasedColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 7, 19 }, { 8, 19 }, mainReleasedColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 8, 20 }, { 9, 20 }, mainReleasedColor );
+
+                // Shading.
+                fheroes2::DrawLine( releasedInactiveHorse, { 27, 13 }, { 27, 20 }, mainShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 21, 11 }, { 20, 12 }, mainShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 19, 12 }, { 17, 12 }, secondShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 20, 11, secondShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 16, 12 }, { 12, 12 }, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 12, secondShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 11, 13 }, { 9, 15 }, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 10, 13, fifthShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 9, 14, 10 );
+                fheroes2::DrawLine( releasedInactiveHorse, { 8, 15 }, { 8, 18 }, 10 );
+                fheroes2::SetPixel( releasedInactiveHorse, 7, 18, secondShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 6, 19 }, { 8, 21 }, 10 );
+                fheroes2::DrawLine( releasedInactiveHorse, { 6, 20 }, { 7, 21 }, thirdShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 9, 21, 10 );
+                fheroes2::SetPixel( releasedInactiveHorse, 10, 20, thirdShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 16, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 17, secondShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 11, 21, 10 );
+                fheroes2::DrawLine( releasedInactiveHorse, { 14, 20 }, { 14, 21 }, thirdShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 17, 19 }, { 17, 20 }, mainShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 18, 18 }, { 20, 18 }, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 21, 19, mainShadingColor );
+                fheroes2::SetPixel( releasedInactiveHorse, 18, 19, thirdShadingColor );
+                fheroes2::DrawLine( releasedInactiveHorse, { 19, 19 }, { 20, 19 }, 10 );
+                fheroes2::DrawLine( releasedInactiveHorse, { 21, 20 }, { 21, 21 }, 10 );
+                fheroes2::SetPixel( releasedInactiveHorse, 24, 20, thirdShadingColor );
+
+                // Clean up button border.
+                fheroes2::DrawLine( releasedInactiveHorse, { 23, 4 }, { 22, 5 }, 10 );
+                const uint8_t backgroundReleasedColor = isGoodButton ? 41 : 16;
+                fheroes2::SetPixel( releasedInactiveHorse, 22, 4, backgroundReleasedColor );
+
+                // Make pressed state.
+                // To keep the button's edge colors do all color manipulations on a temporary single-layer image.
+                const int32_t pressedHorseImageWidth = 26;
+                const int32_t pressedHorseImageHeight = 24;
+                buttonImage._disableTransformLayer();
+                buttonImage.resize( pressedHorseImageWidth, pressedHorseImageHeight );
+
+                const uint8_t backgroundPressedColor = isGoodButton ? 45 : 22;
+                Fill( buttonImage, 0, 0, pressedHorseImageWidth, pressedHorseImageHeight, backgroundPressedColor );
+                Copy( releasedInactiveHorse, 6, 11, buttonImage, 0, 7, 22, 17 );
+                Copy( releasedInactiveHorse, 24, 4, buttonImage, 18, 0, 8, 10 );
+                Copy( releasedInactiveHorse, 22, 8, buttonImage, 16, 4, 2, 3 );
+
+                fheroes2::ReplaceColorId( buttonImage, mainReleasedColor, mainPressedColor );
+                const uint8_t pressedColorOffset = isGoodButton ? 4 : 6;
+                fheroes2::ReplaceColorId( buttonImage, backgroundReleasedColor, backgroundPressedColor );
+                fheroes2::ReplaceColorId( buttonImage, mainShadingColor, mainShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, secondShadingColor, secondShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, thirdShadingColor, thirdShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, fourthShadingColor, fourthShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, fifthShadingColor, fifthShadingColor + pressedColorOffset );
+                fheroes2::ReplaceColorId( buttonImage, 10, isGoodButton ? 40 : 14 );
+
+                Copy( emptyButtonPressed, _icnVsSprite[id][19] );
+                Copy( buttonImage, 0, 0, _icnVsSprite[id][19], 5, 5, pressedHorseImageWidth, pressedHorseImageHeight );
+                // Fix left border.
+                if ( isGoodButton ) {
+                    fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 5 }, { 5, 19 }, 44 );
+                    fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 21 }, { 5, 28 }, 44 );
+                }
             }
             return true;
         case ICN::ARTFX:
@@ -4696,32 +4704,24 @@ namespace
                 original = std::move( temp );
             }
             return true;
-        case ICN::FLAG32:
+        case ICN::FLAG32: {
             LoadOriginalICN( id );
-            // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
-            // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
-            // This helps to solve the problem with rendering order.
-            _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
-            for ( int32_t i = 14; i < 14 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
+            auto & flagImages = _icnVsSprite[id];
+            if ( flagImages.size() == 49 ) {
+                // Shift and crop the Lighthouse flags to properly render them on the Adventure map.
+                flagImages.resize( 49 + 7 * 2 );
+                for ( size_t i = 42; i < 42 + 7; ++i ) {
+                    const fheroes2::Sprite & original = flagImages[i];
 
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+                    flagImages[i + 7] = Crop( original, 0, 0, -original.x(), original.height() );
+                    flagImages[i + 7].setPosition( 32 + original.x(), original.y() );
 
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
-            }
-
-            for ( int32_t i = 42; i < 42 + 7; ++i ) {
-                const fheroes2::Sprite & original = _icnVsSprite[id][i];
-
-                _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
-                _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
-
-                _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
-                _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                    flagImages[i + 7 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    flagImages[i + 7 + 7].setPosition( 0, original.y() );
+                }
             }
             return true;
+        }
         case ICN::SHADOW32:
             LoadOriginalICN( id );
             // The shadow sprite of hero needs to be shifted to match the hero sprite.
@@ -5088,6 +5088,29 @@ namespace
 
                 Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
             }
+
+            return true;
+        }
+        case ICN::EMPTY_INTERFACE_BUTTON_GOOD:
+        case ICN::EMPTY_INTERFACE_BUTTON_EVIL: {
+            const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
+            loadICN( originalId );
+            _icnVsSprite[id].resize( 2 );
+
+            Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
+            Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
+
+            // Get the button's icon colors.
+            const uint8_t backgroundReleasedColor = _icnVsSprite[originalId][2].image()[1 * 36 + 5];
+            const uint8_t backgroundPressedColor = _icnVsSprite[originalId][3].image()[5 * 36 + 6];
+
+            // Clean-up the buttons' background
+            Fill( _icnVsSprite[id][0], 23, 5, 8, 5, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 8, 10, 24, 8, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 6, 18, 24, 10, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][1], 22, 6, 8, 5, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 7, 11, 24, 8, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 5, 19, 24, 10, backgroundPressedColor );
 
             return true;
         }

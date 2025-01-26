@@ -1397,6 +1397,9 @@ namespace Interface
 
                         action.commit();
                     }
+                    else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
+                        fheroes2::ArtifactDialogElement( static_cast<int>( objectInfo.metadata[0] ) ).showPopup( Dialog::OK );
+                    }
                     else {
                         std::string msg = _( "%{object} has no properties to change." );
                         StringReplace( msg, "%{object}", _( "This artifact" ) );

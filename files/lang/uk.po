@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-25 13:34+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4422,6 +4422,13 @@ msgid "Undo"
 msgstr "Скасувати"
 
 msgid "Undo your last action."
+msgstr "Скасуйте останню дію."
+
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
 msgstr "Скасуйте останню дію."
 
 msgid "Edit map title, description, and other general information."
@@ -11502,11 +11509,14 @@ msgstr "Масове Уповільнення"
 msgid "Slows all enemies to half movement rate."
 msgstr "Зменшує швидкість пересування всіх ворожих загонів вдвічі."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
-
 msgid "spell|Blind"
 msgstr "Сліпота"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
 
 msgid "Bless"
 msgstr "Благословення"
