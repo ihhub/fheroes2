@@ -189,7 +189,7 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
         else if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
         }
-        else if ( !hero->MayStillMove( false, true ) ) {
+        else if ( hero->GetPath().isValidForMovement() ) {
             fheroes2::showStandardTextMessage( "", "The hero's army is exhausted and cannot move anymore today. A night's rest will replenish the movement points.",
                                                Dialog::OK );
         }
