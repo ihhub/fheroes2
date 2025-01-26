@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -84,9 +84,6 @@ msgid "CANCEL"
 msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr "ОК"
-
-msgid "smallerButton|OKAY"
 msgstr "ОК"
 
 msgid "ACCEPT"
@@ -3425,8 +3422,9 @@ msgstr "Защитники:"
 msgid "Unknown"
 msgstr "Неизвестный"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Уровень %{level})"
+#, fuzzy
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "Случайный герой (Уровень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -12040,6 +12038,12 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "smallerButton|OKAY"
+#~ msgstr "ОК"
+
+#~ msgid "%{name} (Level %{level})"
+#~ msgstr "%{name} (Уровень %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Включить автобитву"

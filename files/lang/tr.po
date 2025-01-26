@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "İPTAL"
 
 msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "smallerButton|OKAY"
 msgstr "TAMAM"
 
 msgid "ACCEPT"
@@ -3306,7 +3303,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -10889,6 +10886,9 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "smallerButton|OKAY"
+#~ msgstr "TAMAM"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Otomatik savacı aç"

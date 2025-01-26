@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "ZRUŠIT"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -3382,8 +3379,9 @@ msgstr "Obránci:"
 msgid "Unknown"
 msgstr "Není známo"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Úroveň %{level})"
+#, fuzzy
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "Náhodný hrdina (Úroveň %{level})"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -11918,6 +11916,12 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "smallerButton|OKAY"
+#~ msgstr "OK"
+
+#~ msgid "%{name} (Level %{level})"
+#~ msgstr "%{name} (Úroveň %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Zapnout automatický boj"

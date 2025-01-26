@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "smallerButton|OKAY"
 msgstr "OKEJ"
 
 msgid "ACCEPT"
@@ -3398,8 +3395,9 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+#, fuzzy
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "Slumpad hjälte (Nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -12012,6 +12010,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "smallerButton|OKAY"
+#~ msgstr "OKEJ"
+
+#~ msgid "%{name} (Level %{level})"
+#~ msgstr "%{name} (nivå %{level})"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Aktivera autom. strid"

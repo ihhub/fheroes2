@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,9 +80,6 @@ msgid "CANCEL"
 msgstr "RENUNȚĂ"
 
 msgid "OKAY"
-msgstr "OKAY"
-
-msgid "smallerButton|OKAY"
 msgstr "OKAY"
 
 msgid "ACCEPT"
@@ -3275,7 +3272,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -10906,6 +10903,9 @@ msgstr ""
 "Verificați cea mai nouă versiune a jocului la\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "smallerButton|OKAY"
+#~ msgstr "OKAY"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Activează lupta automată"
