@@ -277,7 +277,15 @@ namespace
         fheroes2::StandardWindow background( 289, 382, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
+
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const fheroes2::Sprite & panelSprite = fheroes2::AGG::GetICN( ICN::CSPANEL, 0 );
         const int32_t panelWidth = panelSprite.width();
@@ -295,16 +303,9 @@ namespace
             }
         }
 
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
-        fheroes2::Button buttonOk;
-        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-
         RedrawBattleSettings( optionAreas );
 
-        display.render();
+        display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {

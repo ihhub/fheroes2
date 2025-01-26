@@ -115,7 +115,14 @@ namespace Dialog
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
         const fheroes2::Point optionOffset( windowRoi.x + 53, windowRoi.y + 31 );
@@ -135,14 +142,7 @@ namespace Dialog
 
         drawDialog( roi );
 
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
-        fheroes2::Button buttonOk;
-        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-
-        display.render();
+        display.render( background.totalArea() );
 
         bool saveConfig = false;
 
@@ -248,7 +248,7 @@ namespace Dialog
             if ( haveSettingsChanged ) {
                 emptyDialogRestorer.restore();
                 drawDialog( roi );
-                display.render();
+                display.render( background.totalArea() );
 
                 saveConfig = true;
             }

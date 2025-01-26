@@ -130,7 +130,14 @@ namespace
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 36 );
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
@@ -146,14 +153,7 @@ namespace
 
         drawOptions();
 
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
-        fheroes2::Button buttonOk;
-        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-
-        display.render();
+        display.render( background.totalArea() );
 
         bool isFullScreen = fheroes2::engine().isFullScreen();
 
