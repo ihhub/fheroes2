@@ -64,5 +64,5 @@ CCFLAGS := $(filter-out -pthread,$(CCFLAGS))
 
 LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	-sENVIRONMENT=web \
-	-sALLOW_BLOCKING_ON_MAIN_THREAD=0
+	-sNO_ALLOW_BLOCKING_ON_MAIN_THREAD
 endif

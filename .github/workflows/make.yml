@@ -326,12 +326,14 @@ jobs:
           on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
+            LDFLAGS: -sINCOMING_MODULE_JS_API=canvas,preRun,setStatus
           package_name: fheroes2_emscripten.zip
         - name: Emscripten Multithreaded
           on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_THREADS: ON
+            LDFLAGS: -sINCOMING_MODULE_JS_API=canvas,preRun,setStatus
           package_name: fheroes2_emscripten_mt.zip
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
@@ -351,7 +353,7 @@ jobs:
     - name: Build
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
-        LDFLAGS="-sINCOMING_MODULE_JS_API=canvas,preRun,setStatus" emmake make -f Makefile.emscripten -j "$(nproc)"
+        emmake make -f Makefile.emscripten -j "$(nproc)"
       env: ${{ matrix.env }}
     - name: Create package
       if: ${{ contains( matrix.on, github.event_name ) }}
