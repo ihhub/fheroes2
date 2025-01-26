@@ -36,7 +36,6 @@ LDFLAGS := $(LDFLAGS) \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=65536 \
-	-sINCOMING_MODULE_JS_API=canvas,preRun,setStatus \
 	-sINITIAL_MEMORY=128mb \
 	-sMEMORY_GROWTH_LINEAR_STEP=32mb \
 	-sNO_DISABLE_EXCEPTION_CATCHING \
@@ -51,14 +50,13 @@ ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -gsource-map
 LDFLAGS := $(LDFLAGS) -O0 -gsource-map
 else
-CCFLAGS := $(CCFLAGS) -flto
-LDFLAGS := $(LDFLAGS) -O3 -flto
+CCFLAGS := $(filter-out -O3,$(CCFLAGS)) -Oz -flto
+LDFLAGS := $(LDFLAGS) -Oz -flto
 endif
 
 ifdef FHEROES2_WITH_THREADS
 LDFLAGS := $(LDFLAGS) \
 	-Wno-pthreads-mem-growth \
-	-sALLOW_BLOCKING_ON_MAIN_THREAD \
 	-sENVIRONMENT=web,worker \
 	-sPTHREAD_POOL_SIZE=8
 else
@@ -66,5 +64,5 @@ CCFLAGS := $(filter-out -pthread,$(CCFLAGS))
 
 LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
 	-sENVIRONMENT=web \
-	-sNO_ALLOW_BLOCKING_ON_MAIN_THREAD
+	-sALLOW_BLOCKING_ON_MAIN_THREAD=0
 endif

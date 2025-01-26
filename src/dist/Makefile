@@ -29,7 +29,7 @@ TARGET := fheroes2
 #
 
 # Common flags for both C and C++ compilers
-CCFLAGS := -fsigned-char -pthread
+CCFLAGS := $(CCFLAGS) -fsigned-char -pthread
 # Flags for the C compiler
 CFLAGS := $(CFLAGS)
 # Flags for the C++ compiler
