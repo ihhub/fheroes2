@@ -335,7 +335,7 @@ jobs:
           package_name: fheroes2_emscripten_mt.zip
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
-    container: emscripten/emsdk:3.1.74
+    container: emscripten/emsdk:latest
     timeout-minutes: 30
     defaults:
       run:
@@ -348,47 +348,6 @@ jobs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
-    - name: Apply temporary patch
-      if: ${{ contains( matrix.on, github.event_name ) }}
-      run: |
-        patch -d / -p0 -f <<EOF
-        --- emsdk/upstream/emscripten/tools/ports/sdl2_mixer.py
-        +++ emsdk/upstream/emscripten/tools/ports/sdl2_mixer.py
-        @@ -10,8 +10,10 @@
-
-         deps = ['sdl2']
-         variants = {
-        -  'sdl2_mixer_mp3': {'SDL2_MIXER_FORMATS': ["mp3"]},
-        -  'sdl2_mixer_none': {'SDL2_MIXER_FORMATS': []},
-        +  'sdl2_mixer-mp3': {'SDL2_MIXER_FORMATS': ['mp3']},
-        +  'sdl2_mixer-none': {'SDL2_MIXER_FORMATS': []},
-        +  'sdl2_mixer-mp3-mt': {'SDL2_MIXER_FORMATS': ['mp3'], 'PTHREADS': 1},
-        +  'sdl2_mixer-none-mt': {'SDL2_MIXER_FORMATS': [], 'PTHREADS': 1},
-         }
-
-
-        @@ -25,7 +27,9 @@ def get_lib_name(settings):
-
-           libname = 'libSDL2_mixer'
-           if formats != '':
-        -    libname += '_' + formats
-        +    libname += '-' + formats
-        +  if settings.PTHREADS:
-        +    libname += '-mt'
-           libname += '.a'
-
-           return libname
-        @@ -68,6 +72,9 @@ def create(final):
-                 '-DMUSIC_MID_TIMIDITY',
-               ]
-
-        +    if settings.PTHREADS:
-        +      flags.append('-pthread')
-        +
-             build_dir = ports.clear_project_build('sdl2_mixer')
-             include_path = os.path.join(source_path, 'include')
-             includes = [
-        EOF
     - name: Build
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |

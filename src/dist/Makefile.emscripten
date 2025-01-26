@@ -35,7 +35,7 @@ LDFLAGS := $(LDFLAGS) \
 	--preload-file ../../../files/timidity/@/etc/ \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
-	-sASYNCIFY_STACK_SIZE=65536 \
+	-sASYNCIFY_STACK_SIZE=64kb \
 	-sINCOMING_MODULE_JS_API=canvas,preRun,setStatus \
 	-sINITIAL_MEMORY=128mb \
 	-sMEMORY_GROWTH_LINEAR_STEP=32mb \
