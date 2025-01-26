@@ -190,7 +190,8 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
             return EventDefaultAction();
         }
         else if ( hero->GetPath().isValidForMovement() ) {
-            fheroes2::showStandardTextMessage( "", "The hero's army is exhausted and cannot move anymore today. A night's rest will replenish the movement points.",
+            fheroes2::showStandardTextMessage( "Hero Movement Points",
+                                               "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn.",
                                                Dialog::OK );
         }
     }
