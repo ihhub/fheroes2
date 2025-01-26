@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,18 +63,28 @@ namespace
     void drawInterfaceType( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
+        const InterfaceType interfaceType = conf.getInterfaceType();
 
+        uint32_t icnInx = 15;
         std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
+        switch ( interfaceType ) {
+        case DYNAMIC:
+            value = _( "Dynamic" );
+            break;
+        case GOOD:
+            icnInx = 16;
             value = _( "Good" );
+            break;
+        case EVIL:
+            icnInx = 17;
+            value = _( "Evil" );
+            break;
+        default:
+            assert( 0 );
         }
 
-        fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
@@ -287,7 +297,7 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                conf.setInterfaceType( static_cast<InterfaceType>( ( conf.getInterfaceType() + 1 ) % InterfaceType::COUNT ) );
                 updateUI();
                 saveConfiguration = true;
 
