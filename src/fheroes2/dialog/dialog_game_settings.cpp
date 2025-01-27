@@ -232,6 +232,7 @@ namespace fheroes2
     void openGameSettings()
     {
         drawMainMenuScreen();
+        fheroes2::Display::instance().render();
 
         Settings & conf = Settings::Get();
 
