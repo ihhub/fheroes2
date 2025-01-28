@@ -77,8 +77,9 @@ namespace fheroes2
 
 namespace
 {
-    // In original Editor map name is limited to 17 characters. We keep this limit to fit the Select Scenario dialog.
-    const int32_t maxMapNameLength = 17;
+    // In original Editor map name is limited to 17 characters.
+    // However, we have no such limitation but to be reasonable we still have a limit.
+    const int32_t maxMapNameLength = 50;
 
     const int32_t descriptionBoxWidth = 292;
     const int32_t descriptionBoxHeight = 90;
@@ -2106,6 +2107,7 @@ namespace Editor
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
         fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+        text.fitToOneRow( mapNameRoi.width );
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
@@ -2266,6 +2268,7 @@ namespace Editor
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
             fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+            text.fitToOneRow( mapNameRoi.width );
             text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
         };
 

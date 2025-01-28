@@ -94,8 +94,11 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
+    const fheroes2::Rect scenarioNameRoi{ 37 + shadowOffset.x, 29 + shadowOffset.y, 349, 19 };
+
     fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite(), mapInfo.getSupportedLanguage() );
-    text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
+    text.fitToOneRow( scenarioNameRoi.width );
+    text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameRoi.width, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
@@ -168,7 +171,11 @@ void Dialog::GameInfo()
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( scenarioNameRoi ) ) {
+            text.set( mapInfo.name, fheroes2::FontType::normalYellow(), mapInfo.getSupportedLanguage() );
+            fheroes2::showMessage( text, fheroes2::Text{}, Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
         }
         else {
