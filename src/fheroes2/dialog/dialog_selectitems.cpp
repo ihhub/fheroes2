@@ -1266,9 +1266,9 @@ void Dialog::selectTownType( int & type, int & color )
     fheroes2::Button buttonTown;
     fheroes2::Button buttonCastle;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { -50, 7 },
+    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { 0, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
+    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 0, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
@@ -1291,10 +1291,14 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     if ( isCastle ) {
-        buttonCastle.drawOnPress();
+        buttonCastle.disable();
+        buttonTown.enable();
+        buttonTown.draw();
     }
     else {
-        buttonTown.drawOnPress();
+        buttonCastle.enable();
+        buttonTown.disable();
+        buttonCastle.draw();
     }
 
     while ( le.HandleEvents() ) {
@@ -1343,10 +1347,10 @@ void Dialog::selectTownType( int & type, int & color )
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
+        else if ( buttonTown.isEnabled() && le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Town" ), _( "Click to select town placing." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
+        else if ( buttonCastle.isEnabled() && le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Castle" ), _( "Click to select castle placing." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( castleRoi ) ) {
@@ -1385,6 +1389,17 @@ void Dialog::selectTownType( int & type, int & color )
         }
 
         castleBackground.restore();
+
+        if ( isCastle ) {
+            buttonCastle.disable();
+            buttonTown.enable();
+            buttonTown.draw();
+        }
+        else {
+            buttonCastle.enable();
+            buttonTown.disable();
+            buttonCastle.draw();
+        }
 
         // Update town image.
         const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( getPackedTownType( townRace, isCastle ), townColor, basementGround );
