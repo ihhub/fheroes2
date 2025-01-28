@@ -29,6 +29,7 @@
 #include <limits>
 #include <optional>
 #include <ostream>
+#include <random>
 #include <set>
 #include <tuple>
 
@@ -89,7 +90,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
     {
         std::vector<int32_t> suitableIds;
 
@@ -123,7 +124,7 @@ namespace
             return -1;
         }
 
-        return Rand::Get( suitableIds );
+        return Rand::GetWithGen( suitableIds, gen );
     }
 
     int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId )
@@ -605,6 +606,8 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
+    std::mt19937 seededGen( _seed );
+
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             // Monsters are not placed on water.
@@ -624,7 +627,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ) );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ), seededGen );
             if ( tileToSet >= 0 ) {
                 primaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -639,7 +642,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true, seededGen );
             if ( tileToSet >= 0 ) {
                 secondaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -654,7 +657,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true, seededGen );
             if ( tileToSet >= 0 ) {
                 tetriaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -663,9 +666,9 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     // Shuffle all found tile IDs.
-    Rand::Shuffle( primaryTargetTiles );
-    Rand::Shuffle( secondaryTargetTiles );
-    Rand::Shuffle( tetriaryTargetTiles );
+    Rand::ShuffleWithGen( primaryTargetTiles, seededGen );
+    Rand::ShuffleWithGen( secondaryTargetTiles, seededGen );
+    Rand::ShuffleWithGen( tetriaryTargetTiles, seededGen );
 
     // Calculate the number of monsters to be placed.
     uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
@@ -675,7 +678,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
+        monstersToBePlaced = Rand::GetWithGen( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, seededGen );
     }
 
     // 85% of positions are for primary targets
