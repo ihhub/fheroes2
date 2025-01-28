@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,11 +80,8 @@ msgstr ""
 msgid "CANCEL"
 msgstr "СКАСУВАТИ"
 
-msgid "OKAY"
-msgstr "ГАРАЗД"
-
 # Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
-msgid "smallerButton|OKAY"
+msgid "OKAY"
 msgstr "ГАРАЗД"
 
 msgid "ACCEPT"
@@ -3412,8 +3409,8 @@ msgstr "Захисники:"
 msgid "Unknown"
 msgstr "Невідомо"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Рівень %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Рівень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
