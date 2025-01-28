@@ -23,9 +23,14 @@
 namespace Maps
 {
     class Tile;
+
+    namespace Map_Format
+    {
+        struct MapFormat;
+    }
 }
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tile & tile );
+    void showPopupWindow( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat );
 }
