@@ -478,9 +478,8 @@ msgstr "No puedes mover la última tropa"
 msgid "Move the %{name}"
 msgstr "Pierdes el héroe: %{name}."
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Dispara a %{monster}"
+msgstr "Establece la cantidad de %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
