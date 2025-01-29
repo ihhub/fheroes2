@@ -3395,7 +3395,7 @@ msgid "Number to buy:"
 msgstr "Reclutar:"
 
 msgid "Recruit selected monsters."
-msgstr "Recluta monstruos seleccionados."
+msgstr "Recluta los monstruos seleccionados."
 
 msgid "Select maximum monsters to be recruited."
 msgstr "Elige el máximo de monstruos que deseas reclutar."
