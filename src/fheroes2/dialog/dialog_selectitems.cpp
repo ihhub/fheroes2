@@ -1263,13 +1263,17 @@ void Dialog::selectTownType( int & type, int & color )
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    fheroes2::Button buttonTown;
-    fheroes2::Button buttonCastle;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { 0, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 0, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+    const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
+    const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
+    fheroes2::Button buttonTown{ 0, 0, townButtonIcnId, 0, 1 };
+    fheroes2::Button buttonCastle{ 0, 0, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1 };
+
+    const fheroes2::Point buttonOffset{ area.x + ( area.width - townButtonImage.width() ) / 2, area.y + area.height - townButtonImage.height() - 7 };
+    buttonTown.setPosition( buttonOffset.x, buttonOffset.y );
+    buttonCastle.setPosition( buttonOffset.x, buttonOffset.y );
+    fheroes2::addGradientShadow( townButtonImage, display, buttonOffset, { -5, 5 } );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
