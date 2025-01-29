@@ -1848,7 +1848,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.getTile( tileIndex ) );
+        Editor::showPopupWindow( world.getTile( tileIndex ), _mapFormat );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
