@@ -658,7 +658,7 @@ int Maps::Tile::getTileIndependentPassability() const
         if ( MP2::isOffGameActionObject( type ) ) {
             // This is an action object part.
             isActionObject = true;
-            return MP2::getActionObjectDirection( type );
+            return MP2::getActionObjectPassability( type );
         }
 
         if ( type == MP2::OBJ_REEFS ) {

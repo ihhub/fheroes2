@@ -534,7 +534,7 @@ namespace MP2
     bool isBattleLife( const MapObjectType objectType );
 
     // Make sure that you pass a valid action object.
-    int getActionObjectDirection( const MapObjectType objectType );
+    int getActionObjectPassability( const MapObjectType objectType );
 
     bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
     bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
