@@ -1127,7 +1127,7 @@ namespace Interface
         fheroes2::Sprite mainMenuReleased;
         fheroes2::Sprite mainMenuPressed;
         fheroes2::getTextAdaptedButton( mainMenuReleased, mainMenuPressed, gettext_noop( "MAIN\nMENU" ),
-                                        isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK_EVIL );
+                                        isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
