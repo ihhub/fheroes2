@@ -461,7 +461,7 @@ msgid "Move the %{name} "
 msgstr "Pierdes el héroe: %{name}."
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Mover o clic drecho para redistribuir %{name}"
+msgstr "Mueve o haz clic derecho para redistribuir %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Combinar los ejércitos de %{name}"
