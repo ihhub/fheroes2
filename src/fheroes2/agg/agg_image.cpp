@@ -55,6 +55,7 @@
 #include "ui_button.h"
 #include "ui_font.h"
 #include "ui_language.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
