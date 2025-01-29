@@ -434,7 +434,7 @@ msgid "army|Legion"
 msgstr "Legión"
 
 msgid "All %{race} troops +1"
-msgstr "Toda tropa de %{race} +1"
+msgstr "Todas las tropas %{race} +1"
 
 #, fuzzy
 msgid "NeutralRaceTroops|Neutral"
