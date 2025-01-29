@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 02:09+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4791,6 +4791,10 @@ msgstr ""
 "Poziom trudności na aktualnie wybranej mapie, określony przez autora "
 "scenariusza. Na bardziej złożonych mapach mogą występować silniejsi "
 "przeciwnicy, mniej zasobów lub inne specjalne warunki utrudniające rozgrywkę."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Wybierz ilość %{resource}:"
 
 #, fuzzy
 msgid "Animation"
