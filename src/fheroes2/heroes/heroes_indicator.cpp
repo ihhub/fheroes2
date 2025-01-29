@@ -297,7 +297,6 @@ void SpellPointsIndicator::Redraw() const
         if ( text.width() > renderRoi.width + 1 ) {
             // Spell points are too long. Display only available spell points.
             text.set( std::to_string( _hero->GetSpellPoints() ), fheroes2::FontType::smallWhite() );
-            
         }
 
         text.drawInRoi( renderRoi.x + ( spellPointImage.width() - text.width() ) / 2 - widthReduction, _area.y + 23, display, renderRoi );
