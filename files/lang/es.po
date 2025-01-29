@@ -456,9 +456,8 @@ msgstr ""
 msgid "View %{name}"
 msgstr "Ver %{name}"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Pierdes el héroe: %{name}."
+msgstr "Mover el %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Mueve o haz clic derecho para redistribuir %{name}"
