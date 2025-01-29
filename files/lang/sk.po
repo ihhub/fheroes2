@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 02:09+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4790,6 +4790,10 @@ msgstr ""
 "scenára. Ťažšie mapy môžu obsahovať viac alebo silnejších nepriateľov, menej "
 "zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
 "hráča."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Zvoľ počet - %{resource}:"
 
 #, fuzzy
 msgid "Animation"
