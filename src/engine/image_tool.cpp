@@ -55,6 +55,7 @@
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
+#include "serialize.h"
 #include "system.h"
 
 namespace
