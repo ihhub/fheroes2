@@ -451,7 +451,7 @@ msgid ""
 "troop"
 msgstr ""
 "Tropa\n"
-"por defecto"
+"Por defecto"
 
 msgid "View %{name}"
 msgstr "Ver %{name}"
