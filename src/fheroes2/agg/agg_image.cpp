@@ -5297,6 +5297,13 @@ namespace
         }
     }
 
+    size_t GetMaximumICNIndex( int id )
+    {
+        loadICN( id );
+
+        return _icnVsSprite[id].size();
+    }
+
     size_t GetMaximumTILIndex( const int id )
     {
         auto & tilImages = _tilVsImage[id];
@@ -5407,13 +5414,6 @@ namespace
 
 namespace fheroes2::AGG
 {
-    size_t GetMaximumICNIndex( int id )
-    {
-        loadICN( id );
-
-        return _icnVsSprite[id].size();
-    }
-
     const Sprite & GetICN( int icnId, uint32_t index )
     {
         if ( !IsValidICNId( icnId ) ) {

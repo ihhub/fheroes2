@@ -42,8 +42,6 @@ namespace fheroes2
 
         int32_t GetAbsoluteICNHeight( int icnId );
 
-        size_t GetMaximumICNIndex( int id );
-
         // This function must be called only at the time of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }

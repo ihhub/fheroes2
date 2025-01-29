@@ -141,13 +141,13 @@ namespace
     {
         switch ( fontSize ) {
         case fheroes2::FontSize::SMALL:
-            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::SMALFONT ) + 0x20 - 1;
         case fheroes2::FontSize::NORMAL:
         case fheroes2::FontSize::LARGE:
-            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::FONT ) + 0x20 - 1;
         case fheroes2::FontSize::BUTTON_RELEASED:
         case fheroes2::FontSize::BUTTON_PRESSED:
-            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::BUTTON_GOOD_FONT_RELEASED ) + 0x20 - 1;
         default:
             // Did you add a new font size? Please add implementation.
             assert( 0 );
