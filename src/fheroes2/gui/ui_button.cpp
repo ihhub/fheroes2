@@ -756,8 +756,8 @@ namespace fheroes2
 
         fheroes2::Size backgroundBorders = { 0, 7 };
 
-        fheroes2::Point releasedOffset = {};
-        fheroes2::Point pressedOffset = {};
+        fheroes2::Point releasedOffset;
+        fheroes2::Point pressedOffset;
 
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 
