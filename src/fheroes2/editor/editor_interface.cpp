@@ -1121,13 +1121,16 @@ namespace Interface
     fheroes2::GameMode EditorInterface::eventFileDialog()
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
         fheroes2::Sprite mainMenuReleased;
         fheroes2::Sprite mainMenuPressed;
         fheroes2::getTextAdaptedButton( mainMenuReleased, mainMenuPressed, gettext_noop( "MAIN\nMENU" ),
                                         isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK_EVIL );
 
         fheroes2::Display & display = fheroes2::Display::instance();
+
         fheroes2::StandardWindow background( 321 - 32 + mainMenuReleased.width() / 2, 236 - 32 + mainMenuReleased.height() / 2 + 15 + 21, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
@@ -1138,9 +1141,9 @@ namespace Interface
         fheroes2::Button buttonCancel( roi.x + 128, roi.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         const fheroes2::Point buttonOffsets = { 30, 15 };
-        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, { 30, 15 },
+        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
                                  fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 30, 15 },
+        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, buttonOffsets,
                                  fheroes2::StandardWindow::Padding::TOP_RIGHT );
         background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { 30, mainMenuReleased.height() + 4 },
                                  fheroes2::StandardWindow::Padding::CENTER_LEFT );
@@ -1219,6 +1222,9 @@ namespace Interface
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
