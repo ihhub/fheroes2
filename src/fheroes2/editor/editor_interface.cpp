@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -687,8 +687,6 @@ namespace Interface
 
     void EditorInterface::redraw( const uint32_t force )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
@@ -696,6 +694,8 @@ namespace Interface
             if ( combinedRedraw & REDRAW_PASSABILITIES ) {
                 renderFlags |= LEVEL_PASSABILITIES;
             }
+
+            fheroes2::Display & display = fheroes2::Display::instance();
 
             // Render all except the fog.
             _gameArea.Redraw( display, renderFlags );
@@ -707,7 +707,9 @@ namespace Interface
                 // Keep 4 pixels from each edge.
                 text.fitToOneRow( roi.width - 8 );
 
-                text.draw( roi.x + 4, roi.y + roi.height - text.height() - 4, display );
+                const bool isSystemInfoShown = Settings::Get().isSystemInfoEnabled();
+
+                text.draw( roi.x + 4, roi.y + roi.height - text.height() - ( isSystemInfoShown ? 14 : 4 ), display );
             }
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
@@ -1395,6 +1397,9 @@ namespace Interface
 
                         action.commit();
                     }
+                    else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
+                        fheroes2::ArtifactDialogElement( static_cast<int>( objectInfo.metadata[0] ) ).showPopup( Dialog::OK );
+                    }
                     else {
                         std::string msg = _( "%{object} has no properties to change." );
                         StringReplace( msg, "%{object}", _( "This artifact" ) );
@@ -1843,7 +1848,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.getTile( tileIndex ) );
+        Editor::showPopupWindow( world.getTile( tileIndex ), _mapFormat );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,16 +74,12 @@ namespace
     // This constant is used to mark the unknown color or resource index.
     const uint32_t unknownIndex = UINT32_MAX;
 
-    const std::array<int32_t, 4> tileSizePerZoomLevel{ 4, 6, 12, 32 };
-    const std::array<int32_t, 4> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
-    const std::array<int32_t, 4> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const std::array<int32_t, 4> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
+    constexpr size_t totalZoomLevels{ 4 };
 
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-    const int32_t zoomLevels = 4;
-#else
-    const int32_t zoomLevels = 3;
-#endif
+    const std::array<int32_t, totalZoomLevels> tileSizePerZoomLevel{ 4, 6, 12, 32 };
+    const std::array<int32_t, totalZoomLevels> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
+    const std::array<int32_t, totalZoomLevels> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
+    const std::array<int32_t, totalZoomLevels> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
@@ -99,42 +95,48 @@ namespace
         return { x, y, pixelsW, pixelsH };
     }
 
-    ZoomLevel GetNextZoomLevel( const ZoomLevel level, const bool cycle )
+    ZoomLevel GetNextZoomLevel( const ZoomLevel level, const bool cycle, const size_t zoomLevels )
     {
-        switch ( level ) {
-        case ZoomLevel::ZoomLevel0:
+        assert( zoomLevels == 3 || zoomLevels == 4 );
+
+        if ( level == ZoomLevel::ZoomLevel0 ) {
             return ZoomLevel::ZoomLevel1;
-        case ZoomLevel::ZoomLevel1:
-            return ZoomLevel::ZoomLevel2;
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-        case ZoomLevel::ZoomLevel2:
-            return ZoomLevel::ZoomLevel3;
-        default:
-            return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel3;
-#else
-        default:
-            return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel2;
-#endif
         }
+
+        if ( level == ZoomLevel::ZoomLevel1 ) {
+            return ZoomLevel::ZoomLevel2;
+        }
+
+        if ( zoomLevels == 3 ) {
+            return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel2;
+        }
+
+        if ( level == ZoomLevel::ZoomLevel2 ) {
+            return ZoomLevel::ZoomLevel3;
+        }
+
+        return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel3;
     }
 
-    ZoomLevel GetPreviousZoomLevel( const ZoomLevel level, const bool cycle )
+    ZoomLevel GetPreviousZoomLevel( const ZoomLevel level, const bool cycle, const size_t zoomLevels )
     {
-        switch ( level ) {
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-        case ZoomLevel::ZoomLevel0:
-            return cycle ? ZoomLevel::ZoomLevel3 : ZoomLevel::ZoomLevel0;
-#else
-        case ZoomLevel::ZoomLevel0:
-            return cycle ? ZoomLevel::ZoomLevel2 : ZoomLevel::ZoomLevel0;
-#endif
-        case ZoomLevel::ZoomLevel1:
+        if ( level == ZoomLevel::ZoomLevel1 ) {
             return ZoomLevel::ZoomLevel0;
-        case ZoomLevel::ZoomLevel2:
-            return ZoomLevel::ZoomLevel1;
-        default:
-            return ZoomLevel::ZoomLevel2;
         }
+
+        if ( level == ZoomLevel::ZoomLevel2 ) {
+            return ZoomLevel::ZoomLevel1;
+        }
+
+        if ( level == ZoomLevel::ZoomLevel0 ) {
+            if ( zoomLevels == 3 ) {
+                return cycle ? ZoomLevel::ZoomLevel2 : ZoomLevel::ZoomLevel0;
+            }
+
+            return cycle ? ZoomLevel::ZoomLevel3 : ZoomLevel::ZoomLevel0;
+        }
+
+        return ZoomLevel::ZoomLevel2;
     }
 
     // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 'unknownIndex' for unknown color.
@@ -186,14 +188,16 @@ namespace
 
     struct CacheForMapWithResources
     {
-        std::array<fheroes2::Image, zoomLevels> cachedImages; // One image per zoom Level
+        std::vector<fheroes2::Image> cachedImages; // One image per zoom Level
 
         CacheForMapWithResources() = delete;
 
         // Compute complete world map, and save it for all zoom levels
-        explicit CacheForMapWithResources( const ViewWorldMode viewMode, Interface::GameArea & gameArea )
+        explicit CacheForMapWithResources( const ViewWorldMode viewMode, Interface::GameArea & gameArea, const size_t zoomLevels )
         {
-            for ( int32_t i = 0; i < zoomLevels; ++i ) {
+            cachedImages.resize( zoomLevels );
+
+            for ( size_t i = 0; i < zoomLevels; ++i ) {
                 cachedImages[i]._disableTransformLayer();
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
             }
@@ -241,7 +245,7 @@ namespace
                     gameArea.SetCenterInPixels( { x * fheroes2::tileWidthPx + redrawAreaCenterX, y * fheroes2::tileWidthPx + redrawAreaCenterY } );
                     gameArea.Redraw( temporaryImg, drawingFlags );
 
-                    for ( int32_t i = 0; i < zoomLevels; ++i ) {
+                    for ( size_t i = 0; i < zoomLevels; ++i ) {
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i],
                                           y * tileSizePerZoomLevel[i], blockSizeX * tileSizePerZoomLevel[i], blockSizeY * tileSizePerZoomLevel[i] );
                     }
@@ -255,6 +259,11 @@ namespace
 #if defined( SAVE_WORLD_MAP )
             fheroes2::Save( cachedImages[3], Settings::Get().getCurrentMapInfo().name + saveFilePrefix + ".bmp" );
 #endif
+        }
+
+        size_t getZoomLevels() const
+        {
+            return cachedImages.size();
         }
     };
 
@@ -320,7 +329,7 @@ namespace
 
         // Render two flags to the left and to the right of Castle/Town entrance.
         const auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
-            for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
+            for ( size_t zoomLevelId = 0; zoomLevelId < cache.getZoomLevels(); ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
 
                 const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
@@ -338,7 +347,7 @@ namespace
 
         // Render hero/artifact icon.
         const auto renderIcon = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
-            for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
+            for ( size_t zoomLevelId = 0; zoomLevelId < cache.getZoomLevels(); ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
                 const int32_t dstx = posX * tileSize + tileSize / 2;
                 const int32_t dsty = posY * tileSize + tileSize / 2;
@@ -357,7 +366,7 @@ namespace
                 return;
             }
 
-            for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
+            for ( size_t zoomLevelId = 0; zoomLevelId < cache.getZoomLevels(); ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
                 const int32_t dstx = posX * tileSize + tileSize / 2;
                 const int32_t dsty = posY * tileSize + tileSize / 2;
@@ -496,18 +505,20 @@ namespace
     }
 }
 
-ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels )
+ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels, const size_t zoomLevels )
     : _zoomLevel( zoomLevel )
     , _center( centerInPixels )
     , _visibleROI( visibleScreenInPixels )
 {
+    _roiForZoomLevels.resize( zoomLevels );
+
     _updateZoomLevels();
     _updateCenter();
 }
 
 void ViewWorld::ZoomROIs::_updateZoomLevels()
 {
-    for ( int32_t i = 0; i < zoomLevels; ++i ) {
+    for ( size_t i = 0; i < _roiForZoomLevels.size(); ++i ) {
         _roiForZoomLevels[i] = computeROI( _center, static_cast<ZoomLevel>( i ), _visibleROI );
     }
 }
@@ -555,13 +566,13 @@ bool ViewWorld::ZoomROIs::_changeZoom( const ZoomLevel newLevel )
 
 bool ViewWorld::ZoomROIs::zoomIn( const bool cycle )
 {
-    const ZoomLevel newLevel = GetNextZoomLevel( _zoomLevel, cycle );
+    const ZoomLevel newLevel = GetNextZoomLevel( _zoomLevel, cycle, _roiForZoomLevels.size() );
     return _changeZoom( newLevel );
 }
 
 bool ViewWorld::ZoomROIs::zoomOut( const bool cycle )
 {
-    const ZoomLevel newLevel = GetPreviousZoomLevel( _zoomLevel, cycle );
+    const ZoomLevel newLevel = GetPreviousZoomLevel( _zoomLevel, cycle, _roiForZoomLevels.size() );
     return _changeZoom( newLevel );
 }
 
@@ -613,7 +624,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     renderProcessor.stopColorCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
-    Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
+    Interface::Radar radar( interface.getRadar(), display );
 
     Interface::GameArea & gameArea = interface.getGameArea();
     const fheroes2::Rect & worldMapROI = gameArea.GetVisibleTileROI();
@@ -630,11 +641,35 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         viewCenterInPixels.y = world.h() * fheroes2::tileWidthPx / 2;
     }
 
-    ZoomROIs currentROI( zoomLevel, viewCenterInPixels, visibleScreenInPixels );
+#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
+    const size_t zoomLevels = 4;
+#else
+    const size_t zoomLevels = interface.isEditor() ? 4 : 3;
+#endif
 
-    CacheForMapWithResources cache( mode, gameArea );
+    ZoomROIs currentROI( zoomLevel, viewCenterInPixels, visibleScreenInPixels, zoomLevels );
 
-    DrawObjectsIcons( color, mode, cache );
+    CacheForMapWithResources cache( mode, gameArea, zoomLevels );
+
+    if ( !interface.isEditor() ) {
+        DrawObjectsIcons( color, mode, cache );
+    }
+    else if ( display.height() == fheroes2::Display::DEFAULT_HEIGHT ) {
+        // Fix borders for Editor if screen height is 480 pixels.
+        const fheroes2::Sprite & borderSprite = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+
+        const int32_t offsetX = 480;
+        const int32_t stepY = 304;
+        fheroes2::Rect borderRoi( display.width() - borderSprite.width() + offsetX, 160, 144, 17 );
+
+        fheroes2::Copy( borderSprite, offsetX, borderRoi.y, display, borderRoi );
+        borderRoi.y += stepY;
+        fheroes2::Copy( borderSprite, offsetX, borderRoi.y, display, borderRoi );
+
+        borderRoi.y -= stepY;
+        borderRoi.height += stepY;
+        display.updateNextRenderRoi( borderRoi );
+    }
 
     // We need to draw interface borders only if game interface is turned off on Adventure map.
     if ( isHideInterface ) {

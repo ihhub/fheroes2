@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -79,9 +79,6 @@ msgid "CANCEL"
 msgstr "AFBRYD"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -221,11 +218,11 @@ msgstr "NULSTIL"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "BORGE"
-
 msgid "TOWN"
 msgstr "BY"
+
+msgid "CASTLE"
+msgstr "BORGE"
 
 msgid "RESTRICT"
 msgstr "BEGRÆNS"
@@ -315,6 +312,16 @@ msgid "EVENTS"
 msgstr ""
 
 msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -470,10 +477,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} udsletter halvdelen af fjendens tropper!"
 msgstr[1] "%{name} udsletter halvdelen af fjendens tropper!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} har deaktiveret automatisk kamp"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} har aktiveret automatisk kamp"
 
 msgid "Spell failed!"
@@ -810,14 +819,18 @@ msgstr "Se Ballistens info"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Aktiver Autokamp"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillader computeren at udkæmpe kampen for dig."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Autokamp"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Autokamp"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Tilpas systemindstillinger"
@@ -865,11 +878,36 @@ msgstr "Beskedlinje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Er du sikker på, at du vil aktivere autokamp?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på, at du vil færdiggøre denne kamp automatisk?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Tillader computeren at udkæmpe kampen for dig."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Autokamp"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Autokamp"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -996,7 +1034,8 @@ msgstr "Spejlbilledet er skabt."
 msgid "The mirror image is destroyed!"
 msgstr "Spejlbilledet er ødelagt!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Er du sikker på, du vil afbryde autokamp-tilstand?"
 
 msgid "Error"
@@ -3319,6 +3358,9 @@ msgstr ""
 "eller\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "i/t"
 
@@ -3420,8 +3462,8 @@ msgstr "Forsvarere:"
 msgid "Unknown"
 msgstr "Ukendt"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Level %{level})"
 
 msgid "Attack:"
 msgstr "Angreb:"
@@ -3824,7 +3866,8 @@ msgstr "Auto, ingen magi"
 msgid "Battles"
 msgstr "Kamp"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuelt"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4443,6 +4486,13 @@ msgstr "Fortryd"
 msgid "Undo your last action."
 msgstr "Fortryd din sidste handling."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Fortryd din sidste handling."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Rediger kortets navn, beskrivelse eller andre informationer."
 
@@ -4707,6 +4757,10 @@ msgstr ""
 "udelukkende bedømt af scenariets designer. Vanskeligere kort inkluderer "
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vælg antal %{resource}:"
 
 msgid "Animation"
 msgstr "Animation"
@@ -5134,6 +5188,10 @@ msgstr "Fuldskærm"
 msgid "hotkey|toggle text support mode"
 msgstr "Tekstunderstøttelsestilstand"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Tekstunderstøttelsestilstand"
+
 msgid "hotkey|new game"
 msgstr "Nyt spil"
 
@@ -5369,11 +5427,13 @@ msgstr "Tilbagetog fra kamp"
 msgid "hotkey|surrender during battle"
 msgstr "Overgivelse i kamp"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Autokamp (til/fra)"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Færdiggør kampen automatisk"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Forlad"
 
 msgid "hotkey|battle options"
 msgstr "Kampindstillinger"
@@ -11558,11 +11618,14 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Halverer hele den fjendtlige hærs bevægelseshastighed."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Skygger den berørte trops øjne og forhindrer dem i at bevæge sig."
-
 msgid "spell|Blind"
 msgstr "Blinding"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Skygger den berørte trops øjne og forhindrer dem i at bevæge sig."
 
 msgid "Bless"
 msgstr "Velsignelse"
@@ -12128,6 +12191,12 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Aktiver Autokamp"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Færdiggør kampen automatisk"
 
 #~ msgid "Please Remember"
 #~ msgstr "Husk venligst"

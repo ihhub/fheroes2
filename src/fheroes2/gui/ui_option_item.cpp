@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,5 +49,6 @@ namespace fheroes2
         name.draw( textHorizontalOffset, optionRoi.y + optionRoi.height + nameVerticalOffset, textMaxWidth, display );
 
         Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
+        fheroes2::addGradientShadow( icon, display, { optionRoi.x, optionRoi.y }, { -5, 5 } );
     }
 }

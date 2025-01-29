@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1205,17 +1205,12 @@ int Army::GetMoraleModificator( std::string * strs ) const
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
-    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
-            allUndead = allUndead && troop->isUndead();
         }
-
-    if ( allUndead )
-        return Morale::NORMAL;
 
     int result = Morale::NORMAL;
 
@@ -1616,6 +1611,12 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
 
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop )
 {
+    if ( !troop.isValid() ) {
+        assert( 0 );
+
+        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
+    }
+
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
@@ -1626,8 +1627,9 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
             const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
 
-            if ( !isAlliance && !isCurse )
+            if ( !isAlliance && !isCurse ) {
                 continue;
+            }
 
             Monster monster( campaignAwards[i]._subType );
             while ( true ) {
@@ -1643,29 +1645,38 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                     }
                 }
 
-                // try to cycle through the creature's upgrades
-                if ( !monster.isAllowUpgrade() )
+                // Also check the upgraded variant(s) of the same monster
+                if ( !monster.isAllowUpgrade() ) {
                     break;
+                }
 
                 monster = monster.GetUpgrade();
             }
         }
     }
 
-    if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
-    if ( Maps::isMonsterOnTileJoinConditionSkip( tile ) || !troop.isValid() ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = Troops( hero.GetArmy().getTroops() ).GetStrength() / troop.GetStrength();
 
-    // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
-    // mandatory condition for their joining in accordance with the mechanics of the original game
-    if ( armyStrengthRatio > 2 && hero.GetArmy().CanJoinTroop( troop ) ) {
+    const bool canJoin = [&hero, &tile, &troop, armyStrengthRatio]() {
+        if ( armyStrengthRatio <= 2 ) {
+            return false;
+        }
+
+        // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a mandatory condition for their joining in accordance with the
+        // mechanics of the original game
+        if ( !hero.GetArmy().CanJoinTroop( troop ) ) {
+            return false;
+        }
+
+        if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
+            return false;
+        }
+
+        return !Maps::isMonsterOnTileJoinConditionSkip( tile );
+    }();
+
+    if ( canJoin ) {
         if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
@@ -1674,8 +1685,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const uint32_t amountToJoin
                 = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            // The ability to hire the entire stack of monsters is a mandatory condition for their joining
-            // due to hero's Diplomacy skill in accordance with the mechanics of the original game
+            // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
+            // the mechanics of the original game
             if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
@@ -1683,7 +1694,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     }
 
     if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
-        // ... surely flee before us
+        // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 

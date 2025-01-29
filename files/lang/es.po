@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
-"PO-Revision-Date: 2025-01-06 19:11+0100\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -83,9 +83,6 @@ msgid "CANCEL"
 msgstr "CANCELAR"
 
 msgid "OKAY"
-msgstr "VALE"
-
-msgid "smallerButton|OKAY"
 msgstr "VALE"
 
 msgid "ACCEPT"
@@ -236,11 +233,11 @@ msgstr "REINICIAR"
 msgid "START"
 msgstr "COMENZAR"
 
-msgid "CASTLE"
-msgstr "CASTILLO"
-
 msgid "TOWN"
 msgstr "CIUDAD"
+
+msgid "CASTLE"
+msgstr "CASTILLO"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -330,6 +327,16 @@ msgstr "EVENTOS"
 
 msgid "LANGUAGE"
 msgstr "IDIOMA"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerrero"
@@ -491,6 +498,14 @@ msgstr "%{name} ha desactivado la batalla automática."
 
 msgid "%{name} has turned on the auto battle"
 msgstr "%{name} ha activado la batalla automática."
+
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
+msgstr "Daña a todos los Nomuertos en combate."
+
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
+msgstr "Daña a todos los Nomuertos en combate."
 
 msgid "Spell failed!"
 msgstr "¡Hechizo fallido!"
@@ -843,8 +858,17 @@ msgstr "Combate automático"
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Permite que la CPU luche la batalla por ti."
 
-msgid "Auto Combat"
+msgid "Automatic combat modes"
 msgstr "Combate Automático"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Combate Automático"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Personalizar opciones de sistema"
@@ -893,11 +917,35 @@ msgstr "Barra de mensajes"
 msgid "Shows the results of individual monster's actions."
 msgstr "Muestra los resultados de las acciones de cada monstruo."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "¿Estás seguro de que quieres activar el combate automático?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
+
+msgid "The computer continues the combat for you."
+msgstr ""
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Combate Automático"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Combate Automático"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1023,7 +1071,8 @@ msgstr "Reflejo creado."
 msgid "The mirror image is destroyed!"
 msgstr "¡La imagen espejo ha sido destruida!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "¿Estas seguro de que quieres interrumpir la batalla automática?"
 
 msgid "Error"
@@ -3259,6 +3308,9 @@ msgstr ""
 "o\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/d"
 
@@ -3361,8 +3413,8 @@ msgstr "Defensores:"
 msgid "Unknown"
 msgstr "Desconocido"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} ( Nivel %{level} )"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "( Nivel %{level} )"
 
 msgid "Attack:"
 msgstr "Ataque:"
@@ -3797,7 +3849,8 @@ msgstr "Automáticas, sin hechizos"
 msgid "Battles"
 msgstr "Batallas"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuales"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4448,6 +4501,12 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4717,6 +4776,10 @@ msgstr ""
 "pueden incluir enemigos más abundantes o poderosos, menos recursos, o "
 "algunas otras condiciones que vuelvan las cosas más duras para el jugador "
 "humano."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Seleccionar cantidad de %{resource}:"
 
 #, fuzzy
 msgid "Animation"
@@ -5146,6 +5209,9 @@ msgstr ""
 msgid "hotkey|toggle text support mode"
 msgstr ""
 
+msgid "hotkey|toggle developer mode"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5391,12 +5457,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
-
 #, fuzzy
-msgid "hotkey|finish the battle in auto mode"
-msgstr "¿Estás seguro de que desea descartar este ejército?"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Mostrar el siguiente héroe"
+
+msgid "hotkey|quick combat"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|battle options"
@@ -11372,11 +11438,14 @@ msgstr "Ralentizar en Masas"
 msgid "Slows all enemies to half movement rate."
 msgstr "Ralentiza a todos los enemigas a la mitad del movimiento."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
-
 msgid "spell|Blind"
 msgstr "Cegar"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Cubre los ojos de la criatura afectada, previniendo que se mueva."
 
 msgid "Bless"
 msgstr "Bendecir"
@@ -11920,6 +11989,14 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Enable auto combat"
+#~ msgstr "Combate automático"
+
+#, fuzzy
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "¿Estás seguro de que desea descartar este ejército?"
 
 #~ msgid "Please Remember"
 #~ msgstr "Recuerde"

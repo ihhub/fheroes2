@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,7 +73,8 @@ namespace
         { gettext_noop( "Mass Haste" ), 10, 0, 0, 61, 2, gettext_noop( "Increases the speed of all of your creatures by %{count}." ) },
         { gettext_noop( "spell|Slow" ), 3, 0, 0, 1, 0, gettext_noop( "Slows target to half movement rate." ) },
         { gettext_noop( "Mass Slow" ), 15, 0, 0, 62, 0, gettext_noop( "Slows all enemies to half movement rate." ) },
-        { gettext_noop( "spell|Blind" ), 6, 0, 0, 21, 0, gettext_noop( "Clouds the affected creatures' eyes, preventing them from moving." ) },
+        { gettext_noop( "spell|Blind" ), 6, 0, 0, 21, 50,
+          gettext_noop( "Clouds the affected creatures' eyes, preventing them from moving and reduces the damage when retaliating by %{count} percent." ) },
         { gettext_noop( "Bless" ), 3, 0, 0, 7, 0, gettext_noop( "Causes the selected creatures to inflict maximum damage." ) },
         { gettext_noop( "Mass Bless" ), 12, 0, 0, 63, 0, gettext_noop( "Causes all of your units to inflict maximum damage." ) },
         { gettext_noop( "Stoneskin" ), 3, 0, 0, 31, 3, gettext_noop( "Magically increases the defense skill of the selected creatures." ) },

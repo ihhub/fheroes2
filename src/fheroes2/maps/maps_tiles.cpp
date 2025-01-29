@@ -373,21 +373,40 @@ namespace
         return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( ta.icnType ), ta.icnIndex );
     }
 
-    void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os )
+    void getObjectPartInfo( const Maps::ObjectPart & part, std::ostringstream & os, const bool isGroundLayer )
     {
         os << "UID             : " << part._uid << std::endl
            << "ICN object type : " << static_cast<int>( part.icnType ) << " (" << ICN::getIcnFileName( MP2::getIcnIdFromObjectIcnType( part.icnType ) ) << ")"
            << std::endl
-           << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl
-           << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl
-           << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
+           << "image index     : " << static_cast<int>( part.icnIndex ) << std::endl;
+
+        if ( isGroundLayer || ( part.layerType == Maps::OBJECT_LAYER ) ) {
+            os << "layer type      : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+        }
+        else {
+            os << "!!! INVALID !!! layer type : " << static_cast<int>( part.layerType ) << " - " << getObjectLayerName( part.layerType ) << std::endl;
+        }
+
+        os << "is shadow       : " << ( isObjectPartShadow( part ) ? "yes" : "no" ) << std::endl;
+
+        if ( part == Maps::ObjectPart{} ) {
+            return;
+        }
+
+        const auto * partInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( partInfo == nullptr ) {
+            os << "!!! UNKNOWN OBJECT PART !!!" << std::endl;
+            return;
+        }
+
+        os << "MP2 object type : " << static_cast<int>( partInfo->objectType ) << " (" << MP2::StringObject( partInfo->objectType ) << ")" << std::endl;
     }
 
-    std::string getObjectPartInfo( const Maps::ObjectPart & part, const int lvl )
+    std::string getObjectPartInfo( const Maps::ObjectPart & part, const bool isGroundLayer )
     {
         std::ostringstream os;
-        os << "--------- Level " << lvl << " --------" << std::endl;
-        getObjectPartInfo( part, os );
+        os << "--------- " << ( isGroundLayer ? "Ground" : "Top" ) << " layer --------" << std::endl;
+        getObjectPartInfo( part, os, isGroundLayer );
         return os.str();
     }
 }
@@ -694,6 +713,9 @@ void Maps::Tile::updatePassability()
         return;
     }
 
+    // If this assertion blows up then you are calling this method more than once!
+    assert( _tilePassabilityDirections == getTileIndependentPassability() );
+
     // Verify the neighboring tiles.
     // If a tile contains a tall object then it affects the passability of diagonal moves to the top from the current tile.
     if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && isValidDirection( _index, Direction::LEFT ) ) {
@@ -772,6 +794,13 @@ void Maps::Tile::updatePassability()
         }
     }
 
+    // If the tile below contains an action object and it allows access from top, nothing we need to change for passability
+    // as the object below does not affect it.
+    const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
+    if ( MP2::isOffGameActionObject( bottomTileObjectType ) && ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
+        return;
+    }
+
     // Count how many objects are there excluding shadows, roads and river streams.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
         if ( isObjectPartShadow( part ) ) {
@@ -786,18 +815,9 @@ void Maps::Tile::updatePassability()
     // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
     if ( !singleObjectTile && !isDetachedObject() && ( bottomTile._mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
          && !bottomTile._mainObjectPart.isPassabilityTransparent() ) {
-        const MP2::MapObjectType bottomTileObjectType = bottomTile.getMainObjectType( false );
         const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
         if ( MP2::isOffGameActionObject( bottomTileObjectType ) || MP2::isOffGameActionObject( correctedObjectType ) ) {
-            if ( ( bottomTile.getTileIndependentPassability() & Direction::TOP ) != 0 ) {
-                // This is an action object with unrestricted access from top.
-
-                // Only main action object parts can have unrestricted access.
-                assert( MP2::isOffGameActionObject( bottomTileObjectType ) );
-                return;
-            }
-
             if ( !isShortObject( bottomTileObjectType ) && !isShortObject( correctedObjectType ) ) {
                 // Since the object on the tile below is considered as tall we must mark this tile as impassable.
                 _tilePassabilityDirections = 0;
@@ -925,69 +945,96 @@ std::string Maps::Tile::String() const
     const MP2::MapObjectType objectType = getMainObjectType();
 
     os << "******* Tile info *******" << std::endl
-       << "Tile index      : " << _index << ", "
+       << "index           : " << _index << ", "
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
-       << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl;
-
-    getObjectPartInfo( _mainObjectPart, os );
-
-    os << "region          : " << _region << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
+       << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
+       << "region Id       : " << _region << std::endl
+       << "ground type     : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
        << "ground img index: " << _terrainImageIndex << ", image flags: " << static_cast<int>( _terrainFlags ) << std::endl
        << "passable from   : " << ( _tilePassabilityDirections ? Direction::String( _tilePassabilityDirections ) : "nowhere" ) << std::endl
        << "metadata value 1: " << _metadata[0] << std::endl
        << "metadata value 2: " << _metadata[1] << std::endl
        << "metadata value 3: " << _metadata[2] << std::endl;
 
-    if ( objectType == MP2::OBJ_BOAT )
+    if ( objectType == MP2::OBJ_BOAT ) {
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
+    }
+
+    os << "--------- Main object part --------" << std::endl;
+    getObjectPartInfo( _mainObjectPart, os, true );
 
     for ( const auto & part : _groundObjectPart ) {
-        os << getObjectPartInfo( part, 1 );
+        os << getObjectPartInfo( part, true );
     }
 
     for ( const auto & part : _topObjectPart ) {
-        os << getObjectPartInfo( part, 2 );
+        os << getObjectPartInfo( part, false );
     }
 
-    os << "--- Extra information ---" << std::endl;
+    bool isExtraInfoPresent = false;
+
+    const auto addExtraInfoLine = [&isExtraInfoPresent, &os]() {
+        if ( !isExtraInfoPresent ) {
+            isExtraInfoPresent = true;
+            os << "--- Extra information ---" << std::endl;
+        }
+    };
 
     switch ( objectType ) {
+    case MP2::OBJ_ABANDONED_MINE:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_GENIE_LAMP:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_MONSTER:
+    case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREE_CITY:
-    case MP2::OBJ_WAGON_CAMP:
-    case MP2::OBJ_DESERT_TENT:
-    case MP2::OBJ_TROLL_BRIDGE:
-    case MP2::OBJ_DRAGON_CITY:
-    case MP2::OBJ_CITY_OF_DEAD:
-    case MP2::OBJ_WATCH_TOWER:
-    case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_CAVE:
     case MP2::OBJ_TREE_HOUSE:
-    case MP2::OBJ_ARCHER_HOUSE:
-    case MP2::OBJ_GOBLIN_HUT:
-    case MP2::OBJ_DWARF_COTTAGE:
-    case MP2::OBJ_HALFLING_HOLE:
-    case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_MONSTER:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_ALTAR:
+        addExtraInfoLine();
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HERO: {
+        addExtraInfoLine();
         const Heroes * hero = getHero();
-        if ( hero )
+        if ( hero ) {
             os << hero->String();
+        }
+        else {
+            os << "!!! INVALID OBJECT TYPE !!!";
+        }
         break;
     }
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
+        addExtraInfoLine();
         const Castle * castle = world.getCastle( GetCenter() );
-        if ( castle )
+        if ( castle ) {
             os << castle->String();
+        }
+        else {
+            os << "!!! INVALID OBJECT TYPE !!!";
+        }
         break;
     }
     default: {
         const MapsIndexes & v = getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
+            addExtraInfoLine();
             os << "protection      : ";
             for ( const int32_t index : v ) {
                 os << index << ", ";
@@ -999,6 +1046,7 @@ std::string Maps::Tile::String() const
     }
 
     if ( MP2::isCaptureObject( getMainObjectType( false ) ) ) {
+        addExtraInfoLine();
         const CapturedObject & co = world.GetCapturedObject( _index );
 
         os << "capture color   : " << Color::String( co.objCol.second ) << std::endl;
@@ -1085,18 +1133,6 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
     return ( direction & _tilePassabilityDirections ) != 0;
 }
 
-void Maps::Tile::SetObjectPassable( bool pass )
-{
-    if ( getMainObjectType( false ) == MP2::OBJ_TROLL_BRIDGE ) {
-        if ( pass ) {
-            _tilePassabilityDirections |= Direction::TOP_LEFT;
-        }
-        else {
-            _tilePassabilityDirections &= ~Direction::TOP_LEFT;
-        }
-    }
-}
-
 bool Maps::Tile::isStream() const
 {
     for ( const auto & part : _groundObjectPart ) {
@@ -1172,34 +1208,15 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, int colo
     }
 
     switch ( objectType ) {
-    case MP2::OBJ_MAGIC_GARDEN:
-        objectSpriteIndex += 128 + 14;
-        updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );
-        objectSpriteIndex += 7;
-        if ( isValidDirection( _index, Direction::RIGHT ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );
-        }
+    case MP2::OBJ_MINE: {
+        objectSpriteIndex += 14;
+        Tile & tile = world.getTile( _index );
+        tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
         break;
+    }
 
-    case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_MINE:
-        objectSpriteIndex += 128 + 14;
-        if ( isValidDirection( _index, Direction::TOP ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::TOP ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
-        }
-
-        objectSpriteIndex += 7;
-        if ( isValidDirection( _index, Direction::TOP_RIGHT ) ) {
-            Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, true );
-        }
-        break;
-
-    case MP2::OBJ_WINDMILL:
     case MP2::OBJ_LIGHTHOUSE:
-        objectSpriteIndex += 128 + 42;
+        objectSpriteIndex += 49;
         if ( isValidDirection( _index, Direction::LEFT ) ) {
             Tile & tile = world.getTile( GetDirectionIndex( _index, Direction::LEFT ) );
             tile.updateFlag( color, objectSpriteIndex, _mainObjectPart._uid, false );

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -84,9 +84,6 @@ msgid "CANCEL"
 msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr "ОК"
-
-msgid "smallerButton|OKAY"
 msgstr "ОК"
 
 msgid "ACCEPT"
@@ -228,11 +225,11 @@ msgstr "СБРОС"
 msgid "START"
 msgstr "НАЧАТЬ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "ГОРОД"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ЗАПРЕТ"
@@ -327,6 +324,16 @@ msgstr "СОБЫТИЯ"
 
 msgid "LANGUAGE"
 msgstr "ЯЗЫК"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Воин"
@@ -483,10 +490,12 @@ msgstr[0] "%{name} убивает половину вражеского отря
 msgstr[1] "%{name} убивают половину вражеского отряда!"
 msgstr[2] "%{name} убивают половину вражеского отряда!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} выключил автобитву"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} включил автобитву"
 
 msgid "Spell failed!"
@@ -824,14 +833,18 @@ msgstr "Информация о баллисте"
 msgid "Ballista"
 msgstr "Баллиста"
 
-msgid "Enable auto combat"
-msgstr "Включить автобитву"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Позволяет компьютеру сражаться за Вас."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Автобитва"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Автобитва"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Изменить настройки системы"
@@ -879,11 +892,36 @@ msgstr "Информационная строка"
 msgid "Shows the results of individual monster's actions."
 msgstr "Здесь отображаются результаты действий отдельных отрядов."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Вы действительно хотите включить автобитву?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Позволяет компьютеру сражаться за Вас."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Автобитва"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Автобитва"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1013,7 +1051,8 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Вы действительно хотите прервать автобитву?"
 
 msgid "Error"
@@ -3278,6 +3317,9 @@ msgstr ""
 "или\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "н/д"
 
@@ -3383,8 +3425,8 @@ msgstr "Защитники:"
 msgid "Unknown"
 msgstr "Неизвестный"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Уровень %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Уровень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -3790,7 +3832,8 @@ msgstr "Авто, без магии"
 msgid "Battles"
 msgstr "Битвы"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4398,6 +4441,13 @@ msgstr "Отменить"
 msgid "Undo your last action."
 msgstr "Отменить последнее действие."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Отменить последнее действие."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Изменить название карты, описание и прочие параметры."
 
@@ -4629,6 +4679,10 @@ msgstr ""
 "больше врагов, либо враги могут быть более сильными. Такие карты могут "
 "содержать меньше ресурсов или иметь прочие условия, усложняющие жизнь игроку-"
 "человеку."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Подарить %{resource}:"
 
 msgid "Animation"
 msgstr "Анимация"
@@ -5057,6 +5111,10 @@ msgstr "переключить полноэкранный режим"
 msgid "hotkey|toggle text support mode"
 msgstr "текстовое сопровождение (вкл./выкл.)"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "текстовое сопровождение (вкл./выкл.)"
+
 msgid "hotkey|new game"
 msgstr "новая игра"
 
@@ -5291,11 +5349,13 @@ msgstr "отступление из битвы"
 msgid "hotkey|surrender during battle"
 msgstr "сдаться в битве"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "включить режим автобитвы"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "закончить битву в авторежиме"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "выйти из игры"
 
 msgid "hotkey|battle options"
 msgstr "настройки битвы"
@@ -11442,13 +11502,16 @@ msgstr "Общее замедление"
 msgid "Slows all enemies to half movement rate."
 msgstr "Замедляет все вражеские отряды на 2 ступени."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
+msgstr "Слепота"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 "Ослеплённый отряд пропускает ходы до тех пор, пока не получит урон или не "
 "окончится действие заклинания."
-
-msgid "spell|Blind"
-msgstr "Слепота"
 
 msgid "Bless"
 msgstr "Благословение"
@@ -11981,6 +12044,12 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Включить автобитву"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "закончить битву в авторежиме"
 
 #~ msgid "Please Remember"
 #~ msgstr "Запомните"

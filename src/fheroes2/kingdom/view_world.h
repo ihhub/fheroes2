@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <array>
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 
 #include "math_base.h"
 #include "settings.h"
@@ -52,7 +53,7 @@ public:
     class ZoomROIs
     {
     public:
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels );
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels, const size_t zoomLevels );
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
@@ -83,7 +84,7 @@ public:
 
         ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
         fheroes2::Point _center;
-        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
+        std::vector<fheroes2::Rect> _roiForZoomLevels;
         fheroes2::Rect _visibleROI;
     };
 };

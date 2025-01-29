@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1263,13 +1263,17 @@ void Dialog::selectTownType( int & type, int & color )
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    fheroes2::Button buttonTown;
-    fheroes2::Button buttonCastle;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { -50, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+    const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
+    const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
+    fheroes2::Button buttonTown{ 0, 0, townButtonIcnId, 0, 1 };
+    fheroes2::Button buttonCastle{ 0, 0, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1 };
+
+    const fheroes2::Point buttonOffset{ area.x + ( area.width - townButtonImage.width() ) / 2, area.y + area.height - townButtonImage.height() - 7 };
+    buttonTown.setPosition( buttonOffset.x, buttonOffset.y );
+    buttonCastle.setPosition( buttonOffset.x, buttonOffset.y );
+    fheroes2::addGradientShadow( townButtonImage, display, buttonOffset, { -5, 5 } );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
@@ -1291,10 +1295,14 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     if ( isCastle ) {
-        buttonCastle.drawOnPress();
+        buttonCastle.disable();
+        buttonTown.enable();
+        buttonTown.draw();
     }
     else {
-        buttonTown.drawOnPress();
+        buttonCastle.enable();
+        buttonTown.disable();
+        buttonCastle.draw();
     }
 
     while ( le.HandleEvents() ) {
@@ -1343,10 +1351,10 @@ void Dialog::selectTownType( int & type, int & color )
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
+        else if ( buttonTown.isEnabled() && le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Town" ), _( "Click to select town placing." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
+        else if ( buttonCastle.isEnabled() && le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Castle" ), _( "Click to select castle placing." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( castleRoi ) ) {
@@ -1385,6 +1393,17 @@ void Dialog::selectTownType( int & type, int & color )
         }
 
         castleBackground.restore();
+
+        if ( isCastle ) {
+            buttonCastle.disable();
+            buttonTown.enable();
+            buttonTown.draw();
+        }
+        else {
+            buttonCastle.enable();
+            buttonTown.disable();
+            buttonCastle.draw();
+        }
 
         // Update town image.
         const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( getPackedTownType( townRace, isCastle ), townColor, basementGround );
@@ -1481,7 +1500,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     uint32_t selectedResourceType = 0;
 
     const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-    if ( type > 0 ) {
+    if ( type >= 0 ) {
         assert( static_cast<size_t>( type ) < allObjectInfo.size() );
 
         if ( allObjectInfo[type].objectType == MP2::OBJ_ABANDONED_MINE ) {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "MÉGSEM"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "ÚJRA"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "VÁR"
-
 msgid "TOWN"
 msgstr "VÁROS"
+
+msgid "CASTLE"
+msgstr "VÁR"
 
 msgid "RESTRICT"
 msgstr "KORLÁTOZ"
@@ -321,6 +318,16 @@ msgstr "ESEMÉNYEK"
 
 msgid "LANGUAGE"
 msgstr "NYELV"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -475,10 +482,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} elpusztítja az ellenséges csapatok felét!"
 msgstr[1] "%{name} elpusztítják az ellenséges csapatok felét!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} kikapcsolta az automata csata funkciót"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} bekapcsolta az automata csata funkciót"
 
 msgid "Spell failed!"
@@ -806,14 +815,18 @@ msgstr "Hajítógép információk"
 msgid "Ballista"
 msgstr "Hajítógép"
 
-msgid "Enable auto combat"
-msgstr "Automatikus harc bekapcsolása"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "A számítógép lejátssza helyetted a csatát."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Automatikus csata"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Automatikus csata"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
@@ -861,11 +874,36 @@ msgstr "Üzenetsáv"
 msgid "Shows the results of individual monster's actions."
 msgstr "Mutatja egy lény tevékenységének eredményét."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Biztos, hogy be akarod kapcsolni az automata csatát?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Biztos vagy benne hogy automatikus módban kívánod befejezni a csatát?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "A számítógép lejátssza helyetted a csatát."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Automatikus csata"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Automatikus csata"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -986,7 +1024,8 @@ msgstr "Tükör képmás készült."
 msgid "The mirror image is destroyed!"
 msgstr "Tükör képmás megsemmisült!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Biztos, hogy meg akarod szakítani az automatikus csatát?"
 
 msgid "Error"
@@ -3256,6 +3295,9 @@ msgstr ""
 "vagy\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/a"
 
@@ -3357,8 +3399,8 @@ msgstr "Védők:"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (%{level}. szint)"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(%{level}. szint)"
 
 msgid "Attack:"
 msgstr "Támadóerő:"
@@ -3763,7 +3805,8 @@ msgstr "Auto, nincs varázslás"
 msgid "Battles"
 msgstr "Csaták"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Kézi vezérlés"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4370,6 +4413,13 @@ msgstr "Visszavonás"
 msgid "Undo your last action."
 msgstr "Utolsó cselekedet visszavonása."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Utolsó cselekedet visszavonása."
+
 msgid "Edit map title, description, and other general information."
 msgstr "A pályanevek, leírások és egyéb általános információk szerkesztése."
 
@@ -4604,6 +4654,10 @@ msgstr ""
 "Kattints a térkép nehézségi fokozatának beállításához. Nehezebb térképek "
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "A számításba veendő %{resource} kiválasztása:"
 
 msgid "Animation"
 msgstr "Animáció"
@@ -5030,6 +5084,10 @@ msgstr "teljes képernyő váltás"
 msgid "hotkey|toggle text support mode"
 msgstr "szöveges támogatás váltás"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "szöveges támogatás váltás"
+
 msgid "hotkey|new game"
 msgstr "új játék"
 
@@ -5264,11 +5322,13 @@ msgstr "visszavonulás a csatából"
 msgid "hotkey|surrender during battle"
 msgstr "megadás a csatában"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "automatikus csata mód kapcsoló"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "csata befejezése automatikus módban"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "kilépés"
 
 msgid "hotkey|battle options"
 msgstr "csata beállítások"
@@ -11417,11 +11477,14 @@ msgstr "Tömeges lassítás"
 msgid "Slows all enemies to half movement rate."
 msgstr "Felezi az összes ellenség sebességét."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
-
 msgid "spell|Blind"
 msgstr "Vakítás"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
 
 msgid "Bless"
 msgstr "Áldás"
@@ -11937,6 +12000,12 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Automatikus harc bekapcsolása"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "csata befejezése automatikus módban"
 
 #~ msgid "Please Remember"
 #~ msgstr "Kérlek, ne felejtsd el"
