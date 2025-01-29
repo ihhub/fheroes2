@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 10:55+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -223,11 +223,11 @@ msgstr ""
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "BURG"
-
 msgid "TOWN"
 msgstr "STÄDT"
+
+msgid "CASTLE"
+msgstr "BURG"
 
 #, fuzzy
 msgid "RESTRICT"

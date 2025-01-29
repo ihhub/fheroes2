@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 10:55+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -219,11 +219,11 @@ msgstr "SIFIRLA"
 msgid "START"
 msgstr "BAŞLA"
 
-msgid "CASTLE"
-msgstr "KALE"
-
 msgid "TOWN"
 msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
 
 msgid "RESTRICT"
 msgstr "KISITLA"

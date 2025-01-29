@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 10:55+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -218,11 +218,11 @@ msgstr "ÅTERS."
 msgid "START"
 msgstr "STARTA"
 
-msgid "CASTLE"
-msgstr "SLOTT"
-
 msgid "TOWN"
 msgstr "STAD"
+
+msgid "CASTLE"
+msgstr "SLOTT"
 
 msgid "RESTRICT"
 msgstr "BEGRÄNSA"

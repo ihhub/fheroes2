@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 10:55+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -219,11 +219,11 @@ msgstr "ÚJRA"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "VÁR"
-
 msgid "TOWN"
 msgstr "VÁROS"
+
+msgid "CASTLE"
+msgstr "VÁR"
 
 msgid "RESTRICT"
 msgstr "KORLÁTOZ"
