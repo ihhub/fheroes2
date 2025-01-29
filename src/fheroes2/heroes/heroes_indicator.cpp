@@ -227,7 +227,7 @@ void ExperienceIndicator::Redraw() const
     }
     else {
         // Experience can be longer than the width of the rendering area.
-        // This is why it is important to either take into an account letter shadows or change the value of the experience.
+        // This is why it is important to either take into account letter shadows or change the experience value.
         const uint32_t experienceValue = _hero->GetExperience();
         std::string experienceString = std::to_string( _hero->GetExperience() );
 
@@ -237,10 +237,10 @@ void ExperienceIndicator::Redraw() const
             const uint32_t millions = experienceValue / 1000000;
 
             if ( experienceValue < 10000000 ) {
-                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 10000 ) + "M";
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 10000 ) + _( "million|M" );
             }
             else {
-                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 100000 ) + "M";
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 100000 ) + _( "million|M" );
             }
 
             text.set( experienceString, fheroes2::FontType::smallWhite() );
