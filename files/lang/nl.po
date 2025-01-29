@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3165,15 +3165,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
 #, fuzzy
 msgid "Hide"
 msgstr "Horde"
@@ -3184,25 +3175,16 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
+msgid "Interface Type"
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Scroll Speed"
 msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
@@ -4700,6 +4682,9 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
+msgid "Normal"
+msgstr ""
+
 msgid "Hard"
 msgstr ""
 
@@ -6103,6 +6088,21 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Zie %{name}"
+
+msgid "Slow"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""

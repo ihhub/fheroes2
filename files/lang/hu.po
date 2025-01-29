@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3215,15 +3215,6 @@ msgstr "Esemény: "
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
 
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-msgid "Interface Type"
-msgstr "Kezelőfelület típusa"
-
 msgid "Hide"
 msgstr "Elrejt"
 
@@ -3233,26 +3224,17 @@ msgstr "Mutat"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
-msgid "Slow"
-msgstr "Lassú"
-
-msgid "Normal"
-msgstr "Normál"
-
-msgid "Fast"
-msgstr "Gyors"
-
-msgid "Very Fast"
-msgstr "Nagyon gyors"
-
-msgid "Scroll Speed"
-msgstr "Képernyőgörgetés sebessége"
+msgid "Interface Type"
+msgstr "Kezelőfelület típusa"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid "Toggle interface visibility."
 msgstr "Kezelőfelület láthatóságának kapcsolója."
+
+msgid "Scroll Speed"
+msgstr "Képernyőgörgetés sebessége"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Beállítja az ablakok görgetésének sebességét."
@@ -4784,6 +4766,9 @@ msgstr "és egyebek..."
 
 msgid "Easy"
 msgstr "Könnyű"
+
+msgid "Normal"
+msgstr "Normál"
 
 msgid "Hard"
 msgstr "Nehéz"
@@ -6324,6 +6309,21 @@ msgstr "szlovák"
 
 msgid "Vietnamese"
 msgstr "vietnámi"
+
+msgid "Slow"
+msgstr "Lassú"
+
+msgid "Fast"
+msgstr "Gyors"
+
+msgid "Very Fast"
+msgstr "Nagyon gyors"
+
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
 
 msgid ", FPS: "
 msgstr ", FPS: "

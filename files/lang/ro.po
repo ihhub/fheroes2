@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3100,15 +3100,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Scurtături:"
 
-msgid "Evil"
-msgstr "Rău"
-
-msgid "Good"
-msgstr "Bun"
-
-msgid "Interface Type"
-msgstr "Tipul interfeței"
-
 msgid "Hide"
 msgstr "Ascunde"
 
@@ -3118,26 +3109,17 @@ msgstr "Arată"
 msgid "Interface"
 msgstr "Interfață"
 
-msgid "Slow"
-msgstr "Încet"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Rapid"
-
-msgid "Very Fast"
-msgstr "Foarte rapid"
-
-msgid "Scroll Speed"
-msgstr "Viteză de defilare"
+msgid "Interface Type"
+msgstr "Tipul interfeței"
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr ""
+
+msgid "Scroll Speed"
+msgstr "Viteză de defilare"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
@@ -4627,6 +4609,9 @@ msgstr ""
 msgid "Easy"
 msgstr "Ușor"
 
+msgid "Normal"
+msgstr "Normal"
+
 msgid "Hard"
 msgstr "Greu"
 
@@ -6042,6 +6027,21 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Vezi %{name}"
+
+msgid "Slow"
+msgstr "Încet"
+
+msgid "Fast"
+msgstr "Rapid"
+
+msgid "Very Fast"
+msgstr "Foarte rapid"
+
+msgid "Evil"
+msgstr "Rău"
+
+msgid "Good"
+msgstr "Bun"
 
 msgid ", FPS: "
 msgstr ""
