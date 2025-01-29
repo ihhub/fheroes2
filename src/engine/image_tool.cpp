@@ -449,7 +449,7 @@ namespace fheroes2
 
         const uint8_t * input = data.data() + 6;
         uint8_t * image = output.image();
-        const uint8_t * imageEnd = image + width * height;
+        const uint8_t * imageEnd = image + static_cast<ptrdiff_t>( width ) * height;
         uint8_t * transform = output.transform();
 
         for ( ; image != imageEnd; ++image, ++transform, ++input ) {
