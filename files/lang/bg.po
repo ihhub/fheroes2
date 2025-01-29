@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -79,9 +79,6 @@ msgid "CANCEL"
 msgstr "ОТКАЗ"
 
 msgid "OKAY"
-msgstr "ДОБРЕ"
-
-msgid "smallerButton|OKAY"
 msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
@@ -3471,8 +3468,8 @@ msgstr "Защитници:"
 msgid "Unknown"
 msgstr "неизвестен"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Ниво %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Ниво %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -4553,6 +4550,13 @@ msgid "Undo"
 msgstr "Отмяна"
 
 msgid "Undo your last action."
+msgstr "Отмени последното си действие."
+
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
 msgstr "Отмени последното си действие."
 
 msgid "Edit map title, description, and other general information."
@@ -11772,11 +11776,14 @@ msgstr "Всеобщо забавяне"
 msgid "Slows all enemies to half movement rate."
 msgstr "Забавя всички врагове до половината скорост на движение."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Замъглява очите на засегнатите същества, като им пречи да се движат."
-
 msgid "spell|Blind"
 msgstr "Слепота"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Замъглява очите на засегнатите същества, като им пречи да се движат."
 
 msgid "Bless"
 msgstr "Благословия"

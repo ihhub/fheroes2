@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "smallerButton|OKAY"
 msgstr "OKEJ"
 
 msgid "ACCEPT"
@@ -3398,8 +3395,8 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -4412,6 +4409,13 @@ msgid "Undo"
 msgstr "Ångra"
 
 msgid "Undo your last action."
+msgstr "Ångra din sista åtgärd."
+
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
 msgstr "Ångra din sista åtgärd."
 
 msgid "Edit map title, description, and other general information."
@@ -11461,11 +11465,14 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Saktar ned alla fiendevarelser till hälften."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Grumlar varelsens ögon som förhindrar den från att röra sig."
-
 msgid "spell|Blind"
 msgstr "Förblinda"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Grumlar varelsens ögon som förhindrar den från att röra sig."
 
 msgid "Bless"
 msgstr "Välsignelse"

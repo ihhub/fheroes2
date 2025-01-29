@@ -738,6 +738,8 @@ namespace fheroes2
         released = resizeButton( originalReleased, { width, originalReleased.height() } );
         pressed = resizeButton( originalPressed, { width, originalPressed.height() } );
 
+        addButtonShine( released, icnId );
+
         if ( !isTransparentBackground ) {
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             makeTransparentBackground( released, pressed, backgroundIcnId );

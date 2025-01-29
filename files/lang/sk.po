@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -84,9 +84,6 @@ msgid "CANCEL"
 msgstr "ZRUŠIŤ"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -3452,8 +3449,8 @@ msgstr "Obrancovia:"
 msgid "Unknown"
 msgstr "Neznáme"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} na úrovni %{level}"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "na úrovni %{level}"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -4519,6 +4516,12 @@ msgid "Undo"
 msgstr "Vrátiť"
 
 msgid "Undo your last action."
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -11673,11 +11676,14 @@ msgstr "Hromadné spomalenie"
 msgid "Slows all enemies to half movement rate."
 msgstr "Spomaľuje všetkých nepriateľov na polovicu rýchlosti pohybu."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
-
 msgid "spell|Blind"
 msgstr "Slepota"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
 
 msgid "Bless"
 msgstr "Požehnanie"

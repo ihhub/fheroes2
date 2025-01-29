@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-18 04:54+0000\n"
+"POT-Creation-Date: 2025-01-26 14:00+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -65,9 +65,6 @@ msgid "CANCEL"
 msgstr ""
 
 msgid "OKAY"
-msgstr ""
-
-msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -3223,7 +3220,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 #, fuzzy
@@ -4242,6 +4239,12 @@ msgid "Undo"
 msgstr ""
 
 msgid "Undo your last action."
+msgstr ""
+
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
 msgstr ""
 
 msgid "Edit map title, description, and other general information."
@@ -10509,10 +10512,12 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
-msgid "spell|Blind"
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 
 msgid "Bless"
