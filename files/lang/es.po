@@ -3215,7 +3215,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Cambia el tipo de interfaz que deseas utilizar."
 
 msgid "Toggle interface visibility."
-msgstr "Alternar visibilidad de la interfaz."
+msgstr "Alterna la visibilidad de la interfaz."
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Establece la velocidad a la que se desplaza la ventana."
