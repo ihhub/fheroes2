@@ -3431,7 +3431,7 @@ msgid "Click to apply the entered text."
 msgstr "Haz clic para volver al menú principal"
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr "Haga clic para abrir el cuadro de diálogo Teclado virtual."
+msgstr "Haz clic para abrir el cuadro de diálogo del Teclado virtual."
 
 msgid "Open Virtual Keyboard"
 msgstr "Abrir teclado virtual"
@@ -3529,7 +3529,7 @@ msgid "%{color} %{race}"
 msgstr "Héroe %{race} %{color}"
 
 msgid "You will place"
-msgstr "Objeto de terreno"
+msgstr "Colocarás"
 
 #, fuzzy
 msgid "Click to select this class."
