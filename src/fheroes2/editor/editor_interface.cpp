@@ -185,9 +185,10 @@ namespace
                 return false;
             }
 
-            if ( MP2::isOffGameActionObject( objectPart.objectType ) && MP2::isPickupObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
-                // We are trying to place a pickup action object on a tile that has some other objects.
-                // Since, pickup objects are tend to be removed we are not allowing to put them on top of other objects.
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) && MP2::getActionObjectPassability( objectPart.objectType ) == DIRECTION_ALL
+                 && !Maps::isClearGround( tile ) ) {
+                // We are trying to place a "movable" action object on a tile that has some other objects.
+                // Since, "movable" objects are tend to be removed we do not allow to put them on top of other objects.
                 return false;
             }
         }
