@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -218,11 +218,11 @@ msgstr "NULSTIL"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "BORGE"
-
 msgid "TOWN"
 msgstr "BY"
+
+msgid "CASTLE"
+msgstr "BORGE"
 
 msgid "RESTRICT"
 msgstr "BEGRÆNS"
@@ -3358,6 +3358,9 @@ msgstr ""
 "eller\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "i/t"
 
@@ -4754,6 +4757,10 @@ msgstr ""
 "udelukkende bedømt af scenariets designer. Vanskeligere kort inkluderer "
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vælg antal %{resource}:"
 
 msgid "Animation"
 msgstr "Animation"

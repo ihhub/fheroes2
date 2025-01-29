@@ -1824,7 +1824,16 @@ namespace
         case ICN::BUTTON_CASTLE_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+            // Town and Castle buttons must have the same width.
+            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
+            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+
+            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
+            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
 
             break;
         }
@@ -1832,7 +1841,16 @@ namespace
         case ICN::BUTTON_TOWN_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
+            // Town and Castle buttons must have the same width.
+            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
+            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+
+            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
+            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
 
             break;
         }

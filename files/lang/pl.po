@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -228,14 +228,14 @@ msgstr ""
 msgid "START"
 msgstr "OD NOWA"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MIASTA/\n"
 "ZAMKI"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3355,6 +3355,9 @@ msgid ""
 "%{skill2}"
 msgstr "Możesz nauczyć się:"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "nd."
 
@@ -4791,6 +4794,10 @@ msgstr ""
 "Poziom trudności na aktualnie wybranej mapie, określony przez autora "
 "scenariusza. Na bardziej złożonych mapach mogą występować silniejsi "
 "przeciwnicy, mniej zasobów lub inne specjalne warunki utrudniające rozgrywkę."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Wybierz ilość %{resource}:"
 
 #, fuzzy
 msgid "Animation"

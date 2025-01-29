@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -220,11 +220,11 @@ msgstr "RESET"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "CASTEL"
-
 msgid "TOWN"
 msgstr "ORAȘ"
+
+msgid "CASTLE"
+msgstr "CASTEL"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3174,6 +3174,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr ""
 
@@ -4492,6 +4495,9 @@ msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
+msgstr ""
+
+msgid "editor|%{count} %{resource}"
 msgstr ""
 
 #, fuzzy

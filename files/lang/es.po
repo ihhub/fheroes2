@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -232,11 +232,11 @@ msgstr "REINICIAR"
 msgid "START"
 msgstr "COMENZAR"
 
-msgid "CASTLE"
-msgstr "CASTILLO"
-
 msgid "TOWN"
 msgstr "CIUDAD"
+
+msgid "CASTLE"
+msgstr "CASTILLO"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3284,6 +3284,9 @@ msgstr ""
 "o\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/d"
 
@@ -4716,6 +4719,10 @@ msgstr ""
 "pueden incluir enemigos más abundantes o poderosos, menos recursos, o "
 "algunas otras condiciones que vuelvan las cosas más duras para el jugador "
 "humano."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Seleccionar cantidad de %{resource}:"
 
 #, fuzzy
 msgid "Animation"

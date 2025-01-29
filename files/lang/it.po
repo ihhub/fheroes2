@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -192,10 +192,10 @@ msgstr ""
 msgid "START"
 msgstr ""
 
-msgid "CASTLE"
+msgid "TOWN"
 msgstr ""
 
-msgid "TOWN"
+msgid "CASTLE"
 msgstr ""
 
 msgid "RESTRICT"
@@ -3177,6 +3177,9 @@ msgid ""
 "%{skill2}"
 msgstr "Può imparare:"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/d"
 
@@ -4606,6 +4609,10 @@ msgstr ""
 "data dallo scenario. Mappe più difficili includono più nemici (o più forti), "
 "meno risorse oppure altre condizioni speciali che rendono la partita più "
 "dura all'umano."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Scegli quantità di %{resource}:"
 
 #, fuzzy
 msgid "Animation"

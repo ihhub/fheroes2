@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -225,11 +225,11 @@ msgstr "СБРОС"
 msgid "START"
 msgstr "НАЧАТЬ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "ГОРОД"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ЗАПРЕТ"
@@ -3317,6 +3317,9 @@ msgstr ""
 "или\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "н/д"
 
@@ -4676,6 +4679,10 @@ msgstr ""
 "больше врагов, либо враги могут быть более сильными. Такие карты могут "
 "содержать меньше ресурсов или иметь прочие условия, усложняющие жизнь игроку-"
 "человеку."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Подарить %{resource}:"
 
 msgid "Animation"
 msgstr "Анимация"

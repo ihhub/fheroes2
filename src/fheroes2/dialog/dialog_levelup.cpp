@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,95 +80,81 @@ namespace
 
     int DialogSelectSecondary( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         std::string header = _( "%{name} has gained a level.\n\n%{skill} +1" );
         StringReplace( header, "%{name}", name );
         StringReplace( header, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
-        fheroes2::Display & display = fheroes2::Display::instance();
+        std::string body = _( "You may learn either:\n%{skill1}\nor\n%{skill2}" );
+        StringReplace( body, "%{skill1}", sec1.GetName() );
+        StringReplace( body, "%{skill2}", sec2.GetName() );
 
-        // setup cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-        const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
-        const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );
-        const fheroes2::Sprite & sprite_skill2 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec2.GetIndexSprite1() );
-
-        std::string message = _( "You may learn either:\n%{skill1}\nor\n%{skill2}" );
-        StringReplace( message, "%{skill1}", sec1.GetName() );
-        StringReplace( message, "%{skill2}", sec2.GetName() );
-
-        const fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text headerText{ std::move( header ), fheroes2::FontType::normalWhite() };
+        const fheroes2::Text bodyText{ std::move( body ), fheroes2::FontType::normalWhite() };
         const int spacer = 10;
 
-        const Dialog::FrameBox box( box1.height( fheroes2::boxAreaWidthPx ) + spacer + box2.height( fheroes2::boxAreaWidthPx ) + 10 + sprite_frame.height(), true );
+        const fheroes2::SecondarySkillDialogElement skillLeft{ sec1, hero };
+        const fheroes2::SecondarySkillDialogElement skillRight{ sec2, hero };
+
+        const Dialog::FrameBox dialogFrame( headerText.height( fheroes2::boxAreaWidthPx ) + spacer + bodyText.height( fheroes2::boxAreaWidthPx ) + 10
+                                                + skillLeft.area().height,
+                                            true );
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
 
-        fheroes2::Point pt;
-        pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).width() - 20;
-        pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button buttonLearnLeft( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
+        const fheroes2::Sprite & buttonLearnImage = fheroes2::AGG::GetICN( buttonLearnIcnID, 0 );
 
-        pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-        pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
-        fheroes2::Button buttonLearnRight( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
+        fheroes2::Point offset;
+        offset.x = dialogRoi.x + dialogRoi.width / 2 - buttonLearnImage.width() - 20;
+        offset.y = dialogRoi.y + dialogRoi.height - buttonLearnImage.height();
+        fheroes2::Button buttonLearnLeft( offset.x, offset.y, buttonLearnIcnID, 0, 1 );
 
-        const fheroes2::Rect & boxArea = box.GetArea();
-        fheroes2::Point pos( boxArea.x, boxArea.y );
+        offset.x = dialogRoi.x + dialogRoi.width / 2 + 20;
+        offset.y = dialogRoi.y + dialogRoi.height - buttonLearnImage.height();
+        fheroes2::Button buttonLearnRight( offset.x, offset.y, buttonLearnIcnID, 0, 1 );
 
-        box1.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
-        pos.y += box1.height( fheroes2::boxAreaWidthPx ) + spacer;
+        offset = { dialogRoi.x, dialogRoi.y };
 
-        box2.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
-        pos.y += box2.height( fheroes2::boxAreaWidthPx ) + spacer;
+        fheroes2::Display & display = fheroes2::Display::instance();
+        headerText.draw( offset.x, offset.y + 2, fheroes2::boxAreaWidthPx, display );
+        offset.y += headerText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
-        // sprite1
-        pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;
-        fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
-        pos.x += 3;
-        const fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
-        fheroes2::Blit( sprite_skill1, display, pos.x, pos.y + 3 );
+        bodyText.draw( offset.x, offset.y + 2, fheroes2::boxAreaWidthPx, display );
+        offset.y += bodyText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
-        fheroes2::Text text{ Skill::Secondary::String( sec1.Skill() ), fheroes2::FontType::smallWhite() };
-        text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + 7, display );
-        text.set( Skill::Level::String( sec1.Level() ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + sprite_skill1.height() - 10, display );
+        offset.x = dialogRoi.x + dialogRoi.width / 2 - skillLeft.area().width - 20;
+        offset.x += 3;
+        skillLeft.draw( display, offset );
+        const fheroes2::Rect skillLeftRoi{ offset.x, offset.y, skillLeft.area().width, skillLeft.area().height };
 
-        // sprite2
-        pos.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-        fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
-        pos.x += 3;
-
-        const fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
-        fheroes2::Blit( sprite_skill2, display, pos.x, pos.y + 3 );
-        // text
-        const fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
-        name_skill2.draw( pos.x + ( sprite_skill2.width() - name_skill2.width() ) / 2, pos.y + 7, display );
-        const fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
-        name_level2.draw( pos.x + ( sprite_skill2.width() - name_level2.width() ) / 2, pos.y + sprite_skill2.height() - 10, display );
+        offset.x = dialogRoi.x + dialogRoi.width / 2 + 20;
+        offset.x += 3;
+        skillRight.draw( display, offset );
+        const fheroes2::Rect skillRightRoi{ offset.x, offset.y, skillRight.area().width, skillRight.area().height };
 
         // hero button
-        pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
-        pt.y = box.GetArea().y + box.GetArea().height - 35;
+        offset.x = dialogRoi.x + dialogRoi.width / 2 - 18;
+        offset.y = dialogRoi.y + dialogRoi.height - 35;
 
         const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
         fheroes2::ButtonSprite buttonHero
-            = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
+            = fheroes2::makeButtonWithBackground( offset.x, offset.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
-        text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ), fheroes2::FontType::normalWhite() );
-        text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 15, display );
+        const fheroes2::Text text{ std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ),
+                                   fheroes2::FontType::normalWhite() };
+        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offset.y - 15, display );
 
         buttonLearnLeft.draw();
         buttonLearnRight.draw();
         buttonHero.draw();
 
         display.render();
-        LocalEvent & le = LocalEvent::Get();
 
-        // message loop
+        LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeft.area() ) );
             buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRight.area() ) );
@@ -183,28 +169,40 @@ namespace
             }
 
             if ( le.MouseClickLeft( buttonHero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-                LocalEvent::Get().reset();
+                le.reset();
                 hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
             }
 
-            if ( le.MouseClickLeft( rect_image1 ) ) {
-                fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::OK );
+            if ( le.MouseClickLeft( skillLeftRoi ) ) {
+                skillLeft.showPopup( Dialog::OK );
             }
-            else if ( le.MouseClickLeft( rect_image2 ) ) {
-                fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::OK );
+            else if ( le.MouseClickLeft( skillRightRoi ) ) {
+                skillRight.showPopup( Dialog::OK );
             }
 
-            if ( le.isMouseRightButtonPressedInArea( rect_image1 ) ) {
-                fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::ZERO );
+            if ( le.isMouseRightButtonPressedInArea( skillLeftRoi ) ) {
+                skillLeft.showPopup( Dialog::ZERO );
                 display.render();
             }
-            else if ( le.isMouseRightButtonPressedInArea( rect_image2 ) ) {
-                fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
+            else if ( le.isMouseRightButtonPressedInArea( skillRightRoi ) ) {
+                skillRight.showPopup( Dialog::ZERO );
                 display.render();
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonHero.area() ) ) {
                 fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonLearnLeft.area() ) ) {
+                std::string message = _( "Learn %{secondary-skill}" );
+                StringReplace( message, "%{secondary-skill}", sec1.GetName() );
+
+                fheroes2::showStandardTextMessage( "", std::move( message ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonLearnRight.area() ) ) {
+                std::string message = _( "Learn %{secondary-skill}" );
+                StringReplace( message, "%{secondary-skill}", sec2.GetName() );
+
+                fheroes2::showStandardTextMessage( "", std::move( message ), Dialog::ZERO );
             }
         }
 

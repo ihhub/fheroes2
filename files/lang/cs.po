@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 14:00+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -219,11 +219,11 @@ msgstr "RESET"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "HRAD"
-
 msgid "TOWN"
 msgstr "MĚSTO"
+
+msgid "CASTLE"
+msgstr "HRAD"
 
 msgid "RESTRICT"
 msgstr "OMEZIT"
@@ -3278,6 +3278,9 @@ msgstr ""
 "nebo\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/a"
 
@@ -4625,6 +4628,10 @@ msgstr ""
 "Klikněte pro nastavení obtížnosti mapy. Obtížnější mapy mohou zahrnovat "
 "silnější nepřátele, méně zdrojů nebo jiné speciální podmínky, které ztěžují "
 "hru hráči."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vyberte množství %{resource}:"
 
 msgid "Animation"
 msgstr "Animace"
