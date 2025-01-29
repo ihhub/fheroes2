@@ -851,10 +851,6 @@ msgstr "Ver información de la ballesta"
 msgid "Ballista"
 msgstr "Balista"
 
-#, fuzzy
-msgid "Enable auto combat"
-msgstr "Combate automático"
-
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Permite que la CPU luche la batalla por ti."
 
