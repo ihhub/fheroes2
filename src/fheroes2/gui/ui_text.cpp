@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "agg_image.h"
+#include "icn.h"
 #include "ui_language.h"
 
 namespace
@@ -44,6 +45,115 @@ namespace
     bool isSpaceChar( const uint8_t character )
     {
         return ( character == ' ' );
+    }
+
+    const fheroes2::Sprite errorImage;
+
+    const fheroes2::Sprite & getChar( const uint8_t character, const fheroes2::FontType & fontType )
+    {
+        if ( character < 0x21 ) {
+            return errorImage;
+        }
+
+        switch ( fontType.size ) {
+        case fheroes2::FontSize::SMALL:
+            switch ( fontType.color ) {
+            case fheroes2::FontColor::WHITE:
+                return fheroes2::AGG::GetICN( ICN::SMALFONT, character - 0x20 );
+            case fheroes2::FontColor::GRAY:
+                return fheroes2::AGG::GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+            case fheroes2::FontColor::YELLOW:
+                return fheroes2::AGG::GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case fheroes2::FontSize::NORMAL:
+            switch ( fontType.color ) {
+            case fheroes2::FontColor::WHITE:
+                return fheroes2::AGG::GetICN( ICN::FONT, character - 0x20 );
+            case fheroes2::FontColor::GRAY:
+                return fheroes2::AGG::GetICN( ICN::GRAY_FONT, character - 0x20 );
+            case fheroes2::FontColor::YELLOW:
+                return fheroes2::AGG::GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            case fheroes2::FontColor::GOLDEN_GRADIENT:
+                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
+            case fheroes2::FontColor::SILVER_GRADIENT:
+                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case fheroes2::FontSize::LARGE:
+            switch ( fontType.color ) {
+            case fheroes2::FontColor::WHITE:
+                return fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+            case fheroes2::FontColor::GOLDEN_GRADIENT:
+                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
+            case fheroes2::FontColor::SILVER_GRADIENT:
+                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case fheroes2::FontSize::BUTTON_RELEASED:
+            switch ( fontType.color ) {
+            case fheroes2::FontColor::WHITE:
+                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
+            case fheroes2::FontColor::GRAY:
+                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            switch ( fontType.color ) {
+            case fheroes2::FontColor::WHITE:
+                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
+            case fheroes2::FontColor::GRAY:
+                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
+            default:
+                // Did you add a new font color? Add the corresponding logic for it!
+                assert( 0 );
+                break;
+            }
+            break;
+        default:
+            // Did you add a new font size? Add the corresponding logic for it!
+            assert( 0 );
+            break;
+        }
+
+        assert( 0 ); // Did you add a new font size? Please add implementation.
+
+        return errorImage;
+    }
+
+    uint32_t getCharacterLimit( const fheroes2::FontSize fontSize )
+    {
+        switch ( fontSize ) {
+        case fheroes2::FontSize::SMALL:
+            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+        case fheroes2::FontSize::NORMAL:
+        case fheroes2::FontSize::LARGE:
+            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return static_cast<uint32_t>( fheroes2::AGG::GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
+        default:
+            // Did you add a new font size? Please add implementation.
+            assert( 0 );
+        }
+
+        return 0;
     }
 
     int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler, const bool keepTrailingSpaces )
@@ -686,7 +796,7 @@ namespace fheroes2
 
     FontCharHandler::FontCharHandler( const FontType fontType )
         : _fontType( fontType )
-        , _charLimit( AGG::getCharacterLimit( fontType.size ) )
+        , _charLimit( getCharacterLimit( fontType.size ) )
         , _spaceCharWidth( _getSpaceCharWidth() )
     {
         // Do nothing.
@@ -700,7 +810,7 @@ namespace fheroes2
     const Sprite & FontCharHandler::getSprite( const uint8_t character ) const
     {
         // Display '?' in place of the invalid character.
-        return AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
+        return getChar( _isValid( character ) ? character : invalidChar, _fontType );
     }
 
     int32_t FontCharHandler::getWidth( const uint8_t character ) const
