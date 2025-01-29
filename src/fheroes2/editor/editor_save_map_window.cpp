@@ -241,6 +241,7 @@ namespace Editor
         background.applyTextBackgroundShading( mapNameRoi );
         fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
 
+        mapNameText.fitToOneRow( mapNameRoi.width );
         mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
