@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,9 +80,6 @@ msgstr "НАЗАД"
 
 msgid "OKAY"
 msgstr "ДОБРА"
-
-msgid "smallerButton|OKAY"
-msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -219,10 +216,10 @@ msgstr ""
 msgid "START"
 msgstr "НАНОВА"
 
-msgid "CASTLE"
+msgid "TOWN"
 msgstr ""
 
-msgid "TOWN"
+msgid "CASTLE"
 msgstr ""
 
 #, fuzzy
@@ -3128,6 +3125,9 @@ msgid ""
 "%{skill2}"
 msgstr ""
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr ""
 
@@ -3226,7 +3226,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -4498,6 +4498,9 @@ msgid ""
 msgstr ""
 "Складанасць мапы вызначаецца ейным аўтарам. Болей складаныя мапы могуць "
 "утрымліваць больш ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
+
+msgid "editor|%{count} %{resource}"
+msgstr ""
 
 #, fuzzy
 msgid "Animation"

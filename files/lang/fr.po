@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -80,9 +80,6 @@ msgid "CANCEL"
 msgstr "ANNULER"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -225,11 +222,11 @@ msgstr "R.A.Z."
 msgid "START"
 msgstr "COMMENCER"
 
-msgid "CASTLE"
-msgstr "CHÂTEAU"
-
 msgid "TOWN"
 msgstr "VILLAGE"
+
+msgid "CASTLE"
+msgstr "CHÂTEAU"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3375,6 +3372,9 @@ msgstr ""
 "ou\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/a"
 
@@ -3479,8 +3479,8 @@ msgstr "Défenseurs :"
 msgid "Unknown"
 msgstr "Inconnu"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (niveau %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(niveau %{level})"
 
 msgid "Attack:"
 msgstr "Attaque :"
@@ -4814,6 +4814,10 @@ msgstr ""
 "peuvent inclure des ennemis plus nombreux ou plus forts, moins de ressources "
 "ou d'autres conditions spéciales rendant les choses plus difficiles pour le "
 "joueur humain."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Sélectionner %{resource} :"
 
 #, fuzzy
 msgid "Animation"

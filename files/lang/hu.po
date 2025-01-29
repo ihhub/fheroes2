@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "MÉGSEM"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "ÚJRA"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "VÁR"
-
 msgid "TOWN"
 msgstr "VÁROS"
+
+msgid "CASTLE"
+msgstr "VÁR"
 
 msgid "RESTRICT"
 msgstr "KORLÁTOZ"
@@ -3298,6 +3295,9 @@ msgstr ""
 "vagy\n"
 "%{skill2}"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/a"
 
@@ -3399,8 +3399,8 @@ msgstr "Védők:"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (%{level}. szint)"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(%{level}. szint)"
 
 msgid "Attack:"
 msgstr "Támadóerő:"
@@ -4654,6 +4654,10 @@ msgstr ""
 "Kattints a térkép nehézségi fokozatának beállításához. Nehezebb térképek "
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "A számításba veendő %{resource} kiválasztása:"
 
 msgid "Animation"
 msgstr "Animáció"

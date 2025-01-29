@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -84,9 +84,6 @@ msgid "CANCEL"
 msgstr "ZRUŠIŤ"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -232,14 +229,14 @@ msgstr ""
 msgid "START"
 msgstr "REŠTART"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MESTÁ/\n"
 "HRADY"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3348,6 +3345,9 @@ msgid ""
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "nie je"
 
@@ -3452,8 +3452,8 @@ msgstr "Obrancovia:"
 msgid "Unknown"
 msgstr "Neznáme"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} na úrovni %{level}"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "na úrovni %{level}"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -4793,6 +4793,10 @@ msgstr ""
 "scenára. Ťažšie mapy môžu obsahovať viac alebo silnejších nepriateľov, menej "
 "zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
 "hráča."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Zvoľ počet - %{resource}:"
 
 #, fuzzy
 msgid "Animation"

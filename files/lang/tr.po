@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "İPTAL"
 
 msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "smallerButton|OKAY"
 msgstr "TAMAM"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "SIFIRLA"
 msgid "START"
 msgstr "BAŞLA"
 
-msgid "CASTLE"
-msgstr "KALE"
-
 msgid "TOWN"
 msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
 
 msgid "RESTRICT"
 msgstr "KISITLA"
@@ -3207,6 +3204,9 @@ msgstr ""
 "ya da\n"
 "%{skill2} öğrenebilirsin."
 
+msgid "Learn %{secondary-skill}"
+msgstr ""
+
 msgid "n/a"
 msgstr "n/a"
 
@@ -3306,7 +3306,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -4512,6 +4512,10 @@ msgid ""
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "%{resource} sayısını seç:"
 
 msgid "Animation"
 msgstr ""
