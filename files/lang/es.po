@@ -3927,15 +3927,14 @@ msgstr "Pueblo"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
-"Haz clic para cambiar el nombre del castillo. Haz clic derecho para "
-"restablecer el nombre predeterminado."
+"Haz clic para cambiar el nombre del castillo. Haz clic derecho para restablecer al valor predeterminado."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Pierdes el héroe: %{name}."
 
 msgid "Allow to build a castle in this town."
-msgstr "Permitir construir un castillo en esta ciudad."
+msgstr "Permite construir un castillo en esta ciudad."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
@@ -3944,18 +3943,17 @@ msgstr ""
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
-"Activar o desactivar el modo de restricción de construcción de edificios."
+"Activa o desactiva el modo de restricción de construcción de edificios."
 
 msgid "Restrict Building Construction"
-msgstr "Restringir la construcción de edificios"
+msgstr "Restringe la construcción de edificios"
 
 msgid "Use default defenders army."
-msgstr "Utilice el ejército de defensores predeterminado."
+msgstr "Usa el ejército defensor predeterminado."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
 msgstr ""
-"Configura un ejército de castillo personalizado. Haz clic derecho para "
-"restablecer la unidad."
+"Establece un ejército personalizado del castillo. Haz clic derecho para restablecer la unidad."
 
 msgid "Message Text:"
 msgstr "Texto del mensaje:"
@@ -3967,7 +3965,7 @@ msgid "Player colors allowed to get event:"
 msgstr "Colores de jugador permitidos para obtener el evento:"
 
 msgid "Computer colors allowed to get event:"
-msgstr "Colores de computadora permitidos para obtener el evento:"
+msgstr "Colores de la computadora permitidos para obtener el evento:"
 
 msgid "First day of occurrence:"
 msgstr "Primer día de ocurrencia:"
@@ -3986,14 +3984,13 @@ msgstr ""
 "el jugador %{color} si está controlado por un humano."
 
 msgid "Allow %{color} computer player to get event"
-msgstr "Permitir que el jugador de la computadora %{color} obtenga el evento"
+msgstr "Permitir que el jugador controlado por la computadora %{color} reciba el evento"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a computer."
 msgstr ""
-"Si esta casilla de verificación está marcada, este evento se activará para "
-"el jugador %{color} si está controlado por la CPU."
+"Si esta casilla está marcada, este evento se activará para el jugador %{color} si está controlado por la computadora."
 
 msgid "Message:"
 msgstr "Mensaje:"
@@ -4158,7 +4155,7 @@ msgid "Set Random Ultimate Artifact Radius"
 msgstr "Encuentra el artefacto definitivo"
 
 msgid "%{object} has no properties to change."
-msgstr "%{object} no tiene propiedades para cambiar."
+msgstr "%{object} no tiene propiedades que se puedan cambiar."
 
 #, fuzzy
 msgid "This artifact"
@@ -4191,10 +4188,10 @@ msgid "The map is corrupted."
 msgstr "Reflejo creado."
 
 msgid "Unable to locate data directory to save the map."
-msgstr "No se puede ubicar el directorio de datos para guardar el mapa."
+msgstr "No se puede localizar el directorio de datos para guardar el mapa."
 
 msgid "Unable to create a directory to save the map."
-msgstr "No se puede crear un directorio para guardar el mapa."
+msgstr "No se pudo crear un directorio para guardar el mapa."
 
 #, fuzzy
 msgid "Unable to locate a directory to save the map."
@@ -4314,14 +4311,14 @@ msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
-"Dibuja el terreno en incrementos de\n"
-"%{size} por %{size} cuadrados."
+"Dibuja el terreno en secciones \n"
+"de %{size} por %{size} cuadrados."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
-"Borra objetos en incrementos de\n"
+"Borra objetos en secciones de \n"
 "%{size} por %{size} cuadrados."
 
 #, fuzzy
