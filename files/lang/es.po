@@ -3802,14 +3802,13 @@ msgstr "Manuales"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
-"Cambia la velocidad a la que se mueven tus héroes en la pantalla principal."
+"Cambia la velocidad a la que se mueven tus héroes en el mapa de aventura."
 
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
-"Establece la velocidad a la que se mueven los héroes de la computadora. "
-"También puedes elegir no ver el movimiento de la computadora en absoluto."
+"Establece la velocidad a la que se mueven los héroes controlados por la computadora. También puedes optar por no ver el movimiento de la computadora."
 
 #, fuzzy
 msgid "Change the interface settings of the game."
