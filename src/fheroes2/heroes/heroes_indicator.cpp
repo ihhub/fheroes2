@@ -197,6 +197,8 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 ExperienceIndicator::ExperienceIndicator( const Heroes * hero )
     : HeroesIndicator( hero )
 {
+    assert( hero != nullptr );
+
     _area.width = 35;
     _area.height = 36;
 
@@ -211,12 +213,42 @@ void ExperienceIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
-    fheroes2::Blit( sprite, display, _area.x, _area.y );
+    const fheroes2::Sprite & experienceImage = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( experienceImage, display, _area.x, _area.y );
 
-    // For the default range of experience see Heroes::GetStartingXp() method.
-    const fheroes2::Text text( _isDefault ? "40-90" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
-    text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
+    const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 24, 33, 9 };
+    const int32_t widthReduction = experienceImage.width() - renderRoi.width;
+
+    if ( _isDefault ) {
+        // For the default range of experience see Heroes::GetStartingXp() method.
+        const fheroes2::Text text{ "40-90", fheroes2::FontType::smallWhite() };
+        assert( text.width() <= renderRoi.width );
+        text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+    }
+    else {
+        // Experience can be longer than the width of the rendering area.
+        // This is why it is important to either take into an account letter shadows or change the value of the experience.
+        const uint32_t experienceValue = _hero->GetExperience();
+        std::string experienceString = std::to_string( _hero->GetExperience() );
+
+        fheroes2::Text text{ std::move( experienceString ), fheroes2::FontType::smallWhite() };
+        if ( text.width() > renderRoi.width + 1 ) {
+            // The experience string is much longer than the rendering area. We want to avoid too long strings.
+            const uint32_t millions = experienceValue / 1000000;
+
+            if ( experienceValue < 10000000 ) {
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 10000 ) + "M";
+            }
+            else {
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 100000 ) + "M";
+            }
+
+            text.set( experienceString, fheroes2::FontType::smallWhite() );
+            text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+        }
+
+        text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+    }
 }
 
 void ExperienceIndicator::QueueEventProcessing() const
@@ -250,13 +282,26 @@ void SpellPointsIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
-    fheroes2::Blit( sprite, display, _area.x, _area.y );
+    const fheroes2::Sprite & spellPointImage = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    fheroes2::Blit( spellPointImage, display, _area.x, _area.y );
 
-    const fheroes2::Text text( _isDefault ? std::to_string( _hero->GetMaxSpellPoints() )
-                                          : std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ),
-                               fheroes2::FontType::smallWhite() );
-    text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
+    const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 22, 33, 9 };
+    const int32_t widthReduction = spellPointImage.width() - renderRoi.width;
+
+    if ( _isDefault ) {
+        const fheroes2::Text text{ std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() };
+        text.drawInRoi( renderRoi.x + ( spellPointImage.width() - text.width() ) / 2 - widthReduction, _area.y + 23, display, renderRoi );
+    }
+    else {
+        fheroes2::Text text{ std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() };
+        if ( text.width() > renderRoi.width + 1 ) {
+            // Spell points are too long. Display only available spell points.
+            text.set( std::to_string( _hero->GetSpellPoints() ), fheroes2::FontType::smallWhite() );
+            
+        }
+
+        text.drawInRoi( renderRoi.x + ( spellPointImage.width() - text.width() ) / 2 - widthReduction, _area.y + 23, display, renderRoi );
+    }
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const
