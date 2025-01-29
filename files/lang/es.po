@@ -1021,7 +1021,7 @@ msgid "The mirror image is created."
 msgstr "Reflejo creado."
 
 msgid "The mirror image is destroyed!"
-msgstr "Reflejo destruido."
+msgstr "¡La imagen espejo ha sido destruida!"
 
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "¿Estas seguro de que quieres interrumpir la batalla automática?"
