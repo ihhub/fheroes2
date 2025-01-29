@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 10:55+0000\n"
+"POT-Creation-Date: 2025-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -222,14 +222,14 @@ msgstr ""
 msgid "START"
 msgstr "РЕСТАРТ"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "ГРАДОВЕ/\n"
 "ЗАМЪЦИ"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
