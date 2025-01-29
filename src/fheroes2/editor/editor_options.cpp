@@ -248,9 +248,6 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
-            }
         }
 
         return DialogAction::Close;
