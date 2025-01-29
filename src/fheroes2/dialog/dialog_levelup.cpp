@@ -97,8 +97,9 @@ namespace
         const fheroes2::SecondarySkillDialogElement skillLeft{ sec1, hero };
         const fheroes2::SecondarySkillDialogElement skillRight{ sec2, hero };
 
-        const Dialog::FrameBox dialogFrame(
-            headerText.height( fheroes2::boxAreaWidthPx ) + spacer + bodyText.height( fheroes2::boxAreaWidthPx ) + 10 + skillLeft.area().height, true );
+        const Dialog::FrameBox dialogFrame( headerText.height( fheroes2::boxAreaWidthPx ) + spacer + bodyText.height( fheroes2::boxAreaWidthPx ) + 10
+                                                + skillLeft.area().height,
+                                            true );
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -143,8 +144,8 @@ namespace
         fheroes2::ButtonSprite buttonHero
             = fheroes2::makeButtonWithBackground( offset.x, offset.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
-        const fheroes2::Text text{
-            std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ), fheroes2::FontType::normalWhite() };
+        const fheroes2::Text text{ std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ),
+                                   fheroes2::FontType::normalWhite() };
         text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offset.y - 15, display );
 
         buttonLearnLeft.draw();
