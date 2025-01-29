@@ -206,14 +206,25 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 {
     Reset();
 
-    StreamFile fs;
-    if ( !fs.open( filePath, "rb" ) ) {
+    StreamFile fileStream;
+    if ( !fileStream.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
         return false;
     }
 
+    // While reading needed number of bytes and immediately checking their values might be a good idea,
+    // in reality reading a chunk of data in one shot from a hard disk and then processing it is a ways faster approach
+    // as it reduces I/O operations.
+    // Since we know the minimum size of each MP2 map file we can read it immediately.
+    if ( fileStream.size() < MP2::MP2_MAP_INFO_SIZE ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid size for file " << filePath )
+        return false;
+    }
+
+    ROStreamBuf dataStream{ fileStream.getRaw( MP2::MP2_MAP_INFO_SIZE ) };
+
     // magic byte
-    if ( fs.getBE32() != 0x5C000000 ) {
+    if ( dataStream.getBE32() != 0x5C000000 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << " is not a valid map file" )
         return false;
     }
@@ -221,7 +232,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     filename = std::move( filePath );
 
     // Difficulty level
-    switch ( fs.getLE16() ) {
+    switch ( dataStream.getLE16() ) {
     case 0x00:
         difficulty = Difficulty::EASY;
         break;
@@ -240,28 +251,28 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     }
 
     // Width & height of the map in tiles
-    width = fs.get();
-    height = fs.get();
+    width = dataStream.get();
+    height = dataStream.get();
 
     const Colors colors( Color::ALL );
 
     // Colors used by kingdoms: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
-        if ( fs.get() != 0 ) {
+        if ( dataStream.get() != 0 ) {
             kingdomColors |= color;
         }
     }
 
     // Colors available for human players: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
-        if ( fs.get() != 0 ) {
+        if ( dataStream.get() != 0 ) {
             colorsAvailableForHumans |= color;
         }
     }
 
     // Colors available for computer players: blue, green, red, yellow, orange, purple
     for ( const int color : colors ) {
-        if ( fs.get() != 0 ) {
+        if ( dataStream.get() != 0 ) {
             colorsAvailableForComp |= color;
         }
     }
@@ -276,27 +287,27 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // fs.seekg(0x1A, std::ios_base::beg);
     // fs.get();
 
-    fs.seek( 29 );
+    dataStream.seek( 29 );
     // Victory condition type.
-    victoryConditionType = fs.get();
+    victoryConditionType = dataStream.get();
     // Do the victory conditions apply to AI too?
-    compAlsoWins = ( fs.get() != 0 );
+    compAlsoWins = ( dataStream.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here?
-    allowNormalVictory = ( fs.get() != 0 );
+    allowNormalVictory = ( dataStream.get() != 0 );
     // Parameter of victory condition.
-    victoryConditionParams[0] = fs.getLE16();
+    victoryConditionParams[0] = dataStream.getLE16();
     // Loss condition type.
-    lossConditionType = fs.get();
+    lossConditionType = dataStream.get();
     // Parameter of loss condition.
-    lossConditionParams[0] = fs.getLE16();
+    lossConditionParams[0] = dataStream.getLE16();
     // Does the game start with a hero in the first castle?
-    startWithHeroInFirstCastle = ( 0 == fs.get() );
+    startWithHeroInFirstCastle = ( 0 == dataStream.get() );
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
 
     // Initial races.
     for ( const int color : colors ) {
-        const uint8_t race = Race::IndexToRace( fs.get() );
+        const uint8_t race = Race::IndexToRace( dataStream.get() );
         const int idx = Color::GetIndex( color );
         assert( idx < maxNumOfPlayers );
 
@@ -308,19 +319,19 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     }
 
     // Additional parameter of victory condition.
-    victoryConditionParams[1] = fs.getLE16();
+    victoryConditionParams[1] = dataStream.getLE16();
     // Additional parameter of loss condition.
-    lossConditionParams[1] = fs.getLE16();
+    lossConditionParams[1] = dataStream.getLE16();
 
     bool skipUnionSetup = false;
     // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
     // If the color is under computer control only we have to make it as an ally for human player.
     if ( lossConditionType == LOSS_HERO && victoryConditionType == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
+        fileStream.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
 
         MP2::MP2TileInfo mp2tile;
-        MP2::loadTile( fs, mp2tile );
+        MP2::loadTile( fileStream, mp2tile );
 
         Maps::Tile tile;
         tile.Init( 0, mp2tile );
@@ -339,12 +350,12 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     }
 
     // Map name
-    fs.seek( 58 );
-    name = fs.getString( mapNameLength );
+    dataStream.seek( 58 );
+    name = dataStream.getString( mapNameLength );
 
     // Map description
-    fs.seek( 118 );
-    description = fs.getString( mapDescriptionLength );
+    dataStream.seek( 118 );
+    description = dataStream.getString( mapDescriptionLength );
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
