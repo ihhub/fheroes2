@@ -31,7 +31,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"
 #include "color.h"
@@ -86,6 +85,7 @@
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -1198,7 +1198,7 @@ namespace Interface
             }
             else if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
                 const int returnValue
-                    = fheroes2::showStandardTextMessage( _( "Editor" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
+                    = fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
                                                          Dialog::YES | Dialog::NO );
                 if ( returnValue == Dialog::YES ) {
                     result = fheroes2::GameMode::MAIN_MENU;
