@@ -1,5 +1,5 @@
 # Spanish translation for fheroes2
-# Copyright (C) 2020-2025 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2020 - 2025 fheroes2 team <fhomm2@gmail.com>
 # Copyright (C) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 #
@@ -464,7 +464,7 @@ msgid "Move or right click to redistribute %{name}"
 msgstr "Mueve o haz clic derecho para redistribuir %{name}"
 
 msgid "Combine %{name} armies"
-msgstr "Combinar los ejércitos de %{name}"
+msgstr "Combina los ejércitos de %{name}"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr "Intercambiar %{name2} por %{name}"
