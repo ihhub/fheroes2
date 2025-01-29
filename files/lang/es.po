@@ -618,7 +618,7 @@ msgstr ""
 "juego."
 
 msgid "Toggle to display damage information during the battle."
-msgstr "Alternar para mostrar información de daño durante la batalla."
+msgstr "Activa o desactiva para mostrar la información de daño durante la batalla."
 
 msgid "Exit this menu."
 msgstr "Salir de este menú."
