@@ -379,9 +379,12 @@ namespace Editor
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
 
-                // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
+                // In original Editor map name is limited to 17 characters.
+                // However, we have no such limitation but to be reasonable we still have a limit.
+                const int32_t maxMapNameLength = 50;
+
                 const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, 17, false, language ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
