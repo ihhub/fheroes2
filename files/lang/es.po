@@ -610,7 +610,7 @@ msgstr ""
 
 msgid "Change the audio settings of the game."
 msgstr ""
-"Cambiar la configuración de audio del juego."
+"Cambia la configuración de audio del juego."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
