@@ -831,7 +831,7 @@ msgid "Select spell target"
 msgstr "Seleccionar objetivo del hechizo"
 
 msgid "View Ballista info"
-msgstr "Ver información de ballesta"
+msgstr "Ver información de la ballesta"
 
 msgid "Ballista"
 msgstr "Balista"
