@@ -37,8 +37,6 @@ namespace fheroes2
         // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
 
-        int32_t GetAbsoluteICNHeight( int icnId );
-
         // This function must be called only at the time of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }

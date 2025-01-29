@@ -5458,24 +5458,6 @@ namespace fheroes2::AGG
         return _tilVsImage[tilId][shapeId][index];
     }
 
-    int32_t GetAbsoluteICNHeight( int icnId )
-    {
-        const uint32_t frameCount = GetICNCount( icnId );
-        if ( frameCount == 0 ) {
-            return 0;
-        }
-
-        int32_t height = 0;
-        for ( uint32_t i = 0; i < frameCount; ++i ) {
-            const int32_t offset = -GetICN( icnId, i ).y();
-            if ( offset > height ) {
-                height = offset;
-            }
-        }
-
-        return height;
-    }
-
     void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
     {
         if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
