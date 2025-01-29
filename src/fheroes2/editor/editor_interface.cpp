@@ -1120,33 +1120,42 @@ namespace Interface
 
     fheroes2::GameMode EditorInterface::eventFileDialog()
     {
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
-
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        fheroes2::Sprite mainMenuReleased;
+        fheroes2::Sprite mainMenuPressed;
+        fheroes2::getTextAdaptedButton( mainMenuReleased, mainMenuPressed, gettext_noop( "MAIN\nMENU" ),
+                                        isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK_EVIL );
 
         fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::StandardWindow background( 321 - 32 + mainMenuReleased.width() / 2, 236 - 32 + mainMenuReleased.height() / 2 + 15 + 21, true, display );
+        const fheroes2::Rect roi = background.activeArea();
 
-        // Since the original image contains shadow it is important to remove it from calculation of window's position.
-        const fheroes2::Point rb( ( display.width() - background.width() - fheroes2::borderWidthPx ) / 2,
-                                  ( display.height() - background.height() + fheroes2::borderWidthPx ) / 2 );
-        fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
-        fheroes2::Blit( background, display, rb.x, rb.y );
+        fheroes2::Button buttonNew( roi.x + 62, roi.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
+        fheroes2::Button buttonLoad( roi.x + 195, roi.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
+        fheroes2::Button buttonSave( roi.x + 62, roi.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
+        fheroes2::Button buttonQuit( roi.x + 195, roi.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
+        fheroes2::Button buttonCancel( roi.x + 128, roi.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
-        fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        const fheroes2::Point buttonOffsets = { 30, 15 };
+        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, { 30, 15 },
+                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
+        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 30, 15 },
+                                 fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { 30, mainMenuReleased.height() + 4 },
+                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
+        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { 30, mainMenuReleased.height() + 4 },
+                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        buttonNew.draw();
-        buttonLoad.draw();
-        buttonSave.draw();
-        buttonQuit.draw();
-        buttonCancel.draw();
+        fheroes2::ButtonSprite buttonMainMenu( roi.x + ( roi.width - mainMenuReleased.width() ) / 2, roi.y + ( roi.height - mainMenuReleased.height() ) / 2 - 10,
+                                               mainMenuReleased, mainMenuPressed );
+        fheroes2::addGradientShadow( mainMenuReleased, display, buttonMainMenu.area().getPosition(), { -5, 5 } );
 
-        display.render( back.rect() );
+        buttonMainMenu.draw();
+
+        display.render( background.totalArea() );
 
         fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
 
@@ -1158,6 +1167,7 @@ namespace Interface
             buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
             buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
@@ -1172,8 +1182,6 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                back.restore();
-
                 Get().saveMapToFile();
 
                 break;
@@ -1182,6 +1190,15 @@ namespace Interface
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
+                    break;
+                }
+            }
+            else if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
+                const int returnValue
+                    = fheroes2::showStandardTextMessage( _( "Editor" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
+                                                         Dialog::YES | Dialog::NO );
+                if ( returnValue == Dialog::YES ) {
+                    result = fheroes2::GameMode::MAIN_MENU;
                     break;
                 }
             }
@@ -1207,11 +1224,6 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
-
-        // restore background
-        back.restore();
-        display.render( back.rect() );
-
         return result;
     }
 
