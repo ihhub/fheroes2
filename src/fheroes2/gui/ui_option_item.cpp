@@ -27,8 +27,8 @@
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
-#include "settings.h"
 #include "screen.h"
+#include "settings.h"
 #include "translations.h"
 #include "ui_text.h"
 
