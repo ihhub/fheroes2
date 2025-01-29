@@ -77,10 +77,6 @@ namespace fheroes2
 
 namespace
 {
-    // In original Editor map name is limited to 17 characters.
-    // However, we have no such limitation but to be reasonable we still have a limit.
-    const int32_t maxMapNameLength = 50;
-
     const int32_t descriptionBoxWidth = 292;
     const int32_t descriptionBoxHeight = 90;
 
@@ -2064,7 +2060,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat )
+    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat, const int32_t maxMapNameLength )
     {
         // Verify victory and loss condition types.
         if ( std::find( supportedVictoryConditions.begin(), supportedVictoryConditions.end(), mapFormat.victoryConditionType ) == supportedVictoryConditions.end() ) {

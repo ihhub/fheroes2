@@ -195,7 +195,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language )
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language, const int32_t maxMapNameLength )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -378,11 +378,6 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
-
-                // In original Editor map name is limited to 17 characters.
-                // However, we have no such limitation but to be reasonable we still have a limit.
-                const int32_t maxMapNameLength = 50;
-
                 const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
