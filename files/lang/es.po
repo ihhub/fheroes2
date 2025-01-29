@@ -488,13 +488,11 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "El %{name} elimina mitad de las tropas enemigas!"
 msgstr[1] "Los %{name} eliminan mitad de las tropas enemigas!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Daña a todos los Nomuertos en combate."
+msgstr "%{name} ha desactivado la batalla automática."
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Daña a todos los Nomuertos en combate."
+msgstr "%{name} ha activado la batalla automática."
 
 msgid "Spell failed!"
 msgstr "¡Hechizo fallido!"
