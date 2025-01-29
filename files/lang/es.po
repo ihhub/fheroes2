@@ -3398,7 +3398,7 @@ msgid "Recruit selected monsters."
 msgstr "Recluta los monstruos seleccionados."
 
 msgid "Select maximum monsters to be recruited."
-msgstr "Elige el máximo de monstruos que deseas reclutar."
+msgstr "Selecciona el máximo de monstruos que deseas reclutar."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Selecciona solo 1 monstruo para reclutar."
