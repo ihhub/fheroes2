@@ -3424,7 +3424,7 @@ msgid "Select Game Resolution:"
 msgstr "Seleccione la resolución del juego:"
 
 msgid "Click to apply the selected resolution."
-msgstr "Haga clic para aplicar la resolución seleccionada."
+msgstr "Haz clic para aplicar la resolución seleccionada."
 
 #, fuzzy
 msgid "Click to apply the entered text."
