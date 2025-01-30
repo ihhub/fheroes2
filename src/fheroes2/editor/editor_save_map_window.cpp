@@ -241,7 +241,8 @@ namespace Editor
         background.applyTextBackgroundShading( mapNameRoi );
         fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
 
-        mapNameText.fitToOneRow( mapNameRoi.width );
+        const int32_t maxMapNameTextWidth = mapNameRoi.width - 6;
+        mapNameText.fitToOneRow( maxMapNameTextWidth );
         mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
@@ -388,7 +389,7 @@ namespace Editor
                     mapName = std::move( editableMapName );
                     mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
-                    mapNameText.fitToOneRow( mapNameRoi.width );
+                    mapNameText.fitToOneRow( maxMapNameTextWidth );
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
                     display.render( mapNameRoi );
