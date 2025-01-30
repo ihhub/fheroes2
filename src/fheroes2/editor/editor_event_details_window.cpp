@@ -147,8 +147,7 @@ namespace Editor
         // Experience
         auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );
         const fheroes2::Rect experienceRoi{ secondColumnOffsetX + sectionWidth - experienceUI->area().width,
-                                            offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2,
-                                            experienceUI->area().width, experienceUI->area().height };
+                                            offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2, experienceUI->area().width, experienceUI->area().height };
         fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width, experienceRoi.height );
 
         experienceUI->draw( display, experienceRoi.getPosition() );
@@ -159,13 +158,13 @@ namespace Editor
             = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{ eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel }, fakeHero );
 
         const fheroes2::Rect secondarySkillRoi{ ( artifactRoi.x + artifactRoi.width + experienceRoi.x - secondarySkillUI->area().width ) / 2,
-                                                offsetY + ( artifactRoi.height - secondarySkillUI->area().height ) / 2,
-                                                secondarySkillUI->area().width, secondarySkillUI->area().height };
+                                                offsetY + ( artifactRoi.height - secondarySkillUI->area().height ) / 2, secondarySkillUI->area().width,
+                                                secondarySkillUI->area().height };
 
         secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
 
-        fheroes2::Button buttonDeleteSecondarySkill(
-            secondarySkillRoi.x + ( secondarySkillRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
+        fheroes2::Button buttonDeleteSecondarySkill( secondarySkillRoi.x + ( secondarySkillRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5,
+                                                     minibuttonIcnId, 17, 18 );
         buttonDeleteSecondarySkill.draw();
 
         // Conditions
