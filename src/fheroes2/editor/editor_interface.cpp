@@ -1220,8 +1220,7 @@ namespace Interface
             }
             if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
                 // The map either hasn't been saved to a file or there aren't any human-playable colors.
-                const int amountHumans = conf.getCurrentMapInfo().colorsAvailableForHumans == 0;
-                if ( !( conf.getCurrentMapInfo().name == "" ) && conf.getCurrentMapInfo().colorsAvailableForHumans > 0 ) {
+                if ( !conf.getCurrentMapInfo().name.empty() && conf.getCurrentMapInfo().colorsAvailableForHumans > 0 ) {
                     if ( fheroes2::showStandardTextMessage( _( "Play Map" ), _( "Do you wish to leave the editor and play the current map?" ), Dialog::YES | Dialog::NO )
                          == Dialog::YES ) {
                         return fheroes2::GameMode::NEW_STANDARD;
