@@ -1168,8 +1168,6 @@ namespace Interface
 
         display.render( background.totalArea() );
 
-        fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
-
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
@@ -1183,39 +1181,33 @@ namespace Interface
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_NEW_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_NEW_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_LOAD_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 Get().saveMapToFile();
-
-                break;
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    result = fheroes2::GameMode::QUIT_GAME;
-                    break;
+                    return fheroes2::GameMode::QUIT_GAME;
                 }
             }
-            else if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
-                const int returnValue
-                    = fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
-                                                         Dialog::YES | Dialog::NO );
-                if ( returnValue == Dialog::YES ) {
-                    result = fheroes2::GameMode::MAIN_MENU;
-                    break;
+            if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
+                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    return fheroes2::GameMode::MAIN_MENU;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-                break;
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
@@ -1239,7 +1231,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
-        return result;
+        return fheroes2::GameMode::CANCEL;
     }
 
     void EditorInterface::eventViewWorld()
