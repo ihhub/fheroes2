@@ -738,6 +738,8 @@ namespace fheroes2
         released = resizeButton( originalReleased, { width, originalReleased.height() } );
         pressed = resizeButton( originalPressed, { width, originalPressed.height() } );
 
+        addButtonShine( released, icnId );
+
         if ( !isTransparentBackground ) {
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             makeTransparentBackground( released, pressed, backgroundIcnId );
@@ -754,8 +756,8 @@ namespace fheroes2
 
         fheroes2::Size backgroundBorders = { 0, 7 };
 
-        fheroes2::Point releasedOffset = {};
-        fheroes2::Point pressedOffset = {};
+        fheroes2::Point releasedOffset;
+        fheroes2::Point pressedOffset;
 
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 

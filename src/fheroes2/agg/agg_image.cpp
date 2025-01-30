@@ -94,8 +94,6 @@ namespace
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_SMALL_OKAY_GOOD,
                                                 ICN::BUTTON_SMALL_OKAY_EVIL,
-                                                ICN::BUTTON_SMALLER_OKAY_GOOD,
-                                                ICN::BUTTON_SMALLER_OKAY_EVIL,
                                                 ICN::BUTTON_SMALL_ACCEPT_GOOD,
                                                 ICN::BUTTON_SMALL_ACCEPT_EVIL,
                                                 ICN::BUTTON_SMALL_DECLINE_GOOD,
@@ -265,55 +263,6 @@ namespace
                 fheroes2::Copy( original, pixelLocation.x, pixelLocation.y, output, x, y, 1, 1 );
             }
         }
-    }
-
-    // BMP files within AGG are not Bitmap images!
-    fheroes2::Sprite loadBMPFile( const std::string & path )
-    {
-        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path, false );
-        if ( data.size() < 6 ) {
-            // It is an invalid BMP file.
-            return {};
-        }
-
-        ROStreamBuf imageStream( data );
-
-        const uint8_t blackColor = imageStream.get();
-        const uint8_t whiteColor = 11;
-
-        // Skip the second byte
-        imageStream.get();
-
-        const int32_t width = imageStream.getLE16();
-        const int32_t height = imageStream.getLE16();
-
-        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
-            // It is an invalid BMP file.
-            return {};
-        }
-
-        fheroes2::Sprite output( width, height );
-
-        const uint8_t * input = data.data() + 6;
-        uint8_t * image = output.image();
-        const uint8_t * imageEnd = image + width * height;
-        uint8_t * transform = output.transform();
-
-        for ( ; image != imageEnd; ++image, ++transform, ++input ) {
-            if ( *input == 1 ) {
-                *image = whiteColor;
-                *transform = 0;
-            }
-            else if ( *input == 2 ) {
-                *image = blackColor;
-                *transform = 0;
-            }
-            else {
-                *transform = 1;
-            }
-        }
-
-        return output;
     }
 
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
@@ -901,12 +850,10 @@ namespace
             break;
         }
         case ICN::BUTTON_SMALL_OKAY_GOOD:
-        case ICN::BUTTON_SMALL_OKAY_EVIL:
-        case ICN::BUTTON_SMALLER_OKAY_GOOD:
-        case ICN::BUTTON_SMALLER_OKAY_EVIL: {
+        case ICN::BUTTON_SMALL_OKAY_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
             const bool isSameResourceAsLanguage = useOriginalResources();
 
             if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) ) {
@@ -918,20 +865,9 @@ namespace
 
                 break;
             }
-            if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 1 );
-                break;
-            }
 
-            int32_t textWidth = 86;
-            const char * text = gettext_noop( "OKAY" );
-            if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
-                textWidth = 70;
-                text = gettext_noop( "smallerButton|OKAY" );
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, text, isEvilInterface );
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -982,21 +918,17 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_LEARN_EVIL );
-            const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
             if ( useOriginalResources() ) {
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( baseIcnID, 9 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( baseIcnID, 10 );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnID, 11 + i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
         }
@@ -1021,22 +953,17 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_YES_EVIL );
-            const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
             if ( useOriginalResources() ) {
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( baseIcnID, 5 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( baseIcnID, 6 );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnID, 11 + i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
-
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
         case ICN::BUTTON_SMALL_NO_GOOD:
@@ -1044,22 +971,17 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_NO_EVIL );
-            const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
             if ( useOriginalResources() ) {
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( baseIcnID, 7 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( baseIcnID, 8 );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnID, 11 + i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
-
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
         case ICN::BUTTON_SMALL_EXIT_GOOD:
@@ -1636,15 +1558,10 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BTNGIFT_EVIL );
-            const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, 11 + i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 5, 5 }, { 4, 6 }, { 88, 16 }, buttonFontColor );
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
         }
@@ -1858,7 +1775,16 @@ namespace
         case ICN::BUTTON_CASTLE_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+            // Town and Castle buttons must have the same width.
+            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
+            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+
+            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
+            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
 
             break;
         }
@@ -1866,7 +1792,16 @@ namespace
         case ICN::BUTTON_TOWN_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
+            // Town and Castle buttons must have the same width.
+            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
+            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+
+            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
+            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
 
             break;
         }
@@ -1917,22 +1852,17 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_OKAY_BUTTON );
-            const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
             if ( useOriginalResources() ) {
+                const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( baseIcnId, 1 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( baseIcnId, 2 );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, 11 + i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
-
+            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
+                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
         case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
@@ -4152,7 +4082,7 @@ namespace
                 }
                 digit += std::to_string( i + 1 );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "ADVMBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "ADVMBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -4167,7 +4097,7 @@ namespace
                 }
                 digit += std::to_string( i );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "SPELBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "SPELBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -4182,7 +4112,7 @@ namespace
                 }
                 digit += std::to_string( i + 1 );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "CMSEBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "CMSEBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -5545,130 +5475,6 @@ namespace fheroes2::AGG
         }
 
         return _tilVsImage[tilId][shapeId][index];
-    }
-
-    int32_t GetAbsoluteICNHeight( int icnId )
-    {
-        const uint32_t frameCount = GetICNCount( icnId );
-        if ( frameCount == 0 ) {
-            return 0;
-        }
-
-        int32_t height = 0;
-        for ( uint32_t i = 0; i < frameCount; ++i ) {
-            const int32_t offset = -GetICN( icnId, i ).y();
-            if ( offset > height ) {
-                height = offset;
-            }
-        }
-
-        return height;
-    }
-
-    uint32_t getCharacterLimit( const FontSize fontSize )
-    {
-        switch ( fontSize ) {
-        case FontSize::SMALL:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-        case FontSize::NORMAL:
-        case FontSize::LARGE:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-        case FontSize::BUTTON_RELEASED:
-        case FontSize::BUTTON_PRESSED:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
-        default:
-            assert( 0 ); // Did you add a new font size? Please add implementation.
-        }
-
-        return 0;
-    }
-
-    const Sprite & getChar( const uint8_t character, const FontType & fontType )
-    {
-        if ( character < 0x21 ) {
-            return errorImage;
-        }
-
-        switch ( fontType.size ) {
-        case FontSize::SMALL:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::SMALFONT, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
-            case FontColor::YELLOW:
-                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::NORMAL:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::FONT, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::GRAY_FONT, character - 0x20 );
-            case FontColor::YELLOW:
-                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case FontColor::GOLDEN_GRADIENT:
-                return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
-            case FontColor::SILVER_GRADIENT:
-                return GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::LARGE:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
-            case FontColor::GOLDEN_GRADIENT:
-                return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
-            case FontColor::SILVER_GRADIENT:
-                return GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::BUTTON_RELEASED:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::BUTTON_PRESSED:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        default:
-            // Did you add a new font size? Add the corresponding logic for it!
-            assert( 0 );
-            break;
-        }
-
-        assert( 0 ); // Did you add a new font size? Please add implementation.
-
-        return errorImage;
     }
 
     void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )

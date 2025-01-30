@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "ZRUŠIT"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "RESET"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "HRAD"
-
 msgid "TOWN"
 msgstr "MĚSTO"
+
+msgid "CASTLE"
+msgstr "HRAD"
 
 msgid "RESTRICT"
 msgstr "OMEZIT"
@@ -3201,15 +3198,6 @@ msgstr "Událost: "
 msgid "Hot Keys:"
 msgstr "Klávesové zkratky:"
 
-msgid "Evil"
-msgstr "Zlý"
-
-msgid "Good"
-msgstr "Dobrý"
-
-msgid "Interface Type"
-msgstr "Rozhraní"
-
 msgid "Hide"
 msgstr "Skrýt"
 
@@ -3219,26 +3207,17 @@ msgstr "Zobrazit"
 msgid "Interface"
 msgstr "Rozhraní"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normální"
-
-msgid "Fast"
-msgstr "Rychlá"
-
-msgid "Very Fast"
-msgstr "Velmi rychlá"
-
-msgid "Scroll Speed"
-msgstr "Rychlost posunu"
+msgid "Interface Type"
+msgstr "Rozhraní"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Přepněte typ rozhraní, které chcete používat."
 
 msgid "Toggle interface visibility."
 msgstr "Přepněte viditelnost rozhraní."
+
+msgid "Scroll Speed"
+msgstr "Rychlost posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastavit rychlost posouvání okna."
@@ -3280,6 +3259,9 @@ msgstr ""
 "%{skill1}\n"
 "nebo\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3382,8 +3364,8 @@ msgstr "Obránci:"
 msgid "Unknown"
 msgstr "Není známo"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Úroveň %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Úroveň %{level})"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -4629,6 +4611,10 @@ msgstr ""
 "silnější nepřátele, méně zdrojů nebo jiné speciální podmínky, které ztěžují "
 "hru hráči."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vyberte množství %{resource}:"
+
 msgid "Animation"
 msgstr "Animace"
 
@@ -4754,6 +4740,9 @@ msgstr "a víc..."
 
 msgid "Easy"
 msgstr "Lehká"
+
+msgid "Normal"
+msgstr "Normální"
 
 msgid "Hard"
 msgstr "Těžká"
@@ -6275,6 +6264,21 @@ msgstr "Slovenština"
 
 msgid "Vietnamese"
 msgstr "Větnamština"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Fast"
+msgstr "Rychlá"
+
+msgid "Very Fast"
+msgstr "Velmi rychlá"
+
+msgid "Evil"
+msgstr "Zlý"
+
+msgid "Good"
+msgstr "Dobrý"
 
 msgid ", FPS: "
 msgstr ", FPS: "

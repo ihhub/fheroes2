@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
-"PO-Revision-Date: 2025-01-18 23:26+0100\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "MÉGSEM"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "ÚJRA"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "VÁR"
-
 msgid "TOWN"
 msgstr "VÁROS"
+
+msgid "CASTLE"
+msgstr "VÁR"
 
 msgid "RESTRICT"
 msgstr "KORLÁTOZ"
@@ -3215,15 +3212,6 @@ msgstr "Esemény: "
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
 
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-msgid "Interface Type"
-msgstr "Kezelőfelület típusa"
-
 msgid "Hide"
 msgstr "Elrejt"
 
@@ -3233,26 +3221,17 @@ msgstr "Mutat"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
-msgid "Slow"
-msgstr "Lassú"
-
-msgid "Normal"
-msgstr "Normál"
-
-msgid "Fast"
-msgstr "Gyors"
-
-msgid "Very Fast"
-msgstr "Nagyon gyors"
-
-msgid "Scroll Speed"
-msgstr "Képernyőgörgetés sebessége"
+msgid "Interface Type"
+msgstr "Kezelőfelület típusa"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid "Toggle interface visibility."
 msgstr "Kezelőfelület láthatóságának kapcsolója."
+
+msgid "Scroll Speed"
+msgstr "Képernyőgörgetés sebessége"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Beállítja az ablakok görgetésének sebességét."
@@ -3294,6 +3273,9 @@ msgstr ""
 "%{skill1}\n"
 "vagy\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3396,8 +3378,8 @@ msgstr "Védők:"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (%{level}. szint)"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(%{level}. szint)"
 
 msgid "Attack:"
 msgstr "Támadóerő:"
@@ -4651,6 +4633,10 @@ msgstr ""
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "A számításba veendő %{resource} kiválasztása:"
+
 msgid "Animation"
 msgstr "Animáció"
 
@@ -4776,6 +4762,9 @@ msgstr "és egyebek..."
 
 msgid "Easy"
 msgstr "Könnyű"
+
+msgid "Normal"
+msgstr "Normál"
 
 msgid "Hard"
 msgstr "Nehéz"
@@ -6312,6 +6301,21 @@ msgstr "szlovák"
 
 msgid "Vietnamese"
 msgstr "vietnámi"
+
+msgid "Slow"
+msgstr "Lassú"
+
+msgid "Fast"
+msgstr "Gyors"
+
+msgid "Very Fast"
+msgstr "Nagyon gyors"
+
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
 
 msgid ", FPS: "
 msgstr ", FPS: "

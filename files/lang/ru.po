@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -84,9 +84,6 @@ msgid "CANCEL"
 msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr "ОК"
-
-msgid "smallerButton|OKAY"
 msgstr "ОК"
 
 msgid "ACCEPT"
@@ -228,11 +225,11 @@ msgstr "СБРОС"
 msgid "START"
 msgstr "НАЧАТЬ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "ГОРОД"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ЗАПРЕТ"
@@ -3240,15 +3237,6 @@ msgstr "Событие: "
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -3258,26 +3246,17 @@ msgstr "Показать"
 msgid "Interface"
 msgstr "Интерфейс"
 
-msgid "Slow"
-msgstr "Медленная"
-
-msgid "Normal"
-msgstr "Обычная"
-
-msgid "Fast"
-msgstr "Быстрая"
-
-msgid "Very Fast"
-msgstr "Очень быстрая"
-
-msgid "Scroll Speed"
-msgstr "Скорость прокрутки"
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
+
+msgid "Scroll Speed"
+msgstr "Скорость прокрутки"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Устанавливает скорость прокрутки окна на карте мира."
@@ -3319,6 +3298,9 @@ msgstr ""
 "%{skill1}\n"
 "или\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "н/д"
@@ -3425,8 +3407,8 @@ msgstr "Защитники:"
 msgid "Unknown"
 msgstr "Неизвестный"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Уровень %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Уровень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -4680,6 +4662,10 @@ msgstr ""
 "содержать меньше ресурсов или иметь прочие условия, усложняющие жизнь игроку-"
 "человеку."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Подарить %{resource}:"
+
 msgid "Animation"
 msgstr "Анимация"
 
@@ -4805,6 +4791,9 @@ msgstr "и т.д."
 
 msgid "Easy"
 msgstr "Лёгкая"
+
+msgid "Normal"
+msgstr "Обычная"
 
 msgid "Hard"
 msgstr "Тяжёлая"
@@ -6349,6 +6338,21 @@ msgstr "Словацкий"
 
 msgid "Vietnamese"
 msgstr "Вьетнамский"
+
+msgid "Slow"
+msgstr "Медленная"
+
+msgid "Fast"
+msgstr "Быстрая"
+
+msgid "Very Fast"
+msgstr "Очень быстрая"
+
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
 
 msgid ", FPS: "
 msgstr ", FPS: "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -79,9 +79,6 @@ msgid "CANCEL"
 msgstr "ОТКАЗ"
 
 msgid "OKAY"
-msgstr "ДОБРЕ"
-
-msgid "smallerButton|OKAY"
 msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
@@ -225,14 +222,14 @@ msgstr ""
 msgid "START"
 msgstr "РЕСТАРТ"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "ГРАДОВЕ/\n"
 "ЗАМЪЦИ"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3286,15 +3283,6 @@ msgstr "Събитие"
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
-msgid "Evil"
-msgstr "Зъл"
-
-msgid "Good"
-msgstr "Добър"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
 msgid "Hide"
 msgstr "Скрий"
 
@@ -3304,26 +3292,17 @@ msgstr "Покажи"
 msgid "Interface"
 msgstr "Интерфейс"
 
-msgid "Slow"
-msgstr "Бавно"
-
-msgid "Normal"
-msgstr "Нормлано"
-
-msgid "Fast"
-msgstr "Бързо"
-
-msgid "Very Fast"
-msgstr "Мн. бързo"
-
-msgid "Scroll Speed"
-msgstr "Скорост на Превъртане"
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
+
+msgid "Scroll Speed"
+msgstr "Скорост на Превъртане"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
@@ -3366,6 +3345,9 @@ msgstr ""
 "%{skill1}\n"
 "или\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "без"
@@ -3471,8 +3453,8 @@ msgstr "Защитници:"
 msgid "Unknown"
 msgstr "неизвестен"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Ниво %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Ниво %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -4830,6 +4812,10 @@ msgstr ""
 "правят нещата по-трудни за играча."
 
 #, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Избери брой %{resource}:"
+
+#, fuzzy
 msgid "Animation"
 msgstr "Анексирам"
 
@@ -4963,6 +4949,9 @@ msgstr "и още..."
 
 msgid "Easy"
 msgstr "Лесно"
+
+msgid "Normal"
+msgstr "Нормлано"
 
 msgid "Hard"
 msgstr "Трудно"
@@ -6518,6 +6507,21 @@ msgstr "Словашки"
 
 msgid "Vietnamese"
 msgstr "Виетнамски"
+
+msgid "Slow"
+msgstr "Бавно"
+
+msgid "Fast"
+msgstr "Бързо"
+
+msgid "Very Fast"
+msgstr "Мн. бързo"
+
+msgid "Evil"
+msgstr "Зъл"
+
+msgid "Good"
+msgstr "Добър"
 
 msgid ", FPS: "
 msgstr ""

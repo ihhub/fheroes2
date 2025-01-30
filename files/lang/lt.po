@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -65,9 +65,6 @@ msgid "CANCEL"
 msgstr ""
 
 msgid "OKAY"
-msgstr ""
-
-msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -197,10 +194,10 @@ msgstr ""
 msgid "START"
 msgstr ""
 
-msgid "CASTLE"
+msgid "TOWN"
 msgstr ""
 
-msgid "TOWN"
+msgid "CASTLE"
 msgstr ""
 
 msgid "RESTRICT"
@@ -3049,15 +3046,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
 msgid "Hide"
 msgstr ""
 
@@ -3067,25 +3055,16 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
+msgid "Interface Type"
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Scroll Speed"
 msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
@@ -3122,6 +3101,9 @@ msgid ""
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
+msgstr ""
+
+msgid "Learn %{secondary-skill}"
 msgstr ""
 
 msgid "n/a"
@@ -3223,7 +3205,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 #, fuzzy
@@ -4494,6 +4476,9 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+msgid "editor|%{count} %{resource}"
+msgstr ""
+
 msgid "Animation"
 msgstr ""
 
@@ -4616,6 +4601,9 @@ msgid "and more..."
 msgstr ""
 
 msgid "Easy"
+msgstr ""
+
+msgid "Normal"
 msgstr ""
 
 msgid "Hard"
@@ -6066,6 +6054,21 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Žiūrėti %{name}"
+
+msgid "Slow"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""

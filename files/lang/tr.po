@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "İPTAL"
 
 msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "smallerButton|OKAY"
 msgstr "TAMAM"
 
 msgid "ACCEPT"
@@ -222,11 +219,11 @@ msgstr "SIFIRLA"
 msgid "START"
 msgstr "BAŞLA"
 
-msgid "CASTLE"
-msgstr "KALE"
-
 msgid "TOWN"
 msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
 
 msgid "RESTRICT"
 msgstr "KISITLA"
@@ -3128,15 +3125,6 @@ msgstr "Etkinlik: "
 msgid "Hot Keys:"
 msgstr "Kısayollar:"
 
-msgid "Evil"
-msgstr "Şeytani"
-
-msgid "Good"
-msgstr "İyi"
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
 msgid "Hide"
 msgstr "Gizle"
 
@@ -3146,26 +3134,17 @@ msgstr "Göster"
 msgid "Interface"
 msgstr "Arayüz"
 
-msgid "Slow"
-msgstr "Yavaş"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hızlı"
-
-msgid "Very Fast"
-msgstr "Çok Hızlı"
-
-msgid "Scroll Speed"
-msgstr "Kaydırma Hızı"
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
+
+msgid "Scroll Speed"
+msgstr "Kaydırma Hızı"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Pencereyi kaydırma hızını ayarlar."
@@ -3206,6 +3185,9 @@ msgstr ""
 "Ya %{skill1}\n"
 "ya da\n"
 "%{skill2} öğrenebilirsin."
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3306,7 +3288,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -4513,6 +4495,10 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "%{resource} sayısını seç:"
+
 msgid "Animation"
 msgstr ""
 
@@ -4635,6 +4621,9 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr ""
@@ -6039,6 +6028,21 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Görünüm %{name}"
+
+msgid "Slow"
+msgstr "Yavaş"
+
+msgid "Fast"
+msgstr "Hızlı"
+
+msgid "Very Fast"
+msgstr "Çok Hızlı"
+
+msgid "Evil"
+msgstr "Şeytani"
+
+msgid "Good"
+msgstr "İyi"
 
 msgid ", FPS: "
 msgstr ""

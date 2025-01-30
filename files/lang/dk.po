@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -79,9 +79,6 @@ msgid "CANCEL"
 msgstr "AFBRYD"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -221,11 +218,11 @@ msgstr "NULSTIL"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "BORGE"
-
 msgid "TOWN"
 msgstr "BY"
+
+msgid "CASTLE"
+msgstr "BORGE"
 
 msgid "RESTRICT"
 msgstr "BEGRÆNS"
@@ -3278,15 +3275,6 @@ msgstr "Begivenhed: "
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
 msgid "Hide"
 msgstr "Skjul"
 
@@ -3296,28 +3284,19 @@ msgstr "Vis"
 msgid "Interface"
 msgstr "Interface"
 
-msgid "Slow"
-msgstr "Langsom"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hurtig"
-
-msgid "Very Fast"
-msgstr "Meget hurtig"
-
-msgid "Scroll Speed"
-msgstr ""
-"Rulle\n"
-"hastighed"
+msgid "Interface Type"
+msgstr "Interface-type"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
+
+msgid "Scroll Speed"
+msgstr ""
+"Rulle\n"
+"hastighed"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Bestemmer vinduets rullehastighed."
@@ -3360,6 +3339,9 @@ msgstr ""
 "%{skill1}\n"
 "eller\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "i/t"
@@ -3462,8 +3444,8 @@ msgstr "Forsvarere:"
 msgid "Unknown"
 msgstr "Ukendt"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Level %{level})"
 
 msgid "Attack:"
 msgstr "Angreb:"
@@ -4758,6 +4740,10 @@ msgstr ""
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vælg antal %{resource}:"
+
 msgid "Animation"
 msgstr "Animation"
 
@@ -4885,6 +4871,9 @@ msgstr "og mere..."
 
 msgid "Easy"
 msgstr "Let"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svær"
@@ -6422,6 +6411,21 @@ msgstr "Slovensk"
 
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
+
+msgid "Slow"
+msgstr "Langsom"
+
+msgid "Fast"
+msgstr "Hurtig"
+
+msgid "Very Fast"
+msgstr "Meget hurtig"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS:"

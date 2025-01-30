@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -79,9 +79,6 @@ msgid "CANCEL"
 msgstr "TỪ BỎ"
 
 msgid "OKAY"
-msgstr "ĐƯỢC"
-
-msgid "smallerButton|OKAY"
 msgstr "ĐƯỢC"
 
 msgid "ACCEPT"
@@ -224,11 +221,11 @@ msgstr "CÀI LẠI"
 msgid "START"
 msgstr "LÀM LẠI"
 
-msgid "CASTLE"
-msgstr "LÂU ĐÀI"
-
 msgid "TOWN"
 msgstr "THỊ TRẤN"
+
+msgid "CASTLE"
+msgstr "LÂU ĐÀI"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3272,15 +3269,6 @@ msgstr "Sự kiện: "
 msgid "Hot Keys:"
 msgstr "Phím tắt:"
 
-msgid "Evil"
-msgstr "Xấu"
-
-msgid "Good"
-msgstr "Tốt"
-
-msgid "Interface Type"
-msgstr "Kiểu Giao diện"
-
 msgid "Hide"
 msgstr "Ẩn"
 
@@ -3290,26 +3278,17 @@ msgstr "Hiện"
 msgid "Interface"
 msgstr "Giao diện"
 
-msgid "Slow"
-msgstr "Chậm"
-
-msgid "Normal"
-msgstr "Thường"
-
-msgid "Fast"
-msgstr "Nhanh"
-
-msgid "Very Fast"
-msgstr "Rất nhanh"
-
-msgid "Scroll Speed"
-msgstr "Tốc độ Cuộn"
+msgid "Interface Type"
+msgstr "Kiểu Giao diện"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
 
 msgid "Toggle interface visibility."
 msgstr "Chuyển đổi khả năng hiển thị giao diện."
+
+msgid "Scroll Speed"
+msgstr "Tốc độ Cuộn"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Đặt tốc độ cuộn cửa sổ."
@@ -3352,6 +3331,9 @@ msgstr ""
 "%{skill1}\n"
 "hoặc\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3457,8 +3439,8 @@ msgstr "Bên thủ:"
 msgid "Unknown"
 msgstr "Không biết"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Cấp độ %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Cấp độ %{level})"
 
 msgid "Attack:"
 msgstr "Tấn công:"
@@ -4793,6 +4775,10 @@ msgstr ""
 "thứ trở nên khó khăn hơn đối với người chơi."
 
 #, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Chọn số lượng %{resource}:"
+
+#, fuzzy
 msgid "Animation"
 msgstr "Thôn tính"
 
@@ -4926,6 +4912,9 @@ msgstr "và hơn thế nữa..."
 
 msgid "Easy"
 msgstr "Dễ"
+
+msgid "Normal"
+msgstr "Thường"
 
 msgid "Hard"
 msgstr "Khó"
@@ -6466,6 +6455,21 @@ msgstr "Tiếng Slovak"
 
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
+
+msgid "Slow"
+msgstr "Chậm"
+
+msgid "Fast"
+msgstr "Nhanh"
+
+msgid "Very Fast"
+msgstr "Rất nhanh"
+
+msgid "Evil"
+msgstr "Xấu"
+
+msgid "Good"
+msgstr "Tốt"
 
 msgid ", FPS: "
 msgstr ", FPS: "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "smallerButton|OKAY"
 msgstr "OKEJ"
 
 msgid "ACCEPT"
@@ -221,11 +218,11 @@ msgstr "ÅTERS."
 msgid "START"
 msgstr "STARTA"
 
-msgid "CASTLE"
-msgstr "SLOTT"
-
 msgid "TOWN"
 msgstr "STAD"
+
+msgid "CASTLE"
+msgstr "SLOTT"
 
 msgid "RESTRICT"
 msgstr "BEGRÄNSA"
@@ -3215,15 +3212,6 @@ msgstr "Händelse: "
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
-
 msgid "Hide"
 msgstr "Dölj"
 
@@ -3233,28 +3221,19 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Slow"
-msgstr "Långsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Snabb"
-
-msgid "Very Fast"
-msgstr "Mkt. snabb"
-
-msgid "Scroll Speed"
-msgstr ""
-"Skroll-\n"
-"hastighet"
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
+
+msgid "Scroll Speed"
+msgstr ""
+"Skroll-\n"
+"hastighet"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
@@ -3296,6 +3275,9 @@ msgstr ""
 "%{skill1}\n"
 "eller\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "Inga"
@@ -3398,8 +3380,8 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -4647,6 +4629,10 @@ msgstr ""
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Välj antal %{resource}:"
+
 msgid "Animation"
 msgstr "Animering"
 
@@ -4774,6 +4760,9 @@ msgstr "och mer..."
 
 msgid "Easy"
 msgstr "Lätt"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svår"
@@ -6309,6 +6298,21 @@ msgstr "Slovakiska"
 
 msgid "Vietnamese"
 msgstr "Vietnamesiska"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Very Fast"
+msgstr "Mkt. snabb"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS: "

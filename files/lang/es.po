@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-25 13:34+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -82,9 +82,6 @@ msgid "CANCEL"
 msgstr "CANCELAR"
 
 msgid "OKAY"
-msgstr "VALE"
-
-msgid "smallerButton|OKAY"
 msgstr "VALE"
 
 msgid "ACCEPT"
@@ -235,11 +232,11 @@ msgstr "REINICIAR"
 msgid "START"
 msgstr "COMENZAR"
 
-msgid "CASTLE"
-msgstr "CASTILLO"
-
 msgid "TOWN"
 msgstr "CIUDAD"
+
+msgid "CASTLE"
+msgstr "CASTILLO"
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3206,15 +3203,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Atajos de Teclado:"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Tipo de interfaz"
-
 msgid "Hide"
 msgstr ""
 
@@ -3224,26 +3212,17 @@ msgstr ""
 msgid "Interface"
 msgstr "Interfaz"
 
-msgid "Slow"
-msgstr "Lento"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr "Muy rápido"
-
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
+msgid "Interface Type"
+msgstr "Tipo de interfaz"
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr ""
+
+msgid "Scroll Speed"
+msgstr "Velocidad de desplazamiento"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
@@ -3286,6 +3265,9 @@ msgstr ""
 "%{skill1}\n"
 "o\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/d"
@@ -3389,8 +3371,8 @@ msgstr "Defensores:"
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} ( Nivel %{level} )"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "( Nivel %{level} )"
 
 msgid "Attack:"
 msgstr "Ataque:"
@@ -4721,6 +4703,10 @@ msgstr ""
 "humano."
 
 #, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Seleccionar cantidad de %{resource}:"
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexión"
 
@@ -4846,6 +4832,9 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Fácil"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Difícil"
@@ -6378,6 +6367,21 @@ msgstr ""
 
 msgid "Vietnamese"
 msgstr ""
+
+msgid "Slow"
+msgstr "Lento"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr "Muy rápido"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
 
 msgid ", FPS: "
 msgstr ""
