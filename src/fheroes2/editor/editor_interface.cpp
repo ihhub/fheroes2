@@ -1128,10 +1128,14 @@ namespace Interface
         fheroes2::Sprite mainMenuPressed;
         fheroes2::getTextAdaptedButton( mainMenuReleased, mainMenuPressed, gettext_noop( "MAIN\nMENU" ),
                                         isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+        fheroes2::Sprite playMapReleased;
+        fheroes2::Sprite playMapPressed;
+        fheroes2::getTextAdaptedButton( playMapReleased, playMapPressed, gettext_noop( "PLAY\nMAP" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                        isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289 + mainMenuReleased.width(), 204, true, display );
+        fheroes2::StandardWindow background( 193 + mainMenuReleased.width() + playMapReleased.width(), 204, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
         fheroes2::Button buttonNew( roi.x + 62, roi.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
@@ -1156,6 +1160,10 @@ namespace Interface
                                                roi.y + ( roi.height - mainMenuReleased.height() ) / 2 + buttonOffsets.y, mainMenuReleased, mainMenuPressed );
         fheroes2::addGradientShadow( mainMenuReleased, display, buttonMainMenu.area().getPosition(), { -5, 5 } );
 
+        fheroes2::ButtonSprite buttonPlayMap( roi.x + roi.width - playMapReleased.width() - buttonOffsets.x, roi.y + buttonOffsets.y, playMapReleased, playMapPressed );
+        fheroes2::addGradientShadow( playMapReleased, display, buttonPlayMap.area().getPosition(), { -5, 5 } );
+
+        buttonPlayMap.draw();
         buttonMainMenu.draw();
 
         display.render( background.totalArea() );
@@ -1171,6 +1179,7 @@ namespace Interface
             buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
             buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
+            buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPlayMap.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
