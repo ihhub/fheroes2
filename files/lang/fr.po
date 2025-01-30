@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-10-07 15:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3291,15 +3291,6 @@ msgstr "Événement : "
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Interface"
-
 msgid "Hide"
 msgstr "Libre"
 
@@ -3309,26 +3300,17 @@ msgstr "Attachée"
 msgid "Interface"
 msgstr "Interface"
 
-msgid "Slow"
-msgstr "Lente"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Rapide"
-
-msgid "Very Fast"
-msgstr "Très rapide"
-
-msgid "Scroll Speed"
-msgstr "Défilement"
+msgid "Interface Type"
+msgstr "Interface"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
 
 msgid "Toggle interface visibility."
 msgstr "Visibilité d'interface."
+
+msgid "Scroll Speed"
+msgstr "Défilement"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
@@ -4954,6 +4936,9 @@ msgstr "et plus encore..."
 msgid "Easy"
 msgstr "Facile"
 
+msgid "Normal"
+msgstr "Normal"
+
 msgid "Hard"
 msgstr "Difficile"
 
@@ -6503,6 +6488,21 @@ msgstr "Slovaque"
 
 msgid "Vietnamese"
 msgstr "Vietnamien"
+
+msgid "Slow"
+msgstr "Lente"
+
+msgid "Fast"
+msgstr "Rapide"
+
+msgid "Very Fast"
+msgstr "Très rapide"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
 
 msgid ", FPS: "
 msgstr ", FPS : "

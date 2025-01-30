@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 msgid ""
 "BATTLE\n"
@@ -323,11 +323,15 @@ msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"AUTOM.\n"
+"CSATA"
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"GYORS\n"
+"CSATA"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -482,13 +486,11 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} elpusztítja az ellenséges csapatok felét!"
 msgstr[1] "%{name} elpusztítják az ellenséges csapatok felét!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto combat"
-msgstr "%{name} kikapcsolta az automata csata funkciót"
+msgstr "%{name} kikapcsolta az automata csata módot"
 
-#, fuzzy
 msgid "%{name} has turned on the auto combat"
-msgstr "%{name} bekapcsolta az automata csata funkciót"
+msgstr "%{name} bekapcsolta az automata csata módot"
 
 msgid "Spell failed!"
 msgstr "A varázslat meghiúsult!"
@@ -815,18 +817,16 @@ msgstr "Hajítógép információk"
 msgid "Ballista"
 msgstr "Hajítógép"
 
-#, fuzzy
 msgid "Automatic combat modes"
-msgstr "Automatikus csata"
+msgstr "Automatikus csata módok"
 
-#, fuzzy
 msgid "Automatic Combat Modes"
-msgstr "Automatikus csata"
+msgstr "Automatikus csata módok"
 
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
-msgstr ""
+msgstr "Válassz a csata automatikus vagy gyors lefolytatása között."
 
 msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
@@ -874,36 +874,34 @@ msgstr "Üzenetsáv"
 msgid "Shows the results of individual monster's actions."
 msgstr "Mutatja egy lény tevékenységének eredményét."
 
-#, fuzzy
 msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Biztos, hogy be akarod kapcsolni az automata csatát?"
+msgstr "Biztos, hogy be akarod kapcsolni az automatikus csata módot?"
 
-#, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Biztos vagy benne hogy automatikus módban kívánod befejezni a csatát?"
+msgstr "Biztos vagy benne hogy gyors csata módban kívánod befejezni a csatát?"
 
-#, fuzzy
 msgid "The computer continues the combat for you."
-msgstr "A számítógép lejátssza helyetted a csatát."
+msgstr "A számítógép folytatja helyetted a csatát."
 
 msgid ""
 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
+"Bármikor megszakítható az Automatikus csata gyorsbillentyű vagy a Mégse gomb "
+"lenyomására, illetve ha bárhol a játéktéren lenyomjuk valamelyik egérgombot."
 
 msgid "Auto Combat"
 msgstr "Automatikus csata"
 
 msgid "The combat is resolved from the current state."
-msgstr ""
+msgstr "A csata kimenetele a jelenlegi állapot szerint dől el."
 
 msgid "quickCombat|This cannot be undone."
-msgstr ""
+msgstr "Ezt nem lehet visszavonni."
 
-#, fuzzy
 msgid "Quick Combat"
-msgstr "Automatikus csata"
+msgstr "Gyors csata"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1024,9 +1022,8 @@ msgstr "Tükör képmás készült."
 msgid "The mirror image is destroyed!"
 msgstr "Tükör képmás megsemmisült!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat mode?"
-msgstr "Biztos, hogy meg akarod szakítani az automatikus csatát?"
+msgstr "Biztos, hogy meg akarod szakítani az automatikus csata módot?"
 
 msgid "Error"
 msgstr "Hiba"
@@ -3215,15 +3212,6 @@ msgstr "Esemény: "
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
 
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-msgid "Interface Type"
-msgstr "Kezelőfelület típusa"
-
 msgid "Hide"
 msgstr "Elrejt"
 
@@ -3233,26 +3221,17 @@ msgstr "Mutat"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
-msgid "Slow"
-msgstr "Lassú"
-
-msgid "Normal"
-msgstr "Normál"
-
-msgid "Fast"
-msgstr "Gyors"
-
-msgid "Very Fast"
-msgstr "Nagyon gyors"
-
-msgid "Scroll Speed"
-msgstr "Képernyőgörgetés sebessége"
+msgid "Interface Type"
+msgstr "Kezelőfelület típusa"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid "Toggle interface visibility."
 msgstr "Kezelőfelület láthatóságának kapcsolója."
+
+msgid "Scroll Speed"
+msgstr "Képernyőgörgetés sebessége"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Beállítja az ablakok görgetésének sebességét."
@@ -3805,7 +3784,6 @@ msgstr "Auto, nincs varázslás"
 msgid "Battles"
 msgstr "Csaták"
 
-#, fuzzy
 msgid "combatMode|Manual"
 msgstr "Kézi vezérlés"
 
@@ -4785,6 +4763,9 @@ msgstr "és egyebek..."
 msgid "Easy"
 msgstr "Könnyű"
 
+msgid "Normal"
+msgstr "Normál"
+
 msgid "Hard"
 msgstr "Nehéz"
 
@@ -5084,9 +5065,8 @@ msgstr "teljes képernyő váltás"
 msgid "hotkey|toggle text support mode"
 msgstr "szöveges támogatás váltás"
 
-#, fuzzy
 msgid "hotkey|toggle developer mode"
-msgstr "szöveges támogatás váltás"
+msgstr "fejlesztői mód kapcsoló"
 
 msgid "hotkey|new game"
 msgstr "új játék"
@@ -5322,13 +5302,11 @@ msgstr "visszavonulás a csatából"
 msgid "hotkey|surrender during battle"
 msgstr "megadás a csatában"
 
-#, fuzzy
 msgid "hotkey|toggle auto combat mode"
 msgstr "automatikus csata mód kapcsoló"
 
-#, fuzzy
 msgid "hotkey|quick combat"
-msgstr "kilépés"
+msgstr "gyors csata"
 
 msgid "hotkey|battle options"
 msgstr "csata beállítások"
@@ -5391,14 +5369,13 @@ msgid "hotkey|join stacks"
 msgstr "egységek összevonása"
 
 msgid "hotkey|upgrade troop"
-msgstr "csapat fejlesztése"
+msgstr "egység fejlesztése"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "hős/egység elbocsátása"
 
-#, fuzzy
 msgid "hotkey|exchange all troops"
-msgstr "csapat fejlesztése"
+msgstr "összes egység cseréje"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -6324,6 +6301,21 @@ msgstr "szlovák"
 
 msgid "Vietnamese"
 msgstr "vietnámi"
+
+msgid "Slow"
+msgstr "Lassú"
+
+msgid "Fast"
+msgstr "Gyors"
+
+msgid "Very Fast"
+msgstr "Nagyon gyors"
+
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
 
 msgid ", FPS: "
 msgstr ", FPS: "

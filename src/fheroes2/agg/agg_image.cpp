@@ -265,55 +265,6 @@ namespace
         }
     }
 
-    // BMP files within AGG are not Bitmap images!
-    fheroes2::Sprite loadBMPFile( const std::string & path )
-    {
-        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path, false );
-        if ( data.size() < 6 ) {
-            // It is an invalid BMP file.
-            return {};
-        }
-
-        ROStreamBuf imageStream( data );
-
-        const uint8_t blackColor = imageStream.get();
-        const uint8_t whiteColor = 11;
-
-        // Skip the second byte
-        imageStream.get();
-
-        const int32_t width = imageStream.getLE16();
-        const int32_t height = imageStream.getLE16();
-
-        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
-            // It is an invalid BMP file.
-            return {};
-        }
-
-        fheroes2::Sprite output( width, height );
-
-        const uint8_t * input = data.data() + 6;
-        uint8_t * image = output.image();
-        const uint8_t * imageEnd = image + width * height;
-        uint8_t * transform = output.transform();
-
-        for ( ; image != imageEnd; ++image, ++transform, ++input ) {
-            if ( *input == 1 ) {
-                *image = whiteColor;
-                *transform = 0;
-            }
-            else if ( *input == 2 ) {
-                *image = blackColor;
-                *transform = 0;
-            }
-            else {
-                *transform = 1;
-            }
-        }
-
-        return output;
-    }
-
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
     class OriginalAlphabetPreserver
     {
@@ -4131,7 +4082,7 @@ namespace
                 }
                 digit += std::to_string( i + 1 );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "ADVMBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "ADVMBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -4146,7 +4097,7 @@ namespace
                 }
                 digit += std::to_string( i );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "SPELBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "SPELBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -4161,7 +4112,7 @@ namespace
                 }
                 digit += std::to_string( i + 1 );
 
-                _icnVsSprite[id][i] = loadBMPFile( std::string( "CMSEBW" ) + digit + ".BMP" );
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "CMSEBW" ) + digit + ".BMP", false ) );
             }
             return true;
         }
@@ -5524,130 +5475,6 @@ namespace fheroes2::AGG
         }
 
         return _tilVsImage[tilId][shapeId][index];
-    }
-
-    int32_t GetAbsoluteICNHeight( int icnId )
-    {
-        const uint32_t frameCount = GetICNCount( icnId );
-        if ( frameCount == 0 ) {
-            return 0;
-        }
-
-        int32_t height = 0;
-        for ( uint32_t i = 0; i < frameCount; ++i ) {
-            const int32_t offset = -GetICN( icnId, i ).y();
-            if ( offset > height ) {
-                height = offset;
-            }
-        }
-
-        return height;
-    }
-
-    uint32_t getCharacterLimit( const FontSize fontSize )
-    {
-        switch ( fontSize ) {
-        case FontSize::SMALL:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-        case FontSize::NORMAL:
-        case FontSize::LARGE:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-        case FontSize::BUTTON_RELEASED:
-        case FontSize::BUTTON_PRESSED:
-            return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
-        default:
-            assert( 0 ); // Did you add a new font size? Please add implementation.
-        }
-
-        return 0;
-    }
-
-    const Sprite & getChar( const uint8_t character, const FontType & fontType )
-    {
-        if ( character < 0x21 ) {
-            return errorImage;
-        }
-
-        switch ( fontType.size ) {
-        case FontSize::SMALL:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::SMALFONT, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
-            case FontColor::YELLOW:
-                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::NORMAL:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::FONT, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::GRAY_FONT, character - 0x20 );
-            case FontColor::YELLOW:
-                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case FontColor::GOLDEN_GRADIENT:
-                return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
-            case FontColor::SILVER_GRADIENT:
-                return GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::LARGE:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
-            case FontColor::GOLDEN_GRADIENT:
-                return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
-            case FontColor::SILVER_GRADIENT:
-                return GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::BUTTON_RELEASED:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        case FontSize::BUTTON_PRESSED:
-            switch ( fontType.color ) {
-            case FontColor::WHITE:
-                return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
-            case FontColor::GRAY:
-                return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
-            default:
-                // Did you add a new font color? Add the corresponding logic for it!
-                assert( 0 );
-                break;
-            }
-            break;
-        default:
-            // Did you add a new font size? Add the corresponding logic for it!
-            assert( 0 );
-            break;
-        }
-
-        assert( 0 ); // Did you add a new font size? Please add implementation.
-
-        return errorImage;
     }
 
     void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )

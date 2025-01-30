@@ -62,6 +62,11 @@ namespace
         Animation,
         Passabiility,
         UpdateSettings,
+        InterfaceType,
+        CursorType,
+        UpdateScrollSpeed,
+        IncreaseScrollSpeed,
+        DecreaseScrollSpeed,
         Close
     };
 
@@ -75,6 +80,11 @@ namespace
     const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect animationRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect passabilityRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
+                                         optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
+                                        optionWindowSize };
+    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
                                          optionWindowSize };
 
     void drawLanguage( const fheroes2::Rect & optionRoi )
@@ -127,7 +137,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 272, true, display );
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -137,14 +147,23 @@ namespace
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowAnimationRoi( animationRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowPassabilityRoi( passabilityRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi]() {
+        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi,
+                                  &windowInterfaceTypeRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
+            const Settings & conf = Settings::Get();
+
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
             drawHotKeyOptions( windowHotKeyRoi );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.isEvilInterfaceEnabled() );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 
         drawOptions();
@@ -183,6 +202,21 @@ namespace
             if ( le.MouseClickLeft( windowPassabilityRoi ) ) {
                 return DialogAction::Passabiility;
             }
+            if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
+                return DialogAction::InterfaceType;
+            }
+            if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
+                return DialogAction::CursorType;
+            }
+            if ( le.MouseClickLeft( windowScrollSpeedRoi ) ) {
+                return DialogAction::UpdateScrollSpeed;
+            }
+            if ( le.isMouseWheelUpInArea( windowScrollSpeedRoi ) ) {
+                return DialogAction::IncreaseScrollSpeed;
+            }
+            if ( le.isMouseWheelDownInArea( windowScrollSpeedRoi ) ) {
+                return DialogAction::DecreaseScrollSpeed;
+            }
 
             if ( le.isMouseRightButtonPressedInArea( windowLanguageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Language" ), _( "Change the language of the game." ), 0 );
@@ -201,6 +235,15 @@ namespace
             }
             else if ( le.isMouseRightButtonPressedInArea( windowPassabilityRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle display of objects' passability." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowInterfaceTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
+            }
+            if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -301,6 +344,37 @@ namespace Editor
                 saveConfiguration = true;
 
                 redrawEditor();
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::InterfaceType:
+                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                rebuildEditor();
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::CursorType:
+                conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::UpdateScrollSpeed:
+                conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::IncreaseScrollSpeed:
+                conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::DecreaseScrollSpeed:
+                conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
+                saveConfiguration = true;
 
                 action = DialogAction::Configuration;
                 break;

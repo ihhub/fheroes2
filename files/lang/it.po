@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3097,15 +3097,6 @@ msgstr "Evento"
 msgid "Hot Keys:"
 msgstr ""
 
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
 msgid "Hide"
 msgstr "Nascondi"
 
@@ -3115,29 +3106,17 @@ msgstr "Mostra"
 msgid "Interface"
 msgstr "Interfaccia"
 
-#, fuzzy
-msgid "Slow"
-msgstr "Pianissimo"
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normale"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Velocissima"
-
-msgid "Scroll Speed"
-msgstr "Velocità dello Scorrimento"
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr ""
+
+msgid "Scroll Speed"
+msgstr "Velocità dello Scorrimento"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
@@ -4744,6 +4723,10 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
 msgid "Hard"
 msgstr ""
 
@@ -6223,6 +6206,23 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Mostra %{name}"
+
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
 
 msgid ", FPS: "
 msgstr ""
