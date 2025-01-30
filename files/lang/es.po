@@ -3244,9 +3244,6 @@ msgstr "Rápido"
 msgid "Very Fast"
 msgstr "Muy rápido"
 
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
-
 msgid "Interface Type"
 msgstr "Tipo de interfaz"
 
