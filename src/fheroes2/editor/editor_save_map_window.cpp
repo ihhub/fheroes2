@@ -445,7 +445,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Map Name" ), '\"' + mapName + "\"\n\n" + _( "Click to change your map name." ), Dialog::ZERO );
             }
 
             // Text input cursor blink.

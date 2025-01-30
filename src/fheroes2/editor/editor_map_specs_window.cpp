@@ -2429,7 +2429,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Map Name" ), '\"' + mapFormat.name + "\"\n\n" + _( "Click to change your map name." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
