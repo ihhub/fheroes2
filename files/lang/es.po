@@ -3232,18 +3232,6 @@ msgstr "Mostrar"
 msgid "Interface"
 msgstr "Interfaz"
 
-msgid "Slow"
-msgstr "Lento"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Rápido"
-
-msgid "Very Fast"
-msgstr "Muy rápido"
-
 msgid "Interface Type"
 msgstr "Tipo de interfaz"
 
