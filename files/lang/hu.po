@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 msgid ""
 "BATTLE\n"
@@ -323,11 +323,15 @@ msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"AUTOM.\n"
+"CSATA"
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"GYORS\n"
+"CSATA"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -482,13 +486,11 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} elpusztítja az ellenséges csapatok felét!"
 msgstr[1] "%{name} elpusztítják az ellenséges csapatok felét!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto combat"
-msgstr "%{name} kikapcsolta az automata csata funkciót"
+msgstr "%{name} kikapcsolta az automata csata módot"
 
-#, fuzzy
 msgid "%{name} has turned on the auto combat"
-msgstr "%{name} bekapcsolta az automata csata funkciót"
+msgstr "%{name} bekapcsolta az automata csata módot"
 
 msgid "Spell failed!"
 msgstr "A varázslat meghiúsult!"
@@ -815,18 +817,16 @@ msgstr "Hajítógép információk"
 msgid "Ballista"
 msgstr "Hajítógép"
 
-#, fuzzy
 msgid "Automatic combat modes"
-msgstr "Automatikus csata"
+msgstr "Automatikus csata módok"
 
-#, fuzzy
 msgid "Automatic Combat Modes"
-msgstr "Automatikus csata"
+msgstr "Automatikus csata módok"
 
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
-msgstr ""
+msgstr "Válassz a csata automatikus vagy gyors lefolytatása között."
 
 msgid "Customize system options"
 msgstr "Rendszerbeállítások testreszabása"
@@ -874,36 +874,34 @@ msgstr "Üzenetsáv"
 msgid "Shows the results of individual monster's actions."
 msgstr "Mutatja egy lény tevékenységének eredményét."
 
-#, fuzzy
 msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Biztos, hogy be akarod kapcsolni az automata csatát?"
+msgstr "Biztos, hogy be akarod kapcsolni az automatikus csata módot?"
 
-#, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Biztos vagy benne hogy automatikus módban kívánod befejezni a csatát?"
+msgstr "Biztos vagy benne hogy gyors csata módban kívánod befejezni a csatát?"
 
-#, fuzzy
 msgid "The computer continues the combat for you."
-msgstr "A számítógép lejátssza helyetted a csatát."
+msgstr "A számítógép folytatja helyetted a csatát."
 
 msgid ""
 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
+"Bármikor megszakítható az Automatikus csata gyorsbillentyű vagy a Mégse gomb "
+"lenyomására, illetve ha bárhol a játéktéren lenyomjuk valamelyik egérgombot."
 
 msgid "Auto Combat"
 msgstr "Automatikus csata"
 
 msgid "The combat is resolved from the current state."
-msgstr ""
+msgstr "A csata kimenetele a jelenlegi állapot szerint dől el."
 
 msgid "quickCombat|This cannot be undone."
-msgstr ""
+msgstr "Ezt nem lehet visszavonni."
 
-#, fuzzy
 msgid "Quick Combat"
-msgstr "Automatikus csata"
+msgstr "Gyors csata"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1024,9 +1022,8 @@ msgstr "Tükör képmás készült."
 msgid "The mirror image is destroyed!"
 msgstr "Tükör képmás megsemmisült!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat mode?"
-msgstr "Biztos, hogy meg akarod szakítani az automatikus csatát?"
+msgstr "Biztos, hogy meg akarod szakítani az automatikus csata módot?"
 
 msgid "Error"
 msgstr "Hiba"
@@ -3787,7 +3784,6 @@ msgstr "Auto, nincs varázslás"
 msgid "Battles"
 msgstr "Csaták"
 
-#, fuzzy
 msgid "combatMode|Manual"
 msgstr "Kézi vezérlés"
 
@@ -5069,9 +5065,8 @@ msgstr "teljes képernyő váltás"
 msgid "hotkey|toggle text support mode"
 msgstr "szöveges támogatás váltás"
 
-#, fuzzy
 msgid "hotkey|toggle developer mode"
-msgstr "szöveges támogatás váltás"
+msgstr "fejlesztői mód kapcsoló"
 
 msgid "hotkey|new game"
 msgstr "új játék"
@@ -5307,13 +5302,11 @@ msgstr "visszavonulás a csatából"
 msgid "hotkey|surrender during battle"
 msgstr "megadás a csatában"
 
-#, fuzzy
 msgid "hotkey|toggle auto combat mode"
 msgstr "automatikus csata mód kapcsoló"
 
-#, fuzzy
 msgid "hotkey|quick combat"
-msgstr "kilépés"
+msgstr "gyors csata"
 
 msgid "hotkey|battle options"
 msgstr "csata beállítások"
@@ -5376,14 +5369,13 @@ msgid "hotkey|join stacks"
 msgstr "egységek összevonása"
 
 msgid "hotkey|upgrade troop"
-msgstr "csapat fejlesztése"
+msgstr "egység fejlesztése"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "hős/egység elbocsátása"
 
-#, fuzzy
 msgid "hotkey|exchange all troops"
-msgstr "csapat fejlesztése"
+msgstr "összes egység cseréje"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
