@@ -20,7 +20,6 @@
 
 #include "editor_event_details_window.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -32,13 +31,13 @@
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "artifact_info.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -48,11 +47,11 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -153,7 +152,7 @@ namespace Editor
         experienceUI->draw( display, experienceRoi.getPosition() );
 
         // Secondary Skill
-        Heroes fakeHero;
+        const Heroes fakeHero;
         auto secondarySkillUI
             = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{ eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel }, fakeHero );
 
@@ -421,7 +420,7 @@ namespace Editor
                 const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                 int32_t tempValue{ eventMetadata.experience };
 
-                if ( Dialog::SelectCount( _( "Set Experience value" ), 0, Heroes::getExperienceMaxValue(), tempValue, 1, &tempExperienceUI ) ) {
+                if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), tempValue, 1, &tempExperienceUI ) ) {
                     eventMetadata.experience = tempValue;
 
                     experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );

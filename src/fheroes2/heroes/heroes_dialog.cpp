@@ -504,7 +504,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                     int32_t value = static_cast<int32_t>( experience );
 
-                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, Heroes::getExperienceMaxValue(), value, 1, &tempExperienceUI ) ) {
+                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), value, 1, &tempExperienceUI ) ) {
                         useDefaultExperience = false;
                         experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );

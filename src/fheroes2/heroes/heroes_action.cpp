@@ -742,8 +742,6 @@ namespace
 
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
-            assert( sign != nullptr );
-
             fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), ( sign ? sign->message : "No message provided" ), Dialog::OK );
         }
         else {
@@ -2805,6 +2803,7 @@ namespace
         const std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
 
         std::vector<const fheroes2::DialogElement *> elementUI;
+        elementUI.reserve( resourceUI.size() );
         for ( const fheroes2::ResourceDialogElement & element : resourceUI ) {
             elementUI.emplace_back( &element );
         }
