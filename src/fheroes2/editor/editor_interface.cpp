@@ -1131,7 +1131,7 @@ namespace Interface
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 321 - 32 + mainMenuReleased.width() / 2, 236 - 32 + mainMenuReleased.height() / 2 + 15 + 21, true, display );
+        fheroes2::StandardWindow background( 289 + mainMenuReleased.width(), 204, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
         fheroes2::Button buttonNew( roi.x + 62, roi.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
@@ -1143,17 +1143,17 @@ namespace Interface
         const fheroes2::Point buttonOffsets = { 30, 15 };
         background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
                                  fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, buttonOffsets,
-                                 fheroes2::StandardWindow::Padding::TOP_RIGHT );
-        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { 30, mainMenuReleased.height() + 4 },
+        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 0, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::TOP_CENTER );
+        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
                                  fheroes2::StandardWindow::Padding::CENTER_LEFT );
-        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { 30, mainMenuReleased.height() + 4 },
+        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
                                  fheroes2::StandardWindow::Padding::CENTER_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        fheroes2::ButtonSprite buttonMainMenu( roi.x + ( roi.width - mainMenuReleased.width() ) / 2, roi.y + ( roi.height - mainMenuReleased.height() ) / 2 - 10,
-                                               mainMenuReleased, mainMenuPressed );
+        fheroes2::ButtonSprite buttonMainMenu( roi.x + ( roi.width - mainMenuReleased.width() ) / 2,
+                                               roi.y + ( roi.height - mainMenuReleased.height() ) / 2 + buttonOffsets.y, mainMenuReleased, mainMenuPressed );
         fheroes2::addGradientShadow( mainMenuReleased, display, buttonMainMenu.area().getPosition(), { -5, 5 } );
 
         buttonMainMenu.draw();
