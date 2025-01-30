@@ -1122,7 +1122,8 @@ namespace Interface
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Sprite mainMenuReleased;
         fheroes2::Sprite mainMenuPressed;
@@ -1135,7 +1136,15 @@ namespace Interface
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 193 + mainMenuReleased.width() + playMapReleased.width(), 204, true, display );
+        const fheroes2::Size dialogActiveSize = { 193 + mainMenuReleased.width() + playMapReleased.width(), 204 };
+        const int32_t totalDialogWidth = dialogActiveSize.width + 32;
+        const int32_t totalDialogHeight = dialogActiveSize.height + 32;
+
+        // Prepare restorer of the adventure map for when save feedback dialog is shown.
+        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth ) / 2 - fheroes2::borderWidthPx, ( display.height() - totalDialogHeight ) / 2,
+                                      totalDialogWidth + fheroes2::borderWidthPx, totalDialogHeight + fheroes2::borderWidthPx );
+
+        fheroes2::StandardWindow background( dialogActiveSize.width, dialogActiveSize.height, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
         fheroes2::Button buttonNew( roi.x + 62, roi.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
@@ -1190,6 +1199,9 @@ namespace Interface
                 }
             }
             if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+                // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
+                back.restore();
+                display.render( background.totalArea() );
                 Get().saveMapToFile();
                 return fheroes2::GameMode::CANCEL;
             }
@@ -1204,6 +1216,19 @@ namespace Interface
                                                         Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     return fheroes2::GameMode::MAIN_MENU;
+                }
+            }
+            if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+                // The map either hasn't been saved to a file or there aren't any human-playable colors.
+                const int amountHumans = conf.getCurrentMapInfo().colorsAvailableForHumans == 0;
+                if ( !( conf.getCurrentMapInfo().name == "" ) && conf.getCurrentMapInfo().colorsAvailableForHumans > 0 ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Play Map" ), _( "Do you wish to leave the editor and play the current map?" ), Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        return fheroes2::GameMode::NEW_STANDARD;
+                    }
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Invalid Map" ), _( "This map is not valid. Try to save the latest changes." ), Dialog::OK );
                 }
             }
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
