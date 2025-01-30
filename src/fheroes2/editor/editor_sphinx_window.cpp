@@ -310,7 +310,9 @@ namespace Editor
 
                     int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 

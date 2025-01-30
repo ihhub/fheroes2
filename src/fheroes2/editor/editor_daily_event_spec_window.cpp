@@ -314,7 +314,12 @@ namespace Editor
 
                     int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), -99999, 999999, temp, 1 ) ) {
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string message = _( "Set %{resource-type} Count" );
+                    StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
+
+                    if ( Dialog::SelectCount( message, -99999, 999999, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 

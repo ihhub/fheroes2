@@ -1570,6 +1570,11 @@ uint32_t Heroes::GetExperienceFromLevel( int lvl )
     return ( l1 + static_cast<uint32_t>( round( ( l1 - GetExperienceFromLevel( lvl - 2 ) ) * 1.2 / 100 ) * 100 ) );
 }
 
+uint32_t Heroes::getExperienceMaxValue()
+{
+    return 2990600;
+}
+
 bool Heroes::BuySpellBook( const Castle * castle )
 {
     if ( HaveSpellBook() || Color::NONE == GetColor() ) {

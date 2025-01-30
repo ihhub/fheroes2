@@ -687,6 +687,8 @@ public:
     static int GetLevelFromExperience( uint32_t exp );
     static uint32_t GetExperienceFromLevel( int lvl );
 
+    static uint32_t getExperienceMaxValue();
+
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 

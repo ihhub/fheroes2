@@ -307,8 +307,6 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        assert( artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || artifact.isValid() );
-
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };
     }
@@ -318,7 +316,9 @@ namespace fheroes2
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         Blit( frame, 0, 0, output, offset.x, offset.y, frame.width(), frame.height() );
 
-        const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, _artifact.IndexSprite64() );
+        const uint32_t icnIndex = ( _artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || _artifact.isValid() ) ? _artifact.IndexSprite64() : 0;
+
+        const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, icnIndex );
         Blit( artifact, output, offset.x + 6, offset.y + 6 );
     }
 
@@ -688,6 +688,14 @@ namespace fheroes2
     {
         const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
+
+        if ( !_skill.isValid() ) {
+            const Sprite & icn = AGG::GetICN( ICN::SECSKILL, 0 );
+            const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
+            Copy( icn, 0, 0, output, icnRect );
+
+            return;
+        }
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
         const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );

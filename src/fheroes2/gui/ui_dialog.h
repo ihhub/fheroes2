@@ -360,7 +360,7 @@ namespace fheroes2
         const Monster _monster;
     };
 
-    class ValueSelectionDialogElement
+    class ValueSelectionDialogElement final
     {
     public:
         explicit ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step, const Point & offset );
