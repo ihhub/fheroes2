@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,9 +62,9 @@ namespace
 {
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
-    const fheroes2::Size messageArea{ 300, 210 };
     const int32_t elementOffset{ 9 };
-    const int32_t playerAreaWidth{ messageArea.width }; //{ fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2 - 3 * elementOffset - messageArea.width };
+    const int32_t sectionWidth{ ( fheroes2::Display::DEFAULT_WIDTH - elementOffset * 3 ) / 2 };
+    const fheroes2::Size messageArea{ sectionWidth, 207 };
 }
 
 namespace Editor
@@ -83,7 +83,7 @@ namespace Editor
 
         const bool isDefaultScreenSize = display.isDefaultSize();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
+        fheroes2::StandardWindow background( sectionWidth * 2 + elementOffset * 3, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
 
         if ( isDefaultScreenSize ) {
@@ -111,7 +111,72 @@ namespace Editor
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
         text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
 
+        offsetY = startOffsetY;
+        const int32_t secondColumnOffsetX = dialogRoi.x + sectionWidth + 2 * elementOffset;
+
+        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
+        text.draw( secondColumnOffsetX + ( sectionWidth - text.width() ) / 2, offsetY, display );
+
+        offsetY += text.height( sectionWidth );
+
+        // Resources
+        const fheroes2::Rect resourceRoi{ secondColumnOffsetX, offsetY, sectionWidth, 99 };
+        background.applyTextBackgroundShading( resourceRoi );
+
+        fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
+
+        std::array<fheroes2::Rect, 7> individualResourceRoi;
+        renderResources( eventMetadata.resources, resourceRoi, display, individualResourceRoi );
+
+        // Artifact
+        offsetY += resourceRoi.height + elementOffset;
+
+        auto artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( eventMetadata.artifact );
+        const fheroes2::Rect artifactRoi{ secondColumnOffsetX, offsetY, artifactUI->area().width, artifactUI->area().height };
+
+        artifactUI->draw( display, artifactRoi.getPosition() );
+
+        const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
+
+        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 17 );
+        const int32_t buttonWidth = buttonImage.width();
+
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
+        buttonDeleteArtifact.draw();
+
+        // Experience
+        auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );
+        const fheroes2::Rect experienceRoi{ secondColumnOffsetX + sectionWidth - experienceUI->area().width,
+                                            offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2,
+                                            experienceUI->area().width, experienceUI->area().height };
+        fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width, experienceRoi.height );
+
+        experienceUI->draw( display, experienceRoi.getPosition() );
+
+        // Secondary Skill
+        Heroes fakeHero;
+        auto secondarySkillUI
+            = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{ eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel }, fakeHero );
+
+        const fheroes2::Rect secondarySkillRoi{ ( artifactRoi.x + artifactRoi.width + experienceRoi.x - secondarySkillUI->area().width ) / 2,
+                                                offsetY + ( artifactRoi.height - secondarySkillUI->area().height ) / 2,
+                                                secondarySkillUI->area().width, secondarySkillUI->area().height };
+
+        secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
+
+        fheroes2::Button buttonDeleteSecondarySkill(
+            secondarySkillRoi.x + ( secondarySkillRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
+        buttonDeleteSecondarySkill.draw();
+
+        // Conditions
         offsetY = messageRoi.y + messageRoi.height + 2 * elementOffset;
+
+        text.set( _( "Conditions:" ), fheroes2::FontType::normalWhite() );
+        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
+
+        offsetY += text.height() + elementOffset;
+        const int32_t conditionSectionOffsetY = offsetY;
+
         const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY };
 
         fheroes2::MovableSprite recurringEventCheckbox;
@@ -124,24 +189,24 @@ namespace Editor
             recurringEventCheckbox.show();
         }
 
-        offsetY += recurringEventArea.height + elementOffset;
+        offsetY = conditionSectionOffsetY;
 
         text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
 
-        int32_t textWidth = playerAreaWidth;
+        int32_t textWidth = sectionWidth;
         // If the text fits on one line, make it span two lines.
         while ( text.rows( textWidth ) < 2 ) {
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( dialogRoi.x + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
-        const int32_t checkOffX = ( playerAreaWidth - availablePlayersCount * 32 ) / 2;
+        const int32_t checkOffX = ( sectionWidth - availablePlayersCount * 32 ) / 2;
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, dialogRoi.x + checkOffX, offsetY, display );
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
@@ -149,76 +214,20 @@ namespace Editor
 
         text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
 
-        textWidth = playerAreaWidth;
+        textWidth = sectionWidth;
 
         // If the text fits on one line, make it span two lines.
         while ( text.rows( textWidth ) < 2 ) {
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( dialogRoi.x + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, dialogRoi.x + checkOffX, offsetY, display );
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
-
-        offsetY = startOffsetY;
-        const int32_t rewardAreaOffsetX = dialogRoi.x + elementOffset + messageRoi.width + elementOffset;
-
-        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
-        text.draw( rewardAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, display );
-
-        offsetY += text.height( textWidth );
-
-        // Resources
-        const fheroes2::Rect resourceRoi{ rewardAreaOffsetX, offsetY, playerAreaWidth, 99 };
-        background.applyTextBackgroundShading( resourceRoi );
-
-        fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
-
-        std::array<fheroes2::Rect, 7> individualResourceRoi;
-        renderResources( eventMetadata.resources, resourceRoi, display, individualResourceRoi );
-
-        // Artifact
-        offsetY += resourceRoi.height + elementOffset;
-
-        auto artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( eventMetadata.artifact );
-        const fheroes2::Rect artifactRoi{ rewardAreaOffsetX, offsetY, artifactUI->area().width, artifactUI->area().height };
-
-        artifactUI->draw( display, artifactRoi.getPosition() );
-
-        const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
-
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 17 );
-        const int32_t buttonWidth = buttonImage.width();
-
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
-        buttonDeleteArtifact.draw();
-
-        // Secondary Skill
-        Heroes fakeHero;
-        auto secondarySkillUI
-            = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{ eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel }, fakeHero );
-
-        const fheroes2::Rect secondarySkillRoi{ rewardAreaOffsetX + artifactRoi.width + elementOffset,
-                                                offsetY + ( artifactRoi.height - secondarySkillUI->area().height ) / 2,
-                                                secondarySkillUI->area().width, secondarySkillUI->area().height };
-
-        secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
-
-        fheroes2::Button buttonDeleteSecondarySkill(
-            secondarySkillRoi.x + ( secondarySkillRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
-        buttonDeleteSecondarySkill.draw();
-
-        auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );
-        const fheroes2::Rect experienceRoi{ rewardAreaOffsetX + artifactRoi.width + secondarySkillRoi.width + elementOffset * 2,
-                                            offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2,
-                                            experienceUI->area().width, experienceUI->area().height };
-        fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width, experienceRoi.height );
-
-        experienceUI->draw( display, experienceRoi.getPosition() );
 
         // Window buttons
         fheroes2::Button buttonOk;
