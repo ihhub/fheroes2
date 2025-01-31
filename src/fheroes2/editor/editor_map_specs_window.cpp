@@ -1006,7 +1006,7 @@ namespace
                 }
 
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
+                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface, roi.width - 5 );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
@@ -1019,7 +1019,8 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface,
+                                                                                   roi.width - 5 );
 
                     if ( _isVictoryConditionApplicableForAI ) {
                         _allowVictoryConditionForAI.show();
@@ -1097,7 +1098,7 @@ namespace
                     }
 
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
                 }
 
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
@@ -1169,9 +1170,10 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface,
+                                                                                   roi.width - 5 );
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface );
+                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface, roi.width - 5 );
                 }
 
                 _goldAccumulationValue.draw( output );
