@@ -486,9 +486,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 StringReplace( str, "%{monster}", mons.GetName() );
 
                 int32_t count = 1;
-                auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
+                const fheroes2::MonsterDialogElement monsUi{ mons };
 
-                if ( Dialog::SelectCount( std::move( str ), 1, 500000, count, 1, monsUi.get() ) ) {
+                if ( Dialog::SelectCount( std::move( str ), 1, 500000, count, 1, &monsUi ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }
