@@ -347,8 +347,7 @@ namespace Editor
         fheroes2::MovableSprite allowCastleSign;
         fheroes2::Rect allowCastleArea;
         if ( isTown ) {
-            allowCastleArea
-                = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
+            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
             if ( std::find( castleMetadata.bannedBuildings.begin(), castleMetadata.bannedBuildings.end(), BUILD_CASTLE ) == castleMetadata.bannedBuildings.end() ) {
                 allowCastleSign.show();
             }

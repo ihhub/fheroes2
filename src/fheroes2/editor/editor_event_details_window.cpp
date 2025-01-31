@@ -106,9 +106,8 @@ namespace Editor
         const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
 
         fheroes2::MovableSprite recurringEventCheckbox;
-        const fheroes2::Rect recurringEventArea
-            = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x, recurringEventPos.y, isEvilInterface,
-                                    dialogRoi.width - 2 * elementOffset );
+        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
+                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
         if ( eventMetadata.isRecurringEvent ) {
             recurringEventCheckbox.hide();
         }
