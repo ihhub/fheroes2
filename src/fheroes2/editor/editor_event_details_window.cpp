@@ -379,8 +379,6 @@ namespace Editor
 
                 // The opened selectArtifact() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
-
-                isRedrawNeeded = false;
             }
             else if ( le.MouseClickLeft( buttonDeleteArtifact.area() ) ) {
                 eventMetadata.artifact = 0;
@@ -404,8 +402,6 @@ namespace Editor
 
                 // The opened selectSecondarySkill() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
-
-                isRedrawNeeded = false;
             }
             else if ( le.MouseClickLeft( buttonDeleteSecondarySkill.area() ) ) {
                 eventMetadata.secondarySkill = 0;
@@ -433,8 +429,6 @@ namespace Editor
 
                 // The opened SelectCount() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
-
-                isRedrawNeeded = false;
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
