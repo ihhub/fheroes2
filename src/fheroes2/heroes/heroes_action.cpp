@@ -2808,7 +2808,7 @@ namespace
             elementUI.emplace_back( &element );
         }
 
-        // Check for the presence of an artifact as a reward in the event and display it in the dialog.
+        // Check for the presence of an artifact in the event and display it in the dialog.
         std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
         const Artifact & art = mapEvent->artifact;
         if ( art.isValid() ) {
@@ -2856,7 +2856,7 @@ namespace
         fheroes2::showMessage( header, body, Dialog::OK, elementUI );
 
         // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
-        // and the fullness of the bag. Is also displays appropriate text when an artifact cannot be picked up.
+        // and the fullness of the bag. It also displays appropriate text when an artifact cannot be picked up.
         hero.PickupArtifact( art );
 
         if ( mapEvent->experience > 0 ) {

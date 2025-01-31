@@ -113,7 +113,7 @@ namespace Editor
         offsetY = startOffsetY;
         const int32_t secondColumnOffsetX = dialogRoi.x + sectionWidth + 2 * elementOffset;
 
-        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
+        text.set( _( "Effects:" ), fheroes2::FontType::normalWhite() );
         text.draw( secondColumnOffsetX + ( sectionWidth - text.width() ) / 2, offsetY, display );
 
         offsetY += text.height( sectionWidth );
@@ -210,7 +210,7 @@ namespace Editor
 
         offsetY += 35;
 
-        text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
+        text.set( _( "Computer colors allowed to get the event:" ), fheroes2::FontType::normalWhite() );
 
         textWidth = sectionWidth;
 
@@ -451,11 +451,11 @@ namespace Editor
                     artifactUI->showPopup( Dialog::ZERO );
                 }
                 else {
-                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given by the event." ), Dialog::ZERO );
                 }
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteArtifact.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( secondarySkillRoi ) ) {
                 const Skill::Secondary skill( eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel );
@@ -464,18 +464,18 @@ namespace Editor
                     secondarySkillUI->showPopup( Dialog::ZERO );
                 }
                 else {
-                    fheroes2::showStandardTextMessage( _( "Secondary Skill" ), _( "No SecondarySkill will be given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Secondary Skill" ), _( "No Secondary Skill will be given by the event." ), Dialog::ZERO );
                 }
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete a Secondary SKill from the reward." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( experienceRoi ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
                 if ( eventMetadata.resources.GetValidItemsCount() == 0 ) {
-                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be part of this event." ), Dialog::ZERO );
                 }
                 else {
                     fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
