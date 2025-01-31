@@ -479,7 +479,7 @@ namespace Editor
                 }
                 else {
                     fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
-                                                   fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                                   fheroes2::Text{ _( "Resources will be given by the event." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                    eventMetadata.resources );
                 }
             }
