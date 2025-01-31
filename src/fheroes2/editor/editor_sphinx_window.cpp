@@ -50,6 +50,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -312,7 +313,10 @@ namespace Editor
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1, &resourceUI ) ) {
+                    std::string str = _( "Set %{resource-type} Count" );
+                    StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
+
+                    if ( Dialog::SelectCount( str, 0, 1000000, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 
