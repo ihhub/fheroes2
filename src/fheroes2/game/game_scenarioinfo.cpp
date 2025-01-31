@@ -312,7 +312,7 @@ namespace
         }
         levelCursor.redraw();
 
-        display.render();
+        fheroes2::validateFadeInAndRender();
 
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
 
