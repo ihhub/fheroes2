@@ -1330,7 +1330,8 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get() )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
@@ -1356,7 +1357,8 @@ namespace Interface
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
-                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
                         action.commit();

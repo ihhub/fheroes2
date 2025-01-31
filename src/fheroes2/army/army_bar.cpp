@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -488,7 +488,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 int32_t count = 1;
                 auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
 
-                if ( Dialog::SelectCount( str, 1, 500000, count, 1, monsUi.get() ) ) {
+                if ( Dialog::SelectCount( std::move( str ), 1, 500000, count, 1, monsUi.get() ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }

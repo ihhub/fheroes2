@@ -319,7 +319,7 @@ namespace Editor
                     std::string message = _( "Set %{resource-type} Count" );
                     StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
 
-                    if ( Dialog::SelectCount( message, -99999, 999999, temp, 1, &resourceUI ) ) {
+                    if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 

@@ -210,7 +210,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 
         const fheroes2::PrimarySkillDialogElement skillUI{ skill, {} };
 
-        return Dialog::SelectCount( header, skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue, 1, &skillUI );
+        return Dialog::SelectCount( std::move( header ), skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue, 1, &skillUI );
     };
 
     int32_t value;
