@@ -464,7 +464,7 @@ msgid "View %{name}"
 msgstr "Ver %{name}"
 
 msgid "Move the %{name} "
-msgstr "Mover el %{name} "
+msgstr "Mueve el %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Mueve o haz clic derecho para redistribuir %{name}"
@@ -492,12 +492,6 @@ msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "El %{name} elimina mitad de las tropas enemigas!"
 msgstr[1] "Los %{name} eliminan mitad de las tropas enemigas!"
-
-msgid "%{name} has turned off the auto battle"
-msgstr "%{name} ha desactivado la batalla automática."
-
-msgid "%{name} has turned on the auto battle"
-msgstr "%{name} ha activado la batalla automática."
 
 #, fuzzy
 msgid "%{name} has turned off the auto combat"
@@ -851,9 +845,6 @@ msgstr "Ver información de la ballesta"
 msgid "Ballista"
 msgstr "Balista"
 
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Permite que la CPU luche la batalla por ti."
-
 msgid "Automatic combat modes"
 msgstr "Combate Automático"
 
@@ -870,7 +861,7 @@ msgid "Customize system options"
 msgstr "Personalizar opciones de sistema"
 
 msgid "Allows you to customize the combat screen."
-msgstr "Le permite personalizar la pantalla de combate."
+msgstr "Te permite personalizar la pantalla de combate."
 
 msgid "System Options"
 msgstr "Opciones de Sistema"
@@ -4005,7 +3996,7 @@ msgid "Repeat period (days):"
 msgstr "Periodo de repetición (días):"
 
 msgid "Allow %{color} human player to get event"
-msgstr "Permitir que %{color} jugador humano obtenga el evento"
+msgstr "Permitir que el jugador humano %{color} obtenga el evento"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
