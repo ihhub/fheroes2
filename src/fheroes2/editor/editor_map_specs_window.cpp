@@ -2429,7 +2429,13 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), '\"' + mapFormat.name + "\"\n\n" + _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::MultiFontText message;
+                message.add( fheroes2::Text{ "\"", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage } );
+                message.add( fheroes2::Text{ "\"\n\n", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ _( "Click to change your map name." ), fheroes2::FontType::normalWhite() } );
+
+                fheroes2::showMessage( fheroes2::Text{ _( "Map Name" ), fheroes2::FontType::normalYellow() }, message, Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
