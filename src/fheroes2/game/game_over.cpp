@@ -405,12 +405,12 @@ void GameOver::Result::Reset()
 
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
+    const int humanColors = Players::HumanColors();
+    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const Settings & conf = Settings::Get();
-    const int humanColors = Players::HumanColors();
     const int currentColor = conf.CurrentColor();
-    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
+
     // Remembers whether the current player was considered active at the time of calling this function
     const bool isCurrentPlayerWasActive = ( currentColor & colors );
 
@@ -446,46 +446,45 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 #endif
 
         if ( kingdom.isControlHuman() || isAIAutoControlMode ) {
+            // First check loss conditions and then victory conditions.
+
+            // If the player's kingdom has been vanquished, they loses regardless of other conditions.
+            if ( !kingdom.isPlay() ) {
+                result = GameOver::LOSS_ALL;
+            }
+            else {
+                result = world.CheckKingdomLoss( kingdom );
+            }
+
+            if ( result != GameOver::COND_NONE ) {
+                // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
+                    DialogLoss( result );
+                }
+
+                AudioManager::ResetAudio();
+                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+
             result = world.CheckKingdomWins( kingdom );
 
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
 
                 if ( conf.isCampaignGameType() ) {
-                    res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
-                }
-                else {
-                    AudioManager::ResetAudio();
-
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
-
-                    // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
-                    AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-
-                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-                }
-            }
-            else {
-                // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                if ( !kingdom.isPlay() ) {
-                    result = GameOver::LOSS_ALL;
-                }
-                else {
-                    result = world.CheckKingdomLoss( kingdom );
+                    return fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
 
-                if ( result != GameOver::COND_NONE ) {
-                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
-                    // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                    if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
-                        DialogLoss( result );
-                    }
+                AudioManager::ResetAudio();
+                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
 
-                    AudioManager::ResetAudio();
-                    Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
+                AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
-                    res = fheroes2::GameMode::MAIN_MENU;
-                }
+                return fheroes2::GameMode::HIGHSCORES_STANDARD;
             }
         }
     }
@@ -538,15 +537,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             return GameOver::COND_NONE;
         }();
 
-        if ( result & GameOver::WINS ) {
-            DialogWins( result );
-
-            AudioManager::ResetAudio();
-            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
-
-            res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-        }
-        else if ( result & GameOver::LOSS ) {
+        if ( result & GameOver::LOSS ) {
             const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
                 if ( !( currentColor & Color::ALL ) ) {
@@ -595,12 +586,20 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 AudioManager::ResetAudio();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
-                res = fheroes2::GameMode::MAIN_MENU;
+                return fheroes2::GameMode::MAIN_MENU;
             }
+        }
+        else if ( result & GameOver::WINS ) {
+            DialogWins( result );
+
+            AudioManager::ResetAudio();
+            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+
+            return fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
     }
 
-    return res;
+    return fheroes2::GameMode::CANCEL;
 }
 
 OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
