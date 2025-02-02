@@ -93,8 +93,23 @@ function stage_iso_assets {
     fi
 
     copy_directory "$HOMM2_DIR" "ANIM"
-    copy_directory "$HOMM2_DIR" "MAPS"
-    copy_directory "$HOMM2_DIR" "DATA"
+
+    DATA_CAB_PATH=$(find "ROM" -type f -iname data1.cab)
+    if [[ -n "$DATA_CAB_PATH" ]]; then
+        if [[ -z "$(command -v unshield)" ]]; then
+            echo_red "unshield was not found in your system. Unable to extract 'data1.cab'. Installation aborted."
+            exit 1
+        fi
+        unshield -d "CAB" x "$DATA_CAB_PATH" > /dev/null
+
+        copy_directory "CAB" "MAPS"
+        copy_directory "CAB" "DATA"
+
+        rm -rf CAB
+    else
+        copy_directory "$HOMM2_DIR" "MAPS"
+        copy_directory "$HOMM2_DIR" "DATA"
+    fi
 
     fusermount -u ROM
     trap - RETURN
