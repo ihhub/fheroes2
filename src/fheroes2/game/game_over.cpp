@@ -459,7 +459,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             if ( result != GameOver::COND_NONE ) {
                 // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
                 // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                if ( result != GameOver::LOSS_ALL || !kingdom.GetCastles().empty() || kingdom.GetLostTownDays() != 0 ) {
+                if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
                     DialogLoss( result );
                 }
 
