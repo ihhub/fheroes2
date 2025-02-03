@@ -1125,33 +1125,18 @@ namespace Interface
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        fheroes2::Sprite mainMenuReleased;
-        fheroes2::Sprite mainMenuPressed;
-        fheroes2::getTextAdaptedButton( mainMenuReleased, mainMenuPressed, gettext_noop( "MAIN\nMENU" ),
-                                        isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-        fheroes2::Sprite playMapReleased;
-        fheroes2::Sprite playMapPressed;
-        fheroes2::getTextAdaptedButton( playMapReleased, playMapPressed, gettext_noop( "PLAY\nMAP" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                        isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Size dialogActiveSize = { 193 + mainMenuReleased.width() + playMapReleased.width(), 204 };
-        const int32_t totalDialogWidth = dialogActiveSize.width + 32;
-        const int32_t totalDialogHeight = dialogActiveSize.height + 32;
-
-        // Prepare restorer of the adventure map for when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth ) / 2 - fheroes2::borderWidthPx, ( display.height() - totalDialogHeight ) / 2,
-                                      totalDialogWidth + fheroes2::borderWidthPx, totalDialogHeight + fheroes2::borderWidthPx );
-
-        fheroes2::StandardWindow background( dialogActiveSize.width, dialogActiveSize.height, true, display );
+        fheroes2::StandardWindow background( 417 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
-        fheroes2::Button buttonNew( roi.x + 62, roi.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonLoad( roi.x + 195, roi.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonSave( roi.x + 62, roi.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonQuit( roi.x + 195, roi.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( roi.x + 128, roi.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        fheroes2::Button buttonNew;
+        fheroes2::Button buttonLoad;
+        fheroes2::Button buttonSave;
+        fheroes2::Button buttonQuit;
+        fheroes2::Button buttonCancel;
+        fheroes2::ButtonSprite buttonMainMenu;
+        fheroes2::ButtonSprite buttonPlayMap;
 
         const fheroes2::Point buttonOffsets = { 30, 15 };
         background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
@@ -1164,16 +1149,10 @@ namespace Interface
                                  fheroes2::StandardWindow::Padding::CENTER_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-
-        fheroes2::ButtonSprite buttonMainMenu( roi.x + ( roi.width - mainMenuReleased.width() ) / 2,
-                                               roi.y + ( roi.height - mainMenuReleased.height() ) / 2 + buttonOffsets.y, mainMenuReleased, mainMenuPressed );
-        fheroes2::addGradientShadow( mainMenuReleased, display, buttonMainMenu.area().getPosition(), { -5, 5 } );
-
-        fheroes2::ButtonSprite buttonPlayMap( roi.x + roi.width - playMapReleased.width() - buttonOffsets.x, roi.y + buttonOffsets.y, playMapReleased, playMapPressed );
-        fheroes2::addGradientShadow( playMapReleased, display, buttonPlayMap.area().getPosition(), { -5, 5 } );
-
-        buttonPlayMap.draw();
-        buttonMainMenu.draw();
+        background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height },
+                                       { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+        background.renderButtonSprite( buttonPlayMap, gettext_noop( "PLAY\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
+                                       { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::TOP_RIGHT );
 
         display.render( background.totalArea() );
 
