@@ -95,6 +95,8 @@ namespace fheroes2
 
         static void renderBackgroundImage( fheroes2::Image & output, const Rect & roi, const int32_t borderOffset, const bool isEvilInterface );
 
+        void restoreBackground();
+
     private:
         Image & _output;
         const Rect _activeArea;
