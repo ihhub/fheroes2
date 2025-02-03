@@ -180,7 +180,6 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
                                                 ICN::BUTTON_RUMORS_GOOD,
                                                 ICN::BUTTON_RUMORS_EVIL,
                                                 ICN::BUTTON_EVENTS_GOOD,
@@ -418,11 +417,11 @@ namespace
         const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
         const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
 
-        releasedText.draw( releasedTextOffset.x, releasedTextOffset.y + ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
-        pressedText.draw( pressedTextOffset.x, pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2, buttonSize.width, pressedState );
+        releasedText.draw( releasedTextOffset.x, ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
+        pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
     }
 
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, int32_t buttonWidth, const char * text, const bool isEvilInterface,
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, int32_t buttonWidth,
                              int32_t buttonHeight = 25 )
     {
         fheroes2::Point releasedOffset;
@@ -431,7 +430,7 @@ namespace
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonWidth, buttonHeight },
                             buttonFontColor );
     }
 
@@ -625,15 +624,7 @@ namespace
         case ICN::BTNBATTLEONLY: {
             _icnVsSprite[id].resize( 2 );
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), false, 117, 56 );
 
             break;
         }
@@ -649,15 +640,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -673,15 +656,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nGAME" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -697,15 +672,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nGAME" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -721,15 +688,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -745,15 +704,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -769,15 +720,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -793,15 +736,7 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -819,13 +754,7 @@ namespace
 
             const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, i );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), isEvilInterface, 86, 56 );
 
             break;
         }
@@ -1015,8 +944,7 @@ namespace
 
             // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
             // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
-            const int32_t textWidth = 70;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
 
             break;
         }
@@ -1032,17 +960,8 @@ namespace
 
             // Needs to be generated from original assets because it needs the black background from the pressed state.
             // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
-            for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
-                fheroes2::Sprite & out = buttonStates[i];
-                out = fheroes2::AGG::GetICN( ICN::TREASURY, 1 + i );
 
-                // clean the button.
-                Fill( out, 6 - i, 4 + i, 70, 17, getButtonFillingColor( i == 0 ) );
-            }
-
-            const int32_t textWidth = 70;
-            renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 7, 5 }, { 6, 6 },
-                                { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
 
             break;
         }
@@ -1137,16 +1056,7 @@ namespace
                 break;
             }
 
-            // Needs to be generated from original assets because the pressed state is 1px wider than normal.
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::OVERVIEW, 4 + i );
-
-                // clean the button.
-                Fill( out, 6 - i, 4 + i, 89, 16, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 6, 5 }, { 5, 6 }, { 89, 16 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 89 );
 
             break;
         }
@@ -1159,15 +1069,7 @@ namespace
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::OVERVIEW, 0 + i );
-
-                // clean the button.
-                Fill( out, 5, 10 + i, 89, 20, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), { 6, 5 }, { 5, 6 }, { 89, 34 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, 89, 42 );
 
             break;
         }
@@ -1188,7 +1090,7 @@ namespace
                 Fill( out, 6, 6 + i, 89 - i, 30, getButtonFillingColor( i == 0 ) );
             }
 
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 5, 6 }, { 90, 34 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, 89, 42 );
 
             break;
         }
@@ -1202,8 +1104,7 @@ namespace
                 break;
             }
 
-            const int32_t textWidth = 46;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "S" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), false, 46 );
 
             break;
         }
@@ -1216,8 +1117,7 @@ namespace
                 break;
             }
 
-            const int32_t textWidth = 46;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "M" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), false, 46 );
 
             break;
         }
@@ -1230,8 +1130,7 @@ namespace
                 break;
             }
 
-            const int32_t textWidth = 46;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "L" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), false, 46 );
 
             break;
         }
@@ -1244,8 +1143,7 @@ namespace
                 break;
             }
 
-            const int32_t textWidth = 46;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "X-L" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), false, 46 );
 
             break;
         }
@@ -1258,8 +1156,7 @@ namespace
                 break;
             }
 
-            const int32_t textWidth = 58;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), false, 58 );
 
             break;
         }
@@ -1293,20 +1190,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 1 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 1 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "STANDARD\nGAME" ), { 12, 5 }, { 11, 6 }, { 120, 47 },
-                                fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "STANDARD\nGAME" ), false, 117, 56 );
 
             break;
         }
@@ -1314,20 +1215,29 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                // Fix the disabled state.
+                fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), { 11, 5 }, { 10, 6 }, { 119, 47 },
-                                fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), false, 117, 56 );
 
             break;
         }
@@ -1335,20 +1245,25 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 5 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 5 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), false, 117, 56 );
 
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
-                                fheroes2::FontColor::WHITE );
 
             break;
         }
@@ -1356,19 +1271,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), false, 117, 56 );
 
             break;
         }
@@ -1376,19 +1296,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 5 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 5 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), false, 117, 56 );
 
             break;
         }
@@ -1396,20 +1321,25 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
+
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ORIGINAL\nCAMPAIGN" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
-                                fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ORIGINAL\nCAMPAIGN" ), false, 117, 56 );
 
             break;
         }
@@ -1417,20 +1347,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXPANSION\nCAMPAIGN" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
-                                fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXPANSION\nCAMPAIGN" ), false, 117, 56 );
 
             break;
         }
@@ -1438,19 +1372,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), false, 117, 56 );
 
             break;
         }
@@ -1458,19 +1397,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 1 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 0 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 1 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), false, 117, 56 );
 
             break;
         }
@@ -1478,19 +1422,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 2 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 3 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 2 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 3 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), false, 117, 56 );
 
             break;
         }
@@ -1498,19 +1447,25 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 4 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 5 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 4 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 5 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), false, 117, 56 );
 
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
 
             break;
         }
@@ -1518,19 +1473,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 6 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 7 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 6 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 7 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), false, 117, 56 );
 
             break;
         }
@@ -1538,19 +1498,24 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 8 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, 9 );
+                // Remove embedded shadows so that we can add them later.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 8 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 9 );
+
+                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
+
+                setButtonCornersTransparent( released );
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNCOM, i );
-                // clean button.
-                Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
-            }
-
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), false, 117, 56 );
 
             break;
         }
@@ -1591,16 +1556,8 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_VIEWWORLD_EXIT_EVIL );
             const int baseIcnId = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( baseIcnId, 0 + i );
-                // clean the button.
-                Fill( out, 27 - i, 4 + i, 25, 26, getButtonFillingColor( i == 0, !isEvilInterface ) );
-            }
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 6, 5 }, { 5, 6 }, { 71, 27 }, buttonFontColor );
+            // TODO: Can't be drawn because it is both taller and smaller than the standard button which resizeButton does not handle yet.
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70, 35 );
 
             break;
         }
@@ -1699,55 +1656,28 @@ namespace
         case ICN::BUTTON_SMALL_MIN_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            if ( useOriginalResources() ) {
-                // Write the "MIN" text on original assets ICNs.
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 + i );
-
-                    // Clean the button text.
-                    Blit( fheroes2::AGG::GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, _icnVsSprite[id][i], 6 - i, 4 + i, 50, 16 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 6, 5 }, { 5, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), false, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MIN_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), true );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), true, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            if ( useOriginalResources() ) {
-                // The original assets ICN contains button with shadow. We crop only the button.
-                _icnVsSprite[id][0] = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), 5, 0, 60, 25 );
-                _icnVsSprite[id][1] = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), 5, 0, 60, 25 );
-
-                // To properly generate shadows and Blit the button we need to make some pixels transparent.
-                for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
-                    setButtonCornersTransparent( image );
-                }
-
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), false );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MAX_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), true );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), true, 61 );
 
             break;
         }
@@ -1785,7 +1715,7 @@ namespace
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL, width );
 
             break;
         }
@@ -1802,7 +1732,7 @@ namespace
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], width, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL, width );
 
             break;
         }
@@ -1823,28 +1753,10 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_MAX_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON );
-            const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
+            const char * text = ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? gettext_noop( "MIN" ) : gettext_noop( "MAX" );
 
-                const fheroes2::Sprite & originalButton = fheroes2::AGG::GetICN( ICN::RECRUIT, 4 + i );
-                out.resize( originalButton.width() + 4, originalButton.height() - 5 + i );
-                out.reset();
-
-                const fheroes2::Sprite & emptyButton = fheroes2::AGG::GetICN( baseIcnId, 11 + i );
-
-                // Copy left main body of button.
-                fheroes2::Copy( emptyButton, 0, 0, out, 0, 0, originalButton.width() - 3 + i, originalButton.height() - 5 + i );
-
-                // Copy terminating right margin of the button.
-                fheroes2::Copy( emptyButton, 89 + i, 0, out, 63 + i, 0, 7 - i, originalButton.height() - i );
-            }
-
-            const char * text( ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? "MIN" : "MAX" );
-
-            const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), { 6, 5 }, { 4, 6 }, { 62, 16 }, buttonFontColor );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, 61 );
 
             break;
         }
@@ -1923,7 +1835,7 @@ namespace
                 break;
             }
 
-            // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+            // We need to temporarily remove the letter-specific X offsets in the font because if not the letters will
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
@@ -2020,7 +1932,7 @@ namespace
 
             const ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 21, 124 }, fheroes2::FontColor::WHITE );
+            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 27, 133 }, fheroes2::FontColor::WHITE );
 
             break;
         }
@@ -2079,11 +1991,10 @@ namespace
 
             break;
         }
-        case ICN::DISMISS_HERO_DISABLED_BUTTON:
-        case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
+        case ICN::DISMISS_HERO_DISABLED_BUTTON: {
             _icnVsSprite[id].resize( 1 );
 
-            const int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+            const int buttonIcnId = ICN::BUTTON_VERTICAL_DISMISS;
 
             const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
             const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );

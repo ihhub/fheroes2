@@ -91,10 +91,14 @@ fheroes2::GameMode Game::LoadMulti()
     fheroes2::drawMainMenuScreen();
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
+    fheroes2::ButtonSprite buttonHotSeat = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 0 ),
+                                                                           fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 1 ), display, { -5, 6 } );
 
-    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+    fheroes2::ButtonSprite buttonNetwork = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNMP, 2 ),
+                                                                           fheroes2::AGG::GetICN( ICN::BTNMP, 3 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonCancel
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
 
     buttonHotSeat.draw();
     buttonCancel.draw();
@@ -151,12 +155,21 @@ fheroes2::GameMode Game::LoadGame()
     fheroes2::drawMainMenuScreen();
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Button buttonStandardGame( 0, 0, ICN::BUTTON_STANDARD_GAME, 0, 1 );
-    fheroes2::ButtonSprite buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
-                                               fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
-    fheroes2::Button buttonMultiplayerGame( 0, 0, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
-    fheroes2::Button buttonCancel( 0, 0, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+    fheroes2::ButtonSprite buttonStandardGame
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 1 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonCampaignGame
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonMultiplayerGame
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 1 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonCancel
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+
 
     const std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
