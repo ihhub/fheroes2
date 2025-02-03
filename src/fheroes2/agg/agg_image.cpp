@@ -422,15 +422,16 @@ namespace
         pressedText.draw( pressedTextOffset.x, pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2, buttonSize.width, pressedState );
     }
 
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, int32_t textWidth, const char * text, const bool isEvilInterface )
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, int32_t buttonWidth, const char * text, const bool isEvilInterface,
+                             int32_t buttonHeight = 25 )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { buttonWidth, buttonHeight }, releasedOffset, pressedOffset );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
                             buttonFontColor );
     }
 
