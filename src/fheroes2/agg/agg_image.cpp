@@ -751,8 +751,6 @@ namespace
                 break;
             }
 
-            const int baseIcnId = isEvilInterface ? ICN::EMPTY_EVIL_MEDIUM_BUTTON : ICN::EMPTY_GOOD_MEDIUM_BUTTON;
-
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), isEvilInterface, 86, 56 );
 
             break;
@@ -4807,32 +4805,6 @@ namespace
                 Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
 
                 Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
-            }
-
-            return true;
-        }
-        case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
-        case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
-            const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
-            const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
-            loadICN( originalId );
-
-            if ( _icnVsSprite[originalId].size() < 10 ) {
-                return true;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-            released = _icnVsSprite[originalId][2];
-            pressed = _icnVsSprite[originalId][3];
-
-            if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
-                // Clean the buttons.
-                Fill( released, 28, 15, 42, 27, getButtonFillingColor( true, isGoodInterface ) );
-                Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
             }
 
             return true;
