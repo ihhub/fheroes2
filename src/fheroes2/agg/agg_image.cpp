@@ -1263,7 +1263,6 @@ namespace
 
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), false, 117, 56 );
 
-
             break;
         }
         case ICN::BUTTON_LARGE_CANCEL: {
