@@ -201,9 +201,8 @@ fheroes2::GameMode Game::CampaignSelection()
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::ButtonSprite buttonSuccessionWars
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 1 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonSuccessionWars = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 0 ),
+                                                                                  fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 1 ), display, { -5, 6 } );
     fheroes2::ButtonSprite buttonPriceOfLoyalty
         = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_EXPANSION_CAMPAIGN, 0 ),
                                           fheroes2::AGG::GetICN( ICN::BUTTON_EXPANSION_CAMPAIGN, 1 ), display, { -5, 6 } );
@@ -494,8 +493,9 @@ fheroes2::GameMode Game::NewNetwork()
                                                                         fheroes2::AGG::GetICN( ICN::BTNNET, 1 ), display, { -5, 6 } );
     fheroes2::ButtonSprite buttonGuest = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNET, 2 ),
                                                                          fheroes2::AGG::GetICN( ICN::BTNNET, 3 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::ButtonSprite buttonCancel
+        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
 
     buttonHost.draw();
     buttonGuest.draw();

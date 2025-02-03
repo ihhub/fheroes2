@@ -430,8 +430,7 @@ namespace
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonWidth, buttonHeight },
-                            buttonFontColor );
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonWidth, buttonHeight }, buttonFontColor );
     }
 
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
@@ -1465,7 +1464,6 @@ namespace
             }
 
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), false, 117, 56 );
-
 
             break;
         }

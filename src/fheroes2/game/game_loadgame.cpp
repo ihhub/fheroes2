@@ -170,7 +170,6 @@ fheroes2::GameMode Game::LoadGame()
         = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
                                           fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
 
-
     const std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
     if ( !isSuccessionWarsCampaignPresent() ) {
