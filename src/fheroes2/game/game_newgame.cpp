@@ -199,7 +199,7 @@ fheroes2::GameMode Game::CampaignSelection()
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonSuccessionWars = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 0 ),
                                                                                   fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 1 ), display, { -5, 6 } );
@@ -487,7 +487,7 @@ fheroes2::GameMode Game::NewNetwork()
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonHost = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BTNNET, 0 ),
                                                                         fheroes2::AGG::GetICN( ICN::BTNNET, 1 ), display, { -5, 6 } );
@@ -547,7 +547,7 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonStandardGame = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 0 ),
                                                                                 fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 1 ), display, { -5, 6 } );
@@ -654,7 +654,7 @@ fheroes2::GameMode Game::NewMulti()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::ButtonSprite buttonHotSeat = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 0 ),

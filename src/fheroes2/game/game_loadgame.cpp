@@ -155,7 +155,7 @@ fheroes2::GameMode Game::LoadGame()
     fheroes2::drawMainMenuScreen();
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonStandardGame
         = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 0 ),
