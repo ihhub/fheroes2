@@ -1246,7 +1246,9 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.y );
                 if ( id == ICN::BUTTON_CAMPAIGN_GAME ) {
                     // Fix the disabled state.
-                    fheroes2::Image common = fheroes2::ExtractCommonPattern( { &_icnVsSprite[id][0], &_icnVsSprite[id][1] } );
+                    const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.x );
+                    const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.y );
+                    fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
                     common = fheroes2::FilterOnePixelNoise( common );
                     common = fheroes2::FilterOnePixelNoise( common );
                     common = fheroes2::FilterOnePixelNoise( common );
