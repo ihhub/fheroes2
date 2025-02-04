@@ -1470,31 +1470,47 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_SMALL_MIN_GOOD: {
-            _icnVsSprite[id].resize( 2 );
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), false, ICN::STONEBAK, 61 );
-
-            break;
-        }
+        case ICN::BUTTON_SMALL_MIN_GOOD:
         case ICN::BUTTON_SMALL_MIN_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), true, ICN::STONEBAK_EVIL, 61 );
+            const bool isEvilInterface = id == ICN::BUTTON_SMALL_MIN_EVIL;
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ).width() - 10 );
 
             break;
         }
+        case ICN::BUTTON_SMALL_MAX_EVIL:
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, ICN::STONEBAK, 61 );
+            const bool isEvilInterface = id == ICN::BUTTON_SMALL_MAX_EVIL;
 
-            break;
-        }
-        case ICN::BUTTON_SMALL_MAX_EVIL: {
-            _icnVsSprite[id].resize( 2 );
+            if ( useOriginalResources() && !isEvilInterface ) {
+                // The original assets ICN contains button with shadow. We crop only the button.
+                _icnVsSprite[id][0] = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), 5, 0, 60, 25 );
+                _icnVsSprite[id][1] = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), 5, 0, 60, 25 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), true, ICN::STONEBAK_EVIL, 61 );
+                // To properly generate shadows and Blit the button we need to make some pixels transparent.
+                for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
+                    setButtonCornersTransparent( image );
+                }
+
+                break;
+            }
+            else if ( useOriginalResources() && isEvilInterface ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 1 );
+                if ( isEvilInterface ) {
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                }
+
+                break;
+            }
+
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 61 );
 
             break;
         }
@@ -2023,23 +2039,60 @@ namespace
                       offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
             }
             return true;
+        case ICN::BUTTON_SMALL_MAX_GOOD: {
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::RECRUIT, 4 );
+            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::RECRUIT, 5 );
+            released = originalReleased;
+            pressed = originalPressed;
+            // The original assets ICN contains button with shadow. We crop only the button.
+            released = fheroes2::Crop( originalReleased, 5, 0, 60, 25 );
+            pressed = fheroes2::Crop( originalPressed, 5, 0, 60, 25 );
+            released.setPosition( 0, 0 );
+            pressed.setPosition( 0, 0 );
+            // Fill wrong transparent text pixels with color.
+            fheroes2::Image whiteBackground( released.width(), released.height() );
+            fheroes2::Fill( whiteBackground, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, whiteBackground );
+            released = whiteBackground;
+            // To properly generate shadows and Blit the button we need to make some pixels transparent.
+            for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
+                setButtonCornersTransparent( image );
+            }
+            fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+            common = fheroes2::FilterOnePixelNoise( common );
+            fheroes2::Blit( common, _icnVsSprite[id][0] );
+
+            return true;
+        }
         case ICN::BUTTON_SMALL_MIN_GOOD:
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::RECRUIT, 4 + i );
+                out = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, i );
                 // Clean the button and leave 'M'
-                Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
-                Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                Fill( out, 26 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                Fill( out, 24 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
                 // Add 'I'
-                Blit( fheroes2::AGG::GetICN( ICN::APANEL, 4 + i ), 25 - i, 19 + i, out, 32 - i, 4 + i, 7 - i, 15 );
-                Blit( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 + i ), 28 - i, 7 + i, out, 36 - i, 7 + i, 3, 9 );
-                Fill( out, 37 - i, 16 + i, 2, 3, getButtonFillingColor( i == 0 ) );
+                Copy( fheroes2::AGG::GetICN( ICN::APANEL, 4 + i ), 25 - i, 19 + i, out, 27 - i, 4 + i, 7 - i, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 + i ), 28 - i, 7 + i, out, 31 - i, 7 + i, 3, 9 );
+                Fill( out, 32 - i, 16 + i, 2, 3, getButtonFillingColor( i == 0 ) );
                 // Add 'N'
-                Blit( fheroes2::AGG::GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, 41 - i, 5, 14, 15 );
-                Fill( out, 41 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
-                Fill( out, 41 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
+                Copy( fheroes2::AGG::GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, 36 - i, 5, 14, 15 );
+                Fill( out, 36 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
+                Fill( out, 36 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
             }
+            return true;
+        case ICN::BUTTON_SMALL_MIN_EVIL:
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MIN_GOOD, 0 );
+            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MIN_GOOD, 1 );
+            fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             return true;
         default:
             break;
@@ -2068,6 +2121,35 @@ namespace
                 // Add pixel to 'W'
                 Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
             }
+            return true;
+        case ICN::BUTTON_SMALL_MIN_GOOD:
+            _icnVsSprite[id].resize( 2 );
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, i );
+                out = original;
+                // Wipe the button
+                Fill( out, 9 - 2 * i, 7 + i, 46 + i, 10, getButtonFillingColor( i == 0 ) );
+                // 'M'
+                Copy( original, 9 - i, 7 + i, out, 13 - i, 7 + i, 14, 10 );
+                // 'I'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMCFG, 4 + i ), 53 - i, 23 + i, out, 28 - i, 7 + i, 5, 10 );
+                // 'N'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMCFG, 0 + i ), 83 - i, 29 + i, out, 34 - i, 7 + i, 11, 10 );
+                // '.'
+                Copy( original, 52 - i, 14 + i, out, 47 - i, 14 + i, 3, 3 );
+                fheroes2::Fill( out, 44 - i, 8 + i, 1, 9, getButtonFillingColor( i == 0 ) );
+                if ( i == 0 ) {
+                    fheroes2::ReplaceColorId( out, 56, 55 );
+                }
+            }
+            return true;
+        case ICN::BUTTON_SMALL_MIN_EVIL:
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MIN_GOOD, 0 );
+            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MIN_GOOD, 1 );
+            fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             return true;
         default:
             break;
