@@ -4237,6 +4237,13 @@ namespace
             }
             return true;
         }
+        case ICN::BLACKBAK: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Image & background = _icnVsSprite[id][0];
+            // This enough to cover the largest buttons.
+            background.resize( 200, 200 );
+            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 20 );
+        }
         case ICN::UNIFORMBAK_GOOD:
         case ICN::UNIFORMBAK_EVIL: {
             _icnVsSprite[id].resize( 1 );
