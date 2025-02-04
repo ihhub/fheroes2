@@ -90,7 +90,7 @@ fheroes2::GameMode Game::LoadMulti()
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
     fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
@@ -153,6 +153,7 @@ fheroes2::GameMode Game::LoadGame()
     fheroes2::Button buttonCampaignGame( 0, 0, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
     fheroes2::Button buttonMultiplayerGame( 0, 0, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonCancel( 0, 0, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+
     const std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
     if ( !isSuccessionWarsCampaignPresent() ) {
