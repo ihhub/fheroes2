@@ -201,7 +201,7 @@ fheroes2::GameMode Game::CampaignSelection()
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::BUTTON_ORIGINAL_CAMPAIGN, 0, 1 );
-    fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
+    fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
     fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonSuccessionWars.draw();
