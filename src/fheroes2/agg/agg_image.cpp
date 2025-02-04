@@ -774,9 +774,8 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
-            const bool isSameResourceAsLanguage = useOriginalResources();
 
-            if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) ) {
+            if ( useOriginalResources() ) {
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
 
@@ -950,22 +949,20 @@ namespace
 
             // Needs to be generated from original assets because it needs the black background from the pressed state.
             // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
-
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
 
             break;
         }
         case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
         case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL: {
-            std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
-            buttonStates.resize( 2 );
+            _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL );
 
             if ( useOriginalResources() ) {
                 const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
-                buttonStates[0] = fheroes2::AGG::GetICN( originalButtonICN, 4 );
-                buttonStates[1] = fheroes2::AGG::GetICN( originalButtonICN, 5 );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalButtonICN, 4 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalButtonICN, 5 );
                 break;
             }
 
@@ -1354,6 +1351,7 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::WELLXTRA, 1 );
                 break;
             }
+
             fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
@@ -1361,8 +1359,15 @@ namespace
         case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
         case ICN::BUTTON_VIEWWORLD_EXIT_EVIL: {
             _icnVsSprite[id].resize( 2 );
-
             const bool isEvilInterface = ( id == ICN::BUTTON_VIEWWORLD_EXIT_EVIL );
+
+            if ( useOriginalResources() ) {
+                const int originalIcnId = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalIcnId, 2 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalIcnId, 3 );
+                break;
+            }
+
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70, 35 );
 
             break;
