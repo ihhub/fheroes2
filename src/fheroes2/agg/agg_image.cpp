@@ -421,7 +421,7 @@ namespace
         pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
     }
 
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, const uint32_t backgroundIcnId,
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, const int backgroundIcnId,
                              int32_t buttonWidth, int32_t buttonHeight = 25 )
     {
         fheroes2::Point releasedOffset;

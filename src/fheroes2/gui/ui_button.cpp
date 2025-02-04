@@ -752,7 +752,7 @@ namespace fheroes2
     }
 
     void fheroes2::getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset,
-                                          Point & pressedOffset, const int32_t backgroundIcnId )
+                                          Point & pressedOffset, const int backgroundIcnId )
     {
         assert( buttonSize.width > 0 && buttonSize.height > 0 );
 
@@ -849,7 +849,7 @@ namespace fheroes2
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const fheroes2::Size buttonSize, const bool isEvilInterface,
-                            const uint32_t backgroundIcnId )
+                            const int backgroundIcnId )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
