@@ -4211,7 +4211,6 @@ namespace
             Fill( background, 540, 361, 99, 83, 57 );
             Fill( background, 540, 454, 99, 24, 57 );
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, background, 540, 402, 99, 5 );
-            fheroes2::Save( background, "overviewBackground.png", 96 );
             return true;
         }
         case ICN::ESPANBKG_EVIL: {
@@ -4513,14 +4512,13 @@ namespace
 
             released = _icnVsSprite[originalId][11];
 
-            // fix single bright pixel in the left part of the text area of the released state buttons
             Fill( released, 8, 7, 1, 1, getButtonFillingColor( true, isGoodInterface ) );
 
             const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalId, 12 );
 
             if ( originalPressed.width() > 2 && originalPressed.height() > 2 ) {
                 pressed.resize( originalPressed.width(), originalPressed.height() );
-                // copy the original pressed button but add the missing darker leftside border from the released state
+                // Copy the original pressed button but add the missing darker left side border from the released state
                 Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
                 Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
 
@@ -4538,6 +4536,8 @@ namespace
                 FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
                 FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
             }
+
+            Fill( pressed, 90, 5, 1, 1, getButtonFillingColor( false, isGoodInterface ) );
 
             return true;
         }
