@@ -827,6 +827,6 @@ namespace fheroes2
         const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
 
         releasedText.draw( releasedOffset.x, ( buttonSize.height - releasedText.height( buttonSize.width ) ) / 2, buttonSize.width, released );
-        pressedText.draw( pressedOffset.x, ( buttonSize.height - pressedText.height( buttonSize.width ) ) / 2, buttonSize.width, pressed );
+        pressedText.draw( pressedOffset.x, ( buttonSize.height - pressedText.height( buttonSize.width ) ) / 2 + 1, buttonSize.width, pressed );
     }
 }
