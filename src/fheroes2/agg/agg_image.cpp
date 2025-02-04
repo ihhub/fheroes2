@@ -1846,24 +1846,20 @@ namespace
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                const fheroes2::Sprite originalSprite = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
-                const int32_t newWidth = originalSprite.width() - 5;
-                const int32_t newHeight = originalSprite.height() - 6;
-                out.resize( newWidth, newHeight );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i ), 5, 0, out, 0, 0, newWidth, newHeight );
+                out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
                 // Clean the button
-                Fill( out, 21 - i, 23 + i, 84, 11, getButtonFillingColor( i == 0 ) );
+                Fill( out, 26 - i, 23 + i, 84, 11, getButtonFillingColor( i == 0 ) );
                 // Add 'K'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 35 - i, 23, 12, 14 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
                 //'Add 'A'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 47 - i, 23, 13, 14 );
-                Copy( out, 20, 20, out, 47 - i + 12, 25, 3, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 52 - i, 23, 13, 14 );
+                Copy( out, 20, 20, out, 52 - i + 12, 25, 3, 3 );
                 // Add 'M'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 60 - i, 23, 14, 14 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 65 - i, 23, 14, 14 );
                 // Add 'F'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 82 - i, 23, 10, 14 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 87 - i, 23, 10, 14 );
                 // Add 'P'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 73 - i, 23, 10, 14 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
             }
             return true;
         case ICN::BUTTON_SMALL_MIN_GOOD:
@@ -1891,40 +1887,36 @@ namespace
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                const fheroes2::Sprite originalSprite = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
-                const int32_t newWidth = originalSprite.width() - 5;
-                const int32_t newHeight = originalSprite.height() - 6;
-                out.resize( newWidth, newHeight );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i ), 5, 0, out, 0, 0, newWidth, newHeight );
+                out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
                 // Clean the button
-                Fill( out, 27 - i, 21 + i, 77, 14, getButtonFillingColor( i == 0 ) );
+                Fill( out, 32 - i, 21 + i, 77, 14, getButtonFillingColor( i == 0 ) );
                 const int32_t secondLine = 28;
                 // Add 'MODE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 40 - i, 13, 50, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 45 - i, 13, 50, 15 );
                 // Clean up 'MODE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 89 - i, 18, 1, 10 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 94 - i, 18, 1, 10 );
                 // Add 'BA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 23 - i, secondLine, 22, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 28 - i, secondLine, 22, 15 );
                 // Clean up 'BA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 34 - i, secondLine, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 44 - i, secondLine + 4, 1, 2 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 39 - i, secondLine, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 49 - i, secondLine + 4, 1, 2 );
                 // Add 'T'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 45 - i, secondLine, 12, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 49 - i, secondLine, 12, 15 );
                 // Clean up 'AT'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 45 - i, secondLine, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 44 - i, secondLine + 4 + i, 1, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, secondLine, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 49 - i, secondLine + 4 + i, 1, 3 );
                 // Add 'AI'.
-                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 57 - i, secondLine, 18, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 15 );
                 // Clean up 'TA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 55 - i, secondLine + 12, 3, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 60 - i, secondLine + 12, 3, 3 );
                 // Add 'LLE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 76 - i, secondLine, 31, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
                 // Clean up "IL"
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 76 - i, secondLine + 7, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 75 - i, secondLine + 4, 2, 2 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 74 - i, secondLine + 12, 3, 3 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 74 - i, secondLine + 5, 1, 10 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 74 - i, secondLine + 9, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 81 - i, secondLine + 7, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 80 - i, secondLine + 4, 2, 2 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 79 - i, secondLine + 12, 3, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
             }
             return true;
         case ICN::BTNGIFT_GOOD:
@@ -2061,14 +2053,10 @@ namespace
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                const fheroes2::Sprite originalSprite = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
-                const int32_t newWidth = originalSprite.width() - 5;
-                const int32_t newHeight = originalSprite.height() - 6;
-                out.resize( newWidth, newHeight );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i ), 5, 0, out, 0, 0, newWidth, newHeight );
+                out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
                 // clean the button
-                Fill( out, 36 - i, 23 + i, 57, 11, getButtonFillingColor( i == 0 ) );
-                const int32_t offsetX = 41;
+                Fill( out, 41 - i, 23 + i, 57, 11, getButtonFillingColor( i == 0 ) );
+                const int32_t offsetX = 46;
                 const int32_t offsetY = 23;
                 // Add 'BI'
                 Copy( fheroes2::AGG::GetICN( ICN::BTNMCFG, 2 + i ), 58 - i, 29, out, offsetX - i, offsetY, 14, 11 );
