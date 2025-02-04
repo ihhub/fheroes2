@@ -1059,14 +1059,6 @@ namespace
                 break;
             }
 
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::OVERVIEW, 2 + i );
-
-                // clean the button.
-                Fill( out, 6, 6 + i, 89 - i, 30, getButtonFillingColor( i == 0 ) );
-            }
-
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, 89, 42 );
 
             break;
