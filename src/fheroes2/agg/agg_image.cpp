@@ -1588,10 +1588,23 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_MAX_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON );
+            if ( useOriginalResources() ) {
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+                int buttonIcnId = id == ICN::UNIFORM_GOOD_MAX_BUTTON ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
+                if ( isEvilInterface ) {
+                    buttonIcnId = id == ICN::UNIFORM_EVIL_MAX_BUTTON ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MIN_EVIL;
+                }
+
+                released = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+                pressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+                fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
+                break;
+            }
 
             const char * text = ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? gettext_noop( "MIN" ) : gettext_noop( "MAX" );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface,isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD, 61 );
 
             break;
         }
