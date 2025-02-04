@@ -29,7 +29,6 @@
 #include <ostream>
 #include <string>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
