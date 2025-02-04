@@ -976,6 +976,7 @@ namespace ICN
         UNIFORMBAK_EVIL,
         REDBAK_SMALL_VERTICAL,
         BLACKBAK,
+        BROWNBAK,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,

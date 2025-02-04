@@ -1036,7 +1036,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::UNKNOWN, 89 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::BROWNBAK, 89 );
 
             break;
         }
@@ -1049,7 +1049,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, ICN::UNKNOWN, 89, 42 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, ICN::BROWNBAK, 89, 42 );
 
             break;
         }
@@ -1062,7 +1062,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, ICN::UNKNOWN, 89, 42 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, ICN::BROWNBAK, 89, 42 );
 
             break;
         }
@@ -4204,6 +4204,16 @@ namespace
                 }
             }
             return true;
+        case ICN::OVERBACK: {
+            LoadOriginalICN( id );
+            fheroes2::Sprite & background = _icnVsSprite[id][0];
+            // Fill button backgrounds. This bug was present in the original game too.
+            Fill( background, 540, 361, 99, 83, 57 );
+            Fill( background, 540, 454, 99, 24, 57 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, background, 540, 402, 99, 5 );
+            fheroes2::Save( background, "overviewBackground.png", 96 );
+            return true;
+        }
         case ICN::ESPANBKG_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
@@ -4251,6 +4261,14 @@ namespace
             // This is enough to cover the largest buttons.
             background.resize( 200, 200 );
             fheroes2::Fill( background, 0, 0, background.width(), background.height(), 9 );
+            return true;
+        }
+        case ICN::BROWNBAK: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Image & background = _icnVsSprite[id][0];
+            // This is enough to cover the largest buttons.
+            background.resize( 200, 200 );
+            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 57 );
             return true;
         }
         case ICN::UNIFORMBAK_GOOD:
