@@ -620,13 +620,6 @@ namespace
     void generateDefaultImages( const int id )
     {
         switch ( id ) {
-        case ICN::BTNBATTLEONLY: {
-            _icnVsSprite[id].resize( 2 );
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), false, 117, 56 );
-
-            break;
-        }
         case ICN::BUTTON_NEW_GAME_EVIL:
         case ICN::BUTTON_NEW_GAME_GOOD: {
             _icnVsSprite[id].resize( 2 );
@@ -1170,6 +1163,7 @@ namespace
 
             break;
         }
+        case ICN::BTNBATTLEONLY:
         case ICN::BUTTON_STANDARD_GAME:
         case ICN::BUTTON_CAMPAIGN_GAME:
         case ICN::BUTTON_MULTIPLAYER_GAME:
@@ -1185,7 +1179,7 @@ namespace
         case ICN::BUTTON_6_PLAYERS: {
             _icnVsSprite[id].resize( 2 );
 
-            if ( useOriginalResources() ) {
+            if ( useOriginalResources() && id != ICN::BTNBATTLEONLY ) {
                 int buttonIcnID = ICN::BTNNEWGM;
                 fheroes2::Point icnIndex( 0, 1 );
                 switch ( id ) {
@@ -1263,8 +1257,8 @@ namespace
             }
             const char * text = gettext_noop( "STANDARD\nGAME" );
             switch ( id ) {
-            case ICN::BUTTON_STANDARD_GAME: {
-                text = gettext_noop( "STANDARD\nGAME" );
+            case ICN::BTNBATTLEONLY: {
+                text = gettext_noop( "BATTLE\nONLY" );
                 break;
             }
             case ICN::BUTTON_CAMPAIGN_GAME: {
@@ -1327,12 +1321,12 @@ namespace
             const fheroes2::Sprite & originalShadow = fheroes2::AGG::GetICN( ICN::BTNCOM, 0 );
             fheroes2::Image temp( originalShadow.width(), originalShadow.height() );
 
-            Copy( released, 0, 0, temp, 5, 6, released.width(), released.height() );
+            Copy( released, 0, 0, temp, 5, 0, released.width(), released.height() );
             fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
             fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
             fheroes2::Copy( temp, released );
 
-            Copy( pressed, 0, 0, temp, 5, 6, released.width(), released.height() );
+            Copy( pressed, 0, 0, temp, 5, 0, released.width(), released.height() );
             fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
             fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
             fheroes2::Copy( temp, pressed );
