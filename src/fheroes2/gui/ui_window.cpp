@@ -349,7 +349,7 @@ namespace fheroes2
         Sprite released;
         Sprite pressed;
 
-        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, false );
+        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
         const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
 

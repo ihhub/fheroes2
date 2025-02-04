@@ -421,12 +421,12 @@ namespace
         pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
     }
 
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, int32_t buttonWidth,
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, const uint32_t backgroundIcnId, int32_t buttonWidth,
                              int32_t buttonHeight = 25 )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { buttonWidth, buttonHeight }, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { buttonWidth, buttonHeight }, releasedOffset, pressedOffset, backgroundIcnId );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
@@ -632,7 +632,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), isEvilInterface,
+                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 86, 56 );
 
             break;
         }
@@ -648,7 +649,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nGAME" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nGAME" ), isEvilInterface,
+                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 86, 56 );
 
             break;
         }
@@ -664,7 +666,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nGAME" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nGAME" ), isEvilInterface,
+                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 86, 56 );
 
             break;
         }
@@ -680,7 +683,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                86, 56 );
 
             break;
         }
@@ -696,7 +700,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                86, 56 );
 
             break;
         }
@@ -712,7 +717,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nMAP" ), isEvilInterface,
+                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 86, 56 );
 
             break;
         }
@@ -728,7 +734,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nMAP" ), isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                isEvilInterface, 86, 56 );
 
             break;
         }
@@ -744,7 +751,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), isEvilInterface, 86, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nMAP" ), isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                isEvilInterface, 86, 56 );
 
             break;
         }
@@ -933,7 +941,7 @@ namespace
 
             // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
             // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedSprite() instead.
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::STONEBAK, 70 );
 
             break;
         }
@@ -947,9 +955,7 @@ namespace
                 break;
             }
 
-            // Needs to be generated from original assets because it needs the black background from the pressed state.
-            // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::BLACKBAK, 70 );
 
             break;
         }
@@ -966,7 +972,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 70 );
 
             break;
         }
@@ -1030,7 +1036,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 89 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::UNKNOWN, 89 );
 
             break;
         }
@@ -1043,7 +1049,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, 89, 42 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, ICN::UNKNOWN, 89, 42 );
 
             break;
         }
@@ -1056,7 +1062,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, 89, 42 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, ICN::UNKNOWN, 89, 42 );
 
             break;
         }
@@ -1070,7 +1076,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), false, 46 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), false, ICN::STONEBAK, 46 );
 
             break;
         }
@@ -1083,7 +1089,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), false, 46 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), false, ICN::STONEBAK, 46 );
 
             break;
         }
@@ -1096,7 +1102,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), false, 46 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), false, ICN::STONEBAK, 46 );
 
             break;
         }
@@ -1109,7 +1115,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), false, 46 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), false, ICN::STONEBAK, 46 );
 
             break;
         }
@@ -1122,7 +1128,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), false, 58 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), false, ICN::STONEBAK, 58 );
 
             break;
         }
@@ -1304,7 +1310,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, false, 117, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, false, ICN::STONEBAK, 117, 56 );
 
             fheroes2::Sprite & released = _icnVsSprite[id][0];
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
@@ -1368,7 +1374,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70, 35 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 70, 35 );
 
             break;
         }
@@ -1467,28 +1473,28 @@ namespace
         case ICN::BUTTON_SMALL_MIN_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), false, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), false, ICN::STONEBAK, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MIN_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), true, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), true, ICN::STONEBAK_EVIL, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, ICN::STONEBAK, 61 );
 
             break;
         }
         case ICN::BUTTON_SMALL_MAX_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), true, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), true, ICN::STONEBAK_EVIL, 61 );
 
             break;
         }
@@ -1525,8 +1531,9 @@ namespace
 
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL, width );
+            const bool isEvilInterface = id == ICN::BUTTON_CASTLE_EVIL;
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CASTLE" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                width );
 
             break;
         }
@@ -1542,8 +1549,9 @@ namespace
 
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
+            const bool isEvilInterface = id == ICN::BUTTON_TOWN_EVIL;
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL, width );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWN" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, width );
 
             break;
         }
@@ -1567,7 +1575,7 @@ namespace
 
             const char * text = ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? gettext_noop( "MIN" ) : gettext_noop( "MAX" );
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface,isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD, 61 );
 
             break;
         }
@@ -4240,9 +4248,10 @@ namespace
         case ICN::BLACKBAK: {
             _icnVsSprite[id].resize( 1 );
             fheroes2::Image & background = _icnVsSprite[id][0];
-            // This enough to cover the largest buttons.
+            // This is enough to cover the largest buttons.
             background.resize( 200, 200 );
-            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 20 );
+            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 9 );
+            return true;
         }
         case ICN::UNIFORMBAK_GOOD:
         case ICN::UNIFORMBAK_EVIL: {

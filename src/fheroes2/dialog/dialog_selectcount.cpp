@@ -234,7 +234,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     fheroes2::Sprite pressedVirtualKB;
     const fheroes2::Size buttonVirtualKBSize{ 40, 25 };
 
-    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBSize, isEvilInterface, true );
+    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBSize, isEvilInterface, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
     // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
     fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBSize.width - 10 ) / 2, dst_pt.y - 30,
                                                                        releasedVirtualKB, pressedVirtualKB, display );

@@ -751,8 +751,8 @@ namespace fheroes2
                  std::move( disabledWithBackground ) };
     }
 
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset, Point & pressedOffset,
-                                const bool isTransparentBackground /* = false */ )
+    void fheroes2::getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset,
+                                          Point & pressedOffset, const int32_t backgroundIcnId )
     {
         assert( buttonSize.width > 0 && buttonSize.height > 0 );
 
@@ -780,8 +780,7 @@ namespace fheroes2
 
         addButtonShine( released, icnId );
 
-        if ( !isTransparentBackground ) {
-            const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+        if ( backgroundIcnId != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, backgroundIcnId );
         }
     }
@@ -850,11 +849,11 @@ namespace fheroes2
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const fheroes2::Size buttonSize, const bool isEvilInterface,
-                            const bool isTransparentBackground )
+                            const uint32_t backgroundIcnId )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonSize, releasedOffset, pressedOffset, isTransparentBackground );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonSize, releasedOffset, pressedOffset, backgroundIcnId );
 
         const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
