@@ -1499,18 +1499,18 @@ namespace
 
                 break;
             }
-            else if ( useOriginalResources() && isEvilInterface ) {
+            if ( useOriginalResources() && isEvilInterface ) {
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 1 );
-                if ( isEvilInterface ) {
-                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-                    fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-                }
+
+                fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
 
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 61 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
+                                61 );
 
             break;
         }
