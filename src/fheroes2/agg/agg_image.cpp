@@ -968,28 +968,15 @@ namespace
             buttonStates.resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL );
-            const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
 
             if ( useOriginalResources() ) {
+                const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
                 buttonStates[0] = fheroes2::AGG::GetICN( originalButtonICN, 4 );
                 buttonStates[1] = fheroes2::AGG::GetICN( originalButtonICN, 5 );
                 break;
             }
 
-            // Needs to be generated from original assets because the background has a much darker shadow than normal.
-            // TODO: Make the button generated as normal after removing the embedded shadow on the background.
-            for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
-                fheroes2::Sprite & out = buttonStates[i];
-                out = fheroes2::AGG::GetICN( originalButtonICN, 4 + i );
-
-                // clean the button.
-                Fill( out, 6 - i, 4 + i, 71 - i, 17, getButtonFillingColor( i == 0, !isEvilInterface ) );
-            }
-
-            const int32_t textWidth = 71;
-            renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 6, 5 }, { 5, 6 },
-                                { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
-                                isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70 );
 
             break;
         }
