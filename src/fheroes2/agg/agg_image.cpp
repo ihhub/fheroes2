@@ -1833,7 +1833,7 @@ namespace
         }
     }
 
-        bool generateGermanSpecificImages( const int id )
+    bool generateGermanSpecificImages( const int id )
     {
         switch ( id ) {
         case ICN::BTNBATTLEONLY:
