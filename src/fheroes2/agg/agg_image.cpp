@@ -1537,7 +1537,6 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_VIEWWORLD_EXIT_EVIL );
-            // TODO: Can't be drawn because it is both taller and smaller than the standard button which resizeButton does not handle yet.
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface, 70, 35 );
 
             break;
