@@ -751,7 +751,7 @@ namespace fheroes2
                  std::move( disabledWithBackground ) };
     }
 
-    void fheroes2::getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset,
+    void fheroes2::getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, Size buttonSize, Point & releasedOffset,
                                           Point & pressedOffset, const int backgroundIcnId )
     {
         assert( buttonSize.width > 0 && buttonSize.height > 0 );

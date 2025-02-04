@@ -348,7 +348,7 @@ namespace fheroes2
 
     // The height of text area is only 16 pixels. If 'isTransparentBackground' is set to false the button sprite will have a default background pattern from
     // STONEBAK or STONEBAK_EVIL (for Evil interface). The pattern is the same for all buttons.
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset, Point & pressedOffset,
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, Size buttonSize, Point & releasedOffset, Point & pressedOffset,
                                 const int backgroundIcnId );
 
     // Makes a button that has the width necessary to fit a provided text using an empty button template
