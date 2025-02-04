@@ -458,7 +458,7 @@ namespace
 
         for ( size_t i = 0; i < texts.size(); ++i ) {
             const size_t icnIndex = 2 * i;
-            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID,
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID,
                                             buttonBackgroundICN );
         }
     }
@@ -764,7 +764,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -785,7 +785,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -806,7 +806,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -827,7 +827,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -845,7 +845,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
@@ -863,7 +863,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
@@ -880,7 +880,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
@@ -898,7 +898,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
@@ -915,7 +915,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -932,7 +932,7 @@ namespace
             }
 
             // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
-            // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
+            // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedSprite() instead.
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, 70 );
 
             break;
@@ -982,7 +982,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -999,7 +999,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1016,7 +1016,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1142,7 +1142,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
             if ( isEvilInterface ) {
                 const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
@@ -1330,7 +1330,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BTNGIFT_EVIL );
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
@@ -1339,7 +1339,7 @@ namespace
         case ICN::BUYMAX: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1352,7 +1352,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1406,7 +1406,7 @@ namespace
                     fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
                 }
                 // Generate the DIFFICULTY button because it is not present in the original resources
-                fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                                 isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
                 break;
             }
@@ -1456,7 +1456,7 @@ namespace
                     fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
                 }
                 // generate the DIFFICULTY button as it is not present in the original resources
-                fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON, ICN::STONEBAK_SMALL_POL );
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON, ICN::STONEBAK_SMALL_POL );
                 break;
             }
             createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -1495,21 +1495,21 @@ namespace
         case ICN::BUTTON_EXIT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
         case ICN::BUTTON_RESET_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESET" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESET" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
         case ICN::BUTTON_START_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
@@ -1551,7 +1551,7 @@ namespace
         case ICN::BUTTON_RESTRICT_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTRICT" ),
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTRICT" ),
                                   id == ICN::BUTTON_RESTRICT_EVIL ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   id == ICN::BUTTON_RESTRICT_EVIL ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -1584,7 +1584,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
@@ -1602,7 +1602,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -1620,7 +1620,7 @@ namespace
                 break;
             }
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -1650,7 +1650,7 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                   ICN::REDBAK_SMALL_VERTICAL );
 
             break;
@@ -1680,7 +1680,7 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
 
             break;
         }
@@ -1691,7 +1691,7 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                   ICN::REDBAK_SMALL_VERTICAL );
 
             break;
@@ -1753,7 +1753,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_RUMORS_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RUMORS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RUMORS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1764,7 +1764,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_EVENTS_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EVENTS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EVENTS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1775,7 +1775,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_LANGUAGE_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LANGUAGE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LANGUAGE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1786,7 +1786,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_COMBAT_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO\nCOMBAT" ),
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO\nCOMBAT" ),
                                   isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -1797,7 +1797,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_QUICK_COMBAT_EVIL );
 
-            getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
                                   isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;

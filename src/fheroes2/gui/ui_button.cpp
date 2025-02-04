@@ -786,7 +786,7 @@ namespace fheroes2
         }
     }
 
-    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
         fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
         fheroes2::Point textAreaMargins = { 0, 3 };
