@@ -2197,52 +2197,6 @@ namespace
         return false;
     }
 
-    bool generateItalianSpecificImages( const int id )
-    {
-        switch ( id ) {
-        case ICN::BTNBATTLEONLY:
-            _icnVsSprite[id].resize( 2 );
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
-                // clean the button
-                const uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
-                Fill( out, 25, 18, 88, 23, buttonFillingColor );
-                const int32_t offsetX = 16;
-                const int32_t offsetY = 21;
-                // Add 'B'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 15 );
-                Fill( out, offsetX + 11, offsetY + 13, 1, 2, buttonFillingColor );
-                // Add 'A'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 13 - i, offsetY, 14, 15 );
-                Fill( out, offsetX + 13 - i, offsetY + 3, 1, 4, buttonFillingColor );
-                // Add 'T'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 - 2 * i, offsetY, 12, 15 );
-                // Add 'T'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 - 2 * i, offsetY, 12, 15 );
-                // Add 'A'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 50 - i, offsetY, 14, 15 );
-                Fill( out, offsetX + 65 - i, offsetY + 5, 1, 2, buttonFillingColor );
-                Fill( out, offsetX + 65 - i, offsetY + 14, 1, 3, buttonFillingColor );
-                Fill( out, offsetX + 50 - i, offsetY + 3, 1, 4, buttonFillingColor );
-                // Add 'G'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 - i, offsetY, 11, 15 );
-                // Add 'L'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 77 - 2 * i, offsetY, 9, 15 );
-                // Add 'I'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 86 - i, offsetY, 7, 15 );
-                // Add 'A'
-                Blit( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 93 - i, offsetY, 14, 15 );
-                Fill( out, offsetX + 109 - i, offsetY + 5, 1, 2, buttonFillingColor );
-                Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
-            }
-            return true;
-        default:
-            break;
-        }
-        return false;
-    }
-
     void generateLanguageSpecificImages( int id )
     {
         assert( isLanguageDependentIcnId( id ) );
@@ -2259,11 +2213,6 @@ namespace
                 break;
             case fheroes2::SupportedLanguage::Polish:
                 if ( generatePolishSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::Italian:
-                if ( generateItalianSpecificImages( id ) ) {
                     return;
                 }
                 break;
