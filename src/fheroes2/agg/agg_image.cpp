@@ -2002,6 +2002,51 @@ namespace
         }
     }
 
+        bool generateGermanSpecificImages( const int id )
+    {
+        switch ( id ) {
+        case ICN::BTNBATTLEONLY:
+            _icnVsSprite[id].resize( 2 );
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                const fheroes2::Sprite originalSprite = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
+                const int32_t newWidth = originalSprite.width() - 5;
+                const int32_t newHeight = originalSprite.height() - 6;
+                out.resize( newWidth, newHeight );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i ), 5, 0, out, 0, 0, newWidth, newHeight );
+                // Clean the button
+                Fill( out, 21 - i, 23 + i, 84, 11, getButtonFillingColor( i == 0 ) );
+                // Add 'K'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 35 - i, 23, 12, 14 );
+                //'Add 'A'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 47 - i, 23, 13, 14 );
+                Copy( out, 20, 20, out, 47 - i + 12, 25, 3, 3 );
+                // Add 'M'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 60 - i, 23, 14, 14 );
+                // Add 'F'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 82 - i, 23, 10, 14 );
+                // Add 'P'
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 73 - i, 23, 10, 14 );
+            }
+            return true;
+        case ICN::BUTTON_SMALL_MIN_GOOD:
+            _icnVsSprite[id].resize( 2 );
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                out = fheroes2::AGG::GetICN( ICN::RECRUIT, 4 + i );
+                // clean the button
+                Blit( fheroes2::AGG::GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                // add 'IN'
+                Copy( fheroes2::AGG::GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                Copy( fheroes2::AGG::GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+            }
+            return true;
+        default:
+            break;
+        }
+        return false;
+    }
+
     bool generateFrenchSpecificImages( const int id )
     {
         switch ( id ) {
@@ -2213,6 +2258,11 @@ namespace
         // Language-specific image generators, may fail
         if ( fheroes2::getCurrentLanguage() == resourceLanguage ) {
             switch ( resourceLanguage ) {
+            case fheroes2::SupportedLanguage::German:
+                if ( generateGermanSpecificImages( id ) ) {
+                    return;
+                }
+                break;
             case fheroes2::SupportedLanguage::French:
                 if ( generateFrenchSpecificImages( id ) ) {
                     return;
