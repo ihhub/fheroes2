@@ -82,8 +82,6 @@ fheroes2::GameMode Game::LoadHotseat()
 
 fheroes2::GameMode Game::LoadMulti()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -91,20 +89,16 @@ fheroes2::GameMode Game::LoadMulti()
     fheroes2::drawMainMenuScreen();
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    fheroes2::ButtonSprite buttonHotSeat = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 0 ),
-                                                                           fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 1 ), display, { -5, 6 } );
 
-    fheroes2::ButtonSprite buttonNetwork = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNMP, 2 ),
-                                                                           fheroes2::AGG::GetICN( ICN::BTNMP, 3 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
     buttonCancel.draw();
     buttonNetwork.disable();
 
-    display.render();
+    fheroes2::Display::instance().render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
@@ -155,21 +149,11 @@ fheroes2::GameMode Game::LoadGame()
     fheroes2::drawMainMenuScreen();
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    const fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::ButtonSprite buttonStandardGame
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCampaignGame
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonMultiplayerGame
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
-
+    fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
+    fheroes2::Button buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
+    fheroes2::Button buttonMultiplayerGame( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
     const std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
     if ( !isSuccessionWarsCampaignPresent() ) {
@@ -182,7 +166,7 @@ fheroes2::GameMode Game::LoadGame()
         buttons[i]->draw();
     }
 
-    // following the cancel button in newgame
+    // following the cancel button in new game
     buttonCancel.setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttonCancel.draw();
 

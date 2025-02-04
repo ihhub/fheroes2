@@ -199,16 +199,10 @@ fheroes2::GameMode Game::CampaignSelection()
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    const fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::ButtonSprite buttonSuccessionWars = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 0 ),
-                                                                                  fheroes2::AGG::GetICN( ICN::BUTTON_ORIGINAL_CAMPAIGN, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonPriceOfLoyalty
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_EXPANSION_CAMPAIGN, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_EXPANSION_CAMPAIGN, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::BUTTON_ORIGINAL_CAMPAIGN, 0, 1 );
+    fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonSuccessionWars.draw();
     buttonPriceOfLoyalty.draw();
@@ -487,15 +481,10 @@ fheroes2::GameMode Game::NewNetwork()
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    const fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::ButtonSprite buttonHost = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BTNNET, 0 ),
-                                                                        fheroes2::AGG::GetICN( ICN::BTNNET, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonGuest = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNET, 2 ),
-                                                                         fheroes2::AGG::GetICN( ICN::BTNNET, 3 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
+    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHost.draw();
     buttonGuest.draw();
@@ -547,24 +536,13 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-    const fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::ButtonSprite buttonStandardGame = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 0 ),
-                                                                                fheroes2::AGG::GetICN( ICN::BUTTON_STANDARD_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCampaignGame
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonMultiGame
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 2, fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_MULTIPLAYER_GAME, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonBattleGame = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 3, fheroes2::AGG::GetICN( ICN::BTNBATTLEONLY, 0 ),
-                                                                              fheroes2::AGG::GetICN( ICN::BTNBATTLEONLY, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonSettings
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 4, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CONFIG, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CONFIG, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
+    fheroes2::Button buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
+    fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
+    fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
+    fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_LARGE_CONFIG, 0, 1 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampaignGame.disable();
@@ -654,16 +632,11 @@ fheroes2::GameMode Game::NewMulti()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-    fheroes2::ButtonSprite buttonHotSeat = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y, fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 0 ),
-                                                                           fheroes2::AGG::GetICN( ICN::BUTTON_HOT_SEAT, 1 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonNetwork = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNMP, 2 ),
-                                                                           fheroes2::AGG::GetICN( ICN::BTNMP, 3 ), display, { -5, 6 } );
-    fheroes2::ButtonSprite buttonCancel
-        = fheroes2::makeButtonWithShadow( buttonPos.x, buttonPos.y + buttonYStep * 5, fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 0 ),
-                                          fheroes2::AGG::GetICN( ICN::BUTTON_LARGE_CANCEL, 1 ), display, { -5, 6 } );
+    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
     buttonCancel.draw();
@@ -672,7 +645,7 @@ fheroes2::GameMode Game::NewMulti()
     fheroes2::Display::instance().render();
 
     LocalEvent & le = LocalEvent::Get();
-    // newgame loop
+    // new game loop
     while ( le.HandleEvents() ) {
         buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHotSeat.area() ) );
         if ( buttonNetwork.isEnabled() ) {

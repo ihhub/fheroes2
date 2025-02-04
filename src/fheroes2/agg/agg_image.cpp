@@ -1170,334 +1170,172 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_STANDARD_GAME: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 1 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "STANDARD\nGAME" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_CAMPAIGN_GAME: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                // Fix the disabled state.
-                fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
-                common = fheroes2::FilterOnePixelNoise( common );
-                common = fheroes2::FilterOnePixelNoise( common );
-                common = fheroes2::FilterOnePixelNoise( common );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_MULTIPLAYER_GAME: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 5 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_LARGE_CANCEL: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_LARGE_CONFIG: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 5 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ORIGINAL\nCAMPAIGN" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_EXPANSION_CAMPAIGN: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXPANSION\nCAMPAIGN" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_HOT_SEAT: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_2_PLAYERS: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 0 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 1 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_3_PLAYERS: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 2 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 3 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_4_PLAYERS: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 4 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 5 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), false, 117, 56 );
-
-            break;
-        }
-        case ICN::BUTTON_5_PLAYERS: {
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 6 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 7 );
-
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
-                break;
-            }
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), false, 117, 56 );
-
-            break;
-        }
+        case ICN::BUTTON_STANDARD_GAME:
+        case ICN::BUTTON_CAMPAIGN_GAME:
+        case ICN::BUTTON_MULTIPLAYER_GAME:
+        case ICN::BUTTON_LARGE_CANCEL:
+        case ICN::BUTTON_LARGE_CONFIG:
+        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
+        case ICN::BUTTON_EXPANSION_CAMPAIGN:
+        case ICN::BUTTON_HOT_SEAT:
+        case ICN::BUTTON_2_PLAYERS:
+        case ICN::BUTTON_3_PLAYERS:
+        case ICN::BUTTON_4_PLAYERS:
+        case ICN::BUTTON_5_PLAYERS:
         case ICN::BUTTON_6_PLAYERS: {
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() ) {
-                // Remove embedded shadows so that we can add them later.
-                fheroes2::Sprite & released = _icnVsSprite[id][0];
-                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+                int buttonIcnID = ICN::BTNNEWGM;
+                fheroes2::Point icnIndex( 0, 1 );
+                switch ( id ) {
+                case ICN::BUTTON_CAMPAIGN_GAME: {
+                    icnIndex = { 2, 3 };
+                    break;
+                }
+                case ICN::BUTTON_MULTIPLAYER_GAME: {
+                    icnIndex = { 4, 5 };
+                    break;
+                }
+                case ICN::BUTTON_LARGE_CANCEL: {
+                    icnIndex = { 6, 7 };
+                    break;
+                }
+                case ICN::BUTTON_LARGE_CONFIG: {
+                    buttonIcnID = ICN::BTNDCCFG;
+                    icnIndex = { 4, 5 };
+                    break;
+                }
+                case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
+                    buttonIcnID = ICN::X_LOADCM;
+                    icnIndex = { 0, 1 };
+                    break;
+                }
+                case ICN::BUTTON_EXPANSION_CAMPAIGN: {
+                    buttonIcnID = ICN::X_LOADCM;
+                    icnIndex = { 2, 3 };
+                    break;
+                }
+                case ICN::BUTTON_HOT_SEAT: {
+                    buttonIcnID = ICN::BTNMP;
+                    break;
+                }
+                case ICN::BUTTON_2_PLAYERS: {
+                    buttonIcnID = ICN::BTNHOTST;
+                    break;
+                }
+                case ICN::BUTTON_3_PLAYERS: {
+                    buttonIcnID = ICN::BTNHOTST;
+                    icnIndex = { 2, 3 };
+                    break;
+                }
+                case ICN::BUTTON_4_PLAYERS: {
+                    buttonIcnID = ICN::BTNHOTST;
+                    icnIndex = { 4, 5 };
+                    break;
+                }
+                case ICN::BUTTON_5_PLAYERS: {
+                    buttonIcnID = ICN::BTNHOTST;
+                    icnIndex = { 6, 7 };
+                    break;
+                }
+                case ICN::BUTTON_6_PLAYERS: {
+                    buttonIcnID = ICN::BTNHOTST;
+                    icnIndex = { 8, 9 };
+                    break;
+                }
+                default:
+                    break;
+                }
 
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNHOTST, 8 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( ICN::BTNHOTST, 9 );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.x );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.y );
+                if ( id == ICN::BUTTON_CAMPAIGN_GAME ) {
+                    // Fix the disabled state.
+                    fheroes2::Image common = fheroes2::ExtractCommonPattern( { &_icnVsSprite[id][0], &_icnVsSprite[id][1] } );
+                    common = fheroes2::FilterOnePixelNoise( common );
+                    common = fheroes2::FilterOnePixelNoise( common );
+                    common = fheroes2::FilterOnePixelNoise( common );
+                    fheroes2::Blit( common, _icnVsSprite[id][0] );
+                }
 
-                released.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-                pressed.resize( originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                Copy( originalReleased, 5, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-                Copy( originalPressed, 5, 0, _icnVsSprite[id][1], 0, 0, originalReleased.width() - 5, originalReleased.height() - 6 );
-
-                setButtonCornersTransparent( released );
+                break;
+            }
+            const char * text = gettext_noop( "STANDARD\nGAME" );
+            switch ( id ) {
+            case ICN::BUTTON_STANDARD_GAME: {
+                text = gettext_noop( "STANDARD\nGAME" );
+                break;
+            }
+            case ICN::BUTTON_CAMPAIGN_GAME: {
+                text = gettext_noop( "CAMPAIGN\nGAME" );
+                break;
+            }
+            case ICN::BUTTON_MULTIPLAYER_GAME: {
+                text = gettext_noop( "MULTI-\nPLAYER\nGAME" );
+                break;
+            }
+            case ICN::BUTTON_LARGE_CANCEL: {
+                text = gettext_noop( "CANCEL" );
+                break;
+            }
+            case ICN::BUTTON_LARGE_CONFIG: {
+                text = gettext_noop( "CONFIG" );
+                break;
+            }
+            case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
+                text = gettext_noop( "ORIGINAL\nCAMPAIGN" );
+                break;
+            }
+            case ICN::BUTTON_EXPANSION_CAMPAIGN: {
+                text = gettext_noop( "EXPANSION\nCAMPAIGN" );
+                break;
+            }
+            case ICN::BUTTON_HOT_SEAT: {
+                text = gettext_noop( "HOT SEAT" );
+                break;
+            }
+            case ICN::BUTTON_2_PLAYERS: {
+                text = gettext_noop( "2 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_3_PLAYERS: {
+                text = gettext_noop( "3 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_4_PLAYERS: {
+                text = gettext_noop( "4 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_5_PLAYERS: {
+                text = gettext_noop( "5 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_6_PLAYERS: {
+                text = gettext_noop( "6 PLAYERS" );
+                break;
+            }
+            default:
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), false, 117, 56 );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, false, 117, 56 );
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            // Add original shadow.
+            const fheroes2::Sprite & originalShadow = fheroes2::AGG::GetICN( ICN::BTNCOM, 0 );
+            fheroes2::Image temp( originalShadow.width(), originalShadow.height() );
+
+            Copy( released, 0, 0, temp, 5, 6, released.width(), released.height() );
+            fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
+            fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
+            fheroes2::Copy( temp, released );
+
+            Copy( pressed, 0, 0, temp, 5, 6, released.width(), released.height() );
+            fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
+            fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
+            fheroes2::Copy( temp, pressed );
 
             break;
         }
