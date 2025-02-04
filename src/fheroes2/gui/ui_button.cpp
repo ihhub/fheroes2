@@ -110,6 +110,41 @@ namespace
             fheroes2::Copy( original, originalWidth - secondHalfWidth, originalHeight - secondHalfHeight, output, buttonSize.width - secondHalfWidth,
                             buttonSize.height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
         }
+        // Buttons that are taller but less wide.
+        else if ( buttonSize.height > originalHeight && buttonSize.width < originalWidth ) {
+            // Height increase
+            const int32_t middleHeight = originalHeight / 5;
+            const int32_t overallMiddleHeight = buttonSize.height - middleHeight * 2;
+            const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
+            const int32_t middleHeightLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
+
+            const int32_t middleWidth = originalWidth / 3;
+
+            // The new button doesn't fit the two end corners. Are you using the wrong empty button to generate the new one?
+            assert( buttonSize.width >= middleWidth * 2 );
+
+            const int32_t rightSideWidth = buttonSize.width - middleWidth;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, middleHeight );
+            fheroes2::Copy( original, rightSideWidth, 0, output, middleWidth, 0, rightSideWidth, middleHeight );
+
+            int32_t offsetY = middleHeight;
+            for ( int32_t i = 0; i < middleHeightCount; ++i ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeight );
+                fheroes2::Copy( original, rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
+                offsetY += middleHeight;
+            }
+
+            if ( middleHeightLeftOver > 0 ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeightLeftOver );
+                fheroes2::Copy( original, rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeightLeftOver );
+                offsetY += middleHeightLeftOver;
+            }
+            assert( offsetY + originalHeight - middleHeight * 4 == buttonSize.height );
+
+            fheroes2::Copy( original, 0, originalHeight - middleHeight, output, 0, offsetY, middleWidth, middleHeight );
+            fheroes2::Copy( original, rightSideWidth, originalHeight - middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
+        }
         // Buttons that have increased width and height.
         else if ( buttonSize.height > originalHeight && buttonSize.width > originalWidth ) {
             const int32_t middleWidth = originalWidth / 3;
