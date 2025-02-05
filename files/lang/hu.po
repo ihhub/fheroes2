@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-05 23:37+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4119,6 +4119,9 @@ msgstr "Nincs megváltoztatható tulajdonsága ennek: %{object}"
 
 msgid "This artifact"
 msgstr "Ez a varázstárgy"
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 msgid "Roads"
 msgstr "Utak"

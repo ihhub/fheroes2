@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-05 23:37+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3977,6 +3977,9 @@ msgstr ""
 #, fuzzy
 msgid "This artifact"
 msgstr "Artifact"
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 msgid "Roads"
 msgstr ""
