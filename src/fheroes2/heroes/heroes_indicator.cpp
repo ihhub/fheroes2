@@ -282,25 +282,12 @@ void SpellPointsIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & spellPointImage = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
-    fheroes2::Blit( spellPointImage, display, _area.x, _area.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 22, 33, 9 };
-    const int32_t widthReduction = spellPointImage.width() - renderRoi.width;
-
-    if ( _isDefault ) {
-        const fheroes2::Text text{ std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() };
-        text.drawInRoi( renderRoi.x + ( spellPointImage.width() - text.width() ) / 2 - widthReduction, _area.y + 23, display, renderRoi );
-    }
-    else {
-        fheroes2::Text text{ std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() };
-        if ( text.width() > renderRoi.width + 1 ) {
-            // Spell points are too long. Display only available spell points.
-            text.set( std::to_string( _hero->GetSpellPoints() ), fheroes2::FontType::smallWhite() );
-        }
-
-        text.drawInRoi( renderRoi.x + ( spellPointImage.width() - text.width() ) / 2 - widthReduction, _area.y + 23, display, renderRoi );
-    }
+    // For the default range of experience see Heroes::GetStartingXp() method.
+    const fheroes2::Text text( _isDefault ? "40-90" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
+    text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const
