@@ -282,12 +282,13 @@ void SpellPointsIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    // For the default range of experience see Heroes::GetStartingXp() method.
-    const fheroes2::Text text( _isDefault ? "40-90" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
-    text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
+    const fheroes2::Text text( _isDefault ? std::to_string( _hero->GetMaxSpellPoints() )
+                                          : std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ),
+                               fheroes2::FontType::smallWhite() );
+    text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const
