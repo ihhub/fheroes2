@@ -2849,11 +2849,26 @@ namespace
             elementUI.emplace_back( experienceUI.get() );
         }
 
-        // TODO: this dialog might be too long to be displayed on small resolutions.
-        //       Find a way how to make this text scrollable or conditionally reduce the number of UI elements.
-        const fheroes2::Text header( {}, fheroes2::FontType::normalYellow() );
+        const fheroes2::Text emptyText;
         const fheroes2::Text body( mapEvent->message, fheroes2::FontType::normalWhite(), Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
-        fheroes2::showMessage( header, body, Dialog::OK, elementUI );
+
+        int32_t dialogHeight = fheroes2::getDialogHeight( emptyText, body, Dialog::OK, elementUI );
+        const int32_t displayHeight = fheroes2::Display::instance().height();
+        if ( dialogHeight > displayHeight ) {
+            // We have to split the message into 2 as it is too big.
+            std::vector<const fheroes2::DialogElement *> secondDialogUIElement;
+            while ( dialogHeight > displayHeight && !elementUI.empty() ) {
+                secondDialogUIElement.push_back( elementUI.back() );
+                elementUI.pop_back();
+                dialogHeight = fheroes2::getDialogHeight( emptyText, body, Dialog::OK, elementUI );
+            }
+
+            fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );
+            fheroes2::showMessage( emptyText, body, Dialog::OK, secondDialogUIElement );
+        }
+        else {
+            fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );
+        }
 
         // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
         // and the fullness of the bag. It also displays appropriate text when an artifact cannot be picked up.

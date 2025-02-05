@@ -46,6 +46,8 @@ namespace fheroes2
 
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
 
+    int32_t getDialogHeight( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
+
     // This is a simplified version of UI window which is used to display a window with a text.
     // Header text has yellow normal font style and body text - white normal font style.
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements = {} );

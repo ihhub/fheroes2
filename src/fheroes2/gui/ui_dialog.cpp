@@ -248,6 +248,75 @@ namespace fheroes2
         return result;
     }
 
+    int32_t getDialogHeight( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
+    {
+        const int32_t headerHeight = header.empty() ? 0 : header.height( fheroes2::boxAreaWidthPx ) + textOffsetY;
+
+        int overallTextHeight = headerHeight;
+
+        const int32_t bodyTextHeight = body.height( fheroes2::boxAreaWidthPx );
+        if ( bodyTextHeight > 0 ) {
+            overallTextHeight += bodyTextHeight + textOffsetY;
+        }
+
+        std::vector<int32_t> rowElementIndex;
+        std::vector<int32_t> rowHeight;
+        std::vector<size_t> rowId;
+        std::vector<int32_t> rowMaxElementWidth;
+        std::vector<int32_t> rowElementCount;
+
+        int32_t elementHeight = 0;
+        size_t elementId = 0;
+        for ( const DialogElement * element : elements ) {
+            assert( element != nullptr );
+
+            const int32_t currentElementWidth = element->area().width;
+            if ( rowHeight.empty() ) {
+                rowElementIndex.emplace_back( 0 );
+                rowHeight.emplace_back( element->area().height );
+                rowId.emplace_back( elementId );
+                rowMaxElementWidth.emplace_back( currentElementWidth );
+                rowElementCount.emplace_back( 1 );
+
+                ++elementId;
+            }
+            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= fheroes2::boxAreaWidthPx ) {
+                rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
+                rowHeight.back() = std::max( rowHeight.back(), element->area().height );
+
+                // We cannot use back() to insert it into the same container as it will be resized upon insertion.
+                const size_t lastRoiId = rowId.back();
+                rowId.emplace_back( lastRoiId );
+
+                rowMaxElementWidth.back() = std::max( rowMaxElementWidth.back(), currentElementWidth );
+                ++rowElementCount.back();
+            }
+            else {
+                elementHeight += textOffsetY;
+                elementHeight += rowHeight.back();
+
+                rowElementIndex.emplace_back( 0 );
+                rowHeight.emplace_back( element->area().height );
+                rowId.emplace_back( elementId );
+                rowMaxElementWidth.emplace_back( currentElementWidth );
+                rowElementCount.emplace_back( 1 );
+
+                ++elementId;
+            }
+        }
+
+        if ( !rowHeight.empty() ) {
+            // UI elements are offset from the dialog body.
+            if ( bodyTextHeight > 0 ) {
+                elementHeight += textOffsetY;
+            }
+            elementHeight += textOffsetY;
+            elementHeight += rowHeight.back();
+        }
+
+        return overallTextHeight + elementHeight + ( ( buttons != 0 ) ? Dialog::FrameBox::getButtonAreaHeight() : 0 );
+    }
+
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
         const Text header( std::move( headerText ), FontType::normalYellow() );

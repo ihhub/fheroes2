@@ -176,3 +176,8 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 
     fheroes2::Display::instance().render( _restorer->rect() );
 }
+
+int32_t Dialog::NonFixedFrameBox::getButtonAreaHeight()
+{
+    return buttonHeight;
+}
