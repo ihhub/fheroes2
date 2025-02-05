@@ -120,6 +120,31 @@ namespace
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
 
+    size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
+    {
+        const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+        std::set<size_t> obeliskIndex;
+        for ( size_t i = 0; i < miscellaneousObjects.size(); ++i ) {
+            if ( miscellaneousObjects[i].objectType == MP2::OBJ_OBELISK ) {
+                obeliskIndex.emplace( i );
+            }
+        }
+
+        size_t obeliskCount = 0;
+        for ( const auto & mapTile : _mapFormat.tiles ) {
+            for ( const auto & object : mapTile.objects ) {
+                if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && obeliskIndex.count( object.index ) > 0 ) {
+                    assert( object.index < miscellaneousObjects.size() );
+
+                    ++obeliskCount;
+                }
+            }
+        }
+
+        return obeliskCount;
+    }
+
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
@@ -1478,6 +1503,12 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectType == MP2::OBJ_OBELISK ) {
+                    std::string str = _( "The total number of obelisks is %{count}." );
+                    StringReplace( str, "%{count}", getObeliskCount( _mapFormat ) );
+
+                    fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
+                }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
                     StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );
@@ -1801,26 +1832,7 @@ namespace Interface
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( objectInfo.objectType == MP2::OBJ_OBELISK ) {
-                const auto & objects = Maps::getObjectsByGroup( groupType );
-
-                std::set<size_t> obeliskIndex;
-                for ( size_t i = 0; i < objects.size(); ++i ) {
-                    if ( objects[i].objectType == MP2::OBJ_OBELISK ) {
-                        obeliskIndex.emplace( i );
-                    }
-                }
-
-                size_t obeliskCount = 0;
-                for ( const auto & mapTile : _mapFormat.tiles ) {
-                    for ( const auto & object : mapTile.objects ) {
-                        if ( object.group == groupType && obeliskIndex.count( object.index ) > 0 ) {
-                            assert( object.index < objects.size() );
-
-                            ++obeliskCount;
-                        }
-                    }
-                }
-
+                const size_t obeliskCount = getObeliskCount( _mapFormat );
                 if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
