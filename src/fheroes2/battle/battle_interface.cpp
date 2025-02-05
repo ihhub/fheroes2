@@ -303,6 +303,24 @@ namespace
         return rainbow;
     }
 
+    int32_t GetAbsoluteICNHeight( int icnId )
+    {
+        const uint32_t frameCount = fheroes2::AGG::GetICNCount( icnId );
+        if ( frameCount == 0 ) {
+            return 0;
+        }
+
+        int32_t height = 0;
+        for ( uint32_t i = 0; i < frameCount; ++i ) {
+            const int32_t offset = -fheroes2::AGG::GetICN( icnId, i ).y();
+            if ( offset > height ) {
+                height = offset;
+            }
+        }
+
+        return height;
+    }
+
     fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, const int spellICN, const fheroes2::Sprite & spellSprite )
     {
         const fheroes2::Rect & pos = target.GetRectPosition();
@@ -354,7 +372,7 @@ namespace
         }
 
         if ( result.y < 0 ) {
-            const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
+            const int maximumY = GetAbsoluteICNHeight( spellICN );
             result.y = maximumY + spellSprite.y();
         }
 
@@ -4885,7 +4903,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         }
     }
     else {
-        const int maxHeight = fheroes2::AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
+        const int maxHeight = GetAbsoluteICNHeight( ICN::CLOUDLUK );
         int y = pos.y + pos.height + cellYOffset;
 
         // move drawing position if it will clip outside of the battle window

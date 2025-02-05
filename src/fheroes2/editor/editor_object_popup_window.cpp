@@ -100,6 +100,22 @@ namespace
 
                 if ( info.objectType == MP2::OBJ_MONSTER && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
+                        const int32_t monsterCount = iter->second.metadata[0];
+                        std::string message = "%{count} %{monster}";
+                        StringReplace( message, "%{count}", monsterCount );
+
+                        if ( monsterCount == 1 ) {
+                            StringReplace( message, "%{monster}", Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName() );
+                        }
+                        else {
+                            StringReplace( message, "%{monster}", Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName() );
+                        }
+
+                        return message;
+                    }
+
                     return MP2::StringObject( MP2::OBJ_MONSTER ) + std::string( "\n" ) + Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName();
                 }
             }

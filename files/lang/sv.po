@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3212,15 +3212,6 @@ msgstr "Händelse: "
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
-
 msgid "Hide"
 msgstr "Dölj"
 
@@ -3230,28 +3221,19 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Slow"
-msgstr "Långsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Snabb"
-
-msgid "Very Fast"
-msgstr "Mkt. snabb"
-
-msgid "Scroll Speed"
-msgstr ""
-"Skroll-\n"
-"hastighet"
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
+
+msgid "Scroll Speed"
+msgstr ""
+"Skroll-\n"
+"hastighet"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
@@ -4778,6 +4760,9 @@ msgstr "och mer..."
 
 msgid "Easy"
 msgstr "Lätt"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svår"
@@ -6313,6 +6298,21 @@ msgstr "Slovakiska"
 
 msgid "Vietnamese"
 msgstr "Vietnamesiska"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Very Fast"
+msgstr "Mkt. snabb"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS: "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 12:11+0000\n"
+"POT-Creation-Date: 2025-01-29 22:18+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3269,15 +3269,6 @@ msgstr "Udalosť"
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
-msgid "Evil"
-msgstr "Zlo"
-
-msgid "Good"
-msgstr "Dobro"
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
 msgid "Hide"
 msgstr "Skry"
 
@@ -3287,26 +3278,17 @@ msgstr "Zobraz"
 msgid "Interface"
 msgstr "Rozhranie"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normálna"
-
-msgid "Fast"
-msgstr "Rýchla"
-
-msgid "Very Fast"
-msgstr "Veľmi rýchla"
-
-msgid "Scroll Speed"
-msgstr "Rýchlosť posunu"
+msgid "Interface Type"
+msgstr "Typ rozhrania"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
+
+msgid "Scroll Speed"
+msgstr "Rýchlosť posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
@@ -4931,6 +4913,9 @@ msgstr "a viac..."
 msgid "Easy"
 msgstr "Ľahká"
 
+msgid "Normal"
+msgstr "Normálna"
+
 msgid "Hard"
 msgstr "Ťažká"
 
@@ -6475,6 +6460,21 @@ msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr "Vietnamsky"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Fast"
+msgstr "Rýchla"
+
+msgid "Very Fast"
+msgstr "Veľmi rýchla"
+
+msgid "Evil"
+msgstr "Zlo"
+
+msgid "Good"
+msgstr "Dobro"
 
 msgid ", FPS: "
 msgstr ", FPS: "

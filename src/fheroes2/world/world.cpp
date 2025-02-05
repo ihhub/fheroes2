@@ -606,7 +606,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    std::mt19937 seededGen( _seed );
+    std::mt19937 seededGen( _seed + month );
 
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,6 +55,7 @@
 #include "image_palette.h"
 #include "image_tool.h"
 #include "logging.h"
+#include "serialize.h"
 #include "system.h"
 
 namespace
@@ -420,6 +421,53 @@ namespace fheroes2
             tilImage.resize( width, height );
             memcpy( tilImage.image(), data + i * imageSize, imageSize );
         }
+    }
+
+    Sprite decodeBMPFile( const std::vector<uint8_t> & data )
+    {
+        if ( data.size() < 6 ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        ROStreamBuf imageStream( data );
+
+        const uint8_t blackColor = imageStream.get();
+        const uint8_t whiteColor = 11;
+
+        // Skip the second byte
+        imageStream.get();
+
+        const int32_t width = imageStream.getLE16();
+        const int32_t height = imageStream.getLE16();
+
+        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        fheroes2::Sprite output( width, height );
+
+        const uint8_t * input = data.data() + 6;
+        uint8_t * image = output.image();
+        const uint8_t * imageEnd = image + static_cast<ptrdiff_t>( width ) * height;
+        uint8_t * transform = output.transform();
+
+        for ( ; image != imageEnd; ++image, ++transform, ++input ) {
+            if ( *input == 1 ) {
+                *image = whiteColor;
+                *transform = 0;
+            }
+            else if ( *input == 2 ) {
+                *image = blackColor;
+                *transform = 0;
+            }
+            else {
+                *transform = 1;
+            }
+        }
+
+        return output;
     }
 
     bool isPNGFormatSupported()
