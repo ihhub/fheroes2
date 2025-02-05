@@ -217,7 +217,7 @@ void ExperienceIndicator::Redraw() const
     fheroes2::Blit( experienceImage, display, _area.x, _area.y );
 
     const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 24, 33, 9 };
-    const int32_t widthReduction = experienceImage.width() - renderRoi.width;
+    const int32_t widthReduction = experienceImage.width() - renderRoi.width - 1;
 
     if ( _isDefault ) {
         // For the default range of experience see Heroes::GetStartingXp() method.
