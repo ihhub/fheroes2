@@ -144,12 +144,19 @@ namespace Editor
         buttonDeleteArtifact.draw();
 
         // Experience
-        auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );
+        auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( 0 );
         const fheroes2::Rect experienceRoi{ secondColumnOffsetX + sectionWidth - experienceUI->area().width,
                                             offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2, experienceUI->area().width, experienceUI->area().height };
-        fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width, experienceRoi.height );
+
+        const fheroes2::Rect experienceValueRoi{ experienceRoi.x, buttonDeleteArtifact.area().y, experienceRoi.width, buttonDeleteArtifact.area().height };
+        background.applyTextBackgroundShading( experienceValueRoi );
+
+        fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width,
+                                                       experienceValueRoi.y + experienceValueRoi.height - experienceRoi.y );
 
         experienceUI->draw( display, experienceRoi.getPosition() );
+        text.set( std::to_string( eventMetadata.experience ), fheroes2::FontType::smallWhite() );
+        text.draw( experienceValueRoi.x + ( experienceValueRoi.width - text.width() ) / 2, experienceValueRoi.y + 5, display );
 
         // Secondary Skill
         const Heroes fakeHero;
@@ -419,12 +426,10 @@ namespace Editor
                 if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), tempValue, 1, &tempExperienceUI ) ) {
                     eventMetadata.experience = tempValue;
 
-                    experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( eventMetadata.experience );
-
                     experienceRoiRestorer.restore();
-                    experienceRoiRestorer.update( experienceRoi.x, experienceRoi.y, experienceUI->area().width, experienceUI->area().height );
-
                     experienceUI->draw( display, experienceRoi.getPosition() );
+                    text.set( std::to_string( eventMetadata.experience ), fheroes2::FontType::smallWhite() );
+                    text.draw( experienceValueRoi.x + ( experienceValueRoi.width - text.width() ) / 2, experienceValueRoi.y + 5, display );
                 }
 
                 // The opened SelectCount() dialog might be bigger than this dialog so we render the whole screen.
