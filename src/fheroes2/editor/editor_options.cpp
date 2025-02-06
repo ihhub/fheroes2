@@ -175,7 +175,8 @@ namespace
         const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        display.render( background.totalArea() );
+        // Render the whole screen as interface type or resolution could have been changed.
+        display.render();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
