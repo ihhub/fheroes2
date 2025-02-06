@@ -73,7 +73,7 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
+    const std::set<int> languageDependentIcnId{ ICN::BUTTON_WELL_MAX,
                                                 ICN::BUTTON_NEW_GAME_GOOD,
                                                 ICN::BUTTON_NEW_GAME_EVIL,
                                                 ICN::BUTTON_SAVE_GAME_GOOD,
@@ -142,8 +142,8 @@ namespace
                                                 ICN::BUTTON_5_PLAYERS,
                                                 ICN::BUTTON_6_PLAYERS,
                                                 ICN::BTNBATTLEONLY,
-                                                ICN::BTNGIFT_GOOD,
-                                                ICN::BTNGIFT_EVIL,
+                                                ICN::BUTTON_GIFT_GOOD,
+                                                ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
                                                 ICN::UNIFORM_EVIL_MIN_BUTTON,
                                                 ICN::UNIFORM_GOOD_MAX_BUTTON,
@@ -1331,11 +1331,10 @@ namespace
 
             break;
         }
-        case ICN::BTNGIFT_GOOD:
-        case ICN::BTNGIFT_EVIL: {
+        case ICN::BUTTON_GIFT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BTNGIFT_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_GIFT_EVIL );
 
             fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ),
                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
@@ -1343,7 +1342,20 @@ namespace
 
             break;
         }
-        case ICN::BUYMAX: {
+        case ICN::BUTTON_GIFT_EVIL: {
+            // To preserve language-specific generations from generateLanguageSpecificImages() we do a palette swap.
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BUTTON_GIFT_GOOD, 0 );
+            released = originalReleased;
+            pressed = fheroes2::AGG::GetICN( ICN::BUTTON_GIFT_GOOD, 1 );
+            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            fheroes2::makeTransparentBackground( released, pressed, ICN::UNIFORMBAK_EVIL );
+            break;
+        }
+        case ICN::BUTTON_WELL_MAX: {
             _icnVsSprite[id].resize( 2 );
 
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
@@ -1472,8 +1484,7 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_SMALL_MIN_GOOD:
-        case ICN::BUTTON_SMALL_MIN_EVIL: {
+        case ICN::BUTTON_SMALL_MIN_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = id == ICN::BUTTON_SMALL_MIN_EVIL;
@@ -1483,7 +1494,6 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_SMALL_MAX_EVIL:
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
@@ -1513,17 +1523,52 @@ namespace
 
             break;
         }
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_GOOD_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_MIN_BUTTON: {
+        case ICN::UNIFORM_GOOD_MIN_BUTTON:
+        case ICN::UNIFORM_GOOD_MAX_BUTTON: {
+            // To preserve language-specific generations from generateLanguageSpecificImages() we clean the non uniform button.
             _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const bool maxButton = id == ICN::UNIFORM_GOOD_MAX_BUTTON;
+            const int buttonIcnID = maxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+            // Clean the borders of the pressed state.
+            FillTransform( pressed, 4, 0, pressed.width() - 3, 1, 1 );
+            FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+            FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
+            FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 5, 1 );
+            fheroes2::makeTransparentBackground( released, pressed, ICN::UNIFORMBAK_GOOD );
 
-            const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_MAX_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON );
+            break;
+        }
+        case ICN::UNIFORM_EVIL_MAX_BUTTON:
+        case ICN::UNIFORM_EVIL_MIN_BUTTON: {
+            // To preserve language-specific generations from generateLanguageSpecificImages() we do a palette swap.
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const bool isMaxButton = id == ICN::UNIFORM_EVIL_MAX_BUTTON;
+            const int buttonIcnID = isMaxButton ? ICN::UNIFORM_GOOD_MAX_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON;
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
 
-            const char * text = ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? gettext_noop( "MIN" ) : gettext_noop( "MAX" );
-
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD, 61 );
+            break;
+        }
+        case ICN::BUTTON_SMALL_MAX_EVIL:
+        case ICN::BUTTON_SMALL_MIN_EVIL: {
+            // To preserve language-specific generations from generateLanguageSpecificImages() we do a palette swap.
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const bool isMaxButton = id == ICN::BUTTON_SMALL_MAX_EVIL;
+            const int buttonIcnID = isMaxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
 
             break;
         }
@@ -1937,7 +1982,7 @@ namespace
             }
             return true;
         }
-        case ICN::BTNGIFT_GOOD: {
+        case ICN::BUTTON_GIFT_GOOD: {
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
@@ -1987,18 +2032,6 @@ namespace
             }
             return true;
         }
-        case ICN::BTNGIFT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( ICN::BTNGIFT_GOOD, 0 );
-            released = originalReleased;
-            pressed = fheroes2::AGG::GetICN( ICN::BTNGIFT_GOOD, 1 );
-            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            fheroes2::makeTransparentBackground( released, pressed, ICN::UNIFORMBAK_EVIL );
-            return true;
-        }
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
             fheroes2::Sprite & released = _icnVsSprite[id][0];
@@ -2046,52 +2079,6 @@ namespace
                 Fill( out, 36 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
                 Fill( out, 36 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
             }
-            return true;
-        }
-        case ICN::UNIFORM_GOOD_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_MAX_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool maxButton = id == ICN::UNIFORM_GOOD_MAX_BUTTON;
-            const int buttonIcnID = maxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            // Clean the borders of the pressed state.
-            FillTransform( pressed, 4, 0, 54, 1, 1 );
-            FillTransform( pressed, 57, 1, 2, 1, 1 );
-            FillTransform( pressed, 58, 2, 2, 1, 1 );
-            FillTransform( pressed, 59, 3, 1, 18, 1 );
-            fheroes2::makeTransparentBackground( released, pressed, ICN::UNIFORMBAK_GOOD );
-
-            return true;
-        }
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool isMaxButton = id == ICN::UNIFORM_EVIL_MAX_BUTTON;
-            const int buttonIcnID = isMaxButton ? ICN::UNIFORM_GOOD_MAX_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-
-            return true;
-        }
-        case ICN::BUTTON_SMALL_MAX_EVIL:
-        case ICN::BUTTON_SMALL_MIN_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool isMaxButton = id == ICN::BUTTON_SMALL_MAX_EVIL;
-            const int buttonIcnID = isMaxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-
             return true;
         }
         default:
@@ -2148,52 +2135,6 @@ namespace
                     ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
                 }
             }
-            return true;
-        }
-        case ICN::BUTTON_SMALL_MAX_EVIL:
-        case ICN::BUTTON_SMALL_MIN_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool isMaxButton = id == ICN::BUTTON_SMALL_MAX_EVIL;
-            const int buttonIcnID = isMaxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-
-            return true;
-        }
-        case ICN::UNIFORM_GOOD_MIN_BUTTON:
-        case ICN::UNIFORM_GOOD_MAX_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool maxButton = id == ICN::UNIFORM_GOOD_MAX_BUTTON;
-            const int buttonIcnID = maxButton ? ICN::BUTTON_SMALL_MAX_GOOD : ICN::BUTTON_SMALL_MIN_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            // Clean the borders of the pressed state.
-            FillTransform( pressed, 4, 0, 54, 1, 1 );
-            FillTransform( pressed, 57, 1, 2, 1, 1 );
-            FillTransform( pressed, 58, 2, 2, 1, 1 );
-            FillTransform( pressed, 59, 3, 1, 18, 1 );
-            fheroes2::makeTransparentBackground( released, pressed, ICN::UNIFORMBAK_GOOD );
-
-            return true;
-        }
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool isMaxButton = id == ICN::UNIFORM_EVIL_MAX_BUTTON;
-            const int buttonIcnID = isMaxButton ? ICN::UNIFORM_GOOD_MAX_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-
             return true;
         }
         default:

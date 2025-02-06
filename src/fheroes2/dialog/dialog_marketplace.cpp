@@ -91,7 +91,7 @@ namespace
             const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
             const int tradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD;
-            const int giftButtonIcnID = isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD;
+            const int giftButtonIcnID = isEvilInterface ? ICN::BUTTON_GIFT_EVIL : ICN::BUTTON_GIFT_GOOD;
 
             buttonGift.setICNInfo( giftButtonIcnID, 0, 1 );
             buttonTrade.setICNInfo( tradeButtonIcnID, 0, 1 );

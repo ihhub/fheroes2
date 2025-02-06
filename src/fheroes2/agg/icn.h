@@ -908,10 +908,10 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BUYMAX,
+        BUTTON_WELL_MAX,
         BTNBATTLEONLY,
-        BTNGIFT_GOOD,
-        BTNGIFT_EVIL,
+        BUTTON_GIFT_GOOD,
+        BUTTON_GIFT_EVIL,
         CSLMARKER,
 
         GRAY_FONT,

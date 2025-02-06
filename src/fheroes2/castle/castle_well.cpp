@@ -215,7 +215,7 @@ void Castle::_openWell()
     const int32_t buttonOffsetY = roi.y + bottomBarOffsetY;
 
     // MAX button.
-    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUYMAX, 0, 1 );
+    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUTTON_WELL_MAX, 0, 1 );
 
     // EXIT button.
     fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
@@ -376,7 +376,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
     const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 ).width();
+    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUTTON_WELL_MAX, 0 ).width();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
     fheroes2::Copy( bottomBar, 1, 0, background, buttonMaxWidth, bottomBarOffsetY, backgroundWidth / 2 - buttonMaxWidth, barHeight );
     fheroes2::Copy( bottomBar, bottomBar.width() - backgroundWidth / 2 + exitWidth - 1, 0, background, backgroundWidth / 2, bottomBarOffsetY,
