@@ -1179,7 +1179,7 @@ namespace Interface
             }
             if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
-                back.restore();
+                background.restoreBackground();
                 display.render( background.totalArea() );
                 Get().saveMapToFile();
                 return fheroes2::GameMode::CANCEL;
