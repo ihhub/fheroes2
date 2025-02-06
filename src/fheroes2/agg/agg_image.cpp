@@ -1133,30 +1133,32 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_MAP_SELECT_EVIL:
         case ICN::BUTTON_MAP_SELECT_GOOD: {
             _icnVsSprite[id].resize( 2 );
-            const bool isEvilInterface = ( id == ICN::BUTTON_MAP_SELECT_EVIL );
 
             if ( useOriginalResources() ) {
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::NGEXTRA, 65 );
-                if ( isEvilInterface ) {
-                    const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
-                    fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
-                    fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
-                }
                 break;
             }
 
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
-            if ( isEvilInterface ) {
-                const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
-                fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
-                fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
-            }
+            break;
+        }
+        case ICN::BUTTON_MAP_SELECT_EVIL: {
+            _icnVsSprite[id].resize( 2 );
 
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+            const int buttonIcnID = ICN::BUTTON_MAP_SELECT_GOOD;
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+
+            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
+            fheroes2::ApplyPalette( released, goodToEvilPalette );
+            fheroes2::ApplyPalette( pressed, goodToEvilPalette );
             break;
         }
         case ICN::BTNBATTLEONLY:
@@ -1812,7 +1814,7 @@ namespace
 
             const ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 27, 133 }, fheroes2::FontColor::WHITE );
+            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 3, 4 }, { 2, 5 }, { 23, 133 }, fheroes2::FontColor::WHITE );
 
             break;
         }
