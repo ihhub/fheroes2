@@ -1127,7 +1127,7 @@ namespace Interface
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 417 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
+        fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
         const fheroes2::Rect roi = background.activeArea();
 
         fheroes2::Button buttonNew;
@@ -1147,12 +1147,12 @@ namespace Interface
                                  fheroes2::StandardWindow::Padding::CENTER_LEFT );
         background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
                                  fheroes2::StandardWindow::Padding::CENTER_RIGHT );
-        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
-                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
         background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
                                        isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
         background.renderButtonSprite( buttonPlayMap, gettext_noop( "PLAY\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
                                        { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         display.render( background.totalArea() );
 
