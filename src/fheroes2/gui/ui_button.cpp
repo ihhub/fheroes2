@@ -214,7 +214,7 @@ namespace
         const bool isGoodButton = ( emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON );
         if ( isGoodButton || emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON ) {
             const uint8_t firstColor = 10;
-            const uint8_t secondColor = isGoodButton ? 38 : 15;
+            const uint8_t secondColor = isGoodButton ? 37 : 15;
             const uint8_t lastColor = isGoodButton ? 39 : 16;
             // Left-side shine
             fheroes2::SetPixel( buttonImage, 11, 4, firstColor );
@@ -225,10 +225,63 @@ namespace
             fheroes2::SetPixel( buttonImage, 8, 7, lastColor );
             fheroes2::SetPixel( buttonImage, 15, 4, lastColor );
             // Right-side shine
-            fheroes2::SetPixel( buttonImage, buttonImage.width() - 9, 4, firstColor );
-            fheroes2::SetPixel( buttonImage, buttonImage.width() - 7, 4, firstColor );
-            fheroes2::DrawLine( buttonImage, { buttonImage.width() - 10, 5 }, { buttonImage.width() - 11, 6 }, secondColor );
-            fheroes2::SetPixel( buttonImage, buttonImage.width() - 8, 5, secondColor );
+            const int32_t buttonWidth = buttonImage.width();
+            fheroes2::SetPixel( buttonImage, buttonWidth - 9, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, buttonWidth - 7, 4, firstColor );
+            fheroes2::DrawLine( buttonImage, { buttonWidth - 10, 5 }, { buttonWidth - 11, 6 }, secondColor );
+            fheroes2::SetPixel( buttonImage, buttonWidth - 8, 5, secondColor );
+
+            const int32_t buttonHeight = buttonImage.height();
+            // To avoid overcrowding the ',,,' virtual keyboard button with decorations we set 50.
+            if ( buttonWidth > 50 ) {
+                // Longer left-side shine
+                fheroes2::DrawLine( buttonImage, { 11, 4 }, { 9, 6 }, firstColor );
+                fheroes2::SetPixel( buttonImage, 8, 7, lastColor );
+                fheroes2::SetPixel( buttonImage, 13, 4, secondColor );
+                fheroes2::DrawLine( buttonImage, { 12, 5 }, { 9, 8 }, lastColor );
+                fheroes2::DrawLine( buttonImage, { 8, 9 }, { 7, 10 }, firstColor );
+                fheroes2::SetPixel( buttonImage, 6, 11, lastColor );
+                fheroes2::DrawLine( buttonImage, { 15, 4 }, { 13, 6 }, firstColor );
+                fheroes2::SetPixel( buttonImage, 12, 7, lastColor );
+
+                // Longer right-side shine
+                fheroes2::SetPixel( buttonImage, buttonWidth - 10, 2, firstColor );
+                fheroes2::SetPixel( buttonImage, buttonWidth - 8, 3, secondColor );
+                fheroes2::SetPixel( buttonImage, buttonWidth - 11, 3, secondColor );
+                fheroes2::SetPixel( buttonImage, buttonWidth - 12, 4, firstColor );
+                fheroes2::DrawLine( buttonImage, { buttonWidth - 13, 5 }, { buttonWidth - 14, 6 }, lastColor );
+                fheroes2::DrawLine( buttonImage, { buttonWidth - 10, 5 }, { buttonWidth - 12, 7 }, firstColor );
+                fheroes2::DrawLine( buttonImage, { buttonWidth - 13, 8 }, { buttonWidth - 14, 9 }, secondColor );
+                fheroes2::DrawLine( buttonImage, { buttonWidth - 8, 5 }, { buttonWidth - 10, 7 }, firstColor );
+                fheroes2::SetPixel( buttonImage, buttonWidth - 11, 8, lastColor );
+                // Bottom left-side shine
+                fheroes2::SetPixel( buttonImage, 11, buttonHeight - 6, lastColor );
+                fheroes2::DrawLine( buttonImage, { 12, buttonHeight - 7 }, { 13, buttonHeight - 8 }, firstColor );
+                fheroes2::SetPixel( buttonImage, 14, buttonHeight - 9, lastColor );
+                if ( buttonWidth > 96 || buttonHeight > 25 ) {
+                    // Longer bottom left shine
+                    fheroes2::SetPixel( buttonImage, 10, buttonHeight - 5, lastColor );
+                    // Center part shine
+                    fheroes2::SetPixel( buttonImage, 30, buttonHeight - 5, secondColor );
+                    fheroes2::SetPixel( buttonImage, 31, buttonHeight - 6, lastColor );
+                    fheroes2::DrawLine( buttonImage, { 32, buttonHeight - 5 }, { 34, buttonHeight - 7 }, firstColor );
+                    fheroes2::SetPixel( buttonImage, 35, buttonHeight - 8, secondColor );
+                    fheroes2::SetPixel( buttonImage, 36, buttonHeight - 9, lastColor );
+                    fheroes2::SetPixel( buttonImage, 34, buttonHeight - 5, secondColor );
+                    fheroes2::SetPixel( buttonImage, 35, buttonHeight - 6, lastColor );
+                }
+
+                if ( buttonHeight > 25 ) {
+                    // Bottom right-side shine
+                    fheroes2::DrawLine( buttonImage, { buttonWidth - 20, buttonHeight - 5 }, { buttonWidth - 16, buttonHeight - 9 }, secondColor );
+                    fheroes2::SetPixel( buttonImage, buttonWidth - 15, buttonHeight - 10, lastColor );
+                    fheroes2::DrawLine( buttonImage, { buttonWidth - 18, buttonHeight - 5 }, { buttonWidth - 14, buttonHeight - 9 }, firstColor );
+                    fheroes2::DrawLine( buttonImage, { buttonWidth - 13, buttonHeight - 10 }, { buttonWidth - 12, buttonHeight - 11 }, secondColor );
+                    fheroes2::DrawLine( buttonImage, { buttonWidth - 11, buttonHeight - 12 }, { buttonWidth - 10, buttonHeight - 13 }, lastColor );
+                    fheroes2::DrawLine( buttonImage, { buttonWidth - 16, buttonHeight - 5 }, { buttonWidth - 12, buttonHeight - 9 }, secondColor );
+                    fheroes2::SetPixel( buttonImage, buttonWidth - 11, buttonHeight - 10, lastColor );
+                }
+            }
         }
     }
 
