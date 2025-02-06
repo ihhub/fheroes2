@@ -232,7 +232,7 @@ namespace
             fheroes2::SetPixel( buttonImage, buttonWidth - 8, 5, secondColor );
 
             const int32_t buttonHeight = buttonImage.height();
-            // To avoid overcrowding the ',,,' virtual keyboard button with decorations we set 50.
+            // To avoid overcrowding the '...' virtual keyboard button with decorations we set 50.
             if ( buttonWidth > 50 ) {
                 // Longer left-side shine
                 fheroes2::DrawLine( buttonImage, { 11, 4 }, { 9, 6 }, firstColor );
