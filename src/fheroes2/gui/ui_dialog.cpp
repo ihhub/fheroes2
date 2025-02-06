@@ -45,6 +45,8 @@
 #include "resource.h"
 #include "screen.h"
 #include "spell_info.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_keyboard.h"
@@ -925,6 +927,14 @@ namespace fheroes2
             assert( _value >= _minimum && _value <= _maximum );
 
             return true;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( _editBox ) ) {
+            std::string message = _( "The available values range from %{min} to %{max}." );
+            StringReplace( message, "%{min}", _minimum );
+            StringReplace( message, "%{max}", _maximum );
+
+            fheroes2::showStandardTextMessage( {}, std::move( message ), Dialog::ZERO );
         }
 
         return false;
