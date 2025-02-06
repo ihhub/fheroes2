@@ -81,6 +81,8 @@ fheroes2::GameMode Game::LoadHotseat()
 
 fheroes2::GameMode Game::LoadMulti()
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -97,7 +99,7 @@ fheroes2::GameMode Game::LoadMulti()
     buttonCancel.draw();
     buttonNetwork.disable();
 
-    fheroes2::Display::instance().render();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
