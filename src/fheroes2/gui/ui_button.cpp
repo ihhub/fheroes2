@@ -243,7 +243,6 @@ namespace
                 fheroes2::SetPixel( buttonImage, 6, 11, lastColor );
                 fheroes2::DrawLine( buttonImage, { 15, 4 }, { 13, 6 }, firstColor );
                 fheroes2::SetPixel( buttonImage, 12, 7, lastColor );
-
                 // Longer right-side shine
                 fheroes2::SetPixel( buttonImage, buttonWidth - 10, 2, firstColor );
                 fheroes2::SetPixel( buttonImage, buttonWidth - 8, 3, secondColor );
