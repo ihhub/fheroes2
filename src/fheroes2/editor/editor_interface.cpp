@@ -1191,22 +1191,43 @@ namespace Interface
                 }
             }
             if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
-                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
+                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? (Any unsaved changes will be lost.)" ),
                                                         Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     return fheroes2::GameMode::MAIN_MENU;
                 }
             }
             if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
-                // The map either hasn't been saved to a file or there aren't any human-playable colors.
-                if ( !conf.getCurrentMapInfo().name.empty() && conf.getCurrentMapInfo().colorsAvailableForHumans > 0 ) {
-                    if ( fheroes2::showStandardTextMessage( _( "Play Map" ), _( "Do you wish to leave the editor and play the current map?" ), Dialog::YES | Dialog::NO )
+                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                if ( isNameEmpty ) {
+                    if ( fheroes2::showStandardTextMessage(
+                             _( "Unsaved Changes" ),
+                             _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                             Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        Get().saveMapToFile();
+                        isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                        if ( isNameEmpty ) {
+                            display.render( background.totalArea() );
+                            continue;
+                        }
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+                    fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
+                                                       _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
+                }
+                else {
+                    if ( fheroes2::
+                             showStandardTextMessage( _( "Play Map" ),
+                                                      _( "Do you wish to leave the Editor and play the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                      Dialog::YES | Dialog::NO )
                          == Dialog::YES ) {
                         return fheroes2::GameMode::NEW_STANDARD;
                     }
-                }
-                else {
-                    fheroes2::showStandardTextMessage( _( "Invalid Map" ), _( "This map is not valid. Try to save the latest changes." ), Dialog::OK );
                 }
             }
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
