@@ -426,12 +426,11 @@ namespace
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { buttonSize.width, buttonSize.height }, releasedOffset, pressedOffset,
-                                         backgroundIcnId );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { buttonSize.width, buttonSize.height }, releasedOffset, pressedOffset, backgroundIcnId );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonSize.width, buttonSize.height}, buttonFontColor );
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { buttonSize.width, buttonSize.height }, buttonFontColor );
     }
 
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
@@ -1988,7 +1987,7 @@ namespace
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::TRADPOST, 17 + i );
-                // Using this Copy function to convert pressed original from single layered.
+                // We use this Copy function to make the pressed state not single layered like the original.
                 Copy( original, out );
                 // Clean the button
                 Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );

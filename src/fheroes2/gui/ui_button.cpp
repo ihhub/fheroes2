@@ -120,7 +120,7 @@ namespace
 
             const int32_t middleWidth = originalWidth / 3;
 
-            // The new button doesn't fit the two end corners. Are you using the wrong empty button to generate the new one?
+            // The new button cannot even fit the two end corners. Are you using the wrong empty button to generate the new one?
             assert( buttonSize.width >= middleWidth * 2 );
 
             const int32_t rightSideWidth = buttonSize.width - middleWidth;
@@ -257,6 +257,7 @@ namespace
                 fheroes2::SetPixel( buttonImage, 11, buttonHeight - 6, lastColor );
                 fheroes2::DrawLine( buttonImage, { 12, buttonHeight - 7 }, { 13, buttonHeight - 8 }, firstColor );
                 fheroes2::SetPixel( buttonImage, 14, buttonHeight - 9, lastColor );
+                // This is mainly to decorate the space bar button
                 if ( buttonWidth > 96 || buttonHeight > 25 ) {
                     // Longer bottom left shine
                     fheroes2::SetPixel( buttonImage, 10, buttonHeight - 5, lastColor );
@@ -269,7 +270,6 @@ namespace
                     fheroes2::SetPixel( buttonImage, 34, buttonHeight - 5, secondColor );
                     fheroes2::SetPixel( buttonImage, 35, buttonHeight - 6, lastColor );
                 }
-
                 if ( buttonHeight > 25 ) {
                     // Bottom right-side shine
                     fheroes2::DrawLine( buttonImage, { buttonWidth - 20, buttonHeight - 5 }, { buttonWidth - 16, buttonHeight - 9 }, secondColor );
