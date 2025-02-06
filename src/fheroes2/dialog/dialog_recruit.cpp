@@ -314,10 +314,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
-    dst_pt.x = dialogOffset.x + 218;
+    buttonId = isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD;
+    const int32_t buttonMaxWidth = fheroes2::AGG ::GetICN( buttonId, 0 ).width();
+    dst_pt.x = dialogOffset.x + 253 - buttonMaxWidth / 2;
     dst_pt.y = dialogOffset.y + 140;
 
-    buttonId = isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MIN_EVIL : ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
