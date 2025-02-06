@@ -819,7 +819,7 @@ namespace fheroes2
         buttonSize.width = std::clamp( buttonSize.width, minimumButtonWidth, maximumButtonWidth );
 
         const int32_t minimumButtonHeight = 25;
-        const int32_t maximumButtonHeight = 200; // Why is such a wide button needed?
+        const int32_t maximumButtonHeight = 200; // Why is such a tall button needed?
         buttonSize.height = std::clamp( buttonSize.height, minimumButtonHeight, maximumButtonHeight );
 
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
