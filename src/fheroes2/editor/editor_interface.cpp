@@ -1149,8 +1149,8 @@ namespace Interface
                                  fheroes2::StandardWindow::Padding::CENTER_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-        background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height },
-                                       { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+        background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
+                                       isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
         background.renderButtonSprite( buttonPlayMap, gettext_noop( "PLAY\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
                                        { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::TOP_RIGHT );
 
