@@ -478,8 +478,8 @@ namespace Editor
                 }
                 else {
                     fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
-                                                   fheroes2::Text{ _( "These resources will be a part of the event." ), fheroes2::FontType::normalWhite() },
-                                                   Dialog::ZERO, eventMetadata.resources );
+                                                   fheroes2::Text{ _( "These resources will be a part of the event." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                                   eventMetadata.resources );
                 }
             }
             else if ( le.isMouseRightButtonPressedInArea( recurringEventArea ) ) {
