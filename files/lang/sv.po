@@ -896,7 +896,7 @@ msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
 
 msgid "The computer continues the combat for you."
-msgstr "Dator fortsätter striden åt dig."
+msgstr "Datorn fortsätter striden åt dig."
 
 msgid ""
 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
@@ -1228,7 +1228,7 @@ msgid ""
 "win."
 msgstr ""
 "Dina fiender har allierat sig emot dig och de börjar nära så var redo på "
-"strid. Du behöver kontrollera alla fyra borgar  i den lilla dalen för att "
+"strid. Du behöver kontrollera alla fyra borgar i den lilla dalen för att "
 "vinna."
 
 msgid ""
@@ -1343,7 +1343,7 @@ msgid ""
 msgstr ""
 "De skenheliga trollkarlarna har tagit Svartkonstnärernas borg i besittning. "
 "Du måste återerövra borgen för att uppnå seger. Kom ihåg att du startar med "
-"en stark armé, men du har inget borg och måste erövra ett inom 7 dagar, "
+"en stark armé, men du har ingen borg och måste erövra ett inom 7 dagar, "
 "annars förlorar du. (Tips: Det närmaste borgen finns i sydost.)"
 
 msgid ""
@@ -3558,7 +3558,7 @@ msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 
 msgid "Click to start placing the selected castle/town."
-msgstr "Klicka här för att placera det valda borgen/staden."
+msgstr "Klicka här för att placera den valda borgen/staden."
 
 msgid "Click to select town placing."
 msgstr "Klicka för att välja stadsplacering."
@@ -3918,7 +3918,7 @@ msgid "Enter Castle name"
 msgstr "Skriv Slottsnamn"
 
 msgid "Allow to build a castle in this town."
-msgstr "Tillåt att borg byggs i denna stad."
+msgstr "Tillåt att en borg byggs i denna stad."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
@@ -4401,7 +4401,7 @@ msgid "Redo"
 msgstr "Gör om"
 
 msgid "Redo the last undone action."
-msgstr "Gör om sista åtgärden."
+msgstr "Gör om senaste åtgärden."
 
 msgid "Edit map title, description, and other general information."
 msgstr "Redigera karttiteln, beskrivning och annan information."
