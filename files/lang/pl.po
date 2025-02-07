@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4227,6 +4227,9 @@ msgstr ""
 msgid "This artifact"
 msgstr "z jednym artefaktem."
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Droga"
@@ -6383,6 +6386,9 @@ msgid ""
 "skill"
 msgstr "Obrona"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8298,6 +8304,9 @@ msgid ""
 msgstr ""
 "Obecne doświadczenie %{exp1}.\n"
 " Następny poziom %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Poziom %{level}"

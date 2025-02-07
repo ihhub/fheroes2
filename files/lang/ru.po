@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4150,6 +4150,9 @@ msgstr "%{object}: нет свойств, которые можно было б�
 msgid "This artifact"
 msgstr "Этот артефакт"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Дороги"
 
@@ -6246,6 +6249,9 @@ msgstr ""
 "умол-\n"
 "чанию"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8140,6 +8146,9 @@ msgid ""
 msgstr ""
 "Текущий опыт %{exp1}.\n"
 "Следующий уровень %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Уровень %{level}"

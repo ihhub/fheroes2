@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4120,6 +4120,9 @@ msgstr "Nincs megváltoztatható tulajdonsága ennek: %{object}"
 msgid "This artifact"
 msgstr "Ez a varázstárgy"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Utak"
 
@@ -6208,6 +6211,9 @@ msgstr ""
 "Alapértelmezett\n"
 "képesség"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8097,6 +8103,9 @@ msgid ""
 msgstr ""
 "Jelenlegi tapasztalati pont: %{exp1}\n"
 " Következő szint: %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "%{level} szint"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4104,6 +4104,9 @@ msgstr "%{object} nemá žádné vlastnosti k úpravě."
 msgid "This artifact"
 msgstr "Tento artefakt"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Cesty"
 
@@ -6172,6 +6175,9 @@ msgstr ""
 "Výchozí\n"
 "dovednost"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8063,6 +8069,9 @@ msgid ""
 msgstr ""
 "Aktuální zkušenosti %{exp1}.\n"
 " Další úroveň %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Úroveň %{level}"

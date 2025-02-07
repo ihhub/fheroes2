@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4126,6 +4126,9 @@ msgstr "%{object} har inga ändringsbara egenskaper."
 msgid "This artifact"
 msgstr "Denna artefakten"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Vägar"
 
@@ -6207,6 +6210,9 @@ msgstr ""
 "Standard-\n"
 "förmåga"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8117,6 +8123,9 @@ msgid ""
 msgstr ""
 "Nuvarande erfarenhet: %{exp1}. \n"
 "Nästa nivå: %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Nivå %{level}"

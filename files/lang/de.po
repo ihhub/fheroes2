@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 22:18+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4266,6 +4266,9 @@ msgstr ""
 msgid "This artifact"
 msgstr "mit 1 Artefakt."
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Weg"
@@ -6475,6 +6478,9 @@ msgid ""
 "skill"
 msgstr "Verteidigung"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -8450,6 +8456,9 @@ msgid ""
 msgstr ""
 "Aktuelle Erfahrung %{exp1}.\n"
 " Nächste Stufe %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Stufe %{level}"
