@@ -1191,7 +1191,8 @@ namespace Interface
                 }
             }
             if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
-                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Do you wish to return to the game's Main Menu? (Any unsaved changes will be lost.)" ),
+                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ),
+                                                        _( "Do you wish to return to the game's Main Menu? (Any unsaved changes to the current map will be lost.)" ),
                                                         Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     return fheroes2::GameMode::MAIN_MENU;
