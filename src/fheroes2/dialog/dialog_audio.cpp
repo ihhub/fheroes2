@@ -52,9 +52,10 @@ namespace
         const Settings & conf = Settings::Get();
 
         // Music volume.
-        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 1 : 0 );
+        const bool isMusicOn = ( Audio::isValid() && conf.MusicVolume() > 0 );
+        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMusicOn ? 1 : 0 );
         std::string value;
-        if ( Audio::isValid() && conf.MusicVolume() ) {
+        if ( isMusicOn ) {
             value = std::to_string( conf.MusicVolume() );
         }
         else {
@@ -64,8 +65,9 @@ namespace
         fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Sound volume.
-        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
-        if ( Audio::isValid() && conf.SoundVolume() ) {
+        const bool isAudioOn = ( Audio::isValid() && conf.SoundVolume() > 0 );
+        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, isAudioOn ? 3 : 2 );
+        if ( isAudioOn ) {
             value = std::to_string( conf.SoundVolume() );
         }
         else {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 02:09+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -222,14 +222,14 @@ msgstr ""
 msgid "START"
 msgstr "РЕСТАРТ"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "ГРАДОВЕ/\n"
 "ЗАМЪЦИ"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3283,15 +3283,6 @@ msgstr "Събитие"
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
-msgid "Evil"
-msgstr "Зъл"
-
-msgid "Good"
-msgstr "Добър"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
 msgid "Hide"
 msgstr "Скрий"
 
@@ -3301,26 +3292,17 @@ msgstr "Покажи"
 msgid "Interface"
 msgstr "Интерфейс"
 
-msgid "Slow"
-msgstr "Бавно"
-
-msgid "Normal"
-msgstr "Нормлано"
-
-msgid "Fast"
-msgstr "Бързо"
-
-msgid "Very Fast"
-msgstr "Мн. бързo"
-
-msgid "Scroll Speed"
-msgstr "Скорост на Превъртане"
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
+
+msgid "Scroll Speed"
+msgstr "Скорост на Превъртане"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
@@ -3363,6 +3345,9 @@ msgstr ""
 "%{skill1}\n"
 "или\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "без"
@@ -4254,6 +4239,9 @@ msgstr ""
 msgid "This artifact"
 msgstr "с 1 артефакт."
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Пътища"
 
@@ -4964,6 +4952,9 @@ msgstr "и още..."
 
 msgid "Easy"
 msgstr "Лесно"
+
+msgid "Normal"
+msgstr "Нормлано"
 
 msgid "Hard"
 msgstr "Трудно"
@@ -6429,6 +6420,9 @@ msgid ""
 "skill"
 msgstr "Защита"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr ""
 
@@ -6519,6 +6513,21 @@ msgstr "Словашки"
 
 msgid "Vietnamese"
 msgstr "Виетнамски"
+
+msgid "Slow"
+msgstr "Бавно"
+
+msgid "Fast"
+msgstr "Бързо"
+
+msgid "Very Fast"
+msgstr "Мн. бързo"
+
+msgid "Evil"
+msgstr "Зъл"
+
+msgid "Good"
+msgstr "Добър"
 
 msgid ", FPS: "
 msgstr ""
@@ -8316,6 +8325,9 @@ msgid ""
 msgstr ""
 "Текущ опит %{exp1}.\n"
 "  Следващо ниво %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Ниво %{level}"

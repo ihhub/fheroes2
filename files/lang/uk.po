@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 02:09+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -225,11 +225,11 @@ msgstr "СКИНУТИ"
 msgid "START"
 msgstr "ПОЧАТИ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "МІСТО"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ОБМЕЖИТИ"
@@ -3227,15 +3227,6 @@ msgstr "Подія: "
 msgid "Hot Keys:"
 msgstr "Гарячі клавіші:"
 
-msgid "Evil"
-msgstr "Зло"
-
-msgid "Good"
-msgstr "Добро"
-
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
 msgid "Hide"
 msgstr "Сховати"
 
@@ -3245,26 +3236,17 @@ msgstr "Показати"
 msgid "Interface"
 msgstr "Інтерфейс"
 
-msgid "Slow"
-msgstr "Повільно"
-
-msgid "Normal"
-msgstr "Звичайна"
-
-msgid "Fast"
-msgstr "Швидко"
-
-msgid "Very Fast"
-msgstr "Дуже швидко"
-
-msgid "Scroll Speed"
-msgstr "Швидкість прокрутки"
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Перемкнути тип інтерфейсу, який хочете використовувати."
 
 msgid "Toggle interface visibility."
 msgstr "Перемкнути видимість інтерфейсу."
+
+msgid "Scroll Speed"
+msgstr "Швидкість прокрутки"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Встановлює швидкість прокручування вікна."
@@ -3307,6 +3289,9 @@ msgstr ""
 "%{skill1}\n"
 "або\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "н/д"
@@ -4150,6 +4135,9 @@ msgstr "%{object} не має властивостей, які можна змі
 msgid "This artifact"
 msgstr "Цей артефакт"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Дороги"
 
@@ -4789,6 +4777,9 @@ msgstr "і не тільки..."
 
 msgid "Easy"
 msgstr "Легко"
+
+msgid "Normal"
+msgstr "Звичайна"
 
 msgid "Hard"
 msgstr "Важко"
@@ -6243,6 +6234,9 @@ msgstr ""
 "Усталена\n"
 "навичка"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6331,6 +6325,21 @@ msgstr ""
 
 msgid "Vietnamese"
 msgstr ""
+
+msgid "Slow"
+msgstr "Повільно"
+
+msgid "Fast"
+msgstr "Швидко"
+
+msgid "Very Fast"
+msgstr "Дуже швидко"
+
+msgid "Evil"
+msgstr "Зло"
+
+msgid "Good"
+msgstr "Добро"
 
 msgid ", FPS: "
 msgstr ", кдр/с:"
@@ -8140,6 +8149,9 @@ msgid ""
 msgstr ""
 "Поточний досвід %{exp1}.\n"
 " Наступний рівень %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Рівень %{level}"

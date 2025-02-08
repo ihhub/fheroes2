@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 02:09+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -229,14 +229,14 @@ msgstr ""
 msgid "START"
 msgstr "REŠTART"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MESTÁ/\n"
 "HRADY"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -3269,15 +3269,6 @@ msgstr "Udalosť"
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
-msgid "Evil"
-msgstr "Zlo"
-
-msgid "Good"
-msgstr "Dobro"
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
 msgid "Hide"
 msgstr "Skry"
 
@@ -3287,26 +3278,17 @@ msgstr "Zobraz"
 msgid "Interface"
 msgstr "Rozhranie"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normálna"
-
-msgid "Fast"
-msgstr "Rýchla"
-
-msgid "Very Fast"
-msgstr "Veľmi rýchla"
-
-msgid "Scroll Speed"
-msgstr "Rýchlosť posunu"
+msgid "Interface Type"
+msgstr "Typ rozhrania"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
+
+msgid "Scroll Speed"
+msgstr "Rýchlosť posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
@@ -3344,6 +3326,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "nie je"
@@ -4231,6 +4216,9 @@ msgstr ""
 msgid "This artifact"
 msgstr "s jedným artefaktom."
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Cesta"
@@ -4927,6 +4915,9 @@ msgstr "a viac..."
 
 msgid "Easy"
 msgstr "Ľahká"
+
+msgid "Normal"
+msgstr "Normálna"
 
 msgid "Hard"
 msgstr "Ťažká"
@@ -6384,6 +6375,9 @@ msgid ""
 "skill"
 msgstr "Obrana"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6472,6 +6466,21 @@ msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr "Vietnamsky"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Fast"
+msgstr "Rýchla"
+
+msgid "Very Fast"
+msgstr "Veľmi rýchla"
+
+msgid "Evil"
+msgstr "Zlo"
+
+msgid "Good"
+msgstr "Dobro"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -8255,6 +8264,9 @@ msgid ""
 msgstr ""
 "Súčasné skúsenosti %{exp1}.\n"
 " Ďalšia úroveň %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Úroveň %{level}"

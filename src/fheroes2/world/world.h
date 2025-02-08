@@ -427,7 +427,7 @@ private:
 
     void Defaults();
     void Reset();
-    void MonthOfMonstersAction( const Monster & );
+    void MonthOfMonstersAction( const Monster & mons );
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 

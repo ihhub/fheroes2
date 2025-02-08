@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,9 +77,6 @@ namespace fheroes2
 
 namespace
 {
-    // In original Editor map name is limited to 17 characters. We keep this limit to fit the Select Scenario dialog.
-    const int32_t maxMapNameLength = 17;
-
     const int32_t descriptionBoxWidth = 292;
     const int32_t descriptionBoxHeight = 90;
 
@@ -1006,7 +1003,7 @@ namespace
                 }
 
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
+                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface, roi.width - 5 );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
@@ -1019,7 +1016,7 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
 
                     if ( _isVictoryConditionApplicableForAI ) {
                         _allowVictoryConditionForAI.show();
@@ -1097,7 +1094,7 @@ namespace
                     }
 
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
                 }
 
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
@@ -1169,9 +1166,9 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface, roi.width - 5 );
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface );
+                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface, roi.width - 5 );
                 }
 
                 _goldAccumulationValue.draw( output );
@@ -2063,7 +2060,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat )
+    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat, const int32_t maxMapNameLength )
     {
         // Verify victory and loss condition types.
         if ( std::find( supportedVictoryConditions.begin(), supportedVictoryConditions.end(), mapFormat.victoryConditionType ) == supportedVictoryConditions.end() ) {
@@ -2106,6 +2103,7 @@ namespace Editor
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
         fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+        text.fitToOneRow( mapNameRoi.width );
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
@@ -2266,6 +2264,7 @@ namespace Editor
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
             fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+            text.fitToOneRow( mapNameRoi.width );
             text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
         };
 
@@ -2430,7 +2429,13 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::MultiFontText message;
+                message.add( fheroes2::Text{ "\"", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage } );
+                message.add( fheroes2::Text{ "\"\n\n", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ _( "Click to change your map name." ), fheroes2::FontType::normalWhite() } );
+
+                fheroes2::showMessage( fheroes2::Text{ _( "Map Name" ), fheroes2::FontType::normalYellow() }, message, Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );
