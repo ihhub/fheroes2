@@ -64,6 +64,7 @@ void Interface::AdventureMap::reset()
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     Settings & conf = Settings::Get();
+    _isCurrentInterfaceEvil = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     if ( isHideInterface ) {

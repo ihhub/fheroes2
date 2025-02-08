@@ -71,7 +71,7 @@ namespace
         GAME_3D_AUDIO = 0x00010000,
         GAME_SYSTEM_INFO = 0x00020000,
         GAME_CURSOR_SOFT_EMULATION = 0x00040000,
-        GAME_EVIL_INTERFACE = 0x00080000,
+        UNUSED_GAME_EVIL_INTERFACE = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
         GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
@@ -237,12 +237,16 @@ bool Settings::Read( const std::string & filePath )
         setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
-    if ( config.Exists( "interface type" ) ) {
+    if ( config.Exists( "use evil interface" ) ) {
+        const bool isEvil = config.StrParams( "use evil interface" ) == "on";
+        setInterfaceType( isEvil ? InterfaceType::EVIL : InterfaceType::GOOD );
+    }
+    else if ( config.Exists( "interface type" ) ) {
         const std::string interfaceType = config.StrParams( "interface type" );
-        if ( interfaceType == "Good" ) {
+        if ( interfaceType == "good" ) {
             setInterfaceType( InterfaceType::GOOD );
         }
-        else if ( interfaceType == "Evil" ) {
+        else if ( interfaceType == "evil" ) {
             setInterfaceType( InterfaceType::EVIL );
         }
         else {
@@ -443,16 +447,16 @@ std::string Settings::String() const
     os << std::endl << "# show turn order during battle: on/off" << std::endl;
     os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# interface type (Good/Evil/Dynamic)" << std::endl;
+    os << std::endl << "# interface type (good/evil/dynamic)" << std::endl;
     switch ( _interfaceType ) {
     case GOOD:
-        os << "interface type = Good" << std::endl;
+        os << "interface type = good" << std::endl;
         break;
     case EVIL:
-        os << "interface type = Evil" << std::endl;
+        os << "interface type = evil" << std::endl;
         break;
     case DYNAMIC:
-        os << "interface type = Dynamic" << std::endl;
+        os << "interface type = dynamic" << std::endl;
         break;
     default:
         assert( 0 );
@@ -898,13 +902,7 @@ bool Settings::isHideInterfaceEnabled() const
 
 void Settings::setInterfaceType( InterfaceType type )
 {
-    assert( type >= InterfaceType::GOOD && type <= InterfaceType::DYNAMIC );
     _interfaceType = type;
-}
-
-InterfaceType Settings::getInterfaceType() const
-{
-    return _interfaceType;
 }
 
 bool Settings::isEvilInterfaceEnabled() const
@@ -915,9 +913,10 @@ bool Settings::isEvilInterfaceEnabled() const
     case InterfaceType::EVIL:
         return true;
     case InterfaceType::DYNAMIC: {
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( !player )
+        const Player * player = GetPlayers().GetCurrent();
+        if ( !player ) {
             return false;
+        }
 
         if ( player->isControlHuman() ) {
             return Race::isEvilRace( player->GetRace() );

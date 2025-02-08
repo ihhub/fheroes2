@@ -175,5 +175,6 @@ namespace Interface
         StatusPanel _statusPanel;
 
         bool _lockRedraw;
+        bool _isCurrentInterfaceEvil;
     };
 }

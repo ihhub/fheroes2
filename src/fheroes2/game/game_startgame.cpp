@@ -699,6 +699,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+    if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+    }
+
     reset();
 
     _radar.Build();
@@ -720,7 +726,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
-
     if ( !isLoadedFromSave || world.CountDay() == 1 ) {
         // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
@@ -728,19 +733,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
     }
 
-    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
-        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
-        conf.SetCurrentColor( Players::HumanColors() );
-
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
-
-        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
-            reset();
-            redraw( Interface::REDRAW_RADAR );
-            redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
-        }
     }
 
     while ( res == fheroes2::GameMode::END_TURN ) {
@@ -793,7 +788,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     if ( isHotSeatGame ) {
-                        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
                             reset();
                             redraw( Interface::REDRAW_RADAR );
                             redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
