@@ -716,10 +716,10 @@ namespace fheroes2
                  std::move( disabledWithBackground ) };
     }
 
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, fheroes2::Size buttonSize, Point & releasedOffset, Point & pressedOffset,
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, Size buttonSize, Point & releasedOffset, Point & pressedOffset,
                                 const bool isTransparentBackground /* = false */ )
     {
-        assert( buttonSize.width > 0 );
+        assert( buttonSize.width > 0 && buttonSize.height > 0 );
 
         releasedOffset = { 7, 5 };
         pressedOffset = { 6, 6 };
@@ -727,16 +727,21 @@ namespace fheroes2
         // The actual button sprite is 10 pixels wider.
         buttonSize.width += 10;
 
+        const int32_t minimumButtonWidth = 16;
+        const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
+        buttonSize.width = std::clamp( buttonSize.width, minimumButtonWidth, maximumButtonWidth );
+
+        const int32_t minimumButtonHeight = 25;
+        const int32_t maximumButtonHeight = 200; // Why is such a tall button needed?
+        buttonSize.height = std::clamp( buttonSize.height, minimumButtonHeight, maximumButtonHeight );
+
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
-        const int32_t minimumButtonSize = 16;
-        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
-        buttonSize.width = std::clamp( buttonSize.width, minimumButtonSize, maximumButtonSize );
 
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        released = resizeButton( originalReleased, { buttonSize.width, buttonSize.height } );
-        pressed = resizeButton( originalPressed, { buttonSize.width, buttonSize.height } );
+        released = resizeButton( originalReleased, buttonSize );
+        pressed = resizeButton( originalPressed, buttonSize );
 
         addButtonShine( released, icnId );
 
@@ -809,7 +814,7 @@ namespace fheroes2
         pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( textAreaHeight - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const fheroes2::Size buttonSize, const bool isEvilInterface,
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface,
                             const bool isTransparentBackground )
     {
         fheroes2::Point releasedOffset;
