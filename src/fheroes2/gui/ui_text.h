@@ -268,10 +268,8 @@ namespace fheroes2
 
     class TextInput final : public Text
     {
-        using Text::Text;
-
     public:
-        TextInput() = default;
+        using Text::Text;
 
         void setCursorPosition( const size_t position )
         {
