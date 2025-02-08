@@ -312,7 +312,7 @@ namespace Editor
 
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
-        background.renderButtonSprite( buttonVirtualKB, "...", 48, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        background.renderButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 

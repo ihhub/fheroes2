@@ -475,7 +475,7 @@ namespace
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, { textWidth, 25 }, releasedOffset, pressedOffset );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 

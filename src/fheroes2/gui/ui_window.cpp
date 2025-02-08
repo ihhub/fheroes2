@@ -343,13 +343,13 @@ namespace fheroes2
         }
     }
 
-    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const int32_t buttonWidth, const Point & offset,
+    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
                                              const bool isEvilInterface, const Padding padding )
     {
         Sprite released;
         Sprite pressed;
 
-        makeButtonSprites( released, pressed, buttonText, buttonWidth, isEvilInterface, false );
+        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, false );
 
         const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
 

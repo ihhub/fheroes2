@@ -284,7 +284,7 @@ namespace
         {
             fheroes2::Sprite released;
             fheroes2::Sprite pressed;
-            makeButtonSprites( released, pressed, text, buttonWidth, isEvilInterface, false );
+            makeButtonSprites( released, pressed, text, { buttonWidth, 25 }, isEvilInterface, false );
             button.setSprite( released, pressed );
 
             // Make Image with shadow for button to Blit it during render.
