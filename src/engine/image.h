@@ -188,11 +188,6 @@ namespace fheroes2
             _isRestored = true;
         }
 
-        Rect area() const
-        {
-            return { _x, _y, _width, _height };
-        }
-
     private:
         Image & _image;
         Image _copy;

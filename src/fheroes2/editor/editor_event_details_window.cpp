@@ -419,7 +419,7 @@ namespace Editor
 
                 display.render( secondarySkillRoi );
             }
-            else if ( le.MouseClickLeft( experienceRoiRestorer.area() ) ) {
+            else if ( le.MouseClickLeft( experienceRoiRestorer.rect() ) ) {
                 const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                 int32_t tempValue{ eventMetadata.experience };
 
@@ -469,7 +469,7 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.rect() ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
