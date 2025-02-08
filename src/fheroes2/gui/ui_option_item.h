@@ -40,7 +40,7 @@ namespace fheroes2
 
     void drawScrollSpeed( const fheroes2::Rect & optionRoi, const int speed );
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType isEvilInterface );
+    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType );
 
     void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor );
 }

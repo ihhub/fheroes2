@@ -349,7 +349,15 @@ namespace Editor
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                    conf.setInterfaceType( InterfaceType::GOOD );
+                }
+                else if ( conf.getInterfaceType() == InterfaceType::GOOD ) {
+                    conf.setInterfaceType( InterfaceType::EVIL );
+                }
+                else {
+                    conf.setInterfaceType( InterfaceType::DYNAMIC );
+                }
                 rebuildEditor();
                 saveConfiguration = true;
 
