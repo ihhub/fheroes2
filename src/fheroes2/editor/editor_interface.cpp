@@ -54,7 +54,6 @@
 #include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "interface_border.h"
 #include "interface_gamearea.h"
