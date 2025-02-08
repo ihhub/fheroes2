@@ -314,7 +314,7 @@ namespace fheroes2
             elementHeight += rowHeight.back();
         }
 
-        return overallTextHeight + elementHeight + ( ( buttons != 0 ) ? Dialog::FrameBox::getButtonAreaHeight() : 0 );
+        return overallTextHeight + elementHeight + ( ( buttons != 0 ) ? Dialog::FrameBox::getButtonAreaHeight() : 0 ) + fheroes2::borderWidthPx * 4;
     }
 
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )

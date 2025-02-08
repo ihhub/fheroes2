@@ -108,7 +108,7 @@ namespace Editor
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
-        text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+        text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
 
         offsetY = startOffsetY;
         const int32_t secondColumnOffsetX = dialogRoi.x + sectionWidth + 2 * elementOffset;
@@ -351,7 +351,7 @@ namespace Editor
 
                     messageRoiRestorer.restore();
                     text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
-                    text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+                    text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
                     isRedrawNeeded = true;
                 }
             }
@@ -419,7 +419,7 @@ namespace Editor
 
                 display.render( secondarySkillRoi );
             }
-            else if ( le.MouseClickLeft( experienceRoi ) ) {
+            else if ( le.MouseClickLeft( experienceRoiRestorer.area() ) ) {
                 const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                 int32_t tempValue{ eventMetadata.experience };
 
@@ -469,7 +469,7 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( experienceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.area() ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {

@@ -2854,7 +2854,7 @@ namespace
 
         int32_t dialogHeight = fheroes2::getDialogHeight( emptyText, body, Dialog::OK, elementUI );
         const int32_t displayHeight = fheroes2::Display::instance().height();
-        if ( dialogHeight > displayHeight && elementUI.size() > 1 ) {
+        if ( dialogHeight > displayHeight && elementUI.size() > 0 ) {
             // We have to split the message into 2 as it is too big.
             std::vector<const fheroes2::DialogElement *> secondDialogUIElement;
             while ( dialogHeight > displayHeight && !elementUI.empty() ) {
@@ -2864,7 +2864,7 @@ namespace
             }
 
             fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );
-            fheroes2::showMessage( emptyText, body, Dialog::OK, secondDialogUIElement );
+            fheroes2::showMessage( emptyText, emptyText, Dialog::OK, secondDialogUIElement );
         }
         else {
             fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );

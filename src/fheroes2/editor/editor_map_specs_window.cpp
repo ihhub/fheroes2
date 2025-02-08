@@ -1756,7 +1756,7 @@ namespace
                 break;
             }
             case Maps::FileInfo::LOSS_OUT_OF_TIME: {
-                const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
+                const fheroes2::Rect roi = _restorer.area();
                 const fheroes2::Point uiOffset{ roi.x + ( roi.width - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, roi.y };
 
                 _outOfTimeValue.setOffset( uiOffset );
