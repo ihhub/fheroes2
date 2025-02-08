@@ -484,8 +484,6 @@ namespace fheroes2
 
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
-        constexpr size_t curosorToBorderDistance = 4;
-
         assert( maxWidth > 0 );
         if ( maxWidth <= 0 || _text.empty() ) {
             return;
@@ -499,8 +497,10 @@ namespace fheroes2
             return;
         }
 
-        // If the cursor is to the left of the textBox
-        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - curosorToBorderDistance ) ), 0 );
+        constexpr size_t cursorToBorderDistance = 4;
+
+        // If the cursor is to the left of the TextBox.
+        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - cursorToBorderDistance ) ), 0 );
 
         // If some characters were deleted and we have space for new characters.
         while ( _textOffset > 0 ) {
@@ -509,14 +509,13 @@ namespace fheroes2
             if ( lineWidth > maxWidth ) {
                 break;
             }
-
             --_textOffset;
         }
 
-        // If the cursor is to the right of the Textbox
+        // If the cursor is to the right of the Textbox.
         int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
                                                           static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
-        while ( _textOffset + maxCharacterCount <= _cursorPosition + curosorToBorderDistance && _textOffset + maxCharacterCount < _text.size() ) {
+        while ( ( _textOffset + maxCharacterCount <= _cursorPosition + cursorToBorderDistance ) && ( _textOffset + maxCharacterCount < _text.size() ) ) {
             ++_textOffset;
             maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
                                                       charHandler, maxWidth );
@@ -531,25 +530,25 @@ namespace fheroes2
 
         // Insert truncation symbol at the beginning if required.
         if ( _textOffset != 0 ) {
-            const int32_t nbCharactersToReplace
+            const int32_t charCountToReplace
                 = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, truncationSymbolWidth );
-            _text.erase( 0, nbCharactersToReplace );
+            _text.erase( 0, charCountToReplace );
             _text.insert( 0, truncatedEnding );
         }
 
-        // Insert truncation symbol at the end if required
+        // Insert truncation symbol at the end if required.
         if ( _text.size() + _textOffset < originalTextSize ) {
             int totalWidth = 0;
-            int nbChars = 0;
+            int charCount = 0;
             for ( auto iter = _text.rbegin(); iter < _text.rend(); ++iter ) {
                 if ( totalWidth < truncationSymbolWidth ) {
                     const int32_t charWidth = charHandler.getWidth( *iter );
                     totalWidth += charWidth;
-                    ++nbChars;
+                    ++charCount;
                 }
             }
 
-            _text.erase( _text.size() - nbChars, nbChars );
+            _text.erase( _text.size() - charCount, charCount );
             _text.insert( _text.size(), truncatedEnding );
         }
     }
