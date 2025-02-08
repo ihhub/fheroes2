@@ -1178,18 +1178,21 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             if ( useOriginalResources() && id != ICN::BTNBATTLEONLY ) {
-                int buttonIcnID = ICN::BTNNEWGM;
-                fheroes2::Point icnIndex( 0, 1 );
+                int buttonIcnID = ICN::UNKNOWN;
+                std::pair<int, int> icnIndex;
                 switch ( id ) {
                 case ICN::BUTTON_CAMPAIGN_GAME: {
+                    buttonIcnID = ICN::BTNNEWGM;
                     icnIndex = { 2, 3 };
                     break;
                 }
                 case ICN::BUTTON_MULTIPLAYER_GAME: {
+                    buttonIcnID = ICN::BTNNEWGM;
                     icnIndex = { 4, 5 };
                     break;
                 }
                 case ICN::BUTTON_LARGE_CANCEL: {
+                    buttonIcnID = ICN::BTNNEWGM;
                     icnIndex = { 6, 7 };
                     break;
                 }
@@ -1210,10 +1213,12 @@ namespace
                 }
                 case ICN::BUTTON_HOT_SEAT: {
                     buttonIcnID = ICN::BTNMP;
+                    icnIndex = { 0, 1 };
                     break;
                 }
                 case ICN::BUTTON_2_PLAYERS: {
                     buttonIcnID = ICN::BTNHOTST;
+                    icnIndex = { 0, 1 };
                     break;
                 }
                 case ICN::BUTTON_3_PLAYERS: {
@@ -1237,15 +1242,18 @@ namespace
                     break;
                 }
                 default:
+                    // All other buttons share the same settings.
+                    buttonIcnID = ICN::BTNNEWGM;
+                    icnIndex = { 0, 1 };
                     break;
                 }
 
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.x );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.y );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
                 if ( id == ICN::BUTTON_CAMPAIGN_GAME ) {
                     // Fix the disabled state.
-                    const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.x );
-                    const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.y );
+                    const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
+                    const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
                     fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
                     common = fheroes2::FilterOnePixelNoise( common );
                     common = fheroes2::FilterOnePixelNoise( common );
