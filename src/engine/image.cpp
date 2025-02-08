@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1291,8 +1291,29 @@ namespace fheroes2
 
     void Copy( const Image & in, Image & out )
     {
-        out.resize( in.width(), in.height() );
-        Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
+        if ( !out.singleLayer() && !in.singleLayer() ) {
+            // Both images have transform layer. Copy using the assignment operator.
+            out = in;
+            return;
+        }
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        out.resize( width, height );
+
+        // We do a full copy of an image.
+        const size_t size = static_cast<size_t>( width ) * height;
+        if ( out.singleLayer() ) {
+            // Copy only image layer. Input image can be single- or double-layer.
+            memcpy( out.image(), in.image(), size );
+        }
+        else {
+            assert( in.singleLayer() );
+            // Copy image layer and set transform to non-transparent mode.
+            memcpy( out.image(), in.image(), size );
+            memset( out.transform(), static_cast<uint8_t>( 0 ), size );
+        }
     }
 
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
@@ -1308,6 +1329,12 @@ namespace fheroes2
 
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
+
+        if ( inX == 0 && inY == 0 && outX == 0 && outY == 0 && width == widthIn && width == widthOut && height == in.height() && height == out.height() ) {
+            // Both images have identical width and height and a full copy is requested.
+            Copy( in, out );
+            return;
+        }
 
         const int32_t offsetInY = inY * widthIn + inX;
         const uint8_t * imageInY = in.image() + offsetInY;

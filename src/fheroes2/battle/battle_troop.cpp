@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -516,8 +516,15 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
 
     const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
 
-    // The retaliatory damage of a blinded unit is halved
-    return ( Modes( SP_BLIND ) ? retaliatoryDamage / 2 : retaliatoryDamage );
+    if ( !Modes( SP_BLIND ) ) {
+        return retaliatoryDamage;
+    }
+
+    // The retaliatory damage of a blinded unit is reduced
+    const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+    assert( reductionPercent <= 100 );
+
+    return retaliatoryDamage * ( 100 - reductionPercent ) / 100;
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
@@ -560,12 +567,15 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         }
     }
 
-    // The retaliatory damage of a blinded unit is halved
+    // The retaliatory damage of a blinded unit is reduced
     if ( _blindRetaliation ) {
         // Petrified units cannot attack, respectively, there should be no retaliation
         assert( !enemy.Modes( SP_STONE ) );
 
-        dmg /= 2;
+        const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+        assert( reductionPercent <= 100 );
+
+        dmg = dmg * ( 100 - reductionPercent ) / 100;
     }
 
     // A petrified unit takes only half of the damage

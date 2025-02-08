@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,10 +36,10 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 #include "ui_text.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -54,7 +54,7 @@ namespace
     };
 
     const fheroes2::Size offsetBetweenOptions{ 118, 110 };
-    const fheroes2::Point optionOffset{ 69, 47 };
+    const fheroes2::Point optionOffset{ 53, 31 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -109,6 +109,7 @@ namespace
         const bool isSystemInfoDisplayed = Settings::Get().isSystemInfoEnabled();
 
         fheroes2::Sprite image = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, 65, 65 );
+        image.setPosition( 0, 0 );
         fheroes2::Text info;
         if ( isSystemInfoDisplayed ) {
             info.set( _( "FPS" ), fheroes2::FontType( fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW ) );
@@ -125,21 +126,16 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        fheroes2::StandardWindow background( 289, 272, true, display );
+
+        const fheroes2::Rect windowRoi = background.activeArea();
+
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
-
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
-                                                dialog.height() + fheroes2::borderWidthPx );
-
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
-        fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
@@ -157,12 +153,7 @@ namespace
 
         drawOptions();
 
-        const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
-        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-
-        buttonOk.draw();
-
-        display.render();
+        display.render( background.totalArea() );
 
         bool isFullScreen = fheroes2::engine().isFullScreen();
 

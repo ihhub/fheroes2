@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,9 +80,6 @@ msgstr "НАЗАД"
 
 msgid "OKAY"
 msgstr "ДОБРА"
-
-msgid "smallerButton|OKAY"
-msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -219,10 +216,10 @@ msgstr ""
 msgid "START"
 msgstr "НАНОВА"
 
-msgid "CASTLE"
+msgid "TOWN"
 msgstr ""
 
-msgid "TOWN"
+msgid "CASTLE"
 msgstr ""
 
 #, fuzzy
@@ -284,6 +281,16 @@ msgid "EVENTS"
 msgstr ""
 
 msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -441,10 +448,12 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} выключыў аўта-бой"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} уключыў аўта-бой"
 
 msgid "Spell failed!"
@@ -765,14 +774,18 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Enable auto combat"
-msgstr "Уключыць аўта-бой"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr ""
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Аўта-бой"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Аўта-бой"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr ""
@@ -819,11 +832,34 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 
 #, fuzzy
-msgid "Are you sure you want to enable auto combat?"
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
+
+msgid "The computer continues the combat for you."
 msgstr ""
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Аўта-бой"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Аўта-бой"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -954,7 +990,7 @@ msgid "The mirror image is destroyed!"
 msgstr ""
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
 msgid "Error"
@@ -3013,15 +3049,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
 msgid "Hide"
 msgstr ""
 
@@ -3031,27 +3058,16 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Slow"
-msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Звычайная"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Шпаркая"
-
-msgid "Scroll Speed"
+msgid "Interface Type"
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Scroll Speed"
 msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
@@ -3087,6 +3103,9 @@ msgid ""
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
+msgstr ""
+
+msgid "Learn %{secondary-skill}"
 msgstr ""
 
 msgid "n/a"
@@ -3187,7 +3206,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -3606,7 +3625,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3940,6 +3959,9 @@ msgstr ""
 msgid "This artifact"
 msgstr ""
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
@@ -4204,6 +4226,12 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4454,6 +4482,9 @@ msgstr ""
 "Складанасць мапы вызначаецца ейным аўтарам. Болей складаныя мапы могуць "
 "утрымліваць больш ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
 
+msgid "editor|%{count} %{resource}"
+msgstr ""
+
 #, fuzzy
 msgid "Animation"
 msgstr "Анексія"
@@ -4579,6 +4610,10 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Звычайная"
 
 msgid "Hard"
 msgstr "Цяжкая"
@@ -4860,6 +4895,9 @@ msgstr ""
 msgid "hotkey|toggle text support mode"
 msgstr ""
 
+msgid "hotkey|toggle developer mode"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5112,10 +5150,11 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
+msgstr "Звычайная гульня"
 
-msgid "hotkey|finish the battle in auto mode"
+msgid "hotkey|quick combat"
 msgstr ""
 
 #, fuzzy
@@ -5934,6 +5973,9 @@ msgid ""
 "skill"
 msgstr "Абарона"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr ""
 
@@ -6023,6 +6065,22 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Праглядзець %{name}"
+
+msgid "Slow"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Шпаркая"
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -7415,6 +7473,9 @@ msgstr ""
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
+msgstr ""
+
+msgid "million|M"
 msgstr ""
 
 msgid "Level %{level}"
@@ -10406,10 +10467,12 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
-msgid "spell|Blind"
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 
 msgid "Bless"
@@ -10897,6 +10960,9 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Уключыць аўта-бой"
 
 #, fuzzy
 #~ msgid ""

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -94,6 +94,10 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
+    // In original Editor map name is limited to 17 characters.
+    // However, we have no such limitation but to be reasonable we still have a limit.
+    const int32_t maxMapNameLength = 50;
+
     class HideInterfaceModeDisabler
     {
     public:
@@ -119,6 +123,31 @@ namespace
     private:
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
+
+    size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
+    {
+        const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+        std::set<size_t> obeliskIndex;
+        for ( size_t i = 0; i < miscellaneousObjects.size(); ++i ) {
+            if ( miscellaneousObjects[i].objectType == MP2::OBJ_OBELISK ) {
+                obeliskIndex.emplace( i );
+            }
+        }
+
+        size_t obeliskCount = 0;
+        for ( const auto & mapTile : _mapFormat.tiles ) {
+            for ( const auto & object : mapTile.objects ) {
+                if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && obeliskIndex.count( object.index ) > 0 ) {
+                    assert( object.index < miscellaneousObjects.size() );
+
+                    ++obeliskCount;
+                }
+            }
+        }
+
+        return obeliskCount;
+    }
 
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
@@ -687,8 +716,6 @@ namespace Interface
 
     void EditorInterface::redraw( const uint32_t force )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
@@ -696,6 +723,8 @@ namespace Interface
             if ( combinedRedraw & REDRAW_PASSABILITIES ) {
                 renderFlags |= LEVEL_PASSABILITIES;
             }
+
+            fheroes2::Display & display = fheroes2::Display::instance();
 
             // Render all except the fog.
             _gameArea.Redraw( display, renderFlags );
@@ -707,7 +736,9 @@ namespace Interface
                 // Keep 4 pixels from each edge.
                 text.fitToOneRow( roi.width - 8 );
 
-                text.draw( roi.x + 4, roi.y + roi.height - text.height() - 4, display );
+                const bool isSystemInfoShown = Settings::Get().isSystemInfoEnabled();
+
+                text.draw( roi.x + 4, roi.y + roi.height - text.height() - ( isSystemInfoShown ? 14 : 4 ), display );
             }
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
@@ -1395,6 +1426,9 @@ namespace Interface
 
                         action.commit();
                     }
+                    else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
+                        fheroes2::ArtifactDialogElement( static_cast<int>( objectInfo.metadata[0] ) ).showPopup( Dialog::OK );
+                    }
                     else {
                         std::string msg = _( "%{object} has no properties to change." );
                         StringReplace( msg, "%{object}", _( "This artifact" ) );
@@ -1472,6 +1506,12 @@ namespace Interface
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
+                }
+                else if ( objectType == MP2::OBJ_OBELISK ) {
+                    std::string str = _( "The total number of obelisks is %{count}." );
+                    StringReplace( str, "%{count}", getObeliskCount( _mapFormat ) );
+
+                    fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
@@ -1796,26 +1836,7 @@ namespace Interface
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( objectInfo.objectType == MP2::OBJ_OBELISK ) {
-                const auto & objects = Maps::getObjectsByGroup( groupType );
-
-                std::set<size_t> obeliskIndex;
-                for ( size_t i = 0; i < objects.size(); ++i ) {
-                    if ( objects[i].objectType == MP2::OBJ_OBELISK ) {
-                        obeliskIndex.emplace( i );
-                    }
-                }
-
-                size_t obeliskCount = 0;
-                for ( const auto & mapTile : _mapFormat.tiles ) {
-                    for ( const auto & object : mapTile.objects ) {
-                        if ( object.group == groupType && obeliskIndex.count( object.index ) > 0 ) {
-                            assert( object.index < objects.size() );
-
-                            ++obeliskCount;
-                        }
-                    }
-                }
-
+                const size_t obeliskCount = getObeliskCount( _mapFormat );
                 if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
@@ -1843,7 +1864,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.getTile( tileIndex ) );
+        Editor::showPopupWindow( world.getTile( tileIndex ), _mapFormat );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
@@ -1951,7 +1972,7 @@ namespace Interface
         std::string fullPath;
 
         while ( true ) {
-            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage ) ) {
+            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage, maxMapNameLength ) ) {
                 return;
             }
 
@@ -1988,7 +2009,7 @@ namespace Interface
     {
         Maps::Map_Format::MapFormat mapBackup = _mapFormat;
 
-        if ( Editor::mapSpecificationsDialog( _mapFormat ) ) {
+        if ( Editor::mapSpecificationsDialog( _mapFormat, maxMapNameLength ) ) {
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
             action.commit();
         }

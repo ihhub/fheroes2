@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-12-21 18:15+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "smallerButton|OKAY"
 msgstr "OKEJ"
 
 msgid "ACCEPT"
@@ -221,11 +218,11 @@ msgstr "ÅTERS."
 msgid "START"
 msgstr "STARTA"
 
-msgid "CASTLE"
-msgstr "SLOTT"
-
 msgid "TOWN"
 msgstr "STAD"
+
+msgid "CASTLE"
+msgstr "SLOTT"
 
 msgid "RESTRICT"
 msgstr "BEGRÄNSA"
@@ -320,6 +317,16 @@ msgstr "HÄNDELSER"
 
 msgid "LANGUAGE"
 msgstr "SPRÅK"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -474,10 +481,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
 msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} har stängt av automatisk strid"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} har aktiverat automatisk strid"
 
 msgid "Spell failed!"
@@ -819,14 +828,18 @@ msgstr "Visa Ballistinformation"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Aktivera autom. strid"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillåter datorn att fortsätta striden åt dig."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Autom. Strid"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Autom. Strid"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
@@ -874,11 +887,36 @@ msgstr "Textfält"
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Är du säker på att du vill aktivera automatisk strid?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Tillåter datorn att fortsätta striden åt dig."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Autom. Strid"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Autom. Strid"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -993,7 +1031,8 @@ msgstr "Spegelbild skapas."
 msgid "The mirror image is destroyed!"
 msgstr "Spegelbilden förstörs!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Är du säker på att du vill avbryta den automatiska striden?"
 
 msgid "Error"
@@ -3173,15 +3212,6 @@ msgstr "Händelse: "
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
-
 msgid "Hide"
 msgstr "Dölj"
 
@@ -3191,28 +3221,19 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Slow"
-msgstr "Långsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Snabb"
-
-msgid "Very Fast"
-msgstr "Mkt. snabb"
-
-msgid "Scroll Speed"
-msgstr ""
-"Skroll-\n"
-"hastighet"
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
+
+msgid "Scroll Speed"
+msgstr ""
+"Skroll-\n"
+"hastighet"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
@@ -3254,6 +3275,9 @@ msgstr ""
 "%{skill1}\n"
 "eller\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "Inga"
@@ -3356,8 +3380,8 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -3765,7 +3789,8 @@ msgstr ""
 msgid "Battles"
 msgstr "Strider"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4101,6 +4126,9 @@ msgstr "%{object} har inga ändringsbara egenskaper."
 msgid "This artifact"
 msgstr "Denna artefakten"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Vägar"
 
@@ -4371,6 +4399,13 @@ msgstr "Ångra"
 msgid "Undo your last action."
 msgstr "Ångra din sista åtgärd."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Ångra din sista åtgärd."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Redigera karttiteln, beskrivning och annan information."
 
@@ -4597,6 +4632,10 @@ msgstr ""
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Välj antal %{resource}:"
+
 msgid "Animation"
 msgstr "Animering"
 
@@ -4724,6 +4763,9 @@ msgstr "och mer..."
 
 msgid "Easy"
 msgstr "Lätt"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svår"
@@ -5023,6 +5065,10 @@ msgstr "Visa fullskärm"
 msgid "hotkey|toggle text support mode"
 msgstr "Aktivera textstöd"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Aktivera textstöd"
+
 msgid "hotkey|new game"
 msgstr "Nytt spel"
 
@@ -5257,11 +5303,13 @@ msgstr "Retirera från strid"
 msgid "hotkey|surrender during battle"
 msgstr "Kapitulera under strid"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Aktivera Automatisk Strid"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Låt datorn fortsätta striden"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Avsluta"
 
 msgid "hotkey|battle options"
 msgstr "Stridsalternativ"
@@ -6162,6 +6210,9 @@ msgstr ""
 "Standard-\n"
 "förmåga"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6253,6 +6304,21 @@ msgstr "Slovakiska"
 
 msgid "Vietnamese"
 msgstr "Vietnamesiska"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Very Fast"
+msgstr "Mkt. snabb"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -8057,6 +8123,9 @@ msgid ""
 msgstr ""
 "Nuvarande erfarenhet: %{exp1}. \n"
 "Nästa nivå: %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Nivå %{level}"
@@ -11412,11 +11481,14 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Saktar ned alla fiendevarelser till hälften."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Grumlar varelsens ögon som förhindrar den från att röra sig."
-
 msgid "spell|Blind"
 msgstr "Förblinda"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Grumlar varelsens ögon som förhindrar den från att röra sig."
 
 msgid "Bless"
 msgstr "Välsignelse"
@@ -11953,6 +12025,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Aktivera autom. strid"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Låt datorn fortsätta striden"
 
 #~ msgid "Please Remember"
 #~ msgstr "Kom ihåg"

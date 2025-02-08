@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,6 +172,29 @@ namespace
         }
 
         return output;
+    }
+
+    void addButtonShine( fheroes2::Sprite & buttonImage, const int emptyButtonIcnID )
+    {
+        const bool isGoodButton = ( emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON );
+        if ( isGoodButton || emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON ) {
+            const uint8_t firstColor = 10;
+            const uint8_t secondColor = isGoodButton ? 38 : 15;
+            const uint8_t lastColor = isGoodButton ? 39 : 16;
+            // Left-side shine
+            fheroes2::SetPixel( buttonImage, 11, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, 13, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, 9, 6, firstColor );
+            fheroes2::SetPixel( buttonImage, 10, 5, secondColor );
+            fheroes2::SetPixel( buttonImage, 12, 5, secondColor );
+            fheroes2::SetPixel( buttonImage, 8, 7, lastColor );
+            fheroes2::SetPixel( buttonImage, 15, 4, lastColor );
+            // Right-side shine
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 9, 4, firstColor );
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 7, 4, firstColor );
+            fheroes2::DrawLine( buttonImage, { buttonImage.width() - 10, 5 }, { buttonImage.width() - 11, 6 }, secondColor );
+            fheroes2::SetPixel( buttonImage, buttonImage.width() - 8, 5, secondColor );
+        }
     }
 
     void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, fheroes2::Point & textAreaBorders, fheroes2::Size & minimumTextArea,
@@ -425,37 +448,58 @@ namespace fheroes2
         Point offset;
 
         switch ( buttonTypes ) {
-        case Dialog::YES | Dialog::NO:
-            offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+        case Dialog::YES | Dialog::NO: {
+            const Sprite & yesButtonSprite = AGG::GetICN( buttonYesIcnID, 0 );
+            const Sprite & noButtonSprite = AGG::GetICN( buttonNoIcnID, 0 );
+
+            const int32_t horizontalFreeSpace = area.width - yesButtonSprite.width() - noButtonSprite.width();
+            const int32_t padding = horizontalFreeSpace / 4;
+            assert( horizontalFreeSpace > 0 );
+
+            offset.x = area.x + padding;
+            offset.y = area.y + area.height - yesButtonSprite.height();
             createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            offset.x = area.x + area.width - noButtonSprite.width() - padding;
+            offset.y = area.y + area.height - noButtonSprite.height();
             createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
+        }
 
-        case Dialog::OK | Dialog::CANCEL:
-            offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+        case Dialog::OK | Dialog::CANCEL: {
+            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
+            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+            const int32_t horizontalFreeSpace = area.width - okayButtonSprite.width() - cancelButtonSprite.width();
+            const int32_t padding = horizontalFreeSpace / 4;
+            assert( horizontalFreeSpace > 0 );
+
+            offset.x = area.x + padding;
+            offset.y = area.y + area.height - okayButtonSprite.height();
             createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            offset.x = area.x + area.width - cancelButtonSprite.width() - padding;
+            offset.y = area.y + area.height - cancelButtonSprite.height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
+        }
 
-        case Dialog::OK:
-            offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+        case Dialog::OK: {
+            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
+
+            offset.x = area.x + ( area.width - okayButtonSprite.width() ) / 2;
+            offset.y = area.y + area.height - okayButtonSprite.height();
             createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
             break;
+        }
 
-        case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+        case Dialog::CANCEL: {
+            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+
+            offset.x = area.x + ( area.width - cancelButtonSprite.width() ) / 2;
+            offset.y = area.y + area.height - cancelButtonSprite.height();
             createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
+        }
 
         default:
             break;
@@ -694,6 +738,8 @@ namespace fheroes2
         released = resizeButton( originalReleased, { width, originalReleased.height() } );
         pressed = resizeButton( originalPressed, { width, originalPressed.height() } );
 
+        addButtonShine( released, icnId );
+
         if ( !isTransparentBackground ) {
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             makeTransparentBackground( released, pressed, backgroundIcnId );
@@ -710,8 +756,8 @@ namespace fheroes2
 
         fheroes2::Size backgroundBorders = { 0, 7 };
 
-        fheroes2::Point releasedOffset = {};
-        fheroes2::Point pressedOffset = {};
+        fheroes2::Point releasedOffset;
+        fheroes2::Point pressedOffset;
 
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 
@@ -724,7 +770,6 @@ namespace fheroes2
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
 
         // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
-        // TODO: Remove the need for the argument once width() has been improved to handle this.
         const int32_t textWidth = releasedText.width( maximumTextArea.width );
         assert( textWidth > 0 );
 
@@ -736,6 +781,10 @@ namespace fheroes2
         const int32_t textHeight = releasedText.height( textAreaWidth );
         assert( textHeight > 0 );
 
+        // Add extra y-margin for multi-lined texts on normal buttons.
+        if ( ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) && textHeight > 17 ) {
+            textAreaMargins.y += 16;
+        }
         const int32_t borderedTextHeight = textHeight + textAreaMargins.y;
         const int32_t textAreaHeight = std::clamp( borderedTextHeight, minimumTextArea.height, maximumTextArea.height );
 
@@ -746,6 +795,9 @@ namespace fheroes2
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
+        }
+        if ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) {
+            addButtonShine( released, emptyButtonIcnID );
         }
 
         const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );

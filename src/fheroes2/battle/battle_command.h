@@ -46,8 +46,8 @@ namespace Battle
         RETREAT,
         SURRENDER,
         SKIP,
-        AUTO_SWITCH,
-        AUTO_FINISH
+        TOGGLE_AUTO_COMBAT,
+        QUICK_COMBAT
     };
 
     class Command final : public std::vector<int>
@@ -62,8 +62,8 @@ namespace Battle
         static constexpr std::integral_constant<CommandType, CommandType::RETREAT> RETREAT{};
         static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
         static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
-        static constexpr std::integral_constant<CommandType, CommandType::AUTO_SWITCH> AUTO_SWITCH{};
-        static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
+        static constexpr std::integral_constant<CommandType, CommandType::TOGGLE_AUTO_COMBAT> TOGGLE_AUTO_COMBAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::QUICK_COMBAT> QUICK_COMBAT{};
 
         template <CommandType cmd, typename... Types>
         explicit Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
@@ -107,7 +107,7 @@ namespace Battle
                 // UID
                 static_assert( sizeof...( params ) == 1 );
             }
-            else if constexpr ( cmd == CommandType::AUTO_SWITCH ) {
+            else if constexpr ( cmd == CommandType::TOGGLE_AUTO_COMBAT ) {
                 // Color
                 static_assert( sizeof...( params ) == 1 );
             }

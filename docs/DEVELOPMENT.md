@@ -43,6 +43,10 @@ If you would like to build and run this project on PlayStation Vita please follo
 
 If you would like to build and run this project on Nintendo Switch please follow the instructions on [**this page**](README_switch.md).
 
+### Emscripten (Wasm)
+
+If you would like to run this project in a web browser please follow the instructions on [**this page**](README_emscripten.md).
+
 ### Build with CMake
 
 If you would like to build the project using CMake please follow the instructions on [**this page**](README_cmake.md).

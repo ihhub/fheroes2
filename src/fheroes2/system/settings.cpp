@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <fstream>
 #include <sstream>
 #include <utility>
 
@@ -363,16 +362,14 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
-
-    std::fstream file;
-    file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
-    if ( !file ) {
+    StreamFile fileStream;
+    if ( !fileStream.open( System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName ), "w" ) ) {
         return false;
     }
 
-    const std::string & data = String();
-    file.write( data.data(), data.size() );
+    const std::string data = String();
+
+    fileStream.putRaw( data.data(), data.size() );
 
     return true;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -338,8 +338,8 @@ namespace Interface
         }
 
         _buttonMagnify.setICNInfo( icnId, 12, 13 );
-        _buttonUndo.setICNInfo( icnId, 14, 15 );
-        _buttonNew.setICNInfo( icnId, 16, 17 );
+        _buttonUndo.setICNInfo( icnId, 41, 42 );
+        _buttonRedo.setICNInfo( icnId, 43, 44 );
         _buttonSpecs.setICNInfo( icnId, 18, 19 );
         _buttonFile.setICNInfo( icnId, 20, 21 );
         _buttonSystem.setICNInfo( icnId, 22, 23 );
@@ -429,8 +429,8 @@ namespace Interface
         _buttonUndo.setPosition( _rectMagnify.x + _rectMagnify.width, displayY );
         _rectUndo = _buttonUndo.area();
 
-        _buttonNew.setPosition( _rectUndo.x + _rectUndo.width, displayY );
-        _rectNew = _buttonNew.area();
+        _buttonRedo.setPosition( _rectUndo.x + _rectUndo.width, displayY );
+        _rectRedo = _buttonRedo.area();
 
         // System buttons bottom row.
         displayY += _rectMagnify.height;
@@ -602,7 +602,7 @@ namespace Interface
 
         _buttonMagnify.draw();
         _buttonUndo.draw();
-        _buttonNew.draw();
+        _buttonRedo.draw();
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
@@ -1187,7 +1187,7 @@ namespace Interface
 
         _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedInArea( _rectMagnify ) );
         _buttonUndo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectUndo ) );
-        _buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( _rectNew ) );
+        _buttonRedo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectRedo ) );
         _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSpecs ) );
         _buttonFile.drawOnState( le.isMouseLeftButtonPressedInArea( _rectFile ) );
         _buttonSystem.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSystem ) );
@@ -1197,10 +1197,11 @@ namespace Interface
         }
         else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
             _interface.undoAction();
-            return fheroes2::GameMode::CANCEL;
+            // TODO: Disable Undo button when there are no actions left to undo.
         }
-        else if ( le.MouseClickLeft( _rectNew ) ) {
-            res = EditorInterface::eventNewMap();
+        else if ( _buttonRedo.isEnabled() && le.MouseClickLeft( _rectRedo ) ) {
+            _interface.redoAction();
+            // TODO: Disable Redo button when there are no actions left to redo.
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             EditorInterface::Get().openMapSpecificationsDialog();
@@ -1246,10 +1247,8 @@ namespace Interface
         else if ( le.isMouseRightButtonPressedInArea( _rectUndo ) ) {
             fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( _rectNew ) ) {
-            // TODO: update this text once random map generator is ready.
-            //       The original text should be "Create a new map, either from scratch or using the random map generator."
-            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( _rectRedo ) ) {
+            fheroes2::showStandardTextMessage( _( "Redo" ), _( "Redo the last undone action." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _rectSpecs ) ) {
             fheroes2::showStandardTextMessage( _( "Specifications" ), _( "Edit map title, description, and other general information." ), Dialog::ZERO );

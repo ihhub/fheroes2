@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2779,7 +2779,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                         bestHero = hero;
                     }
 
-                    // This loop may take many time for computations so update hourglass grains animation.
+                    // This loop may take many time for computations, so pump the event queue and update the animation of the hourglass grains.
                     status.drawAITurnProgress( currentProgressValue );
                 }
 
@@ -2791,13 +2791,11 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
 
         // Calculate turn progress taking into account that the current 'bestHero' most likely will end his turn
         // and will be removed from 'availableHeroes' vector: we add 3/4 (not 1/2) to help rounding the result.
-        uint32_t progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + 3 * heroesToMoveTotalCount )
-                                     / ( 4 * heroesToMoveTotalCount )
-                                 + startProgressValue;
-        if ( currentProgressValue < progressValue ) {
-            currentProgressValue = progressValue;
-            status.drawAITurnProgress( currentProgressValue );
-        }
+        currentProgressValue = std::max( currentProgressValue,
+                                         ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + 3 * heroesToMoveTotalCount )
+                                                 / ( 4 * heroesToMoveTotalCount )
+                                             + startProgressValue );
+        status.drawAITurnProgress( currentProgressValue );
 
         if ( bestTargetIndex == -1 ) {
             // Possibly heroes have nothing to do because one of them is blocking the way. Move a random hero randomly and see what happens.
@@ -2906,13 +2904,11 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                                                []( const Heroes * hero ) { return !hero->MayStillMove( false, false ); } ),
                                availableHeroes.end() );
 
-        progressValue = ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + heroesToMoveTotalCount )
-                            / ( 4 * heroesToMoveTotalCount )
-                        + startProgressValue;
-        if ( currentProgressValue < progressValue ) {
-            currentProgressValue = progressValue;
-            status.drawAITurnProgress( currentProgressValue );
-        }
+        currentProgressValue = std::max( currentProgressValue,
+                                         ( turnProgressScale * ( heroesToMoveTotalCount - static_cast<uint32_t>( availableHeroes.size() ) ) + heroesToMoveTotalCount )
+                                                 / ( 4 * heroesToMoveTotalCount )
+                                             + startProgressValue );
+        status.drawAITurnProgress( currentProgressValue );
     }
 
     status.drawAITurnProgress( endProgressValue );

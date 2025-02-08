@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -313,18 +313,18 @@ namespace Editor
 
         // Use the left part of town construction dialog.
         const int32_t rightPartOffsetX = 438;
-        const int32_t rightPartSizeX = dialogRoi.width - rightPartOffsetX;
+        const int32_t rightPartWidth = dialogRoi.width - rightPartOffsetX;
         fheroes2::Blit( constructionBackground, 0, 0, display, dialogRoi.x, dialogRoi.y, rightPartOffsetX, backgroundHeight );
         // Use the right part of standard background dialog.
         fheroes2::Copy( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), rightPartOffsetX, 0, display, dialogRoi.x + rightPartOffsetX,
-                        dialogRoi.y, rightPartSizeX, backgroundHeight );
+                        dialogRoi.y, rightPartWidth, backgroundHeight );
         // Add horizontal separators.
-        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 226, rightPartSizeX, 4 );
-        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 306, rightPartSizeX, 4 );
+        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 226, rightPartWidth, 4 );
+        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 306, rightPartWidth, 4 );
 
         // Castle name background.
         const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
-        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartSizeX, statusBarSprite.height() - 2 );
+        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartWidth, statusBarSprite.height() - 2 );
         fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarSprite.height() );
 
         const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
@@ -347,7 +347,7 @@ namespace Editor
         fheroes2::MovableSprite allowCastleSign;
         fheroes2::Rect allowCastleArea;
         if ( isTown ) {
-            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface );
+            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
             if ( std::find( castleMetadata.bannedBuildings.begin(), castleMetadata.bannedBuildings.end(), BUILD_CASTLE ) == castleMetadata.bannedBuildings.end() ) {
                 allowCastleSign.show();
             }
@@ -359,12 +359,13 @@ namespace Editor
         // Default buildings checkbox indicator.
         dstPt.y += 30;
         fheroes2::MovableSprite defaultBuildingsSign;
-        const fheroes2::Rect defaultBuildingsArea = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface );
+        const fheroes2::Rect defaultBuildingsArea
+            = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
         // Build restrict mode button.
         fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
-        buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
+        buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartWidth - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
         fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuilding.area().getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
 
@@ -375,7 +376,7 @@ namespace Editor
         fheroes2::MovableSprite defaultArmySign;
         fheroes2::Rect defaultArmyArea;
         if ( isNeutral ) {
-            defaultArmyArea = drawCheckboxWithText( defaultArmySign, _( "Default Army" ), display, dstPt.x, dstPt.y, isEvilInterface );
+            defaultArmyArea = drawCheckboxWithText( defaultArmySign, _( "Default Army" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
 
             if ( Maps::isDefaultCastleDefenderArmy( castleMetadata ) ) {
                 defaultArmySign.show();
@@ -388,7 +389,7 @@ namespace Editor
             defaultArmySign.hide();
 
             const fheroes2::Text armyText( isTown ? _( "Town Army" ) : _( "Castle Army" ), fheroes2::FontType::normalWhite() );
-            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
+            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartWidth - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
         }
 
         Army castleArmy;

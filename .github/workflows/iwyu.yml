@@ -21,7 +21,7 @@ jobs:
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev iwyu
     - name: Prepare compile_commands.json
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
         iwyu_tool -p build -j "$(nproc)" -- -Xiwyu --cxx17ns -Xiwyu --error -Xiwyu --mapping_file="$GITHUB_WORKSPACE/iwyu.map" \

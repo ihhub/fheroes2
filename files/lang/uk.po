@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,11 +80,8 @@ msgstr ""
 msgid "CANCEL"
 msgstr "СКАСУВАТИ"
 
-msgid "OKAY"
-msgstr "ГАРАЗД"
-
 # Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
-msgid "smallerButton|OKAY"
+msgid "OKAY"
 msgstr "ГАРАЗД"
 
 msgid "ACCEPT"
@@ -228,11 +225,11 @@ msgstr "СКИНУТИ"
 msgid "START"
 msgstr "ПОЧАТИ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "МІСТО"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ОБМЕЖИТИ"
@@ -326,6 +323,16 @@ msgid "EVENTS"
 msgstr "ПОДІЇ"
 
 msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -481,10 +488,12 @@ msgstr[0] "%{name} знищує половину ворожого загону!"
 msgstr[1] "%{name} знищують половину ворожого загону!"
 msgstr[2] "%{name} знищують половину ворожого загону!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} вимкнув автобій"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} увімкнув автобій"
 
 msgid "Spell failed!"
@@ -825,14 +834,18 @@ msgstr "Дані по Балісті"
 msgid "Ballista"
 msgstr "Баліста"
 
-msgid "Enable auto combat"
-msgstr "Увімкнути автобій"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Дозволяє комп'ютеру вести битву за вас."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Автобій"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Автобій"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Налаштувати параметри системи"
@@ -880,11 +893,36 @@ msgstr "Табло повідомлень"
 msgid "Shows the results of individual monster's actions."
 msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Ви впевнені, що хочете увімкнути автобитву?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Дозволяє комп'ютеру вести битву за вас."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Автобій"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Автобій"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1015,7 +1053,8 @@ msgstr "Створено Дзеркального Фантома."
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
 msgid "Error"
@@ -3188,15 +3227,6 @@ msgstr "Подія: "
 msgid "Hot Keys:"
 msgstr "Гарячі клавіші:"
 
-msgid "Evil"
-msgstr "Зло"
-
-msgid "Good"
-msgstr "Добро"
-
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
 msgid "Hide"
 msgstr "Сховати"
 
@@ -3206,26 +3236,17 @@ msgstr "Показати"
 msgid "Interface"
 msgstr "Інтерфейс"
 
-msgid "Slow"
-msgstr "Повільно"
-
-msgid "Normal"
-msgstr "Звичайна"
-
-msgid "Fast"
-msgstr "Швидко"
-
-msgid "Very Fast"
-msgstr "Дуже швидко"
-
-msgid "Scroll Speed"
-msgstr "Швидкість прокрутки"
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Перемкнути тип інтерфейсу, який хочете використовувати."
 
 msgid "Toggle interface visibility."
 msgstr "Перемкнути видимість інтерфейсу."
+
+msgid "Scroll Speed"
+msgstr "Швидкість прокрутки"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Встановлює швидкість прокручування вікна."
@@ -3268,6 +3289,9 @@ msgstr ""
 "%{skill1}\n"
 "або\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "н/д"
@@ -3370,8 +3394,8 @@ msgstr "Захисники:"
 msgid "Unknown"
 msgstr "Невідомо"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Рівень %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Рівень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -3768,7 +3792,8 @@ msgstr "Автобитва, без заклять"
 msgid "Battles"
 msgstr "Битви"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Вручну"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4110,6 +4135,9 @@ msgstr "%{object} не має властивостей, які можна змі
 msgid "This artifact"
 msgstr "Цей артефакт"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Дороги"
 
@@ -4381,6 +4409,13 @@ msgstr "Скасувати"
 msgid "Undo your last action."
 msgstr "Скасуйте останню дію."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Скасуйте останню дію."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Редагувати назву мапи, опис та іншу загальну інформацію."
 
@@ -4613,6 +4648,10 @@ msgstr ""
 "більше або сильніших ворогів, меншу кількість ресурсів або інші додаткові "
 "умови, роблячи гру складнішою для гравця-людини."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Виберіть кількість %{resource}:"
+
 msgid "Animation"
 msgstr "Анімація"
 
@@ -4738,6 +4777,9 @@ msgstr "і не тільки..."
 
 msgid "Easy"
 msgstr "Легко"
+
+msgid "Normal"
+msgstr "Звичайна"
 
 msgid "Hard"
 msgstr "Важко"
@@ -5039,6 +5081,10 @@ msgstr "повноекранний режим увімк/вимк"
 msgid "hotkey|toggle text support mode"
 msgstr "текстовий опис увімк/вимк"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "текстовий опис увімк/вимк"
+
 msgid "hotkey|new game"
 msgstr "нова гра"
 
@@ -5273,11 +5319,13 @@ msgstr "відступити з бою"
 msgid "hotkey|surrender during battle"
 msgstr "капітулювати під час битви"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "увімкнути автоматичний бій"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "завершити битву у автоматичному режимі"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "вийти"
 
 msgid "hotkey|battle options"
 msgstr "параметри бою"
@@ -6186,6 +6234,9 @@ msgstr ""
 "Усталена\n"
 "навичка"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6274,6 +6325,21 @@ msgstr ""
 
 msgid "Vietnamese"
 msgstr ""
+
+msgid "Slow"
+msgstr "Повільно"
+
+msgid "Fast"
+msgstr "Швидко"
+
+msgid "Very Fast"
+msgstr "Дуже швидко"
+
+msgid "Evil"
+msgstr "Зло"
+
+msgid "Good"
+msgstr "Добро"
 
 msgid ", FPS: "
 msgstr ", кдр/с:"
@@ -8083,6 +8149,9 @@ msgid ""
 msgstr ""
 "Поточний досвід %{exp1}.\n"
 " Наступний рівень %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Рівень %{level}"
@@ -11453,11 +11522,14 @@ msgstr "Масове Уповільнення"
 msgid "Slows all enemies to half movement rate."
 msgstr "Зменшує швидкість пересування всіх ворожих загонів вдвічі."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
-
 msgid "spell|Blind"
 msgstr "Сліпота"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
 
 msgid "Bless"
 msgstr "Благословення"
@@ -11984,6 +12056,12 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Увімкнути автобій"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "завершити битву у автоматичному режимі"
 
 #~ msgid "Please Remember"
 #~ msgstr "Будь ласка, пам'ятайте"

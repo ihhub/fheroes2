@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,9 @@
 #include "dialog.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "pal.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -149,12 +151,22 @@ void MoraleIndicator::Redraw()
         _description.append( modificators );
     }
 
+    uint32_t spriteInx = 7;
+    if ( _morale < Morale::NORMAL ) {
+        spriteInx = 5;
+    }
+    else if ( _morale > Morale::NORMAL ) {
+        spriteInx = 4;
+    }
+
+    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::HSICONS, spriteInx );
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
         _description.append( "\n\n" );
         _description.append( _( "Entire army is undead, so morale does not apply." ) );
+        fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
     }
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _morale ? 5 : ( 0 < _morale ? 4 : 7 ) ) );
     const int32_t inter = 6;
     int32_t count = ( 0 == _morale ? 1 : std::abs( _morale ) );
     int32_t cx = _area.x + ( _area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
@@ -185,6 +197,8 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 ExperienceIndicator::ExperienceIndicator( const Heroes * hero )
     : HeroesIndicator( hero )
 {
+    assert( hero != nullptr );
+
     _area.width = 35;
     _area.height = 36;
 
@@ -199,12 +213,42 @@ void ExperienceIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
-    fheroes2::Blit( sprite, display, _area.x, _area.y );
+    const fheroes2::Sprite & experienceImage = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( experienceImage, display, _area.x, _area.y );
 
-    // For the default range of experience see Heroes::GetStartingXp() method.
-    const fheroes2::Text text( _isDefault ? "40-90" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
-    text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
+    const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 24, 33, 9 };
+    const int32_t widthReduction = experienceImage.width() - renderRoi.width - 1;
+
+    if ( _isDefault ) {
+        // For the default range of experience see Heroes::GetStartingXp() method.
+        const fheroes2::Text text{ "40-90", fheroes2::FontType::smallWhite() };
+        assert( text.width() <= renderRoi.width );
+        text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+    }
+    else {
+        // Experience can be longer than the width of the rendering area.
+        // This is why it is important to either take into account letter shadows or change the experience value.
+        const uint32_t experienceValue = _hero->GetExperience();
+        std::string experienceString = std::to_string( _hero->GetExperience() );
+
+        fheroes2::Text text{ std::move( experienceString ), fheroes2::FontType::smallWhite() };
+        if ( text.width() > renderRoi.width + 1 ) {
+            // The experience string is much longer than the rendering area. We want to avoid too long strings.
+            const uint32_t millions = experienceValue / 1000000;
+
+            if ( experienceValue < 10000000 ) {
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 10000 ) + _( "million|M" );
+            }
+            else {
+                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 100000 ) + _( "million|M" );
+            }
+
+            text.set( experienceString, fheroes2::FontType::smallWhite() );
+            text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+        }
+
+        text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
+    }
 }
 
 void ExperienceIndicator::QueueEventProcessing() const

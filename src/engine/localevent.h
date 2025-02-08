@@ -55,6 +55,7 @@ namespace fheroes2
         KEY_DOLLAR,
         KEY_AMPERSAND,
         KEY_QUOTE,
+        KEY_BACKQUOTE,
         KEY_LEFT_PARENTHESIS,
         KEY_RIGHT_PARENTHESIS,
         KEY_ASTERISK,

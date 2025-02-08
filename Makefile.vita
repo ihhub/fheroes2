@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,7 +26,9 @@
 
 PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
-PROJECT_VERSION := $(file < version.txt)
+# Version should be in XX.YY format
+PROJECT_VERSION := $(strip $(shell printf %02d.%02d "$$(cat version.txt | cut -s -f1 -d.)" "$$(cat version.txt | cut -s -f2 -d.)") \
+                           $(and $(filter-out 0,$(.SHELLSTATUS)),$(error Invalid version syntax)))
 
 .PHONY: all clean fheroes2.vpk param.sfo fheroes2.elf translations
 
@@ -40,8 +42,8 @@ fheroes2.vpk: eboot.bin param.sfo translations
 		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
 		--add files/data=files/data \
 		--add files/lang/vita_temp=files/lang \
-	fheroes2.vpk
-	rm -r files/lang/vita_temp
+		fheroes2.vpk
+	rm -rf files/lang/vita_temp
 
 translations: fheroes2.elf
 	$(MAKE) -C files/lang
@@ -65,4 +67,4 @@ fheroes2.elf:
 clean:
 	$(MAKE) -C src/dist clean
 	$(MAKE) -C files/lang clean
-	rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo
+	-rm -f fheroes2.velf fheroes2.elf fheroes2.vpk eboot.bin param.sfo

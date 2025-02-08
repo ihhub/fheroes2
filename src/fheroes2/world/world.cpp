@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,7 +27,9 @@
 #include <array>
 #include <cassert>
 #include <limits>
+#include <optional>
 #include <ostream>
+#include <random>
 #include <set>
 #include <tuple>
 
@@ -46,6 +48,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -87,7 +90,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
     {
         std::vector<int32_t> suitableIds;
 
@@ -121,7 +124,7 @@ namespace
             return -1;
         }
 
-        return Rand::Get( suitableIds );
+        return Rand::GetWithGen( suitableIds, gen );
     }
 
     int32_t getNeighbouringEmptyTileCount( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId )
@@ -603,6 +606,8 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
+    std::mt19937 seededGen( _seed + month );
+
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             // Monsters are not placed on water.
@@ -622,7 +627,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ) );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ), seededGen );
             if ( tileToSet >= 0 ) {
                 primaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -637,7 +642,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true, seededGen );
             if ( tileToSet >= 0 ) {
                 secondaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -652,7 +657,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 continue;
             }
 
-            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true, seededGen );
             if ( tileToSet >= 0 ) {
                 tetriaryTargetTiles.emplace_back( tileToSet );
                 excludeTiles.emplace( tileId );
@@ -661,9 +666,9 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     // Shuffle all found tile IDs.
-    Rand::Shuffle( primaryTargetTiles );
-    Rand::Shuffle( secondaryTargetTiles );
-    Rand::Shuffle( tetriaryTargetTiles );
+    Rand::ShuffleWithGen( primaryTargetTiles, seededGen );
+    Rand::ShuffleWithGen( secondaryTargetTiles, seededGen );
+    Rand::ShuffleWithGen( tetriaryTargetTiles, seededGen );
 
     // Calculate the number of monsters to be placed.
     uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
@@ -673,7 +678,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
+        monstersToBePlaced = Rand::GetWithGen( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, seededGen );
     }
 
     // 85% of positions are for primary targets
@@ -707,7 +712,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> World::getCurrentRumor() const
+fheroes2::LocalizedString World::getCurrentRumor() const
 {
     const uint32_t standardRumorCount = 10;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
@@ -1582,6 +1587,38 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++w.heroIdAsWinCondition;
         ++w.heroIdAsLossCondition;
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
+        // Update flags for Mine and Lighthouse captured objects.
+        for ( const auto & [tileIndex, object] : w.map_captureobj ) {
+            if ( object.GetColor() == Color::NONE ) {
+                // This object is not owned by anyone.
+                continue;
+            }
+
+            if ( object.objCol.first == MP2::OBJ_MINE ) {
+                // Update Mine flag.
+                // Remove old flag parts.
+                const int32_t topIndex = tileIndex - w.width;
+                if ( topIndex >= 0 ) {
+                    // Remove top tile flag part.
+                    w.vec_tiles[topIndex].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
+                }
+                if ( ( topIndex % w.width ) < ( w.width - 1 ) ) {
+                    // Remove top-right tile flag part.
+                    w.vec_tiles[topIndex + 1].removeObjects( MP2::OBJ_ICN_TYPE_FLAG32 );
+                }
+
+                // Set new flag.
+                w.vec_tiles[tileIndex].setOwnershipFlag( MP2::OBJ_MINE, object.GetColor() );
+            }
+            else if ( object.objCol.first == MP2::OBJ_LIGHTHOUSE ) {
+                // Update Lighthouse flag parts.
+                w.vec_tiles[tileIndex].setOwnershipFlag( MP2::OBJ_LIGHTHOUSE, object.GetColor() );
+            }
+        }
     }
 
     stream >> w.map_objects >> w._seed;

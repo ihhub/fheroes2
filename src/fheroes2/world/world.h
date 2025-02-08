@@ -28,7 +28,6 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -37,7 +36,7 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
-#include "game_language.h"
+#include "game_string.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -358,7 +357,7 @@ public:
     void NewWeek();
     void NewMonth();
 
-    std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> getCurrentRumor() const;
+    fheroes2::LocalizedString getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -428,7 +427,7 @@ private:
 
     void Defaults();
     void Reset();
-    void MonthOfMonstersAction( const Monster & );
+    void MonthOfMonstersAction( const Monster & mons );
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 

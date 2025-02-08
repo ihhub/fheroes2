@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-02-07 02:52+0000\n"
 "PO-Revision-Date: 2024-12-23 08:39-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -77,9 +77,6 @@ msgid "CANCEL"
 msgstr "CANCELAR"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -220,11 +217,11 @@ msgstr "REINICIAR"
 msgid "START"
 msgstr "INICIAR"
 
-msgid "CASTLE"
-msgstr "CASTELO"
-
 msgid "TOWN"
 msgstr "CIDADE"
+
+msgid "CASTLE"
+msgstr "CASTELO"
 
 msgid "RESTRICT"
 msgstr "RESTRINGIR"
@@ -321,6 +318,16 @@ msgstr "EVENTOS"
 
 msgid "LANGUAGE"
 msgstr "IDIOMA"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -475,10 +482,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} destrói metade das tropas inimigas!"
 msgstr[1] "%{name} destroem metade das tropas inimigas!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} desativou a batalha automática"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} ativou a batalha automática"
 
 msgid "Spell failed!"
@@ -817,14 +826,18 @@ msgstr "Ver informações da Balista"
 msgid "Ballista"
 msgstr "Balista"
 
-msgid "Enable auto combat"
-msgstr "Ativar combate automático"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Permite que o computador lute a batalha por você."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Combate Automático"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Combate Automático"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Personalizar opções do sistema"
@@ -872,11 +885,36 @@ msgstr "Barra de Mensagem"
 msgid "Shows the results of individual monster's actions."
 msgstr "Mostra os resultados das ações individuais dos monstros."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Tem certeza de que deseja habilitar o combate automático?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Você tem certeza de que deseja terminar a batalha no modo automático?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Permite que o computador lute a batalha por você."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Combate Automático"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Combate Automático"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -991,7 +1029,8 @@ msgstr "A imagem espelhada foi criada."
 msgid "The mirror image is destroyed!"
 msgstr "A imagem espelhada foi destruída!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Tem certeza de que deseja interromper o combate automático?"
 
 msgid "Error"
@@ -3190,15 +3229,6 @@ msgstr "Evento: "
 msgid "Hot Keys:"
 msgstr "Atalhos:"
 
-msgid "Evil"
-msgstr "Do Mal"
-
-msgid "Good"
-msgstr "Do Bem"
-
-msgid "Interface Type"
-msgstr "Tipo de Interface"
-
 msgid "Hide"
 msgstr "Ocultar"
 
@@ -3208,28 +3238,19 @@ msgstr "Mostrar"
 msgid "Interface"
 msgstr "Aparência"
 
-msgid "Slow"
-msgstr "Lenta"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Rápida"
-
-msgid "Very Fast"
-msgstr "Muito Rápida"
-
-msgid "Scroll Speed"
-msgstr ""
-"Velocidade\n"
-"de Deslocamento"
+msgid "Interface Type"
+msgstr "Tipo de Interface"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid "Toggle interface visibility."
 msgstr "Alternar a visibilidade da interface."
+
+msgid "Scroll Speed"
+msgstr ""
+"Velocidade\n"
+"de Deslocamento"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Defina a velocidade com a qual você rola a janela."
@@ -3271,6 +3292,9 @@ msgstr ""
 "%{skill1}\n"
 "ou\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/d"
@@ -3376,8 +3400,8 @@ msgstr "Defensores:"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Nível %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Nível %{level})"
 
 msgid "Attack:"
 msgstr "Ataque:"
@@ -3787,7 +3811,8 @@ msgstr "Auto, Sem Feitiços"
 msgid "Battles"
 msgstr "Batalhas"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manual"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4124,6 +4149,9 @@ msgstr "%{object} não tem propriedades a serem alteradas."
 msgid "This artifact"
 msgstr "Esse artefato"
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
 msgid "Roads"
 msgstr "Estradas"
 
@@ -4397,6 +4425,13 @@ msgstr "Desfazer"
 msgid "Undo your last action."
 msgstr "Desfazer sua última ação."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Desfazer sua última ação."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Editar título do mapa, descrição e outras informações gerais."
 
@@ -4630,6 +4665,10 @@ msgstr ""
 "incluir mais inimigos ou inimigos mais fortes, menos recursos ou outras "
 "condições especiais que tornam as coisas mais difíceis para o jogador humano."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Selecionar %{resource}:"
+
 msgid "Animation"
 msgstr "Animação"
 
@@ -4755,6 +4794,9 @@ msgstr "e mais..."
 
 msgid "Easy"
 msgstr "Fácil"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Difícil"
@@ -5058,6 +5100,10 @@ msgstr "alternar tela cheia"
 msgid "hotkey|toggle text support mode"
 msgstr "alternar modo de suporte a texto"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "alternar modo de suporte a texto"
+
 msgid "hotkey|new game"
 msgstr "novo jogo"
 
@@ -5292,11 +5338,13 @@ msgstr "retirar-se da batalha"
 msgid "hotkey|surrender during battle"
 msgstr "render-se durante a batalha"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "alternar modo de batalha automático"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "finalizar a batalha no modo automático"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "sair"
 
 msgid "hotkey|battle options"
 msgstr "opções de batalha"
@@ -6215,6 +6263,9 @@ msgstr ""
 "Habilidade\n"
 "padrão"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6306,6 +6357,21 @@ msgstr "Eslovaco"
 
 msgid "Vietnamese"
 msgstr "Vietnamita"
+
+msgid "Slow"
+msgstr "Lenta"
+
+msgid "Fast"
+msgstr "Rápida"
+
+msgid "Very Fast"
+msgstr "Muito Rápida"
+
+msgid "Evil"
+msgstr "Do Mal"
+
+msgid "Good"
+msgstr "Do Bem"
 
 msgid ", FPS: "
 msgstr ", QPS: "
@@ -8138,6 +8204,9 @@ msgid ""
 msgstr ""
 "Experiência atual: %{exp1}.\n"
 " Próximo nível em: %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Nível %{level}"
@@ -11530,11 +11599,14 @@ msgstr "Lentidão Coletiva"
 msgid "Slows all enemies to half movement rate."
 msgstr "Reduz a velocidade de movimento de todos os inimigos pela metade."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Embaça os olhos das criaturas afetadas, impedindo-as de se moverem."
-
 msgid "spell|Blind"
 msgstr "Cegar"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Embaça os olhos das criaturas afetadas, impedindo-as de se moverem."
 
 msgid "Bless"
 msgstr "Bênção"
@@ -12075,6 +12147,12 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Ativar combate automático"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "finalizar a batalha no modo automático"
 
 #~ msgid "Please Remember"
 #~ msgstr "Por favor, lembre-se"
