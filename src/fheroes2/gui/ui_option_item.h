@@ -24,7 +24,6 @@
 #include <string>
 
 #include "math_base.h"
-#include "settings.h"
 
 namespace fheroes2
 {
