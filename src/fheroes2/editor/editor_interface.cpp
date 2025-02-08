@@ -1128,7 +1128,6 @@ namespace Interface
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
-        const fheroes2::Rect roi = background.activeArea();
 
         fheroes2::Button buttonNew;
         fheroes2::Button buttonLoad;
