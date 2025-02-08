@@ -1280,7 +1280,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and go directly to the map setup window." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and play the map in the Standard Game mode." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
