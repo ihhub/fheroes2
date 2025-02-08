@@ -1177,7 +1177,7 @@ namespace Interface
                                  fheroes2::StandardWindow::Padding::CENTER_RIGHT );
         background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
                                        isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
-        background.renderButtonSprite( buttonPlayMap, gettext_noop( "PLAY\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
+        background.renderButtonSprite( buttonPlayMap, gettext_noop( "START\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
                                        { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::TOP_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
@@ -1251,8 +1251,8 @@ namespace Interface
                 }
                 else {
                     if ( fheroes2::
-                             showStandardTextMessage( _( "Play Map" ),
-                                                      _( "Do you wish to leave the Editor and play the map? (Any unsaved changes to the current map will be lost.)" ),
+                             showStandardTextMessage( _( "Start Map" ),
+                                                      _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
                                                       Dialog::YES | Dialog::NO )
                          == Dialog::YES ) {
                         return fheroes2::GameMode::NEW_STANDARD;
@@ -1281,7 +1281,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Play Map" ), _( "Leave the Editor and go directly to the map setup window." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and go directly to the map setup window." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
