@@ -487,6 +487,7 @@ namespace fheroes2
             }
         }
     }
+
     void StandardWindow::restoreBackground()
     {
         _restorer.restore();
@@ -495,5 +496,5 @@ namespace fheroes2
             // The screen area of the closed window should be updated during the next '.render()' call.
             display.render( _totalArea );
         }
-    };
+    }
 }
