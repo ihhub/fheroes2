@@ -94,6 +94,10 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
+    // In original Editor map name is limited to 17 characters.
+    // However, we have no such limitation but to be reasonable we still have a limit.
+    const int32_t maxMapNameLength = 50;
+
     class HideInterfaceModeDisabler
     {
     public:
@@ -1968,7 +1972,7 @@ namespace Interface
         std::string fullPath;
 
         while ( true ) {
-            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage ) ) {
+            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage, maxMapNameLength ) ) {
                 return;
             }
 
@@ -2005,7 +2009,7 @@ namespace Interface
     {
         Maps::Map_Format::MapFormat mapBackup = _mapFormat;
 
-        if ( Editor::mapSpecificationsDialog( _mapFormat ) ) {
+        if ( Editor::mapSpecificationsDialog( _mapFormat, maxMapNameLength ) ) {
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
             action.commit();
         }
