@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1568,6 +1568,11 @@ uint32_t Heroes::GetExperienceFromLevel( int lvl )
 
     const uint32_t l1 = GetExperienceFromLevel( lvl - 1 );
     return ( l1 + static_cast<uint32_t>( round( ( l1 - GetExperienceFromLevel( lvl - 2 ) ) * 1.2 / 100 ) * 100 ) );
+}
+
+uint32_t Heroes::getExperienceMaxValue()
+{
+    return 2990600;
 }
 
 bool Heroes::BuySpellBook( const Castle * castle )

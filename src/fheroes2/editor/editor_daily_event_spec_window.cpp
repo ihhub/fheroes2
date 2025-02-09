@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -102,7 +102,7 @@ namespace Editor
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
         text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
-        text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+        text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
 
         // Resources
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
@@ -314,7 +314,12 @@ namespace Editor
 
                     int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), -99999, 999999, temp, 1 ) ) {
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string message = _( "Set %{resource-type} Count" );
+                    StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
+
+                    if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 
@@ -335,7 +340,7 @@ namespace Editor
 
                     messageRoiRestorer.restore();
                     text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
-                    text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+                    text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
                     isRedrawNeeded = true;
                 }
             }

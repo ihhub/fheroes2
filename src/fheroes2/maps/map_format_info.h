@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -225,7 +225,7 @@ namespace Maps::Map_Format
 
         int32_t experience{ 0 };
 
-        int8_t secondarySkill{ 0 };
+        uint8_t secondarySkill{ 0 };
         uint8_t secondarySkillLevel{ 0 };
 
         int32_t monsterType{ 0 };

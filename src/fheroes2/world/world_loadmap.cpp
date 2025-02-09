@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -63,6 +63,7 @@
 #include "resource.h"
 #include "serialize.h"
 #include "settings.h"
+#include "skill.h"
 #include "spell.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
@@ -878,7 +879,6 @@ bool World::loadResurrectionMap( const std::string & filename )
                         break;
                     }
 
-                    // TODO: change MapEvent to support map format functionality.
                     auto eventObject = std::make_unique<MapEvent>();
                     eventObject->resources = eventInfo.resources;
                     eventObject->artifact = eventInfo.artifact;
@@ -886,10 +886,12 @@ bool World::loadResurrectionMap( const std::string & filename )
                         eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
                     }
 
-                    eventObject->computer = ( computerColors != 0 );
+                    eventObject->isComputerPlayerAllowed = ( computerColors != 0 );
                     eventObject->colors = humanColors | computerColors;
                     eventObject->message = std::move( eventInfo.message );
                     eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
+                    eventObject->secondarySkill = { eventInfo.secondarySkill, eventInfo.secondarySkillLevel };
+                    eventObject->experience = eventInfo.experience;
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
 

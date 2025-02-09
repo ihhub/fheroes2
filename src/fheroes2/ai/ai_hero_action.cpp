@@ -1154,27 +1154,52 @@ namespace
         }
     }
 
-    void AIToEvent( Heroes & hero, int32_t dst_index )
+    void AIToEvent( Heroes & hero, const int32_t tileIndex )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        MapEvent * event_maps = world.GetMapEvent( Maps::GetPoint( dst_index ) );
+        MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
+        if ( mapEvent == nullptr ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+            return;
+        }
 
-        if ( event_maps && event_maps->isAllow( hero.GetColor() ) && event_maps->computer ) {
-            if ( event_maps->resources.GetValidItemsCount() ) {
-                hero.GetKingdom().AddFundsResource( event_maps->resources );
+        if ( !mapEvent->isComputerPlayerAllowed || !mapEvent->isAllow( hero.GetColor() ) ) {
+            return;
+        }
+
+        hero.GetKingdom().AddFundsResource( mapEvent->resources );
+        hero.PickupArtifact( mapEvent->artifact );
+
+        const auto & skill = mapEvent->secondarySkill;
+        if ( skill.isValid() ) {
+            bool addSkill = false;
+
+            if ( hero.HasSecondarySkill( skill.Skill() ) ) {
+                addSkill = ( hero.GetSecondarySkills().GetLevel( skill.Skill() ) < skill.Level() );
+            }
+            else {
+                addSkill = !hero.HasMaxSecondarySkill();
             }
 
-            if ( event_maps->artifact.isValid() ) {
-                hero.PickupArtifact( event_maps->artifact );
-            }
+            if ( addSkill ) {
+                hero.LearnSkill( skill );
 
-            event_maps->SetVisited();
-
-            if ( event_maps->isSingleTimeEvent ) {
-                hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-                world.RemoveMapObject( event_maps );
+                if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                    hero.Scout( hero.GetIndex() );
+                }
             }
+        }
+
+        if ( mapEvent->experience > 0 ) {
+            hero.IncreaseExperience( static_cast<uint32_t>( mapEvent->experience ) );
+        }
+
+        mapEvent->SetVisited();
+
+        if ( mapEvent->isSingleTimeEvent ) {
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+            world.RemoveMapObject( mapEvent );
         }
     }
 
