@@ -1225,7 +1225,7 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
-                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                const bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty
                      && fheroes2::showStandardTextMessage(
                             _( "Unsaved Changes" ),
