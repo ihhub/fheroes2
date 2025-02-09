@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -296,19 +296,19 @@ namespace fheroes2
         Display::instance().changePalette( palette );
     }
 
-    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
-        : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
+    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const InterfaceType interfaceType_ )
+        : interfaceType( interfaceType_ )
+        , originalInterfaceType( Settings::Get().getInterfaceType() )
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( interfaceType_ );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isOriginalEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( originalInterfaceType );
         }
     }
 

@@ -61,7 +61,14 @@ enum class ZoomLevel : uint8_t
     ZoomLevel0 = 0,
     ZoomLevel1 = 1,
     ZoomLevel2 = 2,
-    ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+    ZoomLevel3 = 3 // Max zoom, but should only exists for debug builds
+};
+
+enum InterfaceType : uint8_t
+{
+    GOOD = 0,
+    EVIL = 1,
+    DYNAMIC = 2
 };
 
 class Settings
@@ -191,6 +198,12 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
+    void setInterfaceType( InterfaceType type );
+    InterfaceType getInterfaceType() const
+    {
+        return _interfaceType;
+    }
+
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -252,7 +265,6 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
-    void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -379,6 +391,7 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
+    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
