@@ -355,6 +355,5 @@ namespace fheroes2
     void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
     // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface,
-                            const int backgroundIcnId );
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
 }
