@@ -37,6 +37,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -52,21 +53,27 @@
 
 namespace
 {
-    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, const int32_t currentValue, const int32_t minimumValue )
+    bool SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, const int32_t currentValue, const int32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
+
+        if ( ( isMinValue && minButton.isHidden() && maxButton.isVisible() ) || ( !isMinValue && minButton.isVisible() && maxButton.isHidden() ) ) {
+            // The MIN/MAX buttons switch is not needed.
+            return false;
+        }
 
         if ( isMinValue ) {
             minButton.hide();
             maxButton.show();
+            maxButton.draw();
         }
         else {
-            minButton.show();
             maxButton.hide();
+            minButton.show();
+            minButton.draw();
         }
 
-        minButton.draw();
-        maxButton.draw();
+        return true;
     }
 }
 
@@ -96,7 +103,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     }
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
+    const fheroes2::Rect selectionBoxArea{ windowArea.x + 38, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
                                            valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
@@ -106,10 +113,14 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const fheroes2::Text mainText( _( "MAX" ), fheroes2::FontType::smallWhite() );
-    const int32_t maxAreaOffsetY{ ( 26 - mainText.height() ) / 2 };
-    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + uiHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
-    mainText.draw( rectMax.x, rectMax.y + 2, display );
+    const fheroes2::Point minMaxButtonOffset( selectionBoxArea.x + selectionBoxArea.width + 6, selectionBoxArea.y );
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
+
+    const fheroes2::Rect interactionElementsRect( fheroes2::getBoundaryRect( fheroes2::getBoundaryRect( buttonMin.area(), buttonMax.area() ), selectionBoxArea ) );
+
+    SwitchMaxMinButtons( buttonMin, buttonMax, selectedValue, min );
 
     display.render();
 
@@ -119,21 +130,32 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     LocalEvent & le = LocalEvent::Get();
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        bool redraw_count = false;
+        bool needRedraw = false;
+
+        if ( buttonMax.isVisible() ) {
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+        }
+
+        if ( buttonMin.isVisible() ) {
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
+        }
 
         if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
             valueSelectionElement.setValue( selectedValue );
-            redraw_count = true;
+            needRedraw = true;
         }
-
-        if ( le.MouseClickLeft( rectMax ) ) {
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             valueSelectionElement.setValue( max );
-            redraw_count = true;
+            needRedraw = true;
+        }
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
+            valueSelectionElement.setValue( min );
+            needRedraw = true;
         }
 
         if ( valueSelectionElement.processEvents() ) {
             selectedValue = valueSelectionElement.getValue();
-            redraw_count = true;
+            needRedraw = true;
         }
 
         if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
@@ -141,9 +163,10 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             display.render();
         }
 
-        if ( redraw_count ) {
+        if ( needRedraw ) {
+            const bool redrawMinMax = SwitchMaxMinButtons( buttonMin, buttonMax, valueSelectionElement.getValue(), min );
             valueSelectionElement.draw( display );
-            display.render( selectionBoxArea );
+            display.render( redrawMinMax ? interactionElementsRect : selectionBoxArea );
         }
 
         result = btnGroups.processEvents();
