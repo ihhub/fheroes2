@@ -1234,7 +1234,7 @@ namespace Interface
                 }
 
                 Get().saveMapToFile();
-                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                const bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty ) {
                     display.render( background.totalArea() );
                     continue;
