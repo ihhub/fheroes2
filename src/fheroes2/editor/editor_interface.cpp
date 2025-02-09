@@ -1206,7 +1206,7 @@ namespace Interface
             }
             if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
-                background.restoreBackground();
+                background.hideWindow();
                 Get().saveMapToFile();
                 return fheroes2::GameMode::CANCEL;
             }
@@ -1224,24 +1224,20 @@ namespace Interface
                     return fheroes2::GameMode::MAIN_MENU;
                 }
             }
-            if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+            else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+                if ( fheroes2::showStandardTextMessage(
+                         _( "Unsaved Changes" ),
+                         _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                         Dialog::YES | Dialog::NO )
+                     == Dialog::NO ) {
+                    continue;
+                }
+
+                Get().saveMapToFile();
                 bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty ) {
-                    if ( fheroes2::showStandardTextMessage(
-                             _( "Unsaved Changes" ),
-                             _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
-                             Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        Get().saveMapToFile();
-                        isNameEmpty = conf.getCurrentMapInfo().name.empty();
-                        if ( isNameEmpty ) {
-                            display.render( background.totalArea() );
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
+                    display.render( background.totalArea() );
+                    continue;
                 }
                 if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
@@ -1257,7 +1253,7 @@ namespace Interface
                     }
                 }
             }
-            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 return fheroes2::GameMode::CANCEL;
             }
 

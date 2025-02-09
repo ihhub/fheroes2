@@ -304,7 +304,7 @@ void Castle::_openWell()
     }
 }
 
-void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const
+void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool hideWindow, fheroes2::Image & background ) const
 {
     if ( !( _constructedBuildings & dwellingType ) ) {
         // This building has not been built.
@@ -346,7 +346,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
         break;
     }
 
-    if ( restoreBackground ) {
+    if ( hideWindow ) {
         // Restore background under "Available: <number>" text.
         const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
 

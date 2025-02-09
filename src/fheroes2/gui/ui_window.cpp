@@ -487,14 +487,4 @@ namespace fheroes2
             }
         }
     }
-
-    void StandardWindow::restoreBackground()
-    {
-        _restorer.restore();
-        Display & display = Display::instance();
-        if ( &_output == &display ) {
-            // The screen area of the closed window should be updated during the next '.render()' call.
-            display.render( _totalArea );
-        }
-    }
 }

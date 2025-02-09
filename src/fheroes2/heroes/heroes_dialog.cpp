@@ -127,8 +127,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // Dialog title.
     const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
 
-    auto drawTitleText = [&display, &titleRoi, &dialogRoi, &backgroundImage, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
-        if ( restoreBackground ) {
+    auto drawTitleText = [&display, &titleRoi, &dialogRoi, &backgroundImage, this]( const std::string & heroName, const int heroRace, const bool hideWindow ) {
+        if ( hideWindow ) {
             fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
         }
 
