@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 02:21+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4209,6 +4209,58 @@ msgstr ""
 "Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "LÀM LẠI"
+
+msgid "Main Menu"
+msgstr "Trình đơn Chính"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Chơi lại"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Ngươi có chắc chắn muốn tải bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "bắt đầu bản đồ mới"
@@ -4230,6 +4282,13 @@ msgstr "Lưu bản đồ hiện tại."
 
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
+
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Nhấp để quay lại màn hình chính."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
 
 msgid "Input %{object} text"
 msgstr ""
@@ -5601,9 +5660,6 @@ msgstr "Hành động Mặc định"
 
 msgid "Global Actions"
 msgstr "Hành động Toàn cầu"
-
-msgid "Main Menu"
-msgstr "Trình đơn Chính"
 
 msgid "World Map"
 msgstr "Bản đồ Thế giới"

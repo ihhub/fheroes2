@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 02:21+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-23 08:39-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4154,6 +4154,58 @@ msgstr ""
 "Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
 "salvas no mapa atual serão perdidas.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "INICIAR"
+
+msgid "Main Menu"
+msgstr "Menu Principal"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Deseja retornar ao Menu Principal do jogo? Todas as alterações não salvas "
+"serão perdidas."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Iniciar"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Tem certeza de que deseja carregar um novo mapa? (Todas as alterações não "
+"salvas no mapa atual serão perdidas.)"
+
 msgid "Create a new map from scratch."
 msgstr "Crie um novo mapa do zero."
 
@@ -4174,6 +4226,13 @@ msgstr "Salvar o mapa atual."
 
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
+
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Clique para retornar ao menu principal."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
 
 msgid "Input %{object} text"
 msgstr "Inserir texto de %{object}"
@@ -5479,9 +5538,6 @@ msgstr "Ações Padrão"
 
 msgid "Global Actions"
 msgstr "Ações Globais"
-
-msgid "Main Menu"
-msgstr "Menu Principal"
 
 msgid "World Map"
 msgstr "Mapa-Múndi"

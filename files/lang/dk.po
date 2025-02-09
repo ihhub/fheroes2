@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 02:21+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4189,6 +4189,58 @@ msgstr ""
 "Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
 "af det nuværende kort, vil gå tabt.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+msgid "Main Menu"
+msgstr "Hovedmenu"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på, at du vil tilbage til spillets hovedmenu? Alle ikke-gemte "
+"ændringer vil gå tabt."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Genstart"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Er du sikker på, at du vil indlæse et nyt kort? (Alle ikke-gemte ændringer "
+"på det nuværende kort, vil gå tabt.)"
+
 msgid "Create a new map from scratch."
 msgstr "Opret et nyt kort fra bunden."
 
@@ -4209,6 +4261,13 @@ msgstr "Gem nuværende kort."
 
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
+
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Klik her for at vende tilbage til hovedmenuen."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
 
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
@@ -5551,9 +5610,6 @@ msgstr "Standardhandlinger"
 
 msgid "Global Actions"
 msgstr "Globale Handlinger"
-
-msgid "Main Menu"
-msgstr "Hovedmenu"
 
 msgid "World Map"
 msgstr "Verdenskort"
