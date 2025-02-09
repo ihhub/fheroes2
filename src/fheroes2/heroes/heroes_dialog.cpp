@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -68,7 +68,6 @@
 namespace
 {
     const fheroes2::Size primarySkillIconSize{ 82, 93 };
-    const uint32_t experienceMaxValue{ 2990600 };
     const uint32_t spellPointsMaxValue{ 999 };
 }
 
@@ -502,8 +501,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                                                : _( "Change Experience value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
+                    const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                     int32_t value = static_cast<int32_t>( experience );
-                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, experienceMaxValue, value ) ) {
+
+                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), value, 1, &tempExperienceUI ) ) {
                         useDefaultExperience = false;
                         experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );

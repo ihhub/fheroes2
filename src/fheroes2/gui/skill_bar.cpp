@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -208,7 +208,9 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         std::string header = _( "Set %{skill} Skill" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
-        return Dialog::SelectCount( header, skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue );
+        const fheroes2::PrimarySkillDialogElement skillUI{ skill, {} };
+
+        return Dialog::SelectCount( std::move( header ), skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue, 1, &skillUI );
     };
 
     int32_t value;

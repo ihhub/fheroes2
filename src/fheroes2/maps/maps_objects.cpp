@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -120,7 +120,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     artifact = dataStream.getLE16() + 1;
 
     // The event applies to AI players as well.
-    computer = ( dataStream.get() != 0 );
+    isComputerPlayerAllowed = ( dataStream.get() != 0 );
 
     // Does event occur only once?
     isSingleTimeEvent = ( dataStream.get() != 0 );
@@ -315,12 +315,12 @@ void MapSign::setDefaultMessage()
     message = Rand::Get( randomMessage );
 }
 
-OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapBaseObject & obj )
 {
     return stream << static_cast<const MapPosition &>( obj ) << obj.uid;
 }
 
-IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
@@ -337,22 +337,34 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.resources << obj.artifact << obj.isComputerPlayerAllowed << obj.isSingleTimeEvent << obj.colors
+                  << obj.message << obj.secondarySkill;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
-    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
+        obj.secondarySkill = {};
+        obj.experience = 0;
+    }
+    else {
+        stream >> obj.secondarySkill >> obj.experience;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 {
-    stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
@@ -367,10 +379,10 @@ IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.message;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.message;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 {
-    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
+    return stream >> static_cast<MapBaseObject &>( obj ) >> obj.message;
 }
