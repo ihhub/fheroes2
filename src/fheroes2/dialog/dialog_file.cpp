@@ -51,10 +51,6 @@ namespace
         const int32_t totalDialogWidth = 337;
         const int32_t totalDialogHeight = 252;
 
-        // Prepare restorer of the adventure map when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - fheroes2::borderWidthPx ) / 2,
-                                      ( display.height() - totalDialogHeight + fheroes2::borderWidthPx ) / 2, totalDialogWidth, totalDialogHeight );
-
         fheroes2::StandardWindow background( 289, 204, true, display );
 
         fheroes2::Button buttonNew;
@@ -107,7 +103,7 @@ namespace
             }
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
-                back.restore();
+                background.restoreBackground();
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
