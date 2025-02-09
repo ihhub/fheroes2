@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2025-02-07 18:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.4.4\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ENDAST\n"
-"STRID"
 
 msgid ""
 "NEW\n"
@@ -146,6 +139,13 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr "SOLOSPEL"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ENDAST\n"
+"STRID"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3146,8 +3146,8 @@ msgstr "Först välj mottagare!"
 msgid "You cannot select %{resource}!"
 msgstr "Du kan inte välja %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Välj antal %{resource}:"
+msgid "Set %{resource-type} Count"
+msgstr "Ange %{resource-type} antal"
 
 msgid "Select Recipients"
 msgstr "Välj mottagare"
@@ -4023,20 +4023,61 @@ msgstr "Radera Händelse"
 msgid "Delete an existing event."
 msgstr "Radera en redan existerande händelse."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effekter"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Förlust-\n"
+"villkor"
+
 msgid "Cancel event after first visit"
 msgstr "Avbryt händelse efter första besök"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Datorfärger som kan få händelsen:"
+
+msgid "Set Experience value"
+msgstr "Ange erfarenhetspoäng"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "Ingen artefakt kommer att ges som belöning."
 
 msgid "Delete Artifact"
 msgstr "Radera Artefakt"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Ta bort en artefakt från belöningen."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Välj Förmåga:"
+
+#, fuzzy
+msgid "Delete Secondary Skill"
+msgstr "Välj %{secondary-skill}"
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "Inga resurser kommer att ges som belöning."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "Inga resurser kommer att ges som belöning."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4111,9 +4152,6 @@ msgstr "Lämna kartredigeraren."
 
 msgid "Input %{object} text"
 msgstr "Skriv in %{object} text"
-
-msgid "Set %{resource-type} Count"
-msgstr "Ange %{resource-type} antal"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ange slumpad radie för Främsta artefakt"
@@ -4735,6 +4773,12 @@ msgstr "Radera Svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
+
+msgid "No artifact will be given as a reward."
+msgstr "Ingen artefakt kommer att ges som belöning."
+
+msgid "Delete an artifact from the reward."
+msgstr "Ta bort en artefakt från belöningen."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "Dag: %{day} Vecka: %{week} Månad: %{month}"
@@ -7999,9 +8043,6 @@ msgstr "Ange erfarenhetspoäng. Nuvarande värde är standard."
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Ändra erfarenhetspoäng. Högerklicka för att återställa till standard."
-
-msgid "Set Experience value"
-msgstr "Ange erfarenhetspoäng"
 
 msgid "View Experience Info"
 msgstr "Visa information för erfarenhet"
@@ -12017,6 +12058,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Välj antal %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Aktivera autom. strid"
