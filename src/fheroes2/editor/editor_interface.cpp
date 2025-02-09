@@ -1225,7 +1225,7 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
-                const bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty
                      && fheroes2::showStandardTextMessage(
                             _( "Unsaved Changes" ),
@@ -1236,12 +1236,13 @@ namespace Interface
                 }
                 if ( isNameEmpty ) {
                     Get().saveMapToFile();
+                    isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 }
-                else if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+                if ( !isNameEmpty && conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
                                                        _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
                 }
-                else {
+                else if ( !isNameEmpty ) {
                     if ( fheroes2::
                              showStandardTextMessage( _( "Start Map" ),
                                                       _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
