@@ -1150,9 +1150,6 @@ namespace Interface
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
         fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
@@ -1164,6 +1161,9 @@ namespace Interface
         fheroes2::Button buttonCancel;
         fheroes2::ButtonSprite buttonMainMenu;
         fheroes2::ButtonSprite buttonPlayMap;
+
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         const fheroes2::Point buttonOffsets = { 30, 15 };
         background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
