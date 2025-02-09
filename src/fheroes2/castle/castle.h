@@ -399,7 +399,7 @@ private:
     void _joinRNDArmy();
     void _postLoad();
 
-    void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool hideWindow, fheroes2::Image & background ) const;
+    void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
     void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> & monsterAnimInfo ) const;
 
