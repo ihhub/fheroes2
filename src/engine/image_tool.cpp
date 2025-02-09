@@ -187,9 +187,8 @@ namespace fheroes2
             return false;
         }
 
-// SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported starting with SDL 2.0.5
 #if !SDL_VERSION_ATLEAST( 2, 0, 5 )
-#error Minimal supported SDL version is 2.0.5.
+#error SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported since SDL 2.0.5
 #endif
 
         // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
