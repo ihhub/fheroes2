@@ -1158,9 +1158,9 @@ namespace Interface
         fheroes2::Button buttonLoad;
         fheroes2::Button buttonSave;
         fheroes2::Button buttonQuit;
-        fheroes2::Button buttonCancel;
         fheroes2::ButtonSprite buttonMainMenu;
         fheroes2::ButtonSprite buttonPlayMap;
+        fheroes2::Button buttonCancel;
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -1190,9 +1190,9 @@ namespace Interface
             buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
             buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
             buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
             buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
             buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPlayMap.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
