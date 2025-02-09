@@ -346,15 +346,14 @@ namespace fheroes2
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
                                        const Point & shadowOffset = Point( -4, 6 ) );
 
-    // The height of text area is only 16 pixels. If 'isTransparentBackground' is set to false the button sprite will have a default background pattern from
-    // STONEBAK or STONEBAK_EVIL (for Evil interface). The pattern is the same for all buttons.
+    // Generate released and pressed button sprites with custom sizes (width and height) for a chosen background ICN.
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, Size buttonSize, Point & releasedOffset, Point & pressedOffset,
                                 const int backgroundIcnId );
 
-    // Makes a button that has the width necessary to fit a provided text using an empty button template
+    // Generates released and pressed button sprites with the width and height necessary to fit a provided text using an empty button template ICN and a chosen background
+    // ICN.
     void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
-    // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const fheroes2::Size buttonSize, const bool isEvilInterface,
-                            const int backgroundIcnId );
+    // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
 }
