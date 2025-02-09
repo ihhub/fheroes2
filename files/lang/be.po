@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -18,13 +18,6 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"АСОБНЫ\n"
-"БОЙ"
 
 msgid ""
 "NEW\n"
@@ -146,6 +139,13 @@ msgid ""
 msgstr ""
 "ЗВЫЧАЙНАЯ\n"
 "ГУЛЬНЯ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"АСОБНЫ\n"
+"БОЙ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -2982,8 +2982,11 @@ msgstr ""
 msgid "You cannot select %{resource}!"
 msgstr ""
 
-msgid "Select count %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid "Select Recipients"
 msgstr ""
@@ -3860,19 +3863,51 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Эфекты"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr "Умова паразы"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr ""
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr ""
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+msgid "Secondary Skill"
+msgstr ""
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3943,12 +3978,6 @@ msgstr ""
 
 msgid "Input %{object} text"
 msgstr ""
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr ""
-"Некалькі\n"
-"%{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
@@ -4585,6 +4614,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -7365,9 +7400,6 @@ msgid "Set custom Experience value. Current value is default."
 msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
-
-msgid "Set Experience value"
 msgstr ""
 
 msgid "View Experience Info"

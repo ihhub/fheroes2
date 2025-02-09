@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
 "X-Generator: Poedit 3.3.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"RÝCHLY\n"
-"BOJ"
 
 msgid ""
 "NEW\n"
@@ -155,6 +148,13 @@ msgid ""
 msgstr ""
 "BEŽNÁ\n"
 "HRA"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"RÝCHLY\n"
+"BOJ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3202,8 +3202,9 @@ msgstr "Najprv zvoľ príjemcov!"
 msgid "You cannot select %{resource}!"
 msgstr "Nemôžeš zvoliť %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Zvoľ počet - %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Streľ do: %{monster}"
 
 msgid "Select Recipients"
 msgstr "Zvoľ príjemcov"
@@ -4107,20 +4108,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Načítať existujúcu mapu."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Zvukové efekty"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Podmienky\n"
+"prehry"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Skúsenosti"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Zvoľ artefakt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Načítať existujúcu mapu."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Zvoľ zručnosť:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4200,10 +4238,6 @@ msgstr "Ukončiť prácu v editore máp."
 
 msgid "Input %{object} text"
 msgstr ""
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Streľ do: %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4890,6 +4924,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -8146,10 +8186,6 @@ msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
-
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Skúsenosti"
 
 msgid "View Experience Info"
 msgstr "Zobraz info o skúsenostiach"
@@ -12228,6 +12264,9 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Zvoľ počet - %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Povoľ automatizovaný boj"

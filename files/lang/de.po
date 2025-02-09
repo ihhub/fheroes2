@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2024-11-07 12:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,13 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"NUR\n"
-"KAMPF"
 
 msgid ""
 "NEW\n"
@@ -148,6 +141,13 @@ msgid ""
 msgstr ""
 "STANDARD\n"
 "SPIEL"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"NUR\n"
+"KAMPF"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3238,8 +3238,9 @@ msgstr "Zuerst die Empfänger auswählen!"
 msgid "You cannot select %{resource}!"
 msgstr "%{resource} nicht ausgewählt werden!"
 
-msgid "Select count %{resource}:"
-msgstr "Anzahl %{resource} wählen:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Schieße auf %{monster}"
 
 msgid "Select Recipients"
 msgstr "Empfänger auswählen"
@@ -4157,20 +4158,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Eine vorhandene Karte laden."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effekte"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Verlust-\n"
+"bedingungen"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Erfahrung"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Artefakt auswählen:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Eine vorhandene Karte laden."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Fähigkeit auswählen:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4250,10 +4288,6 @@ msgstr "Den Karteneditor verlassen."
 
 msgid "Input %{object} text"
 msgstr ""
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Schieße auf %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4956,6 +4990,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -8338,10 +8378,6 @@ msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
-
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Erfahrung"
 
 msgid "View Experience Info"
 msgstr "Infos zur Erfahrung anzeigen"
@@ -12521,6 +12557,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Anzahl %{resource} wählen:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Autokampf einschalten"

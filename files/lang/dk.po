@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -19,13 +19,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Loco-Parser: loco_parse_po\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"KUN\n"
-"KAMP"
 
 msgid ""
 "NEW\n"
@@ -148,6 +141,13 @@ msgid ""
 msgstr ""
 "ENKELT\n"
 "SPILLER"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"KUN\n"
+"KAMP"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3208,8 +3208,9 @@ msgstr "Vælg først modtagere!"
 msgid "You cannot select %{resource}!"
 msgstr "Du kan ikke vælge %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Vælg antal %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Indstil antal %{monster}"
 
 msgid "Select Recipients"
 msgstr "Vælg modtagere"
@@ -4088,19 +4089,55 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "indlæs et eksisterende kort."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effekter"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Tabs-\n"
+"vilkår"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
+msgstr "Indstil erfaringspoint"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr "Slet artefakt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Vælg evne:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4175,10 +4212,6 @@ msgstr "Forlad korteditoren."
 
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Indstil antal %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
@@ -4849,6 +4882,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -8131,9 +8170,6 @@ msgstr "Indstil tilpasset erfaringspointværdi. Nuværende værdi er standard."
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Skift erfaringspointværdi. Højreklik: Nulstil til standardværdi."
-
-msgid "Set Experience value"
-msgstr "Indstil erfaringspoint"
 
 msgid "View Experience Info"
 msgstr "Vis erfaringsinfo"
@@ -12200,6 +12236,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Vælg antal %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Aktiver Autokamp"

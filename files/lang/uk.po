@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ЛИШЕ\n"
-"БИТВА"
 
 msgid ""
 "NEW\n"
@@ -153,6 +146,13 @@ msgid ""
 msgstr ""
 "ЗВИЧАЙНА\n"
 "ГРА"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ЛИШЕ\n"
+"БИТВА"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3162,8 +3162,9 @@ msgstr "Спершу виберіть отримувачів!"
 msgid "You cannot select %{resource}!"
 msgstr "Неможливо вибрати %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Виберіть кількість %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Задати кількість %{monster}"
 
 msgid "Select Recipients"
 msgstr "Вибрати отримувачів"
@@ -4031,20 +4032,58 @@ msgstr "Видалити подію"
 msgid "Delete an existing event."
 msgstr "Видалити існуючу подію."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Ефекти"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr "Умови поразки"
+
 msgid "Cancel event after first visit"
 msgstr "Скасувати подію після першого відвідування"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
+
+msgid "Set Experience value"
+msgstr "Задати кількість досвіду"
 
 msgid "Artifact"
 msgstr "Артефакт"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "Жоден артефакт не буде виданий у якості винагороди."
 
 msgid "Delete Artifact"
 msgstr "Видалити артефакт:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Видалити артефакт з винагороди."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Оберіть навичку:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "Жодних ресурсів не буде надано в якості винагороди."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "Жодних ресурсів не буде надано в якості винагороди."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4121,10 +4160,6 @@ msgstr "Вийти з редактора мап."
 
 msgid "Input %{object} text"
 msgstr "Ввести %{object} текст"
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Задати кількість %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Встановити радіус випадкового Легендарного Артефакту"
@@ -4753,6 +4788,12 @@ msgstr "Видалити відповідь"
 
 msgid "Delete an existing answer for the question."
 msgstr "Видалити існуючу відповідь на запитання."
+
+msgid "No artifact will be given as a reward."
+msgstr "Жоден артефакт не буде виданий у якості винагороди."
+
+msgid "Delete an artifact from the reward."
+msgstr "Видалити артефакт з винагороди."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
@@ -8017,9 +8058,6 @@ msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 "Встановити обсяг досвіду. Тицьніть правою кнопкою миші, щоб відновити "
 "значення як усталено."
-
-msgid "Set Experience value"
-msgstr "Задати кількість досвіду"
 
 msgid "View Experience Info"
 msgstr "Переглянути інформацію про досвід"
@@ -12056,6 +12094,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Виберіть кількість %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Увімкнути автобій"

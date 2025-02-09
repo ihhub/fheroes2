@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 02:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -19,11 +19,6 @@ msgstr ""
 "(n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2014-12-05 05:56+0000\n"
 "X-Generator: Poedit 3.1.1\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
 
 msgid ""
 "NEW\n"
@@ -129,6 +124,11 @@ msgstr ""
 msgid ""
 "STANDARD\n"
 "GAME"
+msgstr ""
+
+msgid ""
+"BATTLE\n"
+"ONLY"
 msgstr ""
 
 msgid ""
@@ -2980,8 +2980,9 @@ msgstr ""
 msgid "You cannot select %{resource}!"
 msgstr ""
 
-msgid "Select count %{resource}:"
-msgstr ""
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Pulti %{monster}"
 
 msgid "Select Recipients"
 msgstr ""
@@ -3853,20 +3854,52 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+msgid "Effects:"
+msgstr ""
+
+#, fuzzy
+msgid "Conditions:"
+msgstr "Pralaimėjimo sąlygos"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr "Magiškas artefaktas"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Magiškas artefaktas"
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Gynybos įgūdis"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3944,10 +3977,6 @@ msgstr ""
 
 msgid "Input %{object} text"
 msgstr ""
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Pulti %{monster}"
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4580,6 +4609,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -7377,9 +7412,6 @@ msgid "Set custom Experience value. Current value is default."
 msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
-
-msgid "Set Experience value"
 msgstr ""
 
 msgid "View Experience Info"
