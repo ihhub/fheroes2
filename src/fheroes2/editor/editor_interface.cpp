@@ -1225,21 +1225,19 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
-                if ( fheroes2::showStandardTextMessage(
-                         _( "Unsaved Changes" ),
-                         _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
-                         Dialog::YES | Dialog::NO )
-                     == Dialog::NO ) {
+                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                if ( isNameEmpty
+                     && fheroes2::showStandardTextMessage(
+                            _( "Unsaved Changes" ),
+                            _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                            Dialog::YES | Dialog::NO )
+                            == Dialog::NO ) {
                     continue;
                 }
-
-                Get().saveMapToFile();
-                const bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty ) {
-                    display.render( background.totalArea() );
-                    continue;
+                    Get().saveMapToFile();
                 }
-                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+                else if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
                                                        _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
                 }
