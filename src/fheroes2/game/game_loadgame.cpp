@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,7 +29,6 @@
 #include <ostream>
 #include <string>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
@@ -153,8 +152,7 @@ fheroes2::GameMode Game::LoadGame()
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonStandardGame( 0, 0, ICN::BUTTON_STANDARD_GAME, 0, 1 );
-    fheroes2::ButtonSprite buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
-                                               fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
+    fheroes2::Button buttonCampaignGame( 0, 0, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
     fheroes2::Button buttonMultiplayerGame( 0, 0, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonCancel( 0, 0, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
@@ -170,7 +168,7 @@ fheroes2::GameMode Game::LoadGame()
         buttons[i]->draw();
     }
 
-    // following the cancel button in newgame
+    // following the cancel button in new game
     buttonCancel.setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttonCancel.draw();
 

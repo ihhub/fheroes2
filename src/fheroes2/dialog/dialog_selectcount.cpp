@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -232,11 +232,11 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     // Generate a button to open the Virtual Keyboard window.
     fheroes2::Sprite releasedVirtualKB;
     fheroes2::Sprite pressedVirtualKB;
-    const int32_t buttonVirtualKBWidth = 40;
+    const fheroes2::Size buttonVirtualKBSize{ 40, 25 };
 
-    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBWidth, isEvilInterface, true );
+    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBSize, isEvilInterface, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
     // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
-    fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y - 30,
+    fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBSize.width - 10 ) / 2, dst_pt.y - 30,
                                                                        releasedVirtualKB, pressedVirtualKB, display );
 
     if ( result.empty() ) {

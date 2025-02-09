@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -789,14 +789,10 @@ void Kingdom::openOverviewDialog()
 
     // buttons
     dst_pt.x = cur_pt.x + 540;
-    dst_pt.y = cur_pt.y + 360;
+    dst_pt.y = cur_pt.y + 361;
     fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_HEROES, 0, 1 );
 
-    // We need to additionally render the background between HEROES and TOWNS/CASTLES buttons.
-    dst_pt.y += 42;
-    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
-
-    dst_pt.y += 3;
+    dst_pt.y += 45;
     fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_TOWNS, 0, 1 );
 
     dst_pt.y += 48;
