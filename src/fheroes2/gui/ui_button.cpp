@@ -900,8 +900,7 @@ namespace fheroes2
         pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( textAreaHeight - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const fheroes2::Size buttonSize, const bool isEvilInterface,
-                            const int backgroundIcnId )
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
