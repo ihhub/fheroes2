@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 02:21+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-21 23:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4108,6 +4108,58 @@ msgstr ""
 "Jste si jisti, že chcete vytvořit novou mapu? (Jakékoli neuložené změny v "
 "aktuální mapě budou ztraceny.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+msgid "Main Menu"
+msgstr "Hlavní menu"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Přejete si se vrátit do hlavního menu hry? Všechny neuložené změny budou "
+"ztraceny."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Start"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Jste si jisti, že chcete načíst novou mapu? (Jakékoli neuložené změny v "
+"aktuální mapě budou ztraceny.)"
+
 msgid "Create a new map from scratch."
 msgstr "Vytvořit novou mapu od základu."
 
@@ -4128,6 +4180,13 @@ msgstr "Uložit aktuální mapu."
 
 msgid "Quit out of the map editor."
 msgstr "Ukončit editor map."
+
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Klikni pro návrat do hlavního menu."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
 
 msgid "Input %{object} text"
 msgstr "Zadejte text %{object}"
@@ -5417,9 +5476,6 @@ msgstr "Výchozí akce"
 
 msgid "Global Actions"
 msgstr "Globální akce"
-
-msgid "Main Menu"
-msgstr "Hlavní menu"
 
 msgid "World Map"
 msgstr "Mapa světa"

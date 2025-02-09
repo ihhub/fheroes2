@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 02:21+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4124,6 +4124,57 @@ msgstr ""
 "Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
 "változtatásai el fognak veszni.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+msgid "Main Menu"
+msgstr "Főmenü"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Biztos hogy vissza akarsz lépni a főmenübe? Minden változtatás el fog veszni."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Start"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
+
 msgid "Create a new map from scratch."
 msgstr "Teljesen új térkép létrehozása."
 
@@ -4144,6 +4195,13 @@ msgstr "Az aktuális térkép mentése."
 
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
+
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
 
 msgid "Input %{object} text"
 msgstr "%{object} szöveg megadása"
@@ -5442,9 +5500,6 @@ msgstr "Alapértelmezett cselekvés"
 
 msgid "Global Actions"
 msgstr "Globális cselekvések"
-
-msgid "Main Menu"
-msgstr "Főmenü"
 
 msgid "World Map"
 msgstr "Világtérkép"
