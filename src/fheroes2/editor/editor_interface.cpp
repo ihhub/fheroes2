@@ -1239,6 +1239,7 @@ namespace Interface
                     isNameEmpty = conf.getCurrentMapInfo().name.empty();
                     if ( isNameEmpty ) {
                         // Saving was aborted.
+                        display.render( background.totalArea() );
                         continue;
                     }
                 }
