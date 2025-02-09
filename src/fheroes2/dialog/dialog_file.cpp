@@ -29,13 +29,11 @@
 #include "game_interface.h"
 #include "game_mode.h"
 #include "icn.h"
-#include "image.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_window.h"
 
