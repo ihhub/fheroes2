@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -175,7 +176,7 @@ namespace fheroes2
         bool _isUniformedVerticalAlignment{ true };
     };
 
-    class Text final : public TextBase
+    class Text : public TextBase
     {
     public:
         friend class MultiFontText;
@@ -234,7 +235,7 @@ namespace fheroes2
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        void fitToOneRow( const int32_t maxWidth );
+        virtual void fitToOneRow( const int32_t maxWidth );
 
         std::string text() const override
         {
@@ -257,12 +258,34 @@ namespace fheroes2
         // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
         void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
 
-    private:
+    protected:
         std::string _text;
 
         FontType _fontType;
 
         bool _keepLineTrailingSpaces{ false };
+    };
+
+    class TextInput final : public Text
+    {
+    public:
+        using Text::Text;
+
+        void setCursorPosition( const size_t position )
+        {
+            _cursorPosition = position;
+        }
+
+        void fitToOneRow( const int32_t maxWidth ) override;
+
+        size_t getOffset() const
+        {
+            return _textOffset;
+        }
+
+    private:
+        size_t _cursorPosition{ 0 };
+        size_t _textOffset{ 0 };
     };
 
     class MultiFontText final : public TextBase
