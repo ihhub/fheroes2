@@ -80,6 +80,15 @@
 #include "ui_tool.h"
 #include "zzlib.h"
 
+#if defined( TARGET_MORPHOS )
+#include "version.h"
+#define STRINGIFY( x ) #x
+#define TOSTRING( x ) STRINGIFY( x )
+#define __AMIGAVER__ TOSTRING( MAJOR_VERSION ) "." TOSTRING( MINOR_VERSION ) "." TOSTRING( INTERMEDIATE_VERSION )
+unsigned long __stack = 1024 * 1024;
+static const std::string morphos_versions_tag = "$VER: fheroes2 " __AMIGAVER__ " (" __AMIGADATE__ ")";
+#endif
+
 namespace
 {
     std::string GetCaption()
@@ -289,9 +298,9 @@ int main( int argc, char ** argv )
     try {
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
-
+#if !defined( TARGET_MORPHOS )
         COUT( GetCaption() )
-
+#endif
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
 
