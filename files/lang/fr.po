@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-09 14:16+0000\n"
-"PO-Revision-Date: 2025-02-10 16:13+0100\n"
+"PO-Revision-Date: 2025-02-10 16:42+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -488,11 +488,9 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "La troupe de %{name} décime la troupe ennemie !"
 msgstr[1] "Les %{name} déciment la troupe ennemie !"
 
-#, fuzzy
 msgid "%{name} has turned off the auto combat"
 msgstr "%{name} a désactivé le combat auto"
 
-#, fuzzy
 msgid "%{name} has turned on the auto combat"
 msgstr "%{name} a activé le combat auto"
 
@@ -903,7 +901,6 @@ msgstr "Voulez-vous vraiment activer le combat automatique ?"
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
 
-#, fuzzy
 msgid "The computer continues the combat for you."
 msgstr "L'ordinateur joue le combat à votre place."
 
@@ -2575,7 +2572,7 @@ msgid "Upg. Dwelling 6"
 msgstr "Demeure 6 renforcée"
 
 msgid "2x Upg. Dwelling 6"
-msgstr "Demeure 6 renforcée 2x"
+msgstr "Demeure 6 ren. 2x"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -4017,7 +4014,7 @@ msgid "Message Text:"
 msgstr "Barre d'informations"
 
 msgid "Reward:"
-msgstr "Récompense:"
+msgstr "Récompense :"
 
 msgid "Player colors allowed to get event:"
 msgstr ""
