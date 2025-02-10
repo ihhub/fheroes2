@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-09 14:16+0000\n"
-"PO-Revision-Date: 2024-10-07 15:36+0200\n"
+"PO-Revision-Date: 2025-02-10 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -47,15 +47,13 @@ msgstr ""
 "QUIT-\n"
 "TER"
 
-#, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "NOU-\n"
-"VEAU"
+"VELLE"
 
-#, fuzzy
 msgid ""
 "SAVE\n"
 "MAP"
@@ -63,7 +61,6 @@ msgstr ""
 "SAUVE-\n"
 "GARDER"
 
-#, fuzzy
 msgid ""
 "LOAD\n"
 "MAP"
@@ -228,9 +225,8 @@ msgstr "VILLAGE"
 msgid "CASTLE"
 msgstr "CHÂTEAU"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "REJOUER"
+msgstr "LIMITER"
 
 msgid ""
 "D\n"
@@ -264,6 +260,7 @@ msgstr ""
 "E\n"
 "R"
 
+# Patrouille is too long.
 msgid ""
 "P\n"
 "A\n"
@@ -272,6 +269,11 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"R\n"
+"A\n"
+"Y\n"
+"O\n"
+"N"
 
 msgid ""
 "C\n"
@@ -312,23 +314,27 @@ msgstr ""
 "O"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "RUMEURS"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ÉVÉNEMENT"
 
 msgid "LANGUAGE"
-msgstr ""
+msgstr "LANGUE"
 
 msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"COMBAT\n"
+"AUTOM."
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"COMBAT\n"
+"RAPIDE"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -435,9 +441,8 @@ msgstr "1000+"
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
-msgstr "Neutre"
+msgstr "Neutres"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Troupes de %{count} alignements -%{penalty}"
@@ -445,11 +450,10 @@ msgstr "Troupes de %{count} alignements -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Morts-vivants parmi les troupes -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Actions par défaut"
+msgstr "Troupes par défaut"
 
 msgid "View %{name}"
 msgstr "Voir %{name}"
@@ -918,9 +922,8 @@ msgstr ""
 msgid "quickCombat|This cannot be undone."
 msgstr ""
 
-#, fuzzy
 msgid "Quick Combat"
-msgstr "Combat Auto"
+msgstr "Combat rapide"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -2538,52 +2541,41 @@ msgstr "Rien de spécial"
 msgid "Horde Building"
 msgstr ""
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Demeures"
+msgstr "Demeure 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Demeures"
+msgstr "Demeure 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Demeures"
+msgstr "Demeure 2 renforcée"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Demeures"
+msgstr "Demeure 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Demeures"
+msgstr "Demeure 3 renforcée"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Demeures"
+msgstr "Demeure 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Demeures"
+msgstr "Demeure 4 renforcée"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Demeures"
+msgstr "Demeure 5"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Demeures"
+msgstr "Demeure 5 renforcée"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Demeures"
+msgstr "Demeure 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Demeures"
+msgstr "Demeure 6 renforcée"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "Demeure 6 renforcée 2x"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -3319,7 +3311,6 @@ msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
-#, fuzzy
 msgid "Select Language:"
 msgstr "Choix de la langue :"
 
@@ -3504,9 +3495,8 @@ msgstr "Sélectionnez les forces maximales à recruter."
 msgid "Select only 1 monster to be recruited."
 msgstr "Ne sélectionnez qu'une seule unité à recruter."
 
-#, fuzzy
 msgid "Select this game resolution."
-msgstr "Choisir la résolution d'écran"
+msgstr "Choisir cette résolution d'écran."
 
 msgid ""
 "Selecting this resolution will set a resolution that is scaled from the "
@@ -3614,9 +3604,8 @@ msgstr "Aléatoire"
 msgid "Click to start placing the selected hero."
 msgstr "Cliquez pour commencer le placement du village/château sélectionné."
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "Héros %{race} %{color}"
+msgstr "%{race} %{color}"
 
 msgid "You will place"
 msgstr "Vous avez choisi de placer"
@@ -3720,13 +3709,12 @@ msgstr "Taille de l'icône"
 msgid "Map Type"
 msgstr "Type de carte"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Indique si la carte est faite pour la version du jeu \"The Succession Wars\" "
-"ou \"The Price of Loyalty\"."
+"Indique si la carte est faite pour la version du jeu \"The Succession "
+"Wars\", \"The Price of Loyalty\" ou \"Resurrection\"."
 
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
@@ -3740,12 +3728,14 @@ msgstr "Le prix de la loyauté"
 msgid "Resurrection"
 msgstr "Résurrection"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Language:\n"
-msgstr "Langue"
+msgstr ""
+"\n"
+"\n"
+"Langue:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -3870,7 +3860,6 @@ msgstr "Auto sans magie"
 msgid "Battles"
 msgstr "Batailles"
 
-#, fuzzy
 msgid "combatMode|Manual"
 msgstr "Manuelles"
 
@@ -3972,13 +3961,11 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Château aléatoire"
+msgstr "Nom du château aléatoire"
 
-#, fuzzy
 msgid "Random Town Name"
-msgstr "Village aléatoire"
+msgstr "Nom du village aléatoire"
 
 #, fuzzy
 msgid "Allow Castle build"
@@ -4030,7 +4017,7 @@ msgid "Message Text:"
 msgstr "Barre d'informations"
 
 msgid "Reward:"
-msgstr ""
+msgstr "Récompense:"
 
 msgid "Player colors allowed to get event:"
 msgstr ""
@@ -4230,12 +4217,13 @@ msgid ""
 "MAIN\n"
 "MENU"
 msgstr ""
+"MENU\n"
+"PRINCI."
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "COMMENCER"
+msgstr "LANCER"
 
 msgid "Main Menu"
 msgstr "Menu principal"
@@ -4842,7 +4830,7 @@ msgid "Click to edit custom rumors."
 msgstr "Enregistrer le jeu en cours."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Rumeurs"
 
 #, fuzzy
 msgid "Click to edit daily events."
@@ -4915,10 +4903,10 @@ msgid "Toggle display of objects' passability."
 msgstr ""
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Rumeur:"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Rumeur"
 
 msgid "This rumor already exists in the list."
 msgstr ""
@@ -8164,6 +8152,9 @@ msgid ""
 "\n"
 "Your answer?"
 msgstr ""
+"'\n"
+"\n"
+"Votre réponse ?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8472,7 +8463,7 @@ msgstr ""
 " Niveau suivant %{exp2}."
 
 msgid "million|M"
-msgstr ""
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "Niveau %{level}"
