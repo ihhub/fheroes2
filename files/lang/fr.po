@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-09 14:16+0000\n"
-"PO-Revision-Date: 2025-02-10 16:49+0100\n"
+"PO-Revision-Date: 2025-02-10 20:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -834,18 +834,18 @@ msgstr "Voir les infos de la baliste"
 msgid "Ballista"
 msgstr "Baliste"
 
-#, fuzzy
 msgid "Automatic combat modes"
-msgstr "Combat Auto"
+msgstr "Modes de combat automatique"
 
-#, fuzzy
 msgid "Automatic Combat Modes"
-msgstr "Combat Auto"
+msgstr "Modes de combat automatique"
 
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
 msgstr ""
+"Choisissez entre lancer le combat en mode combat automatique ou en mode "
+"combat rapide."
 
 msgid "Customize system options"
 msgstr "Modifier les options système"
@@ -893,13 +893,11 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
-#, fuzzy
 msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Voulez-vous vraiment activer le combat automatique ?"
+msgstr "Êtes-vous sur de vouloir désactiver le mode combat automatique ?"
 
-#, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
+msgstr "Êtes-vous sûr de vouloir résoudre le combat en mode combat rapide ?"
 
 msgid "The computer continues the combat for you."
 msgstr "L'ordinateur joue le combat à votre place."
@@ -909,15 +907,18 @@ msgid ""
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
+"Ceci peut être interrompu à tout moment en appuyant sur le raccourcie du "
+"mode combat automatique ou la touche Annuler ou en cliquant gauche ou droite "
+"avec votre souris n'importe où sur l'écran de jeu."
 
 msgid "Auto Combat"
 msgstr "Combat Auto"
 
 msgid "The combat is resolved from the current state."
-msgstr ""
+msgstr "Le combat a été résolu à partir de la situation actuelle."
 
 msgid "quickCombat|This cannot be undone."
-msgstr ""
+msgstr "Cela ne peut pas être modifié."
 
 msgid "Quick Combat"
 msgstr "Combat rapide"
@@ -1045,9 +1046,8 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat mode?"
-msgstr "Voulez-vous vraiment interrompre le combat auto ?"
+msgstr "Êtes-vous sur de vouloir interrompre le mode combat automatique ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -3520,13 +3520,11 @@ msgstr "Cliquez pour ouvrir la fenêtre du clavier virtuel."
 msgid "Open Virtual Keyboard"
 msgstr "Open Virtual Keyboard"
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Troupes à déplacer :"
+msgstr "Combien de créatures voulez-vous déplacer ? "
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Sélectionnez le nombre de pelotons à former :"
+msgstr "Sélectionnez le nombre d'unités que vous voulez séparer :"
 
 msgid "Map: "
 msgstr "Carte : "
@@ -11393,6 +11391,12 @@ msgid ""
 "here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
 "say a word, he hands you a Magic Book."
 msgstr ""
+"Un jeune homme s'approche de vous : \"Mon Seigneur, permettez moi de vous "
+"montrer ma dernière invention pour partager la connaissance !\" Vous suivez "
+"le jeune homme dans son atelier et vous apercevez immédiatement une machine "
+"volumineuse avec des leviers et des manivelles. \"La voici\" dit-il avec "
+"entrain, \"La presse à imprimer\" et avant que vous ne puissiez dire quelque "
+"chose, il vous tend Le Grimoire."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
