@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,13 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.4.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"CHỈ\n"
-"CHIẾN ĐẤU"
 
 msgid ""
 "NEW\n"
@@ -148,6 +141,13 @@ msgid ""
 msgstr ""
 "GAME\n"
 "THƯỜNG"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"CHỈ\n"
+"CHIẾN ĐẤU"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3202,8 +3202,9 @@ msgstr "Đầu tiên chọn người nhận!"
 msgid "You cannot select %{resource}!"
 msgstr "Ngươi không thể chọn %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Chọn số lượng %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Bắn %{monster}"
 
 msgid "Select Recipients"
 msgstr "Chọn Người nhận"
@@ -4103,20 +4104,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Tải một bản đồ đã có."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Hiệu ứng"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Điều kiện\n"
+"Thua"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Kinh nghiệm"
 
 msgid "Artifact"
 msgstr "Bảo vật"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Chọn Bảo vật:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Tải một bản đồ đã có."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Chọn Kỹ năng:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4171,6 +4209,58 @@ msgstr ""
 "Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "LÀM LẠI"
+
+msgid "Main Menu"
+msgstr "Trình đơn Chính"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Chơi lại"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Ngươi có chắc chắn muốn tải bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "bắt đầu bản đồ mới"
@@ -4193,12 +4283,15 @@ msgstr "Lưu bản đồ hiện tại."
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Nhấp để quay lại màn hình chính."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Bắn %{monster}"
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4892,6 +4985,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -5561,9 +5660,6 @@ msgstr "Hành động Mặc định"
 
 msgid "Global Actions"
 msgstr "Hành động Toàn cầu"
-
-msgid "Main Menu"
-msgstr "Trình đơn Chính"
 
 msgid "World Map"
 msgstr "Bản đồ Thế giới"
@@ -8199,10 +8295,6 @@ msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
-
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Kinh nghiệm"
 
 msgid "View Experience Info"
 msgstr "Xem Thông tin Kinh nghiệm"
@@ -12357,6 +12449,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Chọn số lượng %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Kích hoạt tự động chiến đấu"

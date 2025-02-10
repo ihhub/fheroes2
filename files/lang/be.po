@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -18,13 +18,6 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"АСОБНЫ\n"
-"БОЙ"
 
 msgid ""
 "NEW\n"
@@ -146,6 +139,13 @@ msgid ""
 msgstr ""
 "ЗВЫЧАЙНАЯ\n"
 "ГУЛЬНЯ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"АСОБНЫ\n"
+"БОЙ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -2982,8 +2982,11 @@ msgstr ""
 msgid "You cannot select %{resource}!"
 msgstr ""
 
-msgid "Select count %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid "Select Recipients"
 msgstr ""
@@ -3860,19 +3863,51 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Эфекты"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr "Умова паразы"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr ""
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr ""
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+msgid "Secondary Skill"
+msgstr ""
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3916,6 +3951,52 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "НАНОВА"
+
+msgid "Main Menu"
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Вялікія мапы"
+
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
 msgid "Create a new map from scratch."
 msgstr ""
 
@@ -3941,14 +4022,15 @@ msgstr "Назва абранай мапы."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
+msgid "Input %{object} text"
 msgstr ""
-"Некалькі\n"
-"%{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
@@ -4585,6 +4667,12 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
@@ -5244,9 +5332,6 @@ msgid "Default Actions"
 msgstr ""
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -7365,9 +7450,6 @@ msgid "Set custom Experience value. Current value is default."
 msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
-msgstr ""
-
-msgid "Set Experience value"
 msgstr ""
 
 msgid "View Experience Info"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -20,11 +20,6 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "БИТВА"
 
 msgid ""
 "NEW\n"
@@ -153,6 +148,11 @@ msgid ""
 msgstr ""
 "ОБЫЧНАЯ\n"
 "ИГРА"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "БИТВА"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3168,8 +3168,8 @@ msgstr "Сначала выберите получателя!"
 msgid "You cannot select %{resource}!"
 msgstr "Вы не можете подарить %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Подарить %{resource}:"
+msgid "Set %{resource-type} Count"
+msgstr "%{resource-type}: введите количество"
 
 msgid "Select Recipients"
 msgstr "Выберите получателя"
@@ -4048,20 +4048,60 @@ msgstr "Удалить событие"
 msgid "Delete an existing event."
 msgstr "Удалить выбранное событие."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Эффекты"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Условия\n"
+"поражения"
+
 msgid "Cancel event after first visit"
 msgstr "Отменить после посещения"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Событие произойдёт для компьютерных игроков цвета:"
+
+msgid "Set Experience value"
+msgstr "Введите величину опыта"
 
 msgid "Artifact"
 msgstr "Артефакт"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "В вознаграждении не будет выдаваться артефакт."
 
 msgid "Delete Artifact"
 msgstr "Удалить артефакт"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Удалить артефакт из вознаграждения."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Выберите навык:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "В вознаграждении не будут выдаваться ресурсы."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "В вознаграждении не будут выдаваться ресурсы."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4114,6 +4154,58 @@ msgstr ""
 "Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
 "данной карты будут потеряны.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "НАЧАТЬ"
+
+msgid "Main Menu"
+msgstr "Главное меню"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Вы действительно хотите вернуться в главное меню игры? Все несохранённые "
+"изменения будут потеряны."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Начать"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Вы действительно хотите загрузить новую карту? (Любые несохранённые "
+"изменения данной карты будут потеряны.)"
+
 msgid "Create a new map from scratch."
 msgstr "Создать новую карту с нуля."
 
@@ -4135,11 +4227,15 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Нажмите для возврата в главное меню."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "%{object}: введите текст"
-
-msgid "Set %{resource-type} Count"
-msgstr "%{resource-type}: введите количество"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Установить радиус появления великого артефакта"
@@ -4770,6 +4866,12 @@ msgstr "Удалить ответ"
 
 msgid "Delete an existing answer for the question."
 msgstr "Удалить имеющийся ответ на вопрос."
+
+msgid "No artifact will be given as a reward."
+msgstr "В вознаграждении не будет выдаваться артефакт."
+
+msgid "Delete an artifact from the reward."
+msgstr "Удалить артефакт из вознаграждения."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
@@ -5434,9 +5536,6 @@ msgstr "Стандартные действия"
 
 msgid "Global Actions"
 msgstr "Общие действия"
-
-msgid "Main Menu"
-msgstr "Главное меню"
 
 msgid "World Map"
 msgstr "Карта мира"
@@ -8034,9 +8133,6 @@ msgstr "Установить величину опыта. Сейчас - по у
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Изменить величину опыта. Правый клик - сбросить."
-
-msgid "Set Experience value"
-msgstr "Введите величину опыта"
 
 msgid "View Experience Info"
 msgstr "Опыт"
@@ -12053,6 +12149,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Подарить %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Включить автобитву"

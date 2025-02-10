@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"CSAK\n"
-"CSATA"
 
 msgid ""
 "NEW\n"
@@ -146,6 +139,13 @@ msgid ""
 msgstr ""
 "NORMÁL\n"
 "JÁTÉK"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"CSAK\n"
+"CSATA"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3143,8 +3143,8 @@ msgstr "Először válaszd ki a kedvezményezetteket!"
 msgid "You cannot select %{resource}!"
 msgstr "Nem választhatod a(z) %{resource} erőforrást!"
 
-msgid "Select count %{resource}:"
-msgstr "A számításba veendő %{resource} kiválasztása:"
+msgid "Set %{resource-type} Count"
+msgstr "%{resource-type} mennyiség beállítása"
 
 msgid "Select Recipients"
 msgstr "Kedvezményezettek kiválasztása"
@@ -4020,20 +4020,60 @@ msgstr "Esemény törlése"
 msgid "Delete an existing event."
 msgstr "Meglévő esemény törlése."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effektusok"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Vesztési\n"
+"feltételek"
+
 msgid "Cancel event after first visit"
 msgstr "Esemény törlése az első látogatás után"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Gépi játékosok, akiknek megengedett az esemény:"
+
+msgid "Set Experience value"
+msgstr "Tapasztalati érték beállítása"
 
 msgid "Artifact"
 msgstr "Varázstárgy"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "Nincs varázstárgy jutalom."
 
 msgid "Delete Artifact"
 msgstr "Varázstárgy törlése"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Varázstárgy törlése a jutalmak közül."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Képesség kiválasztása:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "Nincs erőforrás jutalom."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "Nincs erőforrás jutalom."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4084,6 +4124,57 @@ msgstr ""
 "Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
 "változtatásai el fognak veszni.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+msgid "Main Menu"
+msgstr "Főmenü"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Biztos hogy vissza akarsz lépni a főmenübe? Minden változtatás el fog veszni."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Start"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
+
 msgid "Create a new map from scratch."
 msgstr "Teljesen új térkép létrehozása."
 
@@ -4105,11 +4196,15 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "%{object} szöveg megadása"
-
-msgid "Set %{resource-type} Count"
-msgstr "%{resource-type} mennyiség beállítása"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Véletlenszerű Szent Varázstárgy sugarának megadása"
@@ -4741,6 +4836,12 @@ msgstr "Válasz törlése"
 
 msgid "Delete an existing answer for the question."
 msgstr "Meglévő válasz törlése."
+
+msgid "No artifact will be given as a reward."
+msgstr "Nincs varázstárgy jutalom."
+
+msgid "Delete an artifact from the reward."
+msgstr "Varázstárgy törlése a jutalmak közül."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "Nap: %{day} hét: %{week} hónap: %{month}"
@@ -5399,9 +5500,6 @@ msgstr "Alapértelmezett cselekvés"
 
 msgid "Global Actions"
 msgstr "Globális cselekvések"
-
-msgid "Main Menu"
-msgstr "Főmenü"
 
 msgid "World Map"
 msgstr "Világtérkép"
@@ -7981,9 +8079,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 "Tapasztalati érték megváltoztatása. Jobb kattintásra alapértékre áll be."
-
-msgid "Set Experience value"
-msgstr "Tapasztalati érték beállítása"
 
 msgid "View Experience Info"
 msgstr "Tapasztalat információ"
@@ -12001,6 +12096,9 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "A számításba veendő %{resource} kiválasztása:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Automatikus harc bekapcsolása"

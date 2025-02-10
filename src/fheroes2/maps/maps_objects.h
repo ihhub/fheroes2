@@ -32,14 +32,15 @@
 #include "artifact.h"
 #include "position.h"
 #include "resource.h"
+#include "skill.h"
 
 class IStreamBase;
 class OStreamBase;
 
-class MapObjectSimple : public MapPosition
+class MapBaseObject : public MapPosition
 {
 public:
-    MapObjectSimple() = default;
+    MapBaseObject() = default;
 
     uint32_t GetUID() const
     {
@@ -58,13 +59,13 @@ public:
     }
 
 protected:
-    friend OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj );
-    friend IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapBaseObject & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj );
 
     uint32_t uid{ 0 };
 };
 
-struct MapEvent : public MapObjectSimple
+struct MapEvent final : public MapBaseObject
 {
     MapEvent() = default;
 
@@ -84,13 +85,16 @@ struct MapEvent : public MapObjectSimple
 
     Funds resources;
     Artifact artifact;
-    bool computer{ false };
+    bool isComputerPlayerAllowed{ false };
     bool isSingleTimeEvent{ true };
     int colors{ 0 };
     std::string message;
+
+    Skill::Secondary secondarySkill;
+    int32_t experience{ 0 };
 };
 
-struct MapSphinx : public MapObjectSimple
+struct MapSphinx final : public MapBaseObject
 {
     MapSphinx() = default;
 
@@ -136,7 +140,7 @@ struct MapSphinx : public MapObjectSimple
     bool isTruncatedAnswer{ true };
 };
 
-struct MapSign : public MapObjectSimple
+struct MapSign final : public MapBaseObject
 {
     MapSign() = default;
 

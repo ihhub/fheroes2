@@ -31,7 +31,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"
 #include "color.h"
@@ -55,7 +54,6 @@
 #include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "interface_border.h"
 #include "interface_gamearea.h"
@@ -86,6 +84,7 @@
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -1149,35 +1148,40 @@ namespace Interface
 
     fheroes2::GameMode EditorInterface::eventFileDialog()
     {
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
-
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // Since the original image contains shadow it is important to remove it from calculation of window's position.
-        const fheroes2::Point rb( ( display.width() - background.width() - fheroes2::borderWidthPx ) / 2,
-                                  ( display.height() - background.height() + fheroes2::borderWidthPx ) / 2 );
-        fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
-        fheroes2::Blit( background, display, rb.x, rb.y );
+        fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
 
-        fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        fheroes2::Button buttonNew;
+        fheroes2::Button buttonLoad;
+        fheroes2::Button buttonSave;
+        fheroes2::Button buttonQuit;
+        fheroes2::ButtonSprite buttonMainMenu;
+        fheroes2::ButtonSprite buttonPlayMap;
+        fheroes2::Button buttonCancel;
 
-        buttonNew.draw();
-        buttonLoad.draw();
-        buttonSave.draw();
-        buttonQuit.draw();
-        buttonCancel.draw();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        display.render( back.rect() );
+        const fheroes2::Point buttonOffsets = { 30, 15 };
+        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
+                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
+        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 0, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::TOP_CENTER );
+        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
+        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        background.renderButtonSprite( buttonMainMenu, gettext_noop( "MAIN\nMENU" ), { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
+                                       isEvilInterface, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+        background.renderButtonSprite( buttonPlayMap, gettext_noop( "START\nMAP" ), { buttonSave.area().width - 10, buttonSave.area().height },
+                                       { buttonOffsets.x, buttonOffsets.y }, isEvilInterface, fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
+        display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -1186,36 +1190,75 @@ namespace Interface
             buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
             buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
             buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
+            buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPlayMap.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_NEW_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_NEW_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_LOAD_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                back.restore();
-
+            if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+                // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
+                background.hideWindow();
                 Get().saveMapToFile();
-
-                break;
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    result = fheroes2::GameMode::QUIT_GAME;
-                    break;
+                    return fheroes2::GameMode::QUIT_GAME;
+                }
+            }
+            if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
+                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ),
+                                                        _( "Do you wish to return to the game's Main Menu? (Any unsaved changes to the current map will be lost.)" ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    return fheroes2::GameMode::MAIN_MENU;
+                }
+            }
+            else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                if ( isNameEmpty
+                     && fheroes2::showStandardTextMessage(
+                            _( "Unsaved Changes" ),
+                            _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                            Dialog::YES | Dialog::NO )
+                            == Dialog::NO ) {
+                    continue;
+                }
+                if ( isNameEmpty ) {
+                    Get().saveMapToFile();
+                    isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                    if ( isNameEmpty ) {
+                        // Saving was aborted.
+                        display.render( background.totalArea() );
+                        continue;
+                    }
+                }
+                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+                    fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
+                                                       _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
+                }
+                else {
+                    if ( fheroes2::
+                             showStandardTextMessage( _( "Start Map" ),
+                                                      _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                      Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        return fheroes2::GameMode::NEW_STANDARD;
+                    }
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-                break;
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
@@ -1232,16 +1275,17 @@ namespace Interface
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and play the map in the Standard Game mode." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
-
-        // restore background
-        back.restore();
-        display.render( back.rect() );
-
-        return result;
+        return fheroes2::GameMode::CANCEL;
     }
 
     void EditorInterface::eventViewWorld()
@@ -1359,7 +1403,8 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get() )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
@@ -1385,7 +1430,8 @@ namespace Interface
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
-                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
                         action.commit();

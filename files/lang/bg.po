@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,13 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"САМО\n"
-"БИТКА"
 
 msgid ""
 "NEW\n"
@@ -148,6 +141,13 @@ msgid ""
 msgstr ""
 "НОРМАЛНА\n"
 "ИГРА"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"САМО\n"
+"БИТКА"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3215,8 +3215,9 @@ msgstr "Първо избери получатели!"
 msgid "You cannot select %{resource}!"
 msgstr "Не можеш да избереш %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Избери брой %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Застреляй %{monster}"
 
 msgid "Select Recipients"
 msgstr "Избери Получатели"
@@ -4130,20 +4131,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Зареди съществуваща карта."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Ефекти"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Условия за\n"
+"Загуба"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Опит"
 
 msgid "Artifact"
 msgstr "Артефакт"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Избери артефакт:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Зареди съществуваща карта."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Избери умение:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4199,6 +4237,58 @@ msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "РЕСТАРТ"
+
+msgid "Main Menu"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Рестарт"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да заредиш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "нова карта от начало"
@@ -4221,12 +4311,15 @@ msgstr "Запазете текущата карта."
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Кликни, за да се върнеш към главното меню."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Застреляй %{monster}"
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4929,6 +5022,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -5597,9 +5696,6 @@ msgid "Default Actions"
 msgstr "действие по подразбиране"
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -8207,10 +8303,6 @@ msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
-
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Опит"
 
 msgid "View Experience Info"
 msgstr "Виж информация за опит"
@@ -12327,6 +12419,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Избери брой %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Включи на автоматична битка"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-23 08:39-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"APENAS\n"
-"BATALHA"
 
 msgid ""
 "NEW\n"
@@ -146,6 +139,13 @@ msgid ""
 msgstr ""
 "JOGO\n"
 "PADRÃO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"APENAS\n"
+"BATALHA"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3162,8 +3162,8 @@ msgstr "Primeiro selecione o recipiente!"
 msgid "You cannot select %{resource}!"
 msgstr "Você não pode selecionar %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Selecionar %{resource}:"
+msgid "Set %{resource-type} Count"
+msgstr "Definir Quantidade de %{resource-type}."
 
 msgid "Select Recipients"
 msgstr "Selecione os Recipientes"
@@ -4046,20 +4046,61 @@ msgstr "Excluir Evento"
 msgid "Delete an existing event."
 msgstr "Exclui um evento existente."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Efeitos"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Condições\n"
+"de\n"
+"Derrota"
+
 msgid "Cancel event after first visit"
 msgstr "Cancelar evento após a primeira visita"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "As cores do computador podem ser usadas em eventos:"
+
+msgid "Set Experience value"
+msgstr "Definir o valor da Experiência"
 
 msgid "Artifact"
 msgstr "Artefato"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "Nenhum artefato será dado como recompensa."
 
 msgid "Delete Artifact"
 msgstr "Apagar Artefato"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Apagar um artefato da recompensa."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Selecionar Habilidade:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "Nenhum recurso será dado como recompensa."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "Nenhum recurso será dado como recompensa."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4113,6 +4154,58 @@ msgstr ""
 "Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
 "salvas no mapa atual serão perdidas.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "INICIAR"
+
+msgid "Main Menu"
+msgstr "Menu Principal"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Deseja retornar ao Menu Principal do jogo? Todas as alterações não salvas "
+"serão perdidas."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Iniciar"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Tem certeza de que deseja carregar um novo mapa? (Todas as alterações não "
+"salvas no mapa atual serão perdidas.)"
+
 msgid "Create a new map from scratch."
 msgstr "Crie um novo mapa do zero."
 
@@ -4134,11 +4227,15 @@ msgstr "Salvar o mapa atual."
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Clique para retornar ao menu principal."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "Inserir texto de %{object}"
-
-msgid "Set %{resource-type} Count"
-msgstr "Definir Quantidade de %{resource-type}."
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
@@ -4770,6 +4867,12 @@ msgstr "Apagar Resposta"
 
 msgid "Delete an existing answer for the question."
 msgstr "Apagar uma resposta existente para a pergunta."
+
+msgid "No artifact will be given as a reward."
+msgstr "Nenhum artefato será dado como recompensa."
+
+msgid "Delete an artifact from the reward."
+msgstr "Apagar um artefato da recompensa."
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "Dia: %{day} Semana: %{week} Mês: %{month}"
@@ -5435,9 +5538,6 @@ msgstr "Ações Padrão"
 
 msgid "Global Actions"
 msgstr "Ações Globais"
-
-msgid "Main Menu"
-msgstr "Menu Principal"
 
 msgid "World Map"
 msgstr "Mapa-Múndi"
@@ -8078,9 +8178,6 @@ msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 "Alterar o valor da Experiência. Clique com o botão direito para redefinir "
 "para o valor padrão."
-
-msgid "Set Experience value"
-msgstr "Definir o valor da Experiência"
 
 msgid "View Experience Info"
 msgstr "Ver Informações Sobre a Experiência"
@@ -12147,6 +12244,9 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Selecionar %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Ativar combate automático"

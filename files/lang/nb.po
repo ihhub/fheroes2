@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:52+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,11 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "KAMP"
 
 msgid ""
 "NEW\n"
@@ -150,6 +145,11 @@ msgid ""
 msgstr ""
 "ENKELT\n"
 "PARTI"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "KAMP"
 
 msgid ""
 "CAMPAIGN\n"
@@ -3260,8 +3260,9 @@ msgstr "Velg først mottakere!"
 msgid "You cannot select %{resource}!"
 msgstr "Du kan ikke velge %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Velg mengde %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Skyt på %{monster}"
 
 msgid "Select Recipients"
 msgstr "Velg mottakere"
@@ -4175,20 +4176,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Last inn et eksisterende kart."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Lydeffekter"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Taps-\n"
+"vilkår"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Erfaringspoeng"
 
 msgid "Artifact"
 msgstr "Gjenstand"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Velg en skatt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Last inn et eksisterende kart."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Velg ferdighet:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4244,6 +4282,58 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "OMSTART"
+
+msgid "Main Menu"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
+"kartet vil gå tapt.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Start på nytt"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Er du sikker på at du ønsker å laste inn et nytt kart?\n"
+"(Alt som er ulagret i dette kartet vil gå tapt.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "Nytt kart fra bunnen av"
@@ -4266,12 +4356,15 @@ msgstr "Lagre det nåværende kartet."
 msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Skyt på %{monster}"
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4969,6 +5062,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -5647,9 +5746,6 @@ msgid "Default Actions"
 msgstr "Standard handling"
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -8323,10 +8419,6 @@ msgstr ""
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
-
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Erfaringspoeng"
 
 msgid "View Experience Info"
 msgstr "Vis erfaringsinfo"
@@ -12541,6 +12633,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Velg mengde %{resource}:"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Skru på autokamp"

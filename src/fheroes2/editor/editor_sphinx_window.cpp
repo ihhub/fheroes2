@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,6 +50,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -310,7 +311,12 @@ namespace Editor
 
                     int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string str = _( "Set %{resource-type} Count" );
+                    StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
+
+                    if ( Dialog::SelectCount( std::move( str ), 0, 1000000, temp, 1, &resourceUI ) ) {
                         *resourcePtr = temp;
                     }
 
