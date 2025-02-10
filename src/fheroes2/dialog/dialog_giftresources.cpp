@@ -202,7 +202,7 @@ namespace
                 }
                 else {
                     std::string msg = _( "Set %{resource-type} Count" );
-                    StringReplace( msg, "%{resource}", Resource::String( rs ) );
+                    StringReplace( msg, "%{resource-type}", Resource::String( rs ) );
 
                     if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
                         int32_t * from = funds.GetPtr( rs );
