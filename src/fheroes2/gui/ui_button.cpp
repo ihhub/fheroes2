@@ -31,6 +31,7 @@
 #include "pal.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_text.h"
 
 namespace
 {

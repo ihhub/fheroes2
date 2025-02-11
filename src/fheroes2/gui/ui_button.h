@@ -32,10 +32,12 @@
 #include "math_base.h"
 #include "screen.h"
 #include "ui_base.h"
-#include "ui_text.h"
 
 namespace fheroes2
 {
+    enum class FontColor : uint8_t;
+    struct FontType;
+
     // An abstract class for button usage
     class ButtonBase : public ActionObject
     {
