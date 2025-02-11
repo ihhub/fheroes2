@@ -68,7 +68,7 @@
 namespace
 {
     const fheroes2::Size primarySkillIconSize{ 82, 93 };
-    const uint32_t spellPointsMaxValue{ 999 };
+    const int32_t spellPointsMaxValue{ 999 };
 }
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
@@ -534,7 +534,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
                 if ( le.MouseClickLeft() ) {
                     int32_t value = static_cast<int32_t>( GetSpellPoints() );
-                    if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, spellPointsMaxValue, value ) ) {
+                    if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, std::max( spellPointsMaxValue, value ), value ) ) {
                         useDefaultSpellPoints = false;
                         SetSpellPoints( static_cast<uint32_t>( value ) );
                         spellPointsInfo.setDefaultState( useDefaultSpellPoints );
