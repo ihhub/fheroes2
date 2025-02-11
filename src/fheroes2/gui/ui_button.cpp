@@ -879,10 +879,12 @@ namespace fheroes2
         const int32_t borderedTextHeight = textHeight + textAreaMargins.y;
         const int32_t textAreaHeight = std::clamp( borderedTextHeight, minimumTextArea.height, maximumTextArea.height );
 
-        assert( textAreaHeight + backgroundBorders.height > 0 );
+        const Size buttonSize( textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height } );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), { textAreaWidth + backgroundBorders.width, textAreaHeight + backgroundBorders.height } );
+        assert( buttonSize.height > 0 );
+
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), buttonSize );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), buttonSize );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
@@ -891,13 +893,10 @@ namespace fheroes2
             addButtonShine( released, emptyButtonIcnID );
         }
 
-        const Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
-        const Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
-
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align.
-        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( textAreaHeight - releasedTextSize.height ) / 2, textAreaWidth, released );
-        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( textAreaHeight - pressedTextSize.height ) / 2, textAreaWidth, pressed );
+        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( textAreaHeight - textHeight ) / 2, textAreaWidth, released );
+        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( textAreaHeight - textHeight ) / 2, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId )
@@ -925,10 +924,7 @@ namespace fheroes2
         const Text releasedText( text, releasedFont );
         const Text pressedText( text, pressedFont );
 
-        const Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
-        const Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
-
-        releasedText.draw( releasedTextOffset.x, ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
-        pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
+        releasedText.draw( releasedTextOffset.x, ( buttonSize.height - releasedText.height( buttonSize.width ) ) / 2, buttonSize.width, releasedState );
+        pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedText.height( buttonSize.width ) ) / 2 + 1, buttonSize.width, pressedState );
     }
 }
