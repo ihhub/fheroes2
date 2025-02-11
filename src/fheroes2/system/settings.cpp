@@ -236,6 +236,8 @@ bool Settings::Read( const std::string & filePath )
         setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
+    // This code handles a configuration file's parameter made by an older versions of the engine.
+    // The original "use evil interface" parameter is not longer being set.
     if ( config.Exists( "use evil interface" ) ) {
         const bool isEvil = config.StrParams( "use evil interface" ) == "on";
         setInterfaceType( isEvil ? InterfaceType::EVIL : InterfaceType::GOOD );
@@ -897,11 +899,6 @@ bool Settings::isHideInterfaceEnabled() const
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
 }
 
-void Settings::setInterfaceType( InterfaceType type )
-{
-    _interfaceType = type;
-}
-
 bool Settings::isEvilInterfaceEnabled() const
 {
     switch ( _interfaceType ) {
@@ -920,7 +917,7 @@ bool Settings::isEvilInterfaceEnabled() const
         }
 
         // Keep the UI of the last player during the AI turn
-        for ( auto iter = Settings::Get().GetPlayers().rbegin(); iter < Settings::Get().GetPlayers().rend(); ++iter ) {
+        for ( auto iter = GetPlayers().rbegin(); iter != GetPlayers().rend(); ++iter ) {
             if ( *iter && ( *iter )->isControlHuman() ) {
                 return Race::isEvilRace( ( *iter )->GetRace() );
             }
@@ -929,6 +926,7 @@ bool Settings::isEvilInterfaceEnabled() const
     }
     default:
         assert( 0 );
+        break;
     }
 
     return false;

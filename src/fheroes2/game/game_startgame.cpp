@@ -790,8 +790,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     if ( isHotSeatGame ) {
                         if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
                             reset();
-                            redraw( Interface::REDRAW_RADAR );
-                            redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
                         }
 
                         _iconsPanel.hideIcons( ICON_ANY );
@@ -801,7 +799,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
-                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
                         validateFadeInAndRender();
 

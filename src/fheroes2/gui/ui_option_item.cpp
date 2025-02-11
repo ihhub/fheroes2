@@ -113,6 +113,7 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
+            break;
         }
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ),

@@ -61,7 +61,7 @@ enum class ZoomLevel : uint8_t
     ZoomLevel0 = 0,
     ZoomLevel1 = 1,
     ZoomLevel2 = 2,
-    ZoomLevel3 = 3 // Max zoom, but should only exists for debug builds
+    ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
 };
 
 enum InterfaceType : uint8_t
@@ -198,7 +198,10 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    void setInterfaceType( InterfaceType type );
+    void setInterfaceType( InterfaceType type )
+    {
+        _interfaceType = type;
+    }
     InterfaceType getInterfaceType() const
     {
         return _interfaceType;
@@ -391,10 +394,10 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
-    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
+    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
