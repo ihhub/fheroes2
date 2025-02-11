@@ -8153,7 +8153,7 @@ msgstr ""
 " Další úroveň %{exp2}."
 
 msgid "million|M"
-msgstr "million|M"
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "Úroveň %{level}"
