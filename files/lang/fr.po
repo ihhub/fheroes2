@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-09 14:16+0000\n"
-"PO-Revision-Date: 2025-02-10 20:31+0100\n"
+"PO-Revision-Date: 2025-02-11 12:14+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -894,7 +894,7 @@ msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
 msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Êtes-vous sur de vouloir désactiver le mode combat automatique ?"
+msgstr "Êtes-vous sûr de vouloir désactiver le mode combat automatique ?"
 
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Êtes-vous sûr de vouloir résoudre le combat en mode combat rapide ?"
@@ -907,15 +907,15 @@ msgid ""
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
-"Ceci peut être interrompu à tout moment en appuyant sur le raccourcie du "
-"mode combat automatique ou la touche Annuler ou en cliquant gauche ou droite "
-"avec votre souris n'importe où sur l'écran de jeu."
+"Ceci peut être interrompu à tout moment en appuyant sur le raccourci du mode "
+"combat automatique ou la touche Annuler ou en cliquant gauche ou droite avec "
+"votre souris n'importe où sur l'écran de jeu."
 
 msgid "Auto Combat"
 msgstr "Combat Auto"
 
 msgid "The combat is resolved from the current state."
-msgstr "Le combat a été résolu à partir de la situation actuelle."
+msgstr "Le combat sera résolu à partir de la situation actuelle."
 
 msgid "quickCombat|This cannot be undone."
 msgstr "Cela ne peut pas être modifié."
@@ -1047,7 +1047,7 @@ msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
 msgid "Are you sure you want to interrupt the auto combat mode?"
-msgstr "Êtes-vous sur de vouloir interrompre le mode combat automatique ?"
+msgstr "Êtes-vous sûr de vouloir interrompre le mode combat automatique ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -3493,7 +3493,7 @@ msgid "Select only 1 monster to be recruited."
 msgstr "Ne sélectionnez qu'une seule unité à recruter."
 
 msgid "Select this game resolution."
-msgstr "Choisir cette résolution d'écran."
+msgstr "Choisissez cette résolution d'écran."
 
 msgid ""
 "Selecting this resolution will set a resolution that is scaled from the "
@@ -4250,9 +4250,8 @@ msgid ""
 "be playable."
 msgstr ""
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Commencer"
+msgstr "Lancer carte"
 
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
@@ -4831,9 +4830,8 @@ msgstr "Rumeurs"
 msgid "Click to edit daily events."
 msgstr "Cliquez pour quitter les résultats de la bataille."
 
-#, fuzzy
 msgid "Events"
-msgstr "Événement"
+msgstr "Événements"
 
 #, fuzzy
 msgid "Click to change the language of the map."
@@ -4898,7 +4896,7 @@ msgid "Toggle display of objects' passability."
 msgstr ""
 
 msgid "Rumor:"
-msgstr "Rumeur:"
+msgstr "Rumeur :"
 
 msgid "Rumor"
 msgstr "Rumeur"
@@ -5569,9 +5567,8 @@ msgstr "Reddition"
 msgid "hotkey|toggle auto combat mode"
 msgstr "Activer/désactiver le mode combat auto"
 
-#, fuzzy
 msgid "hotkey|quick combat"
-msgstr "Quitter"
+msgstr "combat rapide"
 
 msgid "hotkey|battle options"
 msgstr "Options de bataille"
@@ -5755,14 +5752,13 @@ msgid ""
 "the first one from the screen and keep viewing the information on the item."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Bienvenue sur Heroes of Might and Magic II amélioré par le moteur "
-"fheroes2 !\n"
+"\n"
+"\n"
 "Avant de commencer le jeu choisissez la résolution du jeu."
 
 msgid "Greetings!"
@@ -8130,7 +8126,6 @@ msgstr ""
 "vous serez récompensé. Répondez incorrectement, et vous serez mangé. "
 "Acceptez-vous de relever le défi ?\""
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
@@ -8138,9 +8133,7 @@ msgid ""
 msgstr ""
 "Le Sphinx vous pose l'énigme suivante :\n"
 "\n"
-"\"%{riddle}\n"
-"\n"
-"Votre réponse ?"
+"'"
 
 msgid ""
 "sphinx|'\n"
