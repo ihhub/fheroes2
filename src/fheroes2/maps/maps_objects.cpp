@@ -338,7 +338,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj )
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 {
     return stream << static_cast<const MapBaseObject &>( obj ) << obj.resources << obj.artifact << obj.isComputerPlayerAllowed << obj.isSingleTimeEvent << obj.colors
-                  << obj.message << obj.secondarySkill;
+                  << obj.message << obj.secondarySkill << obj.experience;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
