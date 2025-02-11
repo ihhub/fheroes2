@@ -915,8 +915,8 @@ namespace fheroes2
         return isFontAvailable( translatedText, font ) ? translatedText : untranslatedText;
     }
 
-    void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset,
-                             const Point & pressedTextOffset, const Size & buttonSize, const FontColor fontColor )
+    void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
+                             const Size & buttonSize, const FontColor fontColor )
     {
         const FontType releasedFont{ FontSize::BUTTON_RELEASED, fontColor };
         const FontType pressedFont{ FontSize::BUTTON_PRESSED, fontColor };
