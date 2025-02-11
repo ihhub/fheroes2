@@ -31,7 +31,6 @@
 #include "pal.h"
 #include "settings.h"
 #include "translations.h"
-#include "ui_text.h"
 
 namespace
 {
@@ -734,7 +733,7 @@ namespace fheroes2
     void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID )
     {
         // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );
+        const Sprite & background = AGG::GetICN( backgroundIcnID, 0 );
         // you are trying to apply transform on an image that is single-layered
         assert( !pressed.singleLayer() && !released.singleLayer() );
         const uint8_t * releasedTransform = released.transform();
@@ -778,7 +777,7 @@ namespace fheroes2
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
                                        const Point & shadowOffset )
     {
-        const Sprite & shadow = fheroes2::makeShadow( released, shadowOffset, 3 );
+        const Sprite & shadow = makeShadow( released, shadowOffset, 3 );
 
         Sprite croppedBackground = Crop( background, offsetX + shadow.x(), offsetY + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, croppedBackground );
@@ -837,28 +836,28 @@ namespace fheroes2
         }
     }
 
-    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * untranslatedText, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
-        fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
-        fheroes2::Point textAreaMargins = { 0, 3 };
+        FontColor buttonFont = FontColor::WHITE;
+        Point textAreaMargins = { 0, 3 };
 
-        fheroes2::Size minimumTextArea = { 0, 15 };
-        fheroes2::Size maximumTextArea = { 200, 200 }; // Why is such a wide button needed?
+        Size minimumTextArea = { 0, 15 };
+        Size maximumTextArea = { 200, 200 }; // Why is such a wide button needed?
 
-        fheroes2::Size backgroundBorders = { 0, 7 };
+        Size backgroundBorders = { 0, 7 };
 
-        fheroes2::Point releasedOffset;
-        fheroes2::Point pressedOffset;
+        Point releasedOffset;
+        Point pressedOffset;
 
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
+        const FontType releasedButtonFont{ FontSize::BUTTON_RELEASED, buttonFont };
 
-        const char * translatedText = _( text );
-        const char * supportedText = fheroes2::isFontAvailable( translatedText, releasedButtonFont ) ? translatedText : text;
+        // TODO: do not do translations for button generation. We shouldn't assume that we receive a non-translated string.
+        const char * supportedText = getSupportedText( untranslatedText, releasedButtonFont );
 
-        const fheroes2::Text releasedText( supportedText, releasedButtonFont );
-        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
+        const Text releasedText( supportedText, releasedButtonFont );
+        const Text pressedText( supportedText, { FontSize::BUTTON_PRESSED, buttonFont } );
 
         // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
         const int32_t textWidth = releasedText.width( maximumTextArea.width );
@@ -891,8 +890,8 @@ namespace fheroes2
             addButtonShine( released, emptyButtonIcnID );
         }
 
-        const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
-        const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
+        const Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
+        const Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align.
@@ -902,16 +901,33 @@ namespace fheroes2
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId )
     {
-        fheroes2::Point releasedOffset;
-        fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonSize, releasedOffset, pressedOffset, backgroundIcnId );
+        Point releasedOffset;
+        Point pressedOffset;
+        getCustomNormalButton( released, pressed, isEvilInterface, buttonSize, releasedOffset, pressedOffset, backgroundIcnId );
 
-        const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+        const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
+    }
 
-        const fheroes2::Text releasedText( text, { fheroes2::FontSize::BUTTON_RELEASED, fontColor } );
-        const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
+    const char * getSupportedText( const char * untranslatedText, const FontType font )
+    {
+        const char * translatedText = _( untranslatedText );
+        return isFontAvailable( translatedText, font ) ? translatedText : untranslatedText;
+    }
 
-        releasedText.draw( releasedOffset.x, ( buttonSize.height - releasedText.height( buttonSize.width ) ) / 2, buttonSize.width, released );
-        pressedText.draw( pressedOffset.x, ( buttonSize.height - pressedText.height( buttonSize.width ) ) / 2 + 1, buttonSize.width, pressed );
+    void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset,
+                             const Point & pressedTextOffset, const Size & buttonSize, const FontColor fontColor )
+    {
+        const FontType releasedFont{ FontSize::BUTTON_RELEASED, fontColor };
+        const FontType pressedFont{ FontSize::BUTTON_PRESSED, fontColor };
+
+        const Text releasedText( text, releasedFont );
+        const Text pressedText( text, pressedFont );
+
+        const Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
+        const Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
+
+        releasedText.draw( releasedTextOffset.x, ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
+        pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
     }
 }
