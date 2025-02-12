@@ -397,40 +397,14 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
-    const char * getSupportedText( const char * text, const fheroes2::FontType font )
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * untranslatedText, const bool isEvilInterface,
+                             const int backgroundIcnId, fheroes2::Size buttonSize )
     {
-        const char * translatedText = _( text );
-        return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
-    }
-
-    void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
-                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size & buttonSize, const fheroes2::FontColor fontColor )
-    {
-        const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
-        const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
-
-        const char * textSupported = getSupportedText( text, releasedFont );
-
-        const fheroes2::Text releasedText( textSupported, releasedFont );
-        const fheroes2::Text pressedText( textSupported, pressedFont );
-
-        const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
-        const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
-
-        releasedText.draw( releasedTextOffset.x, ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
-        pressedText.draw( pressedTextOffset.x, ( buttonSize.height - pressedTextSize.height ) / 2 + 1, buttonSize.width, pressedState );
-    }
-
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const bool isEvilInterface, const int backgroundIcnId,
-                             fheroes2::Size buttonSize )
-    {
-        fheroes2::Point releasedOffset;
-        fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonSize, releasedOffset, pressedOffset, backgroundIcnId );
-
+        // TODO: do not do translations for button generation. We shouldn't assume that we receive a non-translated string.
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+        const char * text = fheroes2::getSupportedText( untranslatedText, fheroes2::FontType{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
+        fheroes2::makeButtonSprites( released, pressed, text, buttonSize, isEvilInterface, backgroundIcnId );
     }
 
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
@@ -1610,8 +1584,8 @@ namespace
             // Town and Castle buttons must have the same width.
             // This is why we need to calculate text width for both buttons and then create a button with a needed width.
             const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
 
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
@@ -1628,8 +1602,8 @@ namespace
             // Town and Castle buttons must have the same width.
             // This is why we need to calculate text width for both buttons and then create a button with a needed width.
             const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
+            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
 
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
@@ -1822,7 +1796,9 @@ namespace
 
             const ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 3, 4 }, { 2, 5 }, { 23, 133 }, fheroes2::FontColor::WHITE );
+
+            const char * translatedText = fheroes2::getSupportedText( buttonText, fheroes2::FontType{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE } );
+            fheroes2::renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], translatedText, { 3, 4 }, { 2, 5 }, { 23, 133 }, fheroes2::FontColor::WHITE );
 
             break;
         }

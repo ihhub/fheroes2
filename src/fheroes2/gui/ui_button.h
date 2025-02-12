@@ -35,6 +35,9 @@
 
 namespace fheroes2
 {
+    enum class FontColor : uint8_t;
+    struct FontType;
+
     // An abstract class for button usage
     class ButtonBase : public ActionObject
     {
@@ -352,8 +355,14 @@ namespace fheroes2
 
     // Generates released and pressed button sprites with the width and height necessary to fit a provided text using an empty button template ICN and a chosen background
     // ICN.
-    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * untranslatedText, const int icnId, const int buttonBackgroundIcnID );
 
     // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
+
+    // TODO: find a better place where to put this function.
+    const char * getSupportedText( const char * untranslatedText, const FontType font );
+
+    void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
+                             const Size & buttonSize, const FontColor fontColor );
 }
