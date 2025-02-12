@@ -392,13 +392,20 @@ bool Troops::HasMonster( const Monster & mons ) const
 
 bool Troops::AllTroopsAreUndead() const
 {
+    bool isValidArmy = false;
+
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() && !( *it )->isUndead() ) {
-            return false;
+        if ( ( *it )->isValid() ) {
+            isValidArmy = true;
+
+            if ( !( *it )->isUndead() ) {
+                return false;
+            }
         }
     }
 
-    return true;
+    // If army has no units then the army cannot be marked as undead.
+    return isValidArmy;
 }
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
