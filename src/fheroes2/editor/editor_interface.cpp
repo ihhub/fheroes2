@@ -500,7 +500,17 @@ namespace
             }
 
             if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
-                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
+                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) {
+                    // This check is being run for every action in the Editor.
+                    // Therefore, after the placement of an Ultimate Artifact on this tile the check would fail since the tile contains something on it.
+                    // So, before checking for correctness on placement an Ultimate Artifact we check whether the current tile already has one.
+                    // If this is true then we consider that the placement is allowed.
+                    if ( tileToCheck.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        return true;
+                    }
+
+                    return tileToCheck.GoodForUltimateArtifact();
+                     } ) ) {
                 errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
             }
