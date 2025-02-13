@@ -956,12 +956,14 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
     _considerRetreat = false;
     _defensiveTactics = false;
     _cautiousOffensive = false;
+    _avoidStackingUnits = false;
 
     if ( enemyForce.empty() ) {
         return;
     }
 
     double sumEnemyStr = 0.0;
+    double areaAttackThreat = 0.0;
 
     for ( const Battle::Unit * unit : enemyForce ) {
         assert( unit != nullptr );
@@ -976,6 +978,9 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
         if ( unit->isArchers() && !unit->isImmovable() ) {
             _enemyRangedUnitsOnly += unitStr;
+            if ( unit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !unit->isHandFighting() ) {
+                areaAttackThreat += unitStr;
+            }
         }
 
         // The average speed is weighted by the troop strength
@@ -988,6 +993,10 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
     if ( sumEnemyStr > 0.0 ) {
         _enemyAverageSpeed /= sumEnemyStr;
+    }
+
+    if ( areaAttackThreat / sumEnemyStr > 0.1 ) {
+        _avoidStackingUnits = true;
     }
 
     uint32_t initialUnitCount = 0;
@@ -1709,8 +1718,8 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                 continue;
             }
 
-            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, frnd]() -> CellDistanceInfo {
-                const Battle::Indexes nearbyIndexes = [&currentUnit, frnd]() {
+            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, avoidStackingUnits = _avoidStackingUnits, frnd]() -> CellDistanceInfo {
+                const Battle::Indexes nearbyIndexes = [&currentUnit, avoidStackingUnits, frnd]() {
                     Battle::Indexes result;
                     result.reserve( 8 );
 
@@ -1762,7 +1771,14 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                                 continue;
                             }
 
-                            const int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+                            int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+
+                            if ( avoidStackingUnits && Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+                                if ( currentUnit.isWide() && ( dir == Battle::RIGHT || dir == Battle::LEFT ) && Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                    nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+                                }
+                            }
 
                             if ( std::find( result.begin(), result.end(), nearbyIdx ) != result.end() ) {
                                 continue;
@@ -1782,7 +1798,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     }
 
                     assert( pos.isValidForUnit( currentUnit ) );
-                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
+                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
 
                     if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                         continue;

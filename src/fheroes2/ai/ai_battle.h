@@ -138,5 +138,6 @@ namespace AI
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
         bool _cautiousOffensive = false;
+        bool _avoidStackingUnits = false;
     };
 }
