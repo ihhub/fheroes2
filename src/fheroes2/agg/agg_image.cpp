@@ -4650,13 +4650,20 @@ namespace
                 const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalID, 0 + i );
 
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                // The empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result.
                 out.resize( original.width() - 1, original.height() );
 
                 Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
                 Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
-
-                Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
+                // We do some extra cleaning because some localized assets, like Russian, have texts which go outside of the normal button borders.
+                Fill( out, 3 - i, 2 + i, 55, 14, getButtonFillingColor( i == 0 ) );
+                const uint8_t borderColor = i == 0 ? 38 : 41;
+                fheroes2::DrawLine( out, { 3 - i, 3 + i }, { 4 - i, 2 + i }, borderColor );
+                fheroes2::SetPixel( out, 5 - 3 * i, 2 + i, borderColor );
+                fheroes2::SetPixel( out, 57 - i, 2 + i, borderColor );
+                fheroes2::DrawLine( out, { 26, 1 + i }, { 42, 1 + i }, borderColor );
+                const uint8_t secondBorderColor = i == 0 ? 42 : 46;
+                fheroes2::DrawLine( out, { 26, 0 + i }, { 42, 0 + i }, secondBorderColor );
             }
 
             return true;
