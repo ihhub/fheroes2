@@ -328,6 +328,7 @@ namespace
                      "Matt Taylor\n"
                      "Matthew Pfluger\n"
                      "Michael Van Wambeke\n"
+                     "Reximus\n"
                      "Siarzuk Piatrouski\n"
                      "slvclw\n"
                      "TechnoCore\n"
