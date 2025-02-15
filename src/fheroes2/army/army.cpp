@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -237,19 +237,16 @@ Troops::~Troops()
     } );
 }
 
-void Troops::Assign( const Troop * itbeg, const Troop * itend )
+void Troops::Assign( const Troop * troopsBegin, const Troop * troopsEnd )
 {
     Clean();
 
-    iterator it = begin();
+    for ( iterator iter = begin(); iter != end() && troopsBegin != troopsEnd; ++iter, ++troopsBegin ) {
+        assert( *iter != nullptr && troopsBegin != nullptr );
 
-    while ( it != end() && itbeg != itend ) {
-        if ( itbeg->isValid() ) {
-            ( *it )->Set( *itbeg );
+        if ( troopsBegin->isValid() ) {
+            ( *iter )->Set( *troopsBegin );
         }
-
-        ++it;
-        ++itbeg;
     }
 }
 
@@ -257,24 +254,25 @@ void Troops::Assign( const Troops & troops )
 {
     Clean();
 
-    iterator it1 = begin();
-    const_iterator it2 = troops.begin();
+    for ( auto [thisIter, troopsIter] = std::make_pair( begin(), troops.begin() ); thisIter != end() && troopsIter != troops.end(); ++thisIter, ++troopsIter ) {
+        assert( *thisIter != nullptr && *troopsIter != nullptr );
 
-    while ( it1 != end() && it2 != troops.end() ) {
-        if ( ( *it2 )->isValid() )
-            ( *it1 )->Set( **it2 );
-        ++it2;
-        ++it1;
+        if ( ( *troopsIter )->isValid() ) {
+            ( *thisIter )->Set( **troopsIter );
+        }
     }
 }
 
 void Troops::Insert( const Troops & troops )
 {
-    for ( const_iterator it = troops.begin(); it != troops.end(); ++it )
-        push_back( new Troop( **it ) );
+    for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
+        push_back( new Troop( *troop ) );
+    }
 }
 
-void Troops::PushBack( const Monster & mons, uint32_t count )
+void Troops::PushBack( const Monster & mons, const uint32_t count )
 {
     push_back( new Troop( mons, count ) );
 }
@@ -394,13 +392,20 @@ bool Troops::HasMonster( const Monster & mons ) const
 
 bool Troops::AllTroopsAreUndead() const
 {
+    bool isValidArmy = false;
+
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() && !( *it )->isUndead() ) {
-            return false;
+        if ( ( *it )->isValid() ) {
+            isValidArmy = true;
+
+            if ( !( *it )->isUndead() ) {
+                return false;
+            }
         }
     }
 
-    return true;
+    // If army has no units then the army cannot be marked as undead.
+    return isValidArmy;
 }
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
@@ -1207,17 +1212,12 @@ int Army::GetMoraleModificator( std::string * strs ) const
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
-    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
-            allUndead = allUndead && troop->isUndead();
         }
-
-    if ( allUndead )
-        return Morale::NORMAL;
 
     int result = Morale::NORMAL;
 
@@ -1509,6 +1509,20 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
     moveTroops( false );
 }
 
+void Army::SwapTroops( Army & from )
+{
+    assert( this != &from );
+
+    // Heroes need to have at least one occupied slot in their army, so both armies should have at least one
+    // occupied slot, even if the exchange of armies takes place between a castle garrison and a hero.
+    assert( from.isValid() && isValid() );
+
+    const Troops temp = this->getTroops();
+
+    Assign( from );
+    from.Assign( temp );
+}
+
 uint32_t Army::ActionToSirens() const
 {
     uint32_t experience = 0;
@@ -1604,6 +1618,12 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
 
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop )
 {
+    if ( !troop.isValid() ) {
+        assert( 0 );
+
+        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
+    }
+
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
@@ -1614,8 +1634,9 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
             const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
 
-            if ( !isAlliance && !isCurse )
+            if ( !isAlliance && !isCurse ) {
                 continue;
+            }
 
             Monster monster( campaignAwards[i]._subType );
             while ( true ) {
@@ -1631,29 +1652,38 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                     }
                 }
 
-                // try to cycle through the creature's upgrades
-                if ( !monster.isAllowUpgrade() )
+                // Also check the upgraded variant(s) of the same monster
+                if ( !monster.isAllowUpgrade() ) {
                     break;
+                }
 
                 monster = monster.GetUpgrade();
             }
         }
     }
 
-    if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
-    if ( Maps::isMonsterOnTileJoinConditionSkip( tile ) || !troop.isValid() ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = Troops( hero.GetArmy().getTroops() ).GetStrength() / troop.GetStrength();
 
-    // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
-    // mandatory condition for their joining in accordance with the mechanics of the original game
-    if ( armyStrengthRatio > 2 && hero.GetArmy().CanJoinTroop( troop ) ) {
+    const bool canJoin = [&hero, &tile, &troop, armyStrengthRatio]() {
+        if ( armyStrengthRatio <= 2 ) {
+            return false;
+        }
+
+        // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a mandatory condition for their joining in accordance with the
+        // mechanics of the original game
+        if ( !hero.GetArmy().CanJoinTroop( troop ) ) {
+            return false;
+        }
+
+        if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
+            return false;
+        }
+
+        return !Maps::isMonsterOnTileJoinConditionSkip( tile );
+    }();
+
+    if ( canJoin ) {
         if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
@@ -1662,8 +1692,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const uint32_t amountToJoin
                 = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            // The ability to hire the entire stack of monsters is a mandatory condition for their joining
-            // due to hero's Diplomacy skill in accordance with the mechanics of the original game
+            // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
+            // the mechanics of the original game
             if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
@@ -1671,7 +1701,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     }
 
     if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
-        // ... surely flee before us
+        // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 

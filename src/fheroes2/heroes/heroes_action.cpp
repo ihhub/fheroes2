@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -2466,7 +2466,6 @@ namespace
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, Color::UNUSED );
-                tile.SetObjectPassable( true );
 
                 if ( fheroes2::showStandardTextMessage( title, victoryMsg, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                     const Troop troop = getTroopFromTile( tile );
@@ -2779,55 +2778,111 @@ namespace
         }
     }
 
-    void ActionToEvent( Heroes & hero, int32_t dst_index )
+    void ActionToEvent( Heroes & hero, const int32_t tileIndex )
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        MapEvent * event_maps = world.GetMapEvent( Maps::GetPoint( dst_index ) );
+        MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
+        if ( mapEvent == nullptr ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+            return;
+        }
 
-        if ( event_maps && event_maps->isAllow( hero.GetColor() ) ) {
-            hero.SetMove( false );
+        if ( !mapEvent->isAllow( hero.GetColor() ) ) {
+            return;
+        }
 
-            const Funds fundsToUpdate = Resource::CalculateEventResourceUpdate( hero.GetKingdom().GetFunds(), event_maps->resources );
+        hero.SetMove( false );
 
-            if ( event_maps->resources.GetValidItemsCount() ) {
-                hero.GetKingdom().AddFundsResource( event_maps->resources );
+        const Funds fundsToUpdate = Resource::CalculateEventResourceUpdate( hero.GetKingdom().GetFunds(), mapEvent->resources );
+
+        if ( mapEvent->resources.GetValidItemsCount() ) {
+            hero.GetKingdom().AddFundsResource( mapEvent->resources );
+        }
+
+        const std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
+
+        std::vector<const fheroes2::DialogElement *> elementUI;
+        elementUI.reserve( resourceUI.size() );
+        for ( const fheroes2::ResourceDialogElement & element : resourceUI ) {
+            elementUI.emplace_back( &element );
+        }
+
+        // Check for the presence of an artifact in the event and display it in the dialog.
+        std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
+        const Artifact & art = mapEvent->artifact;
+        if ( art.isValid() ) {
+            artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
+            AudioManager::PlaySound( M82::TREASURE );
+            elementUI.emplace_back( artifactUI.get() );
+        }
+
+        std::unique_ptr<fheroes2::SecondarySkillDialogElement> secondarySkillUI;
+        const auto & skill = mapEvent->secondarySkill;
+        if ( skill.isValid() ) {
+            bool addSkill = false;
+
+            if ( hero.HasSecondarySkill( skill.Skill() ) ) {
+                addSkill = ( hero.GetSecondarySkills().GetLevel( skill.Skill() ) < skill.Level() );
+            }
+            else {
+                addSkill = !hero.HasMaxSecondarySkill();
             }
 
-            const Artifact & art = event_maps->artifact;
-            const bool hasValidArtifact = art.isValid();
+            if ( addSkill ) {
+                secondarySkillUI = std::make_unique<fheroes2::SecondarySkillDialogElement>( skill, hero );
+                elementUI.emplace_back( secondarySkillUI.get() );
 
-            const std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
+                hero.LearnSkill( skill );
 
-            std::vector<const fheroes2::DialogElement *> elementUI;
-            elementUI.reserve( resourceUI.size() + ( hasValidArtifact ? 1 : 0 ) );
+                // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
+                if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                    hero.Scout( hero.GetIndex() );
+                    hero.ScoutRadar();
+                }
+            }
+        }
 
-            for ( const fheroes2::ResourceDialogElement & element : resourceUI ) {
-                elementUI.emplace_back( &element );
+        std::unique_ptr<fheroes2::ExperienceDialogElement> experienceUI;
+        if ( mapEvent->experience > 0 ) {
+            experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( mapEvent->experience );
+            elementUI.emplace_back( experienceUI.get() );
+        }
+
+        const fheroes2::Text emptyText;
+        const fheroes2::Text body( mapEvent->message, fheroes2::FontType::normalWhite(), Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
+
+        int32_t dialogHeight = fheroes2::getDialogHeight( emptyText, body, Dialog::OK, elementUI );
+        const int32_t displayHeight = fheroes2::Display::instance().height();
+        if ( dialogHeight > displayHeight && !elementUI.empty() ) {
+            // We have to split the message into 2 as it is too big.
+            std::vector<const fheroes2::DialogElement *> secondDialogUIElement;
+            while ( dialogHeight > displayHeight && !elementUI.empty() ) {
+                secondDialogUIElement.push_back( elementUI.back() );
+                elementUI.pop_back();
+                dialogHeight = fheroes2::getDialogHeight( emptyText, body, Dialog::OK, elementUI );
             }
 
-            // Check for the presence of an artifact as a reward in the event and display it in the dialog.
-            std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
-            if ( hasValidArtifact ) {
-                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
-                AudioManager::PlaySound( M82::TREASURE );
-                elementUI.emplace_back( artifactUI.get() );
-            }
+            fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );
+            fheroes2::showMessage( emptyText, emptyText, Dialog::OK, secondDialogUIElement );
+        }
+        else {
+            fheroes2::showMessage( emptyText, body, Dialog::OK, elementUI );
+        }
 
-            const fheroes2::Text header( {}, fheroes2::FontType::normalYellow() );
-            const fheroes2::Text body( event_maps->message, fheroes2::FontType::normalWhite(), Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
-            fheroes2::showMessage( header, body, Dialog::OK, elementUI );
+        // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
+        // and the fullness of the bag. It also displays appropriate text when an artifact cannot be picked up.
+        hero.PickupArtifact( art );
 
-            // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
-            // and the fullness of the bag. Is also displays appropriate text when an artifact cannot be picked up.
-            hero.PickupArtifact( art );
+        if ( mapEvent->experience > 0 ) {
+            hero.IncreaseExperience( static_cast<uint32_t>( mapEvent->experience ) );
+        }
 
-            event_maps->SetVisited();
+        mapEvent->SetVisited();
 
-            if ( event_maps->isSingleTimeEvent ) {
-                hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
-                world.RemoveMapObject( event_maps );
-            }
+        if ( mapEvent->isSingleTimeEvent ) {
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+            world.RemoveMapObject( mapEvent );
         }
     }
 

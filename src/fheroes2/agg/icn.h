@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ICN_H
-#define H2ICN_H
+#pragma once
 
 #include <cstdint>
 
@@ -909,10 +908,10 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BUYMAX,
+        BUTTON_WELL_MAX,
         BTNBATTLEONLY,
-        BTNGIFT_GOOD,
-        BTNGIFT_EVIL,
+        BUTTON_GIFT_GOOD,
+        BUTTON_GIFT_EVIL,
         CSLMARKER,
 
         GRAY_FONT,
@@ -944,12 +943,12 @@ namespace ICN
         SILVER_GRADIENT_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
+        SWAP_ARROWS_CIRCULAR,
 
         COLOR_CURSOR_ADVENTURE_MAP,
         MONO_CURSOR_ADVENTURE_MAP,
 
         DISMISS_HERO_DISABLED_BUTTON,
-        NEW_CAMPAIGN_DISABLED_BUTTON,
 
         KNIGHT_CASTLE_RIGHT_FARM,
         KNIGHT_CASTLE_LEFT_FARM,
@@ -976,6 +975,8 @@ namespace ICN
         UNIFORMBAK_GOOD,
         UNIFORMBAK_EVIL,
         REDBAK_SMALL_VERTICAL,
+        BLACKBAK,
+        BROWNBAK,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
@@ -998,12 +999,12 @@ namespace ICN
 
         EMPTY_GOOD_BUTTON,
         EMPTY_EVIL_BUTTON,
-        EMPTY_GOOD_MEDIUM_BUTTON,
-        EMPTY_EVIL_MEDIUM_BUTTON,
         EMPTY_POL_BUTTON,
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
         EMPTY_MAP_SELECT_BUTTON,
+        EMPTY_INTERFACE_BUTTON_GOOD,
+        EMPTY_INTERFACE_BUTTON_EVIL,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1034,8 +1035,6 @@ namespace ICN
         BUTTON_SMALL_CANCEL_EVIL,
         BUTTON_SMALL_OKAY_GOOD,
         BUTTON_SMALL_OKAY_EVIL,
-        BUTTON_SMALLER_OKAY_GOOD,
-        BUTTON_SMALLER_OKAY_EVIL,
         BUTTON_SMALL_ACCEPT_GOOD,
         BUTTON_SMALL_ACCEPT_EVIL,
         BUTTON_SMALL_DECLINE_GOOD,
@@ -1126,6 +1125,11 @@ namespace ICN
         BUTTON_LANGUAGE_GOOD,
         BUTTON_LANGUAGE_EVIL,
 
+        BUTTON_AUTO_COMBAT_GOOD,
+        BUTTON_AUTO_COMBAT_EVIL,
+        BUTTON_QUICK_COMBAT_GOOD,
+        BUTTON_QUICK_COMBAT_EVIL,
+
         SCENIBKG_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
@@ -1142,5 +1146,3 @@ namespace ICN
 
     int getFlagIcnId( const int color );
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -55,6 +55,7 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "pal.h"
 #include "profit.h"
 #include "resource.h"
 #include "screen.h"
@@ -717,19 +718,20 @@ namespace
 
         const bool isActiveHero = ( activeHero != nullptr );
 
-        std::string message;
         // hero's name
+        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
+        fheroes2::Text text( hero.GetName(), smallWhite );
+        // hero's level
         if ( isFullInfo && isActiveHero ) {
-            message = _( "%{name} (Level %{level})" );
-            StringReplace( message, "%{name}", hero.GetName() );
-            StringReplace( message, "%{level}", activeHero->GetLevel() );
-        }
-        else {
-            message = hero.GetName();
+            std::string heroLevel = _( "heroQuickInfo|(Level %{level})" );
+            StringReplace( heroLevel, "%{level}", activeHero->GetLevel() );
+            heroLevel.insert( 0, " " );
+            // if Identify Hero has been cast then we want to know the hero's level rather than name.
+            const int32_t boxShadowAndBorder = 39;
+            text.fitToOneRow( box.width() - boxShadowAndBorder - fheroes2::Text{ heroLevel, smallWhite }.width() );
+            text.set( text.text() + heroLevel, smallWhite );
         }
 
-        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-        fheroes2::Text text( message, smallWhite );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y = cur_rt.y + 2;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -760,7 +762,20 @@ namespace
         // morale
         if ( isFullInfo ) {
             const int32_t morale = hero.GetMorale();
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
+
+            uint32_t spriteInx = 5;
+            if ( morale < 0 ) {
+                spriteInx = 3;
+            }
+            else if ( morale > 0 ) {
+                spriteInx = 4;
+            }
+
+            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, spriteInx );
+            if ( hero.GetArmy().AllTroopsAreUndead() ) {
+                fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            }
             uint32_t count = ( 0 == morale ? 1 : std::abs( morale ) );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y = cur_rt.y + ( count == 1 ? 20 : 13 );

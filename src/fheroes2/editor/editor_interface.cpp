@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"
 #include "color.h"
@@ -55,7 +54,6 @@
 #include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "interface_border.h"
 #include "interface_gamearea.h"
@@ -86,6 +84,7 @@
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -93,6 +92,10 @@
 namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
+
+    // In original Editor map name is limited to 17 characters.
+    // However, we have no such limitation but to be reasonable we still have a limit.
+    const int32_t maxMapNameLength = 50;
 
     class HideInterfaceModeDisabler
     {
@@ -119,6 +122,31 @@ namespace
     private:
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
+
+    size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
+    {
+        const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+        std::set<size_t> obeliskIndex;
+        for ( size_t i = 0; i < miscellaneousObjects.size(); ++i ) {
+            if ( miscellaneousObjects[i].objectType == MP2::OBJ_OBELISK ) {
+                obeliskIndex.emplace( i );
+            }
+        }
+
+        size_t obeliskCount = 0;
+        for ( const auto & mapTile : _mapFormat.tiles ) {
+            for ( const auto & object : mapTile.objects ) {
+                if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && obeliskIndex.count( object.index ) > 0 ) {
+                    assert( object.index < miscellaneousObjects.size() );
+
+                    ++obeliskCount;
+                }
+            }
+        }
+
+        return obeliskCount;
+    }
 
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
@@ -471,8 +499,17 @@ namespace
                 return false;
             }
 
-            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT
-                 && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) { return tileToCheck.GoodForUltimateArtifact(); } ) ) {
+            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT && !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tile & tileToCheck ) {
+                     // This check is being run for every action in the Editor.
+                     // Therefore, after the placement of an Ultimate Artifact on this tile the check would fail since the tile contains something on it.
+                     // So, before checking for correctness on placement an Ultimate Artifact we check whether the current tile already has one.
+                     // If this is true then we consider that the placement is allowed.
+                     if ( tileToCheck.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                         return true;
+                     }
+
+                     return tileToCheck.GoodForUltimateArtifact();
+                 } ) ) {
                 errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
             }
@@ -687,8 +724,6 @@ namespace Interface
 
     void EditorInterface::redraw( const uint32_t force )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
@@ -696,6 +731,8 @@ namespace Interface
             if ( combinedRedraw & REDRAW_PASSABILITIES ) {
                 renderFlags |= LEVEL_PASSABILITIES;
             }
+
+            fheroes2::Display & display = fheroes2::Display::instance();
 
             // Render all except the fog.
             _gameArea.Redraw( display, renderFlags );
@@ -707,7 +744,9 @@ namespace Interface
                 // Keep 4 pixels from each edge.
                 text.fitToOneRow( roi.width - 8 );
 
-                text.draw( roi.x + 4, roi.y + roi.height - text.height() - 4, display );
+                const bool isSystemInfoShown = Settings::Get().isSystemInfoEnabled();
+
+                text.draw( roi.x + 4, roi.y + roi.height - text.height() - ( isSystemInfoShown ? 14 : 4 ), display );
             }
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
@@ -1118,35 +1157,45 @@ namespace Interface
 
     fheroes2::GameMode EditorInterface::eventFileDialog()
     {
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
-
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // Since the original image contains shadow it is important to remove it from calculation of window's position.
-        const fheroes2::Point rb( ( display.width() - background.width() - fheroes2::borderWidthPx ) / 2,
-                                  ( display.height() - background.height() + fheroes2::borderWidthPx ) / 2 );
-        fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
-        fheroes2::Blit( background, display, rb.x, rb.y );
+        fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
 
-        fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1 );
-        fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        fheroes2::Button buttonNew;
+        fheroes2::Button buttonLoad;
+        fheroes2::Button buttonSave;
+        fheroes2::Button buttonQuit;
+        fheroes2::ButtonSprite buttonMainMenu;
+        fheroes2::ButtonSprite buttonPlayMap;
+        fheroes2::Button buttonCancel;
 
-        buttonNew.draw();
-        buttonLoad.draw();
-        buttonSave.draw();
-        buttonQuit.draw();
-        buttonCancel.draw();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        display.render( back.rect() );
+        const fheroes2::Point buttonOffsets = { 30, 15 };
+        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
+                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
+        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 0, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::TOP_CENTER );
+        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
+        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
+                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
 
-        fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+
+        background.renderButtonSprite( buttonMainMenu, fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), releasedButtonFont ),
+                                       { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y }, isEvilInterface,
+                                       fheroes2::StandardWindow::Padding::CENTER_CENTER );
+        background.renderButtonSprite( buttonPlayMap, fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), releasedButtonFont ),
+                                       { buttonSave.area().width - 10, buttonSave.area().height }, { buttonOffsets.x, buttonOffsets.y }, isEvilInterface,
+                                       fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -1155,36 +1204,75 @@ namespace Interface
             buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
             buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
             buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
+            buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPlayMap.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_NEW_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_NEW_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
-                    result = fheroes2::GameMode::EDITOR_LOAD_MAP;
-                    break;
+                    return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                back.restore();
-
+            if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+                // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
+                background.hideWindow();
                 Get().saveMapToFile();
-
-                break;
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    result = fheroes2::GameMode::QUIT_GAME;
-                    break;
+                    return fheroes2::GameMode::QUIT_GAME;
+                }
+            }
+            if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
+                if ( fheroes2::showStandardTextMessage( _( "Main Menu" ),
+                                                        _( "Do you wish to return to the game's Main Menu? (Any unsaved changes to the current map will be lost.)" ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    return fheroes2::GameMode::MAIN_MENU;
+                }
+            }
+            else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                if ( isNameEmpty
+                     && fheroes2::showStandardTextMessage(
+                            _( "Unsaved Changes" ),
+                            _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                            Dialog::YES | Dialog::NO )
+                            == Dialog::NO ) {
+                    continue;
+                }
+                if ( isNameEmpty ) {
+                    Get().saveMapToFile();
+                    isNameEmpty = conf.getCurrentMapInfo().name.empty();
+                    if ( isNameEmpty ) {
+                        // Saving was aborted.
+                        display.render( background.totalArea() );
+                        continue;
+                    }
+                }
+                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+                    fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
+                                                       _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
+                }
+                else {
+                    if ( fheroes2::
+                             showStandardTextMessage( _( "Start Map" ),
+                                                      _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                      Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        return fheroes2::GameMode::NEW_STANDARD;
+                    }
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-                break;
+                return fheroes2::GameMode::CANCEL;
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
@@ -1201,16 +1289,17 @@ namespace Interface
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and play the map in the Standard Game mode." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
         }
-
-        // restore background
-        back.restore();
-        display.render( back.rect() );
-
-        return result;
+        return fheroes2::GameMode::CANCEL;
     }
 
     void EditorInterface::eventViewWorld()
@@ -1328,7 +1417,8 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, monsterUi.get() ) && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get() )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
@@ -1354,7 +1444,8 @@ namespace Interface
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
-                    if ( Dialog::SelectCount( str, 0, 999999, resourceCount, 1, &resourceUI ) && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI )
+                         && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
                         action.commit();
@@ -1394,6 +1485,9 @@ namespace Interface
                         Maps::setSpellOnTile( tile, newSpellId );
 
                         action.commit();
+                    }
+                    else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
+                        fheroes2::ArtifactDialogElement( static_cast<int>( objectInfo.metadata[0] ) ).showPopup( Dialog::OK );
                     }
                     else {
                         std::string msg = _( "%{object} has no properties to change." );
@@ -1472,6 +1566,12 @@ namespace Interface
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
+                }
+                else if ( objectType == MP2::OBJ_OBELISK ) {
+                    std::string str = _( "The total number of obelisks is %{count}." );
+                    StringReplace( str, "%{count}", getObeliskCount( _mapFormat ) );
+
+                    fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
@@ -1796,26 +1896,7 @@ namespace Interface
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( objectInfo.objectType == MP2::OBJ_OBELISK ) {
-                const auto & objects = Maps::getObjectsByGroup( groupType );
-
-                std::set<size_t> obeliskIndex;
-                for ( size_t i = 0; i < objects.size(); ++i ) {
-                    if ( objects[i].objectType == MP2::OBJ_OBELISK ) {
-                        obeliskIndex.emplace( i );
-                    }
-                }
-
-                size_t obeliskCount = 0;
-                for ( const auto & mapTile : _mapFormat.tiles ) {
-                    for ( const auto & object : mapTile.objects ) {
-                        if ( object.group == groupType && obeliskIndex.count( object.index ) > 0 ) {
-                            assert( object.index < objects.size() );
-
-                            ++obeliskCount;
-                        }
-                    }
-                }
-
+                const size_t obeliskCount = getObeliskCount( _mapFormat );
                 if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
@@ -1843,7 +1924,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.getTile( tileIndex ) );
+        Editor::showPopupWindow( world.getTile( tileIndex ), _mapFormat );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
@@ -1951,7 +2032,7 @@ namespace Interface
         std::string fullPath;
 
         while ( true ) {
-            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage ) ) {
+            if ( !Editor::mapSaveSelectFile( fileName, mapName, _mapFormat.mainLanguage, maxMapNameLength ) ) {
                 return;
             }
 
@@ -1988,7 +2069,7 @@ namespace Interface
     {
         Maps::Map_Format::MapFormat mapBackup = _mapFormat;
 
-        if ( Editor::mapSpecificationsDialog( _mapFormat ) ) {
+        if ( Editor::mapSpecificationsDialog( _mapFormat, maxMapNameLength ) ) {
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
             action.commit();
         }

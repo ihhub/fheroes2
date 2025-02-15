@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,6 +80,13 @@ namespace
 #if defined( ANDROID )
         // Value greater than 1024 causes audio distortion on Android
         int chunkSize = 1024;
+#elif defined( __EMSCRIPTEN__ )
+        // When a WebAssembly app is running in a browser, no background threads (emulated by the web workers) have
+        // access to the audio. The audio can only be accessed (and feeded) from the main thread (when yielding to
+        // the browser's event loop). The chunk size should be large enough to avoid playback issues caused by other
+        // activities performed on the main thread. On the other hand, it shouldn't be too big, because it is possible
+        // to stop the audio playback only after the current chunk has been completely played.
+        int chunkSize = 8192;
 #else
         int chunkSize = 2048;
 #endif
@@ -540,6 +547,8 @@ namespace
         // Either there is no need to resume music playback, or the resumption failed. Let's try to
         // start the playback from the beginning.
         if ( returnCode != 0 ) {
+            track->setPosition( 0 );
+
             returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
 
             if ( returnCode != 0 ) {

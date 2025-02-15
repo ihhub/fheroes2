@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -34,11 +34,11 @@ VPATH := $(SOURCEDIRS)
 
 .PHONY: all pot clean
 
-all: fheroes2 pot
+all: $(TARGET) pot
 
 pot: fheroes2.pot
 
-fheroes2: $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
+$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SOURCES))) $(DEPLIBS)
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 fheroes2.pot: $(SOURCES)
@@ -51,4 +51,4 @@ fheroes2.pot: $(SOURCES)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.d *.o fheroes2 fheroes2.pot fheroes2.pot~
+	-rm -f *.d *.o fheroes2 fheroes2.*

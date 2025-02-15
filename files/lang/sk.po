@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
 "X-Generator: Poedit 3.3.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"RÝCHLY\n"
-"BOJ"
 
 msgid ""
 "NEW\n"
@@ -84,9 +77,6 @@ msgid "CANCEL"
 msgstr "ZRUŠIŤ"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -158,6 +148,13 @@ msgid ""
 msgstr ""
 "BEŽNÁ\n"
 "HRA"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"RÝCHLY\n"
+"BOJ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -232,14 +229,14 @@ msgstr ""
 msgid "START"
 msgstr "REŠTART"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MESTÁ/\n"
 "HRADY"
-
-msgid "TOWN"
-msgstr ""
 
 #, fuzzy
 msgid "RESTRICT"
@@ -325,6 +322,16 @@ msgid "EVENTS"
 msgstr ""
 
 msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -483,10 +490,12 @@ msgstr[0] "%{name} zničil polovicu nepriateľov!"
 msgstr[1] "%{name} zničili polovicu nepriateľov!"
 msgstr[2] "%{name} zničili polovicu nepriateľov!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} vypol automatizovaný boj"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} zapol automatizovaný boj"
 
 msgid "Spell failed!"
@@ -818,14 +827,18 @@ msgstr "Zobraz info o balistovi"
 msgid "Ballista"
 msgstr "Balista"
 
-msgid "Enable auto combat"
-msgstr "Povoľ automatizovaný boj"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Umožní počítaču vybojovať boj za teba."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Auto boj"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Auto boj"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Nastav systémové možnosti"
@@ -873,11 +886,36 @@ msgstr "Panel správ"
 msgid "Shows the results of individual monster's actions."
 msgstr "Ukáže výsledky činností jednotlivých bojovníkov."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Určite chceš povoliť automatický boj?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Umožní počítaču vybojovať boj za teba."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Auto boj"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Auto boj"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1014,7 +1052,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Zrkadlový obraz je zničený!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Určite chceš prerušiť automatizovaný súboj?"
 
 msgid "Error"
@@ -3164,8 +3202,9 @@ msgstr "Najprv zvoľ príjemcov!"
 msgid "You cannot select %{resource}!"
 msgstr "Nemôžeš zvoliť %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Zvoľ počet - %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Streľ do: %{monster}"
 
 msgid "Select Recipients"
 msgstr "Zvoľ príjemcov"
@@ -3231,15 +3270,6 @@ msgstr "Udalosť"
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
-msgid "Evil"
-msgstr "Zlo"
-
-msgid "Good"
-msgstr "Dobro"
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
 msgid "Hide"
 msgstr "Skry"
 
@@ -3249,26 +3279,17 @@ msgstr "Zobraz"
 msgid "Interface"
 msgstr "Rozhranie"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normálna"
-
-msgid "Fast"
-msgstr "Rýchla"
-
-msgid "Very Fast"
-msgstr "Veľmi rýchla"
-
-msgid "Scroll Speed"
-msgstr "Rýchlosť posunu"
+msgid "Interface Type"
+msgstr "Typ rozhrania"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
+
+msgid "Scroll Speed"
+msgstr "Rýchlosť posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
@@ -3306,6 +3327,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "nie je"
@@ -3411,8 +3435,8 @@ msgstr "Obrancovia:"
 msgid "Unknown"
 msgstr "Neznáme"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} na úrovni %{level}"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "na úrovni %{level}"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -3836,7 +3860,8 @@ msgstr "Auto bez kúziel"
 msgid "Battles"
 msgstr "Boje"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuálne"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4083,20 +4108,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Načítať existujúcu mapu."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Zvukové efekty"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Podmienky\n"
+"prehry"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Skúsenosti"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Zvoľ artefakt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Načítať existujúcu mapu."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Zvoľ zručnosť:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4152,6 +4214,58 @@ msgstr ""
 "Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "REŠTART"
+
+msgid "Main Menu"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Reštart"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Určite chceš načítať novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "nová mapa, od nuly"
@@ -4174,12 +4288,15 @@ msgstr "Uložiť aktuálnu mapu."
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Streľ do: %{monster}"
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4191,6 +4308,9 @@ msgstr ""
 #, fuzzy
 msgid "This artifact"
 msgstr "s jedným artefaktom."
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 #, fuzzy
 msgid "Roads"
@@ -4479,6 +4599,12 @@ msgstr "Vrátiť"
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr "Upraviť názov mapy, popis a ďalšie všeobecné informácie."
 
@@ -4747,6 +4873,10 @@ msgstr ""
 "hráča."
 
 #, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Zvoľ počet - %{resource}:"
+
+#, fuzzy
 msgid "Animation"
 msgstr "Anexia"
 
@@ -4855,6 +4985,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4878,6 +5014,9 @@ msgstr "a viac..."
 
 msgid "Easy"
 msgstr "Ľahká"
+
+msgid "Normal"
+msgstr "Normálna"
 
 msgid "Hard"
 msgstr "Ťažká"
@@ -5179,6 +5318,10 @@ msgstr "prepni celú obrazovku"
 msgid "hotkey|toggle text support mode"
 msgstr "prepni mód podpory textu"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "prepni mód podpory textu"
+
 msgid "hotkey|new game"
 msgstr "nová hra"
 
@@ -5422,11 +5565,13 @@ msgstr "uteč z boja"
 msgid "hotkey|surrender during battle"
 msgstr "vzdaj sa počas boja"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "prepni boj do automatického módu"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "ukonči boj v automatickom móde"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "ukonči"
 
 msgid "hotkey|battle options"
 msgstr "možnosti boja"
@@ -5494,6 +5639,10 @@ msgstr "povýš jednotku"
 msgid "hotkey|dismiss hero or troop"
 msgstr "prepusti jednotku alebo hrdinu"
 
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "povýš jednotku"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5511,9 +5660,6 @@ msgid "Default Actions"
 msgstr "predvolená činnosť"
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -6325,6 +6471,9 @@ msgid ""
 "skill"
 msgstr "Obrana"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6413,6 +6562,21 @@ msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr "Vietnamsky"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Fast"
+msgstr "Rýchla"
+
+msgid "Very Fast"
+msgstr "Veľmi rýchla"
+
+msgid "Evil"
+msgstr "Zlo"
+
+msgid "Good"
+msgstr "Dobro"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -8079,10 +8243,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Skúsenosti"
-
 msgid "View Experience Info"
 msgstr "Zobraz info o skúsenostiach"
 
@@ -8196,6 +8356,9 @@ msgid ""
 msgstr ""
 "Súčasné skúsenosti %{exp1}.\n"
 " Ďalšia úroveň %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Úroveň %{level}"
@@ -11621,11 +11784,14 @@ msgstr "Hromadné spomalenie"
 msgid "Slows all enemies to half movement rate."
 msgstr "Spomaľuje všetkých nepriateľov na polovicu rýchlosti pohybu."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
-
 msgid "spell|Blind"
 msgstr "Slepota"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
 
 msgid "Bless"
 msgstr "Požehnanie"
@@ -12154,6 +12320,15 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Zvoľ počet - %{resource}:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Povoľ automatizovaný boj"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "ukonči boj v automatickom móde"
 
 #~ msgid "Please Remember"
 #~ msgstr "Nezabudni, prosím"

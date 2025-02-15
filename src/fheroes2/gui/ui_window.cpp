@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -343,13 +343,13 @@ namespace fheroes2
         }
     }
 
-    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const int32_t buttonWidth, const Point & offset,
+    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
                                              const bool isEvilInterface, const Padding padding )
     {
         Sprite released;
         Sprite pressed;
 
-        makeButtonSprites( released, pressed, buttonText, buttonWidth, isEvilInterface, false );
+        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
         const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
 

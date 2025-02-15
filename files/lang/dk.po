@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-05-21 12:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -19,13 +19,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Loco-Parser: loco_parse_po\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"KUN\n"
-"KAMP"
 
 msgid ""
 "NEW\n"
@@ -79,9 +72,6 @@ msgid "CANCEL"
 msgstr "AFBRYD"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -153,6 +143,13 @@ msgstr ""
 "SPILLER"
 
 msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"KUN\n"
+"KAMP"
+
+msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr "FELTTOG"
@@ -221,11 +218,11 @@ msgstr "NULSTIL"
 msgid "START"
 msgstr "START"
 
-msgid "CASTLE"
-msgstr "BORGE"
-
 msgid "TOWN"
 msgstr "BY"
+
+msgid "CASTLE"
+msgstr "BORGE"
 
 msgid "RESTRICT"
 msgstr "BEGRÆNS"
@@ -315,6 +312,16 @@ msgid "EVENTS"
 msgstr ""
 
 msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -470,10 +477,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} udsletter halvdelen af fjendens tropper!"
 msgstr[1] "%{name} udsletter halvdelen af fjendens tropper!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} har deaktiveret automatisk kamp"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} har aktiveret automatisk kamp"
 
 msgid "Spell failed!"
@@ -810,14 +819,18 @@ msgstr "Se Ballistens info"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Aktiver Autokamp"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillader computeren at udkæmpe kampen for dig."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Autokamp"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Autokamp"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Tilpas systemindstillinger"
@@ -865,11 +878,36 @@ msgstr "Beskedlinje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Er du sikker på, at du vil aktivere autokamp?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på, at du vil færdiggøre denne kamp automatisk?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Tillader computeren at udkæmpe kampen for dig."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Autokamp"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Autokamp"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -996,7 +1034,8 @@ msgstr "Spejlbilledet er skabt."
 msgid "The mirror image is destroyed!"
 msgstr "Spejlbilledet er ødelagt!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Er du sikker på, du vil afbryde autokamp-tilstand?"
 
 msgid "Error"
@@ -3169,8 +3208,9 @@ msgstr "Vælg først modtagere!"
 msgid "You cannot select %{resource}!"
 msgstr "Du kan ikke vælge %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Vælg antal %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Indstil antal %{monster}"
 
 msgid "Select Recipients"
 msgstr "Vælg modtagere"
@@ -3236,15 +3276,6 @@ msgstr "Begivenhed: "
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
 msgid "Hide"
 msgstr "Skjul"
 
@@ -3254,28 +3285,19 @@ msgstr "Vis"
 msgid "Interface"
 msgstr "Interface"
 
-msgid "Slow"
-msgstr "Langsom"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hurtig"
-
-msgid "Very Fast"
-msgstr "Meget hurtig"
-
-msgid "Scroll Speed"
-msgstr ""
-"Rulle\n"
-"hastighed"
+msgid "Interface Type"
+msgstr "Interface-type"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
+
+msgid "Scroll Speed"
+msgstr ""
+"Rulle\n"
+"hastighed"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Bestemmer vinduets rullehastighed."
@@ -3318,6 +3340,9 @@ msgstr ""
 "%{skill1}\n"
 "eller\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "i/t"
@@ -3420,8 +3445,8 @@ msgstr "Forsvarere:"
 msgid "Unknown"
 msgstr "Ukendt"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Level %{level})"
 
 msgid "Attack:"
 msgstr "Angreb:"
@@ -3824,7 +3849,8 @@ msgstr "Auto, ingen magi"
 msgid "Battles"
 msgstr "Kamp"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuelt"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4063,19 +4089,55 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "indlæs et eksisterende kort."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effekter"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Tabs-\n"
+"vilkår"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
+msgstr "Indstil erfaringspoint"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr "Slet artefakt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "indlæs et eksisterende kort."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Vælg evne:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4127,6 +4189,58 @@ msgstr ""
 "Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
 "af det nuværende kort, vil gå tabt.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+msgid "Main Menu"
+msgstr "Hovedmenu"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på, at du vil tilbage til spillets hovedmenu? Alle ikke-gemte "
+"ændringer vil gå tabt."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Genstart"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Er du sikker på, at du vil indlæse et nyt kort? (Alle ikke-gemte ændringer "
+"på det nuværende kort, vil gå tabt.)"
+
 msgid "Create a new map from scratch."
 msgstr "Opret et nyt kort fra bunden."
 
@@ -4148,12 +4262,15 @@ msgstr "Gem nuværende kort."
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Klik her for at vende tilbage til hovedmenuen."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "Indtast tekst til %{object}"
-
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Indstil antal %{monster}"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
@@ -4164,6 +4281,9 @@ msgstr ""
 #, fuzzy
 msgid "This artifact"
 msgstr "med 1 artefakt."
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 msgid "Roads"
 msgstr "Veje"
@@ -4443,6 +4563,13 @@ msgstr "Fortryd"
 msgid "Undo your last action."
 msgstr "Fortryd din sidste handling."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Fortryd din sidste handling."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Rediger kortets navn, beskrivelse eller andre informationer."
 
@@ -4708,6 +4835,10 @@ msgstr ""
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Vælg antal %{resource}:"
+
 msgid "Animation"
 msgstr "Animation"
 
@@ -4812,6 +4943,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4835,6 +4972,9 @@ msgstr "og mere..."
 
 msgid "Easy"
 msgstr "Let"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svær"
@@ -5134,6 +5274,10 @@ msgstr "Fuldskærm"
 msgid "hotkey|toggle text support mode"
 msgstr "Tekstunderstøttelsestilstand"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Tekstunderstøttelsestilstand"
+
 msgid "hotkey|new game"
 msgstr "Nyt spil"
 
@@ -5369,11 +5513,13 @@ msgstr "Tilbagetog fra kamp"
 msgid "hotkey|surrender during battle"
 msgstr "Overgivelse i kamp"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Autokamp (til/fra)"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Færdiggør kampen automatisk"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "Forlad"
 
 msgid "hotkey|battle options"
 msgstr "Kampindstillinger"
@@ -5441,6 +5587,10 @@ msgstr "Opgradér trop"
 msgid "hotkey|dismiss hero or troop"
 msgstr "Bortvis helt eller trop"
 
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "Opgradér trop"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5460,9 +5610,6 @@ msgstr "Standardhandlinger"
 
 msgid "Global Actions"
 msgstr "Globale Handlinger"
-
-msgid "Main Menu"
-msgstr "Hovedmenu"
 
 msgid "World Map"
 msgstr "Verdenskort"
@@ -6273,6 +6420,9 @@ msgstr ""
 "standard\n"
 "evne"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6362,6 +6512,21 @@ msgstr "Slovensk"
 
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
+
+msgid "Slow"
+msgstr "Langsom"
+
+msgid "Fast"
+msgstr "Hurtig"
+
+msgid "Very Fast"
+msgstr "Meget hurtig"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS:"
@@ -8062,9 +8227,6 @@ msgstr "Indstil tilpasset erfaringspointværdi. Nuværende værdi er standard."
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Skift erfaringspointværdi. Højreklik: Nulstil til standardværdi."
 
-msgid "Set Experience value"
-msgstr "Indstil erfaringspoint"
-
 msgid "View Experience Info"
 msgstr "Vis erfaringsinfo"
 
@@ -8172,6 +8334,9 @@ msgid ""
 msgstr ""
 "Nuværende erfaringspoint %{exp1}.\n"
 " Næste level %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Level %{level}"
@@ -11554,11 +11719,14 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Halverer hele den fjendtlige hærs bevægelseshastighed."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Skygger den berørte trops øjne og forhindrer dem i at bevæge sig."
-
 msgid "spell|Blind"
 msgstr "Blinding"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Skygger den berørte trops øjne og forhindrer dem i at bevæge sig."
 
 msgid "Bless"
 msgstr "Velsignelse"
@@ -12124,6 +12292,15 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Vælg antal %{resource}:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Aktiver Autokamp"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Færdiggør kampen automatisk"
 
 #~ msgid "Please Remember"
 #~ msgstr "Husk venligst"

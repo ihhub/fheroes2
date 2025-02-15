@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
-"PO-Revision-Date: 2024-10-07 15:36+0200\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
+"PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -17,11 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "BATAILLE"
 
 msgid ""
 "NEW\n"
@@ -52,15 +47,13 @@ msgstr ""
 "QUIT-\n"
 "TER"
 
-#, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "NOU-\n"
-"VEAU"
+"VELLE"
 
-#, fuzzy
 msgid ""
 "SAVE\n"
 "MAP"
@@ -68,7 +61,6 @@ msgstr ""
 "SAUVE-\n"
 "GARDER"
 
-#, fuzzy
 msgid ""
 "LOAD\n"
 "MAP"
@@ -80,9 +72,6 @@ msgid "CANCEL"
 msgstr "ANNULER"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -150,6 +139,11 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr "SCÉNARIO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "BATAILLE"
 
 msgid ""
 "CAMPAIGN\n"
@@ -225,15 +219,14 @@ msgstr "R.A.Z."
 msgid "START"
 msgstr "COMMENCER"
 
-msgid "CASTLE"
-msgstr "CHÂTEAU"
-
 msgid "TOWN"
 msgstr "VILLAGE"
 
-#, fuzzy
+msgid "CASTLE"
+msgstr "CHÂTEAU"
+
 msgid "RESTRICT"
-msgstr "REJOUER"
+msgstr "LIMITER"
 
 msgid ""
 "D\n"
@@ -267,6 +260,7 @@ msgstr ""
 "E\n"
 "R"
 
+# Patrouille is too long.
 msgid ""
 "P\n"
 "A\n"
@@ -275,6 +269,11 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"R\n"
+"A\n"
+"Y\n"
+"O\n"
+"N"
 
 msgid ""
 "C\n"
@@ -315,13 +314,28 @@ msgstr ""
 "O"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "RUMEURS"
 
+# EVENEMENTS is too long for the UI currently. It overlaps with other buttons.
 msgid "EVENTS"
-msgstr ""
+msgstr "ÉVÉNEMENT"
 
 msgid "LANGUAGE"
+msgstr "LANGUE"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
 msgstr ""
+"COMBAT\n"
+"AUTOM."
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+"COMBAT\n"
+"RAPIDE"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -428,9 +442,8 @@ msgstr "1000+"
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
-msgstr "Neutre"
+msgstr "Neutres"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Troupes de %{count} alignements -%{penalty}"
@@ -438,11 +451,10 @@ msgstr "Troupes de %{count} alignements -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Morts-vivants parmi les troupes -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Actions par défaut"
+msgstr "Troupes par défaut"
 
 msgid "View %{name}"
 msgstr "Voir %{name}"
@@ -477,10 +489,10 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "La troupe de %{name} décime la troupe ennemie !"
 msgstr[1] "Les %{name} déciment la troupe ennemie !"
 
-msgid "%{name} has turned off the auto battle"
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} a désactivé le combat auto"
 
-msgid "%{name} has turned on the auto battle"
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} a activé le combat auto"
 
 msgid "Spell failed!"
@@ -823,14 +835,18 @@ msgstr "Voir les infos de la baliste"
 msgid "Ballista"
 msgstr "Baliste"
 
-msgid "Enable auto combat"
-msgstr "Activer le combat automatique"
+msgid "Automatic combat modes"
+msgstr "Modes de combat automatique"
 
-msgid "Allows the computer to fight out the battle for you."
-msgstr "L'ordinateur joue le combat à votre place."
+msgid "Automatic Combat Modes"
+msgstr "Modes de combat automatique"
 
-msgid "Auto Combat"
-msgstr "Combat Auto"
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
+"Choisissez entre lancer le combat en mode combat automatique ou en mode "
+"combat rapide."
 
 msgid "Customize system options"
 msgstr "Modifier les options système"
@@ -878,11 +894,35 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
-msgid "Are you sure you want to enable auto combat?"
-msgstr "Voulez-vous vraiment activer le combat automatique ?"
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Êtes-vous sûr de vouloir désactiver le mode combat automatique ?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Êtes-vous sûr de vouloir résoudre le combat en mode combat rapide ?"
+
+msgid "The computer continues the combat for you."
+msgstr "L'ordinateur joue le combat à votre place."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+"Ceci peut être interrompu à tout moment en appuyant sur le raccourci du mode "
+"combat automatique ou la touche Annuler ou en cliquant gauche ou droite avec "
+"votre souris n'importe où sur l'écran de jeu."
+
+msgid "Auto Combat"
+msgstr "Combat Auto"
+
+msgid "The combat is resolved from the current state."
+msgstr "Le combat sera résolu à partir de la situation actuelle."
+
+msgid "quickCombat|This cannot be undone."
+msgstr "Cela ne peut pas être modifié."
+
+msgid "Quick Combat"
+msgstr "Combat rapide"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1007,8 +1047,8 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-msgid "Are you sure you want to interrupt the auto combat?"
-msgstr "Voulez-vous vraiment interrompre le combat auto ?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
+msgstr "Êtes-vous sûr de vouloir interrompre le mode combat automatique ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -2499,52 +2539,41 @@ msgstr "Rien de spécial"
 msgid "Horde Building"
 msgstr ""
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Demeures"
+msgstr "Demeure 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Demeures"
+msgstr "Demeure 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Demeures"
+msgstr "Demeure 2 renforcée"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Demeures"
+msgstr "Demeure 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Demeures"
+msgstr "Demeure 3 renforcée"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Demeures"
+msgstr "Demeure 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Demeures"
+msgstr "Demeure 4 renforcée"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Demeures"
+msgstr "Demeure 5"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Demeures"
+msgstr "Demeure 5 renforcée"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Demeures"
+msgstr "Demeure 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Demeures"
+msgstr "Demeure 6 renforcée"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "Demeure 6 ren. 2x"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -3181,8 +3210,9 @@ msgstr "Sélectionnez d'abord les destinataires !"
 msgid "You cannot select %{resource}!"
 msgstr "Vous ne pouvez pas sélectionner %{resource} !"
 
-msgid "Select count %{resource}:"
-msgstr "Sélectionner %{resource} :"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Tirer sur %{monster}"
 
 msgid "Select Recipients"
 msgstr "Sélectionner les destinataires"
@@ -3252,15 +3282,6 @@ msgstr "Événement : "
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Interface"
-
 msgid "Hide"
 msgstr "Libre"
 
@@ -3270,20 +3291,8 @@ msgstr "Attachée"
 msgid "Interface"
 msgstr "Interface"
 
-msgid "Slow"
-msgstr "Lente"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Rapide"
-
-msgid "Very Fast"
-msgstr "Très rapide"
-
-msgid "Scroll Speed"
-msgstr "Défilement"
+msgid "Interface Type"
+msgstr "Interface"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
@@ -3291,13 +3300,15 @@ msgstr "Bascule le type d'interface que vous voulez utiliser."
 msgid "Toggle interface visibility."
 msgstr "Visibilité d'interface."
 
+msgid "Scroll Speed"
+msgstr "Défilement"
+
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
-#, fuzzy
 msgid "Select Language:"
 msgstr "Choix de la langue :"
 
@@ -3332,6 +3343,9 @@ msgstr ""
 "%{skill1}\n"
 "ou\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3437,8 +3451,8 @@ msgstr "Défenseurs :"
 msgid "Unknown"
 msgstr "Inconnu"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (niveau %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(niveau %{level})"
 
 msgid "Attack:"
 msgstr "Attaque :"
@@ -3479,9 +3493,8 @@ msgstr "Sélectionnez les forces maximales à recruter."
 msgid "Select only 1 monster to be recruited."
 msgstr "Ne sélectionnez qu'une seule unité à recruter."
 
-#, fuzzy
 msgid "Select this game resolution."
-msgstr "Choisir la résolution d'écran"
+msgstr "Choisissez cette résolution d'écran."
 
 msgid ""
 "Selecting this resolution will set a resolution that is scaled from the "
@@ -3508,13 +3521,11 @@ msgstr "Cliquez pour ouvrir la fenêtre du clavier virtuel."
 msgid "Open Virtual Keyboard"
 msgstr "Open Virtual Keyboard"
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Troupes à déplacer :"
+msgstr "Combien de créatures voulez-vous déplacer ? "
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Sélectionnez le nombre de pelotons à former :"
+msgstr "Sélectionnez le nombre d'unités que vous voulez séparer :"
 
 msgid "Map: "
 msgstr "Carte : "
@@ -3589,9 +3600,8 @@ msgstr "Aléatoire"
 msgid "Click to start placing the selected hero."
 msgstr "Cliquez pour commencer le placement du village/château sélectionné."
 
-#, fuzzy
 msgid "%{color} %{race}"
-msgstr "Héros %{race} %{color}"
+msgstr "%{race} %{color}"
 
 msgid "You will place"
 msgstr "Vous avez choisi de placer"
@@ -3695,13 +3705,12 @@ msgstr "Taille de l'icône"
 msgid "Map Type"
 msgstr "Type de carte"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Indique si la carte est faite pour la version du jeu \"The Succession Wars\" "
-"ou \"The Price of Loyalty\"."
+"Indique si la carte est faite pour la version du jeu \"The Succession "
+"Wars\", \"The Price of Loyalty\" ou \"Resurrection\"."
 
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
@@ -3715,12 +3724,14 @@ msgstr "Le prix de la loyauté"
 msgid "Resurrection"
 msgstr "Résurrection"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Language:\n"
-msgstr "Langue"
+msgstr ""
+"\n"
+"\n"
+"Langue:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -3845,7 +3856,7 @@ msgstr "Auto sans magie"
 msgid "Battles"
 msgstr "Batailles"
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr "Manuelles"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3946,13 +3957,11 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Château aléatoire"
+msgstr "Nom du château aléatoire"
 
-#, fuzzy
 msgid "Random Town Name"
-msgstr "Village aléatoire"
+msgstr "Nom du village aléatoire"
 
 #, fuzzy
 msgid "Allow Castle build"
@@ -4004,7 +4013,7 @@ msgid "Message Text:"
 msgstr "Barre d'informations"
 
 msgid "Reward:"
-msgstr ""
+msgstr "Récompense :"
 
 msgid "Player colors allowed to get event:"
 msgstr ""
@@ -4092,20 +4101,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Charger une carte existante."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effets"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Conditions\n"
+"de défaite"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Expérience"
 
 msgid "Artifact"
 msgstr "Artéfact"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Choisir artéfact :"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Charger une carte existante."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Choisir compétence :"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4163,6 +4209,60 @@ msgstr ""
 "Voulez-vous vraiment créer une nouvelle carte ? (Toutes les modifications "
 "non enregistrées seront perdues.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"MENU\n"
+"PRINCI."
+
+msgid ""
+"START\n"
+"MAP"
+msgstr "LANCER"
+
+msgid "Main Menu"
+msgstr "Menu principal"
+
+# Needs line break to have insectile space but keep partie and ? together.
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Voulez-vous vraiment créer une nouvelle carte ? (Toutes les modifications "
+"non enregistrées seront perdues.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Start Map"
+msgstr "Lancer carte"
+
+# Needs line break to have insectile space but keep partie and ? together.
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Voulez-vous vraiment charger une carte ? (Toutes les modifications non "
+"enregistrées seront perdues.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "Carte vierge"
@@ -4185,12 +4285,15 @@ msgstr "Sauvegarder la carte actuelle."
 msgid "Quit out of the map editor."
 msgstr "Quitter l'éditeur de carte."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Cliquez pour revenir au menu principal."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "Tirer sur %{monster}"
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set Random Ultimate Artifact Radius"
@@ -4202,6 +4305,9 @@ msgstr ""
 #, fuzzy
 msgid "This artifact"
 msgstr "avec un artéfact."
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 msgid "Roads"
 msgstr "Routes"
@@ -4495,6 +4601,13 @@ msgstr "Annuler"
 msgid "Undo your last action."
 msgstr "Annuler votre dernière action."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Annuler votre dernière action."
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 "Modifier le titre de la carte, la description et d'autres informations "
@@ -4712,15 +4825,14 @@ msgid "Click to edit custom rumors."
 msgstr "Enregistrer le jeu en cours."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Rumeurs"
 
 #, fuzzy
 msgid "Click to edit daily events."
 msgstr "Cliquez pour quitter les résultats de la bataille."
 
-#, fuzzy
 msgid "Events"
-msgstr "Événement"
+msgstr "Événements"
 
 #, fuzzy
 msgid "Click to change the language of the map."
@@ -4766,6 +4878,10 @@ msgstr ""
 "joueur humain."
 
 #, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Sélectionner %{resource} :"
+
+#, fuzzy
 msgid "Animation"
 msgstr "Annexion"
 
@@ -4781,10 +4897,10 @@ msgid "Toggle display of objects' passability."
 msgstr ""
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Rumeur :"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Rumeur"
 
 msgid "This rumor already exists in the list."
 msgstr ""
@@ -4876,6 +4992,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4899,6 +5021,9 @@ msgstr "et plus encore..."
 
 msgid "Easy"
 msgstr "Facile"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Difficile"
@@ -5199,6 +5324,10 @@ msgstr "Basculer en plein écran"
 msgid "hotkey|toggle text support mode"
 msgstr "Basculer en mode texte"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "Basculer en mode texte"
+
 msgid "hotkey|new game"
 msgstr "Nouveau partie"
 
@@ -5435,11 +5564,12 @@ msgstr "Retraite"
 msgid "hotkey|surrender during battle"
 msgstr "Reddition"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "Activer/désactiver le mode combat auto"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Finir la bataille en mode auto"
+msgid "hotkey|quick combat"
+msgstr "Combat rapide"
 
 msgid "hotkey|battle options"
 msgstr "Options de bataille"
@@ -5507,6 +5637,9 @@ msgstr "Améliorer une troupe"
 msgid "hotkey|dismiss hero or troop"
 msgstr "Renvoyer un héros ou une troupe"
 
+msgid "hotkey|exchange all troops"
+msgstr "Échanger toutes les troupes"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5526,9 +5659,6 @@ msgstr "Actions par défaut"
 
 msgid "Global Actions"
 msgstr "Actions globales"
-
-msgid "Main Menu"
-msgstr "Menu principal"
 
 msgid "World Map"
 msgstr "Carte du monde"
@@ -5622,14 +5752,13 @@ msgid ""
 "the first one from the screen and keep viewing the information on the item."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Bienvenue sur Heroes of Might and Magic II amélioré par le moteur "
-"fheroes2 !\n"
+"\n"
+"\n"
 "Avant de commencer le jeu choisissez la résolution du jeu."
 
 msgid "Greetings!"
@@ -6349,6 +6478,9 @@ msgid ""
 "skill"
 msgstr "Défense"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6439,6 +6571,21 @@ msgstr "Slovaque"
 
 msgid "Vietnamese"
 msgstr "Vietnamien"
+
+msgid "Slow"
+msgstr "Lente"
+
+msgid "Fast"
+msgstr "Rapide"
+
+msgid "Very Fast"
+msgstr "Très rapide"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -7979,7 +8126,6 @@ msgstr ""
 "vous serez récompensé. Répondez incorrectement, et vous serez mangé. "
 "Acceptez-vous de relever le défi ?\""
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
@@ -7987,15 +8133,16 @@ msgid ""
 msgstr ""
 "Le Sphinx vous pose l'énigme suivante :\n"
 "\n"
-"\"%{riddle}\n"
-"\n"
-"Votre réponse ?"
+"'"
 
 msgid ""
 "sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
+"'\n"
+"\n"
+"Votre réponse ?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8188,10 +8335,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Expérience"
-
 msgid "View Experience Info"
 msgstr "Voir les infos de l'expérience"
 
@@ -8306,6 +8449,9 @@ msgid ""
 msgstr ""
 "Expérience actuelle %{exp1}.\n"
 " Niveau suivant %{exp2}."
+
+msgid "million|M"
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "Niveau %{level}"
@@ -9456,12 +9602,11 @@ msgstr "Autel d'invocation de la terre"
 msgid "Water Summoning Altar"
 msgstr "Autel d'invocation de l'eau"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Marais"
+msgstr "Lac marécageux"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Lac gélé"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
@@ -10012,45 +10157,35 @@ msgstr "Élémentaire"
 msgid "No Morale"
 msgstr "Pas de moral"
 
-#, fuzzy
 msgid "Earth creature"
-msgstr "Recruter des créatures"
+msgstr "Créature de la terre"
 
-#, fuzzy
 msgid "Air creature"
-msgstr "Recruter des créatures"
+msgstr "Créature de l'air"
 
-#, fuzzy
 msgid "Fire creature"
-msgstr "Recruter des créatures"
+msgstr "Créature de feu"
 
-#, fuzzy
 msgid "Water creature"
-msgstr "Lac"
+msgstr "Créature de l'eau"
 
-#, fuzzy
 msgid "Double damage from Fire spells"
-msgstr "200% des dégâts des sorts du feu"
+msgstr "Double les dégâts subis par les sorts de feu"
 
-#, fuzzy
 msgid "Double damage from Cold spells"
-msgstr "200% des dégâts des sorts du froid"
+msgstr "Double les dégats subis par les sorts de froid"
 
-#, fuzzy
 msgid "Double damage from Earth creatures"
-msgstr "Lève tous les sortilèges de toutes les créatures."
+msgstr "Double les dégâts subis par les créatures de la terre"
 
-#, fuzzy
 msgid "Double damage from Air creatures"
-msgstr "Double dégâts aux morts-vivants"
+msgstr "Double les dégâts subis par les créatures de l'air"
 
-#, fuzzy
 msgid "Double damage from Fire creatures"
-msgstr "200% des dégâts des sorts du feu"
+msgstr "Double les dégâts subis par les créatures de feu"
 
-#, fuzzy
 msgid "Double damage from Water creatures"
-msgstr "Lève tous les sortilèges de toutes les créatures."
+msgstr "Double les dégâts subis par les créatures de l'eau"
 
 msgid "Lightning"
 msgstr "Éclair foudroyant"
@@ -11238,6 +11373,12 @@ msgid ""
 "here is it!\" he says eagerly, \"The Printing Press.\" And before you get to "
 "say a word, he hands you a Magic Book."
 msgstr ""
+"Un jeune homme s'approche de vous : \"Mon Seigneur, permettez moi de vous "
+"montrer ma dernière invention pour partager la connaissance !\" Vous suivez "
+"le jeune homme dans son atelier et vous apercevez immédiatement une machine "
+"volumineuse avec des leviers et des manivelles. \"La voici\" dit-il avec "
+"entrain, \"La presse à imprimer\" et avant que vous ne puissiez dire quelque "
+"chose, il vous tend Le Grimoire."
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
 msgstr ""
@@ -11323,7 +11464,7 @@ msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
-"%{name} fournit %{count} pour cent de protection contre Armageddon et Orage, "
+"%{name} fournit %{count} pour cent de protection contre Apocalypse et Orage, "
 "mais diminue la Puissance de 2."
 
 msgid ""
@@ -11718,11 +11859,15 @@ msgstr "Lourdeur collective"
 msgid "Slows all enemies to half movement rate."
 msgstr "Ralentit tous les ennemis à la moitié de leur vitesse de déplacement."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Obscurcit les yeux des créatures affectées, les empêchant de bouger."
-
 msgid "spell|Blind"
 msgstr "Aveugler"
+
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr ""
+"Aveugle l'ennemi, l'empêchant de se déplacer et réduit les dommages de la "
+"riposte de %{count} pourcent."
 
 msgid "Bless"
 msgstr "Bénédiction"
@@ -11782,9 +11927,8 @@ msgstr "Saint cri"
 msgid "Anti-Magic"
 msgstr "Anti-magie"
 
-#, fuzzy
 msgid "Prevents any magic against the selected creatures."
-msgstr "Protège la créature choisie de la magie néfaste."
+msgstr "Immunise la créature ciblée à la magie."
 
 msgid "Dispel Magic"
 msgstr "Contre-sorts"
@@ -12156,9 +12300,8 @@ msgstr "Vous n'avez pas de grimoire, vous ne pouvez donc pas lancer un sort."
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."
 
-#, fuzzy
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr "Le héros a %{point} points de magie restants."
+msgstr "Il reste %{sp} points de magie sur %{max} au héro."
 
 msgid "View Adventure Spells"
 msgstr "Voir les sorts d'aventure"
@@ -12270,6 +12413,15 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Sélectionner %{resource} :"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Activer le combat automatique"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Finir la bataille en mode auto"
 
 #~ msgid "Please Remember"
 #~ msgstr "N'oubliez pas"

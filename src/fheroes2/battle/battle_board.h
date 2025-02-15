@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_BOARD_H
-#define H2BATTLE_BOARD_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -135,5 +134,3 @@ namespace Battle
         void SetCobjObject( const int icn, const uint32_t dst );
     };
 }
-
-#endif

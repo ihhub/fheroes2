@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,38 +126,22 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
-    fheroes2::Button buttonOkay( dialogRoi.x, pos.y, okayButtonIcnID, 0, 1 );
+    fheroes2::ButtonGroup buttonGroup( dialogRoi, Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonBase & buttonOkay = buttonGroup.button( 0 );
+    const fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
 
     if ( !AllowBuyHero() ) {
         buttonOkay.disable();
     }
 
-    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-
-    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
-    fheroes2::Button buttonCancel( pos.x, pos.y, cancelButtonIcnID, 0, 1 );
-
-    buttonOkay.draw();
-    buttonCancel.draw();
-
+    buttonGroup.draw();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-
-        if ( buttonOkay.isEnabled() && ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
-            return Dialog::OK;
-        }
-
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            break;
+        const int result = buttonGroup.processEvents();
+        if ( result != Dialog::ZERO ) {
+            return result;
         }
 
         if ( le.isMouseRightButtonPressedInArea( heroPortraitArea ) ) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace Maps::Map_Format
 {
     struct MapFormat;
@@ -27,5 +29,5 @@ namespace Maps::Map_Format
 
 namespace Editor
 {
-    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat );
+    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat, const int32_t maxMapNameLength );
 }

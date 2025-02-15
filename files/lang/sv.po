@@ -1,13 +1,13 @@
 # Swedish translation for fheroes2
-# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2020 - 2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
-"PO-Revision-Date: 2024-12-21 18:15+0100\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
+"PO-Revision-Date: 2025-02-07 18:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.4.4\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ENDAST\n"
-"STRID"
 
 msgid ""
 "NEW\n"
@@ -77,9 +70,6 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "smallerButton|OKAY"
 msgstr "OKEJ"
 
 msgid "ACCEPT"
@@ -149,6 +139,13 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr "SOLOSPEL"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ENDAST\n"
+"STRID"
 
 msgid ""
 "CAMPAIGN\n"
@@ -221,11 +218,11 @@ msgstr "ÅTERS."
 msgid "START"
 msgstr "STARTA"
 
-msgid "CASTLE"
-msgstr "SLOTT"
-
 msgid "TOWN"
 msgstr "STAD"
+
+msgid "CASTLE"
+msgstr "SLOTT"
 
 msgid "RESTRICT"
 msgstr "BEGRÄNSA"
@@ -320,6 +317,20 @@ msgstr "HÄNDELSER"
 
 msgid "LANGUAGE"
 msgstr "SPRÅK"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+"AUTO.-\n"
+"STRID"
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+"SNABB-\n"
+"STRID"
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -474,10 +485,10 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
 msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
-msgid "%{name} has turned off the auto battle"
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} har stängt av automatisk strid"
 
-msgid "%{name} has turned on the auto battle"
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} har aktiverat automatisk strid"
 
 msgid "Spell failed!"
@@ -819,14 +830,18 @@ msgstr "Visa Ballistinformation"
 msgid "Ballista"
 msgstr "Ballist"
 
-msgid "Enable auto combat"
-msgstr "Aktivera autom. strid"
+msgid "Automatic combat modes"
+msgstr "Autom. Stridslägen"
 
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillåter datorn att fortsätta striden åt dig."
+msgid "Automatic Combat Modes"
+msgstr "Autom. Stridslägen"
 
-msgid "Auto Combat"
-msgstr "Autom. Strid"
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
+"Välj mellan att fortsätta striden i automatiskt stridsläge eller i "
+"snabbstridsläge."
 
 msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
@@ -874,11 +889,35 @@ msgstr "Textfält"
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
 
-msgid "Are you sure you want to enable auto combat?"
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Är du säker på att du vill aktivera automatisk strid?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
+
+msgid "The computer continues the combat for you."
+msgstr "Datorn fortsätter striden åt dig."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+"Detta kan avbryta när som helst genom att klicka på snabbtangenten för "
+"automatisk strid, standardtangenten för Avbryt eller genom att vänster eller "
+"högerklicka varsomhelst på slagfältet."
+
+msgid "Auto Combat"
+msgstr "Autom. Strid"
+
+msgid "The combat is resolved from the current state."
+msgstr "Striden avgörs från nuvarande läge."
+
+msgid "quickCombat|This cannot be undone."
+msgstr "Detta kan inte göras ogjort."
+
+msgid "Quick Combat"
+msgstr "Snabbstrid"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -993,7 +1032,7 @@ msgstr "Spegelbild skapas."
 msgid "The mirror image is destroyed!"
 msgstr "Spegelbilden förstörs!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Är du säker på att du vill avbryta den automatiska striden?"
 
 msgid "Error"
@@ -1153,10 +1192,10 @@ msgid ""
 "will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
-"Roland behöver dig för att besegra herrarna nära hans slott för att kunna "
+"Roland behöver dig för att besegra herrarna nära hans borg för att kunna "
 "påbörja upproret mot sin broder. De är inte allierade med varandra, så de "
 "kommer mest strida inbördes. Segern är din när du har besegrat alla deras "
-"hjältar och intagit deras slott."
+"hjältar och intagit deras borg."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -1165,7 +1204,7 @@ msgid ""
 msgstr ""
 "De lokala herrarna vägrar att alliera sig med Roland och måste kuvas. De är "
 "rika och mäktiga så var förberedd på hårt motstånd. \n"
-"Inta alla fiendeslott för att vinna."
+"Inta alla fiendeborgar för att vinna."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
@@ -1173,7 +1212,7 @@ msgid ""
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
 "Din uppgift är att försvara Dvärgarna mot Archibalds styrkor. Inta alla "
-"fiendestäder och slott för att vinna, och försäkra dig om att inte förlora "
+"fiendestäder och borgar för att vinna, och försäkra dig om att inte förlora "
 "kontrollen över samtliga dvärgstäder för i så fall har fienden vunnit."
 
 msgid ""
@@ -1181,7 +1220,7 @@ msgid ""
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Du kommer att möta fyra allierade fiender i en kamp om resurser och skatter. "
-"Inta alla fiendeslott för seger."
+"Inta alla fiendeborgar för seger."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
@@ -1189,7 +1228,7 @@ msgid ""
 "win."
 msgstr ""
 "Dina fiender har allierat sig emot dig och de börjar nära så var redo på "
-"strid. Du behöver kontrollera alla fyra slott i den lilla dalen för att "
+"strid. Du behöver kontrollera alla fyra borgar i den lilla dalen för att "
 "vinna."
 
 msgid ""
@@ -1199,8 +1238,8 @@ msgid ""
 "castle on an island in the ocean.)"
 msgstr ""
 "Norastons Häxcirkel har begärt Rolands hjälp mot ett anfall från Arcibalds "
-"allierade. Inta alla fiendeslott för att vinna. Förlora inte kontrollen över "
-"Noraston, för då förlorar du. (Tips: Det finns ett fiendeslott på en ö i "
+"allierade. Inta alla fiendesborgar för att vinna. Förlora inte kontrollen "
+"över Noraston, för då förlorar du. (Tips: Det finns en fiendeborg på en ö i "
 "havet.)"
 
 msgid ""
@@ -1209,9 +1248,9 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
-"Ansamla en så stor armé som möjligt och inta fiendeslottet inom 8 veckor. Du "
+"Ansamla en så stor armé som möjligt och inta fiendeborgen inom 8 veckor. Du "
 "har endast en motståndare, men du måste färdas långt för att nå "
-"fiendeslottet. Dina trupper som du har i scenariets slut följer med dig till "
+"fiendeborgen. Dina trupper som du har i scenariets slut följer med dig till "
 "slutstriden."
 
 msgid ""
@@ -1228,7 +1267,7 @@ msgid ""
 "fight against you in the final scenario."
 msgstr ""
 "Tre allierade fiender, även Lord Corlagon, står mellan dig och segern. "
-"Roland befinner sig i ett slott i nordväst, och du kommer förlora om han "
+"Roland befinner sig i en borg i nordväst, och du kommer förlora om han "
 "hamnar i fiendernas klor. Kom igång att om du tillfångatar Lord Corlagon så "
 "kommer han inte slåss mot dig i slutstriden."
 
@@ -1245,7 +1284,7 @@ msgid ""
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
-"Lojalitetsbyte lämnar dig med tre slott mot fiendens enda. Denna strid "
+"Lojalitetsbyte lämnar dig med tre borgar mot fiendens enda. Denna strid "
 "kommer bli din enklaste strid för resten av kriget... förrädare."
 
 msgid "Barbarian Wars"
@@ -1283,7 +1322,7 @@ msgid ""
 msgstr ""
 "Kung Archibald kräver att du besegrar tre fiender i denna regionen. De är "
 "inte allierade med varandra, så de kommer mest strida inbördes. Segern är "
-"din när du har besegrat alla deras hjältar och intagit deras slott."
+"din när du har besegrat alla deras hjältar och intagit deras borgar."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1294,7 +1333,7 @@ msgstr ""
 "Du måste förena babarstammarna i norr genom att erövra dem. Så som i "
 "föregående uppdrag så är inte fienderna allierade mer varandra, men de har "
 "mer resurser till sitt förfogande. Du vinner när du kontrollerar alla "
-"fiendeslott och alla fiendehjältar är besegrade."
+"fiendeborgar och alla fiendehjältar är besegrade."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1302,10 +1341,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
-"De skenheliga trollkarlarna har tagit Svartkonstnärernas slott i besittning. "
-"Du måste återerövra slottet för att uppnå seger. Kom ihåg att du startar med "
-"en stark armé, men du har inget slott och måste erövra ett inom 7 dagar, "
-"annars förlorar du. (Tips: Det närmaste slottet finns i sydost.)"
+"De skenheliga trollkarlarna har tagit Svartkonstnärernas borg i besittning. "
+"Du måste återerövra borgen för att uppnå seger. Kom ihåg att du startar med "
+"en stark armé, men du har ingen borg och måste erövra ett inom 7 dagar, "
+"annars förlorar du. (Tips: Det närmaste borgen finns i sydost.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1316,7 +1355,7 @@ msgstr ""
 "Dvärgarna behöver besegras innan de kan störa Kung Archibalds planer. "
 "Rolands styrkor startar mer fler än en hjälte och flera städer, så var "
 "beredd på angrepp på flera fronter. Du måste inta alla fiendestäder och "
-"slott för att utropa seger."
+"borgar för att utropa seger."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
@@ -1325,7 +1364,7 @@ msgid ""
 msgstr ""
 "Du måste slå ner ett bondeuppror lett av Rolands styrkor. De är allierade "
 "mot dig, men du har Lord Corlagon, en erfaren hjälte till din hjälp. Erövra "
-"alla fiendeslott för att vinna."
+"alla fiendeborgar för att vinna."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
@@ -1343,9 +1382,9 @@ msgid ""
 "Capture all enemy castles for victory."
 msgstr ""
 "Dina order är att erövra de herrars land som svurit trohet till Roland. Alla "
-"fiendestäder har förenats emot dig. Eftersom du börjar utan ett slott så "
-"måste du skynda dig erövra ett innan veckans slut. Erövra alla fiendeslott "
-"för segern."
+"fiendestäder har förenats emot dig. Eftersom du börjar utan en borg så måste "
+"du skynda dig erövra ett innan veckans slut. Erövra alla fiendeborgar för "
+"segern."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
@@ -1415,7 +1454,7 @@ msgid ""
 "strong for you."
 msgstr ""
 "Kraeger är förberedd inför din ankomst och har samlat en styrka med "
-"svartkonstnärer för att stoppa dig. Du måste inta slottet Scabsdale innan "
+"svartkonstnärer för att stoppa dig. Du måste inta borgen Scabsdale innan "
 "första dagen på tredje veckan, annars kommer Svartkonstnärerna ha blivit för "
 "starka."
 
@@ -1511,8 +1550,7 @@ msgstr ""
 "städer och invadera sedan djungelriket. Lämna inga fiender levande."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
-"Återta slottet Elfenbensportarna, som har fallit på grund av förräderi."
+msgstr "Återta borgen Elfenbensportarna, som har fallit på grund av förräderi."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
@@ -1573,7 +1611,7 @@ msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
-"Du måste ta kontroll över det Förtrollade slottet, där trollkonsten källa "
+"Du måste ta kontroll över det Förtrollade borgen, där trollkonsten källa "
 "ligger. Gör detta och segern är din."
 
 msgid "Blood is Thicker"
@@ -1998,7 +2036,7 @@ msgid "Cannot build. You have already built here today."
 msgstr "Kan inte byggas. Du har redan byggt här idag."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
+msgstr "För denna åtgärd är det nödvändigt att först bygga en borg."
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} producerar %{monster}."
@@ -2502,7 +2540,7 @@ msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
-"Befästningar ökar dina slottsmurars styrka, ökar antal rundor det krävs för "
+"Befästningar ökar dina borgmurars styrka, ökar antal rundor det krävs för "
 "att riva dem."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
@@ -2548,7 +2586,7 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Benhögen ökar produktionen av Skelett med %{count} per vecka."
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
-msgstr "Särskilda byggnaden ger en särskild bonus till den valda slottstypen."
+msgstr "Särskilda byggnaden ger en särskild bonus till den valda borgtypen."
 
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
@@ -2617,7 +2655,7 @@ msgstr ""
 "spaningsinformation om fiendestäder. Fler Gillen ger bättre information."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr "Värdshuset höjer stridsmoralen för trupperna som försvarar slottet."
+msgstr "Värdshuset höjer stridsmoralen för trupperna som försvarar borgen."
 
 msgid "The Shipyard allows ships to be built."
 msgstr "Skeppsvarvet bygger skepp."
@@ -2632,10 +2670,10 @@ msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Statyn ökar stadens inkomst med %{count} guld per dag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr "Vänster Torn ger extra mycket eldkraft under slottstrid."
+msgstr "Vänster Torn ger extra mycket eldkraft under borgstrid."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr "Höger Torn ger extra mycket eldkraft under slottstrid."
+msgstr "Höger Torn ger extra mycket eldkraft under borgstrid."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
@@ -2662,14 +2700,14 @@ msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
-"Tältet låter arbetare bygga ett slott, förutsatt att det finns tillräckligt "
+"Tältet låter arbetare bygga en borg, förutsatt att det finns tillräckligt "
 "med guld och resurser."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
-"Kaptensbostaden tillåter att en Kapten att assistera i slottets försvar när "
+"Kaptensbostaden tillåter att en Kapten att assistera i borgens försvar när "
 "ingen hjälte är närvarande."
 
 msgid ""
@@ -2706,7 +2744,7 @@ msgid "Show previous town"
 msgstr "Visa föregående stad"
 
 msgid "This town may not be upgraded to a castle."
-msgstr "Denna stad kan inte uppgraderas till ett slott."
+msgstr "Denna stad kan inte uppgraderas till en borg."
 
 msgid "Town"
 msgstr "Stad"
@@ -3108,8 +3146,8 @@ msgstr "Först välj mottagare!"
 msgid "You cannot select %{resource}!"
 msgstr "Du kan inte välja %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Välj antal %{resource}:"
+msgid "Set %{resource-type} Count"
+msgstr "Ange %{resource-type} antal"
 
 msgid "Select Recipients"
 msgstr "Välj mottagare"
@@ -3173,15 +3211,6 @@ msgstr "Händelse: "
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
-
 msgid "Hide"
 msgstr "Dölj"
 
@@ -3191,28 +3220,19 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Slow"
-msgstr "Långsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Snabb"
-
-msgid "Very Fast"
-msgstr "Mkt. snabb"
-
-msgid "Scroll Speed"
-msgstr ""
-"Skroll-\n"
-"hastighet"
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
+
+msgid "Scroll Speed"
+msgstr ""
+"Skroll-\n"
+"hastighet"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
@@ -3254,6 +3274,9 @@ msgstr ""
 "%{skill1}\n"
 "eller\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr "Välj %{secondary-skill}"
 
 msgid "n/a"
 msgstr "Inga"
@@ -3356,8 +3379,8 @@ msgstr "Försvarare:"
 msgid "Unknown"
 msgstr "Okänd"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (nivå %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(nivå %{level})"
 
 msgid "Attack:"
 msgstr "Anfall:"
@@ -3535,13 +3558,13 @@ msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 
 msgid "Click to start placing the selected castle/town."
-msgstr "Klicka här för att placera det valda slottet/staden."
+msgstr "Klicka här för att placera den valda borgen/staden."
 
 msgid "Click to select town placing."
 msgstr "Klicka för att välja stadsplacering."
 
 msgid "Click to select castle placing."
-msgstr "Klicka här för att välja slottplacering."
+msgstr "Klicka här för att välja borgplacering."
 
 msgid "%{color} %{race} %{townOrCastle}"
 msgstr "%{color} %{race} %{townOrCastle}"
@@ -3765,7 +3788,7 @@ msgstr ""
 msgid "Battles"
 msgstr "Strider"
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3895,7 +3918,7 @@ msgid "Enter Castle name"
 msgstr "Skriv Slottsnamn"
 
 msgid "Allow to build a castle in this town."
-msgstr "Tillåt att slott byggs i denna stad."
+msgstr "Tillåt att en borg byggs i denna stad."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
@@ -4000,20 +4023,61 @@ msgstr "Radera Händelse"
 msgid "Delete an existing event."
 msgstr "Radera en redan existerande händelse."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Effekter"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Förlust-\n"
+"villkor"
+
 msgid "Cancel event after first visit"
 msgstr "Avbryt händelse efter första besök"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Datorfärger som kan få händelsen:"
+
+msgid "Set Experience value"
+msgstr "Ange erfarenhetspoäng"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "Ingen artefakt kommer att ges som belöning."
 
 msgid "Delete Artifact"
 msgstr "Radera Artefakt"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Ta bort en artefakt från belöningen."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Välj Förmåga:"
+
+#, fuzzy
+msgid "Delete Secondary Skill"
+msgstr "Välj %{secondary-skill}"
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "Inga resurser kommer att ges som belöning."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "Inga resurser kommer att ges som belöning."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4065,6 +4129,58 @@ msgstr ""
 "Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
 "nuvarande karta kommer försvinna.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "STARTA"
+
+msgid "Main Menu"
+msgstr "Huvudmeny"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Är du säker på att du vill återvända till Huvudmenyn? Osparade ändringar "
+"kommer att försvinna."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Starta"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Är du säker på att du vill ladda en ny karta? (Osparade ändringar för din "
+"nuvarande karta kommer försvinna.)"
+
 msgid "Create a new map from scratch."
 msgstr "Skapa en ny blank karta."
 
@@ -4086,11 +4202,15 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "Skriv in %{object} text"
-
-msgid "Set %{resource-type} Count"
-msgstr "Ange %{resource-type} antal"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Ange slumpad radie för Främsta artefakt"
@@ -4100,6 +4220,9 @@ msgstr "%{object} har inga ändringsbara egenskaper."
 
 msgid "This artifact"
 msgstr "Denna artefakten"
+
+msgid "The total number of obelisks is %{count}."
+msgstr "Det totala antalet obelisker är %{count}."
 
 msgid "Roads"
 msgstr "Vägar"
@@ -4333,7 +4456,7 @@ msgstr "Rikesföremålsläge"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
-"Används för att placera Rikesföremål (städer, slott och hjältar) på kartan."
+"Används för att placera Rikesföremål (städer, borgar och hjältar) på kartan."
 
 msgid "Monsters Mode"
 msgstr "Varelseläge"
@@ -4370,6 +4493,12 @@ msgstr "Ångra"
 
 msgid "Undo your last action."
 msgstr "Ångra din sista åtgärd."
+
+msgid "Redo"
+msgstr "Gör om"
+
+msgid "Redo the last undone action."
+msgstr "Gör om senaste åtgärden."
 
 msgid "Edit map title, description, and other general information."
 msgstr "Redigera karttiteln, beskrivning och annan information."
@@ -4428,13 +4557,13 @@ msgid "[%{pos}]: %{race} town"
 msgstr "[%{pos}]: %{race}stad"
 
 msgid "[%{pos}]: %{race} castle"
-msgstr "[%{pos}]: %{race}slott"
+msgstr "[%{pos}]: %{race}borg"
 
 msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "[%{pos}]: %{name}, %{race}stad"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "[%{pos}]: %{name}, %{race}slott"
+msgstr "[%{pos}]: %{name}, %{race}borg"
 
 msgid "None."
 msgstr "Inga."
@@ -4597,6 +4726,9 @@ msgstr ""
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
 
+msgid "editor|%{count} %{resource}"
+msgstr "%{count} %{resource}"
+
 msgid "Animation"
 msgstr "Animering"
 
@@ -4701,6 +4833,12 @@ msgstr "Radera Svar"
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
 
+msgid "No artifact will be given as a reward."
+msgstr "Ingen artefakt kommer att ges som belöning."
+
+msgid "Delete an artifact from the reward."
+msgstr "Ta bort en artefakt från belöningen."
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "Dag: %{day} Vecka: %{week} Månad: %{month}"
 
@@ -4724,6 +4862,9 @@ msgstr "och mer..."
 
 msgid "Easy"
 msgstr "Lätt"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Svår"
@@ -5023,6 +5164,9 @@ msgstr "Visa fullskärm"
 msgid "hotkey|toggle text support mode"
 msgstr "Aktivera textstöd"
 
+msgid "hotkey|toggle developer mode"
+msgstr "Aktivera utvecklarläge"
+
 msgid "hotkey|new game"
 msgstr "Nytt spel"
 
@@ -5257,11 +5401,11 @@ msgstr "Retirera från strid"
 msgid "hotkey|surrender during battle"
 msgstr "Kapitulera under strid"
 
-msgid "hotkey|toggle battle auto mode"
-msgstr "Aktivera Automatisk Strid"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Aktivera Automatiskt Stridsläge"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Låt datorn fortsätta striden"
+msgid "hotkey|quick combat"
+msgstr "Snabbstrid"
 
 msgid "hotkey|battle options"
 msgstr "Stridsalternativ"
@@ -5329,6 +5473,9 @@ msgstr "Uppgradera trupp"
 msgid "hotkey|dismiss hero or troop"
 msgstr "Avskeda hjälte eller varelse"
 
+msgid "hotkey|exchange all troops"
+msgstr "Växla alla enheter"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5347,9 +5494,6 @@ msgstr "Standardåtgärder"
 
 msgid "Global Actions"
 msgstr "Globala Åtgärder"
-
-msgid "Main Menu"
-msgstr "Huvudmeny"
 
 msgid "World Map"
 msgstr "Världskarta"
@@ -5689,7 +5833,7 @@ msgstr ""
 "\n"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
-msgstr "Besegra alla fiendehjältar och inta alla fiendestäder och slott."
+msgstr "Besegra alla fiendehjältar och inta alla fiendestäder och borgar."
 
 msgid "Your side defeats the opposing side."
 msgstr "Din sida besegrar motståndarsidan."
@@ -5715,7 +5859,7 @@ msgstr[1] ""
 "av %{enemies}."
 
 msgid "Capture the castle '%{name}'."
-msgstr "Erövra slottet '%{name}'."
+msgstr "Erövra borgen '%{name}'."
 
 msgid "Capture the town '%{name}'."
 msgstr "Erövra staden '%{name}'."
@@ -5737,10 +5881,10 @@ msgid ""
 "and castles."
 msgstr ""
 ", eller så kan du vinna genom att besegra alla fiendehjältar och inta alla "
-"fiendestäder och slott."
+"fiendestäder och borgar."
 
 msgid "Lose the castle '%{name}'."
-msgstr "Förlora slottet '%{name}'."
+msgstr "Förlora borgen '%{name}'."
 
 msgid "Lose the town '%{name}'."
 msgstr "Förlora staden '%{name}'."
@@ -6158,6 +6302,9 @@ msgstr ""
 "Standard-\n"
 "förmåga"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr "De möjliga värdena går från och med %{min} till och med %{max}."
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6249,6 +6396,21 @@ msgstr "Slovakiska"
 
 msgid "Vietnamese"
 msgstr "Vietnamesiska"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Very Fast"
+msgstr "Mkt. snabb"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -7857,7 +8019,7 @@ msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "This spell will have no effect."
 msgstr ""
-"Du äger för närvarande inte någon stad eller slott som inte är upptaget. "
+"Du äger för närvarande inte någon stad eller borg som inte är upptaget. "
 "Besvärjelsen har ingen verkan."
 
 msgid "This hero is already in a town, so this spell will have no effect."
@@ -7938,9 +8100,6 @@ msgstr "Ange erfarenhetspoäng. Nuvarande värde är standard."
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Ändra erfarenhetspoäng. Högerklicka för att återställa till standard."
 
-msgid "Set Experience value"
-msgstr "Ange erfarenhetspoäng"
-
 msgid "View Experience Info"
 msgstr "Visa information för erfarenhet"
 
@@ -7984,7 +8143,7 @@ msgid "Exit Hero Screen"
 msgstr "Lämna Hjältevyn"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr "Du kan inte avskeda en Hjälte i ett slott."
+msgstr "Du kan inte avskeda en Hjälte i en borg."
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr "Avskedandet av %{race}n %{name} är förbjudet i detta scernario"
@@ -8053,6 +8212,9 @@ msgid ""
 msgstr ""
 "Nuvarande erfarenhet: %{exp1}. \n"
 "Nästa nivå: %{exp2}."
+
+msgid "million|M"
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "Nivå %{level}"
@@ -8320,7 +8482,7 @@ msgid ""
 msgstr ""
 "%{skill} ökar skadan från hjältens skjutande varelser med %{count} procent "
 "och tar bort %{penalty} procent av straffet när projektiler passerar hinder, "
-"exempelvis slottsmurar."
+"exempelvis borgmurar."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} ökar hjältens steg med %{count} procent."
@@ -8385,22 +8547,21 @@ msgstr "%{skill} höjer hjältens tur med %{count}."
 msgid ""
 "%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
-msgstr ""
-"%{skill} ökar katapultens sannolikhet att träffa och skada slottsmurar."
+msgstr "%{skill} ökar katapultens sannolikhet att träffa och skada borgsmurar."
 
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} ger katapulten en extra avfyrning, och varje avfyrning har en "
-"större chans att träffa och skada slottsmurar."
+"större chans att träffa och skada borgmurar."
 
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} ger katapulten en extra avfyrning och varje avfyrning förstör muren "
-"förutom Riddarens uppgraderade slottsmur."
+"förutom Riddarens uppgraderade borgmur."
 
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
@@ -10628,7 +10789,7 @@ msgid ""
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "%{name} sänker handikappet med %{count} procent för hjältens varelsers "
-"projektiler när de passerar hinder, exempelvis slottsmurar."
+"projektiler när de passerar hinder, exempelvis borgmurar."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
@@ -11054,7 +11215,7 @@ msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
 msgstr ""
-"%{name} ger mer specifik information om varelser, fiendehjältar och slott "
+"%{name} ger mer specifik information om varelser, fiendehjältar och borgar "
 "som befinner sig nära hjälten."
 
 msgid ""
@@ -11291,7 +11452,7 @@ msgid ""
 "powerful creatures and buildings."
 msgstr ""
 "Det finns 7 olika resurser i Heroes och Might and Magic 2 som används för "
-"att bygga och förbättra slott, rekrytera trupper och hjältar. Guld är den "
+"att bygga och förbättra borgar, rekrytera trupper och hjältar. Guld är den "
 "vanligaste, som behövs till det mesta. Trä och Malm används mest till "
 "byggnader. Ädelstenar, Kvicksilver, Svavel och Kristaller är sällsynta "
 "magiska resurser som används till de mest kraftfulla varelser och byggnader."
@@ -11408,11 +11569,15 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr "Saktar ned alla fiendevarelser till hälften."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Grumlar varelsens ögon som förhindrar den från att röra sig."
-
 msgid "spell|Blind"
 msgstr "Förblinda"
+
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr ""
+"Grumlar varelsens ögon som förhindrar den från att röra sig och sänker "
+"skadan den ger vid vedergällning med %{count} procent."
 
 msgid "Bless"
 msgstr "Välsignelse"
@@ -11660,7 +11825,7 @@ msgid "Summons Water Elementals to fight for your army."
 msgstr "Kallar in Vattenväsen för att strida för hjältens armé."
 
 msgid "Damages castle walls."
-msgstr "Skadar slottsmurar."
+msgstr "Skadar borgmurar."
 
 msgid "Earthquake"
 msgstr "Jordbävning"
@@ -11686,7 +11851,7 @@ msgid "View Artifacts"
 msgstr "Visa Artefakter"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr "Gör alla städer och slott synliga över hela landet."
+msgstr "Gör alla städer och borgar synliga över hela landet."
 
 msgid "View Towns"
 msgstr "Visa Städer"
@@ -11730,7 +11895,7 @@ msgstr ""
 "portal"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr "För tillbaka Hjälten till någon stad eller slott som du kontrollerar."
+msgstr "För tillbaka Hjälten till någon stad eller borg som du kontrollerar."
 
 msgid "Town Gate"
 msgstr "Stadsport"
@@ -11738,7 +11903,7 @@ msgstr "Stadsport"
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
-msgstr "För tillbaka Hjälten till valfri stad eller slott som du kontrollerar."
+msgstr "För tillbaka Hjälten till valfri stad eller borg som du kontrollerar."
 
 msgid "Visions"
 msgstr "Syner"
@@ -11949,6 +12114,15 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Välj antal %{resource}:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Aktivera autom. strid"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Låt datorn fortsätta striden"
 
 #~ msgid "Please Remember"
 #~ msgstr "Kom ihåg"

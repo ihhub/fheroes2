@@ -1,11 +1,12 @@
 # Android port of [**fheroes2**](README.md) project
 
 ## Installation
+
 Install the fheroes2.apk to your device running Android. You need to have set the necessary permissions on your device to
 do this.
 
 fheroes2 requires the data files from the original Heroes of Might and Magic II. If you do not have the original game you
-can download a demo version of the game from https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip
+can download a demo version of the game from <https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip>
 
 If you already have a legally purchased copy of the original game, then put the directories "ANIM", "DATA", "MAPS" and "MUSIC"
 from your original Heroes of Might and Magic II installation into a ZIP archive and copy this archive to your Android device.
@@ -21,6 +22,7 @@ Depending on your original version of Heroes 2 they can either be found on your 
 your Heroes 2 installation directory.
 
 ## Controls
+
 To simulate a right-click to get info on various items, you need to first touch and keep touching on the item of interest
 and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen
 and keep viewing the information on the item.
@@ -39,6 +41,7 @@ intend to attack from, to the cell occupied by the enemy unit. Next, you should 
 your planned attack, and then confirm the action by touching the target cell with your finger again.
 
 ## Android specific notes
+
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
 

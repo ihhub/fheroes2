@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 09:39+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"SADECE\n"
-"SAVAŞ"
 
 msgid ""
 "NEW\n"
@@ -77,9 +70,6 @@ msgid "CANCEL"
 msgstr "İPTAL"
 
 msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "smallerButton|OKAY"
 msgstr "TAMAM"
 
 msgid "ACCEPT"
@@ -149,6 +139,13 @@ msgid ""
 msgstr ""
 "STANDART\n"
 "OYUN"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"SADECE\n"
+"SAVAŞ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -222,11 +219,11 @@ msgstr "SIFIRLA"
 msgid "START"
 msgstr "BAŞLA"
 
-msgid "CASTLE"
-msgstr "KALE"
-
 msgid "TOWN"
 msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
 
 msgid "RESTRICT"
 msgstr "KISITLA"
@@ -318,6 +315,16 @@ msgstr "ETKİNLİKLER"
 
 msgid "LANGUAGE"
 msgstr "DİL"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Savaşçı"
@@ -472,10 +479,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} düşman birliklerinin yarısını yok etti!"
 msgstr[1] "%{name} düşman birliklerinin yarısını yok etti!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} otomatik savaşı kapattı"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} otomatik savaşı açtı"
 
 msgid "Spell failed!"
@@ -810,14 +819,18 @@ msgstr "Mancınık bilgilerini görüntüle"
 msgid "Ballista"
 msgstr "Mancınık"
 
-msgid "Enable auto combat"
-msgstr "Otomatik savacı aç"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Bilgisayarın sizin için savaşmasına izin verir."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Otomatik savaş"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Otomatik savaş"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Sistem seçeneklerini özelleştirin"
@@ -865,11 +878,36 @@ msgstr "Mesaj Çubuğu"
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Bilgisayarın sizin için savaşmasına izin verir."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Otomatik savaş"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Otomatik savaş"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -984,7 +1022,8 @@ msgstr "Ayna görüntüsü oluşturuldu."
 msgid "The mirror image is destroyed!"
 msgstr "Ayna görüntüsü yok edildi!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Otomatik savaşı kesmek istediğine emin misin?"
 
 msgid "Error"
@@ -3021,8 +3060,9 @@ msgstr "Önce alıcıları seçin!"
 msgid "You cannot select %{resource}!"
 msgstr "%{resource} seçemezsin!"
 
-msgid "Select count %{resource}:"
-msgstr "%{resource} sayısını seç:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "%{monster} sayısını ayarla"
 
 msgid "Select Recipients"
 msgstr "Alıcıları Seçin"
@@ -3086,15 +3126,6 @@ msgstr "Etkinlik: "
 msgid "Hot Keys:"
 msgstr "Kısayollar:"
 
-msgid "Evil"
-msgstr "Şeytani"
-
-msgid "Good"
-msgstr "İyi"
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
 msgid "Hide"
 msgstr "Gizle"
 
@@ -3104,26 +3135,17 @@ msgstr "Göster"
 msgid "Interface"
 msgstr "Arayüz"
 
-msgid "Slow"
-msgstr "Yavaş"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hızlı"
-
-msgid "Very Fast"
-msgstr "Çok Hızlı"
-
-msgid "Scroll Speed"
-msgstr "Kaydırma Hızı"
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
+
+msgid "Scroll Speed"
+msgstr "Kaydırma Hızı"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Pencereyi kaydırma hızını ayarlar."
@@ -3164,6 +3186,9 @@ msgstr ""
 "Ya %{skill1}\n"
 "ya da\n"
 "%{skill2} öğrenebilirsin."
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3264,7 +3289,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -3650,7 +3675,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3881,19 +3906,52 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+msgid "Effects:"
+msgstr ""
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Yenilgi\n"
+"Şartları"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr ""
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr ""
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+msgid "Secondary Skill"
+msgstr ""
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3937,6 +3995,52 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "BAŞLA"
+
+msgid "Main Menu"
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Başla"
+
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
 msgid "Create a new map from scratch."
 msgstr ""
 
@@ -3958,12 +4062,15 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Savaşa geri dön."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-#, fuzzy
-msgid "Set %{resource-type} Count"
-msgstr "%{monster} sayısını ayarla"
+msgid "Input %{object} text"
+msgstr ""
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr ""
@@ -3972,6 +4079,9 @@ msgid "%{object} has no properties to change."
 msgstr ""
 
 msgid "This artifact"
+msgstr ""
+
+msgid "The total number of obelisks is %{count}."
 msgstr ""
 
 msgid "Roads"
@@ -4230,6 +4340,12 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4465,6 +4581,10 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "%{resource} sayısını seç:"
+
 msgid "Animation"
 msgstr ""
 
@@ -4564,6 +4684,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4587,6 +4713,9 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr ""
@@ -4866,6 +4995,9 @@ msgstr ""
 msgid "hotkey|toggle text support mode"
 msgstr ""
 
+msgid "hotkey|toggle developer mode"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5106,12 +5238,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
-
 #, fuzzy
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Sistem seçeneklerini özelleştirin"
+
+msgid "hotkey|quick combat"
+msgstr ""
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -5179,6 +5311,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5195,9 +5330,6 @@ msgid "Default Actions"
 msgstr ""
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -5896,6 +6028,9 @@ msgid ""
 "skill"
 msgstr ""
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr ""
 
@@ -5985,6 +6120,21 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Görünüm %{name}"
+
+msgid "Slow"
+msgstr "Yavaş"
+
+msgid "Fast"
+msgstr "Hızlı"
+
+msgid "Very Fast"
+msgstr "Çok Hızlı"
+
+msgid "Evil"
+msgstr "Şeytani"
+
+msgid "Good"
+msgstr "İyi"
 
 msgid ", FPS: "
 msgstr ""
@@ -7270,9 +7420,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
-
 msgid "View Experience Info"
 msgstr ""
 
@@ -7375,6 +7522,9 @@ msgstr ""
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
+msgstr ""
+
+msgid "million|M"
 msgstr ""
 
 msgid "Level %{level}"
@@ -10344,10 +10494,12 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
-msgid "spell|Blind"
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 
 msgid "Bless"
@@ -10833,3 +10985,13 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "%{resource} sayısını seç:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Otomatik savacı aç"
+
+#, fuzzy
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,6 +32,7 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -222,6 +223,25 @@ public:
     }
 
     template <class Type>
+    IStreamBase & operator>>( std::optional<Type> & v )
+    {
+        bool hasValue{};
+        *this >> hasValue;
+
+        if ( hasValue ) {
+            Type temp{};
+            *this >> temp;
+
+            v = std::move( temp );
+        }
+        else {
+            v = {};
+        }
+
+        return *this;
+    }
+
+    template <class Type>
     IStreamBase & operator>>( std::vector<Type> & v )
     {
         v.resize( get32() );
@@ -249,11 +269,11 @@ public:
         v.clear();
 
         for ( uint32_t i = 0; i < size; ++i ) {
-            std::pair<Type1, Type2> pr;
+            std::pair<Type1, Type2> temp{};
 
-            *this >> pr;
+            *this >> temp;
 
-            v.emplace( std::move( pr ) );
+            v.emplace( std::move( temp ) );
         }
 
         return *this;
@@ -329,6 +349,19 @@ public:
     OStreamBase & operator<<( const std::pair<Type1, Type2> & v )
     {
         return *this << v.first << v.second;
+    }
+
+    template <class Type>
+    OStreamBase & operator<<( const std::optional<Type> & v )
+    {
+        const bool hasValue = v.has_value();
+        *this << hasValue;
+
+        if ( hasValue ) {
+            *this << *v;
+        }
+
+        return *this;
     }
 
     template <class Type>
@@ -684,7 +717,9 @@ private:
         }
     }
 
-    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, []( std::FILE * f ) { return std::fclose( f ); } };
+    static int closeFile( std::FILE * f );
+
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, closeFile };
 };
 
 namespace fheroes2

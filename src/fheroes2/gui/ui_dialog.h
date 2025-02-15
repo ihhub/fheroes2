@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,6 +45,8 @@ namespace fheroes2
     class TextBase;
 
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
+
+    int32_t getDialogHeight( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
 
     // This is a simplified version of UI window which is used to display a window with a text.
     // Header text has yellow normal font style and body text - white normal font style.
@@ -360,7 +362,7 @@ namespace fheroes2
         const Monster _monster;
     };
 
-    class ValueSelectionDialogElement
+    class ValueSelectionDialogElement final
     {
     public:
         explicit ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step, const Point & offset );
