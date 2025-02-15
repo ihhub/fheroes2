@@ -772,15 +772,15 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_SMALL_ACCEPT_GOOD:
-        case ICN::BUTTON_SMALL_ACCEPT_EVIL: {
+        case ICN::BUTTON_SMALL_ACCEPT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_ACCEPT_EVIL );
-
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 1 );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::SURRENDR, 0 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::SURRENDR, 1 );
+
+                // Fix incorrect font color.
+                ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
                 CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
@@ -788,32 +788,44 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
-        case ICN::BUTTON_SMALL_DECLINE_GOOD:
+        case ICN::BUTTON_SMALL_DECLINE_GOOD: {
+            _icnVsSprite[id].resize( 2 );
+
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::SURRENDR, 2 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::SURRENDR, 3 );
+
+                // Fix incorrect font color.
+                ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+
+                // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                setButtonCornersTransparent( _icnVsSprite[id][1] );
+
+                break;
+            }
+
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_SMALL_ACCEPT_EVIL:
         case ICN::BUTTON_SMALL_DECLINE_EVIL: {
+            // To preserve language-specific generations from generateLanguageSpecificImages() we do a palette swap.
             _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_DECLINE_EVIL );
-
-            if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 2 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 3 );
-
-                // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
-
-                break;
-            }
-
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const int buttonIcnID = id == ICN::BUTTON_SMALL_ACCEPT_EVIL ? ICN::BUTTON_SMALL_ACCEPT_GOOD : ICN::BUTTON_SMALL_DECLINE_GOOD; 
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
             break;
-        }
+         }
         case ICN::BUTTON_SMALL_LEARN_GOOD:
         case ICN::BUTTON_SMALL_LEARN_EVIL: {
             _icnVsSprite[id].resize( 2 );
@@ -2031,11 +2043,11 @@ namespace
             pressed = Crop( originalPressed, 5, 0, 60, 25 );
             released.setPosition( 0, 0 );
             pressed.setPosition( 0, 0 );
-            // Fill wrong transparent text pixels with color.
-            fheroes2::Image whiteBackground( released.width(), released.height() );
-            Fill( whiteBackground, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, whiteBackground );
-            released = whiteBackground;
+            // Fill wrong transparent text pixels by using single-colored background.
+            fheroes2::Image background( released.width(), released.height() );
+            Fill( background, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, background );
+            released = background;
             // To properly generate shadows and Blit the button we need to make some pixels transparent.
             for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
                 setButtonCornersTransparent( image );
@@ -2065,6 +2077,25 @@ namespace
                 Fill( out, 36 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
                 Fill( out, 36 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
             }
+            return true;
+        }
+        case ICN::BUTTON_SMALL_DECLINE_GOOD:
+        case ICN::BUTTON_SMALL_ACCEPT_GOOD: {
+            _icnVsSprite[id].resize( 2 );
+            const int buttonIcnIndex = id == ICN::BUTTON_SMALL_ACCEPT_GOOD ? 0 : 2;
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            released = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex );
+            pressed = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex + 1 );
+            // Fill wrong transparent text pixels by using single-colored background.
+            fheroes2::Image background( released.width(), released.height() );
+            Fill( background, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, background );
+            released = background;
+            setButtonCornersTransparent( released );
+            // Fix corrupted pixels.
+            fheroes2::ReplaceColorId( released, 109, 39 );
+            fheroes2::ReplaceColorId( pressed, 178, 39 );
             return true;
         }
         default:
@@ -2731,24 +2762,19 @@ namespace
             }
             return true;
         case ICN::SURRENDR:
-        case ICN::SURRENDE:
             LoadOriginalICN( id );
+            // We fix the pressed button backgrounds here because this is necessary for all localized assets.
             if ( _icnVsSprite[id].size() >= 4 ) {
-                if ( id == ICN::SURRENDR ) {
-                    // Fix incorrect font color on good ACCEPT button.
-                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
-                }
-                // Fix pressed buttons background.
                 for ( const uint32_t i : { 0, 2 } ) {
                     fheroes2::Sprite & out = _icnVsSprite[id][i + 1];
-
                     fheroes2::Sprite tmp( out.width(), out.height() );
                     tmp.reset();
-                    Copy( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
-                    CopyTransformLayer( _icnVsSprite[id][i], tmp );
-
-                    out.reset();
-                    Copy( tmp, 1, 0, out, 0, 1, tmp.width() - 1, tmp.height() - 1 );
+                    Copy( out, 0, 1, tmp, 0, 1, tmp.width() - 1, tmp.height() - 1 );
+                    out = tmp;
+                    setButtonCornersTransparent( out );
+                    FillTransform( out, out.width() - 3, 1, 2, 1, 1 );
+                    FillTransform( out, out.width() - 2, 2, 1, 1, 1 );
+                    fheroes2::makeTransparentBackground( _icnVsSprite[id][i], _icnVsSprite[id][i + 1], ICN::STONEBAK );
                 }
             }
             return true;
