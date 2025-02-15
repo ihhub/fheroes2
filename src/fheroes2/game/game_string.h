@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2025                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,14 +21,24 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 #include <string>
+
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
+
     enum class SupportedLanguage : uint8_t;
+
+    struct LocalizedString
+    {
+        std::string text;
+
+        std::optional<SupportedLanguage> language;
+    };
 }
 
-namespace Editor
-{
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language, const int32_t maxMapNameLength );
-}
+OStreamBase & operator<<( OStreamBase & stream, const fheroes2::LocalizedString & string );
+IStreamBase & operator>>( IStreamBase & stream, fheroes2::LocalizedString & string );

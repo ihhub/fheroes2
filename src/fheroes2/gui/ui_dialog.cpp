@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,6 +45,8 @@
 #include "resource.h"
 #include "screen.h"
 #include "spell_info.h"
+#include "tools.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_keyboard.h"
@@ -248,6 +250,75 @@ namespace fheroes2
         return result;
     }
 
+    int32_t getDialogHeight( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements )
+    {
+        const int32_t headerHeight = header.empty() ? 0 : header.height( fheroes2::boxAreaWidthPx ) + textOffsetY;
+
+        int overallTextHeight = headerHeight;
+
+        const int32_t bodyTextHeight = body.height( fheroes2::boxAreaWidthPx );
+        if ( bodyTextHeight > 0 ) {
+            overallTextHeight += bodyTextHeight + textOffsetY;
+        }
+
+        std::vector<int32_t> rowElementIndex;
+        std::vector<int32_t> rowHeight;
+        std::vector<size_t> rowId;
+        std::vector<int32_t> rowMaxElementWidth;
+        std::vector<int32_t> rowElementCount;
+
+        int32_t elementHeight = 0;
+        size_t elementId = 0;
+        for ( const DialogElement * element : elements ) {
+            assert( element != nullptr );
+
+            const int32_t currentElementWidth = element->area().width;
+            if ( rowHeight.empty() ) {
+                rowElementIndex.emplace_back( 0 );
+                rowHeight.emplace_back( element->area().height );
+                rowId.emplace_back( elementId );
+                rowMaxElementWidth.emplace_back( currentElementWidth );
+                rowElementCount.emplace_back( 1 );
+
+                ++elementId;
+            }
+            else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= fheroes2::boxAreaWidthPx ) {
+                rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
+                rowHeight.back() = std::max( rowHeight.back(), element->area().height );
+
+                // We cannot use back() to insert it into the same container as it will be resized upon insertion.
+                const size_t lastRoiId = rowId.back();
+                rowId.emplace_back( lastRoiId );
+
+                rowMaxElementWidth.back() = std::max( rowMaxElementWidth.back(), currentElementWidth );
+                ++rowElementCount.back();
+            }
+            else {
+                elementHeight += textOffsetY;
+                elementHeight += rowHeight.back();
+
+                rowElementIndex.emplace_back( 0 );
+                rowHeight.emplace_back( element->area().height );
+                rowId.emplace_back( elementId );
+                rowMaxElementWidth.emplace_back( currentElementWidth );
+                rowElementCount.emplace_back( 1 );
+
+                ++elementId;
+            }
+        }
+
+        if ( !rowHeight.empty() ) {
+            // UI elements are offset from the dialog body.
+            if ( bodyTextHeight > 0 ) {
+                elementHeight += textOffsetY;
+            }
+            elementHeight += textOffsetY;
+            elementHeight += rowHeight.back();
+        }
+
+        return overallTextHeight + elementHeight + ( ( buttons != 0 ) ? Dialog::FrameBox::getButtonAreaHeight() : 0 ) + fheroes2::borderWidthPx * 4;
+    }
+
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons, const std::vector<const DialogElement *> & elements /* = {} */ )
     {
         const Text header( std::move( headerText ), FontType::normalYellow() );
@@ -307,8 +378,6 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        assert( artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || artifact.isValid() );
-
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };
     }
@@ -318,7 +387,9 @@ namespace fheroes2
         const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
         Blit( frame, 0, 0, output, offset.x, offset.y, frame.width(), frame.height() );
 
-        const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, _artifact.IndexSprite64() );
+        const uint32_t icnIndex = ( _artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || _artifact.isValid() ) ? _artifact.IndexSprite64() : 0;
+
+        const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, icnIndex );
         Blit( artifact, output, offset.x + 6, offset.y + 6 );
     }
 
@@ -689,6 +760,14 @@ namespace fheroes2
         const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
+        if ( !_skill.isValid() ) {
+            const Sprite & icn = AGG::GetICN( ICN::SECSKILL, 0 );
+            const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
+            Copy( icn, 0, 0, output, icnRect );
+
+            return;
+        }
+
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
         const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
         Copy( icn, 0, 0, output, icnRect );
@@ -925,6 +1004,14 @@ namespace fheroes2
             assert( _value >= _minimum && _value <= _maximum );
 
             return true;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( _editBox ) ) {
+            std::string message = _( "The available values range from %{min} to %{max}." );
+            StringReplace( message, "%{min}", _minimum );
+            StringReplace( message, "%{max}", _maximum );
+
+            fheroes2::showStandardTextMessage( {}, std::move( message ), Dialog::ZERO );
         }
 
         return false;

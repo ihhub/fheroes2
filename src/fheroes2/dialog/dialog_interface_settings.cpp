@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,6 @@
 
 #include "dialog_interface_settings.h"
 
-#include <cassert>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -60,23 +59,6 @@ namespace
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
-
-        std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
-            value = _( "Good" );
-        }
-
-        fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
         // Interface show/hide state.
@@ -95,58 +77,6 @@ namespace
         }
 
         fheroes2::drawOption( optionRoi, interfaceStateIcon, _( "Interface" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
-    void drawCursorType( const fheroes2::Rect & optionRoi )
-    {
-        if ( Settings::Get().isMonochromeCursorEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-    }
-
-    void drawScrollSpeed( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & conf = Settings::Get();
-        const int scrollSpeed = conf.ScrollSpeed();
-        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
-        uint32_t scrollSpeedIconId = 0;
-        std::string scrollSpeedName;
-
-        if ( scrollSpeed == SCROLL_SPEED_NONE ) {
-            scrollSpeedName = _( "Off" );
-            scrollSpeedIconIcn = ICN::SPANEL;
-            scrollSpeedIconId = 9;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
-            scrollSpeedName = _( "Slow" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
-            scrollSpeedName = _( "Normal" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
-            scrollSpeedName = _( "Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 1;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
-            scrollSpeedName = _( "Very Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 2;
-        }
-
-        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
-
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
-        fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow( bool & saveConfiguration )
@@ -175,11 +105,11 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            drawInterfaceType( windowInterfaceTypeRoi );
+        const auto drawOptions = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
+            drawInterfaceType( windowInterfaceTypeRoi, conf.isEvilInterfaceEnabled() );
             drawInterfacePresence( windowInterfacePresenceRoi );
-            drawCursorType( windowCursorTypeRoi );
-            drawScrollSpeed( windowScrollSpeedRoi );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 
         drawOptions();

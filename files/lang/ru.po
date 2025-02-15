@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 14:34+0000\n"
+"POT-Creation-Date: 2025-02-09 14:16+0000\n"
 "PO-Revision-Date: 2024-12-27 20:34+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -20,11 +20,6 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "БИТВА"
 
 msgid ""
 "NEW\n"
@@ -84,9 +79,6 @@ msgid "CANCEL"
 msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr "ОК"
-
-msgid "smallerButton|OKAY"
 msgstr "ОК"
 
 msgid "ACCEPT"
@@ -156,6 +148,11 @@ msgid ""
 msgstr ""
 "ОБЫЧНАЯ\n"
 "ИГРА"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "БИТВА"
 
 msgid ""
 "CAMPAIGN\n"
@@ -228,11 +225,11 @@ msgstr "СБРОС"
 msgid "START"
 msgstr "НАЧАТЬ"
 
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
 msgid "TOWN"
 msgstr "ГОРОД"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "RESTRICT"
 msgstr "ЗАПРЕТ"
@@ -327,6 +324,16 @@ msgstr "СОБЫТИЯ"
 
 msgid "LANGUAGE"
 msgstr "ЯЗЫК"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Воин"
@@ -483,10 +490,12 @@ msgstr[0] "%{name} убивает половину вражеского отря
 msgstr[1] "%{name} убивают половину вражеского отряда!"
 msgstr[2] "%{name} убивают половину вражеского отряда!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} выключил автобитву"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} включил автобитву"
 
 msgid "Spell failed!"
@@ -824,14 +833,18 @@ msgstr "Информация о баллисте"
 msgid "Ballista"
 msgstr "Баллиста"
 
-msgid "Enable auto combat"
-msgstr "Включить автобитву"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Позволяет компьютеру сражаться за Вас."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Автобитва"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Автобитва"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Изменить настройки системы"
@@ -879,11 +892,36 @@ msgstr "Информационная строка"
 msgid "Shows the results of individual monster's actions."
 msgstr "Здесь отображаются результаты действий отдельных отрядов."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Вы действительно хотите включить автобитву?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Позволяет компьютеру сражаться за Вас."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Автобитва"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Автобитва"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1013,7 +1051,8 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Вы действительно хотите прервать автобитву?"
 
 msgid "Error"
@@ -3129,8 +3168,8 @@ msgstr "Сначала выберите получателя!"
 msgid "You cannot select %{resource}!"
 msgstr "Вы не можете подарить %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Подарить %{resource}:"
+msgid "Set %{resource-type} Count"
+msgstr "%{resource-type}: введите количество"
 
 msgid "Select Recipients"
 msgstr "Выберите получателя"
@@ -3198,15 +3237,6 @@ msgstr "Событие: "
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -3216,26 +3246,17 @@ msgstr "Показать"
 msgid "Interface"
 msgstr "Интерфейс"
 
-msgid "Slow"
-msgstr "Медленная"
-
-msgid "Normal"
-msgstr "Обычная"
-
-msgid "Fast"
-msgstr "Быстрая"
-
-msgid "Very Fast"
-msgstr "Очень быстрая"
-
-msgid "Scroll Speed"
-msgstr "Скорость прокрутки"
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
+
+msgid "Scroll Speed"
+msgstr "Скорость прокрутки"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Устанавливает скорость прокрутки окна на карте мира."
@@ -3277,6 +3298,9 @@ msgstr ""
 "%{skill1}\n"
 "или\n"
 "%{skill2}"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "н/д"
@@ -3383,8 +3407,8 @@ msgstr "Защитники:"
 msgid "Unknown"
 msgstr "Неизвестный"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} (Уровень %{level})"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "(Уровень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -3790,7 +3814,8 @@ msgstr "Авто, без магии"
 msgid "Battles"
 msgstr "Битвы"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4023,20 +4048,60 @@ msgstr "Удалить событие"
 msgid "Delete an existing event."
 msgstr "Удалить выбранное событие."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Эффекты"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Условия\n"
+"поражения"
+
 msgid "Cancel event after first visit"
 msgstr "Отменить после посещения"
+
+#, fuzzy
+msgid "Computer colors allowed to get the event:"
+msgstr "Событие произойдёт для компьютерных игроков цвета:"
+
+msgid "Set Experience value"
+msgstr "Введите величину опыта"
 
 msgid "Artifact"
 msgstr "Артефакт"
 
-msgid "No artifact will be given as a reward."
+#, fuzzy
+msgid "No artifact will be given by the event."
 msgstr "В вознаграждении не будет выдаваться артефакт."
 
 msgid "Delete Artifact"
 msgstr "Удалить артефакт"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
 msgstr "Удалить артефакт из вознаграждения."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Выберите навык:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+#, fuzzy
+msgid "No resources will be part of this event."
+msgstr "В вознаграждении не будут выдаваться ресурсы."
+
+#, fuzzy
+msgid "These resources will be a part of the event."
+msgstr "В вознаграждении не будут выдаваться ресурсы."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4089,6 +4154,58 @@ msgstr ""
 "Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
 "данной карты будут потеряны.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "НАЧАТЬ"
+
+msgid "Main Menu"
+msgstr "Главное меню"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Вы действительно хотите вернуться в главное меню игры? Все несохранённые "
+"изменения будут потеряны."
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Начать"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Вы действительно хотите загрузить новую карту? (Любые несохранённые "
+"изменения данной карты будут потеряны.)"
+
 msgid "Create a new map from scratch."
 msgstr "Создать новую карту с нуля."
 
@@ -4110,11 +4227,15 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Нажмите для возврата в главное меню."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr "%{object}: введите текст"
-
-msgid "Set %{resource-type} Count"
-msgstr "%{resource-type}: введите количество"
 
 msgid "Set Random Ultimate Artifact Radius"
 msgstr "Установить радиус появления великого артефакта"
@@ -4124,6 +4245,9 @@ msgstr "%{object}: нет свойств, которые можно было б�
 
 msgid "This artifact"
 msgstr "Этот артефакт"
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 msgid "Roads"
 msgstr "Дороги"
@@ -4398,6 +4522,13 @@ msgstr "Отменить"
 msgid "Undo your last action."
 msgstr "Отменить последнее действие."
 
+msgid "Redo"
+msgstr ""
+
+#, fuzzy
+msgid "Redo the last undone action."
+msgstr "Отменить последнее действие."
+
 msgid "Edit map title, description, and other general information."
 msgstr "Изменить название карты, описание и прочие параметры."
 
@@ -4630,6 +4761,10 @@ msgstr ""
 "содержать меньше ресурсов или иметь прочие условия, усложняющие жизнь игроку-"
 "человеку."
 
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Подарить %{resource}:"
+
 msgid "Animation"
 msgstr "Анимация"
 
@@ -4732,6 +4867,12 @@ msgstr "Удалить ответ"
 msgid "Delete an existing answer for the question."
 msgstr "Удалить имеющийся ответ на вопрос."
 
+msgid "No artifact will be given as a reward."
+msgstr "В вознаграждении не будет выдаваться артефакт."
+
+msgid "Delete an artifact from the reward."
+msgstr "Удалить артефакт из вознаграждения."
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
 
@@ -4755,6 +4896,9 @@ msgstr "и т.д."
 
 msgid "Easy"
 msgstr "Лёгкая"
+
+msgid "Normal"
+msgstr "Обычная"
 
 msgid "Hard"
 msgstr "Тяжёлая"
@@ -5057,6 +5201,10 @@ msgstr "переключить полноэкранный режим"
 msgid "hotkey|toggle text support mode"
 msgstr "текстовое сопровождение (вкл./выкл.)"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "текстовое сопровождение (вкл./выкл.)"
+
 msgid "hotkey|new game"
 msgstr "новая игра"
 
@@ -5291,11 +5439,13 @@ msgstr "отступление из битвы"
 msgid "hotkey|surrender during battle"
 msgstr "сдаться в битве"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "включить режим автобитвы"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "закончить битву в авторежиме"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "выйти из игры"
 
 msgid "hotkey|battle options"
 msgstr "настройки битвы"
@@ -5386,9 +5536,6 @@ msgstr "Стандартные действия"
 
 msgid "Global Actions"
 msgstr "Общие действия"
-
-msgid "Main Menu"
-msgstr "Главное меню"
 
 msgid "World Map"
 msgstr "Карта мира"
@@ -6201,6 +6348,9 @@ msgstr ""
 "умол-\n"
 "чанию"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6293,6 +6443,21 @@ msgstr "Словацкий"
 
 msgid "Vietnamese"
 msgstr "Вьетнамский"
+
+msgid "Slow"
+msgstr "Медленная"
+
+msgid "Fast"
+msgstr "Быстрая"
+
+msgid "Very Fast"
+msgstr "Очень быстрая"
+
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -7969,9 +8134,6 @@ msgstr "Установить величину опыта. Сейчас - по у
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr "Изменить величину опыта. Правый клик - сбросить."
 
-msgid "Set Experience value"
-msgstr "Введите величину опыта"
-
 msgid "View Experience Info"
 msgstr "Опыт"
 
@@ -8080,6 +8242,9 @@ msgid ""
 msgstr ""
 "Текущий опыт %{exp1}.\n"
 "Следующий уровень %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Уровень %{level}"
@@ -11442,13 +11607,16 @@ msgstr "Общее замедление"
 msgid "Slows all enemies to half movement rate."
 msgstr "Замедляет все вражеские отряды на 2 ступени."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
+msgstr "Слепота"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 "Ослеплённый отряд пропускает ходы до тех пор, пока не получит урон или не "
 "окончится действие заклинания."
-
-msgid "spell|Blind"
-msgstr "Слепота"
 
 msgid "Bless"
 msgstr "Благословение"
@@ -11981,6 +12149,15 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Подарить %{resource}:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Включить автобитву"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "закончить битву в авторежиме"
 
 #~ msgid "Please Remember"
 #~ msgstr "Запомните"

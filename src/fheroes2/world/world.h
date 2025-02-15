@@ -28,7 +28,6 @@
 #include <list>
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -37,7 +36,7 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
-#include "game_language.h"
+#include "game_string.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -87,7 +86,7 @@ public:
         _objects.clear();
     }
 
-    template <typename T, std::enable_if_t<std::is_base_of_v<MapObjectSimple, T>, bool> = true>
+    template <typename T, std::enable_if_t<std::is_base_of_v<MapBaseObject, T>, bool> = true>
     void add( std::unique_ptr<T> && obj )
     {
         if ( !obj ) {
@@ -101,14 +100,14 @@ public:
 
     void remove( const uint32_t uid );
 
-    MapObjectSimple * get( const uint32_t uid ) const;
-    std::list<MapObjectSimple *> get( const fheroes2::Point & pos ) const;
+    MapBaseObject * get( const uint32_t uid ) const;
+    std::list<MapBaseObject *> get( const fheroes2::Point & pos ) const;
 
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
     friend IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
 
-    std::map<uint32_t, std::unique_ptr<MapObjectSimple>> _objects;
+    std::map<uint32_t, std::unique_ptr<MapBaseObject>> _objects;
 };
 
 struct CapturedObject
@@ -358,7 +357,7 @@ public:
     void NewWeek();
     void NewMonth();
 
-    std::pair<std::string, std::optional<fheroes2::SupportedLanguage>> getCurrentRumor() const;
+    fheroes2::LocalizedString getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -390,8 +389,8 @@ public:
     EventsDate GetEventsDate( int color ) const;
 
     MapEvent * GetMapEvent( const fheroes2::Point & );
-    MapObjectSimple * GetMapObject( uint32_t uid );
-    void RemoveMapObject( const MapObjectSimple * );
+    MapBaseObject * GetMapObject( uint32_t uid );
+    void RemoveMapObject( const MapBaseObject * );
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
 
@@ -428,7 +427,7 @@ private:
 
     void Defaults();
     void Reset();
-    void MonthOfMonstersAction( const Monster & );
+    void MonthOfMonstersAction( const Monster & mons );
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 

@@ -150,6 +150,8 @@ namespace Dialog
 
         void redraw();
 
+        static int32_t getButtonAreaHeight();
+
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         fheroes2::Rect area;
