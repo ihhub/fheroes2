@@ -2177,6 +2177,20 @@ namespace
             setButtonCornersTransparent( released );
             return true;
         }
+        case ICN::BUTTON_SMALL_OKAY_EVIL:
+        case ICN::BUTTON_SMALL_CANCEL_EVIL: {
+            // This fixes black pixels in lower right corner of button backgrounds.
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            const bool isOkayButton = id == ICN::BUTTON_SMALL_OKAY_EVIL;
+            const int buttonIcnID = isOkayButton ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALL_CANCEL_GOOD;
+            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
+            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
+            ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            return true;
+        }
         default:
             break;
         }
