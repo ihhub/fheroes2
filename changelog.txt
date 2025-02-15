@@ -31,7 +31,7 @@ version 1.1.6 (15 February 2025)
 - shorten hero name if name plus level is too long
 - add Undo and Redo icons in the Editor
 - show the Artifact description window when clicking on it in the Editor
-- add a info on 50% retaliation damage to the Blind spell description
+- add info about 50% retaliation damage to the Blind spell description
 - update Hero Movement button
 - fix Mine flag rendering on the Adventure Map
 - fix a crash in the View World mode for the Editor

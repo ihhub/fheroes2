@@ -74,7 +74,7 @@
           <li>shorten hero name if name plus level is too long</li>
           <li>add Undo and Redo icons in the Editor</li>
           <li>show the Artifact description window when clicking on it in the Editor</li>
-          <li>add a info on 50% retaliation damage to the Blind spell description</li>
+          <li>add info about 50% retaliation damage to the Blind spell description</li>
           <li>update Hero Movement button</li>
           <li>fix Mine flag rendering on the Adventure Map</li>
           <li>fix a crash in the View World mode for the Editor</li>
