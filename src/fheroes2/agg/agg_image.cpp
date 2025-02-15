@@ -1957,6 +1957,34 @@ namespace
             setButtonCornersTransparent( released );
             return true;
         }
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+            _icnVsSprite[id].resize( 2 );
+            const int originalID = ICN::HISCORE;
+            uint32_t originalICNIndex = 0;
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                originalICNIndex = 2;
+            }
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                originalICNIndex = 4;
+            }
+            else {
+                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+            }
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            released = fheroes2::AGG::GetICN( originalID, originalICNIndex );
+            pressed = fheroes2::AGG::GetICN( originalID, originalICNIndex + 1 );
+            // Fill wrong transparent text pixels by using single-colored background.
+            fheroes2::Image background( released.width(), released.height() );
+            Fill( background, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, background );
+            released = background;
+            setButtonCornersTransparent( released );
+            return true;
+        }
         default:
             break;
         }
@@ -2119,6 +2147,34 @@ namespace
             // Fix corrupted pixels.
             fheroes2::ReplaceColorId( released, 109, 39 );
             fheroes2::ReplaceColorId( pressed, 178, 39 );
+            return true;
+        }
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+            _icnVsSprite[id].resize( 2 );
+            const int originalID = ICN::HISCORE;
+            uint32_t originalICNIndex = 0;
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                originalICNIndex = 2;
+            }
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                originalICNIndex = 4;
+            }
+            else {
+                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+            }
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            released = fheroes2::AGG::GetICN( originalID, originalICNIndex );
+            pressed = fheroes2::AGG::GetICN( originalID, originalICNIndex + 1 );
+            // Fill wrong transparent text pixels by using single-colored background.
+            fheroes2::Image background( released.width(), released.height() );
+            Fill( background, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, background );
+            released = background;
+            setButtonCornersTransparent( released );
             return true;
         }
         default:
