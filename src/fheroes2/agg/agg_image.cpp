@@ -1500,8 +1500,6 @@ namespace
         case ICN::BUTTON_SMALL_MAX_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = id == ICN::BUTTON_SMALL_MAX_EVIL;
-
             if ( useOriginalResources() ) {
                 // The original assets ICN contains button with shadow. We crop only the button.
                 _icnVsSprite[id][0] = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), 5, 0, 60, 25 );
@@ -1513,16 +1511,11 @@ namespace
                 for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
                     setButtonCornersTransparent( image );
                 }
-                if ( isEvilInterface ) {
-                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-                    fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-                }
 
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
-                                { 61, 25 } );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, ICN::STONEBAK, { 61, 25 } );
 
             break;
         }
