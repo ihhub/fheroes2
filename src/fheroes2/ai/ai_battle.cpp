@@ -1773,10 +1773,39 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
                             int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
 
-                            if ( avoidStackingUnits && Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                            if ( avoidStackingUnits ) {
+                                // In this mode, the covering units should not be positioned close to the shooter or to each other. Let's try to position the covering
+                                // unit one cell further away, and if this fails, then ignore this position.
+                                if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                    continue;
+                                }
+
                                 nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
-                                if ( currentUnit.isWide() && ( dir == Battle::RIGHT || dir == Battle::LEFT ) && Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
-                                    nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+
+                                if ( currentUnit.isWide() ) {
+                                    // If the shooter is covered in front by a wide unit, then this unit should be located one more cell further away.
+                                    if ( dir == ( frnd->isReflect() ? Battle::LEFT : Battle::RIGHT ) ) {
+                                        if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                            continue;
+                                        }
+
+                                        nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+                                    }
+                                    // If a wide unit covers a shooter from behind (which is rare, but it can happen) it is necessary to check that the covering unit
+                                    // will not be located close to the shooter - which can happen if there is any obstacle in place of the intended tail of the unit.
+                                    else if ( dir == ( frnd->isReflect() ? Battle::RIGHT : Battle::LEFT ) ) {
+                                        const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearbyIdx );
+                                        if ( pos.GetHead() == nullptr ) {
+                                            continue;
+                                        }
+
+                                        assert( pos.isValidForUnit( currentUnit ) );
+                                        assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
+
+                                        if ( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 ) {
+                                            continue;
+                                        }
+                                    }
                                 }
                             }
 
