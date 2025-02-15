@@ -1893,6 +1893,7 @@ namespace
             common = fheroes2::FilterOnePixelNoise( common );
             common = fheroes2::FilterOnePixelNoise( common );
             common = fheroes2::FilterOnePixelNoise( common );
+            FillTransform( common, 1, common.height() - 1, 23, 1, 1 );
 
             fheroes2::Blit( common, output );
             break;
