@@ -1941,6 +1941,22 @@ namespace
                 Copy( fheroes2::AGG::GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
             }
             return true;
+        case ICN::BUTTON_SMALL_DECLINE_GOOD:
+        case ICN::BUTTON_SMALL_ACCEPT_GOOD: {
+            _icnVsSprite[id].resize( 2 );
+            const int buttonIcnIndex = id == ICN::BUTTON_SMALL_ACCEPT_GOOD ? 0 : 2;
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            released = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex );
+            pressed = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex + 1 );
+            // Fill wrong transparent text pixels by using single-colored background.
+            fheroes2::Image background( released.width(), released.height() );
+            Fill( background, 0, 0, released.width(), released.height(), 10 );
+            Blit( released, background );
+            released = background;
+            setButtonCornersTransparent( released );
+            return true;
+        }
         default:
             break;
         }
