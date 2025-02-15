@@ -819,13 +819,13 @@ namespace
             _icnVsSprite[id].resize( 2 );
             fheroes2::Sprite & released = _icnVsSprite[id][0];
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const int buttonIcnID = id == ICN::BUTTON_SMALL_ACCEPT_EVIL ? ICN::BUTTON_SMALL_ACCEPT_GOOD : ICN::BUTTON_SMALL_DECLINE_GOOD; 
+            const int buttonIcnID = id == ICN::BUTTON_SMALL_ACCEPT_EVIL ? ICN::BUTTON_SMALL_ACCEPT_GOOD : ICN::BUTTON_SMALL_DECLINE_GOOD;
             released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
             pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
             ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
             ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
             break;
-         }
+        }
         case ICN::BUTTON_SMALL_LEARN_GOOD:
         case ICN::BUTTON_SMALL_LEARN_EVIL: {
             _icnVsSprite[id].resize( 2 );
@@ -1020,7 +1020,7 @@ namespace
             ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
             ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
             break;
-         }
+        }
         case ICN::BUTTON_KINGDOM_EXIT: {
             _icnVsSprite[id].resize( 2 );
 
