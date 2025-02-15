@@ -997,23 +997,30 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_SMALL_RESTART_GOOD:
-        case ICN::BUTTON_SMALL_RESTART_EVIL: {
+        case ICN::BUTTON_SMALL_RESTART_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_RESTART_EVIL );
-
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 0 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 1 );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 0 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 1 );
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
+        case ICN::BUTTON_SMALL_RESTART_EVIL: {
+            // To fix localized evil restart buttons we simply do a palette swap.
+            _icnVsSprite[id].resize( 2 );
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            released = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_RESTART_GOOD, 0 );
+            pressed = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_RESTART_GOOD, 1 );
+            ApplyPalette( released, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            ApplyPalette( pressed, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            break;
+         }
         case ICN::BUTTON_KINGDOM_EXIT: {
             _icnVsSprite[id].resize( 2 );
 
@@ -2763,7 +2770,7 @@ namespace
             return true;
         case ICN::SURRENDR:
             LoadOriginalICN( id );
-            // We fix the pressed button backgrounds here because this is necessary for all localized assets.
+            // We fix the pressed button backgrounds here because this also needs to be applied on all localized assets.
             if ( _icnVsSprite[id].size() >= 4 ) {
                 for ( const uint32_t i : { 0, 2 } ) {
                     fheroes2::Sprite & out = _icnVsSprite[id][i + 1];
@@ -2784,17 +2791,6 @@ namespace
             _icnVsSprite[id][0].setPosition( 0, 0 );
 
             _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 3 );
-            _icnVsSprite[id][1].setPosition( 0, 0 );
-
-            // fix transparent corners
-            CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
-            return true;
-        case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
-            _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = Crop( fheroes2::AGG::GetICN( ICN::CAMPXTRE, 2 ), 4, 0, 108, 25 );
-            _icnVsSprite[id][0].setPosition( 0, 0 );
-
-            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::CAMPXTRE, 3 );
             _icnVsSprite[id][1].setPosition( 0, 0 );
 
             // fix transparent corners
