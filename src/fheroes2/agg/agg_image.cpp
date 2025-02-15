@@ -396,6 +396,14 @@ namespace
         }
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
+    void convertToEvilButtonBackground(fheroes2::Sprite& released, fheroes2::Sprite& pressed,const int goodButtonIcnId ) {
+        released = fheroes2::AGG::GetICN( goodButtonIcnId, 0 );
+        pressed = fheroes2::AGG::GetICN( goodButtonIcnId, 1 );
+
+        const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
+        fheroes2::ApplyPalette( released, goodToEvilPalette );
+        fheroes2::ApplyPalette( pressed, goodToEvilPalette );
+    }
 
     void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * untranslatedText, const bool isEvilInterface,
                              const int backgroundIcnId, fheroes2::Size buttonSize )
@@ -1141,17 +1149,7 @@ namespace
         }
         case ICN::BUTTON_MAP_SELECT_EVIL: {
             _icnVsSprite[id].resize( 2 );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-            const int buttonIcnID = ICN::BUTTON_MAP_SELECT_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-
-            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
-            fheroes2::ApplyPalette( released, goodToEvilPalette );
-            fheroes2::ApplyPalette( pressed, goodToEvilPalette );
+            convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::BUTTON_MAP_SELECT_GOOD );
             break;
         }
         case ICN::BTNBATTLEONLY:
