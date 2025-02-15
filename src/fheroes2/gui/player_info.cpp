@@ -363,7 +363,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         else {
             const int playerColor = player->GetColor();
 
-            if ( playerColor & fi.colorsAvailableForHumans ) {
+            if ( playerColor & fi.humanPlayerColors ) {
                 const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( playerColor != human ) {
