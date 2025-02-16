@@ -908,7 +908,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-
         BUTTON_WELL_MAX,
         BTNBATTLEONLY,
         BUTTON_GIFT_GOOD,

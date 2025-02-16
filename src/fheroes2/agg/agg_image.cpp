@@ -1404,6 +1404,49 @@ namespace
 
             break;
         }
+        case ICN::GOOD_CAMPAIGN_BUTTONS:
+        case ICN::EVIL_CAMPAIGN_BUTTONS: {
+            _icnVsSprite[id].resize( 10 );
+
+            if ( useOriginalResources() ) {
+                const bool isEvilInterface = id == ICN::EVIL_CAMPAIGN_BUTTONS;
+                const int originalIcnId = isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG;
+                const int buttonBackground = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+
+                // The evil buttons' released state are 2 pixels wider.
+                const int offsetEvilX = isEvilInterface ? 2 : 0;
+                // remove embedded shadows so that we can generate shadows with our own code later
+                for ( uint32_t i = 0; i < 8; i += 2 ) {
+                    // released
+                    const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalIcnId, i );
+
+                    fheroes2::Sprite & released = _icnVsSprite[id][i];
+                    released.resize( originalReleased.width() - 6 + offsetEvilX, originalReleased.height() - 8 );
+                    released.reset();
+
+                    Copy( originalReleased, 6 - offsetEvilX, 0, released, 0, 0, originalReleased.width() - 1, originalReleased.height() - 8 );
+
+                    // pressed
+                    const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalIcnId, i + 1 );
+
+                    fheroes2::Sprite & pressed = _icnVsSprite[id][i + 1];
+                    pressed.resize( originalPressed.width(), originalPressed.height() );
+                    pressed.reset();
+
+                    Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
+                    setButtonCornersTransparent( released );
+                    fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
+                }
+                // Generate the DIFFICULTY button because it is not present in the original resources
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
+                                                isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
+                break;
+            }
+            createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
+                                           gettext_noop( "DIFFICULTY" ) } );
+
+            break;
+        }
         case ICN::POL_CAMPAIGN_BUTTONS: {
             _icnVsSprite[id].resize( 10 );
 
