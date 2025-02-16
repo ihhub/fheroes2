@@ -376,7 +376,7 @@ namespace
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }
