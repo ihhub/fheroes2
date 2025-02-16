@@ -365,7 +365,7 @@ namespace Editor
 
         // Build restrict mode button.
         fheroes2::ButtonSprite buttonRestrictBuilding;
-        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 43, -34 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 41, -32 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
 
         const bool isNeutral = ( color == Color::NONE );
 
