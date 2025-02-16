@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -228,18 +228,18 @@ namespace
 
         fheroes2::ImageRestorer selectedResBackground( fheroes2::Display::instance(), selectedResRoi.x, selectedResRoi.y, listRoi.width, selectedResRoi.height );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         ResolutionList listBox( roi.getPosition() );
 
         listBox.initListBackgroundRestorer( listRoi );
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );

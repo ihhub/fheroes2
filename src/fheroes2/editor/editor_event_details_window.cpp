@@ -78,12 +78,13 @@ namespace Editor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         const bool isDefaultScreenSize = display.isDefaultSize();
 
         fheroes2::StandardWindow background( sectionWidth * 2 + elementOffset * 3, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
             const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
@@ -238,7 +239,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 

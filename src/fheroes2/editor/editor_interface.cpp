@@ -1187,10 +1187,10 @@ namespace Interface
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
 
         background.renderCustomButtonSprite( buttonMainMenu, fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), releasedButtonFont ),
-                                             { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y }, isEvilInterface,
+                                             { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
                                              fheroes2::StandardWindow::Padding::CENTER_CENTER );
         background.renderCustomButtonSprite( buttonPlayMap, fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), releasedButtonFont ),
-                                             { buttonSave.area().width - 10, buttonSave.area().height }, { buttonOffsets.x, buttonOffsets.y }, isEvilInterface,
+                                             { buttonSave.area().width - 10, buttonSave.area().height }, { buttonOffsets.x, buttonOffsets.y },
                                              fheroes2::StandardWindow::Padding::TOP_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );

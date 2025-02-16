@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -191,14 +191,15 @@ namespace
         listBox.initListBackgroundRestorer( listRoi );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -278,7 +279,7 @@ namespace
                     selectedLangBackground.restore();
                     redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
                     buttonsBackground.restore();
-                    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+                    background.renderOkayCancelButtons( buttonOk, buttonCancel );
                 }
             }
 

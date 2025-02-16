@@ -201,12 +201,12 @@ namespace Editor
         text.set( _( "Answers:" ), fheroes2::FontType::normalWhite() );
         text.draw( answerRoi.x + ( answerRoi.width - text.width() ) / 2, offsetY, display );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         AnswerListBox answerList( answerRoi.getPosition(), language );
         answerList.initListBackgroundRestorer( answerRoi );
 
         answerList.SetAreaItems( { answerRoi.x, answerRoi.y, answerRoi.width, answerRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = answerRoi.x + answerRoi.width + 5;
         background.renderScrollbarBackground( { scrollbarOffsetX, answerRoi.y, answerRoi.width, answerRoi.height }, isEvilInterface );
@@ -273,7 +273,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
