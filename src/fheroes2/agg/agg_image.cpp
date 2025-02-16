@@ -389,14 +389,6 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
-    void fillTransparentButtonText( fheroes2::Sprite & released )
-    {
-        fheroes2::Image background( released.width(), released.height() );
-        Fill( background, 0, 0, released.width(), released.height(), 10 );
-        Blit( released, background );
-        released = background;
-        setButtonCornersTransparent( released );
-    }
     // NOTE: Do not call this with an evil style button's ICN ID.
     void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId )
     {
@@ -471,6 +463,15 @@ namespace
         std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
+    }
+
+    void fillTransparentButtonText( fheroes2::Sprite & released )
+    {
+        fheroes2::Image background( released.width(), released.height() );
+        Fill( background, 0, 0, released.width(), released.height(), 10 );
+        Blit( released, background );
+        released = background;
+        setButtonCornersTransparent( released );
     }
 
     // Remove all shadows from the image and make them fully transparent.
