@@ -191,7 +191,9 @@ namespace
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
                                                 ICN::BUTTON_QUICK_COMBAT_EVIL,
                                                 ICN::BUTTON_SKIP,
-                                                ICN::BUTTON_AUTO };
+                                                ICN::BUTTON_AUTO,
+                                                ICN::BUTTON_BATTLE_SETTINGS,
+                                                ICN::STATUSBAR_BATTLE };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1327,7 +1329,7 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::BLACKBAK );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), ICN::EMPTY_GOOD_SKIP_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1341,7 +1343,93 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::BLACKBAK );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::UNKNOWN );
+
+            break;
+        }
+        case ICN::BUTTON_BATTLE_SETTINGS: {
+            const int32_t originalId = ICN::TEXTBAR;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 15 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 6 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 7 );
+                break;
+            }
+
+            const fheroes2::Sprite & autoButtonReleased = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 );
+            const fheroes2::Sprite & autoButtonPressed = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 1 );
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+            const int32_t buttonWidth = autoButtonReleased.width();
+
+            released.resize( buttonWidth, autoButtonReleased.height() + 1 );
+            pressed.resize( buttonWidth, autoButtonPressed.height() + 1 );
+
+            // We need to add 1 pixel in height because the Settings button should be 1 pixel higher than the AUTO button.
+            Copy( autoButtonReleased, 0, 0, released, 0, 0, buttonWidth, 10 );
+            Copy( autoButtonReleased, 0, 9, released, 0, 10, buttonWidth, 9 );
+
+            Copy( autoButtonPressed, 0, 0, pressed, 0, 0, buttonWidth, 10 );
+            Copy( autoButtonPressed, 0, 9, pressed, 0, 10, buttonWidth, 9 );
+
+            Fill( released, 4, 2, buttonWidth - 8, 14, getButtonFillingColor( true ) );
+            Fill( pressed, 3, 3, buttonWidth - 8, 14, getButtonFillingColor( false ) );
+
+            Copy( fheroes2::AGG::GetICN( originalId, 6 ), 12, 2, released, buttonWidth / 2 - 27 / 2, 2, 27, 14 );
+            Copy( fheroes2::AGG::GetICN( originalId, 7 ), 11, 3, pressed, buttonWidth / 2 - 27 / 2 - 1, 3, 27, 14 );
+
+            break;
+        }
+        case ICN::STATUSBAR_BATTLE: {
+            const int32_t originalId = ICN::TEXTBAR;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 15 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 8 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 9 );
+                break;
+            }
+
+            const fheroes2::Sprite & originalTopHalf = fheroes2::AGG::GetICN( originalId, 8 );
+            const fheroes2::Sprite & originalBottomHalf = fheroes2::AGG::GetICN( originalId, 9 );
+
+            fheroes2::Sprite & topHalf = _icnVsSprite[id][0];
+            fheroes2::Sprite & bottomHalf = _icnVsSprite[id][1];
+
+            const int32_t buttonAutoWidth = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 ).width();
+            const int32_t buttonSkipWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SKIP, 0 ).width();
+            const int32_t originalButtonAutoWidth = fheroes2::AGG::GetICN( originalId, 4 ).width();
+            const int32_t originalButtonSkipWidth = fheroes2::AGG::GetICN( originalId, 0 ).width();
+            const int32_t topBarHeight = originalTopHalf.height();
+            const int32_t bottomBarHeight = originalBottomHalf.height();
+
+            const int32_t excessWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
+
+            topHalf.resize( originalTopHalf.width() - excessWidth, topBarHeight );
+            bottomHalf.resize( originalBottomHalf.width() - excessWidth, bottomBarHeight );
+
+            fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
+            fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
+                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
+
+            fheroes2::Copy( originalBottomHalf, 0, 0, bottomHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, bottomBarHeight );
+            fheroes2::Copy( originalBottomHalf, originalBottomHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, bottomHalf,
+                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, bottomBarHeight );
 
             break;
         }
@@ -4840,92 +4928,6 @@ namespace
             Fill( _icnVsSprite[id][1], 22, 6, 8, 5, backgroundPressedColor );
             Fill( _icnVsSprite[id][1], 7, 11, 24, 8, backgroundPressedColor );
             Fill( _icnVsSprite[id][1], 5, 19, 24, 10, backgroundPressedColor );
-
-            return true;
-        }
-        case ICN::BUTTON_BATTLE_SETTINGS: {
-            const int32_t originalId = ICN::TEXTBAR;
-            loadICN( originalId );
-
-            if ( _icnVsSprite[originalId].size() < 15 ) {
-                return true;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 6 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 7 );
-                return true;
-            }
-
-            const fheroes2::Sprite & autoButtonReleased = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 );
-            const fheroes2::Sprite & autoButtonPressed = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 1 );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-            const int32_t buttonWidth = autoButtonReleased.width();
-
-            released.resize( buttonWidth, autoButtonReleased.height() + 1 );
-            pressed.resize( buttonWidth, autoButtonPressed.height() + 1 );
-
-            // We need to add 1 pixel in height because the Settings button should be 1 pixel higher than the AUTO button.
-            Copy( autoButtonReleased, 0, 0, released, 0, 0, buttonWidth, 10 );
-            Copy( autoButtonReleased, 0, 9, released, 0, 10, buttonWidth, 9 );
-
-            Copy( autoButtonPressed, 0, 0, pressed, 0, 0, buttonWidth, 10 );
-            Copy( autoButtonPressed, 0, 9, pressed, 0, 10, buttonWidth, 9 );
-
-            Fill( released, 4, 2, buttonWidth - 8, 14, getButtonFillingColor( true ) );
-            Fill( pressed, 3, 3, buttonWidth - 8, 14, getButtonFillingColor( false ) );
-
-            Copy( fheroes2::AGG::GetICN( originalId, 6 ), 12, 2, released, buttonWidth / 2 - 27 / 2, 2, 27, 14 );
-            Copy( fheroes2::AGG::GetICN( originalId, 7 ), 11, 3, pressed, buttonWidth / 2 - 27 / 2 - 1, 3, 27, 14 );
-
-            return true;
-        }
-        case ICN::STATUSBAR_BATTLE: {
-            const int32_t originalId = ICN::TEXTBAR;
-            loadICN( originalId );
-
-            if ( _icnVsSprite[originalId].size() < 15 ) {
-                return true;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-
-            if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 8 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 9 );
-                return true;
-            }
-
-            const fheroes2::Sprite & originalTopHalf = fheroes2::AGG::GetICN( originalId, 8 );
-            const fheroes2::Sprite & originalBottomHalf = fheroes2::AGG::GetICN( originalId, 9 );
-
-            fheroes2::Sprite & topHalf = _icnVsSprite[id][0];
-            fheroes2::Sprite & bottomHalf = _icnVsSprite[id][1];
-
-            const int32_t buttonAutoWidth = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 ).width();
-            const int32_t buttonSkipWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SKIP, 0 ).width();
-            const int32_t originalButtonAutoWidth = fheroes2::AGG::GetICN( originalId, 4 ).width();
-            const int32_t originalButtonSkipWidth = fheroes2::AGG::GetICN( originalId, 0 ).width();
-            const int32_t topBarHeight = originalTopHalf.height();
-            const int32_t bottomBarHeight = originalBottomHalf.height();
-
-            const int32_t excessWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
-
-            topHalf.resize( originalTopHalf.width() - excessWidth, topBarHeight );
-            bottomHalf.resize( originalBottomHalf.width() - excessWidth, bottomBarHeight );
-
-            fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
-            fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
-                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
-
-            fheroes2::Copy( originalBottomHalf, 0, 0, bottomHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, bottomBarHeight );
-            fheroes2::Copy( originalBottomHalf, originalBottomHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, bottomHalf,
-                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, bottomBarHeight );
 
             return true;
         }

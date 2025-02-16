@@ -368,19 +368,27 @@ namespace
             break;
         case ICN::EMPTY_GOOD_BATTLE_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textAreaBorders.x = 1 + 1;
-            minimumTextArea.width = 41;
-            backgroundBorders.width = 4 + 4;
+            textAreaBorders.x = 0 + 1;
+            textAreaBorders.y = 0 + 0;
+            minimumTextArea.width = 39;
+            minimumTextArea.height = 14;
+            maximumTextArea.height = 14;
+            backgroundBorders.width = 3 + 4;
+            backgroundBorders.height = 1 + 3;
             releasedOffset = { 4, 1 };
             pressedOffset = { 3, 2 };
             break;
         case ICN::EMPTY_GOOD_SKIP_BUTTON:
             font = fheroes2::FontColor::WHITE;
             textAreaBorders.x = 1 + 1;
+            textAreaBorders.y = 2 + 4;
             minimumTextArea.width = 40;
+            minimumTextArea.height = 31;
+            maximumTextArea.height = 31;
             backgroundBorders.width = 4 + 4;
-            releasedOffset = { 4, 11 };
-            pressedOffset = { 3, 12 };
+            backgroundBorders.height = 2 + 4;
+            releasedOffset = { 4, 2 };
+            pressedOffset = { 3, 3 };
             break;
         default:
             // Was a new empty button template added?
