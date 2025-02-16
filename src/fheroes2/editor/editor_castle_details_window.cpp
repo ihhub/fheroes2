@@ -302,7 +302,7 @@ namespace Editor
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         const fheroes2::Rect dialogRoi = background.activeArea();
         const fheroes2::Rect dialogWithShadowRoi = background.totalArea();
 
@@ -364,10 +364,8 @@ namespace Editor
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
         // Build restrict mode button.
-        fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
-        buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartWidth - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuilding.area().getPosition(), { -5, 5 } );
-        buttonRestrictBuilding.draw();
+        fheroes2::ButtonSprite buttonRestrictBuilding;
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 43, -34 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
 
         const bool isNeutral = ( color == Color::NONE );
 
@@ -449,10 +447,9 @@ namespace Editor
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
         // Exit button.
-        fheroes2::Button buttonExit( dialogRoi.x + rightPartOffsetX + 50, dialogRoi.y + 430, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD,
-                                     0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -2, 2 } );
-        buttonExit.draw();
+        fheroes2::Button buttonExit;
+        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 25 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         // Status bar.
         const int32_t statusBarWidth = statusBarSprite.width();

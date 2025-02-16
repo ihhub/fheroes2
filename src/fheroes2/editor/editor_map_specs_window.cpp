@@ -2249,14 +2249,14 @@ namespace Editor
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         fheroes2::ButtonSprite buttonRumors;
-        background.renderTextAdaptedButton( buttonRumors, gettext_noop( "RUMORS" ), { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        background.renderTextAdaptedButtonSprite( buttonRumors, gettext_noop( "RUMORS" ), { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonEvents;
-        background.renderTextAdaptedButton( buttonEvents, gettext_noop( "EVENTS" ), { 20 + buttonRumors.area().width + 10, 6 },
+        background.renderTextAdaptedButtonSprite( buttonEvents, gettext_noop( "EVENTS" ), { 20 + buttonRumors.area().width + 10, 6 },
                                             fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonLanguage;
-        background.renderTextAdaptedButton( buttonLanguage, gettext_noop( "LANGUAGE" ), { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
+        background.renderTextAdaptedButtonSprite( buttonLanguage, gettext_noop( "LANGUAGE" ), { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
                                             fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {

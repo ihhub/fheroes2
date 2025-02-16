@@ -165,8 +165,6 @@ namespace
                                                 ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_TOWN_GOOD,
                                                 ICN::BUTTON_TOWN_EVIL,
-                                                ICN::BUTTON_RESTRICT_GOOD,
-                                                ICN::BUTTON_RESTRICT_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -180,12 +178,6 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::BUTTON_RUMORS_GOOD,
-                                                ICN::BUTTON_RUMORS_EVIL,
-                                                ICN::BUTTON_EVENTS_GOOD,
-                                                ICN::BUTTON_EVENTS_EVIL,
-                                                ICN::BUTTON_LANGUAGE_GOOD,
-                                                ICN::BUTTON_LANGUAGE_EVIL,
                                                 ICN::BUTTON_AUTO_COMBAT_GOOD,
                                                 ICN::BUTTON_AUTO_COMBAT_EVIL,
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
@@ -1698,13 +1690,6 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_WELL_MAX: {
-            _icnVsSprite[id].resize( 2 );
-
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
-
-            break;
-        }
         case ICN::BUTTON_EXIT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
@@ -1723,6 +1708,13 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_WELL_MAX: {
+            _icnVsSprite[id].resize( 2 );
+
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1763,28 +1755,6 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_RESTRICT_GOOD:
-        case ICN::BUTTON_RESTRICT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTRICT" ),
-                                  id == ICN::BUTTON_RESTRICT_EVIL ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  id == ICN::BUTTON_RESTRICT_EVIL ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_VERTICAL_PATROL: {
-            _icnVsSprite[id].resize( 2 );
-
-            // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
-            // be off-centered when we are displaying one letter per line
-            const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-            const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
-                                  ICN::REDBAK_SMALL_VERTICAL );
-
-            break;
-        }
         case ICN::BUTTON_AUTO_COMBAT_GOOD:
         case ICN::BUTTON_AUTO_COMBAT_EVIL: {
             _icnVsSprite[id].resize( 2 );
@@ -1804,6 +1774,18 @@ namespace
 
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
                                   isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_VERTICAL_PATROL: {
+            _icnVsSprite[id].resize( 2 );
+
+            // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+            // be off-centered when we are displaying one letter per line
+            const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+            const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                  ICN::REDBAK_SMALL_VERTICAL );
 
             break;
         }
