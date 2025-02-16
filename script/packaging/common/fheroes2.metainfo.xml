@@ -37,10 +37,10 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2025-02-15" version="v1.1.6">
+    <release date="2025-02-16" version="v1.1.6">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.6</url>
       <description>
-        <p>Changes in v1.1.6 (15 February 2025):</p>
+        <p>Changes in v1.1.6 (16 February 2025):</p>
         <ul>
           <li>fix Ultimate Artifact being erased for any action done on a map</li>
           <li>fix Editor buttons not being translated</li>
