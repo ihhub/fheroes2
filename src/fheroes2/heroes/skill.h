@@ -186,6 +186,7 @@ namespace Skill
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
         static int getHeroDefaultSkillValue( const int skill, const int race );
+        static std::pair<int, int> getSkillValueRange( const int skill );
 
     protected:
         void LoadDefaults( int type, int race );

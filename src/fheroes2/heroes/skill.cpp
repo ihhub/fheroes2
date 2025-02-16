@@ -197,6 +197,23 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
     return ( skill == POWER || skill == KNOWLEDGE ) ? 1 : 0;
 }
 
+std::pair<int, int> Skill::Primary::getSkillValueRange( const int skill )
+{
+    switch ( skill ) {
+    case ATTACK:
+    case DEFENSE:
+        return { 0, 99 };
+    case POWER:
+    case KNOWLEDGE:
+        return { 1, 99 };
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return { 0, 0 };
+}
+
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
     const FactionProperties * ptr = GameStatic::GetFactionProperties( race );

@@ -204,13 +204,15 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
     }
 
     // The case when we are in Editor mode.
-    auto primarySkillEditDialog = [&skill]( int32_t & skillValue ) {
+    auto primarySkillEditDialog = [skill]( int32_t & skillValue ) {
         std::string header = _( "Set %{skill} Skill" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
+        const auto [min, max] = Skill::Primary::getSkillValueRange( skill );
+
         const fheroes2::PrimarySkillDialogElement skillUI{ skill, {} };
 
-        return Dialog::SelectCount( std::move( header ), skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue, 1, &skillUI );
+        return Dialog::SelectCount( std::move( header ), min, max, skillValue, 1, &skillUI );
     };
 
     int32_t value;
