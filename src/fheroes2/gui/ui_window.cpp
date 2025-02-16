@@ -343,7 +343,7 @@ namespace fheroes2
         }
     }
 
-    void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
+    void StandardWindow::renderTextAdaptedButton( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
     {
         Sprite released;
         Sprite pressed;
