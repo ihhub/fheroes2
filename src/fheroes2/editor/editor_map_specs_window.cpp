@@ -2253,11 +2253,11 @@ namespace Editor
 
         fheroes2::ButtonSprite buttonEvents;
         background.renderTextAdaptedButtonSprite( buttonEvents, gettext_noop( "EVENTS" ), { 20 + buttonRumors.area().width + 10, 6 },
-                                            fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+                                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonLanguage;
         background.renderTextAdaptedButtonSprite( buttonLanguage, gettext_noop( "LANGUAGE" ), { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
-                                            fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+                                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );

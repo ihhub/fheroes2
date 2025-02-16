@@ -85,8 +85,8 @@ namespace fheroes2
 
         void renderScrollbarBackground( const Rect & roi, const bool isEvilInterface );
         void renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding );
-        void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset, const bool isEvilInterface,
-                                 const Padding padding );
+        void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
+                                       const bool isEvilInterface, const Padding padding );
         void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
         void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface );
 

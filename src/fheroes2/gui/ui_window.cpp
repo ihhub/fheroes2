@@ -359,7 +359,7 @@ namespace fheroes2
     }
 
     void StandardWindow::renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
-                                             const bool isEvilInterface, const Padding padding )
+                                                   const bool isEvilInterface, const Padding padding )
     {
         Sprite released;
         Sprite pressed;

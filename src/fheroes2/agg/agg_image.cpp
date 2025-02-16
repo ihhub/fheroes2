@@ -388,7 +388,9 @@ namespace
         }
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
-    void convertToEvilButtonBackground(fheroes2::Sprite& released, fheroes2::Sprite& pressed,const int goodButtonIcnId ) {
+
+    void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId )
+    {
         released = fheroes2::AGG::GetICN( goodButtonIcnId, 0 );
         pressed = fheroes2::AGG::GetICN( goodButtonIcnId, 1 );
 
@@ -1347,12 +1349,12 @@ namespace
                     icnIndex = { 0, 1 };
                     break;
                 }
-                
+
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
                 break;
             }
-            
+
             const char * text = gettext_noop( "LOAD\nMAP" );
             switch ( id ) {
             case ICN::BUTTON_NEW_MAP_GOOD: {
@@ -1396,8 +1398,7 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface,
-                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 86, 56 } );
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 86, 56 } );
 
             break;
         }
