@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,9 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
+#include <functional>
+#include <list>
+#include <map>
 #include <ostream>
 #include <set>
 #include <string>
@@ -40,10 +42,15 @@
 #include "castle.h"
 #include "color.h"
 #include "game_over.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -53,9 +60,12 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "resource.h"
 #include "serialize.h"
 #include "settings.h"
-#include "world.h"
+#include "skill.h"
+#include "spell.h"
+#include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
 namespace
@@ -77,11 +87,11 @@ namespace
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 
-    void fixCastleNames( const AllCastles & castles )
+    void updateCastleNames( const AllCastles & castles )
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
-        std::set<std::string> castleNames;
+        std::set<std::string, std::less<>> castleNames;
 
         for ( Castle * castle : castles ) {
             if ( castle == nullptr ) {
@@ -109,6 +119,19 @@ namespace
             castleNames.emplace( castle->GetName() );
         }
     }
+
+    void updateArtifactStats()
+    {
+        // Clear artifact flags to correctly generate random artifacts.
+        fheroes2::ResetArtifactStats();
+
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+        // do not let the player get a random artifact that allows him to win the game
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
+            fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
+        }
+    }
 }
 
 bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2File )
@@ -118,7 +141,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename.c_str() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename )
         return false;
     }
 
@@ -130,7 +153,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const size_t totalFileSize = fs.size();
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -180,7 +203,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -189,15 +212,15 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // It is a valid case that a map has no add-ons.
     const size_t addonCount = fs.getLE32();
-    std::vector<MP2::mp2addon_t> vec_mp2addons( addonCount );
+    std::vector<MP2::MP2AddonInfo> vec_mp2addons( addonCount );
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
-    for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
+    for ( auto & mp2addon : vec_mp2addons ) {
         MP2::loadAddon( fs, mp2addon );
     }
 
@@ -214,13 +237,13 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const bool checkPoLObjects = !Settings::Get().isPriceOfLoyaltySupported() && isOriginalMp2File;
 
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HERO, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
     vec_object.reserve( 128 );
 
     for ( int32_t i = 0; i < worldSize; ++i ) {
-        Maps::Tiles & tile = vec_tiles[i];
+        Maps::Tile & tile = vec_tiles[i];
 
-        MP2::mp2tile_t mp2tile;
+        MP2::MP2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
         // There are some tiles which have object type as 65 and 193 which are Thatched Hut. This is exactly the same object as Peasant Hut.
         // Since the original number of object types is limited and in order not to confuse players we will convert this type into Peasant Hut.
@@ -255,14 +278,14 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.pushBottomLayerAddon( vec_mp2addons[addonIndex] );
-            tile.pushTopLayerAddon( vec_mp2addons[addonIndex] );
+            tile.pushGroundObjectPart( vec_mp2addons[addonIndex] );
+            tile.pushTopObjectPart( vec_mp2addons[addonIndex] );
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 
-        tile.AddonsSort();
+        tile.sortObjectParts();
 
-        if ( MP2::doesObjectNeedExtendedMetadata( tile.GetObject() ) ) {
+        if ( MP2::doesObjectNeedExtendedMetadata( tile.getMainObjectType() ) ) {
             vec_object.push_back( i );
         }
     }
@@ -274,7 +297,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     fs.seek( afterAddonInfoPos );
 
     if ( totalFileSize < afterAddonInfoPos + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -293,31 +316,31 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         switch ( castleType ) {
         case 0x00:
         case 0x80:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::KNGT ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::KNGT ) );
             break;
         case 0x01:
         case 0x81:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::BARB ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::BARB ) );
             break;
         case 0x02:
         case 0x82:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::SORC ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::SORC ) );
             break;
         case 0x03:
         case 0x83:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::WRLK ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::WRLK ) );
             break;
         case 0x04:
         case 0x84:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::WZRD ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::WZRD ) );
             break;
         case 0x05:
         case 0x85:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::NECR ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::NECR ) );
             break;
         case 0x06:
         case 0x86:
-            vec_castles.AddCastle( new Castle( posX, posY, Race::NONE ) );
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::NONE ) );
             break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -336,7 +359,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     if ( totalFileSize
          < afterAddonInfoPos
                + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -364,7 +387,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x05: // Gems mine.
         case 0x06: // Gold mine.
             // TODO: should we verify the mine type by something?
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINES, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, Color::NONE );
             break;
         case 0x64:
             map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, Color::NONE );
@@ -401,7 +424,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const uint32_t h = fs.get();
 
         if ( fs.tell() == fs.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
             return false;
         }
 
@@ -425,8 +448,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const std::vector<uint8_t> pblock = fs.getRaw( blockSize );
 
         for ( const int32_t tileId : vec_object ) {
-            const Maps::Tiles & tile = vec_tiles[tileId];
-            if ( ( tile.getLayerType() & 0x3 ) != Maps::OBJECT_LAYER ) {
+            const Maps::Tile & tile = vec_tiles[tileId];
+            if ( ( tile.getMainObjectPart().layerType & 0x3 ) != Maps::OBJECT_LAYER ) {
                 continue;
             }
 
@@ -437,8 +460,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
 
         if ( 0 <= objectTileId ) {
-            const Maps::Tiles & tile = vec_tiles[objectTileId];
-            const MP2::MapObjectType objectType = tile.GetObject();
+            const Maps::Tile & tile = vec_tiles[objectTileId];
+            const MP2::MapObjectType objectType = tile.getMainObjectType();
 
             switch ( objectType ) {
             case MP2::OBJ_CASTLE:
@@ -534,14 +557,14 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
                 }
                 break;
-            case MP2::OBJ_HEROES:
+            case MP2::OBJ_HERO:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
@@ -578,23 +601,28 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
                 if ( MP2::MP2_SIGN_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
-                    MapSign * obj = new MapSign();
+                    auto obj = std::make_unique<MapSign>();
                     obj->LoadFromMP2( objectTileId, pblock );
-                    map_objects.add( obj );
+
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             case MP2::OBJ_EVENT:
                 if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
-                    MapEvent * obj = new MapEvent();
+                    auto obj = std::make_unique<MapEvent>();
                     obj->LoadFromMP2( objectTileId, pblock );
-                    map_objects.add( obj );
+
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             case MP2::OBJ_SPHINX:
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
-                    MapSphinx * obj = new MapSphinx();
+                    auto obj = std::make_unique<MapSphinx>();
                     obj->LoadFromMP2( objectTileId, pblock );
-                    map_objects.add( obj );
+
+                    obj->validate();
+
+                    map_objects.add( std::move( obj ) );
                 }
                 break;
             default:
@@ -623,8 +651,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 std::string rumor( reinterpret_cast<const char *>( pblock.data() ) + 8 );
 
                 if ( !rumor.empty() ) {
-                    _rumors.emplace_back( std::move( rumor ) );
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "MP2 format: add rumor " << _rumors.back() )
+                    _customRumors.emplace_back( std::move( rumor ) );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "MP2 format: add rumor " << _customRumors.back() )
                 }
             }
             else {
@@ -639,19 +667,11 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     // If this assertion blows up it means that we are not reading the data properly from the file.
     assert( fs.tell() + 4 == fs.size() );
 
-    fixCastleNames( vec_castles );
+    updateCastleNames( vec_castles );
 
-    // clear artifact flags to correctly generate random artifacts
-    fheroes2::ResetArtifactStats();
+    updateArtifactStats();
 
-    const Settings & conf = Settings::Get();
-
-    // do not let the player get a random artifact that allows him to win the game
-    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
-        fheroes2::ExcludeArtifactFromRandom( conf.WinsFindArtifactID() );
-    }
-
-    if ( !ProcessNewMap( filename, checkPoLObjects ) ) {
+    if ( !ProcessNewMP2Map( filename, checkPoLObjects ) ) {
         return false;
     }
 
@@ -659,12 +679,590 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     return true;
 }
 
-bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
+bool World::loadResurrectionMap( const std::string & filename )
 {
-    for ( Maps::Tiles & tile : vec_tiles ) {
-        Maps::Tiles::fixTileObjectType( tile );
+    Reset();
+    Defaults();
 
-        if ( !updateTileMetadata( tile, tile.GetObject(), checkPoLObjects ) ) {
+    Maps::Map_Format::MapFormat map;
+    if ( !Maps::Map_Format::loadMap( filename, map ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
+        return false;
+    }
+
+    width = map.size;
+    height = map.size;
+
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
+
+    if ( !Maps::readAllTiles( map ) ) {
+        return false;
+    }
+
+    if ( !Maps::updateMapPlayers( map ) ) {
+        return false;
+    }
+
+    if ( map.availablePlayerColors == 0 ) {
+        // No players inside the map.
+        return false;
+    }
+
+    // Read and populate objects.
+    const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+    const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+    const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+    const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+    const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+    const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+    const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
+
+#if defined( WITH_DEBUG )
+    std::set<uint32_t> standardMetadataUIDs;
+    std::set<uint32_t> castleMetadataUIDs;
+    std::set<uint32_t> heroMetadataUIDs;
+    std::set<uint32_t> sphinxMetadataUIDs;
+    std::set<uint32_t> signMetadataUIDs;
+    std::set<uint32_t> adventureMapEventMetadataUIDs;
+    std::set<uint32_t> selectionObjectMetadataUIDs;
+#endif
+
+    const auto areSpellsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata, const int spellLevel ) {
+        if ( metadata.selectedItems.empty() ) {
+            // No spells are being set which means that we fall to the default behavior.
+            return false;
+        }
+
+        const std::vector<int32_t> & spells = Spell::getAllSpellIdsSuitableForSpellBook( spellLevel );
+
+        return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
+                            [&spells]( const int32_t spellId ) { return std::find( spells.begin(), spells.end(), spellId ) != spells.end(); } );
+    };
+
+    std::set<size_t> hiredHeroTileId;
+
+    for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+        const auto & tile = map.tiles[tileId];
+
+        for ( const auto & object : tile.objects ) {
+            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+#if defined( WITH_DEBUG )
+                castleMetadataUIDs.emplace( object.id );
+#endif
+                assert( map.castleMetadata.find( object.id ) != map.castleMetadata.end() );
+                auto & castleInfo = map.castleMetadata[object.id];
+
+                const int color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+
+                int race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+                const bool isRandom = ( race == Race::RAND );
+
+                if ( isRandom ) {
+                    assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
+
+                    if ( ( color & Color::ALL ) == 0 ) {
+                        // This is a neutral town.
+                        race = Race::Rand();
+                    }
+                    else {
+                        const Kingdom & kingdom = GetKingdom( color );
+                        assert( kingdom.GetColor() == color );
+
+                        race = static_cast<uint8_t>( kingdom.GetRace() );
+                    }
+                }
+
+                assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_CASTLE ) != castleInfo.builtBuildings.end() )
+                        == ( townObjects[object.index].metadata[1] != 0 ) );
+                assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_TENT ) != castleInfo.builtBuildings.end() )
+                        == ( townObjects[object.index].metadata[1] == 0 ) );
+
+                fheroes2::Point castleCenter;
+                bool isCastle;
+
+                {
+                    auto castle = std::make_unique<Castle>( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
+                    castle->SetColor( color );
+                    castle->loadFromResurrectionMap( castleInfo );
+
+                    castleCenter = castle->GetCenter();
+                    isCastle = castle->isCastle();
+
+                    vec_castles.AddCastle( std::move( castle ) );
+                }
+
+                if ( isRandom ) {
+                    Maps::UpdateCastleSprite( castleCenter, race, isCastle, true );
+                    Maps::ReplaceRandomCastleObjectId( castleCenter );
+                }
+
+                map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, color );
+            }
+            else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+#if defined( WITH_DEBUG )
+                heroMetadataUIDs.emplace( object.id );
+#endif
+
+                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
+                const auto & metadata = heroObjects[object.index].metadata;
+                auto & heroInfo = map.heroMetadata[object.id];
+
+                const int color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                // Check the race correctness.
+                assert( heroInfo.race == Race::IndexToRace( metadata[1] ) );
+
+                // Heroes can not be neutral.
+                assert( color != Color::NONE );
+
+                const Kingdom & kingdom = GetKingdom( color );
+
+                // Set race for random hero according to the kingdom's race.
+                if ( heroInfo.race == Race::RAND ) {
+                    heroInfo.race = static_cast<uint8_t>( kingdom.GetRace() );
+                }
+
+                // Check if the kingdom has exceeded the limit on hired heroes
+                if ( kingdom.AllowRecruitHero( false ) ) {
+                    Heroes * hero = GetHeroForHire( heroInfo.race );
+                    if ( hero != nullptr ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                        hero->SetColor( color );
+
+                        hero->applyHeroMetadata( heroInfo, false, false );
+
+                        hiredHeroTileId.emplace( tileId );
+                    }
+                    else {
+                        VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )
+                    }
+                }
+                else {
+                    VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " cannot be hired." )
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
+#if defined( WITH_DEBUG )
+                standardMetadataUIDs.emplace( object.id );
+#endif
+                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+                auto & objectInfo = map.standardMetadata[object.id];
+
+                std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
+                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                assert( object.index < miscellaneousObjects.size() );
+
+                const auto objectType = miscellaneousObjects[object.index].objectType;
+                switch ( objectType ) {
+                case MP2::OBJ_EVENT: {
+#if defined( WITH_DEBUG )
+                    adventureMapEventMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.adventureMapEventMetadata.find( object.id ) != map.adventureMapEventMetadata.end() );
+                    auto & eventInfo = map.adventureMapEventMetadata[object.id];
+
+                    eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
+                    eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
+
+                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+
+                    if ( humanColors == 0 && computerColors == 0 ) {
+                        // This event is not being executed for anyone. Skip it.
+                        break;
+                    }
+
+                    auto eventObject = std::make_unique<MapEvent>();
+                    eventObject->resources = eventInfo.resources;
+                    eventObject->artifact = eventInfo.artifact;
+                    if ( eventInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
+                    }
+
+                    eventObject->isComputerPlayerAllowed = ( computerColors != 0 );
+                    eventObject->colors = humanColors | computerColors;
+                    eventObject->message = std::move( eventInfo.message );
+                    eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
+                    eventObject->secondarySkill = { eventInfo.secondarySkill, eventInfo.secondarySkillLevel };
+                    eventObject->experience = eventInfo.experience;
+
+                    eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    map_objects.add( std::move( eventObject ) );
+
+                    break;
+                }
+                case MP2::OBJ_JAIL: {
+#if defined( WITH_DEBUG )
+                    heroMetadataUIDs.emplace( object.id );
+#endif
+
+                    assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
+                    auto & heroInfo = map.heroMetadata[object.id];
+
+                    const int color = Color::NONE;
+
+                    if ( heroInfo.race == Race::RAND ) {
+                        heroInfo.race = static_cast<uint8_t>( Race::Rand() );
+                    }
+
+                    Heroes * hero = GetHeroForHire( heroInfo.race );
+                    if ( hero != nullptr ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                        hero->SetColor( color );
+
+                        hero->applyHeroMetadata( heroInfo, true, false );
+                    }
+                    else {
+                        VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )
+                    }
+                    break;
+                }
+                case MP2::OBJ_PYRAMID: {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    selectionObjectMetadataUIDs.emplace( object.id );
+#endif
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
+
+                    if ( areSpellsValid( metadata, 5 ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
+                    }
+
+                    break;
+                }
+                case MP2::OBJ_SIGN: {
+#if defined( WITH_DEBUG )
+                    signMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
+                    auto & signInfo = map.signMetadata[object.id];
+
+                    auto signObject = std::make_unique<MapSign>();
+                    signObject->message = std::move( signInfo.message );
+                    signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+                    if ( signObject->message.empty() ) {
+                        signObject->setDefaultMessage();
+                    }
+
+                    map_objects.add( std::move( signObject ) );
+
+                    break;
+                }
+                case MP2::OBJ_SPHINX: {
+#if defined( WITH_DEBUG )
+                    sphinxMetadataUIDs.emplace( object.id );
+#endif
+
+                    assert( map.sphinxMetadata.find( object.id ) != map.sphinxMetadata.end() );
+                    auto & sphinxInfo = map.sphinxMetadata[object.id];
+
+                    auto sphinxObject = std::make_unique<MapSphinx>();
+                    sphinxObject->riddle = std::move( sphinxInfo.riddle );
+
+                    for ( auto & answer : sphinxInfo.answers ) {
+                        if ( !answer.empty() ) {
+                            sphinxObject->answers.push_back( std::move( answer ) );
+                        }
+                        else {
+                            // How is it even possible?
+                            assert( 0 );
+                        }
+                    }
+
+                    sphinxObject->resources = sphinxInfo.resources;
+                    sphinxObject->artifact = sphinxInfo.artifact;
+                    if ( sphinxInfo.artifact == Artifact::SPELL_SCROLL ) {
+                        sphinxObject->artifact.SetSpell( sphinxInfo.artifactMetadata );
+                    }
+
+                    sphinxObject->validate();
+
+                    sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    // The original game assumes answers only to be up to 4 characters.
+                    // However, it seems logically incorrect.
+                    sphinxObject->isTruncatedAnswer = false;
+
+                    map_objects.add( std::move( sphinxObject ) );
+
+                    break;
+                }
+                case MP2::OBJ_WITCHS_HUT: {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    selectionObjectMetadataUIDs.emplace( object.id );
+#endif
+
+                    const auto areSkillsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata ) {
+                        if ( metadata.selectedItems.empty() ) {
+                            // No skills are being set which means that we fall to the default behavior.
+                            return false;
+                        }
+
+                        const std::vector<int32_t> & skills = GameStatic::getSecondarySkillsForWitchsHut();
+
+                        return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
+                                            [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
+                    };
+
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
+                    if ( areSkillsValid( metadata ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
+                    }
+
+                    break;
+                }
+                default:
+                    // Other objects do not have metadata as of now.
+                    break;
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_WATER ) {
+                assert( object.index < waterObjects.size() );
+
+                if ( waterObjects[object.index].objectType == MP2::OBJ_BOTTLE ) {
+#if defined( WITH_DEBUG )
+                    signMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
+                    auto & signInfo = map.signMetadata[object.id];
+
+                    auto signObject = std::make_unique<MapSign>();
+                    signObject->message = std::move( signInfo.message );
+                    signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+                    if ( signObject->message.empty() ) {
+                        signObject->setDefaultMessage();
+                    }
+
+                    map_objects.add( std::move( signObject ) );
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+#if defined( WITH_DEBUG )
+                standardMetadataUIDs.emplace( object.id );
+#endif
+
+                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+                auto & objectInfo = map.standardMetadata[object.id];
+
+                std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
+                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
+                }
+
+                assert( object.index < artifactObjects.size() );
+                if ( artifactObjects[object.index].objectType == MP2::OBJ_ARTIFACT && artifactObjects[object.index].metadata[0] == Artifact::SPELL_SCROLL ) {
+                    // This is a hack we need to do since in the original game spells start from 0.
+                    // TODO: fix this hack.
+                    assert( tileData[0] > 0 );
+                    tileData[0] = tileData[0] - 1U;
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                assert( object.index < treasuresObjects.size() );
+
+                const auto & objectInfo = treasuresObjects[object.index];
+
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
+                    // Some maps may have resource objects being set by older Editor versions.
+                    // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
+#if defined( WITH_DEBUG )
+                    standardMetadataUIDs.emplace( object.id );
+#endif
+
+                    std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                    tileData[0] = objectInfo.metadata[0];
+                    tileData[1] = map.standardMetadata[object.id].metadata[0];
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                assert( object.index < powerUpsObjects.size() );
+
+                const MP2::MapObjectType objectType = powerUpsObjects[object.index].objectType;
+
+                switch ( objectType ) {
+                case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+                case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+                case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
+                    if ( map.selectionObjectMetadata.find( object.id ) == map.selectionObjectMetadata.end() ) {
+                        break;
+                    }
+#if defined( WITH_DEBUG )
+                    selectionObjectMetadataUIDs.emplace( object.id );
+#endif
+                    const auto & metadata = map.selectionObjectMetadata[object.id];
+
+                    int spellLevel = 0;
+                    if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
+                        spellLevel = 1;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE ) {
+                        spellLevel = 2;
+                    }
+                    else if ( objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+                        spellLevel = 3;
+                    }
+                    else {
+                        assert( 0 );
+                        spellLevel = 1;
+                    }
+
+                    if ( areSpellsValid( metadata, spellLevel ) ) {
+                        vec_tiles[static_cast<int32_t>( tileId )].metadata()[0] = Rand::Get( metadata.selectedItems );
+                    }
+
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+#if defined( WITH_DEBUG )
+    assert( standardMetadataUIDs.size() == map.standardMetadata.size() );
+    assert( castleMetadataUIDs.size() == map.castleMetadata.size() );
+    assert( heroMetadataUIDs.size() == map.heroMetadata.size() );
+    assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
+    assert( signMetadataUIDs.size() == map.signMetadata.size() );
+    assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
+    assert( selectionObjectMetadataUIDs.size() == map.selectionObjectMetadata.size() );
+
+    for ( const uint32_t uid : standardMetadataUIDs ) {
+        assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
+    }
+
+    for ( const uint32_t uid : castleMetadataUIDs ) {
+        assert( map.castleMetadata.find( uid ) != map.castleMetadata.end() );
+    }
+
+    for ( const uint32_t uid : heroMetadataUIDs ) {
+        assert( map.heroMetadata.find( uid ) != map.heroMetadata.end() );
+    }
+
+    for ( const uint32_t uid : sphinxMetadataUIDs ) {
+        assert( map.sphinxMetadata.find( uid ) != map.sphinxMetadata.end() );
+    }
+
+    for ( const uint32_t uid : signMetadataUIDs ) {
+        assert( map.signMetadata.find( uid ) != map.signMetadata.end() );
+    }
+
+    for ( const uint32_t uid : adventureMapEventMetadataUIDs ) {
+        assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
+    }
+
+    for ( const uint32_t uid : selectionObjectMetadataUIDs ) {
+        assert( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() );
+    }
+#endif
+
+    // Load daily events.
+    for ( auto & event : map.dailyEvents ) {
+        if ( event.firstOccurrenceDay == 0 ) {
+            // This event will never be executed. Skip it.
+            continue;
+        }
+
+        event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
+        event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
+
+        const int humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+
+        if ( humanColors == 0 && computerColors == 0 ) {
+            // This event is not being executed for anyone. Skip it.
+            continue;
+        }
+
+        // TODO: modify EventDate structure to have more flexibility.
+        auto & newEvent = vec_eventsday.emplace_back();
+
+        newEvent.message = std::move( event.message );
+        newEvent.colors = ( humanColors | computerColors );
+        newEvent.isApplicableForAIPlayers = ( computerColors != 0 );
+
+        newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
+        newEvent.repeatPeriodInDays = event.repeatPeriodInDays;
+        newEvent.resource = event.resources;
+    }
+
+    // Load rumors.
+    for ( auto & rumor : map.rumors ) {
+        if ( !rumor.empty() ) {
+            _customRumors.emplace_back( std::move( rumor ) );
+        }
+    }
+
+    // Verify that a capture or loss object exists.
+    if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
+        auto iter = hiredHeroTileId.find( map.lossConditionMetadata[0] );
+        if ( iter == hiredHeroTileId.end() ) {
+            VERBOSE_LOG( "A hero at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            return false;
+        }
+    }
+    else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
+        const Castle * castle
+            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
+        if ( castle == nullptr ) {
+            VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            return false;
+        }
+    }
+
+    if ( map.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO ) {
+        auto iter = hiredHeroTileId.find( map.victoryConditionMetadata[0] );
+        if ( iter == hiredHeroTileId.end() ) {
+            VERBOSE_LOG( "A hero at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            return false;
+        }
+    }
+    else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
+        const Castle * castle = vec_castles.Get(
+            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.size ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.size ) } );
+        if ( castle == nullptr ) {
+            VERBOSE_LOG( "A castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            return false;
+        }
+    }
+
+    updateCastleNames( vec_castles );
+
+    updateArtifactStats();
+
+    if ( !ProcessNewMP2Map( filename, false ) ) {
+        return false;
+    }
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of FH2M map is completed." )
+
+    return true;
+}
+
+bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects )
+{
+    for ( Maps::Tile & tile : vec_tiles ) {
+        Maps::Tile::fixMP2MapTileObjectType( tile );
+
+        if ( !updateTileMetadata( tile, tile.getMainObjectType(), checkPoLObjects ) ) {
             ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
             // You are trying to load a PoL map named as a MP2 file.
             return false;
@@ -677,135 +1275,33 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
-    const Settings & conf = Settings::Get();
-
-    // update wins, loss conditions
-    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
-        const fheroes2::Point & pos = conf.WinsMapsPositionObject();
-
-        const Heroes * hero = GetHeroes( pos );
-        if ( hero == nullptr ) {
-            heroes_cond_wins = Heroes::UNKNOWN;
-            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
-        }
-        else {
-            heroes_cond_wins = hero->GetID();
-        }
-    }
-
-    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
-        const fheroes2::Point & pos = conf.LossMapsPositionObject();
-
-        Heroes * hero = GetHeroes( pos );
-        if ( hero == nullptr ) {
-            heroes_cond_loss = Heroes::UNKNOWN;
-            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
-        }
-        else {
-            heroes_cond_loss = hero->GetID();
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
-        }
-    }
+    setHeroIdsForMapConditions();
 
     // Search for a tile with a predefined Ultimate Artifact
-    const MapsTiles::iterator ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
-
-    const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
-        const int32_t x = idx % width;
-        if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
-            return false;
-        }
-
-        const int32_t y = idx / width;
-        if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
-            return false;
-        }
-
-        return GetTiles( idx ).GoodForUltimateArtifact();
-    };
-
-    // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
-    if ( ultArtTileIter == vec_tiles.end() ) {
-        MapsIndexes pool;
-        pool.reserve( vec_tiles.size() / 2 );
-
-        for ( const Maps::Tiles & tile : vec_tiles ) {
-            const int32_t idx = tile.GetIndex();
-
-            if ( checkTileForSuitabilityForUltArt( idx ) ) {
-                pool.push_back( idx );
-            }
-        }
-
-        if ( !pool.empty() ) {
-            const int32_t pos = Rand::Get( pool );
-
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
-        }
-        else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
-        }
-    }
-    // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
-    else {
-        const int32_t radius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
-        resetObjectMetadata( *ultArtTileIter );
+    const auto ultArtTileIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+    int32_t ultimateArtifactTileId = -1;
+    int32_t ultimateArtifactRadius = 0;
+    if ( ultArtTileIter != vec_tiles.end() ) {
+        ultimateArtifactTileId = ultArtTileIter->GetIndex();
+        ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
 
         // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
-        ultArtTileIter->setAsEmpty();
-
-        // Use the predefined Ultimate Artifact tile index as a fallback
-        int32_t pos = ultArtTileIter->GetIndex();
-
-        if ( radius > 0 ) {
-            MapsIndexes pool = Maps::getAroundIndexes( pos, radius );
-
-            // Maps::getAroundIndexes() results does not include the central index, so we have to append it manually
-            assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
-            pool.push_back( pos );
-
-            pool.erase( std::remove_if( pool.begin(), pool.end(),
-                                        [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
-                        pool.end() );
-
-            if ( !pool.empty() ) {
-                pos = Rand::Get( pool );
-            }
-        }
-
-        ultimate_artifact.Set( pos, getUltimateArtifact() );
-
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                   "predefined Ultimate Artifact index: " << ultArtTileIter->GetIndex() << ", radius: " << radius << ", Ultimate Artifact index: " << pos )
+        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->getMainObjectPart()._uid );
     }
 
-    PostLoad( true );
+    setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
+
+    PostLoad( true, false );
 
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    // If we are in developer mode, then add the DEBUG_HERO
-    if ( IS_DEVEL() ) {
-        Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
-
-        if ( !kingdom.GetCastles().empty() ) {
-            const Castle * castle = kingdom.GetCastles().front();
-            const fheroes2::Point & cp = castle->GetCenter();
-            Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
-
-            if ( hero && !GetTiles( cp.x, cp.y + 1 ).getHero() ) {
-                hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
-            }
-        }
-    }
+    addDebugHero();
 
     return true;
 }
 
-bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects )
+bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects )
 {
     switch ( objectType ) {
     case MP2::OBJ_ARTIFACT:
@@ -841,7 +1337,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_LEAN_TO:
     case MP2::OBJ_MAGIC_GARDEN:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
     case MP2::OBJ_MONSTER:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_PYRAMID:
@@ -887,7 +1383,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_FIRE_ALTAR:
     case MP2::OBJ_WATER_ALTAR:
         // We need to clear metadata because it is being stored as a part of an MP2 object.
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         updateObjectInfoTile( tile, true );
         break;
 
@@ -895,10 +1391,11 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         // We need information from an Ultimate artifact for later use. We will reset metadata later.
         break;
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         // remove map editor sprite
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
-            tile.Remove( tile.GetObjectUID() );
+        if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_MINIHERO ) {
+            tile.removeObjectPartsByUID( tile.getMainObjectPart()._uid );
+        }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
@@ -921,7 +1418,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
             }
         }
 
-        const MP2::MapObjectType updatedObjectType = tile.GetObject( false );
+        const MP2::MapObjectType updatedObjectType = tile.getMainObjectType( false );
         if ( updatedObjectType != objectType ) {
             return updateTileMetadata( tile, updatedObjectType, checkPoLObjects );
         }
@@ -936,4 +1433,133 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     }
 
     return true;
+}
+
+void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
+{
+    assert( radius >= 0 );
+
+    const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+        const int32_t x = idx % width;
+        if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        const int32_t y = idx / width;
+        if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        return getTile( idx ).GoodForUltimateArtifact();
+    };
+
+    if ( tileId < 0 ) {
+        // No tile was set for an Ultimate Artifact.
+        std::vector<int32_t> pool;
+        pool.reserve( vec_tiles.size() / 2 );
+
+        for ( const Maps::Tile & tile : vec_tiles ) {
+            const int32_t idx = tile.GetIndex();
+
+            if ( checkTileForSuitabilityForUltArt( idx ) ) {
+                pool.push_back( idx );
+            }
+        }
+
+        if ( !pool.empty() ) {
+            const int32_t pos = Rand::Get( pool );
+
+            ultimate_artifact.Set( pos, getUltimateArtifact() );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+        }
+        else {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
+        }
+
+        return;
+    }
+
+    assert( tileId < world.w() * world.h() );
+
+    // Use the predefined Ultimate Artifact tile index as a fallback
+    int32_t pos = tileId;
+
+    if ( radius > 0 ) {
+        MapsIndexes pool = Maps::getAroundIndexes( tileId, radius );
+
+        // Maps::getAroundIndexes() results does not include the central index, so we have to append it manually
+        assert( std::find( pool.begin(), pool.end(), tileId ) == pool.end() );
+        pool.push_back( tileId );
+
+        pool.erase( std::remove_if( pool.begin(), pool.end(),
+                                    [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
+                    pool.end() );
+
+        if ( !pool.empty() ) {
+            pos = Rand::Get( pool );
+        }
+    }
+
+    ultimate_artifact.Set( pos, getUltimateArtifact() );
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
+}
+
+void World::addDebugHero()
+{
+    if ( !IS_DEVEL() ) {
+        return;
+    }
+
+    // If we are in developer mode, then add the DEBUG_HERO
+    const int color = Color::GetFirst( Players::HumanColors() );
+    assert( color != Color::NONE );
+
+    Kingdom & kingdom = GetKingdom( color );
+    if ( kingdom.GetCastles().empty() ) {
+        // No castles so no debug hero.
+        return;
+    }
+
+    const Castle * castle = kingdom.GetCastles().front();
+    const fheroes2::Point & cp = castle->GetCenter();
+    Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
+
+    if ( hero && !getTile( cp.x, cp.y + 1 ).getHero() ) {
+        hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
+    }
+}
+
+void World::setHeroIdsForMapConditions()
+{
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+    // update wins, loss conditions
+    if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
+        const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
+
+        const Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroIdAsWinCondition = Heroes::UNKNOWN;
+            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroIdAsWinCondition = hero->GetID();
+        }
+    }
+
+    if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
+        const fheroes2::Point & pos = mapInfo.LossMapsPositionObject();
+
+        Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroIdAsLossCondition = Heroes::UNKNOWN;
+            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroIdAsLossCondition = hero->GetID();
+            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
+        }
+    }
 }

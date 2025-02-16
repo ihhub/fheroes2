@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,8 +26,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
-#include <ostream>
+#include <sstream>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -41,36 +41,28 @@
 #include "translations.h"
 #include "ui_text.h"
 
-Funds::Funds()
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
-{}
-
-Funds::Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold )
-    : wood( _wood )
-    , mercury( _mercury )
-    , ore( _ore )
-    , sulfur( _sulfur )
-    , crystal( _crystal )
-    , gems( _gems )
-    , gold( _gold )
-{}
-
-Funds::Funds( int rs, uint32_t count )
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
+namespace
 {
-    switch ( rs ) {
+    void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & pos, int32_t count, int32_t width, int32_t offset, int32_t value )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
+        fheroes2::Blit( sf, display, dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
+
+        const fheroes2::Text text{ std::to_string( value ), fheroes2::FontType::smallWhite() };
+        text.draw( dst_pt.x - text.width() / 2, dst_pt.y + 4, display );
+    }
+}
+
+Funds::Funds( const int type, const uint32_t count )
+{
+    if ( count == 0 ) {
+        // Nothing to add. Skip it.
+        return;
+    }
+
+    switch ( type ) {
     case Resource::ORE:
         ore = count;
         break;
@@ -94,22 +86,10 @@ Funds::Funds( int rs, uint32_t count )
         break;
 
     default:
-        if ( count > 0 ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
-        }
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
         break;
     }
 }
-
-Funds::Funds( const cost_t & cost )
-    : wood( cost.wood )
-    , mercury( cost.mercury )
-    , ore( cost.ore )
-    , sulfur( cost.sulfur )
-    , crystal( cost.crystal )
-    , gems( cost.gems )
-    , gold( cost.gold )
-{}
 
 int Resource::Rand( const bool includeGold )
 {
@@ -158,9 +138,9 @@ int32_t * Funds::GetPtr( int rs )
     return nullptr;
 }
 
-int32_t Funds::Get( int rs ) const
+int32_t Funds::Get( const int type ) const
 {
-    switch ( rs ) {
+    switch ( type ) {
     case Resource::ORE:
         return ore;
     case Resource::WOOD:
@@ -181,7 +161,7 @@ int32_t Funds::Get( int rs ) const
     return 0;
 }
 
-Funds & Funds::operator=( const cost_t & cost )
+Funds & Funds::operator=( const Cost & cost )
 {
     wood = cost.wood;
     mercury = cost.mercury;
@@ -353,9 +333,16 @@ Funds & Funds::operator/=( const int32_t div )
     return *this;
 }
 
-bool Funds::operator>=( const Funds & pm ) const
+bool Funds::operator==( const Funds & other ) const
 {
-    return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
+    return std::tie( wood, mercury, ore, sulfur, crystal, gems, gold )
+           == std::tie( other.wood, other.mercury, other.ore, other.sulfur, other.crystal, other.gems, other.gold );
+}
+
+bool Funds::operator>=( const Funds & other ) const
+{
+    return wood >= other.wood && mercury >= other.mercury && ore >= other.ore && sulfur >= other.sulfur && crystal >= other.crystal && gems >= other.gems
+           && gold >= other.gold;
 }
 
 std::string Funds::String() const
@@ -366,9 +353,9 @@ std::string Funds::String() const
     return os.str();
 }
 
-const char * Resource::String( int resource )
+const char * Resource::String( const int resourceType )
 {
-    switch ( resource ) {
+    switch ( resourceType ) {
     case Resource::WOOD:
         return _( "Wood" );
     case Resource::MERCURY:
@@ -634,17 +621,6 @@ void Resource::BoxSprite::SetPos( int32_t px, int32_t py )
     y = py;
 }
 
-void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & pos, int32_t count, int32_t width, int32_t offset, int32_t value )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
-    fheroes2::Blit( sf, display, dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
-
-    const fheroes2::Text text{ std::to_string( value ), fheroes2::FontType::smallWhite() };
-    text.draw( dst_pt.x - text.width() / 2, dst_pt.y + 4, display );
-}
-
 void Resource::BoxSprite::Redraw() const
 {
     std::vector<std::pair<int32_t, uint32_t>> valueVsSprite;
@@ -708,12 +684,12 @@ void Resource::BoxSprite::Redraw() const
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Funds & res )
+OStreamBase & operator<<( OStreamBase & stream, const Funds & res )
 {
-    return msg << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
+    return stream << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
 }
 
-StreamBase & operator>>( StreamBase & msg, Funds & res )
+IStreamBase & operator>>( IStreamBase & stream, Funds & res )
 {
-    return msg >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
+    return stream >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
 }

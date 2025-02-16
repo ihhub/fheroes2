@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,15 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HEROES_H
-#define H2HEROES_H
+#pragma once
 
-#include <algorithm>
-#include <cassert>
+#include <cassert> // IWYU pragma: keep
 #include <cmath>
 #include <cstdint>
 #include <exception>
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -46,8 +45,10 @@
 #include "spell.h"
 #include "visit.h"
 
+class IStreamBase;
+class OStreamBase;
+
 class Castle;
-class StreamBase;
 
 namespace Battle
 {
@@ -56,19 +57,29 @@ namespace Battle
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
+
+    namespace Map_Format
+    {
+        struct HeroMetadata;
+    }
 }
 
 namespace fheroes2
 {
     class Image;
     class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
     friend class Battle::Only;
+
+    // Maximum number of hero's secondary skills
+    static constexpr int maxNumOfSecSkills{ 8 };
 
     enum : int32_t
     {
@@ -239,10 +250,6 @@ public:
         }
 
         AIHeroMeetingUpdater( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater( AIHeroMeetingUpdater && ) = delete;
-
-        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater & operator=( AIHeroMeetingUpdater && ) = delete;
 
         ~AIHeroMeetingUpdater()
         {
@@ -264,6 +271,8 @@ public:
             }
         }
 
+        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
+
     private:
         Heroes & _hero;
         const double _initialArmyStrength;
@@ -274,6 +283,7 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
+
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -297,6 +307,10 @@ public:
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
+    void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor );
+    // Updates data in heroMetadata and returns true if it has changes.
+    Maps::Map_Format::HeroMetadata getHeroMetadata() const;
+
     int GetRace() const override;
     const std::string & GetName() const override;
     int GetColor() const override;
@@ -314,6 +328,50 @@ public:
     double getMeetingValue( const Heroes & otherHero ) const;
     double getRecruitValue() const;
     int getStatsValue() const;
+
+    void setAttackBaseValue( const int baseValue )
+    {
+        attack = baseValue;
+    }
+
+    void setDefenseBaseValue( const int baseValue )
+    {
+        defense = baseValue;
+    }
+
+    void setPowerBaseValue( const int baseValue )
+    {
+        power = baseValue;
+    }
+
+    void setKnowledgeBaseValue( const int baseValue )
+    {
+        knowledge = baseValue;
+    }
+
+    // Get hero's Attack skill base value without any modificators.
+    int getAttackBaseValue() const
+    {
+        return attack;
+    }
+
+    // Get hero's Defense skill base value without any modificators.
+    int getDefenseBaseValue() const
+    {
+        return defense;
+    }
+
+    // Get hero's Spell Power skill base value without any modificators.
+    int getPowerBaseValue() const
+    {
+        return power;
+    }
+
+    // Get hero's Knowledge skill base value without any modificators.
+    int getKnowledgeBaseValue() const
+    {
+        return knowledge;
+    }
 
     int GetAttack() const override;
     int GetDefense() const override;
@@ -344,7 +402,7 @@ public:
 
     void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
     {
-        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HERO ) ? objectType : MP2::OBJ_NONE );
     }
 
     const fheroes2::Point & GetPatrolCenter() const
@@ -389,7 +447,7 @@ public:
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill() const;
     int GetLevelSkill( int ) const override;
-    uint32_t GetSecondaryValues( int skill ) const override;
+    uint32_t GetSecondarySkillValue( int skill ) const override;
     void LearnSkill( const Skill::Secondary & );
 
     Skill::SecSkills & GetSecondarySkills()
@@ -419,7 +477,8 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                    const fheroes2::SupportedLanguage language );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -471,14 +530,14 @@ public:
     }
 
     // set visited cell
-    void SetVisited( int32_t, Visit::type_t = Visit::LOCAL );
+    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
 
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::type_t = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
@@ -524,8 +583,23 @@ public:
 
     fheroes2::Point getCurrentPixelOffset() const;
 
-    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
-    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    // Performs a hero fade-out animation with the given speed multiplier and an optional offset
+    void FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-in animation with the given speed multiplier and an optional offset
+    void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-out animation with an optional offset at the lowest possible speed
+    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeOut( 1, offset );
+    }
+
+    // Performs a hero fade-in animation with an optional offset at the lowest possible speed
+    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeIn( 1, offset );
+    }
 
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
@@ -613,6 +687,8 @@ public:
     static int GetLevelFromExperience( uint32_t exp );
     static uint32_t GetExperienceFromLevel( int lvl );
 
+    static uint32_t getExperienceMaxValue();
+
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
@@ -621,9 +697,11 @@ public:
         return id > UNKNOWN && id < HEROES_COUNT;
     }
 
+    void resetHeroSprite();
+
 private:
-    friend StreamBase & operator<<( StreamBase &, const Heroes & );
-    friend StreamBase & operator>>( StreamBase &, Heroes & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, Heroes & hero );
 
     enum
     {
@@ -698,55 +776,69 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int hid ) const;
-    Heroes * Get( const fheroes2::Point & center ) const;
+    VecHeroes() = default;
 };
 
-struct AllHeroes : public VecHeroes
+class AllHeroes
 {
+public:
     AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
-    ~AllHeroes();
+    ~AllHeroes() = default;
 
     AllHeroes & operator=( const AllHeroes & ) = delete;
 
+    auto begin() const noexcept
+    {
+        return Iterator( _heroes.begin() );
+    }
+
+    auto end() const noexcept
+    {
+        return Iterator( _heroes.end() );
+    }
+
     void Init();
-    void clear();
 
-    void Scout( int colors ) const;
-
-    void ResetModes( const uint32_t modes ) const
+    void Clear()
     {
-        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+        _heroes.clear();
     }
 
-    void NewDay()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
-    }
+    Heroes * Get( const int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 
-    void NewWeek()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
-    }
+    void Scout( const int colors ) const;
 
-    void NewMonth()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
-    }
+    void ResetModes( const uint32_t modes ) const;
+
+    void NewDay() const;
+    void NewWeek() const;
+    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        explicit Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        auto * operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+    friend IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
+
+    std::vector<std::unique_ptr<Heroes>> _heroes;
 };
 
-StreamBase & operator<<( StreamBase &, const VecHeroes & );
-StreamBase & operator>>( StreamBase &, VecHeroes & );
-
-StreamBase & operator<<( StreamBase &, const Heroes & );
-StreamBase & operator>>( StreamBase &, Heroes & );
-
-StreamBase & operator<<( StreamBase &, const AllHeroes & );
-StreamBase & operator>>( StreamBase &, AllHeroes & );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
+IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );

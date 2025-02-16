@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
     namespace 'org.fheroes2'
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId 'org.fheroes2'
 
-        minSdkVersion 22
-        targetSdkVersion 34
+        minSdk 22
+        targetSdk 35
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
@@ -80,14 +82,14 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.4'
 
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.15.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
 
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
 
 tasks.register('copyH2D', Copy) {
@@ -95,6 +97,14 @@ tasks.register('copyH2D', Copy) {
         include '*.h2d'
     }
     into 'src/main/assets/files/data'
+}
+
+tasks.register('copyTimidity', Copy) {
+    from('../../files/timidity') {
+        include 'instruments/*.pat'
+        include 'timidity.cfg'
+    }
+    into 'src/main/assets'
 }
 
 tasks.register('copyTranslations', Copy) {
@@ -105,5 +115,5 @@ tasks.register('copyTranslations', Copy) {
 }
 
 preBuild {
-    dependsOn copyH2D, copyTranslations
+    dependsOn copyH2D, copyTimidity, copyTranslations
 }

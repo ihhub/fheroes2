@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2DIRECTION_H
-#define H2DIRECTION_H
+
+#pragma once
 
 #include <string>
 #include <vector>
@@ -67,5 +67,3 @@ namespace Direction
 #define DIRECTION_BOTTOM_RIGHT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_RIGHT | Direction::RIGHT )
 #define DIRECTION_BOTTOM_LEFT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::LEFT )
 #define DIRECTION_ALL_CORNERS ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT )
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,12 @@ namespace fheroes2
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
         explicit MovableSprite( const Sprite & sprite );
+
+        MovableSprite( const MovableSprite & ) = delete;
+
         ~MovableSprite() override;
+
+        MovableSprite & operator=( const MovableSprite & ) = delete;
 
         MovableSprite & operator=( const Sprite & sprite );
 
@@ -60,6 +65,11 @@ namespace fheroes2
         bool isHidden() const
         {
             return _isHidden;
+        }
+
+        Rect getArea() const
+        {
+            return { x(), y(), width(), height() };
         }
 
         void setPosition( int32_t x_, int32_t y_ ) override;
@@ -79,6 +89,7 @@ namespace fheroes2
     {
     public:
         explicit MovableText( Image & output );
+
         MovableText( const MovableText & ) = delete;
 
         ~MovableText() = default;
@@ -103,6 +114,7 @@ namespace fheroes2
     {
     public:
         SystemInfoRenderer();
+
         SystemInfoRenderer( const SystemInfoRenderer & ) = delete;
 
         ~SystemInfoRenderer() = default;
@@ -126,7 +138,12 @@ namespace fheroes2
     {
     public:
         explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
+
+        TimedEventValidator( const TimedEventValidator & ) = delete;
+
         ~TimedEventValidator() override = default;
+
+        TimedEventValidator & operator=( const TimedEventValidator & ) = delete;
 
         bool isDelayPassed();
 
@@ -144,6 +161,7 @@ namespace fheroes2
     {
     public:
         ScreenPaletteRestorer();
+
         ScreenPaletteRestorer( const ScreenPaletteRestorer & ) = delete;
 
         ~ScreenPaletteRestorer();
@@ -158,13 +176,13 @@ namespace fheroes2
         GameInterfaceTypeRestorer() = delete;
         explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
 
+        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
+
         ~GameInterfaceTypeRestorer();
 
-        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
         GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
 
         const bool isEvilInterface;
-
         const bool isOriginalEvilInterface;
     };
 
@@ -192,12 +210,20 @@ namespace fheroes2
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
-    // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset );
-
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );
 
+    // Returns the character position number in the 'text' string.
+    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset );
+
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
+
+    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value );
+
+    // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
+    void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
 }

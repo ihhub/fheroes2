@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -464,7 +464,7 @@ namespace
                 assert( 0 );
                 return {};
             }
-        case Skill::Secondary::EAGLEEYE:
+        case Skill::Secondary::EAGLE_EYE:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
                 return _( "campaignBonus|Basic Eagle Eye" );
@@ -622,7 +622,7 @@ namespace
             const ListFiles files = Settings::FindFiles( "maps", "", false );
 
             for ( const std::string & file : files ) {
-                result.try_emplace( StringLower( System::GetBasename( file ) ), file );
+                result.try_emplace( StringLower( System::GetFileName( file ) ), file );
             }
 
             return result;
@@ -642,14 +642,14 @@ namespace
 
 namespace Campaign
 {
-    StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data )
+    OStreamBase & operator<<( OStreamBase & stream, const ScenarioInfoId & data )
     {
-        return msg << data.campaignId << data.scenarioId;
+        return stream << data.campaignId << data.scenarioId;
     }
 
-    StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data )
+    IStreamBase & operator>>( IStreamBase & stream, ScenarioInfoId & data )
     {
-        return msg >> data.campaignId >> data.scenarioId;
+        return stream >> data.campaignId >> data.scenarioId;
     }
 
     ScenarioBonusData::ScenarioBonusData()
@@ -715,7 +715,7 @@ namespace Campaign
     {
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT: {
-            std::string description( _( "The main hero will have \"%{artifact}\" artifact at the start of the scenario." ) );
+            std::string description( _( "The main hero will have the \"%{artifact}\" artifact at the start of the scenario." ) );
             StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
             return description;
         }
@@ -733,18 +733,18 @@ namespace Campaign
             return description;
         }
         case ScenarioBonusData::SPELL: {
-            std::string description( _( "The main hero will have \"%{spell}\" spell at the start of the scenario." ) );
+            std::string description( _( "The main hero will have the \"%{spell}\" spell at the start of the scenario." ) );
             StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
             return description;
         }
         case ScenarioBonusData::STARTING_RACE:
         case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-            std::string description( _( "The starting race of the scenario will be %{race}." ) );
+            std::string description( _( "The starting alignment of the scenario will be %{race}." ) );
             StringReplace( description, "%{race}", Race::String( _subType ) );
             return description;
         }
         case ScenarioBonusData::SKILL_PRIMARY: {
-            std::string description( _( "The main hero will have additional %{count} %{skill} at the start of the scenario." ) );
+            std::string description( _( "The main hero will receive a +%{count} to their %{skill} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
             StringReplace( description, "%{skill}", Skill::Primary::String( _subType ) );
             return description;
@@ -827,7 +827,7 @@ namespace Campaign
         if ( tryGetMatchingFile( _fileName, matchingFilePath ) ) {
             Maps::FileInfo fi;
 
-            if ( fi.ReadMP2( matchingFilePath ) ) {
+            if ( fi.readMP2Map( std::move( matchingFilePath ), false ) ) {
                 return fi;
             }
         }
@@ -843,7 +843,7 @@ namespace Campaign
         case Campaign::ARCHIBALD_CAMPAIGN:
             return _( "Archibald" );
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            return _( "The Price of Loyalty" );
+            return _( "Price of Loyalty" );
         case Campaign::VOYAGE_HOME_CAMPAIGN:
             return _( "Voyage Home" );
         case Campaign::WIZARDS_ISLE_CAMPAIGN:

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,10 +22,11 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
+#include <map>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -35,13 +36,13 @@
 #include <vector>
 
 #include "battle.h"
-#include "battle_arena.h"
+#include "battle_arena.h" // IWYU pragma: associated
 #include "battle_army.h"
 #include "battle_board.h"
 #include "battle_bridge.h"
+#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
@@ -68,7 +69,7 @@ namespace
         const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
         const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
 
-        assert( attackPositionHeadIdx != -1 && ( !attackingUnit.isWide() || attackPositionTailIdx != -1 ) );
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
 
         if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) ) {
             // The defender's head cell is near the head cell of the attack position
@@ -103,7 +104,7 @@ namespace
         const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
         const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
 
-        assert( attackPositionHeadIdx != -1 && ( !attackingUnit.isWide() || attackPositionTailIdx != -1 ) );
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
 
         // The target cell of the attack is near the head cell of the attack position
         if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) && Battle::Board::isNearIndexes( attackPositionHeadIdx, attackTargetIdx ) ) {
@@ -133,7 +134,7 @@ namespace
             return false;
         }
 
-        assert( !unit->isWide() || pos.GetTail() != nullptr );
+        assert( pos.isValidForUnit( unit ) );
 
         // Index of the destination cell should correspond to the index of the head cell of the target position and nothing else
         if ( pos.GetHead()->GetIndex() != dst ) {
@@ -198,7 +199,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
             attacker.UpdateDirection( board[tgt].GetPos() );
         }
 
-        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() ) {
+        if ( !attacker.isIgnoringRetaliation() && defender.AllowResponse() ) {
             const int32_t responseTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
             const int responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
 
@@ -298,7 +299,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
         }
     }
 
-    attacker.PostAttackAction();
+    attacker.PostAttackAction( defender );
 }
 
 void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
@@ -310,7 +311,7 @@ void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
     assert( checkMoveParams( unit, dst ) );
 
     Position pos = Position::GetReachable( *unit, dst );
-    assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+    assert( pos.isValidForUnit( unit ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 )
@@ -423,11 +424,11 @@ void Battle::Arena::ApplyAction( Command & cmd )
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::AUTO_SWITCH:
-        ApplyActionAutoSwitch( cmd );
+    case CommandType::TOGGLE_AUTO_COMBAT:
+        ApplyActionToggleAutoCombat( cmd );
         break;
-    case CommandType::AUTO_FINISH:
-        ApplyActionAutoFinish( cmd );
+    case CommandType::QUICK_COMBAT:
+        ApplyActionQuickCombat( cmd );
         break;
 
     default:
@@ -478,7 +479,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         break;
 
     case Spell::EARTHQUAKE:
-        ApplyActionSpellEarthQuake( cmd );
+        ApplyActionSpellEarthquake( cmd );
         break;
 
     case Spell::MIRRORIMAGE:
@@ -501,7 +502,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
     commander->SpellCasted( spell );
 
     // Save the spell for the Eagle Eye skill
-    usage_spells.Append( spell );
+    _usedSpells.Append( spell );
 }
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
@@ -559,7 +560,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
-        assert( !attacker->isWide() || attackPos.GetTail() != nullptr );
+        assert( attackPos.isValidForUnit( attacker ) );
 
         if ( tgt < 0 ) {
             tgt = calculateAttackTarget( *attacker, attackPos, *defender );
@@ -626,7 +627,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
     BattleProcess( *attacker, *defender, tgt, dir );
 
     if ( defender->isValid() ) {
-        if ( handfighting && !attacker->ignoreRetaliation() && defender->AllowResponse() ) {
+        if ( handfighting && !attacker->isIgnoringRetaliation() && defender->AllowResponse() ) {
             BattleProcess( *defender, *attacker );
             defender->SetResponse();
         }
@@ -790,7 +791,9 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
 void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
 {
-    if ( !CanRetreatOpponent( _currentColor ) ) {
+    const int currentColor = GetCurrentColor();
+
+    if ( !CanRetreatOpponent( currentColor ) ) {
         ERROR_LOG( "Preconditions were not met" )
 
 #ifdef WITH_DEBUG
@@ -800,12 +803,12 @@ void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
         return;
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
-    if ( _army1->GetColor() == _currentColor ) {
+    if ( _army1->GetColor() == currentColor ) {
         result_game.army1 = RESULT_RETREAT;
     }
-    else if ( _army2->GetColor() == _currentColor ) {
+    else if ( _army2->GetColor() == currentColor ) {
         result_game.army2 = RESULT_RETREAT;
     }
     else {
@@ -830,7 +833,9 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
         return true;
     };
 
-    if ( _army1->GetColor() == _currentColor ) {
+    const int currentColor = GetCurrentColor();
+
+    if ( _army1->GetColor() == currentColor ) {
         Funds cost;
 
         cost.gold = _army1->GetSurrenderCost();
@@ -845,14 +850,14 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
             return;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
         world.GetKingdom( _army1->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
 
         result_game.army1 = RESULT_SURRENDER;
     }
-    else if ( _army2->GetColor() == _currentColor ) {
+    else if ( _army2->GetColor() == currentColor ) {
         Funds cost;
 
         cost.gold = _army2->GetSurrenderCost();
@@ -867,7 +872,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
             return;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
         world.GetKingdom( _army2->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
@@ -907,19 +912,24 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     res.damage = attacker.GetDamage( defender, _randomGenerator );
 
     // Genie special attack
-    if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
-        // Replaces the damage, not adding to it
-        if ( defender.GetCount() == 1 ) {
-            res.damage = defender.GetHitPoints();
-        }
-        else {
-            res.damage = defender.GetHitPoints() / 2;
-        }
+    {
+        const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( attacker.GetID() ).battleStats.abilities;
 
-        if ( Arena::GetInterface() ) {
-            std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
-            StringReplace( str, "%{name}", attacker.GetName() );
-            Arena::GetInterface()->SetStatus( str, true );
+        if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::ENEMY_HALVING );
+             abilityIter != attackerAbilities.end() ) {
+            const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
+            if ( halvingDamage > res.damage && _randomGenerator.Get( 1, 100 ) <= abilityIter->percentage ) {
+                // Replaces damage, not adds extra damage
+                res.damage = std::min( defender.GetHitPoints(), halvingDamage );
+
+                Interface * iface = GetInterface();
+                if ( iface ) {
+                    std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
+                    StringReplace( str, "%{name}", attacker.GetName() );
+
+                    iface->setStatus( str, true );
+                }
+            }
         }
     }
 
@@ -955,7 +965,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
     }
     // lich cloud damage
-    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
+    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !Unit::isHandFighting( attacker, defender ) ) {
         for ( const int32_t nearbyIdx : Board::GetAroundIndexes( dst ) ) {
             assert( Board::GetCell( nearbyIdx ) != nullptr );
 
@@ -1076,11 +1086,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     Unit * target = GetTroopBoard( dst );
 
-    // from spells
     switch ( spell.GetID() ) {
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
-        // skip center
         target = nullptr;
         break;
 
@@ -1092,25 +1100,23 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     TargetInfo res;
 
-    // first target
     if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
         res.defender = target;
 
         targets.push_back( res );
     }
 
-    // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
+    if ( target == nullptr && isAbleToResurrectFromGraveyard( dst, spell ) ) {
+        target = getLastResurrectableUnitFromGraveyard( dst, spell );
+        assert( target != nullptr && !target->isValid() );
 
-        if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
+        if ( consideredTargets.insert( target ).second ) {
             res.defender = target;
 
             targets.push_back( res );
         }
     }
     else {
-        // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
             for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
@@ -1135,7 +1141,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check abroads
         case Spell::FIREBALL:
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
@@ -1156,7 +1161,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
             break;
         }
 
-        // check all troops
         case Spell::DEATHRIPPLE:
         case Spell::DEATHWAVE:
         case Spell::ELEMENTALSTORM:
@@ -1264,22 +1268,34 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         return;
     }
 
+    const auto checkParameters = [this]( const CastleDefenseStructure target, const int damage ) {
+        if ( damage <= 0 ) {
+            return false;
+        }
+
+        const std::vector<CastleDefenseStructure> & allowedTargets = Catapult::getAllowedTargets();
+
+        if ( std::find( allowedTargets.begin(), allowedTargets.end(), target ) == allowedTargets.end() ) {
+            return false;
+        }
+
+        return ( damage <= getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+    };
+
     uint32_t shots = cmd.GetNextValue();
 
     while ( shots-- ) {
-        const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
-        const uint32_t damage = cmd.GetNextValue();
-        const bool hit = cmd.GetNextValue() != 0;
+        const CastleDefenseStructure target = static_cast<CastleDefenseStructure>( cmd.GetNextValue() );
+        const int damage = cmd.GetNextValue();
+        const bool hit = ( cmd.GetNextValue() != 0 );
 
-        if ( target == CastleDefenseElement::NONE ) {
+        if ( target == CastleDefenseStructure::NONE ) {
             continue;
         }
 
-        const uint32_t castleTargetValue = GetCastleTargetValue( target );
-
         using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
 
-        if ( castleTargetValue < damage ) {
+        if ( !checkParameters( target, damage ) ) {
             ERROR_LOG( "Invalid parameters: "
                        << "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << ( hit ? "yes" : "no" ) )
 
@@ -1300,7 +1316,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
             continue;
         }
 
-        SetCastleTargetValue( target, castleTargetValue - damage );
+        applyDamageToCastleDefenseStructure( target, damage );
 
         if ( _interface ) {
             // Continue animating the smoke cloud after changing the "health" of the building.
@@ -1309,7 +1325,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
+void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
 {
     const auto checkParameters = []( const int color ) {
         const Arena * arena = GetArena();
@@ -1339,22 +1355,22 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
         return;
     }
 
-    _autoBattleColors ^= color;
+    _autoCombatColors ^= color;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoCombatColors & color ) ? "on" : "off" ) )
 
     if ( _interface ) {
         const Player * player = Players::Get( color );
         assert( player );
 
-        std::string msg = ( _autoBattleColors & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
+        std::string msg = ( _autoCombatColors & color ) ? _( "%{name} has turned on the auto combat" ) : _( "%{name} has turned off the auto combat" );
         StringReplace( msg, "%{name}", player->GetName() );
 
-        _interface->SetStatus( msg, true );
+        _interface->setStatus( msg, true );
     }
 }
 
-void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
+void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 {
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();
@@ -1375,10 +1391,10 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_HUMAN ) {
-        _autoBattleColors |= army1Color;
+        _autoCombatColors |= army1Color;
     }
     if ( army2Control & CONTROL_HUMAN ) {
-        _autoBattleColors |= army2Color;
+        _autoCombatColors |= army2Color;
     }
 
     _interface.reset();
@@ -1510,7 +1526,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "src: " << src << ", dst: " << dst )
 
     const Position pos = Position::GetPosition( *unit, dst );
-    assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+    assert( pos.isValidForUnit( unit ) );
 
     if ( _interface ) {
         const HeroBase * commander = GetCurrentCommander();
@@ -1529,7 +1545,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     unit->SetPosition( pos );
 }
 
-void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
+void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
 {
     const HeroBase * commander = GetCurrentCommander();
     if ( commander == nullptr ) {
@@ -1542,36 +1558,63 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
         return;
     }
 
-    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
+    const auto [minDamage, maxDamage] = getEarthquakeDamageRange( commander );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+    std::map<CastleDefenseStructure, int> earthquakeDamage;
 
-    if ( _interface ) {
-        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
-        _interface->RedrawActionEarthQuakeSpell( targets );
-    }
+    for ( const CastleDefenseStructure target :
+          { CastleDefenseStructure::WALL1, CastleDefenseStructure::WALL2, CastleDefenseStructure::WALL3, CastleDefenseStructure::WALL4, CastleDefenseStructure::TOWER1,
+            CastleDefenseStructure::TOWER2, CastleDefenseStructure::BRIDGE, CastleDefenseStructure::TOP_BRIDGE_TOWER, CastleDefenseStructure::BOTTOM_BRIDGE_TOWER } ) {
+        const int targetCondition = getCastleDefenseStructureCondition( target, SiegeWeaponType::EarthquakeSpell );
+        assert( targetCondition >= 0 );
 
-    const std::pair<uint32_t, uint32_t> range = getEarthquakeDamageRange( commander );
-    const std::vector<int> wallHexPositions = { CASTLE_FIRST_TOP_WALL_POS, CASTLE_SECOND_TOP_WALL_POS, CASTLE_THIRD_TOP_WALL_POS, CASTLE_FOURTH_TOP_WALL_POS };
-    for ( int position : wallHexPositions ) {
-        const int wallCondition = board[position].GetObject();
+        if ( targetCondition == 0 ) {
+            continue;
+        }
 
-        if ( wallCondition > 0 ) {
-            uint32_t wallDamage = _randomGenerator.Get( range.first, range.second );
-
-            if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
-                wallDamage = wallCondition;
+        const int damage = [this, minDmg = minDamage, maxDmg = maxDamage, target]() {
+            // Reduce the chance of bridge demolition by an extra 50% chance to "miss" it by the Earthquake spell.
+            // It is done to be closer to the original game behavior where bridge demolition by this spell
+            // is more rare than the demolition of the other structures.
+            if ( target == CastleDefenseStructure::BRIDGE && _randomGenerator.Get( 0, 1 ) == 0 ) {
+                return 0;
             }
 
-            board[position].SetObject( wallCondition - wallDamage );
+            return static_cast<int>( _randomGenerator.Get( minDmg, maxDmg ) );
+        }();
+        assert( damage >= 0 );
+
+        if ( damage == 0 ) {
+            continue;
+        }
+
+        if ( const auto [dummy, inserted] = earthquakeDamage.try_emplace( target, std::min( damage, targetCondition ) ); !inserted ) {
+            assert( 0 );
         }
     }
 
-    if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[0]->SetDestroy();
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of damaged targets: " << earthquakeDamage.size() )
+
+    std::vector<CastleDefenseStructure> earthquakeTargets;
+
+    if ( _interface ) {
+        earthquakeTargets.reserve( earthquakeDamage.size() );
+
+        for ( const auto & [target, dummy] : earthquakeDamage ) {
+            earthquakeTargets.push_back( target );
+        }
+
+        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
+        _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
     }
-    if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
-        _towers[2]->SetDestroy();
+
+    for ( const auto & [target, damage] : earthquakeDamage ) {
+        applyDamageToCastleDefenseStructure( target, damage );
+    }
+
+    if ( _interface ) {
+        // Render a second part of blast animation after targets are damaged or even destroyed.
+        _interface->redrawActionEarthquakeSpellPart2( earthquakeTargets );
     }
 }
 
@@ -1633,7 +1676,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         assert( mirrorUnit != nullptr );
 
         const Position pos = Position::GetPosition( *mirrorUnit, *it );
-        assert( pos.GetHead() != nullptr && ( !mirrorUnit->isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.isValidForUnit( mirrorUnit ) );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
@@ -1648,7 +1691,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
 
         if ( _interface ) {
-            _interface->SetStatus( _( "Spell failed!" ), true );
+            _interface->setStatus( _( "Spell failed!" ), true );
         }
     }
 }

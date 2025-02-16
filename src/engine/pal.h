@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2PAL_H
-#define H2PAL_H
+
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -39,6 +39,8 @@ namespace PAL
         MIRROR_IMAGE,
         DARKENING, // for disabled buttons
         GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
+        GOOD_TO_EVIL_BUTTON, // for converting Good style buttons into Evil style buttons.
+        PURPLE, // For random object images.
         CUSTOM
     };
 
@@ -46,5 +48,3 @@ namespace PAL
     const std::vector<uint8_t> & GetPalette( const PaletteType type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }
-
-#endif

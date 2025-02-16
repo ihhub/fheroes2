@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,22 +21,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SKILL_H
-#define H2SKILL_H
+#pragma once
 
 #include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>
 
-void StringAppendModifiers( std::string &, int );
+class IStreamBase;
+class OStreamBase;
 
 class Heroes;
 class HeroBase;
-class StreamBase;
 
 namespace Skill
 {
+    // Total number of primary skills available in the game
+    inline constexpr int numOfPrimarySkills{ 4 };
+    // Total number of secondary skills available in the game
+    inline constexpr int numOfSecondarySkills{ 14 };
+
     class Secondary;
 
     int GetLeadershipModifiers( int level, std::string * strs );
@@ -44,6 +48,7 @@ namespace Skill
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
+    uint32_t GetDiplomacySurrenderCostDiscount( const int level );
 
     namespace Level
     {
@@ -76,7 +81,7 @@ namespace Skill
             MYSTICISM = 9,
             LUCK = 10,
             BALLISTICS = 11,
-            EAGLEEYE = 12,
+            EAGLE_EYE = 12,
             NECROMANCY = 13,
             ESTATES = 14
         };
@@ -110,54 +115,46 @@ namespace Skill
         std::string GetName() const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        uint32_t GetValues() const;
+        uint32_t GetValue() const;
 
         // Returns the sprite index from SECSKILL
         int GetIndexSprite1() const;
         // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
-        static int RandForWitchsHut();
         static const char * String( int );
     };
-
-    StreamBase & operator>>( StreamBase &, Secondary & );
 
     class SecSkills final : protected std::vector<Secondary>
     {
     public:
         SecSkills();
-        explicit SecSkills( int race );
-        SecSkills( const SecSkills & ) = delete;
+        explicit SecSkills( const int race );
 
-        ~SecSkills() = default;
-
-        SecSkills & operator=( const SecSkills & ) = delete;
-        SecSkills & operator=( SecSkills && ) = default;
-
-        int GetLevel( int skill ) const;
-        uint32_t GetValues( int skill ) const;
-        void AddSkill( const Skill::Secondary & );
-        void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
-        void FillMax( const Skill::Secondary & );
-        Secondary * FindSkill( int );
-        std::string String() const;
         int Count() const;
+        int GetLevel( int skill ) const;
         int GetTotalLevel() const;
+        uint32_t GetValue( int skill ) const;
+
+        Secondary * FindSkill( int );
+
+        void AddSkill( const Skill::Secondary & );
+        void FillMax( const Skill::Secondary & );
+
+        std::pair<Secondary, Secondary> FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed, uint32_t const secondSkillSeed ) const;
+
+        std::string String() const;
+
         std::vector<Secondary> & ToVector();
+        const std::vector<Secondary> & ToVector() const;
 
-    protected:
-        friend StreamBase & operator<<( StreamBase &, const SecSkills & );
-        friend StreamBase & operator>>( StreamBase &, SecSkills & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+        friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
-
-    StreamBase & operator<<( StreamBase &, const SecSkills & );
-    StreamBase & operator>>( StreamBase &, SecSkills & );
 
     class Primary
     {
     public:
-        Primary();
         virtual ~Primary() = default;
 
         enum
@@ -179,23 +176,32 @@ namespace Skill
 
         int LevelUp( int race, int level, uint32_t seed );
 
+        // Returns the sum of the values of the four primary skills (attack, defense, power and knowledge), belonging directly to the hero (i.e. excluding artifacts)
+        int getTotalPrimarySkillLevel() const
+        {
+            return attack + defense + power + knowledge;
+        }
+
         static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
+        static int getHeroDefaultSkillValue( const int skill, const int race );
 
     protected:
         void LoadDefaults( int type, int race );
 
-        friend StreamBase & operator<<( StreamBase &, const Primary & );
-        friend StreamBase & operator>>( StreamBase &, Primary & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+        friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
-        int attack;
-        int defense;
-        int power;
-        int knowledge;
+        int attack{ 0 };
+        int defense{ 0 };
+        int power{ 0 };
+        int knowledge{ 0 };
     };
 
-    StreamBase & operator<<( StreamBase &, const Primary & );
-    StreamBase & operator>>( StreamBase &, Primary & );
+    OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
+    IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
+
+    OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
+    IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
-#endif

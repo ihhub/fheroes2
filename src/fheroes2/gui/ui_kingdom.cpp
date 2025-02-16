@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,15 +24,16 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
-#include "maps.h"
 #include "mp2.h"
 #include "translations.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
@@ -50,7 +51,6 @@ namespace fheroes2
     void showLighthouseInfo( const Kingdom & kingdom, const int buttons )
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
-        const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
         const Sprite & shadowTop = AGG::GetICN( ICN::OBJNMUL2, 60 );
         const Sprite & shadowMiddle = AGG::GetICN( ICN::OBJNMUL2, 71 );
@@ -60,28 +60,32 @@ namespace fheroes2
         const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
         const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
 
-        const int32_t topOffset = TILEWIDTH - lighthouseTop.height();
+        const int32_t topOffset = fheroes2::tileWidthPx - lighthouseTop.height();
 
-        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
+        Image combined( 5 * fheroes2::tileWidthPx, 2 * fheroes2::tileWidthPx + lighthouseTop.height() );
         combined.reset();
 
-        Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowBottom, 0, 0, combined, TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowTop, 0, 0, combined, shadowTop.x(), fheroes2::tileWidthPx + shadowTop.y() - topOffset, fheroes2::tileWidthPx, fheroes2::tileWidthPx );
+        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), fheroes2::tileWidthPx * 2 + shadowMiddle.y() - topOffset, fheroes2::tileWidthPx, fheroes2::tileWidthPx );
+        Copy( shadowBottom, 0, 0, combined, fheroes2::tileWidthPx + shadowBottom.x(), fheroes2::tileWidthPx * 2 + shadowBottom.y() - topOffset, fheroes2::tileWidthPx,
+              fheroes2::tileWidthPx );
+        Copy( lighthouseTop, 0, 0, combined, fheroes2::tileWidthPx * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, fheroes2::tileWidthPx, fheroes2::tileWidthPx );
+        Copy( lighthouseMiddle, 0, 0, combined, fheroes2::tileWidthPx * 2 + lighthouseMiddle.x(), fheroes2::tileWidthPx + lighthouseMiddle.y() - topOffset,
+              fheroes2::tileWidthPx, fheroes2::tileWidthPx );
+        Copy( lighthouseBottom, 0, 0, combined, fheroes2::tileWidthPx * 2 + lighthouseBottom.x(), fheroes2::tileWidthPx * 2 + lighthouseBottom.y() - topOffset,
+              fheroes2::tileWidthPx, fheroes2::tileWidthPx );
 
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
         // Use MAPS_DELAY for animation delay since the lighthouse is a map object
         // 61 (0x3D) references the icn offset for the lighthouse animation in icn.cpp
         const CustomAnimationDialogElement lighthouseCustomDynamicImageElement( ICN::OBJNMUL2, combined,
-                                                                                { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 61,
-                                                                                getAnimationDelayValue( Game::MAPS_DELAY ) );
+                                                                                { fheroes2::tileWidthPx * 2 + lighthouseLight.x(),
+                                                                                  fheroes2::tileWidthPx + lighthouseLight.y() - topOffset },
+                                                                                61, getAnimationDelayValue( Game::MAPS_DELAY ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
-        showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
-                     { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
+        showStandardTextMessage( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), _( "For every lighthouse controlled, your ships will move further each day." ), buttons,
+                                 { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
     }
 }

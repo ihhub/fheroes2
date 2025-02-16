@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SELECT_SCENARIO_H
-#define H2SELECT_SCENARIO_H
+#pragma once
 
 #include <cstdint>
 
@@ -46,7 +45,6 @@ public:
 
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
-        , selectOk( false )
         , _offsetX( pt.x )
     {}
 
@@ -75,11 +73,21 @@ public:
         // Do nothing.
     }
 
-    bool selectOk;
+    bool isDoubleClicked() const
+    {
+        return _isDoubleClicked;
+    }
+
+    void setForEditorMode( const bool isForEditor )
+    {
+        _isForEditor = isForEditor;
+    }
 
 private:
     int selectedSize{ Maps::ZERO };
     const int32_t _offsetX;
+    bool _isDoubleClicked{ false };
+    bool _isForEditor{ false };
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
@@ -93,7 +101,5 @@ private:
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & allMaps );
+    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor );
 }
-
-#endif

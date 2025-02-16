@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,8 @@
 #pragma once
 
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-#define INTERMEDIATE_VERSION 10
+#define MINOR_VERSION 1
+#define INTERMEDIATE_VERSION 6
 
 #ifndef BUILD_VERSION
 #define BUILD_VERSION 0

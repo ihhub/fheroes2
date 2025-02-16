@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,7 +24,6 @@
 #include "battle_army.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstddef>
 
 #include "army_troop.h"
@@ -49,54 +48,24 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    if ( isRemoveInvalidUnits ) {
-        erase( std::remove_if( begin(), end(),
-                               []( const Unit * unit ) {
-                                   assert( unit != nullptr );
-
-                                   return !unit->isValid();
-                               } ),
-               end() );
-    }
-}
-
-Battle::Units::Units( const Units & units, const Unit * unitToRemove )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    erase( std::remove_if( begin(), end(),
-                           [unitToRemove]( const Unit * unit ) {
-                               assert( unit != nullptr );
-
-                               return !unit->isValid() || unit == unitToRemove;
-                           } ),
-           end() );
-}
-
 void Battle::Units::SortFastest()
 {
     // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
+Battle::Unit * Battle::Units::FindUID( const uint32_t uid ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const auto iter = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
-Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
+Battle::Unit * Battle::Units::FindMode( const uint32_t mod ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const auto iter = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
 Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
@@ -125,7 +94,7 @@ Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generat
         Position pos;
         pos.Set( idx, troop->isWide(), opposite );
 
-        assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.GetHead() != nullptr && ( troop->isWide() ? pos.GetTail() != nullptr : pos.GetTail() == nullptr ) );
 
         push_back( new Unit( *troop, pos, opposite, generator.GetUnique() ) );
         back()->SetArmy( army );
@@ -178,14 +147,16 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     // Consider only the state of the original army
     for ( size_t index = 0; index < army.Size(); ++index ) {
         const Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit && unit->GetDead() < unit->GetInitialCount() ) {
-                return true;
-            }
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr || unit->GetDead() >= unit->GetInitialCount() ) {
+            continue;
+        }
+
+        return true;
     }
 
     return false;
@@ -193,23 +164,24 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
 
 uint32_t Battle::Force::GetSurrenderCost() const
 {
-    double res = 0;
+    double result = 0.0;
 
     // Consider only the units from the original army
     for ( size_t index = 0; index < army.Size(); ++index ) {
         const Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit && unit->isValid() ) {
-                res += unit->GetSurrenderCost().gold;
-            }
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr || !unit->isValid() ) {
+            continue;
+        }
+
+        result += unit->GetSurrenderCost().gold;
     }
 
     const HeroBase * commander = GetCommander();
-
     if ( commander ) {
         const std::vector<int32_t> costReductionPercent
             = commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT );
@@ -220,26 +192,19 @@ uint32_t Battle::Force::GetSurrenderCost() const
                 mod = mod * value / 100;
             }
         }
-
-        switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
-        case Skill::Level::BASIC:
-            mod *= 0.8;
-            break;
-        case Skill::Level::ADVANCED:
-            mod *= 0.6;
-            break;
-        case Skill::Level::EXPERT:
-            mod *= 0.4;
-            break;
-        default:
-            break;
+        const int diplomacyLevel = commander->GetLevelSkill( Skill::Secondary::DIPLOMACY );
+        if ( diplomacyLevel > Skill::Level::NONE ) {
+            // The modifier is always multiplied by two, normally to negate the 0.5 modifier from regular surrender, but also when there are
+            // artifacts present, even if the 0.5 modifier for normal surrender already has been negated by setting mod = 1.
+            mod *= 2;
+            mod *= ( Skill::GetDiplomacySurrenderCostDiscount( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) / 100.0 );
         }
 
-        res *= mod;
+        result *= mod;
     }
 
     // Total cost should always be at least 1 gold
-    return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
+    return result >= 1 ? static_cast<uint32_t>( result + 0.5 ) : 1;
 }
 
 void Battle::Force::NewTurn()
@@ -330,13 +295,15 @@ void Battle::Force::SyncArmyCount()
 {
     for ( uint32_t index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit ) {
-                troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
-            }
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr ) {
+            continue;
+        }
+
+        troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
 }

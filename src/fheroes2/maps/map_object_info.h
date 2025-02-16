@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,30 +31,30 @@
 namespace Maps
 {
     // An object usually contains of multiple parts / tiles. Each part has its own features like object layer type or image index.
-    // An object always contains a main object part (addon).
+    // An object always contains a main object part.
     // All object's parts shares images from the same ICN source (MP2::ObjectIcnType).
     struct ObjectPartInfo
     {
-        ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
-            : icnType( icn )
+        ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point & offset, const MP2::MapObjectType type )
+            : tileOffset( offset )
             , icnIndex( index )
-            , tileOffset( offset )
             , objectType( type )
+            , icnType( icn )
         {
             // Do nothing.
         }
 
-        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
-        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        // A tile offset from the main object tile.
+        fheroes2::Point tileOffset;
 
         // Image index from an ICN resource to render this object part.
         uint32_t icnIndex{ 0 };
 
-        // A tile offset from the main object tile.
-        fheroes2::Point tileOffset;
-
         // Object type associated with this object part. Not every object part has a type. For example, shadows don't have types.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
+
+        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // The number of following by index images is used to animate this object part.
         // In most cases this value is 0 as the majority of object parts do not have animations.
@@ -63,7 +63,7 @@ namespace Maps
 
     struct LayeredObjectPartInfo : public ObjectPartInfo
     {
-        LayeredObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type,
+        LayeredObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point & offset, const MP2::MapObjectType type,
                                const ObjectLayerType layer )
             : ObjectPartInfo( icn, index, offset, type )
             , layerType( layer )
@@ -71,7 +71,7 @@ namespace Maps
             // Do nothing.
         }
 
-        // A layer where this object part / addon sits on.
+        // A layer where this object part sits on.
         // The layer is used for passability calculations as well as an order of rendering objects.
         ObjectLayerType layerType{ OBJECT_LAYER };
     };
@@ -95,12 +95,12 @@ namespace Maps
         // It does not matter what layer is set here as it is going to be ignored. For consistency put OBJECT_LAYER to detect any bad logic.
         std::vector<ObjectPartInfo> topLevelParts;
 
-        // Object type. Some objects don't have it like cracks.
-        MP2::MapObjectType objectType{ MP2::OBJ_NONE };
-
         // Some action objects require additional information to be stored.
         // Information stored in this member should be interpret based on a group.
         std::array<uint32_t, 2> metadata{ 0 };
+
+        // Object type. Some objects don't have it like cracks.
+        MP2::MapObjectType objectType{ MP2::OBJ_NONE };
 
         bool empty() const
         {
@@ -118,9 +118,11 @@ namespace Maps
     //
     // !!! IMPORTANT !!!
     // Do NOT change the order of the items as they are used for the map format.
-    enum class ObjectGroup : int32_t
+    enum class ObjectGroup : uint8_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.
+        NONE,
+
         ROADS,
         STREAMS,
 
@@ -130,6 +132,10 @@ namespace Maps
         LANDSCAPE_TREES,
         LANDSCAPE_WATER,
         LANDSCAPE_MISCELLANEOUS,
+
+        // Extra landscape objects placed together with other objects.
+        LANDSCAPE_TOWN_BASEMENTS,
+        LANDSCAPE_FLAGS,
 
         // Adventure objects.
         ADVENTURE_ARTIFACTS,
@@ -147,6 +153,9 @@ namespace Maps
         // Monsters.
         MONSTERS,
 
+        // Extra map objects that are not placed in editor (currently).
+        MAP_EXTRAS,
+
         // IMPORTANT!!!
         // Put all new entries just above this entry.
         GROUP_COUNT
@@ -154,12 +163,19 @@ namespace Maps
 
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
 
+    const ObjectInfo & getObjectInfo( const ObjectGroup group, const int32_t objectIndex );
+
+    // The function can return nullptr if an object does not exist.
+    // A valid pointer could also point to LayeredObjectPartInfo object.
+    const ObjectPartInfo * getObjectPartByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
+
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
 
-    // Returns true if given ICN type and index exist as a main object part, false otherwise.
-    bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index );
-
-    // The function returns tile offset only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
+    // The function returns tile offsets only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
     // Objects on other layers do not affect passabilities of tiles so they do not 'occupy' these tiles.
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info );
+
+    // The function returns tile offsets only for ground level objects located on OBJECT_LAYER, BACKGROUND_LAYER and TERRAIN_LAYER layers.
+    // SHADOW_LAYER is excluded as it does not "use" any tile.
+    std::vector<fheroes2::Point> getGroundLevelUsedTileOffset( const ObjectInfo & info );
 }

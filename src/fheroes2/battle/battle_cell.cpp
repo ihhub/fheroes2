@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,7 @@
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_troop.h"
-#include "tools.h"
+#include "math_tools.h"
 
 namespace
 {
@@ -66,32 +66,13 @@ void Battle::Position::Swap()
     std::swap( first, second );
 }
 
-Battle::Cell * Battle::Position::GetHead()
-{
-    return first;
-}
-
-Battle::Cell * Battle::Position::GetTail()
-{
-    return second;
-}
-
-const Battle::Cell * Battle::Position::GetHead() const
-{
-    return first;
-}
-
-const Battle::Cell * Battle::Position::GetTail() const
-{
-    return second;
-}
-
 fheroes2::Rect Battle::Position::GetRect() const
 {
-    if ( first )
-        return second ? getBoundaryRect( first->GetPos(), second->GetPos() ) : first->GetPos();
+    if ( first == nullptr ) {
+        return {};
+    }
 
-    return fheroes2::Rect();
+    return second ? getBoundaryRect( first->GetPos(), second->GetPos() ) : first->GetPos();
 }
 
 Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t dst )
@@ -237,6 +218,26 @@ bool Battle::Position::contains( const int32_t idx ) const
     return ( first && first->GetIndex() == idx ) || ( second && second->GetIndex() == idx );
 }
 
+bool Battle::Position::isEmpty() const
+{
+    if ( first != nullptr ) {
+        return false;
+    }
+
+    assert( second == nullptr );
+
+    return true;
+}
+
+bool Battle::Position::isValidForUnit( const Unit & unit ) const
+{
+    if ( first == nullptr ) {
+        return false;
+    }
+
+    return unit.isWide() ? second != nullptr : second == nullptr;
+}
+
 bool Battle::Position::operator<( const Position & other ) const
 {
     assert( first == nullptr || Board::isValidIndex( first->GetIndex() ) );
@@ -262,10 +263,10 @@ Battle::Cell::Cell( const int32_t idx )
 
 void Battle::Cell::SetArea( const fheroes2::Rect & area )
 {
-    _pos.x = area.x + 89 - ( ( ( _index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + CELLW * ( _index % ARENAW );
-    _pos.y = area.y + 62 + ( ( CELLH - ( CELLH - cellHeightVerSide ) / 2 ) * ( _index / ARENAW ) );
-    _pos.width = CELLW;
-    _pos.height = CELLH;
+    _pos.x = area.x + 89 - ( ( ( _index / Board::widthInCells ) % 2 ) ? widthPx / 2 : 0 ) + widthPx * ( _index % Board::widthInCells );
+    _pos.y = area.y + 62 + ( ( heightPx - ( heightPx - cellHeightVerSide ) / 2 ) * ( _index / Board::widthInCells ) );
+    _pos.width = widthPx;
+    _pos.height = heightPx;
 
     // center
     _coord[0] = { infl * _pos.x + infl * _pos.width / 2, infl * _pos.y + infl * _pos.height / 2 };
@@ -278,7 +279,7 @@ void Battle::Cell::SetArea( const fheroes2::Rect & area )
     _coord[6] = { infl * _pos.x, infl * _pos.y + infl * _pos.height - infl * ( _pos.height - cellHeightVerSide ) / 2 };
 }
 
-Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
+Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
@@ -380,8 +381,13 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
 bool Battle::Cell::isPassableForUnit( const Unit & unit ) const
 {
     const Position unitPos = Position::GetPosition( unit, _index );
+    if ( unitPos.GetHead() == nullptr ) {
+        return false;
+    }
 
-    return unitPos.GetHead() != nullptr && ( !unit.isWide() || unitPos.GetTail() != nullptr );
+    assert( unitPos.isValidForUnit( unit ) );
+
+    return true;
 }
 
 bool Battle::Cell::isPassable( const bool checkForUnit ) const

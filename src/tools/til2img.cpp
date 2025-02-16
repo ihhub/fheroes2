@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -47,10 +47,10 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s) using the specified palette." << std::endl
-                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.til ..." << std::endl;
+        std::cerr << toolName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s) using the specified palette." << std::endl
+                  << "Syntax: " << toolName << " dst_dir palette_file.pal input_file.til ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -64,7 +64,7 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
         if ( palette.size() != validPaletteSize ) {
             std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return EXIT_FAILURE;

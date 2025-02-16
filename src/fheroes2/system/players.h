@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,34 +21,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2PLAYERS_H
-#define H2PLAYERS_H
+#pragma once
 
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "ai_personality.h"
 #include "bitmodes.h"
 #include "color.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps
 {
     struct FileInfo;
 }
 
-namespace AI
-{
-    class Base;
-}
-
 class Castle;
 class Heroes;
 
-// control_t
+// Maximum number of players on the map
+inline constexpr int maxNumOfPlayers{ 6 };
+
 enum
 {
     CONTROL_NONE = 0,
@@ -96,6 +93,9 @@ struct Focus : std::pair<int, void *>
     }
 };
 
+OStreamBase & operator<<( OStreamBase & stream, const Focus & focus );
+IStreamBase & operator>>( IStreamBase & stream, Focus & focus );
+
 struct Control
 {
     virtual int GetControl() const = 0;
@@ -115,7 +115,8 @@ public:
         SEVERE, // 30% fewer resources per turn
     };
 
-    explicit Player( int col = Color::NONE );
+    explicit Player( const int col = Color::NONE );
+
     ~Player() override = default;
 
     bool isColor( int col ) const
@@ -140,7 +141,7 @@ public:
         control = ctl;
     }
 
-    void SetPlay( bool );
+    void SetPlay( const bool f );
 
     void SetFriends( int f )
     {
@@ -198,8 +199,8 @@ public:
 #endif
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const Player & );
-    friend StreamBase & operator>>( StreamBase &, Player & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Player & player );
+    friend IStreamBase & operator>>( IStreamBase & stream, Player & player );
 
     int control;
     int color;
@@ -207,7 +208,7 @@ protected:
     int friends;
     std::string name;
     Focus focus;
-    std::shared_ptr<AI::Base> _ai;
+    AI::Personality _aiPersonality{ AI::Personality::NONE };
     HandicapStatus _handicapStatus;
 
 #if defined( WITH_DEBUG )
@@ -219,9 +220,6 @@ protected:
     bool _isAIAutoControlModePlanned;
 #endif
 };
-
-StreamBase & operator<<( StreamBase &, const Player & );
-StreamBase & operator>>( StreamBase &, Player & );
 
 class Players : public std::vector<Player *>
 {
@@ -274,7 +272,5 @@ private:
     int _currentColor{ Color::NONE };
 };
 
-StreamBase & operator<<( StreamBase &, const Players & );
-StreamBase & operator>>( StreamBase &, Players & );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const Players & players );
+IStreamBase & operator>>( IStreamBase & stream, Players & players );

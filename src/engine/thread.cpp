@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,10 +23,38 @@
 #include <cassert>
 #include <memory>
 
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
+namespace
+{
+    class MutexUnlocker
+    {
+    public:
+        explicit MutexUnlocker( std::mutex & mutex )
+            : _mutex( mutex )
+        {
+            _mutex.unlock();
+        }
+
+        MutexUnlocker( const MutexUnlocker & ) = delete;
+
+        ~MutexUnlocker()
+        {
+            _mutex.lock();
+        }
+
+        MutexUnlocker & operator=( const MutexUnlocker & ) = delete;
+
+    private:
+        std::mutex & _mutex;
+    };
+}
+#endif
+
 namespace MultiThreading
 {
     void AsyncManager::createWorker()
     {
+#if !defined( __EMSCRIPTEN__ ) || defined( __EMSCRIPTEN_PTHREADS__ )
         if ( !_worker ) {
             _runFlag = true;
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
@@ -37,10 +65,14 @@ namespace MultiThreading
                 _masterNotification.wait( lock, [this] { return !_runFlag; } );
             }
         }
+#endif
     }
 
     void AsyncManager::stopWorker()
     {
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
+        assert( !_worker );
+#else
         if ( _worker ) {
             {
                 const std::scoped_lock<std::mutex> lock( _mutex );
@@ -54,13 +86,33 @@ namespace MultiThreading
             _worker->join();
             _worker.reset();
         }
+#endif
     }
 
     void AsyncManager::notifyWorker()
     {
         _runFlag = true;
 
+#if defined( __EMSCRIPTEN__ ) && !defined( __EMSCRIPTEN_PTHREADS__ )
+        assert( !_exitFlag );
+
+        while ( _runFlag ) {
+            const bool moreTasks = prepareTask();
+            if ( !moreTasks ) {
+                _runFlag = false;
+            }
+
+            {
+                // In accordance with the contract, the _mutex should NOT be acquired while
+                // calling the executeTask() - even if its acquisition is in fact a snake oil.
+                MutexUnlocker unlocker( _mutex );
+
+                executeTask();
+            }
+        }
+#else
         _workerNotification.notify_all();
+#endif
     }
 
     void AsyncManager::_workerThread( AsyncManager * manager )

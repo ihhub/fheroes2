@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,11 +26,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <list>
 #include <locale>
 #include <map>
-#include <ostream>
+#include <sstream>
 #include <type_traits>
 #include <utility>
 
@@ -46,6 +47,7 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
@@ -82,9 +84,58 @@ namespace
         return li == lhs.end() && ri != rhs.end();
     }
 
-    bool sortByMapNames( const Maps::FileInfo & lhs, const Maps::FileInfo & rhs )
+    // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
+    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isForEditor, const bool isOriginalMapFormat )
     {
-        return CaseInsensitiveCompare( lhs.name, rhs.name );
+        // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
+        std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
+
+        for ( const std::string & mapFile : mapFiles ) {
+            Maps::FileInfo fi;
+
+            if ( isOriginalMapFormat ) {
+                if ( !fi.readMP2Map( mapFile, isForEditor ) ) {
+                    continue;
+                }
+            }
+            else {
+                if ( !fi.readResurrectionMap( mapFile, isForEditor ) ) {
+                    continue;
+                }
+            }
+
+            if ( !isForEditor ) {
+                assert( humanPlayerCount >= 1 );
+
+                const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+                if ( humanOnlyColorsCount > humanPlayerCount ) {
+                    // This map requires more human-only players than needed.
+                    continue;
+                }
+
+                const int computerHumanColorsCount = Color::Count( fi.AllowCompHumanColors() );
+                if ( humanPlayerCount > ( humanOnlyColorsCount + computerHumanColorsCount ) ) {
+                    // This map does not allow to be played by this number of human players.
+                    continue;
+                }
+
+                if ( humanOnlyColorsCount == humanPlayerCount ) {
+                    // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
+                    fi.removeHumanColors( fi.AllowCompHumanColors() );
+                }
+            }
+
+            uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
+        }
+
+        MapsFileInfoList result;
+        result.reserve( uniqueMaps.size() );
+
+        for ( auto & [name, info] : uniqueMaps ) {
+            result.emplace_back( std::move( info ) );
+        }
+
+        return result;
     }
 }
 
@@ -109,7 +160,7 @@ namespace Editor
 
 void Maps::FileInfo::Reset()
 {
-    file.clear();
+    filename.clear();
     name.clear();
     description.clear();
 
@@ -117,10 +168,10 @@ void Maps::FileInfo::Reset()
     height = 0;
     difficulty = Difficulty::NORMAL;
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
-    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+    for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         races[i] = Race::NONE;
         unions[i] = Color::IndexToColor( i );
     }
@@ -130,35 +181,28 @@ void Maps::FileInfo::Reset()
     colorsAvailableForComp = 0;
     colorsOfRandomRaces = 0;
 
-    victoryConditions = VICTORY_DEFEAT_EVERYONE;
+    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
     compAlsoWins = false;
     allowNormalVictory = false;
-    victoryConditionsParam1 = 0;
-    victoryConditionsParam2 = 0;
+    victoryConditionParams.fill( 0 );
 
-    lossConditions = LOSS_EVERYTHING;
-    lossConditionsParam1 = 0;
-    lossConditionsParam2 = 0;
+    lossConditionType = LOSS_EVERYTHING;
+    lossConditionParams.fill( 0 );
 
     timestamp = 0;
 
-    startWithHeroInEachCastle = false;
+    startWithHeroInFirstCastle = false;
 
     version = GameVersion::SUCCESSION_WARS;
 
     worldDay = 0;
     worldWeek = 0;
     worldMonth = 0;
+
+    mainLanguage = fheroes2::SupportedLanguage::English;
 }
 
-bool Maps::FileInfo::ReadSAV( std::string filePath )
-{
-    Reset();
-
-    return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
-}
-
-bool Maps::FileInfo::ReadMP2( const std::string & filePath )
+bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 {
     Reset();
 
@@ -174,7 +218,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         return false;
     }
 
-    file = filePath;
+    filename = std::move( filePath );
 
     // Difficulty level
     switch ( fs.getLE16() ) {
@@ -222,33 +266,39 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         }
     }
 
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+        // This is not a valid map since no human players exist so it cannot be played.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
+        return false;
+    }
+
     // TODO: Number of active kingdoms (unused)
     // fs.seekg(0x1A, std::ios_base::beg);
     // fs.get();
 
     fs.seek( 29 );
     // Victory condition type.
-    victoryConditions = fs.get();
+    victoryConditionType = fs.get();
     // Do the victory conditions apply to AI too?
     compAlsoWins = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here?
     allowNormalVictory = ( fs.get() != 0 );
     // Parameter of victory condition.
-    victoryConditionsParam1 = fs.getLE16();
+    victoryConditionParams[0] = fs.getLE16();
     // Loss condition type.
-    lossConditions = fs.get();
+    lossConditionType = fs.get();
     // Parameter of loss condition.
-    lossConditionsParam1 = fs.getLE16();
-    // Does the game start with heroes in castles automatically?
-    startWithHeroInEachCastle = ( 0 == fs.get() );
+    lossConditionParams[0] = fs.getLE16();
+    // Does the game start with a hero in the first castle?
+    startWithHeroInFirstCastle = ( 0 == fs.get() );
 
-    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
 
     // Initial races.
     for ( const int color : colors ) {
         const uint8_t race = Race::IndexToRace( fs.get() );
         const int idx = Color::GetIndex( color );
-        assert( idx < KINGDOMMAX );
+        assert( idx < maxNumOfPlayers );
 
         races[idx] = race;
 
@@ -258,31 +308,31 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     }
 
     // Additional parameter of victory condition.
-    victoryConditionsParam2 = fs.getLE16();
+    victoryConditionParams[1] = fs.getLE16();
     // Additional parameter of loss condition.
-    lossConditionsParam2 = fs.getLE16();
+    lossConditionParams[1] = fs.getLE16();
 
     bool skipUnionSetup = false;
     // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
     // If the color is under computer control only we have to make it as an ally for human player.
-    if ( lossConditions == LOSS_HERO && victoryConditions == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
+    if ( lossConditionType == LOSS_HERO && victoryConditionType == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionsParam1 + lossConditionsParam2 * width ) * 20 );
+        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
 
-        MP2::mp2tile_t mp2tile;
+        MP2::MP2TileInfo mp2tile;
         MP2::loadTile( fs, mp2tile );
 
-        Maps::Tiles tile;
+        Maps::Tile tile;
         tile.Init( 0, mp2tile );
 
-        std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+        const std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
         if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
             const int side1 = colorRace.first | colorsAvailableForHumans;
             const int side2 = colorsAvailableForComp ^ colorRace.first;
 
             FillUnions( side1, side2 );
 
-            victoryConditions = VICTORY_DEFEAT_OTHER_SIDE;
+            victoryConditionType = VICTORY_DEFEAT_OTHER_SIDE;
 
             skipUnionSetup = true;
         }
@@ -290,26 +340,26 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
     // Map name
     fs.seek( 58 );
-    name = fs.toString( mapNameLength );
+    name = fs.getString( mapNameLength );
 
     // Map description
     fs.seek( 118 );
-    description = fs.toString( mapDescriptionLength );
+    description = fs.getString( mapDescriptionLength );
 
     // Alliances of kingdoms
-    if ( victoryConditions == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
+    if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
         int side1 = 0;
         int side2 = 0;
 
         const Colors availableColors( kingdomColors );
         if ( availableColors.empty() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << ": invalid list of kingdom colors during map load" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid list of kingdom colors during map load" )
             return false;
         }
 
-        const int numPlayersSide1 = victoryConditionsParam1;
+        const int numPlayersSide1 = victoryConditionParams[0];
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << ": invalid victory condition param during map load" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid victory condition param during map load" )
             return false;
         }
 
@@ -329,9 +379,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     }
 
     // Determine the type of the map
-    const size_t pos = filePath.rfind( '.' );
+    const size_t pos = filename.rfind( '.' );
     if ( pos != std::string::npos ) {
-        const std::string fileExtension = StringLower( filePath.substr( pos + 1 ) );
+        const std::string fileExtension = StringLower( filename.substr( pos + 1 ) );
 
         version = ( fileExtension == "mx2" || fileExtension == "hxc" ) ? GameVersion::PRICE_OF_LOYALTY : GameVersion::SUCCESSION_WARS;
     }
@@ -339,41 +389,152 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     return true;
 }
 
-bool Maps::FileInfo::readResurrectionMap( std::string filePath )
+bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isForEditor )
 {
     Reset();
 
-    Maps::Map_Format::MapFormat map;
+    Maps::Map_Format::BaseMapFormat map;
     if ( !Maps::Map_Format::loadBaseMap( filePath, map ) ) {
         return false;
     }
 
-    file = std::move( filePath );
+    if ( !loadResurrectionMap( map, std::move( filePath ) ) ) {
+        return false;
+    }
+
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+        // This is not a valid map since no human players exist so it cannot be played.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
+        return false;
+    }
+
+    return true;
+}
+
+bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath )
+{
+    Reset();
+
+    filename = std::move( filePath );
 
     difficulty = map.difficulty;
 
     width = static_cast<uint16_t>( map.size );
     height = static_cast<uint16_t>( map.size );
 
-    name = std::move( map.name );
-    description = std::move( map.description );
+    name = map.name;
+    description = map.description;
+
+    assert( ( map.availablePlayerColors & map.humanPlayerColors ) == map.humanPlayerColors );
+    assert( ( map.availablePlayerColors & map.computerPlayerColors ) == map.computerPlayerColors );
+    assert( ( map.availablePlayerColors & ( map.humanPlayerColors | map.computerPlayerColors ) ) == map.availablePlayerColors );
 
     kingdomColors = map.availablePlayerColors;
     colorsAvailableForHumans = map.humanPlayerColors;
     colorsAvailableForComp = map.computerPlayerColors;
 
+    races = map.playerRace;
+
+    victoryConditionType = map.victoryConditionType;
+    compAlsoWins = map.isVictoryConditionApplicableForAI;
+    allowNormalVictory = map.allowNormalVictory;
+
+    lossConditionType = map.lossConditionType;
+
+    switch ( lossConditionType ) {
+    case LOSS_EVERYTHING:
+        // No special conditions of loss.
+        // So, no metadata should exist.
+        assert( map.lossConditionMetadata.empty() );
+        break;
+    case LOSS_TOWN:
+    case LOSS_HERO:
+        // Town or hero loss metadata must include the following:
+        // - tile index of the object
+        // - color of the object (the color is needed to modify the game for multi-player)
+        assert( map.lossConditionMetadata.size() == 2 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] % map.size );
+        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[0] / map.size );
+        assert( ( map.lossConditionMetadata[1] & map.humanPlayerColors ) == map.lossConditionMetadata[1] );
+        break;
+    case LOSS_OUT_OF_TIME:
+        assert( map.lossConditionMetadata.size() == 1 );
+        assert( map.lossConditionMetadata[0] > 0 );
+
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] );
+        break;
+    default:
+        // Did you add a new loss condition? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    switch ( victoryConditionType ) {
+    case VICTORY_DEFEAT_EVERYONE:
+        // Since this is a normal victory condition.
+        // So, no metadata should exist.
+        assert( map.victoryConditionMetadata.empty() );
+        compAlsoWins = true;
+        allowNormalVictory = true;
+        break;
+    case VICTORY_CAPTURE_TOWN:
+    case VICTORY_KILL_HERO:
+        // Town or hero capture metadata must include the following:
+        // - tile index of the object
+        // - color of the object (the color is needed to modify the game for multi-player mode)
+        assert( map.victoryConditionMetadata.size() == 2 );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.size );
+        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.size );
+        assert( ( map.victoryConditionMetadata[1] & map.availablePlayerColors ) == map.victoryConditionMetadata[1] );
+        break;
+    case VICTORY_OBTAIN_ARTIFACT:
+        assert( map.victoryConditionMetadata.size() == 1 );
+
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        break;
+    case VICTORY_COLLECT_ENOUGH_GOLD:
+        assert( map.victoryConditionMetadata.size() == 1 );
+        // 10,000 gold is the minimum value can be set since Easy difficulty gives a player this amount of gold.
+        assert( map.victoryConditionMetadata[0] >= 10000 );
+
+        // Divide by 1000 since the old format supports only this.
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / 1000 );
+        break;
+    case VICTORY_DEFEAT_OTHER_SIDE:
+        // As of now only 2 alliances are supported.
+        assert( map.alliances.size() == 2 );
+
+        assert( std::all_of( map.alliances.begin(), map.alliances.end(),
+                             [&map = std::as_const( map )]( const uint8_t color ) { return ( color & map.availablePlayerColors ) == color; } ) );
+
+        FillUnions( map.alliances[0], map.alliances[1] );
+        break;
+    default:
+        // Did you add a new victory condition? Add the logic for it!
+        assert( 0 );
+        break;
+    }
+
+    for ( size_t i = 0; i < races.size(); ++i ) {
+        if ( races[i] == Race::RAND ) {
+            colorsOfRandomRaces |= static_cast<uint8_t>( 1 << i );
+        }
+    }
+
     version = GameVersion::RESURRECTION;
+
+    mainLanguage = map.mainLanguage;
 
     return true;
 }
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     using UnionsItemType = decltype( unions )::value_type;
 
-    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+    for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         const uint8_t color = Color::IndexToColor( i );
 
         if ( side1Colors & color ) {
@@ -392,9 +553,14 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
     }
 }
 
-bool Maps::FileInfo::FileSorting( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::sortByFileName( const FileInfo & lhs, const FileInfo & rhs )
 {
-    return CaseInsensitiveCompare( lhs.file, rhs.file );
+    return CaseInsensitiveCompare( lhs.filename, rhs.filename );
+}
+
+bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
+{
+    return CaseInsensitiveCompare( lhs.name, rhs.name );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const
@@ -420,7 +586,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
 
 uint32_t Maps::FileInfo::ConditionWins() const
 {
-    switch ( victoryConditions ) {
+    switch ( victoryConditionType ) {
     case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
     case VICTORY_CAPTURE_TOWN:
@@ -444,7 +610,7 @@ uint32_t Maps::FileInfo::ConditionWins() const
 
 uint32_t Maps::FileInfo::ConditionLoss() const
 {
-    switch ( lossConditions ) {
+    switch ( lossConditionType ) {
     case LOSS_EVERYTHING:
         return GameOver::LOSS_ALL;
     case LOSS_TOWN:
@@ -467,49 +633,46 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
     return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-int Maps::FileInfo::WinsFindArtifactID() const
+std::string Maps::FileInfo::getSummary() const
 {
-    // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
-    return victoryConditionsParam1;
+    std::ostringstream os;
+
+    os << "Map name: " << name << std::endl
+       << "File name: " << filename << std::endl
+       << "Description: " << description << std::endl
+       << "Size: " << width << "x" << height << std::endl
+       << "Difficulty: " << Difficulty::String( difficulty ) << std::endl;
+
+    return os.str();
 }
 
-bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
+OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
 {
-    const int humanOnly = Color::Count( HumanOnlyColors() );
-    const int compHuman = Color::Count( AllowCompHumanColors() );
+    // Only the filename part of the path to the map file is saved
+    stream << System::GetFileName( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
-    return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
-}
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
-StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
-{
-    using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
-
-    // Only the basename of map filename (fi.file) is saved
-    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
-
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
-
-    for ( size_t i = 0; i < KINGDOMMAX; ++i ) {
-        msg << fi.races[i] << fi.unions[i];
+    for ( size_t i = 0; i < maxNumOfPlayers; ++i ) {
+        stream << fi.races[i] << fi.unions[i];
     }
 
-    return msg << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditions << fi.compAlsoWins
-               << fi.allowNormalVictory << fi.victoryConditionsParam1 << fi.victoryConditionsParam2 << fi.lossConditions << fi.lossConditionsParam1
-               << fi.lossConditionsParam2 << fi.timestamp << fi.startWithHeroInEachCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
-               << fi.worldWeek << fi.worldMonth;
+    return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
+                  << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
+                  << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
+                  << fi.mainLanguage;
 }
 
-StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
+IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 {
     uint8_t kingdommax = 0;
 
-    // Only the basename of map filename (fi.file) is loaded
-    msg >> fi.file >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
+    // Only the filename part of the path to the map file is loaded
+    stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
-    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 
     using RacesItemType = decltype( fi.races )::value_type;
     using UnionsItemType = decltype( fi.unions )::value_type;
@@ -518,110 +681,78 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
         RacesItemType racesItem = 0;
         UnionsItemType unionsItem = 0;
 
-        msg >> racesItem >> unionsItem;
+        stream >> racesItem >> unionsItem;
 
-        if ( i < KINGDOMMAX ) {
+        if ( i < maxNumOfPlayers ) {
             fi.races[i] = racesItem;
             fi.unions[i] = unionsItem;
         }
     }
 
-    msg >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditions >> fi.compAlsoWins
-        >> fi.allowNormalVictory >> fi.victoryConditionsParam1 >> fi.victoryConditionsParam2 >> fi.lossConditions >> fi.lossConditionsParam1 >> fi.lossConditionsParam2
-        >> fi.timestamp >> fi.startWithHeroInEachCastle;
+    stream >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
+        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInFirstCastle >> fi.version >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 
-    using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
-    static_assert( std::is_same_v<VersionUnderlyingType, int>, "Type of version has been changed, check the logic below" );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1103_RELEASE ) {
+        fi.mainLanguage = fheroes2::SupportedLanguage::English;
+    }
+    else {
+        stream >> fi.mainLanguage;
+    }
 
-    VersionUnderlyingType version = 0;
-    msg >> version;
-
-    fi.version = static_cast<GameVersion>( version );
-
-    return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
+    return stream;
 }
 
-MapsFileInfoList Maps::getOriginalMapFileInfos( const bool multi )
+MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
 {
-    const Settings & conf = Settings::Get();
-
     ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
-    if ( conf.isPriceOfLoyaltySupported() ) {
+
+    const bool isPOLSupported = Settings::Get().isPriceOfLoyaltySupported();
+
+    if ( isPOLSupported ) {
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-    std::map<std::string, Maps::FileInfo> uniqueMaps;
+    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, true );
 
-    const int prefNumOfPlayers = conf.PreferablyCountPlayers();
+    if ( isPOLSupported ) {
+        const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
+        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, isForEditor, false );
 
-    for ( const std::string & mapFile : maps ) {
-        Maps::FileInfo fi;
+        validMaps.reserve( maps.size() + resurrectionMaps.size() );
 
-        if ( !fi.ReadMP2( mapFile ) ) {
-            continue;
+        for ( auto & map : validResurrectionMaps ) {
+            validMaps.emplace_back( std::move( map ) );
         }
-
-        if ( multi ) {
-            assert( prefNumOfPlayers > 1 );
-
-            if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
-                continue;
-            }
-        }
-        else {
-            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
-
-            // Map has more than one human-only color, it is not suitable for single player mode
-            if ( humanOnlyColorsCount > 1 ) {
-                continue;
-            }
-            // Map has the human-only color, only this color can be selected by a human player
-            if ( humanOnlyColorsCount == 1 ) {
-                fi.removeHumanColors( fi.AllowCompHumanColors() );
-            }
-        }
-
-        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
-    MapsFileInfoList result;
-    result.reserve( uniqueMaps.size() );
-
-    for ( auto & [name, info] : uniqueMaps ) {
-        result.emplace_back( std::move( info ) );
+    if ( isForEditor ) {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+    }
+    else {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
     }
 
-    std::sort( result.begin(), result.end(), sortByMapNames );
-
-    return result;
+    return validMaps;
 }
 
-MapsFileInfoList Maps::getResurrectionMapFileInfos()
+MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
 {
+    if ( !Settings::Get().isPriceOfLoyaltySupported() ) {
+        // Resurrection maps require POL resources presence.
+        return {};
+    }
+
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
+    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, false );
 
-    // Create a list of unique maps (based on the map file name).
-    std::map<std::string, Maps::FileInfo> uniqueMaps;
-
-    for ( const std::string & mapFile : maps ) {
-        Maps::FileInfo fi;
-
-        if ( !fi.readResurrectionMap( mapFile ) ) {
-            continue;
-        }
-
-        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
+    if ( isForEditor ) {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+    }
+    else {
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
     }
 
-    MapsFileInfoList result;
-    result.reserve( uniqueMaps.size() );
-
-    for ( auto & [name, info] : uniqueMaps ) {
-        result.emplace_back( std::move( info ) );
-    }
-
-    std::sort( result.begin(), result.end(), sortByMapNames );
-
-    return result;
+    return validMaps;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,26 +24,13 @@
 #include <cassert>
 #include <cmath>
 
+namespace
+{
+    const int32_t minimumSliderLength = 15;
+}
+
 namespace fheroes2
 {
-    Scrollbar::Scrollbar()
-        : _minIndex( 0 )
-        , _maxIndex( 0 )
-        , _currentIndex( 0 )
-    {
-        // Do nothing.
-    }
-
-    void Scrollbar::setImage( const Image & image )
-    {
-        Copy( image, *this );
-    }
-
-    void Scrollbar::setArea( const Rect & area )
-    {
-        _area = area;
-    }
-
     void Scrollbar::setRange( const int minIndex, const int maxIndex )
     {
         assert( maxIndex >= minIndex );
@@ -56,7 +43,7 @@ namespace fheroes2
             setPosition( _area.x + ( _area.width - width() ) / 2, _area.y + ( _area.height - height() ) / 2 );
         }
         else {
-            if ( _isVertical() ) {
+            if ( isVertical() ) {
                 setPosition( _area.x + ( _area.width - width() ) / 2, _area.y );
             }
             else {
@@ -81,6 +68,9 @@ namespace fheroes2
 
     bool Scrollbar::moveToIndex( const int indexId )
     {
+        // TODO: Make a function to update the Scrollbar position after its image is changed
+        // and call it in the code instead of this one with 'indexId' that is equal to '_currentId'.
+
         const int32_t roiWidth = _area.width - width();
         const int32_t roiHeight = _area.height - height();
 
@@ -91,19 +81,11 @@ namespace fheroes2
             return false;
         }
 
-        if ( indexId < _minIndex ) {
-            _currentIndex = _minIndex;
-        }
-        else if ( indexId > _maxIndex ) {
-            _currentIndex = _maxIndex;
-        }
-        else {
-            _currentIndex = indexId;
-        }
+        _currentIndex = std::clamp( indexId, _minIndex, _maxIndex );
 
         Point newPosition;
 
-        if ( _isVertical() ) {
+        if ( isVertical() ) {
             newPosition.x = _area.x + roiWidth / 2;
             newPosition.y = _area.y + ( _currentIndex - _minIndex ) * roiHeight / ( _maxIndex - _minIndex );
         }
@@ -123,43 +105,31 @@ namespace fheroes2
 
     void Scrollbar::moveToPos( const Point & position )
     {
-        if ( _maxIndex == _minIndex )
+        if ( _maxIndex == _minIndex ) {
             return;
+        }
 
-        const int roiWidth = _area.width - width();
-        const int roiHeight = _area.height - height();
+        const int32_t roiWidth = _area.width - width();
+        const int32_t roiHeight = _area.height - height();
 
-        if ( _isVertical() ) {
-            const int32_t scrollbarImageMiddle = height() / 2;
-            const int32_t minYPos = _area.y + scrollbarImageMiddle;
-            const int32_t maxYPos = _area.y + roiHeight + scrollbarImageMiddle;
+        Point newPosition;
 
-            int32_t posY = position.y;
-            if ( posY < minYPos )
-                posY = minYPos;
-            else if ( posY > maxYPos )
-                posY = maxYPos;
-
-            const double tempPos = static_cast<double>( posY - minYPos ) * ( _maxIndex - _minIndex ) / roiHeight;
-            _currentIndex = static_cast<int>( std::lround( tempPos ) ) + _minIndex;
-
-            setPosition( _area.x + roiWidth / 2, posY - scrollbarImageMiddle );
+        if ( isVertical() ) {
+            newPosition.y = std ::clamp( position.y - height() / 2, _area.y, _area.y + roiHeight );
+            newPosition.x = _area.x + roiWidth / 2;
         }
         else {
-            const int32_t scrollbarImageMiddle = width() / 2;
-            const int32_t minXPos = _area.x + scrollbarImageMiddle;
-            const int32_t maxXPos = _area.x + roiWidth + scrollbarImageMiddle;
+            newPosition.x = std ::clamp( position.x - width() / 2, _area.x, _area.x + roiWidth );
+            newPosition.y = _area.y + roiHeight / 2;
+        }
 
-            int32_t posX = position.x;
-            if ( posX < minXPos )
-                posX = minXPos;
-            else if ( posX > maxXPos )
-                posX = maxXPos;
+        if ( newPosition.x != x() || newPosition.y != y() ) {
+            // Update only on the change.
 
-            const double tempPos = static_cast<double>( posX - minXPos ) * ( _maxIndex - _minIndex ) / roiWidth;
-            _currentIndex = static_cast<int>( std::lround( tempPos ) ) + _minIndex;
+            const double indexPos = isVertical() ? static_cast<double>( newPosition.y - _area.y ) / roiHeight : static_cast<double>( newPosition.x - _area.x ) / roiWidth;
+            _currentIndex = static_cast<int>( std::lround( indexPos * ( _maxIndex - _minIndex ) ) ) + _minIndex;
 
-            setPosition( posX - scrollbarImageMiddle, _area.y + roiHeight / 2 );
+            setPosition( newPosition.x, newPosition.y );
         }
     }
 
@@ -203,8 +173,8 @@ namespace fheroes2
 
         const int32_t currentSliderLength = horizontalSlider ? originalSlider.width() : originalSlider.height();
 
-        if ( sliderAreaLength * elementCountPerView < currentSliderLength * totalElementCount ) {
-            // Slider is too big.
+        if ( sliderAreaLength * elementCountPerView == currentSliderLength * totalElementCount ) {
+            // There is no need change the slider image.
             return originalSlider;
         }
 
@@ -213,17 +183,42 @@ namespace fheroes2
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
+
         if ( horizontalSlider ) {
-            width += middleLength;
+            width = std::max( minimumSliderLength, std::max( width + middleLength, startSliderArea.width * 2 ) );
         }
         else {
-            height += middleLength;
+            height = std::max( minimumSliderLength, std::max( height + middleLength, startSliderArea.height * 2 ) );
         }
 
         Image output( width, height );
+
+        if ( originalSlider.singleLayer() ) {
+            output._disableTransformLayer();
+        }
+
         output.reset();
 
+        // Copy the start slider part.
         Copy( originalSlider, startSliderArea.x, startSliderArea.y, output, startSliderArea.x, startSliderArea.y, startSliderArea.width, startSliderArea.height );
+
+        if ( middleLength < 0 ) {
+            // The slider is shortened. Copy the rest slider part from the end.
+            if ( horizontalSlider ) {
+                const int32_t copyWidth = width - startSliderArea.width;
+                Copy( originalSlider, startSliderArea.x + originalSlider.width() - copyWidth, startSliderArea.y, output, startSliderArea.width, startSliderArea.y,
+                      copyWidth, startSliderArea.height );
+            }
+            else {
+                const int32_t copyHeight = height - startSliderArea.height;
+                Copy( originalSlider, startSliderArea.x, startSliderArea.y + originalSlider.height() - copyHeight, output, startSliderArea.x, startSliderArea.height,
+                      startSliderArea.width, copyHeight );
+            }
+
+            return output;
+        }
+
+        // The slider should be extended.
 
         int32_t offset = 0;
         if ( horizontalSlider ) {
@@ -233,6 +228,7 @@ namespace fheroes2
             offset = startSliderArea.y + startSliderArea.height;
         }
 
+        // Draw the middle slider part.
         const int32_t middleChunkCount = middleLength / step;
         for ( int32_t i = 0; i < middleChunkCount; ++i ) {
             if ( horizontalSlider ) {
@@ -247,7 +243,7 @@ namespace fheroes2
             }
         }
 
-        // Draw leftovers.
+        // Draw leftovers of the middle part.
         const int32_t leftover = middleLength - middleChunkCount * step;
         if ( leftover > 0 ) {
             if ( horizontalSlider ) {
@@ -262,6 +258,7 @@ namespace fheroes2
             }
         }
 
+        // Copy the end part.
         if ( horizontalSlider ) {
             Copy( originalSlider, startSliderArea.x + startSliderArea.width, startSliderArea.y, output, offset, startSliderArea.y,
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );

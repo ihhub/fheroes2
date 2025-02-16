@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,6 +46,11 @@ namespace Game
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
 
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode.
+        DEBUG_TOGGLE_DEVELOPER_MODE,
+#endif
+
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -73,6 +78,8 @@ namespace Game
         EDITOR_RANDOM_MAP_MENU,
         EDITOR_UNDO_LAST_ACTION,
         EDITOR_REDO_LAST_ACTION,
+        EDITOR_TO_GAME_MAIN_MENU,
+        EDITOR_TOGGLE_PASSABILITY,
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
@@ -99,6 +106,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
+        WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
@@ -133,8 +141,8 @@ namespace Game
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
-        BATTLE_AUTO_SWITCH,
-        BATTLE_AUTO_FINISH,
+        BATTLE_TOGGLE_AUTO_COMBAT,
+        BATTLE_QUICK_COMBAT,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,
@@ -160,6 +168,7 @@ namespace Game
         ARMY_JOIN_STACKS,
         ARMY_UPGRADE_TROOP,
         ARMY_DISMISS,
+        ARMY_SWAP,
 
         // WARNING! Put all new event only above this line. No adding in between.
         NO_EVENT,

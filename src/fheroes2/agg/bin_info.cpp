@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,17 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "bin_info.h"
+
+#include <algorithm>
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <ostream>
+#include <string>
 #include <utility>
 
 #include "agg.h"
-#include "battle_animation.h"
 #include "battle_cell.h"
-#include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_info.h"
@@ -41,20 +42,41 @@ namespace
     {
         return fheroes2::getLEValue<T>( reinterpret_cast<const char *>( data ), base, offset );
     }
+
+    const char * GetFilename( const int monsterId )
+    {
+        return fheroes2::getMonsterData( monsterId ).binFileName;
+    }
+
+    class MonsterAnimCache
+    {
+    public:
+        Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
+        {
+            auto mapIterator = _animMap.find( monsterID );
+            if ( mapIterator != _animMap.end() ) {
+                return mapIterator->second;
+            }
+
+            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ), false ) );
+            if ( info.isValid() ) {
+                _animMap[monsterID] = info;
+                return info;
+            }
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Missing BIN file data: " << GetFilename( monsterID ) << ", monster ID: " << monsterID )
+            return {};
+        }
+
+    private:
+        std::map<int, Bin_Info::MonsterAnimInfo> _animMap;
+    };
+
+    MonsterAnimCache _infoCache;
 }
 
 namespace Bin_Info
 {
-    class MonsterAnimCache
-    {
-    public:
-        AnimationReference createAnimReference( int monsterID ) const;
-        MonsterAnimInfo getAnimInfo( int monsterID );
-
-    private:
-        std::map<int, MonsterAnimInfo> _animMap;
-    };
-
     const size_t CORRECT_FRM_LENGTH = 821;
 
     // When base unit and its upgrade use the same FRM file (e.g. Archer and Ranger)
@@ -62,14 +84,6 @@ namespace Bin_Info
     const double MOVE_SPEED_UPGRADE = 0.12;
     const double SHOOT_SPEED_UPGRADE = 0.08;
     const double RANGER_SHOOT_SPEED = 0.78;
-
-    std::map<int, AnimationReference> animRefs;
-    MonsterAnimCache _infoCache;
-
-    const char * GetFilename( int monsterId )
-    {
-        return fheroes2::getMonsterData( monsterId ).binFileName;
-    }
 
     MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
         : moveSpeed( 450 )
@@ -97,7 +111,7 @@ namespace Bin_Info
                 moveOffset.push_back( static_cast<int>( getValue<int8_t>( data, 5 + moveID * 16, frame ) ) );
             }
 
-            frameXOffset.push_back( moveOffset );
+            frameXOffset.emplace_back( std::move( moveOffset ) );
         }
 
         // Idle animations data
@@ -227,7 +241,8 @@ namespace Bin_Info
             for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
-            animationFrames.push_back( anim );
+
+            animationFrames.emplace_back( std::move( anim ) );
         }
 
         if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
@@ -312,9 +327,9 @@ namespace Bin_Info
         if ( ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM )
              && ( frameXOffset[MOVE_START].size() == 4 && frameXOffset[MOVE_MAIN].size() == 7 && animationFrames[MOVE_MAIN].size() == 7 ) ) { // the original golem info
             frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-            frameXOffset[MOVE_START][2] = CELLW * 2 / 8 + 3;
-            frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
+            frameXOffset[MOVE_START][2] = Battle::Cell::widthPx * 2 / 8 + 3;
+            frameXOffset[MOVE_START][3] = Battle::Cell::widthPx * 3 / 8;
 
             // 'MOVE_MAIN' animation is missing 1/4 of animation start. 'MOVE_START' (for first and one cell move) has this 1/4 of animation,
             // but 'MOVE_TILE_START` (for movement after the first cell) is empty, so we move all frames except the last frame from 'MOVE_MAIN'
@@ -329,11 +344,11 @@ namespace Bin_Info
             frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin(), frameXOffset[MOVE_MAIN].end() - 1 );
 
             // Correct the 'x' offset by half of cell.
-            frameXOffset[MOVE_MAIN][0] += CELLW / 2;
+            frameXOffset[MOVE_MAIN][0] += Battle::Cell::widthPx / 2;
             for ( size_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
-                frameXOffset[MOVE_START][id + 4] += CELLW / 2;
+                frameXOffset[MOVE_START][id + 4] += Battle::Cell::widthPx / 2;
                 // For 'MOVE_TILE_START' also include the correction, made in "agg_image.cpp".
-                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - static_cast<int32_t>( id ) ) * CELLW / 28;
+                frameXOffset[MOVE_TILE_START][id] += Battle::Cell::widthPx / 2 - ( 6 - static_cast<int32_t>( id ) ) * Battle::Cell::widthPx / 28;
                 // For 'MOVE_TILE_START' animation frames IDs use new frames, made in "agg_image.cpp", which starts from ID = 40.
                 animationFrames[MOVE_TILE_START][id] = 40 + static_cast<int32_t>( id );
             }
@@ -449,32 +464,13 @@ namespace Bin_Info
         if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
              && frameXOffset[MOVE_STOP].size() == 1 ) {
             frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
             for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
-                xOffset += CELLW / 4 + 3;
+                xOffset += Battle::Cell::widthPx / 4 + 3;
             }
 
-            frameXOffset[MOVE_STOP][0] = CELLW;
+            frameXOffset[MOVE_STOP][0] = Battle::Cell::widthPx;
         }
-    }
-
-    MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
-    {
-        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
-        if ( mapIterator != _animMap.end() ) {
-            return mapIterator->second;
-        }
-        else {
-            const MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( Bin_Info::GetFilename( monsterID ) ) );
-            if ( info.isValid() ) {
-                _animMap[monsterID] = info;
-                return info;
-            }
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
-            }
-        }
-        return MonsterAnimInfo();
     }
 
     bool MonsterAnimInfo::isValid() const
@@ -514,19 +510,8 @@ namespace Bin_Info
         return angles.size() - 1;
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const
-    {
-        return AnimationReference( monsterID );
-    }
-
     MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
-    }
-
-    void InitBinInfo()
-    {
-        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; ++i )
-            animRefs[i] = _infoCache.createAnimReference( i );
     }
 }

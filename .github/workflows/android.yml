@@ -10,6 +10,9 @@ on:
       ANDROID_KEY_PASSWORD:
         required: false
 
+permissions:
+  contents: write
+
 env:
   KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE }}
 
@@ -34,7 +37,7 @@ jobs:
         sudo apt-get -y install gettext
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j "$(nproc)"
     - name: Create keystore
       if: ${{ github.event_name == 'push' && env.KEYSTORE_BASE64 != '' }}
       run: |
@@ -64,12 +67,12 @@ jobs:
       run: |
         cd android
         ./gradlew app:lint isotools:lint
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
       with:
         name: android-app-lint-report
         path: android/app/build/reports/
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
       with:
         name: android-isotools-lint-report
@@ -78,13 +81,13 @@ jobs:
       run: |
         7z a -bb1 -tzip -- fheroes2_android.zip LICENSE changelog.txt fheroes2.apk ./docs/README.txt ./docs/README_android.md
         7z a -bb1 -tzip -- fheroes2_android_aab.zip LICENSE fheroes2.aab
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_android.zip
         path: fheroes2_android.zip
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_android_aab.zip

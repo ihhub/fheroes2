@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2_SPELL_INFO_H
-#define H2_SPELL_INFO_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -47,11 +46,11 @@ namespace fheroes2
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 
+    // Returns the index of the tile that the boat would have been summoned to when using the Summon Boat spell by the given hero, or -1 if there is no suitable tile
+    // nearby.
     int32_t getPossibleBoatPosition( const Heroes & hero );
 
     int32_t getSummonableBoat( const Heroes & hero );
 
     bool isHeroNearWater( const Heroes & hero );
 }
-
-#endif

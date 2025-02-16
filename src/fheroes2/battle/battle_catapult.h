@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,11 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_CATAPULT_H
-#define H2BATTLE_CATAPULT_H
+#pragma once
 
 #include <cstdint>
 #include <map>
+#include <vector>
 
 #include "battle.h"
 #include "math_base.h"
@@ -47,16 +47,17 @@ namespace Battle
 
         Catapult & operator=( const Catapult & ) = delete;
 
-        static CastleDefenseElement GetTarget( const std::map<CastleDefenseElement, uint32_t> & stateOfCatapultTargets,
-                                               Rand::DeterministicRandomGenerator & randomGenerator );
-        static fheroes2::Point GetTargetPosition( const CastleDefenseElement target, const bool hit );
+        static const std::vector<CastleDefenseStructure> & getAllowedTargets();
+        static CastleDefenseStructure GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets,
+                                                 Rand::DeterministicRandomGenerator & randomGenerator );
+        static fheroes2::Point GetTargetPosition( const CastleDefenseStructure target, const bool hit );
 
         uint32_t GetShots() const
         {
             return catShots;
         }
 
-        uint32_t GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        int GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const;
         bool IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
     private:
@@ -65,5 +66,3 @@ namespace Battle
         bool canMiss;
     };
 }
-
-#endif

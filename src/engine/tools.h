@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2TOOLS_H
-#define H2TOOLS_H
+
+#pragma once
 
 #include <bitset>
 #include <cstddef>
@@ -32,13 +32,12 @@
 #include <optional>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <vector>
 
-#include "math_base.h"
-
-template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
-std::string GetHexString( T value, int width = 8 )
+template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
+std::string GetHexString( const T value, const int width = 8 )
 {
     std::ostringstream stream;
 
@@ -47,41 +46,42 @@ std::string GetHexString( T value, int width = 8 )
     return stream.str();
 }
 
-int Sign( int );
+int Sign( const int i );
 
-std::string StringTrim( std::string );
+std::string StringTrim( std::string str );
 
 std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
 
-std::vector<std::string> StringSplit( const std::string & str, const char sep );
+std::vector<std::string> StringSplit( const std::string_view str, const char sep );
 
-// Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
-void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
-void StringReplace( std::string & dst, const char * pred, const std::string & src );
+void StringReplace( std::string & dst, const char * pred, const std::string_view src );
 
-template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
 void StringReplace( std::string & dst, const char * pred, const T value )
 {
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-int CountBits( uint32_t );
+// Returns the number of bits that are set in the number passed as an argument
+constexpr int CountBits( const uint32_t val )
+{
+    int res = 0;
+
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
+        if ( val & itr ) {
+            ++res;
+        }
+    }
+
+    return res;
+}
 
 // Returns a new text string with the inserted character in the input string at the specified position.
 std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
 
 namespace fheroes2
 {
-    double GetAngle( const Point & start, const Point & target );
-    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
-    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
-
-    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
-
-    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
-
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
     template <class T>
@@ -105,9 +105,12 @@ namespace fheroes2
 
     std::string abbreviateNumber( const int num );
 
+    // Appends the given modifier to the end of the given string (e.g. "Coliseum +2")
+    void appendModifierToString( std::string & str, const int mod );
+
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.
-    template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>
+    template <typename To, typename From, std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>, bool> = true>
     constexpr std::optional<To> checkedCast( const From from )
     {
         // Both types have the same signedness
@@ -145,5 +148,3 @@ namespace fheroes2
         }
     }
 }
-
-#endif

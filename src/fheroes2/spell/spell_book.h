@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SPELLBOOK_H
-#define H2SPELLBOOK_H
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -44,7 +43,7 @@ public:
     };
 
     Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
-                const std::function<void( const std::string & )> * statusCallback ) const;
+                const std::function<void( const std::string & )> & statusCallback ) const;
 
     void Edit( const HeroBase & hero );
 
@@ -57,5 +56,3 @@ private:
 
     mutable Filter _spellFilter = Filter::ADVN;
 };
-
-#endif

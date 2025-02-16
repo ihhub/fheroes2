@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -38,7 +38,6 @@
 #include "direction.h"
 #include "game_delays.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
@@ -56,6 +55,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
 
@@ -296,10 +296,10 @@ namespace
         }
 
         // There is a tile below the current.
-        const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
+        const Maps::Tile & tileBelow = world.getTile( x, y + 1 );
 
-        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
-            if ( lowerAddon._uid == uid ) {
+        for ( const auto & lowerPart : tileBelow.getTopObjectParts() ) {
+            if ( lowerPart._uid == uid ) {
                 // This is a tall object.
                 return true;
             }
@@ -321,6 +321,8 @@ Interface::GameArea::GameArea( BaseInterface & interface )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
     , _needRedrawByMouseDragging( false )
+    , _isFastScrollEnabled( false )
+    , _resetMousePositionForFastScroll( false )
 {
     // Do nothing.
 }
@@ -330,16 +332,17 @@ void Interface::GameArea::generate( const fheroes2::Size & screenSize, const boo
     if ( withoutBorders )
         SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, screenSize.width - RADARWIDTH - 3 * BORDERWIDTH, screenSize.height - 2 * BORDERWIDTH );
+        SetAreaPosition( fheroes2::borderWidthPx, fheroes2::borderWidthPx, screenSize.width - fheroes2::radarWidthPx - 3 * fheroes2::borderWidthPx,
+                         screenSize.height - 2 * fheroes2::borderWidthPx );
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
 {
     _windowROI = { x, y, w, h };
-    const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
+    const fheroes2::Size worldSize( world.w() * fheroes2::tileWidthPx, world.h() * fheroes2::tileWidthPx );
 
     if ( worldSize.width > w ) {
-        _minLeftOffset = -( w / 2 ) - TILEWIDTH / 2;
+        _minLeftOffset = -( w / 2 ) - fheroes2::tileWidthPx / 2;
         _maxLeftOffset = worldSize.width - w / 2;
     }
     else {
@@ -348,7 +351,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     if ( worldSize.height > h ) {
-        _minTopOffset = -( h / 2 ) - TILEWIDTH / 2;
+        _minTopOffset = -( h / 2 ) - fheroes2::tileWidthPx / 2;
         _maxTopOffset = worldSize.height - h / 2;
     }
     else {
@@ -357,7 +360,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     // adding 1 extra tile for both axes in case of drawing tiles partially near sides
-    _visibleTileCount = { ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 };
+    _visibleTileCount = { ( w + fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx + 1, ( h + fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx + 1 };
 
     _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }
@@ -426,7 +429,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     Maps::redrawEmptyTile( dst, offset, *this );
                 }
                 else {
-                    const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
+                    const Maps::Tile & tile = world.getTile( offset.x, offset.y );
                     // Do not render terrain on the tiles fully covered with the fog.
                     if ( tile.getFogDirection() != DIRECTION_ALL || !renderFog ) {
                         DrawTile( dst, getTileSurface( tile ), offset );
@@ -470,8 +473,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     TileUnfitRenderObjectInfo tileUnfit;
 
-    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
-
     // TODO: Dragon City with Object ICN Type OBJ_ICN_TYPE_OBJNMUL2 and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
 
@@ -482,19 +483,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
+    const bool isEditor = _interface.isEditor();
+
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
-            const Maps::Tiles & tile = world.GetTiles( posX, posY );
+            const Maps::Tile & tile = world.getTile( posX, posY );
 
-            MP2::MapObjectType objectType = tile.GetObject();
+            MP2::MapObjectType objectType = tile.getMainObjectType();
 
             // We will skip objects which are fully under the fog.
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
-                if ( _interface.isEditor() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+            case MP2::OBJ_HERO: {
+                if ( isEditor ) {
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
@@ -507,7 +510,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
                 const Heroes * hero = tile.getHero();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
@@ -516,7 +519,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( hero->isControlAI() ) {
                         const Route::Path & path = hero->GetPath();
                         // Check if the next AI hero path point will not be seen on map to skip it.
-                        if ( path.isValidForMovement() && ( world.GetTiles( path.GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
+                        if ( path.isValidForMovement() && ( world.getTile( path.GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
                             continue;
                         }
                     }
@@ -528,7 +531,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 populateHeroObjectInfo( tileUnfit, hero );
 
                 // Update object type as it could be an object under the hero.
-                objectType = tile.GetObject( false );
+                objectType = tile.getMainObjectType( false );
 
                 break;
             }
@@ -540,8 +543,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = getMonsterSpritesPerTile( tile, _interface.isEditor() );
-                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, _interface.isEditor() );
+                auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -550,7 +553,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             case MP2::OBJ_BOAT: {
                 // Boats are 2 tiles high so we have to populate info for boat one tile lower than the fog.
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
 
                 if ( !drawHeroes || ( isTileUnderFog && isUpperTileUnderFog ) ) {
                     // Boats can be occupied by heroes so they are considered as the same objects.
@@ -572,10 +575,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINES ) {
+            if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
                     populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
                 }
             }
@@ -585,7 +588,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Render all terrain and background layer object.
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
 
             if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
@@ -603,7 +606,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
 
             if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
@@ -624,7 +627,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
 
             if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
@@ -641,18 +644,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // High priority images are drawn after any other object on this tile.
     renderImagesOnTiles( dst, tileUnfit.highPriorityBottomImages, *this );
 
-    std::vector<const Maps::TilesAddon *> topLayerTallObjects;
+    std::vector<const Maps::ObjectPart *> topLayerTallObjects;
 
     // Expand  ROI to properly render very tall objects (1 tile - left and right; 2 tiles - bottom): Abandoned mine Ghosts, Flag on the Alchemist lab, and others.
     const int32_t roiExtraObjectsMaxX = std::min( maxX + 1, world.w() );
     for ( int32_t y = minY; y < roiToRenderMaxY; ++y ) {
         for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
 
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
             if ( isTileUnderFog ) {
                 // To correctly render tall extra objects (ghosts over abandoned mine) it is needed to analyze one tile to the bottom direction under fog.
-                const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.GetTiles( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.getTile( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
                 if ( isUpperTileUnderFog ) {
                     // If current tile and the bottom one are both under the fog
                     continue;
@@ -667,19 +670,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
-                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
-                    topLayerTallObjects.emplace_back( &addon );
+            for ( const auto & part : tile.getTopObjectParts() ) {
+                if ( isTallTopLayerObject( x, y, part._uid ) ) {
+                    topLayerTallObjects.emplace_back( &part );
                 }
                 else {
-                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, addon );
+                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, part );
                 }
             }
 
             redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
-            for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
-                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
+            for ( const auto * part : topLayerTallObjects ) {
+                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *part );
             }
         }
     }
@@ -689,6 +692,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Draw hero's route. It should be drawn on top of everything.
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
+
+    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
     if ( drawRoutes && ( currentHero != nullptr ) && currentHero->GetPath().isShow() ) {
         const Route::Path & path = currentHero->GetPath();
@@ -723,7 +728,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             uint32_t routeSpriteIndex = 0;
             if ( nextStep != path.end() ) {
-                const Maps::Tiles & tile = world.GetTiles( tileIndex );
+                const Maps::Tile & tile = world.getTile( tileIndex );
                 const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
@@ -734,52 +739,50 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    const bool drawTowns = ( flag & LEVEL_TOWNS );
+    bool drawPassabilities = ( flag & LEVEL_PASSABILITIES );
 
 #ifdef WITH_DEBUG
-    if ( IS_DEVEL() ) {
-        // redraw grid
-        if ( flag & LEVEL_ALL ) {
-            const int32_t friendColors = Players::FriendColors();
+    if ( IS_DEVEL() && ( flag & LEVEL_ALL ) ) {
+        drawPassabilities = true;
+    }
+#endif
 
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
-                }
+    if ( drawPassabilities ) {
+        const int32_t friendColors = Players::FriendColors();
+
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                redrawPassable( world.getTile( x, y ), dst, friendColors, *this, isEditor );
             }
         }
     }
-    else {
-#endif
-        // redraw fog
-        if ( renderFog ) {
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    const Maps::Tiles & tile = world.GetTiles( x, y );
+    else if ( renderFog ) {
+        const bool drawTowns = ( flag & LEVEL_TOWNS );
 
-                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                        drawFog( tile, dst, *this );
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tile & tile = world.getTile( x, y );
 
-                        if ( drawTowns ) {
-                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                    drawFog( tile, dst, *this );
 
-                            const MP2::MapObjectType objectType = tile.GetObject( false );
-                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
-                            }
+                    if ( drawTowns ) {
+                        drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+
+                        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
             }
         }
-#ifdef WITH_DEBUG
     }
-#endif
 
     updateObjectAnimationInfo();
 }
 
-void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const
+void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const
 {
     if ( startTile < 0 || endTile < 0 ) {
         return;
@@ -790,8 +793,8 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
 
     const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
     const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
-    const int32_t sizeX = TILEWIDTH + std::abs( startTileOffset.x - endTileOffset.x );
-    const int32_t sizeY = TILEWIDTH + std::abs( startTileOffset.y - endTileOffset.y );
+    const int32_t sizeX = fheroes2::tileWidthPx + std::abs( startTileOffset.x - endTileOffset.x );
+    const int32_t sizeY = fheroes2::tileWidthPx + std::abs( startTileOffset.y - endTileOffset.y );
 
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
@@ -799,10 +802,12 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
     const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
 
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
+    const uint8_t color = ( isActionObject ? 115 : 181 );
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, color );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, color );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, color );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, color );
 }
 
 void Interface::GameArea::updateMapFogDirections()
@@ -855,8 +860,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448 );
+    fheroes2::Image result;
     result._disableTransformLayer();
+    result.resize( 448, 448 );
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
@@ -874,7 +880,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-    result._disableTransformLayer();
 
     return result;
 }
@@ -905,30 +910,30 @@ int Interface::GameArea::GetScrollCursor() const
     return Cursor::NONE;
 }
 
-void Interface::GameArea::SetScroll( int direct )
+void Interface::GameArea::SetScroll( const int direction )
 {
-    if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
+    if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
-    else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
+    else if ( ( direction & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
         if ( _topLeftTileOffset.x < _maxLeftOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
 
-    if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
+    if ( ( direction & SCROLL_TOP ) == SCROLL_TOP ) {
         if ( _topLeftTileOffset.y > _minTopOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
-    else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
+    else if ( ( direction & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
         if ( _topLeftTileOffset.y < _maxTopOffset ) {
-            scrollDirection |= direct;
+            scrollDirection |= direction;
             updateCursor = true;
         }
     }
@@ -936,27 +941,97 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
+void Interface::GameArea::setFastScrollStatus( const bool enable )
+{
+    _isFastScrollEnabled = enable;
+    _resetMousePositionForFastScroll = true;
+}
+
+bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
+{
+    const fheroes2::Display & display = fheroes2::Display::instance();
+    constexpr int32_t deadZone = 3;
+
+    // Remember the initial reference point for re-enabling checks later on.
+    if ( _resetMousePositionForFastScroll ) {
+        _mousePositionForFastScroll = mousePosition;
+        _resetMousePositionForFastScroll = false;
+    }
+
+    if ( Interface::BaseInterface::isScrollLeft( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x > _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x < _mousePositionForFastScroll.x || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > deadZone && mousePosition.x <= 0 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollRight( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x < _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x > _mousePositionForFastScroll.x
+                  || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > deadZone && mousePosition.x >= display.width() - 1 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollTop( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y > _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y < _mousePositionForFastScroll.y || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > deadZone && mousePosition.y <= 0 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollBottom( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y < _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y > _mousePositionForFastScroll.y
+                  || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > deadZone && mousePosition.y >= display.height() - 1 ) ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else {
+        // We have left the scroll borders, fast scrolling can definitely be re-enabled.
+        return true;
+    }
+
+    // We haven't left the borders, but the direction of the mouse movement within the borders
+    // does not indicate that the user wants to perform the fast scroll right now.
+    return false;
+}
+
+void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Point & mousePosition = le.GetMouseCursor();
+    const fheroes2::Point & mousePosition = le.getMouseCursorPos();
 
-    if ( !le.MousePressLeft() ) {
+    if ( !le.isMouseLeftButtonPressed() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
     }
-    else if ( !_mouseDraggingInitiated ) {
-        _mouseDraggingInitiated = true;
-        _lastMouseDragPosition = mousePosition;
-    }
-    else if ( isCursorOverGamearea && _interface.useMouseDragMovement()
-              && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
-                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
-        _mouseDraggingMovement = true;
+    else if ( _interface.useMouseDragMovement() ) {
+        if ( !_mouseDraggingInitiated ) {
+            _mouseDraggingInitiated = true;
+            _lastMouseDragPosition = mousePosition;
+        }
+        else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
+                  || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
+            _mouseDraggingMovement = true;
+        }
     }
 
-    if ( _mouseDraggingMovement ) {
+    if ( _mouseDraggingMovement && le.isMouseLeftButtonPressedInArea( GetROI() ) ) {
         if ( _lastMouseDragPosition == mousePosition ) {
             _needRedrawByMouseDragging = false;
         }
@@ -966,11 +1041,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
             SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
             _lastMouseDragPosition = mousePosition;
         }
-        return;
-    }
 
-    if ( !isCursorOverGamearea ) {
-        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
         return;
     }
 
@@ -980,6 +1051,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
         if ( updateCursor || index != _prevIndexPos ) {
             _interface.updateCursor( index );
+
             _prevIndexPos = index;
             updateCursor = false;
         }
@@ -988,29 +1060,33 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
-    const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
+    const fheroes2::Point tileOffset = getInternalPosition( mousePosition );
+    const fheroes2::Point tilePos( ( tileOffset.x / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx - _topLeftTileOffset.x + _windowROI.x,
+                                   ( tileOffset.y / fheroes2::tileWidthPx ) * fheroes2::tileWidthPx - _topLeftTileOffset.y + _windowROI.x );
 
-    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
+    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, fheroes2::tileWidthPx, fheroes2::tileWidthPx );
 
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
     }
-    else if ( le.MousePressRight( tileROI ) ) {
+    else if ( le.isMouseRightButtonPressedInArea( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+    else if ( le.MouseLongPressLeft( tileROI ) ) {
+        _interface.mouseCursorAreaLongPressLeft( index );
     }
 
     // The cursor may have moved after mouse click events.
-    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+    index = GetValidTileIdFromPoint( le.getMouseCursorPos() );
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
         _interface.updateCursor( index );
+
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -1018,15 +1094,17 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
 {
-    const int32_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
-    const int32_t y = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.y / TILEWIDTH );
+    const int32_t x
+        = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx : _topLeftTileOffset.x / fheroes2::tileWidthPx );
+    const int32_t y
+        = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - fheroes2::tileWidthPx - 1 ) / fheroes2::tileWidthPx : _topLeftTileOffset.y / fheroes2::tileWidthPx );
 
     return { x, y };
 }
 
 void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 {
-    SetCenterInPixels( { tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 } );
+    SetCenterInPixels( { tile.x * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2, tile.y * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2 } );
 }
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
@@ -1050,12 +1128,12 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
+    const fheroes2::Point offset = getInternalPosition( point );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 
-    const int32_t x = offset.x / TILEWIDTH;
-    const int32_t y = offset.y / TILEWIDTH;
+    const int32_t x = offset.x / fheroes2::tileWidthPx;
+    const int32_t y = offset.y / fheroes2::tileWidthPx;
 
     if ( x >= world.w() || y >= world.h() )
         return -1;
@@ -1065,7 +1143,7 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & po
 
 fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
-    return { tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y };
+    return { tileId.x * fheroes2::tileWidthPx - _topLeftTileOffset.x + _windowROI.x, tileId.y * fheroes2::tileWidthPx - _topLeftTileOffset.y + _windowROI.y };
 }
 
 void Interface::GameArea::updateObjectAnimationInfo() const
@@ -1125,10 +1203,9 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
 Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
 {
-    Maps::Tiles & tile = world.GetTiles( tileId );
+    const Maps::Tile & tile = world.getTile( tileId );
 
-    if ( tile.GetObject() == type ) {
-        removeObjectSprite( tile );
-        tile.setAsEmpty();
+    if ( tile.getMainObjectType() == type ) {
+        removeMainObjectFromTile( tile );
     }
 }

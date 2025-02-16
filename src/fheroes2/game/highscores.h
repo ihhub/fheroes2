@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HIGHSCORES_H
-#define H2HIGHSCORES_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -29,7 +28,8 @@
 
 #include "monster.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
@@ -78,11 +78,11 @@ namespace fheroes2
 
         static uint32_t generateCompletionTime();
 
-        void loadV1( StreamBase & msg );
+        void loadV1( IStreamBase & stream );
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const HighscoreData & );
-        friend StreamBase & operator>>( StreamBase &, HighscoreData & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const HighscoreData & data );
+        friend IStreamBase & operator>>( IStreamBase & stream, HighscoreData & data );
     };
 
     class HighScoreDataContainer
@@ -95,7 +95,6 @@ namespace fheroes2
         int32_t registerScoreCampaign( HighscoreData && data );
 
         void populateStandardDefaultHighScores();
-
         void populateCampaignDefaultHighScores();
 
         const std::vector<HighscoreData> & getHighScoresStandard() const
@@ -109,7 +108,7 @@ namespace fheroes2
         }
 
         static Monster getMonsterByRating( const size_t rating );
-        static Monster getMonsterByDay( const size_t dayCount );
+        static Monster getMonsterByDay( const size_t numOfDays );
 
         void clear()
         {
@@ -122,8 +121,6 @@ namespace fheroes2
         std::vector<HighscoreData> _highScoresCampaign;
     };
 
-    StreamBase & operator<<( StreamBase & msg, const HighscoreData & data );
-    StreamBase & operator>>( StreamBase & msg, HighscoreData & data );
+    OStreamBase & operator<<( OStreamBase & stream, const HighscoreData & data );
+    IStreamBase & operator>>( IStreamBase & stream, HighscoreData & data );
 }
-
-#endif

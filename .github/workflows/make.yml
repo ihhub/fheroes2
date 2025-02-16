@@ -3,13 +3,17 @@ name: Make
 on:
   workflow_call:
 
+permissions:
+  contents: write
+
 jobs:
   make:
     strategy:
       matrix:
-        config:
+        include:
         - name: Linux x86-64 SDL2 Release
-          os: ubuntu-20.04
+          on: [ 'pull_request', 'push' ]
+          os: ubuntu-22.04
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -31,17 +35,18 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
+          on: [ 'pull_request' ]
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
@@ -51,15 +56,13 @@ jobs:
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_ASAN: ON
         - name: Linux ARM64 SDL2 Release
-          os: ubuntu-22.04
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          on: [ 'pull_request', 'push' ]
+          os: ubuntu-22.04-arm
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
-            CC: aarch64-linux-gnu-gcc
-            CXX: aarch64-linux-gnu-g++
-            AR: aarch64-linux-gnu-ar
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
@@ -76,30 +79,29 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
-          os: ubuntu-latest
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          on: [ 'pull_request' ]
+          os: ubuntu-24.04-arm
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_TSAN: ON
-            CC: aarch64-linux-gnu-gcc
-            CXX: aarch64-linux-gnu-g++
-            AR: aarch64-linux-gnu-ar
         - name: macOS SDL2
-          os: macos-11
+          on: [ 'pull_request', 'push' ]
+          os: macos-13
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -121,102 +123,80 @@ jobs:
             LICENSE
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
-            ./src/tools/82m2wav
-            ./src/tools/bin2txt
-            ./src/tools/extractor
-            ./src/tools/h2dmgr
-            ./src/tools/icn2img
-            ./src/tools/pal2img
-            ./src/tools/til2img
-            ./src/tools/xmi2midi
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
+          on: [ 'pull_request' ]
           os: macos-latest
           dependencies: sdl2 sdl2_mixer dylibbundler
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_MACOS_APP_BUNDLE: ON
-    name: Make (${{ matrix.config.name }})
-    runs-on: ${{ matrix.config.os }}
+    name: Make (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     defaults:
       run:
         shell: bash
     steps:
     - uses: actions/checkout@v4
+      if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies (Linux)
-      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
+      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
       run: |
-        if [[ "${{ matrix.config.name }}" == *ARM64* ]]
-        then
-          sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
-          sudo dpkg --add-architecture arm64
-          sudo sh -c '. /etc/os-release;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse" > /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
-          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;'
-        fi
         sudo apt-get -y update
-        sudo apt-get -y install ${{ matrix.config.dependencies }}
+        sudo apt-get -y install ${{ matrix.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
+      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
-        brew install ${{ matrix.config.dependencies }}
+        brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-    - name: Build
+    - name: Build (Linux)
+      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
       run: |
-        make -j 2
-      env: ${{ matrix.config.env }}
-    - name: Create app bundle
-      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
+        make -j "$(nproc)"
+      env: ${{ matrix.env }}
+    - name: Build (MacOS)
+      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
-        make -j 2 bundle
-      env: ${{ matrix.config.env }}
-    - name: Create package
-      if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
+        make -j "$(sysctl -n hw.logicalcpu)"
+      env: ${{ matrix.env }}
+    - name: Create packages
+      if: ${{ contains( matrix.on, github.event_name ) && matrix.package_name != '' && matrix.tools_package_name != '' }}
       run: |
-        7z a -bb1 -tzip -- ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
-    - name: Create tools package
-      if: ${{ matrix.config.tools_package_name != '' && matrix.config.tools_package_files != '' }}
-      run: |
-        7z a -bb1 -tzip -- ${{ matrix.config.tools_package_name }} ${{ matrix.config.tools_package_files }}
-    - uses: actions/upload-artifact@v3
-      if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} ${{ matrix.package_files }}
+        7z a -bb1 -tzip -- ${{ matrix.tools_package_name }} ${{ matrix.tools_package_files }}
+    - uses: actions/upload-artifact@v4
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.package_name != '' }}
       with:
-        name: ${{ matrix.config.package_name }}
-        path: ${{ matrix.config.package_name }}
+        name: ${{ matrix.package_name }}
+        path: ${{ matrix.package_name }}
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
-      if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
+    - uses: actions/upload-artifact@v4
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.tools_package_name != '' }}
       with:
-        name: ${{ matrix.config.tools_package_name }}
-        path: ${{ matrix.config.tools_package_name }}
+        name: ${{ matrix.tools_package_name }}
+        path: ${{ matrix.tools_package_name }}
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
-      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name == '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'push' }}
       with:
-        artifacts: ${{ matrix.config.package_name }}
+        artifacts: ${{ matrix.package_name }}, ${{ matrix.tools_package_name }}
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: ${{ matrix.config.release_name }}
-        tag: ${{ matrix.config.release_tag }}
-        allowUpdates: true
-        artifactErrorsFailBuild: true
-        prerelease: true
-        replacesArtifacts: true
-    - uses: ncipollo/release-action@v1
-      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
-      with:
-        artifacts: ${{ matrix.config.package_name }}, ${{ matrix.config.tools_package_name }}
-        body: ${{ github.event.head_commit.message }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: ${{ matrix.config.release_name }}
-        tag: ${{ matrix.config.release_tag }}
+        name: ${{ matrix.release_name }}
+        tag: ${{ matrix.release_tag }}
         allowUpdates: true
         artifactErrorsFailBuild: true
         prerelease: true
@@ -235,7 +215,7 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.vitasdk-cache
         key: make-vitasdk-cache-${{ github.sha }}
@@ -246,7 +226,7 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/vitasdk/vdpm
         cd vdpm
-        export PATH="$VITASDK/bin:$PATH"
+        export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
         ./install-all.sh
         rm -rf ~/.vitasdk-cache
@@ -260,8 +240,8 @@ jobs:
         fi
     - name: Build
       run: |
-        export PATH="$VITASDK/bin:$PATH"
-        make -f Makefile.vita -j 2
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
@@ -275,7 +255,7 @@ jobs:
       run: |
         # Translations and H2D files are already included in fheroes2.vpk
         7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_psv.zip
@@ -309,18 +289,18 @@ jobs:
         sudo apt-get -y install gettext p7zip-full
     - name: Build
       run: |
-        export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
-        make -f Makefile.switch -j 2
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH
+        make -f Makefile.switch -j "$(nproc)"
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_switch.zip
@@ -338,3 +318,90 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+  make-emscripten:
+    strategy:
+      matrix:
+        include:
+        - name: Emscripten
+          on: [ 'pull_request' ]
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+          package_name: fheroes2_emscripten.zip
+        - name: Emscripten Multithreaded
+          on: [ 'pull_request' ]
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_THREADS: ON
+          package_name: fheroes2_emscripten_mt.zip
+    name: Make (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    container: emscripten/emsdk:3.1.74
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+      if: ${{ contains( matrix.on, github.event_name ) }}
+    - name: Install dependencies
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install gettext p7zip-full
+    - name: Apply temporary patch
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        patch -d / -p0 -f <<EOF
+        --- emsdk/upstream/emscripten/tools/ports/sdl2_mixer.py
+        +++ emsdk/upstream/emscripten/tools/ports/sdl2_mixer.py
+        @@ -10,8 +10,10 @@
+
+         deps = ['sdl2']
+         variants = {
+        -  'sdl2_mixer_mp3': {'SDL2_MIXER_FORMATS': ["mp3"]},
+        -  'sdl2_mixer_none': {'SDL2_MIXER_FORMATS': []},
+        +  'sdl2_mixer-mp3': {'SDL2_MIXER_FORMATS': ['mp3']},
+        +  'sdl2_mixer-none': {'SDL2_MIXER_FORMATS': []},
+        +  'sdl2_mixer-mp3-mt': {'SDL2_MIXER_FORMATS': ['mp3'], 'PTHREADS': 1},
+        +  'sdl2_mixer-none-mt': {'SDL2_MIXER_FORMATS': [], 'PTHREADS': 1},
+         }
+
+
+        @@ -25,7 +27,9 @@ def get_lib_name(settings):
+
+           libname = 'libSDL2_mixer'
+           if formats != '':
+        -    libname += '_' + formats
+        +    libname += '-' + formats
+        +  if settings.PTHREADS:
+        +    libname += '-mt'
+           libname += '.a'
+
+           return libname
+        @@ -68,6 +72,9 @@ def create(final):
+                 '-DMUSIC_MID_TIMIDITY',
+               ]
+
+        +    if settings.PTHREADS:
+        +      flags.append('-pthread')
+        +
+             build_dir = ports.clear_project_build('sdl2_mixer')
+             include_path = os.path.join(source_path, 'include')
+             includes = [
+        EOF
+    - name: Build
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        emmake make -f Makefile.emscripten -j "$(nproc)"
+      env: ${{ matrix.env }}
+    - name: Create package
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        # Translations and H2D files are already included in fheroes2.data
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+    - uses: actions/upload-artifact@v4
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      with:
+        name: ${{ matrix.package_name }}
+        path: ${{ matrix.package_name }}
+        if-no-files-found: error

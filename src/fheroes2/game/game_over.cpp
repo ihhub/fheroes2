@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,10 +39,10 @@
 #include "game.h"
 #include "game_video.h"
 #include "game_video_type.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "highscores.h"
 #include "kingdom.h"
+#include "maps_fileinfo.h"
 #include "monster.h"
 #include "mus.h"
 #include "players.h"
@@ -76,7 +76,7 @@ namespace
             case GameOver::WINS_TOWN: {
                 body = _( "You captured %{name}!\nYou are victorious." );
 
-                const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+                const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
                 assert( town != nullptr );
 
                 if ( town ) {
@@ -102,11 +102,11 @@ namespace
             case GameOver::WINS_ARTIFACT:
                 body = _( "You have found the %{name}.\nYour quest is complete." );
 
-                if ( conf.WinsFindUltimateArtifact() ) {
+                if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
                     StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
                 }
                 else {
-                    const Artifact art = conf.WinsFindArtifactID();
+                    const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
                     StringReplace( body, "%{name}", art.GetName() );
                 }
 
@@ -118,7 +118,7 @@ namespace
 
             case GameOver::WINS_GOLD:
                 body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-                StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
+                StringReplace( body, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
                 break;
 
             default:
@@ -142,7 +142,7 @@ namespace
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
 
-            const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
@@ -154,7 +154,7 @@ namespace
 
         case GameOver::LOSS_ENEMY_WINS_GOLD:
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-            StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
+            StringReplace( body, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
             break;
 
         case GameOver::LOSS_ALL:
@@ -164,7 +164,7 @@ namespace
         case GameOver::LOSS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
 
-            const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
@@ -313,7 +313,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         }
     }
     else if ( WINS_TOWN & cond ) {
-        const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
@@ -331,11 +331,11 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         }
     }
     else if ( WINS_ARTIFACT & cond ) {
-        if ( conf.WinsFindUltimateArtifact() ) {
+        if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
             msg = _( "Find the ultimate artifact." );
         }
         else {
-            const Artifact art = conf.WinsFindArtifactID();
+            const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
 
             msg = _( "Find the '%{name}' artifact." );
             StringReplace( msg, "%{name}", art.GetName() );
@@ -343,7 +343,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_GOLD & cond ) {
         msg = _( "Accumulate %{count} gold." );
-        StringReplace( msg, "%{count}", conf.getWinningGoldAccumulationValue() );
+        StringReplace( msg, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
     }
 
     if ( WINS_ALL != cond && ( WINS_ALL & cond ) ) {
@@ -354,7 +354,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         msg = GetString( LOSS_ALL );
     }
     else if ( LOSS_TOWN & cond ) {
-        const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
@@ -372,10 +372,10 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         }
     }
     else if ( LOSS_TIME & cond ) {
-        const uint32_t dayCount = conf.LossCountDays() - 1;
-        const uint32_t month = dayCount / ( DAYOFWEEK * WEEKOFMONTH );
-        const uint32_t week = ( dayCount - month * ( DAYOFWEEK * WEEKOFMONTH ) ) / DAYOFWEEK;
-        const uint32_t day = dayCount % DAYOFWEEK;
+        const uint32_t dayCount = conf.getCurrentMapInfo().LossCountDays() - 1;
+        const uint32_t month = dayCount / ( numOfDaysPerWeek * numOfWeeksPerMonth );
+        const uint32_t week = ( dayCount - month * ( numOfDaysPerWeek * numOfWeeksPerMonth ) ) / numOfDaysPerWeek;
+        const uint32_t day = dayCount % numOfDaysPerWeek;
 
         msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         StringReplace( msg, "%{day}", day + 1 );
@@ -405,12 +405,12 @@ void GameOver::Result::Reset()
 
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
+    const int humanColors = Players::HumanColors();
+    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const Settings & conf = Settings::Get();
-    const int humanColors = Players::HumanColors();
     const int currentColor = conf.CurrentColor();
-    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
+
     // Remembers whether the current player was considered active at the time of calling this function
     const bool isCurrentPlayerWasActive = ( currentColor & colors );
 
@@ -446,46 +446,45 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 #endif
 
         if ( kingdom.isControlHuman() || isAIAutoControlMode ) {
+            // First check loss conditions and then victory conditions.
+
+            // If the player's kingdom has been vanquished, they loses regardless of other conditions.
+            if ( !kingdom.isPlay() ) {
+                result = GameOver::LOSS_ALL;
+            }
+            else {
+                result = world.CheckKingdomLoss( kingdom );
+            }
+
+            if ( result != GameOver::COND_NONE ) {
+                // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
+                    DialogLoss( result );
+                }
+
+                AudioManager::ResetAudio();
+                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+
             result = world.CheckKingdomWins( kingdom );
 
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
 
                 if ( conf.isCampaignGameType() ) {
-                    res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
-                }
-                else {
-                    AudioManager::ResetAudio();
-
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
-
-                    // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
-                    AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-
-                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-                }
-            }
-            else {
-                // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                if ( !kingdom.isPlay() ) {
-                    result = GameOver::LOSS_ALL;
-                }
-                else {
-                    result = world.CheckKingdomLoss( kingdom );
+                    return fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
 
-                if ( result != GameOver::COND_NONE ) {
-                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
-                    // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                    if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
-                        DialogLoss( result );
-                    }
+                AudioManager::ResetAudio();
+                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
 
-                    AudioManager::ResetAudio();
-                    Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
+                AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
-                    res = fheroes2::GameMode::MAIN_MENU;
-                }
+                return fheroes2::GameMode::HIGHSCORES_STANDARD;
             }
         }
     }
@@ -538,15 +537,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             return GameOver::COND_NONE;
         }();
 
-        if ( result & GameOver::WINS ) {
-            DialogWins( result );
-
-            AudioManager::ResetAudio();
-            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
-
-            res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-        }
-        else if ( result & GameOver::LOSS ) {
+        if ( result & GameOver::LOSS ) {
             const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
                 if ( !( currentColor & Color::ALL ) ) {
@@ -595,20 +586,28 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 AudioManager::ResetAudio();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
-                res = fheroes2::GameMode::MAIN_MENU;
+                return fheroes2::GameMode::MAIN_MENU;
             }
+        }
+        else if ( result & GameOver::WINS ) {
+            DialogWins( result );
+
+            AudioManager::ResetAudio();
+            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+
+            return fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
     }
 
-    return res;
+    return fheroes2::GameMode::CANCEL;
 }
 
-StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
+OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
 {
-    return msg << res.colors << res.result;
+    return stream << res.colors << res.result;
 }
 
-StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
+IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
-    return msg >> res.colors >> res.result;
+    return stream >> res.colors >> res.result;
 }

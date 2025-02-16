@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMEINTERFACE_H
-#define H2GAMEINTERFACE_H
+#pragma once
 
 #include <cstdint>
 
@@ -31,6 +30,7 @@
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
+#include "interface_status.h"
 #include "players.h"
 
 class Castle;
@@ -38,7 +38,7 @@ class Heroes;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace GameFocus
@@ -95,12 +95,17 @@ namespace Interface
 
         IconsPanel & GetIconsPanel()
         {
-            return iconsPanel;
+            return _iconsPanel;
         }
 
         ControlPanel & getControlPanel()
         {
-            return controlPanel;
+            return _controlPanel;
+        }
+
+        StatusPanel & getStatusPanel()
+        {
+            return _statusPanel;
         }
 
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
@@ -116,6 +121,7 @@ namespace Interface
         void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
+        void EventSwitchFocusedHero( const int32_t tileIndex );
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
@@ -141,6 +147,7 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) override;
 
         void updateCursor( const int32_t tileIndex ) override;
 
@@ -150,24 +157,23 @@ namespace Interface
     private:
         AdventureMap();
 
-        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
-        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
-        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
-        static int _getCursorNoFocus( const Maps::Tiles & tile );
+        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tile & tile );
+        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tile & tile );
+        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tile & tile );
+        static int _getCursorNoFocus( const Maps::Tile & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
         void _startHeroMove( Heroes & hero );
 
-        fheroes2::GameMode HumanTurn( const bool isload );
+        fheroes2::GameMode HumanTurn( const bool isLoadedFromSave );
 
-        IconsPanel iconsPanel;
-        ButtonsArea buttonsArea;
-        ControlPanel controlPanel;
+        IconsPanel _iconsPanel;
+        ButtonsPanel _buttonsPanel;
+        ControlPanel _controlPanel;
+        StatusPanel _statusPanel;
 
         bool _lockRedraw;
     };
 }
-
-#endif

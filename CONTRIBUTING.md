@@ -1,4 +1,4 @@
-## Contribution and Development
+# Contribution and Development
 
 This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 

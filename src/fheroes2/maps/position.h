@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2POSITION_H
-#define H2POSITION_H
+#pragma once
 
 #include <cstdint>
 
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class MapPosition
 {
@@ -56,13 +56,8 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const MapPosition & );
-    friend StreamBase & operator>>( StreamBase &, MapPosition & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapPosition & st );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapPosition & st );
 
     fheroes2::Point center;
 };
-
-StreamBase & operator<<( StreamBase &, const MapPosition & );
-StreamBase & operator>>( StreamBase &, MapPosition & );
-
-#endif

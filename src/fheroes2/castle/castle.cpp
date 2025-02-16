@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,10 +27,11 @@
 #include <array>
 #include <cassert>
 #include <iterator>
-#include <ostream>
+#include <sstream>
+#include <utility>
 
 #include "agg_image.h"
-#include "ai.h"
+#include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "audio_manager.h"
@@ -41,6 +42,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
@@ -51,6 +53,8 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -58,9 +62,9 @@
 #include "mp2.h"
 #include "payment.h"
 #include "profit.h"
-#include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -95,25 +99,11 @@ namespace
             gettext_noop( "Sheltemburg" ),  gettext_noop( "Corackston" ) };
 }
 
-Castle::Castle()
-    : race( Race::NONE )
-    , building( 0 )
-    , captain( *this )
-    , army( nullptr )
+Castle::Castle( const int32_t posX, const int32_t posY, int race )
+    : MapPosition( { posX, posY } )
+    , _race( race )
 {
-    std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
-    army.SetCommander( &captain );
-}
-
-Castle::Castle( int32_t cx, int32_t cy, int rc )
-    : MapPosition( fheroes2::Point( cx, cy ) )
-    , race( rc )
-    , building( 0 )
-    , captain( *this )
-    , army( nullptr )
-{
-    std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
-    army.SetCommander( &captain );
+    // Do nothing.
 }
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
@@ -227,7 +217,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     // - unused 29 bytes
     //    Always zeros.
 
-    StreamBuf dataStream( data );
+    ROStreamBuf dataStream( data );
 
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {
@@ -259,91 +249,72 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         // Common buildings.
         const uint16_t commonBuildings = dataStream.getLE16();
         if ( 0x0002 & commonBuildings )
-            building |= BUILD_THIEVESGUILD;
+            _constructedBuildings |= BUILD_THIEVESGUILD;
         if ( 0x0004 & commonBuildings )
-            building |= BUILD_TAVERN;
+            _constructedBuildings |= BUILD_TAVERN;
         if ( 0x0008 & commonBuildings )
-            building |= BUILD_SHIPYARD;
+            _constructedBuildings |= BUILD_SHIPYARD;
         if ( 0x0010 & commonBuildings )
-            building |= BUILD_WELL;
+            _constructedBuildings |= BUILD_WELL;
         if ( 0x0080 & commonBuildings )
-            building |= BUILD_STATUE;
+            _constructedBuildings |= BUILD_STATUE;
         if ( 0x0100 & commonBuildings )
-            building |= BUILD_LEFTTURRET;
+            _constructedBuildings |= BUILD_LEFTTURRET;
         if ( 0x0200 & commonBuildings )
-            building |= BUILD_RIGHTTURRET;
+            _constructedBuildings |= BUILD_RIGHTTURRET;
         if ( 0x0400 & commonBuildings )
-            building |= BUILD_MARKETPLACE;
+            _constructedBuildings |= BUILD_MARKETPLACE;
         if ( 0x1000 & commonBuildings )
-            building |= BUILD_MOAT;
+            _constructedBuildings |= BUILD_MOAT;
         if ( 0x0800 & commonBuildings )
-            building |= BUILD_WEL2;
+            _constructedBuildings |= BUILD_WEL2;
         if ( 0x2000 & commonBuildings )
-            building |= BUILD_SPEC;
+            _constructedBuildings |= BUILD_SPEC;
 
         // Existing dwellings.
         const uint16_t existingDwellings = dataStream.getLE16();
         if ( 0x0008 & existingDwellings )
-            building |= DWELLING_MONSTER1;
+            _constructedBuildings |= DWELLING_MONSTER1;
         if ( 0x0010 & existingDwellings )
-            building |= DWELLING_MONSTER2;
+            _constructedBuildings |= DWELLING_MONSTER2;
         if ( 0x0020 & existingDwellings )
-            building |= DWELLING_MONSTER3;
+            _constructedBuildings |= DWELLING_MONSTER3;
         if ( 0x0040 & existingDwellings )
-            building |= DWELLING_MONSTER4;
+            _constructedBuildings |= DWELLING_MONSTER4;
         if ( 0x0080 & existingDwellings )
-            building |= DWELLING_MONSTER5;
+            _constructedBuildings |= DWELLING_MONSTER5;
         if ( 0x0100 & existingDwellings )
-            building |= DWELLING_MONSTER6;
+            _constructedBuildings |= DWELLING_MONSTER6;
         if ( 0x0200 & existingDwellings )
-            building |= DWELLING_UPGRADE2 | DWELLING_MONSTER2;
+            _constructedBuildings |= DWELLING_UPGRADE2 | DWELLING_MONSTER2;
         if ( 0x0400 & existingDwellings )
-            building |= DWELLING_UPGRADE3 | DWELLING_MONSTER3;
+            _constructedBuildings |= DWELLING_UPGRADE3 | DWELLING_MONSTER3;
         if ( 0x0800 & existingDwellings )
-            building |= DWELLING_UPGRADE4 | DWELLING_MONSTER4;
+            _constructedBuildings |= DWELLING_UPGRADE4 | DWELLING_MONSTER4;
         if ( 0x1000 & existingDwellings )
-            building |= DWELLING_UPGRADE5 | DWELLING_MONSTER5;
+            _constructedBuildings |= DWELLING_UPGRADE5 | DWELLING_MONSTER5;
         if ( 0x2000 & existingDwellings )
-            building |= DWELLING_UPGRADE6 | DWELLING_MONSTER6;
+            _constructedBuildings |= DWELLING_UPGRADE6 | DWELLING_MONSTER6;
 
         // magic tower
         const uint8_t magicGuildLevel = dataStream.get();
         if ( 0 < magicGuildLevel )
-            building |= BUILD_MAGEGUILD1;
+            _constructedBuildings |= BUILD_MAGEGUILD1;
         if ( 1 < magicGuildLevel )
-            building |= BUILD_MAGEGUILD2;
+            _constructedBuildings |= BUILD_MAGEGUILD2;
         if ( 2 < magicGuildLevel )
-            building |= BUILD_MAGEGUILD3;
+            _constructedBuildings |= BUILD_MAGEGUILD3;
         if ( 3 < magicGuildLevel )
-            building |= BUILD_MAGEGUILD4;
+            _constructedBuildings |= BUILD_MAGEGUILD4;
         if ( 4 < magicGuildLevel )
-            building |= BUILD_MAGEGUILD5;
+            _constructedBuildings |= BUILD_MAGEGUILD5;
     }
     else {
         // Skip reading 5 bytes corresponding to custom buildings for the town / castle.
         dataStream.skip( 5 );
 
         // Set default buildings.
-        building |= DWELLING_MONSTER1;
-        uint32_t dwelling2 = 0;
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            dwelling2 = 75;
-            break;
-        case Difficulty::NORMAL:
-            dwelling2 = 50;
-            break;
-        case Difficulty::HARD:
-            dwelling2 = 25;
-            break;
-        case Difficulty::EXPERT:
-            dwelling2 = 10;
-            break;
-        default:
-            break;
-        }
-        if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) )
-            building |= DWELLING_MONSTER2;
+        _setDefaultBuildings();
     }
 
     const bool customDefenders = ( dataStream.get() != 0 );
@@ -358,8 +329,8 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         for ( Troop & troop : troops )
             troop.SetCount( dataStream.getLE16() );
 
-        army.Assign( troops, std::end( troops ) );
-        SetModes( CUSTOMARMY );
+        _army.Assign( troops, std::end( troops ) );
+        SetModes( CUSTOM_ARMY );
     }
     else {
         // Skip 15 bytes as custom defenders are not set.
@@ -368,12 +339,12 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     const bool isCaptainAvailable = ( dataStream.get() != 0 );
     if ( isCaptainAvailable ) {
-        building |= BUILD_CAPTAIN;
+        _constructedBuildings |= BUILD_CAPTAIN;
     }
 
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
-        name = dataStream.toString( 13 );
+        _name = dataStream.getString( 13 );
     }
     else {
         // Skip 13 bytes since the name is not set.
@@ -383,146 +354,221 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     const uint8_t castleFaction = dataStream.get();
     switch ( castleFaction ) {
     case 0:
-        race = Race::KNGT;
+        _race = Race::KNGT;
         break;
     case 1:
-        race = Race::BARB;
+        _race = Race::BARB;
         break;
     case 2:
-        race = Race::SORC;
+        _race = Race::SORC;
         break;
     case 3:
-        race = Race::WRLK;
+        _race = Race::WRLK;
         break;
     case 4:
-        race = Race::WZRD;
+        _race = Race::WZRD;
         break;
     case 5:
-        race = Race::NECR;
+        _race = Race::NECR;
         break;
     default: {
         const uint32_t kingdomRace = Players::GetPlayerRace( GetColor() );
-        race = ( Color::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
+        _race = ( Color::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
         break;
     }
     }
 
     const bool isCastleBuilt = ( dataStream.get() != 0 );
     if ( isCastleBuilt ) {
-        building |= BUILD_CASTLE;
+        _constructedBuildings |= BUILD_CASTLE;
     }
     else {
-        building |= BUILD_TENT;
+        _constructedBuildings |= BUILD_TENT;
     }
 
-    const bool allowToBuildCastle = ( dataStream.get() != 0 );
-    if ( allowToBuildCastle ) {
-        ResetModes( ALLOWCASTLE );
-    }
-    else {
-        SetModes( ALLOWCASTLE );
+    _disabledBuildings = 0;
+
+    const bool isCastleNotAllowed = ( dataStream.get() != 0 );
+    if ( isCastleNotAllowed ) {
+        _disabledBuildings |= BUILD_CASTLE;
     }
 
     // Skip the rest of 29 bytes.
 
-    PostLoad();
+    _postLoad();
 }
 
-void Castle::PostLoad()
+void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata )
 {
-    // dwelling pack
-    if ( building & DWELLING_MONSTER1 )
-        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
-    if ( building & DWELLING_MONSTER2 )
-        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
-    if ( building & DWELLING_UPGRADE2 )
-        dwelling[1] = Monster( race, DWELLING_UPGRADE2 ).GetGrown();
-    if ( building & DWELLING_MONSTER3 )
-        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
-    if ( building & DWELLING_UPGRADE3 )
-        dwelling[2] = Monster( race, DWELLING_UPGRADE3 ).GetGrown();
-    if ( building & DWELLING_MONSTER4 )
-        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
-    if ( building & DWELLING_UPGRADE4 )
-        dwelling[3] = Monster( race, DWELLING_UPGRADE4 ).GetGrown();
-    if ( building & DWELLING_MONSTER5 )
-        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
-    if ( building & DWELLING_UPGRADE5 )
-        dwelling[4] = Monster( race, DWELLING_UPGRADE5 ).GetGrown();
-    if ( building & DWELLING_MONSTER6 )
-        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE6 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE7 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
+    modes = 0;
 
-    // fix upgrade dwelling dependent from race
-    switch ( race ) {
+    _constructedBuildings = Maps::getBuildingsFromVector( metadata.builtBuildings );
+
+    if ( !metadata.customBuildings ) {
+        _setDefaultBuildings();
+    }
+
+    _disabledBuildings = 0;
+
+    for ( const uint32_t building : metadata.bannedBuildings ) {
+        _disabledBuildings |= building;
+    }
+
+    // Check the default Army state for the Neutral player.
+    if ( Maps::loadCastleArmy( _army, metadata ) ) {
+        SetModes( CUSTOM_ARMY );
+    }
+
+    if ( !metadata.customName.empty() ) {
+        _name = metadata.customName;
+    }
+
+    _postLoad();
+}
+
+void Castle::_postLoad()
+{
+    // Fix dwelling upgrades dependent from race. (For random race towns.)
+    switch ( _race ) {
+    case Race::KNGT:
+        _constructedBuildings &= ~DWELLING_UPGRADE7;
+        break;
     case Race::BARB:
-        building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 );
+        _constructedBuildings &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::SORC:
-        building &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 );
+        _constructedBuildings &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::WRLK:
-        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE5 );
+        _constructedBuildings &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE5 );
         break;
     case Race::WZRD:
-        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 );
+        _constructedBuildings &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 | DWELLING_UPGRADE7 );
         break;
     case Race::NECR:
-        building &= ~DWELLING_UPGRADE6;
+        _constructedBuildings &= ~( DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     default:
         break;
     }
 
-    army.SetColor( GetColor() );
+    // Fill built dwellings with weekly growth monsters.
+    if ( _constructedBuildings & DWELLING_MONSTER1 ) {
+        _dwelling[0] = Monster( _race, DWELLING_MONSTER1 ).GetGrown();
+    }
+
+    if ( _constructedBuildings & DWELLING_UPGRADE2 ) {
+        _dwelling[1] = Monster( _race, DWELLING_UPGRADE2 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_MONSTER2 ) {
+        _dwelling[1] = Monster( _race, DWELLING_MONSTER2 ).GetGrown();
+    }
+
+    if ( _constructedBuildings & DWELLING_UPGRADE3 ) {
+        _dwelling[2] = Monster( _race, DWELLING_UPGRADE3 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_MONSTER3 ) {
+        _dwelling[2] = Monster( _race, DWELLING_MONSTER3 ).GetGrown();
+    }
+
+    if ( _constructedBuildings & DWELLING_UPGRADE4 ) {
+        _dwelling[3] = Monster( _race, DWELLING_UPGRADE4 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_MONSTER4 ) {
+        _dwelling[3] = Monster( _race, DWELLING_MONSTER4 ).GetGrown();
+    }
+
+    if ( _constructedBuildings & DWELLING_UPGRADE5 ) {
+        _dwelling[4] = Monster( _race, DWELLING_UPGRADE5 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_MONSTER5 ) {
+        _dwelling[4] = Monster( _race, DWELLING_MONSTER5 ).GetGrown();
+    }
+
+    if ( _constructedBuildings & DWELLING_UPGRADE7 ) {
+        _dwelling[5] = Monster( _race, DWELLING_UPGRADE7 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_UPGRADE6 ) {
+        _dwelling[5] = Monster( _race, DWELLING_UPGRADE6 ).GetGrown();
+    }
+    else if ( _constructedBuildings & DWELLING_MONSTER6 ) {
+        _dwelling[5] = Monster( _race, DWELLING_MONSTER6 ).GetGrown();
+    }
+
+    _army.SetColor( GetColor() );
 
     // fix captain
-    if ( building & BUILD_CAPTAIN ) {
-        captain.LoadDefaults( HeroBase::CAPTAIN, race );
-        captain.SetSpellPoints( captain.GetMaxSpellPoints() );
+    if ( _constructedBuildings & BUILD_CAPTAIN ) {
+        _captain.LoadDefaults( HeroBase::CAPTAIN, _race );
+        _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
     }
 
     // MageGuild
-    mageguild.initialize( race, HaveLibraryCapability() );
+    _mageGuild.initialize( _race, HaveLibraryCapability() );
     // educate heroes and captain
-    EducateHeroes();
+    _educateHeroes();
 
     // AI troops auto pack for gray towns
-    if ( Color::NONE == GetColor() && !Modes( CUSTOMARMY ) ) {
+    if ( Color::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
         // towns get 4 reinforcements at the start of the game
         for ( int i = 0; i < 4; ++i )
-            JoinRNDArmy();
+            _joinRNDArmy();
     }
 
     if ( !HasSeaAccess() ) {
         // Remove shipyard if no sea access.
-        building &= ~BUILD_SHIPYARD;
+        _constructedBuildings &= ~BUILD_SHIPYARD;
     }
 
     // remove tavern from necromancer castle
-    if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
-        building &= ~BUILD_TAVERN;
+    if ( Race::NECR == _race && ( _constructedBuildings & BUILD_TAVERN ) ) {
+        _constructedBuildings &= ~BUILD_TAVERN;
         const GameVersion version = Settings::Get().getCurrentMapInfo().version;
 
         if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
-            building |= BUILD_SHRINE;
+            _constructedBuildings |= BUILD_SHRINE;
         }
     }
 
-    SetModes( ALLOWBUILD );
+    SetModes( ALLOW_TO_BUILD_TODAY );
 
     // end
     DEBUG_LOG( DBG_GAME, DBG_INFO,
-               ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
+               ( _constructedBuildings & BUILD_CASTLE ? "castle" : "town" )
+                   << ": " << _name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
+}
+
+void Castle::_setDefaultBuildings()
+{
+    _constructedBuildings |= DWELLING_MONSTER1;
+    uint32_t dwelling2 = 0;
+
+    switch ( Game::getDifficulty() ) {
+    case Difficulty::EASY:
+        dwelling2 = 75;
+        break;
+    case Difficulty::NORMAL:
+        dwelling2 = 50;
+        break;
+    case Difficulty::HARD:
+        dwelling2 = 25;
+        break;
+    case Difficulty::EXPERT:
+        dwelling2 = 10;
+        break;
+    default:
+        break;
+    }
+
+    if ( dwelling2 >= Rand::Get( 1, 100 ) ) {
+        _constructedBuildings |= DWELLING_MONSTER2;
+    }
 }
 
 uint32_t Castle::CountBuildings() const
 {
     uint32_t tavern = BUILD_TAVERN;
-    if ( race == Race::NECR ) {
+    if ( _race == Race::NECR ) {
         const GameVersion version = Settings::Get().getCurrentMapInfo().version;
         if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
             tavern = BUILD_SHRINE;
@@ -532,7 +578,7 @@ uint32_t Castle::CountBuildings() const
         }
     }
 
-    return CountBits( building
+    return CountBits( _constructedBuildings
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
                           | BUILD_MOAT | BUILD_SPEC | BUILD_CAPTAIN | BUILD_CASTLE | BUILD_MAGEGUILD1 | DWELLING_MONSTER1 | DWELLING_MONSTER2 | DWELLING_MONSTER3
                           | DWELLING_MONSTER4 | DWELLING_MONSTER5 | DWELLING_MONSTER6 ) );
@@ -552,7 +598,7 @@ bool Castle::isPosition( const fheroes2::Point & pt ) const
     return ( ( pt.x >= mp.x - 1 && pt.x <= mp.x + 1 && ( pt.y == mp.y - 1 || pt.y == mp.y ) ) || ( ( pt.x == mp.x - 2 || pt.x == mp.x + 2 ) && pt.y == mp.y ) );
 }
 
-void Castle::EducateHeroes()
+void Castle::_educateHeroes()
 {
     if ( GetLevelMageGuild() == 0 ) {
         return;
@@ -563,8 +609,8 @@ void Castle::EducateHeroes()
         MageGuildEducateHero( *hero );
     }
 
-    if ( captain.isValid() ) {
-        MageGuildEducateHero( captain );
+    if ( _captain.isValid() ) {
+        MageGuildEducateHero( _captain );
     }
 }
 
@@ -579,7 +625,7 @@ int Castle::getBuildingValue() const
     if ( isBuild( DWELLING_MONSTER6 ) )
         value += 6;
 
-    if ( race == Race::WRLK && isBuild( DWELLING_UPGRADE7 ) )
+    if ( _race == Race::WRLK && isBuild( DWELLING_UPGRADE7 ) )
         value += 2;
 
     // DWELLING_UPGRADE7 resolves to a negative, can't use <= operator
@@ -600,10 +646,10 @@ int Castle::getBuildingValue() const
 
 Troops Castle::getAvailableArmy( Funds potentialBudget ) const
 {
-    Troops reinforcement( army.getTroops() );
+    Troops reinforcement( _army.getTroops() );
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
+            const Monster monster( _race, GetActualDwelling( dw ) );
             const uint32_t available = getMonstersInDwelling( dw );
 
             uint32_t couldRecruit = potentialBudget.getLowestQuotient( monster.GetCost() );
@@ -636,7 +682,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
     const int mageGuildLevel = GetLevelMageGuild();
     if ( mageGuildLevel > 0 ) {
         const int spellPower = hero.GetPower();
-        const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
         for ( const Spell & spell : guildSpells ) {
             if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
                 spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
@@ -681,21 +727,21 @@ double Castle::getVisitValue( const Heroes & hero ) const
     return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
-bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
+bool Castle::_isExactBuildingBuilt( const uint32_t buildingToCheck ) const
 {
     assert( CountBits( buildingToCheck ) == 1 );
 
     // This building is not built at all
-    if ( ( building & buildingToCheck ) == 0 ) {
+    if ( ( _constructedBuildings & buildingToCheck ) == 0 ) {
         return false;
     }
 
     const auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
         // All expected levels should be built
-        assert( ( building & expectedLevels ) == expectedLevels );
+        assert( ( _constructedBuildings & expectedLevels ) == expectedLevels );
 
         // Only the expected levels of all possible levels should be built
-        return ( building & allPossibleLevels ) == expectedLevels;
+        return ( _constructedBuildings & allPossibleLevels ) == expectedLevels;
     };
 
     if ( buildingToCheck & BUILD_MAGEGUILD ) {
@@ -755,28 +801,28 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
     return true;
 }
 
-uint32_t * Castle::GetDwelling( uint32_t dw )
+uint32_t * Castle::_getDwelling( const uint32_t buildingType )
 {
-    if ( isBuild( dw ) )
-        switch ( dw ) {
+    if ( isBuild( buildingType ) )
+        switch ( buildingType ) {
         case DWELLING_MONSTER1:
-            return &dwelling[0];
+            return &_dwelling[0];
         case DWELLING_MONSTER2:
         case DWELLING_UPGRADE2:
-            return &dwelling[1];
+            return &_dwelling[1];
         case DWELLING_MONSTER3:
         case DWELLING_UPGRADE3:
-            return &dwelling[2];
+            return &_dwelling[2];
         case DWELLING_MONSTER4:
         case DWELLING_UPGRADE4:
-            return &dwelling[3];
+            return &_dwelling[3];
         case DWELLING_MONSTER5:
         case DWELLING_UPGRADE5:
-            return &dwelling[4];
+            return &_dwelling[4];
         case DWELLING_MONSTER6:
         case DWELLING_UPGRADE6:
         case DWELLING_UPGRADE7:
-            return &dwelling[5];
+            return &_dwelling[5];
         default:
             break;
         }
@@ -785,9 +831,9 @@ uint32_t * Castle::GetDwelling( uint32_t dw )
 
 void Castle::ActionNewDay()
 {
-    EducateHeroes();
+    _educateHeroes();
 
-    SetModes( ALLOWBUILD );
+    SetModes( ALLOW_TO_BUILD_TODAY );
 }
 
 void Castle::ActionNewWeek()
@@ -811,20 +857,20 @@ void Castle::ActionNewWeek()
 
         // Normal population growth
         for ( const uint32_t dwellingId : basicDwellings ) {
-            uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+            uint32_t * dwellingMonsters = _getDwelling( dwellingId );
             if ( dwellingMonsters == nullptr ) {
                 // Such dwelling (or its upgrade) has not been built
                 continue;
             }
 
-            uint32_t growth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
+            uint32_t growth = Monster( _race, GetActualDwelling( dwellingId ) ).GetGrown();
 
-            if ( building & BUILD_WELL ) {
+            if ( _constructedBuildings & BUILD_WELL ) {
                 // The well is built.
                 growth += GetGrownWell();
             }
 
-            if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
+            if ( ( dwellingId == DWELLING_MONSTER1 ) && ( _constructedBuildings & BUILD_WEL2 ) ) {
                 growth += GetGrownWel2();
             }
 
@@ -839,17 +885,17 @@ void Castle::ActionNewWeek()
         if ( isMonsterWeek && !world.BeginMonth() ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
-                if ( !isExactBuildingBuilt( dwellingId ) ) {
+                if ( !_isExactBuildingBuilt( dwellingId ) ) {
                     continue;
                 }
 
-                const Monster mons( race, dwellingId );
+                const Monster mons( _race, dwellingId );
 
                 if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
                     continue;
                 }
 
-                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                uint32_t * dwellingMonsters = _getDwelling( dwellingId );
                 assert( dwellingMonsters != nullptr );
 
                 *dwellingMonsters += GetGrownWeekOf();
@@ -859,11 +905,11 @@ void Castle::ActionNewWeek()
 
         if ( isNeutral ) {
             // Neutral towns have additional increase in garrison army.
-            JoinRNDArmy();
+            _joinRNDArmy();
 
             // The probability that a town will get additional troops is 40%, castle always gets them
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 ) {
-                JoinRNDArmy();
+                _joinRNDArmy();
             }
         }
     }
@@ -873,24 +919,24 @@ void Castle::ActionNewWeek()
         assert( world.GetMonth() > 1 );
 
         if ( isPlagueWeek ) {
-            for ( uint32_t & dwellingRef : dwelling ) {
+            for ( uint32_t & dwellingRef : _dwelling ) {
                 dwellingRef /= 2;
             }
         }
         else if ( isMonsterWeek ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
-                if ( !isExactBuildingBuilt( dwellingId ) ) {
+                if ( !_isExactBuildingBuilt( dwellingId ) ) {
                     continue;
                 }
 
-                const Monster mons( race, dwellingId );
+                const Monster mons( _race, dwellingId );
 
                 if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
                     continue;
                 }
 
-                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                uint32_t * dwellingMonsters = _getDwelling( dwellingId );
                 assert( dwellingMonsters != nullptr );
 
                 *dwellingMonsters += *dwellingMonsters * GetGrownMonthOf() / 100;
@@ -900,102 +946,31 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewWeekAIBonuses()
+void Castle::ChangeColor( const int newColor )
 {
-    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-        // No growth bonus can be applied.
-        return;
-    }
-
-    if ( !isControlAI() ) {
-        // No AI - no perks!
-        return;
-    }
-
-    if ( GetColor() == Color::NONE ) {
-        // Neutrals aren't considered as AI players.
-        return;
-    }
-
-    static const std::array<uint32_t, 6> basicDwellings
-        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
-
-    for ( const uint32_t dwellingId : basicDwellings ) {
-        uint32_t * dwellingMonsters = GetDwelling( dwellingId );
-        if ( dwellingMonsters == nullptr ) {
-            // Such dwelling (or its upgrade) has not been built.
-            continue;
-        }
-
-        uint32_t originalGrowth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
-
-        if ( building & BUILD_WELL ) {
-            originalGrowth += GetGrownWell();
-        }
-
-        if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
-            originalGrowth += GetGrownWel2();
-        }
-
-        *dwellingMonsters += static_cast<uint32_t>( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
-    }
-}
-
-void Castle::ActionNewMonth() const
-{
-    // Do nothing.
-}
-
-void Castle::ChangeColor( int cl )
-{
-    SetColor( cl );
-    army.SetColor( cl );
+    SetColor( newColor );
+    _army.SetColor( newColor );
 }
 
 int Castle::GetLevelMageGuild() const
 {
-    if ( building & BUILD_MAGEGUILD5 )
+    if ( _constructedBuildings & BUILD_MAGEGUILD5 )
         return 5;
-    else if ( building & BUILD_MAGEGUILD4 )
+    if ( _constructedBuildings & BUILD_MAGEGUILD4 )
         return 4;
-    else if ( building & BUILD_MAGEGUILD3 )
+    if ( _constructedBuildings & BUILD_MAGEGUILD3 )
         return 3;
-    else if ( building & BUILD_MAGEGUILD2 )
+    if ( _constructedBuildings & BUILD_MAGEGUILD2 )
         return 2;
-    else if ( building & BUILD_MAGEGUILD1 )
+    if ( _constructedBuildings & BUILD_MAGEGUILD1 )
         return 1;
 
     return 0;
 }
 
-bool Castle::HaveLibraryCapability() const
+const char * Castle::GetStringBuilding( const uint32_t buildingType, const int race )
 {
-    return race == Race::WZRD;
-}
-
-bool Castle::isLibraryBuild() const
-{
-    return race == Race::WZRD && isBuild( BUILD_SPEC );
-}
-
-void Castle::MageGuildEducateHero( HeroBase & hero ) const
-{
-    mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
-}
-
-bool Castle::isFortificationBuild() const
-{
-    return race == Race::KNGT && isBuild( BUILD_SPEC );
-}
-
-const char * Castle::GetStringBuilding( uint32_t build, int race )
-{
-    return fheroes2::getBuildingName( race, static_cast<building_t>( build ) );
-}
-
-const char * Castle::GetDescriptionBuilding( uint32_t build, int race )
-{
-    return fheroes2::getBuildingDescription( race, static_cast<building_t>( build ) );
+    return fheroes2::getBuildingName( race, static_cast<BuildingType>( buildingType ) );
 }
 
 bool Castle::AllowBuyHero( std::string * msg ) const
@@ -1018,7 +993,7 @@ bool Castle::AllowBuyHero( std::string * msg ) const
 
     if ( !myKingdom.AllowRecruitHero( true ) ) {
         if ( msg ) {
-            *msg = _( "Cannot afford a Hero" );
+            *msg = _( "Cannot afford a Hero." );
         }
         return false;
     }
@@ -1047,7 +1022,7 @@ Heroes * Castle::RecruitHero( Heroes * hero )
         MageGuildEducateHero( *hero );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, _name << ", recruit: " << hero->GetName() )
 
     return hero;
 }
@@ -1090,8 +1065,8 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
     uint32_t count = troop.GetCount();
 
-    if ( dwelling[dwellingIndex] < count ) {
-        count = dwelling[dwellingIndex];
+    if ( _dwelling[dwellingIndex] < count ) {
+        count = _dwelling[dwellingIndex];
     }
 
     const Funds paymentCosts = troop.GetTotalCost();
@@ -1113,62 +1088,17 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     }
 
     kingdom.OddFundsResource( paymentCosts );
-    dwelling[dwellingIndex] -= count;
+    _dwelling[dwellingIndex] -= count;
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" )
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, _name << " recruit: " << troop.GetMultiName() << "(" << count << ")" )
 
     return true;
-}
-
-bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
-{
-    const Monster monster( race, GetActualDwelling( dw ) );
-    assert( count <= getRecruitLimit( monster, GetKingdom().GetFunds() ) );
-
-    const Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
-
-    if ( RecruitMonster( troop, false ) ) {
-        return true;
-    }
-
-    // TODO: before removing an existing stack of monsters try to upgrade them and also merge some stacks.
-
-    if ( force ) {
-        Troop * weak = GetArmy().GetWeakestTroop();
-        if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO,
-                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
-            weak->Set( troop );
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void Castle::recruitBestAvailable( Funds budget )
-{
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( !isBuild( dw ) ) {
-            continue;
-        }
-
-        const Monster monster( race, GetActualDwelling( dw ) );
-        const uint32_t willRecruit = getRecruitLimit( monster, budget );
-        if ( willRecruit == 0 ) {
-            continue;
-        }
-
-        if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-            budget -= ( monster.GetCost() * willRecruit );
-        }
-    }
 }
 
 uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const
 {
     // validate that monster is from the current castle
-    if ( monster.GetRace() != race )
+    if ( monster.GetRace() != _race )
         return 0;
 
     const uint32_t available = getMonstersInDwelling( monster.GetDwelling() );
@@ -1180,28 +1110,27 @@ uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget 
     return willRecruit;
 }
 
-/* return current count monster in dwelling */
-uint32_t Castle::getMonstersInDwelling( uint32_t dw ) const
+uint32_t Castle::getMonstersInDwelling( const uint32_t buildingType ) const
 {
-    switch ( dw ) {
+    switch ( buildingType ) {
     case DWELLING_MONSTER1:
-        return dwelling[0];
+        return _dwelling[0];
     case DWELLING_MONSTER2:
     case DWELLING_UPGRADE2:
-        return dwelling[1];
+        return _dwelling[1];
     case DWELLING_MONSTER3:
     case DWELLING_UPGRADE3:
-        return dwelling[2];
+        return _dwelling[2];
     case DWELLING_MONSTER4:
     case DWELLING_UPGRADE4:
-        return dwelling[3];
+        return _dwelling[3];
     case DWELLING_MONSTER5:
     case DWELLING_UPGRADE5:
-        return dwelling[4];
+        return _dwelling[4];
     case DWELLING_MONSTER6:
     case DWELLING_UPGRADE6:
     case DWELLING_UPGRADE7:
-        return dwelling[5];
+        return _dwelling[5];
 
     default:
         break;
@@ -1210,298 +1139,31 @@ uint32_t Castle::getMonstersInDwelling( uint32_t dw ) const
     return 0;
 }
 
-/* return requirement for building */
-uint32_t Castle::GetBuildingRequirement( uint32_t build ) const
+BuildingStatus Castle::CheckBuyBuilding( const uint32_t build ) const
 {
-    uint32_t requirement = 0;
-
-    switch ( build ) {
-    case BUILD_SPEC:
-        switch ( race ) {
-        case Race::WZRD:
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER2:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-        case Race::WZRD:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_TAVERN;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER3:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::BARB:
-        case Race::SORC:
-        case Race::WZRD:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER4:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER1;
-            requirement |= BUILD_TAVERN;
-            break;
-
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER1;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        case Race::WZRD:
-        case Race::WRLK:
-            requirement |= DWELLING_MONSTER2;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_THIEVESGUILD;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER5:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::WRLK:
-            requirement |= DWELLING_MONSTER3;
-            break;
-
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= BUILD_MAGEGUILD1;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_MONSTER6:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::BARB:
-        case Race::SORC:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::WRLK:
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER4;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE2:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER2;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE3:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER3;
-            requirement |= BUILD_WELL;
-            break;
-
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER3;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE4:
-        switch ( race ) {
-        case Race::KNGT:
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER2;
-            requirement |= DWELLING_MONSTER3;
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        case Race::SORC:
-        case Race::WRLK:
-        case Race::NECR:
-            requirement |= DWELLING_MONSTER4;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE5:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::BARB:
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::WZRD:
-            requirement |= BUILD_SPEC;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        case Race::NECR:
-            requirement |= BUILD_MAGEGUILD2;
-            requirement |= DWELLING_MONSTER5;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    case DWELLING_UPGRADE6:
-        switch ( race ) {
-        case Race::KNGT:
-            requirement |= DWELLING_MONSTER6;
-            break;
-
-        case Race::WRLK:
-        case Race::WZRD:
-            requirement |= DWELLING_MONSTER6;
-            break;
-
-        default:
-            break;
-        }
-        break;
-    case DWELLING_UPGRADE7:
-        if ( race == Race::WRLK )
-            requirement |= DWELLING_UPGRADE6;
-        break;
-
-    default:
-        break;
+    if ( build & _constructedBuildings ) {
+        return BuildingStatus::ALREADY_BUILT;
     }
 
-    return requirement;
-}
-
-int Castle::CheckBuyBuilding( const uint32_t build ) const
-{
-    if ( build & building ) {
-        return ALREADY_BUILT;
+    if ( _disabledBuildings & build ) {
+        return BuildingStatus::BUILD_DISABLE;
     }
 
+    // TODO: remove these conditions and do calculation once per game.
     switch ( build ) {
-    case BUILD_CASTLE:
-        if ( !Modes( ALLOWCASTLE ) ) {
-            return BUILD_DISABLE;
-        }
-        break;
     case BUILD_SHIPYARD:
         if ( !HasSeaAccess() ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::SHIPYARD_NOT_ALLOWED;
         }
         break;
     case BUILD_SHRINE:
         if ( Race::NECR != GetRace() || ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS ) ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     case BUILD_TAVERN:
         if ( Race::NECR == GetRace() ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
         break;
     default:
@@ -1511,114 +1173,109 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
     if ( build >= BUILD_MAGEGUILD2 && build <= BUILD_MAGEGUILD5 ) {
         const uint32_t prevMageGuild = build >> 1;
 
-        if ( !( building & prevMageGuild ) ) {
-            return BUILD_DISABLE;
+        if ( !( _constructedBuildings & prevMageGuild ) ) {
+            return BuildingStatus::BUILD_DISABLE;
         }
     }
 
-    if ( !Modes( ALLOWBUILD ) ) {
-        return NOT_TODAY;
+    if ( !Modes( ALLOW_TO_BUILD_TODAY ) ) {
+        return BuildingStatus::NOT_TODAY;
     }
 
     if ( isCastle() ) {
         if ( build == BUILD_TENT ) {
-            return BUILD_DISABLE;
+            return BuildingStatus::BUILD_DISABLE;
         }
     }
     else {
         if ( build != BUILD_CASTLE ) {
-            return NEED_CASTLE;
+            return BuildingStatus::NEED_CASTLE;
         }
     }
 
     switch ( build ) {
     case DWELLING_UPGRADE2:
-        if ( ( Race::WRLK | Race::WZRD ) & race )
-            return UNKNOWN_UPGRADE;
+        if ( ( Race::WRLK | Race::WZRD ) & _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE3:
-        if ( ( Race::BARB | Race::WRLK ) & race )
-            return UNKNOWN_UPGRADE;
+        if ( ( Race::BARB | Race::WRLK ) & _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE4:
-        if ( Race::WZRD & race )
-            return UNKNOWN_UPGRADE;
+        if ( Race::WZRD & _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE5:
-        if ( ( Race::SORC | Race::WRLK ) & race )
-            return UNKNOWN_UPGRADE;
+        if ( ( Race::SORC | Race::WRLK ) & _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE6:
-        if ( ( Race::BARB | Race::SORC | Race::NECR ) & race )
-            return UNKNOWN_UPGRADE;
+        if ( ( Race::BARB | Race::SORC | Race::NECR ) & _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
     case DWELLING_UPGRADE7:
-        if ( Race::WRLK != race )
-            return UNKNOWN_UPGRADE;
+        if ( Race::WRLK != _race )
+            return BuildingStatus::UNKNOWN_UPGRADE;
         break;
 
     default:
         break;
     }
 
-    const uint32_t requirement = Castle::GetBuildingRequirement( build );
+    const uint32_t requirement = fheroes2::getBuildingRequirement( _race, static_cast<BuildingType>( build ) );
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
-        if ( ( requirement & itr ) && !( building & itr ) ) {
-            return REQUIRES_BUILD;
+        if ( ( requirement & itr ) && !( _constructedBuildings & itr ) ) {
+            return BuildingStatus::REQUIRES_BUILD;
         }
     }
 
-    if ( !GetKingdom().AllowPayment( PaymentConditions::BuyBuilding( race, build ) ) ) {
-        return LACK_RESOURCES;
+    if ( !GetKingdom().AllowPayment( PaymentConditions::BuyBuilding( _race, build ) ) ) {
+        return BuildingStatus::LACK_RESOURCES;
     }
 
-    return ALLOW_BUILD;
+    return BuildingStatus::ALLOW_BUILD;
 }
 
-int Castle::GetAllBuildingStatus( const Castle & castle )
+BuildingStatus Castle::GetAllBuildingStatus( const Castle & castle )
 {
-    if ( !castle.Modes( ALLOWBUILD ) )
-        return NOT_TODAY;
+    if ( !castle.Modes( ALLOW_TO_BUILD_TODAY ) )
+        return BuildingStatus::NOT_TODAY;
     if ( !castle.isCastle() )
-        return NEED_CASTLE;
+        return BuildingStatus::NEED_CASTLE;
 
-    const uint32_t rest = ~castle.building;
-
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( ALLOW_BUILD == castle.CheckBuyBuilding( itr ) ) )
-            return ALLOW_BUILD;
+    const uint32_t rest = ~castle._constructedBuildings;
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( LACK_RESOURCES == castle.CheckBuyBuilding( itr ) ) )
-            return LACK_RESOURCES;
+        if ( ( rest & itr ) && ( BuildingStatus::ALLOW_BUILD == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::ALLOW_BUILD;
 
     for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( rest & itr ) && ( REQUIRES_BUILD == castle.CheckBuyBuilding( itr ) ) )
-            return REQUIRES_BUILD;
+        if ( ( rest & itr ) && ( BuildingStatus::LACK_RESOURCES == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::LACK_RESOURCES;
 
-    return UNKNOWN_COND;
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
+        if ( ( rest & itr ) && ( BuildingStatus::REQUIRES_BUILD == castle.CheckBuyBuilding( itr ) ) )
+            return BuildingStatus::REQUIRES_BUILD;
+
+    return BuildingStatus::UNKNOWN_COND;
 }
 
-bool Castle::AllowBuyBuilding( uint32_t build ) const
+bool Castle::BuyBuilding( const uint32_t buildingType )
 {
-    return ALLOW_BUILD == CheckBuyBuilding( build );
-}
-
-bool Castle::BuyBuilding( uint32_t build )
-{
-    if ( !AllowBuyBuilding( build ) )
+    if ( !AllowBuyBuilding( buildingType ) )
         return false;
 
-    GetKingdom().OddFundsResource( PaymentConditions::BuyBuilding( race, build ) );
+    GetKingdom().OddFundsResource( PaymentConditions::BuyBuilding( _race, buildingType ) );
 
     // add build
-    building |= build;
+    _constructedBuildings |= buildingType;
 
-    switch ( build ) {
+    switch ( buildingType ) {
     case BUILD_CASTLE:
-        building &= ~BUILD_TENT;
-        Maps::UpdateCastleSprite( GetCenter(), race );
+        _constructedBuildings &= ~BUILD_TENT;
+        Maps::UpdateCastleSprite( GetCenter(), _race );
         Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
         break;
 
@@ -1627,48 +1284,48 @@ bool Castle::BuyBuilding( uint32_t build )
     case BUILD_MAGEGUILD3:
     case BUILD_MAGEGUILD4:
     case BUILD_MAGEGUILD5:
-        EducateHeroes();
+        _educateHeroes();
         break;
 
     case BUILD_CAPTAIN:
-        captain.LoadDefaults( HeroBase::CAPTAIN, race );
-        captain.SetSpellPoints( captain.GetMaxSpellPoints() );
+        _captain.LoadDefaults( HeroBase::CAPTAIN, _race );
+        _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
         if ( GetLevelMageGuild() )
-            MageGuildEducateHero( captain );
+            MageGuildEducateHero( _captain );
         break;
 
     case BUILD_SPEC:
         // build library
         if ( HaveLibraryCapability() )
-            EducateHeroes();
+            _educateHeroes();
         break;
 
     case DWELLING_MONSTER1:
-        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
+        _dwelling[0] = Monster( _race, DWELLING_MONSTER1 ).GetGrown();
         break;
     case DWELLING_MONSTER2:
-        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
+        _dwelling[1] = Monster( _race, DWELLING_MONSTER2 ).GetGrown();
         break;
     case DWELLING_MONSTER3:
-        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
+        _dwelling[2] = Monster( _race, DWELLING_MONSTER3 ).GetGrown();
         break;
     case DWELLING_MONSTER4:
-        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
+        _dwelling[3] = Monster( _race, DWELLING_MONSTER4 ).GetGrown();
         break;
     case DWELLING_MONSTER5:
-        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
+        _dwelling[4] = Monster( _race, DWELLING_MONSTER5 ).GetGrown();
         break;
     case DWELLING_MONSTER6:
-        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
+        _dwelling[5] = Monster( _race, DWELLING_MONSTER6 ).GetGrown();
         break;
     default:
         break;
     }
 
     // disable day build
-    ResetModes( ALLOWBUILD );
+    ResetModes( ALLOW_TO_BUILD_TODAY );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << " build " << GetStringBuilding( build, race ) )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, _name << " build " << GetStringBuilding( buildingType, _race ) )
     return true;
 }
 
@@ -1676,7 +1333,7 @@ bool Castle::BuyBuilding( uint32_t build )
 void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    const Maps::Tile & tile = world.getTile( GetIndex() );
 
     uint32_t index = 0;
     fheroes2::Point dst_pt;
@@ -1727,7 +1384,7 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     }
 
     // draw castle
-    switch ( race ) {
+    switch ( _race ) {
     case Race::KNGT:
         index = 0;
         break;
@@ -1749,7 +1406,7 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     default:
         break;
     }
-    if ( !( BUILD_CASTLE & building ) )
+    if ( !( BUILD_CASTLE & _constructedBuildings ) )
         index += 16;
     const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index );
     dst_pt.x = pt.x + 2 * 32 + sprite2.x();
@@ -1775,7 +1432,7 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     }
 }
 
-int Castle::GetICNBoat( int race )
+int Castle::GetICNBoat( const int race )
 {
     switch ( race ) {
     case Race::BARB:
@@ -1798,11 +1455,10 @@ int Castle::GetICNBoat( int race )
     return ICN::UNKNOWN;
 }
 
-/* get building name ICN */
-int Castle::GetICNBuilding( uint32_t build, int race )
+int Castle::GetICNBuilding( const uint32_t buildingType, const int race )
 {
     if ( Race::BARB == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNBCSTL;
         case BUILD_TENT:
@@ -1860,7 +1516,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
         }
     }
     else if ( Race::KNGT == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNKCSTL;
         case BUILD_TENT:
@@ -1922,7 +1578,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
         }
     }
     else if ( Race::NECR == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNNCSTL;
         case BUILD_TENT:
@@ -1983,7 +1639,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
         }
     }
     else if ( Race::SORC == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNSCSTL;
         case BUILD_TENT:
@@ -2041,7 +1697,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
         }
     }
     else if ( Race::WRLK == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNWCSTL;
         case BUILD_TENT:
@@ -2099,7 +1755,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
         }
     }
     else if ( Race::WZRD == race ) {
-        switch ( build ) {
+        switch ( buildingType ) {
         case BUILD_CASTLE:
             return ICN::TWNZCSTL;
         case BUILD_TENT:
@@ -2159,7 +1815,7 @@ int Castle::GetICNBuilding( uint32_t build, int race )
 
     DEBUG_LOG( DBG_GAME, DBG_WARN,
                "return unknown"
-                   << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( build, race ) << ", " << build )
+                   << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( buildingType, race ) << ", " << buildingType )
 
     return ICN::UNKNOWN;
 }
@@ -2177,33 +1833,33 @@ bool Castle::HasSeaAccess() const
         return false;
     }
 
-    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileAllowsToPutBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
         }
 
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
             // The main addon does not exist on this tile.
             // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
             return true;
         }
 
         // If this is an object's shadow or this is an action object that can be removed then it is possible to put a boat here.
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
         return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT || tile.isPassabilityTransparent();
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileAllowsToPutBoat( world.getTile( index ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index - 1 ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index + 1 ) ) ) {
         return true;
     }
 
@@ -2218,26 +1874,26 @@ bool Castle::HasBoatNearby() const
         return false;
     }
 
-    auto doesTileHaveBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileHaveBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
         }
 
-        const MP2::MapObjectType objectType = tile.GetObject();
-        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HEROES );
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
+        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HERO );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileHaveBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileHaveBoat( world.getTile( index ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.getTile( index - 1 ) ) ) {
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.getTile( index + 1 ) ) ) {
         return true;
     }
 
@@ -2252,27 +1908,27 @@ int32_t Castle::getTileIndexToPlaceBoat() const
         return -1;
     }
 
-    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+    auto doesTileAllowsToPutBoat = []( const Maps::Tile & tile ) {
         if ( !tile.isWater() ) {
             // No water, no boat.
             return false;
         }
 
-        // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
+        // Mark the tile as worthy to a place a boat if the main object part does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
+        return ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
-    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+    if ( doesTileAllowsToPutBoat( world.getTile( index ) ) ) {
         return index;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index - 1 ) ) ) {
         return index - 1;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.getTile( index + 1 ) ) ) {
         return index + 1;
     }
 
@@ -2290,17 +1946,17 @@ uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
     case DWELLING_UPGRADE7:
         return buildId;
     case DWELLING_MONSTER2:
-        return building & DWELLING_UPGRADE2 ? DWELLING_UPGRADE2 : buildId;
+        return _constructedBuildings & DWELLING_UPGRADE2 ? DWELLING_UPGRADE2 : buildId;
     case DWELLING_MONSTER3:
-        return building & DWELLING_UPGRADE3 ? DWELLING_UPGRADE3 : buildId;
+        return _constructedBuildings & DWELLING_UPGRADE3 ? DWELLING_UPGRADE3 : buildId;
     case DWELLING_MONSTER4:
-        return building & DWELLING_UPGRADE4 ? DWELLING_UPGRADE4 : buildId;
+        return _constructedBuildings & DWELLING_UPGRADE4 ? DWELLING_UPGRADE4 : buildId;
     case DWELLING_MONSTER5:
-        return building & DWELLING_UPGRADE5 ? DWELLING_UPGRADE5 : buildId;
+        return _constructedBuildings & DWELLING_UPGRADE5 ? DWELLING_UPGRADE5 : buildId;
     case DWELLING_MONSTER6:
-        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : ( building & DWELLING_UPGRADE6 ? DWELLING_UPGRADE6 : buildId );
+        return _constructedBuildings & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : ( _constructedBuildings & DWELLING_UPGRADE6 ? DWELLING_UPGRADE6 : buildId );
     case DWELLING_UPGRADE6:
-        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : buildId;
+        return _constructedBuildings & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : buildId;
     default:
         break;
     }
@@ -2308,116 +1964,14 @@ uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
     return BUILD_NOTHING;
 }
 
-uint32_t Castle::GetUpgradeBuilding( uint32_t build ) const
+uint32_t Castle::GetUpgradeBuilding( const uint32_t buildingId ) const
 {
-    switch ( build ) {
-    case BUILD_TENT:
-        return BUILD_CASTLE;
-    case BUILD_MAGEGUILD1:
-        return BUILD_MAGEGUILD2;
-    case BUILD_MAGEGUILD2:
-        return BUILD_MAGEGUILD3;
-    case BUILD_MAGEGUILD3:
-        return BUILD_MAGEGUILD4;
-    case BUILD_MAGEGUILD4:
-        return BUILD_MAGEGUILD5;
-    default:
-        break;
+    if ( _race == Race::WRLK && buildingId == DWELLING_MONSTER6 && isBuild( DWELLING_UPGRADE6 ) ) {
+        // Warlock's dwelling 6 is a special case.
+        return fheroes2::getUpgradeForBuilding( _race, DWELLING_UPGRADE6 );
     }
 
-    if ( Race::BARB == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::KNGT == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::NECR == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::SORC == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WRLK == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER6:
-            return isBuild( DWELLING_UPGRADE6 ) ? DWELLING_UPGRADE7 : DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WZRD == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-
-    return build;
-}
-
-bool Castle::PredicateIsCastle( const Castle * castle )
-{
-    return castle && castle->isCastle();
-}
-
-bool Castle::PredicateIsTown( const Castle * castle )
-{
-    return castle && !castle->isCastle();
-}
-
-bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t building )
-{
-    return castle && castle->isBuild( building );
+    return fheroes2::getUpgradeForBuilding( _race, static_cast<BuildingType>( buildingId ) );
 }
 
 std::string Castle::String() const
@@ -2425,7 +1979,7 @@ std::string Castle::String() const
     std::ostringstream os;
     const Heroes * hero = GetHero();
 
-    os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
+    os << "name and type   : " << _name << " (" << Race::String( _race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "dwellings       : ";
 
@@ -2444,7 +1998,7 @@ std::string Castle::String() const
     os << "buildings       : " << CountBuildings() << " (mage guild: " << GetLevelMageGuild() << ")" << std::endl
        << "coast/has boat  : " << ( HasSeaAccess() ? "yes" : "no" ) << " / " << ( HasBoatNearby() ? "yes" : "no" ) << std::endl
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
-       << "army            : " << army.String() << std::endl;
+       << "army            : " << _army.String() << std::endl;
 
     if ( hero != nullptr ) {
         os << "hero army       : " << hero->GetArmy().String() << std::endl;
@@ -2453,35 +2007,20 @@ std::string Castle::String() const
     return os.str();
 }
 
-int Castle::GetAttackModificator( const std::string * ) const
-{
-    return 0;
-}
-
-int Castle::GetDefenseModificator( const std::string * ) const
-{
-    return 0;
-}
-
 int Castle::GetPowerModificator( std::string * strs ) const
 {
     int result = 0;
 
-    if ( Race::NECR == race && isBuild( BUILD_SPEC ) ) {
+    if ( Race::NECR == _race && isBuild( BUILD_SPEC ) ) {
         const int mod = 2;
         result += mod;
         if ( strs ) {
-            strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            strs->append( GetStringBuilding( BUILD_SPEC, _race ) );
+            fheroes2::appendModifierToString( *strs, mod );
         }
     }
 
     return result;
-}
-
-int Castle::GetKnowledgeModificator( const std::string * ) const
-{
-    return 0;
 }
 
 int Castle::GetMoraleModificator( std::string * strs ) const
@@ -2493,19 +2032,19 @@ int Castle::GetMoraleModificator( std::string * strs ) const
         const int mod = 1;
         result += mod;
         if ( strs ) {
-            strs->append( GetStringBuilding( BUILD_TAVERN, race ) );
-            StringAppendModifiers( *strs, mod );
+            strs->append( GetStringBuilding( BUILD_TAVERN, _race ) );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
 
     // and barbarian coliseum
-    if ( Race::BARB == race && isBuild( BUILD_SPEC ) ) {
+    if ( Race::BARB == _race && isBuild( BUILD_SPEC ) ) {
         const int mod = 2;
         result += mod;
         if ( strs ) {
-            strs->append( GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            strs->append( GetStringBuilding( BUILD_SPEC, _race ) );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2517,12 +2056,12 @@ int Castle::GetLuckModificator( std::string * strs ) const
 {
     int result = Luck::NORMAL;
 
-    if ( Race::SORC == race && isBuild( BUILD_SPEC ) ) {
+    if ( Race::SORC == _race && isBuild( BUILD_SPEC ) ) {
         const int mod = 2;
         result += mod;
         if ( strs ) {
-            strs->append( Castle::GetStringBuilding( BUILD_SPEC, race ) );
-            StringAppendModifiers( *strs, mod );
+            strs->append( Castle::GetStringBuilding( BUILD_SPEC, _race ) );
+            fheroes2::appendModifierToString( *strs, mod );
             strs->append( "\n" );
         }
     }
@@ -2530,26 +2069,16 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-const Army & Castle::GetArmy() const
-{
-    return army;
-}
-
-Army & Castle::GetArmy()
-{
-    return army;
-}
-
 const Army & Castle::GetActualArmy() const
 {
     const Heroes * hero = world.GetHero( *this );
-    return hero ? hero->GetArmy() : army;
+    return hero ? hero->GetArmy() : _army;
 }
 
 Army & Castle::GetActualArmy()
 {
     Heroes * hero = world.GetHero( *this );
-    return hero ? hero->GetArmy() : army;
+    return hero ? hero->GetArmy() : _army;
 }
 
 double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
@@ -2562,7 +2091,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     // there is a place for them. Castle bonuses are applied to the resulting combined army.
     if ( hero ) {
         Army garrisonArmy;
-        garrisonArmy.Assign( army );
+        garrisonArmy.Assign( _army );
 
         Army combinedArmy( hero );
         combinedArmy.Assign( hero->GetArmy() );
@@ -2572,7 +2101,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     }
     // Otherwise just use the garrison army strength. Castle bonuses are also applied.
     else {
-        totalStrength += army.GetStrength();
+        totalStrength += _army.GetStrength();
     }
 
     // Add castle bonuses if there are any troops defending the castle
@@ -2637,14 +2166,14 @@ bool Castle::BuyBoat() const
 
     Kingdom & kingdom = GetKingdom();
     kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-    world.GetTiles( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
+    world.getTile( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
 
     return true;
 }
 
-void Castle::setName( const std::set<std::string> & usedNames )
+void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 {
-    assert( name.empty() );
+    assert( _name.empty() );
 
     std::vector<const char *> shuffledCastleNames( defaultCastleNames.begin(), defaultCastleNames.end() );
 
@@ -2653,7 +2182,7 @@ void Castle::setName( const std::set<std::string> & usedNames )
     for ( const char * originalName : shuffledCastleNames ) {
         const char * translatedCastleName = _( originalName );
         if ( usedNames.count( translatedCastleName ) < 1 ) {
-            name = translatedCastleName;
+            _name = translatedCastleName;
             return;
         }
     }
@@ -2664,13 +2193,8 @@ void Castle::setName( const std::set<std::string> & usedNames )
 
 int Castle::GetControl() const
 {
-    /* gray towns: AI control */
-    return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
-}
-
-bool Castle::isNecromancyShrineBuild() const
-{
-    return race == Race::NECR && ( BUILD_SHRINE & building );
+    // Neutral castles & towns are always controlled by AI
+    return ( GetColor() & Color::ALL ) ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
 uint32_t Castle::GetGrownWell()
@@ -2698,7 +2222,7 @@ void Castle::Scout() const
     Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
 
-void Castle::JoinRNDArmy()
+void Castle::_joinRNDArmy()
 {
     const uint32_t timeModifier = world.CountDay() / 10;
     const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
@@ -2726,72 +2250,55 @@ void Castle::JoinRNDArmy()
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwellingType ), count, false );
+    _army.JoinTroop( Monster( _race, dwellingType ), count, false );
 }
 
 void Castle::ActionPreBattle()
 {
-    Heroes * hero = world.GetHero( *this );
-    if ( hero ) {
-        hero->GetArmy().ArrangeForCastleDefense( army );
+    if ( isControlAI() ) {
+        AI::Planner::CastlePreBattle( *this );
+
+        return;
     }
 
-    if ( isControlAI() ) {
-        AI::Get().CastlePreBattle( *this );
+    Heroes * hero = world.GetHero( *this );
+    if ( hero == nullptr ) {
+        return;
     }
+
+    hero->GetArmy().ArrangeForCastleDefense( _army );
 }
 
-void Castle::ActionAfterBattle( bool attacker_wins )
+void Castle::ActionAfterBattle( const bool attackerWins )
 {
-    if ( attacker_wins ) {
-        army.Clean();
-        ResetModes( CUSTOMARMY );
+    if ( attackerWins ) {
+        _army.Clean();
+        ResetModes( CUSTOM_ARMY );
     }
-
-    if ( isControlAI() )
-        AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
 Castle * VecCastles::GetFirstCastle() const
 {
-    const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
-    return end() != it ? *it : nullptr;
-}
+    const_iterator iter = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
+    if ( iter == end() ) {
+        return nullptr;
+    }
 
-void VecCastles::ChangeColors( int col1, int col2 )
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->GetColor() == col1 )
-            ( *it )->ChangeColor( col2 );
+    return *iter;
 }
 
 AllCastles::AllCastles()
 {
-    // reserve memory
     _castles.reserve( maximumCastles );
 }
 
-AllCastles::~AllCastles()
+void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
-    Clear();
-}
+    assert( castle );
 
-void AllCastles::Init()
-{
-    Clear();
-}
+    const fheroes2::Point & center = castle->GetCenter();
 
-void AllCastles::Clear()
-{
-    for ( auto it = begin(); it != end(); ++it )
-        delete *it;
-    _castles.clear();
-    _castleTiles.clear();
-}
-
-void AllCastles::AddCastle( Castle * castle )
-{
-    _castles.push_back( castle );
+    _castles.emplace_back( std::move( castle ) );
 
     /* Register position of all castle elements on the map
     Castle element positions are:
@@ -2807,7 +2314,6 @@ void AllCastles::AddCastle( Castle * castle )
     */
 
     const size_t id = _castles.size() - 1;
-    const fheroes2::Point & center = castle->GetCenter();
 
     // Castles are added from top to bottom, from left to right.
     // Tiles containing castle ID cannot be overwritten.
@@ -2819,121 +2325,190 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id ); !inserted ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
             }
         }
     }
 
-    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id ); !inserted ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
     }
 }
 
-void AllCastles::Scout( int colors ) const
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
-    for ( auto it = begin(); it != end(); ++it )
-        if ( colors & ( *it )->GetColor() )
-            ( *it )->Scout();
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return nullptr;
+    }
+
+    assert( iter->second < _castles.size() && _castles[iter->second] );
+
+    return _castles[iter->second].get();
 }
 
-/* pack castle */
-StreamBase & operator<<( StreamBase & msg, const Castle & castle )
+void AllCastles::Scout( const int colors ) const
+{
+    for ( const Castle * castle : *this ) {
+        assert( castle != nullptr );
+
+        if ( !( castle->GetColor() & colors ) ) {
+            continue;
+        }
+
+        castle->Scout();
+    }
+}
+
+void AllCastles::NewDay() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewDay();
+    } );
+}
+
+void AllCastles::NewWeek() const
+{
+    std::for_each( begin(), end(), []( Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewWeek();
+    } );
+}
+
+void AllCastles::NewMonth() const
+{
+    std::for_each( begin(), end(), []( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        castle->ActionNewMonth();
+    } );
+}
+
+OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
 {
     const ColorBase & color = castle;
 
-    msg << static_cast<const MapPosition &>( castle ) << castle.modes << castle.race << castle.building << castle.captain << color << castle.name << castle.mageguild
-        << static_cast<uint32_t>( CASTLEMAXMONSTER );
+    stream << static_cast<const MapPosition &>( castle ) << castle.modes << castle._race << castle._constructedBuildings << castle._disabledBuildings << castle._captain
+           << color << castle._name << castle._mageGuild;
 
-    for ( uint32_t ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-        msg << castle.dwelling[ii];
+    stream.put32( static_cast<uint32_t>( castle._dwelling.size() ) );
 
-    return msg << castle.army;
-}
-
-/* unpack castle */
-StreamBase & operator>>( StreamBase & msg, Castle & castle )
-{
-    ColorBase & color = castle;
-    uint32_t dwellingcount;
-
-    msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle.building >> castle.captain >> color >> castle.name >> castle.mageguild;
-
-    msg >> dwellingcount;
-    for ( uint32_t ii = 0; ii < dwellingcount; ++ii )
-        msg >> castle.dwelling[ii];
-
-    msg >> castle.army;
-    castle.army.SetCommander( &castle.captain );
-
-    return msg;
-}
-
-StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
-{
-    msg << static_cast<uint32_t>( castles.size() );
-
-    for ( auto it = castles.begin(); it != castles.end(); ++it )
-        msg << ( *it ? ( *it )->GetIndex() : static_cast<int32_t>( -1 ) );
-
-    return msg;
-}
-
-StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
-{
-    int32_t index;
-    uint32_t size;
-    msg >> size;
-
-    castles.resize( size, nullptr );
-
-    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
-        msg >> index;
-        *it = ( index < 0 ? nullptr : world.getCastleEntrance( Maps::GetPoint( index ) ) );
-        assert( *it != nullptr );
+    for ( const uint32_t _dwelling : castle._dwelling ) {
+        stream << _dwelling;
     }
 
-    return msg;
+    return stream << castle._army;
 }
 
-StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
+IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 {
-    msg << static_cast<uint32_t>( castles.Size() );
+    stream >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle._race >> castle._constructedBuildings;
 
-    for ( const Castle * castle : castles )
-        msg << *castle;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1101_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1101_RELEASE ) {
+        if ( !castle.Modes( Castle::UNUSED_ALLOW_CASTLE_CONSTRUCTION ) ) {
+            castle._disabledBuildings = BUILD_CASTLE;
+        }
+    }
+    else {
+        stream >> castle._disabledBuildings;
+    }
 
-    return msg;
+    ColorBase & color = castle;
+    stream >> castle._captain >> color >> castle._name >> castle._mageGuild;
+
+    if ( const uint32_t size = stream.get32(); castle._dwelling.size() != size ) {
+        // Most likely the save file is corrupted.
+        stream.setFail();
+
+        castle._dwelling = { 0 };
+    }
+    else {
+        for ( uint32_t & _dwelling : castle._dwelling ) {
+            stream >> _dwelling;
+        }
+    }
+
+    stream >> castle._army;
+    castle._army.SetCommander( &castle._captain );
+
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
+OStreamBase & operator<<( OStreamBase & stream, const VecCastles & castles )
 {
-    uint32_t size;
-    msg >> size;
+    stream.put32( static_cast<uint32_t>( castles.size() ) );
+
+    std::for_each( castles.begin(), castles.end(), [&stream]( const Castle * castle ) {
+        assert( castle != nullptr );
+
+        stream << castle->GetIndex();
+    } );
+
+    return stream;
+}
+
+IStreamBase & operator>>( IStreamBase & stream, VecCastles & castles )
+{
+    const uint32_t size = stream.get32();
+
+    castles.clear();
+    castles.reserve( size );
+
+    for ( uint32_t i = 0; i < size; ++i ) {
+        int32_t index{ -1 };
+        stream >> index;
+
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
+        if ( castle == nullptr ) {
+            // Most likely the save file is corrupted.
+            stream.setFail();
+
+            continue;
+        }
+
+        castles.push_back( castle );
+    }
+
+    return stream;
+}
+
+OStreamBase & operator<<( OStreamBase & stream, const AllCastles & castles )
+{
+    stream.put32( static_cast<uint32_t>( castles.Size() ) );
+
+    for ( const Castle * castle : castles ) {
+        stream << *castle;
+    }
+
+    return stream;
+}
+
+IStreamBase & operator>>( IStreamBase & stream, AllCastles & castles )
+{
+    const uint32_t size = stream.get32();
 
     castles.Clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        Castle * castle = new Castle();
-        msg >> *castle;
-        castles.AddCastle( castle );
+        auto castle = std::make_unique<Castle>();
+        stream >> *castle;
+
+        castles.AddCastle( std::move( castle ) );
     }
 
-    return msg;
+    return stream;
 }
 
-std::string Castle::GetStringBuilding( uint32_t build ) const
+std::string Castle::GetDescriptionBuilding( const uint32_t buildingType ) const
 {
-    return GetStringBuilding( build, GetRace() );
-}
+    std::string res = fheroes2::getBuildingDescription( GetRace(), static_cast<BuildingType>( buildingType ) );
 
-std::string Castle::GetDescriptionBuilding( uint32_t build ) const
-{
-    std::string res = GetDescriptionBuilding( build, GetRace() );
-
-    switch ( build ) {
+    switch ( buildingType ) {
     case BUILD_WELL:
         StringReplace( res, "%{count}", GetGrownWell() );
         break;
@@ -2943,7 +2518,7 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
         break;
 
     case BUILD_CASTLE: {
-        StringReplace( res, "%{count}", ProfitConditions::FromBuilding( BUILD_CASTLE, race ).gold );
+        StringReplace( res, "%{count}", ProfitConditions::FromBuilding( BUILD_CASTLE, _race ).gold );
 
         if ( isBuild( BUILD_CASTLE ) ) {
             res.append( "\n\n" );
@@ -2959,7 +2534,7 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        const Funds profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const Funds profit = ProfitConditions::FromBuilding( buildingType, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
         break;
     }

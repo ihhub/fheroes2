@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,10 +39,8 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "localevent.h"
@@ -54,6 +52,7 @@
 #include "serialize.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -62,11 +61,7 @@ namespace
 {
     bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
     {
-        for ( const uint8_t tile : zone ) {
-            if ( !pzl.test( tile ) )
-                return true;
-        }
-        return false;
+        return std::any_of( zone.begin(), zone.end(), [&pzl]( const uint8_t tile ) { return !pzl.test( tile ); } );
     }
 
     void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t> & zone )
@@ -91,7 +86,9 @@ namespace
 
         // Immediately reveal the entire puzzle in developer mode
         if ( IS_DEVEL() ) {
-            fheroes2::Blit( sf, display, dstx, dsty );
+            assert( sf.singleLayer() );
+
+            fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
             return;
         }
@@ -99,7 +96,7 @@ namespace
         for ( size_t i = 0; i < pzl.size(); ++i ) {
             const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
-            fheroes2::Blit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
+            fheroes2::Blit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx );
         }
     }
 
@@ -111,6 +108,9 @@ namespace
             return false;
         }
 
+        // The game area puzzle image should be single-layer.
+        assert( sf.singleLayer() );
+
         fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
 
@@ -120,14 +120,14 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
             }
 
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
-                fheroes2::Blit( sf, display, dstx, dsty );
+                fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
                 for ( size_t i = 0; i < pzl.size(); ++i ) {
                     const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
@@ -136,7 +136,7 @@ namespace
                     if ( pzl.test( i ) )
                         pieceAlpha = static_cast<uint8_t>( alpha );
 
-                    fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
+                    fheroes2::AlphaBlit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx, pieceAlpha );
                 }
 
                 if ( drawControlPanel ) {
@@ -163,34 +163,38 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
-        const fheroes2::Rect & radarArea = radar.GetArea();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        const fheroes2::Rect & radarArea = adventureMapInterface.getRadar().GetArea();
 
-        fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
+        fheroes2::ImageRestorer back( display, fheroes2::borderWidthPx, fheroes2::borderWidthPx, sf.width(), sf.height() );
         fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
         fheroes2::fadeOutDisplay( back.rect(), false );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+        fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+        display.updateNextRenderRoi( radarArea );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
+                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+
         buttonExit.draw();
 
-        drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
+        drawPuzzle( pzl, sf, fheroes2::borderWidthPx, fheroes2::borderWidthPx );
 
         display.updateNextRenderRoi( radarArea );
 
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        const bool earlyExit = revealPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH, buttonExit );
+        const bool earlyExit = revealPuzzle( pzl, sf, fheroes2::borderWidthPx, fheroes2::borderWidthPx, buttonExit );
 
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
 
         // Fade from puzzle map to adventure map.
@@ -200,21 +204,28 @@ namespace
         display.updateNextRenderRoi( radarArea );
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        adventureMapInterface.getGameArea().SetUpdateCursor();
     }
 
     void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().getGameArea().GetROI();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
+        const fheroes2::Rect & gameAreaRoi = gameArea.GetROI();
+        const Interface::Radar & radar = adventureMapInterface.getRadar();
+        const fheroes2::Rect & radarArea = radar.GetArea();
 
-        const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
-                                               sf.height(), false );
+        const fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
-        fheroes2::Rect blitArea = border.activeArea();
+        const fheroes2::StandardWindow border( gameAreaRoi.x + ( gameAreaRoi.width - sf.width() ) / 2, gameAreaRoi.y + ( gameAreaRoi.height - sf.height() ) / 2,
+                                               sf.width(), sf.height(), false );
 
-        fheroes2::Image background( blitArea.width, blitArea.height );
+        const fheroes2::Rect & puzzleArea = border.activeArea();
+
+        fheroes2::Image background( puzzleArea.width, puzzleArea.height );
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -227,56 +238,51 @@ namespace
             background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
         }
 
-        fheroes2::Blit( background, display, blitArea.x, blitArea.y );
-
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
-        const fheroes2::Rect & radarRect = radar.GetRect();
-        const fheroes2::Rect & radarArea = radar.GetArea();
+        fheroes2::Copy( background, 0, 0, display, puzzleArea );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
+                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+
+        const fheroes2::Rect & radarRect = radar.GetRect();
 
         const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
 
-            fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+            display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
 
             return radarRect;
         };
 
-        drawPuzzle( pzl, sf, blitArea.x, blitArea.y );
+        drawPuzzle( pzl, sf, puzzleArea.x, puzzleArea.y );
         drawControlPanel();
 
         display.updateNextRenderRoi( border.totalArea() );
         fheroes2::fadeInDisplay( border.activeArea(), true );
 
-        const bool earlyExit = revealPuzzle( pzl, sf, blitArea.x, blitArea.y, buttonExit, isHideInterface ? &drawControlPanel : nullptr );
+        const bool earlyExit = revealPuzzle( pzl, sf, puzzleArea.x, puzzleArea.y, buttonExit, isHideInterface ? &drawControlPanel : nullptr );
 
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
 
         fheroes2::fadeOutDisplay( border.activeArea(), true );
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        gameArea.SetUpdateCursor();
     }
 }
 
 Puzzle::Puzzle()
 {
-    zone1_order = { 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
-    zone2_order = { 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };
-    zone3_order = { 14, 15, 32, 33 };
-    zone4_order = { 20, 21, 26, 27 };
-
     Rand::Shuffle( zone1_order );
     Rand::Shuffle( zone2_order );
     Rand::Shuffle( zone3_order );
@@ -297,7 +303,7 @@ Puzzle & Puzzle::operator=( const char * str )
 
 void Puzzle::Update( uint32_t open_obelisk, uint32_t total_obelisk )
 {
-    const uint32_t open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
+    const uint32_t open_puzzle = open_obelisk * numOfPuzzleTiles / total_obelisk;
     size_t need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
 
     if ( need_puzzle && ClosedTilesExists( *this, zone1_order ) )
@@ -337,58 +343,65 @@ void Puzzle::ShowMapsDialog() const
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
+OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl )
 {
-    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
+    stream << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
 
-    // orders
-    msg << static_cast<uint8_t>( pzl.zone1_order.size() );
-    for ( const uint8_t tile : pzl.zone1_order )
-        msg << tile;
+    stream << static_cast<uint8_t>( pzl.zone1_order.size() );
+    for ( const uint8_t tile : pzl.zone1_order ) {
+        stream << tile;
+    }
 
-    msg << static_cast<uint8_t>( pzl.zone2_order.size() );
-    for ( const uint8_t tile : pzl.zone2_order )
-        msg << tile;
+    stream << static_cast<uint8_t>( pzl.zone2_order.size() );
+    for ( const uint8_t tile : pzl.zone2_order ) {
+        stream << tile;
+    }
 
-    msg << static_cast<uint8_t>( pzl.zone3_order.size() );
-    for ( const uint8_t tile : pzl.zone3_order )
-        msg << tile;
+    stream << static_cast<uint8_t>( pzl.zone3_order.size() );
+    for ( const uint8_t tile : pzl.zone3_order ) {
+        stream << tile;
+    }
 
-    msg << static_cast<uint8_t>( pzl.zone4_order.size() );
-    for ( const uint8_t tile : pzl.zone4_order )
-        msg << tile;
+    stream << static_cast<uint8_t>( pzl.zone4_order.size() );
+    for ( const uint8_t tile : pzl.zone4_order ) {
+        stream << tile;
+    }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Puzzle & pzl )
+IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl )
 {
     std::string str;
 
-    msg >> str;
+    stream >> str;
     pzl = str.c_str();
 
-    uint8_t size;
+    uint8_t size{ 0 };
 
-    msg >> size;
+    stream >> size;
     pzl.zone1_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone1_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone1_order[i];
+    }
 
-    msg >> size;
+    stream >> size;
     pzl.zone2_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone2_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone2_order[i];
+    }
 
-    msg >> size;
+    stream >> size;
     pzl.zone3_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone3_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone3_order[i];
+    }
 
-    msg >> size;
+    stream >> size;
     pzl.zone4_order.resize( size );
-    for ( uint8_t ii = 0; ii < size; ++ii )
-        msg >> pzl.zone4_order[ii];
+    for ( uint8_t i = 0; i < size; ++i ) {
+        stream >> pzl.zone4_order[i];
+    }
 
-    return msg;
+    return stream;
 }

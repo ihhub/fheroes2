@@ -1,6 +1,6 @@
 :: ###########################################################################
 :: #   fheroes2: https://github.com/ihhub/fheroes2                           #
-:: #   Copyright (C) 2021 - 2023                                             #
+:: #   Copyright (C) 2021 - 2025                                             #
 :: #                                                                         #
 :: #   This program is free software; you can redistribute it and/or modify  #
 :: #   it under the terms of the GNU General Public License as published by  #
@@ -23,7 +23,7 @@
 set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
 set PKG_FILE=windows.zip
-set PKG_FILE_SHA256=2F0729B8BEE12427618AF4BB17B79B4F23F8A27667A8921DEEF3DC659BB678CD
+set PKG_FILE_SHA256=1DEE8433087A6B78419EB7832D9B9A9241B5AE8CF018870E044B40C7083C3BDD
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
