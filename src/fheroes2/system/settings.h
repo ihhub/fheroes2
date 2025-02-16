@@ -202,6 +202,7 @@ public:
     {
         _interfaceType = type;
     }
+
     InterfaceType getInterfaceType() const
     {
         return _interfaceType;

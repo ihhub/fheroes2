@@ -446,7 +446,7 @@ std::string Settings::String() const
     os << std::endl << "# show turn order during battle: on/off" << std::endl;
     os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# interface type (good/evil/dynamic)" << std::endl;
+    os << std::endl << "# interface type good/evil/dynamic" << std::endl;
     switch ( _interfaceType ) {
     case GOOD:
         os << "interface type = good" << std::endl;
@@ -459,6 +459,7 @@ std::string Settings::String() const
         break;
     default:
         assert( 0 );
+        break;
     }
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
