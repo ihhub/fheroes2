@@ -389,6 +389,15 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
+    void fillTransparentButtonText( fheroes2::Sprite & released )
+    {
+        fheroes2::Image background( released.width(), released.height() );
+        Fill( background, 0, 0, released.width(), released.height(), 10 );
+        Blit( released, background );
+        released = background;
+        setButtonCornersTransparent( released );
+    }
+    // NOTE: Do not call this with an evil style button's ICN ID.
     void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId )
     {
         released = fheroes2::AGG::GetICN( goodButtonIcnId, 0 );
@@ -1853,11 +1862,7 @@ namespace
             released = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex );
             pressed = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex + 1 );
             // Fill wrong transparent text pixels by using single-colored background.
-            fheroes2::Image background( released.width(), released.height() );
-            Fill( background, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, background );
-            released = background;
-            setButtonCornersTransparent( released );
+            fillTransparentButtonText( released );
             return true;
         }
         case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
@@ -1881,11 +1886,7 @@ namespace
             released = fheroes2::AGG::GetICN( originalID, originalICNIndex );
             pressed = fheroes2::AGG::GetICN( originalID, originalICNIndex + 1 );
             // Fill wrong transparent text pixels by using single-colored background.
-            fheroes2::Image background( released.width(), released.height() );
-            Fill( background, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, background );
-            released = background;
-            setButtonCornersTransparent( released );
+            fillTransparentButtonText( released );
             return true;
         }
         default:
@@ -1998,14 +1999,10 @@ namespace
             released.setPosition( 0, 0 );
             pressed.setPosition( 0, 0 );
             // Fill wrong transparent text pixels by using single-colored background.
-            fheroes2::Image background( released.width(), released.height() );
-            Fill( background, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, background );
-            released = background;
-            // To properly generate shadows and Blit the button we need to make some pixels transparent.
-            for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
-                setButtonCornersTransparent( image );
-            }
+            fillTransparentButtonText( released );
+            // To properly generate shadows and Blit the button we need to make corner pixels transparent.
+            setButtonCornersTransparent( pressed );
+
             fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
             common = FilterOnePixelNoise( common );
             common = FilterOnePixelNoise( common );
@@ -2042,11 +2039,7 @@ namespace
             released = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex );
             pressed = fheroes2::AGG::GetICN( ICN::SURRENDR, buttonIcnIndex + 1 );
             // Fill wrong transparent text pixels by using single-colored background.
-            fheroes2::Image background( released.width(), released.height() );
-            Fill( background, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, background );
-            released = background;
-            setButtonCornersTransparent( released );
+            fillTransparentButtonText( released );
             // Fix corrupted pixels.
             fheroes2::ReplaceColorId( released, 109, 39 );
             fheroes2::ReplaceColorId( pressed, 178, 39 );
@@ -2073,25 +2066,15 @@ namespace
             released = fheroes2::AGG::GetICN( originalID, originalICNIndex );
             pressed = fheroes2::AGG::GetICN( originalID, originalICNIndex + 1 );
             // Fill wrong transparent text pixels by using single-colored background.
-            fheroes2::Image background( released.width(), released.height() );
-            Fill( background, 0, 0, released.width(), released.height(), 10 );
-            Blit( released, background );
-            released = background;
-            setButtonCornersTransparent( released );
+            fillTransparentButtonText( released );
             return true;
         }
         case ICN::BUTTON_SMALL_OKAY_EVIL:
         case ICN::BUTTON_SMALL_CANCEL_EVIL: {
-            // This fixes black pixels in lower right corner of button backgrounds.
+            // Doing a palette swap fixes black pixels in the lower right corner of the original button backgrounds.
             _icnVsSprite[id].resize( 2 );
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            const bool isOkayButton = id == ICN::BUTTON_SMALL_OKAY_EVIL;
-            const int buttonIcnID = isOkayButton ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALL_CANCEL_GOOD;
-            released = fheroes2::AGG::GetICN( buttonIcnID, 0 );
-            pressed = fheroes2::AGG::GetICN( buttonIcnID, 1 );
-            ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
-            ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            const int goodButtonIcnID = id == ICN::BUTTON_SMALL_OKAY_EVIL ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALL_CANCEL_GOOD;
+            convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID );
             return true;
         }
         default:
