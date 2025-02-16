@@ -1326,7 +1326,8 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 1 );
                 break;
             }
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), false, ICN::BLACKBAK, { 64, 37 } );
+
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::BLACKBAK );
 
             break;
         }
@@ -1339,7 +1340,8 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 5 );
                 break;
             }
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), false, ICN::BLACKBAK, { 64, 18 } );
+
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::BLACKBAK );
 
             break;
         }
