@@ -190,7 +190,7 @@ namespace
                                                 ICN::BUTTON_AUTO_COMBAT_EVIL,
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
                                                 ICN::BUTTON_QUICK_COMBAT_EVIL,
-												ICN::BUTTON_SKIP,
+                                                ICN::BUTTON_SKIP,
                                                 ICN::BUTTON_AUTO };
 
     bool isLanguageDependentIcnId( const int id )
@@ -1526,6 +1526,7 @@ namespace
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
                     fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
                 }
+
                 break;
             }
 
