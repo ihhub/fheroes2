@@ -491,8 +491,7 @@ namespace fheroes2
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
-        const int32_t fullLineWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
+        const int32_t fullLineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, true );
         if ( fullLineWidth < maxWidth ) {
             return;
         }
@@ -503,12 +502,19 @@ namespace fheroes2
         _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - cursorToBorderDistance ) ), 0 );
 
         // If some characters were deleted and we have space for new characters.
+        int32_t currentWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ), charHandler, true );
+        ;
+        const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
+
         while ( _textOffset > 0 ) {
-            const int32_t lineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset - 1 ),
-                                                    static_cast<int32_t>( _text.size() - _textOffset + 1 ), charHandler, _keepLineTrailingSpaces );
-            if ( lineWidth > maxWidth ) {
+            const uint8_t prevChar = textData[_textOffset - 1];
+            currentWidth += charHandler.getWidth( prevChar );
+
+            if ( currentWidth > maxWidth ) {
                 break;
             }
+
             --_textOffset;
         }
 
