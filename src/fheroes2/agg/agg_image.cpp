@@ -191,9 +191,7 @@ namespace
                                                 ICN::BUTTON_QUICK_COMBAT_GOOD,
                                                 ICN::BUTTON_QUICK_COMBAT_EVIL,
 												ICN::BUTTON_SKIP,
-                                                ICN::BUTTON_AUTO,
-                                                ICN::BUTTON_BATTLE_SETTINGS,
-                                                ICN::STATUSBAR_BATTLE };
+                                                ICN::BUTTON_AUTO };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1319,34 +1317,32 @@ namespace
 
             break;
         }
-		case ICN::BUTTON_SKIP: {
-                _icnVsSprite[id].resize( 2 );
-                const int32_t originalId = ICN::TEXTBAR;
+        case ICN::BUTTON_SKIP: {
+            _icnVsSprite[id].resize( 2 );
+            const int32_t originalId = ICN::TEXTBAR;
 
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalId, 0 );
-                    _icnVsSprite[id][1] = GetICN( originalId, 1 );
-                    break;
-                }
-
-                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), ICN::EMPTY_GOOD_SKIP_BUTTON, ICN::UNKNOWN );
-
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 0 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 1 );
                 break;
             }
-		case ICN::BUTTON_AUTO: {
-                _icnVsSprite[id].resize( 2 );
-                const int32_t originalId = ICN::TEXTBAR;
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), false, ICN::BLACKBAK, { 64, 37 } );
 
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalId, 4 );
-                    _icnVsSprite[id][1] = GetICN( originalId, 5 );
-                    break;
-                }
+            break;
+        }
+        case ICN::BUTTON_AUTO: {
+            _icnVsSprite[id].resize( 2 );
+            const int32_t originalId = ICN::TEXTBAR;
 
-                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::UNKNOWN );
-
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 4 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 5 );
                 break;
             }
+            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), false, ICN::BLACKBAK, { 64, 18 } );
+
+            break;
+        }
         case ICN::BUTTON_GIFT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
@@ -1405,203 +1401,6 @@ namespace
 
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface,
                                 isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 70, 35 } );
-
-            break;
-        }
-        case ICN::GOOD_CAMPAIGN_BUTTONS:
-        case ICN::EVIL_CAMPAIGN_BUTTONS: {
-            _icnVsSprite[id].resize( 10 );
-
-            if ( useOriginalResources() ) {
-                const bool isEvilInterface = id == ICN::EVIL_CAMPAIGN_BUTTONS;
-                const int originalIcnId = isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG;
-                const int buttonBackground = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-
-                // The evil buttons' released state are 2 pixels wider.
-                const int offsetEvilX = isEvilInterface ? 2 : 0;
-                // remove embedded shadows so that we can generate shadows with our own code later
-                for ( uint32_t i = 0; i < 8; i += 2 ) {
-                    // released
-                    const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalIcnId, i );
-
-                    fheroes2::Sprite & released = _icnVsSprite[id][i];
-                    released.resize( originalReleased.width() - 6 + offsetEvilX, originalReleased.height() - 8 );
-                    released.reset();
-
-                    Copy( originalReleased, 6 - offsetEvilX, 0, released, 0, 0, originalReleased.width() - 1, originalReleased.height() - 8 );
-
-                    // pressed
-                    const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalIcnId, i + 1 );
-
-                    fheroes2::Sprite & pressed = _icnVsSprite[id][i + 1];
-                    pressed.resize( originalPressed.width(), originalPressed.height() );
-                    // copy the original pressed button but add the missing darker leftside border from the released state
-                    Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
-                    Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
-
-                    // Make the background transparent.
-                    FillTransform( pressed, 1, 0, pressed.width() - 1, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
-
-                    FillTransform( pressed, 1, 1, 2, 1, 1 );
-                    FillTransform( pressed, 1, 2, 1, 1, 1 );
-
-                    FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
-
-                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 1, 3, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
-                }
-
-                return true;
-            }
-            case ICN::EMPTY_POL_BUTTON: {
-                const int originalID = ICN::X_CMPBTN;
-                loadICN( originalID );
-
-                if ( _icnVsSprite[originalID].size() < 8 ) {
-                    return true;
-                }
-
-                _icnVsSprite[id].resize( 2 );
-                // move dark border to new released state from original pressed state button
-                const Sprite & originalReleased = GetICN( originalID, 4 );
-                const Sprite & originalPressed = GetICN( originalID, 5 );
-                if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
-                    return true;
-                }
-                Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
-                releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
-                releasedWithDarkBorder.reset();
-
-                Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
-                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
-                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
-                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
-                Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
-                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
-
-                // pressed state
-                Sprite & pressed = _icnVsSprite[id][1];
-                pressed.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
-                pressed.reset();
-                Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
-
-                // the empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp
-                Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
-                Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalPressed.height() );
-
-                const int32_t pixelPosition = 4 * 94 + 6;
-                Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
-                Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
-
-                return true;
-            }
-            case ICN::EMPTY_GUILDWELL_BUTTON: {
-                const int originalID = ICN::WELLXTRA;
-                loadICN( originalID );
-
-                if ( _icnVsSprite[originalID].size() < 3 ) {
-                    return true;
-                }
-                _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & original = GetICN( originalID, 0 + i );
-
-                    Sprite & out = _icnVsSprite[id][i];
-                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
-                    out.resize( original.width() - 1, original.height() );
-
-                    Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
-                    Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
-
-                    Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
-                }
-
-                return true;
-            }
-            case ICN::EMPTY_GOOD_BATTLE_BUTTON: {
-                const int originalID = ICN::TEXTBAR;
-                loadICN( originalID );
-
-                if ( _icnVsSprite[originalID].size() < 3 ) {
-                    return true;
-                }
-                _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & original = GetICN( originalID, 4 + i );
-
-                    Sprite & out = _icnVsSprite[id][i];
-                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools it will give an integer result
-                    out.resize( original.width() - 1, original.height() );
-
-                    Copy( original, 0, 0, out, 0, 0, original.width() - 5 - i, original.height() );
-                    Copy( original, original.width() - 4 - i, 0, out, original.width() - 5 - i, 0, 4 + i, original.height() );
-
-                    Fill( out, 4 - i, 2 + i, 40, 13, getButtonFillingColor( i == 0 ) );
-                }
-
-                return true;
-            }
-            case ICN::EMPTY_GOOD_SKIP_BUTTON: {
-                const int originalID = ICN::TEXTBAR;
-                loadICN( originalID );
-
-                if ( _icnVsSprite[originalID].size() < 3 ) {
-                    return true;
-                }
-                _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & original = GetICN( originalID, 0 + i );
-
-                    Sprite & out = _icnVsSprite[id][i];
-                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools it will give an integer result
-                    out.resize( original.width() - 1, original.height() );
-
-                    Copy( original, 0, 0, out, 0, 0, original.width() - 5 - i, original.height() );
-                    Copy( original, original.width() - 4 - i, 0, out, original.width() - 5 - i, 0, 4 + i, original.height() );
-
-                    Fill( out, 4 - i, 3, 40, 30 + 2 * i, getButtonFillingColor( i == 0 ) );
-                }
-
-                return true;
-            }
-            case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
-                const int32_t originalId = ICN::HSBTNS;
-                loadICN( originalId );
-
-                if ( _icnVsSprite[originalId].size() < 9 ) {
-                    return true;
-                }
-
-                _icnVsSprite[id].resize( 2 );
-                const Sprite & originalReleased = GetICN( originalId, 2 );
-                const Sprite & originalPressed = GetICN( originalId, 3 );
-
-                Sprite & released = _icnVsSprite[id][0];
-                Sprite & pressed = _icnVsSprite[id][1];
-
-                if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
-                    released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
-                    pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
-                    released.reset();
-                    pressed.reset();
-
-                    Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
-                    setButtonCornersTransparent( released );
-                    fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
-                }
-                // Generate the DIFFICULTY button because it is not present in the original resources
-                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
-                                                isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
-                break;
-            }
-            createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
-                                           gettext_noop( "DIFFICULTY" ) } );
 
             break;
         }
@@ -4722,6 +4521,54 @@ namespace
 
             return true;
         }
+        case ICN::EMPTY_GOOD_BATTLE_BUTTON: {
+            const int originalID = ICN::TEXTBAR;
+            loadICN( originalID );
+
+            if ( _icnVsSprite[originalID].size() < 3 ) {
+                return true;
+            }
+            _icnVsSprite[id].resize( 2 );
+
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalID, 4 + i );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools it will give an integer result
+                out.resize( original.width() - 1, original.height() );
+
+                Copy( original, 0, 0, out, 0, 0, original.width() - 5 - i, original.height() );
+                Copy( original, original.width() - 4 - i, 0, out, original.width() - 5 - i, 0, 4 + i, original.height() );
+
+                Fill( out, 4 - i, 2 + i, 40, 13, getButtonFillingColor( i == 0 ) );
+            }
+
+            return true;
+        }
+        case ICN::EMPTY_GOOD_SKIP_BUTTON: {
+            const int originalID = ICN::TEXTBAR;
+            loadICN( originalID );
+
+            if ( _icnVsSprite[originalID].size() < 3 ) {
+                return true;
+            }
+            _icnVsSprite[id].resize( 2 );
+
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalID, 0 + i );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools it will give an integer result
+                out.resize( original.width() - 1, original.height() );
+
+                Copy( original, 0, 0, out, 0, 0, original.width() - 5 - i, original.height() );
+                Copy( original, original.width() - 4 - i, 0, out, original.width() - 5 - i, 0, 4 + i, original.height() );
+
+                Fill( out, 4 - i, 3, 40, 30 + 2 * i, getButtonFillingColor( i == 0 ) );
+            }
+
+            return true;
+        }
         case ICN::EMPTY_GOOD_BUTTON:
         case ICN::EMPTY_EVIL_BUTTON: {
             const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
@@ -4950,92 +4797,92 @@ namespace
 
             return true;
         }
-		case ICN::BUTTON_BATTLE_SETTINGS: {
-                const int32_t originalId = ICN::TEXTBAR;
-                loadICN( originalId );
+        case ICN::BUTTON_BATTLE_SETTINGS: {
+            const int32_t originalId = ICN::TEXTBAR;
+            loadICN( originalId );
 
-                if ( _icnVsSprite[originalId].size() < 15 ) {
-                    return true;
-                }
-
-                _icnVsSprite[id].resize( 2 );
-
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalId, 6 );
-                    _icnVsSprite[id][1] = GetICN( originalId, 7 );
-                    return true;
-                }
-
-                const Sprite & autoButtonReleased = GetICN( ICN::BUTTON_AUTO, 0 );
-                const Sprite & autoButtonPressed = GetICN( ICN::BUTTON_AUTO, 1 );
-
-                Sprite & released = _icnVsSprite[id][0];
-                Sprite & pressed = _icnVsSprite[id][1];
-
-                const int32_t buttonWidth = autoButtonReleased.width();
-
-                released.resize( buttonWidth, autoButtonReleased.height() + 1 );
-                pressed.resize( buttonWidth, autoButtonPressed.height() + 1 );
-
-                // We need to add 1 pixel in height because the Settings button should be 1 pixel higher than the AUTO button.
-                Copy( autoButtonReleased, 0, 0, released, 0, 0, buttonWidth, 10 );
-                Copy( autoButtonReleased, 0, 9, released, 0, 10, buttonWidth, 9 );
-
-                Copy( autoButtonPressed, 0, 0, pressed, 0, 0, buttonWidth, 10 );
-                Copy( autoButtonPressed, 0, 9, pressed, 0, 10, buttonWidth, 9 );
-
-                Fill( released, 4, 2, buttonWidth - 8, 14, getButtonFillingColor( true ) );
-                Fill( pressed, 3, 3, buttonWidth - 8, 14, getButtonFillingColor( false ) );
-
-                Copy( GetICN( originalId, 6 ), 12, 2, released, buttonWidth / 2 - 27 / 2, 2, 27, 14 );
-                Copy( GetICN( originalId, 7 ), 11, 3, pressed, buttonWidth / 2 - 27 / 2 - 1, 3, 27, 14 );
-
+            if ( _icnVsSprite[originalId].size() < 15 ) {
                 return true;
             }
-            case ICN::STATUSBAR_BATTLE: {
-                const int32_t originalId = ICN::TEXTBAR;
-                loadICN( originalId );
 
-                if ( _icnVsSprite[originalId].size() < 15 ) {
-                    return true;
-                }
+            _icnVsSprite[id].resize( 2 );
 
-                _icnVsSprite[id].resize( 2 );
-
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalId, 8 );
-                    _icnVsSprite[id][1] = GetICN( originalId, 9 );
-                    return true;
-                }
-
-                const Sprite & originalTopHalf = GetICN( originalId, 8 );
-                const Sprite & originalBottomHalf = GetICN( originalId, 9 );
-
-                Sprite & topHalf = _icnVsSprite[id][0];
-                Sprite & bottomHalf = _icnVsSprite[id][1];
-
-                const int32_t buttonAutoWidth = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 ).width();
-                const int32_t buttonSkipWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SKIP, 0 ).width();
-                const int32_t originalButtonAutoWidth = fheroes2::AGG::GetICN( originalId, 4 ).width();
-                const int32_t originalButtonSkipWidth = fheroes2::AGG::GetICN( originalId, 0 ).width();
-                const int32_t topBarHeight = originalTopHalf.height();
-                const int32_t bottomBarHeight = originalBottomHalf.height();
-
-                const int32_t excessWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
-
-                topHalf.resize( originalTopHalf.width() - excessWidth, topBarHeight );
-                bottomHalf.resize( originalBottomHalf.width() - excessWidth, bottomBarHeight );
-
-                fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
-                fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
-                                fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
-
-                fheroes2::Copy( originalBottomHalf, 0, 0, bottomHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, bottomBarHeight );
-                fheroes2::Copy( originalBottomHalf, originalBottomHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, bottomHalf,
-                                fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, bottomBarHeight );
-
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 6 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 7 );
                 return true;
             }
+
+            const fheroes2::Sprite & autoButtonReleased = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 );
+            const fheroes2::Sprite & autoButtonPressed = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 1 );
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+            const int32_t buttonWidth = autoButtonReleased.width();
+
+            released.resize( buttonWidth, autoButtonReleased.height() + 1 );
+            pressed.resize( buttonWidth, autoButtonPressed.height() + 1 );
+
+            // We need to add 1 pixel in height because the Settings button should be 1 pixel higher than the AUTO button.
+            Copy( autoButtonReleased, 0, 0, released, 0, 0, buttonWidth, 10 );
+            Copy( autoButtonReleased, 0, 9, released, 0, 10, buttonWidth, 9 );
+
+            Copy( autoButtonPressed, 0, 0, pressed, 0, 0, buttonWidth, 10 );
+            Copy( autoButtonPressed, 0, 9, pressed, 0, 10, buttonWidth, 9 );
+
+            Fill( released, 4, 2, buttonWidth - 8, 14, getButtonFillingColor( true ) );
+            Fill( pressed, 3, 3, buttonWidth - 8, 14, getButtonFillingColor( false ) );
+
+            Copy( fheroes2::AGG::GetICN( originalId, 6 ), 12, 2, released, buttonWidth / 2 - 27 / 2, 2, 27, 14 );
+            Copy( fheroes2::AGG::GetICN( originalId, 7 ), 11, 3, pressed, buttonWidth / 2 - 27 / 2 - 1, 3, 27, 14 );
+
+            return true;
+        }
+        case ICN::STATUSBAR_BATTLE: {
+            const int32_t originalId = ICN::TEXTBAR;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 15 ) {
+                return true;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+
+            if ( useOriginalResources() ) {
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( originalId, 8 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( originalId, 9 );
+                return true;
+            }
+
+            const fheroes2::Sprite & originalTopHalf = fheroes2::AGG::GetICN( originalId, 8 );
+            const fheroes2::Sprite & originalBottomHalf = fheroes2::AGG::GetICN( originalId, 9 );
+
+            fheroes2::Sprite & topHalf = _icnVsSprite[id][0];
+            fheroes2::Sprite & bottomHalf = _icnVsSprite[id][1];
+
+            const int32_t buttonAutoWidth = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 ).width();
+            const int32_t buttonSkipWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SKIP, 0 ).width();
+            const int32_t originalButtonAutoWidth = fheroes2::AGG::GetICN( originalId, 4 ).width();
+            const int32_t originalButtonSkipWidth = fheroes2::AGG::GetICN( originalId, 0 ).width();
+            const int32_t topBarHeight = originalTopHalf.height();
+            const int32_t bottomBarHeight = originalBottomHalf.height();
+
+            const int32_t excessWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
+
+            topHalf.resize( originalTopHalf.width() - excessWidth, topBarHeight );
+            bottomHalf.resize( originalBottomHalf.width() - excessWidth, bottomBarHeight );
+
+            fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
+            fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
+                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
+
+            fheroes2::Copy( originalBottomHalf, 0, 0, bottomHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, bottomBarHeight );
+            fheroes2::Copy( originalBottomHalf, originalBottomHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, bottomHalf,
+                            fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, bottomBarHeight );
+
+            return true;
+        }
         case ICN::BRCREST: {
             LoadOriginalICN( id );
             // First sprite in this ICN has incorrect transparent pixel at position 30x5.
