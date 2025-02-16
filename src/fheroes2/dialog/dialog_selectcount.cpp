@@ -145,15 +145,16 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
+            selectedValue = max;
             valueSelectionElement.setValue( max );
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
+            selectedValue = min;
             valueSelectionElement.setValue( min );
             needRedraw = true;
         }
-
-        if ( valueSelectionElement.processEvents() ) {
+        else if ( valueSelectionElement.processEvents() ) {
             selectedValue = valueSelectionElement.getValue();
             needRedraw = true;
         }
