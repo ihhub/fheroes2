@@ -42,7 +42,6 @@
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
