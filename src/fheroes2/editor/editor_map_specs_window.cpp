@@ -2248,18 +2248,16 @@ namespace Editor
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
-        fheroes2::Button buttonRumors;
-        const int buttonRumorsIcn = isEvilInterface ? ICN::BUTTON_RUMORS_EVIL : ICN::BUTTON_RUMORS_GOOD;
-        background.renderButton( buttonRumors, buttonRumorsIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        fheroes2::ButtonSprite buttonRumors;
+        background.renderTextAdaptedButton( buttonRumors, gettext_noop( "RUMORS" ), { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
-        fheroes2::Button buttonEvents;
-        const int buttonEventsIcn = isEvilInterface ? ICN::BUTTON_EVENTS_EVIL : ICN::BUTTON_EVENTS_GOOD;
-        background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumors.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        fheroes2::ButtonSprite buttonEvents;
+        background.renderTextAdaptedButton( buttonEvents, gettext_noop( "EVENTS" ), { 20 + buttonRumors.area().width + 10, 6 },
+                                            fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
-        fheroes2::Button buttonLanguage;
-        const int buttonLanguageIcn = isEvilInterface ? ICN::BUTTON_LANGUAGE_EVIL : ICN::BUTTON_LANGUAGE_GOOD;
-        background.renderButton( buttonLanguage, buttonLanguageIcn, 0, 1, { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
-                                 fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        fheroes2::ButtonSprite buttonLanguage;
+        background.renderTextAdaptedButton( buttonLanguage, gettext_noop( "LANGUAGE" ), { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
+                                            fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
