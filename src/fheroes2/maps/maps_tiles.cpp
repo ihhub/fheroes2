@@ -828,10 +828,10 @@ void Maps::Tile::updatePassability()
 
         if ( isShortObject( bottomTileObjectType )
              || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() ) && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-            // Checking the main object type of a tile is not entirely correct idea
-            // as some tiles can be mark as valid objects but nothing was set of them.
-            // As an example, Necroking map contains a tile with rock shadow which is marked as object.
-            // Most likely these maps are hacked but since we are reading old map we cannot assume things and assert them.
+            // Checking the main object type of a tile is not entirely the correct idea
+            // as some tiles can be marked as valid objects even though nothing was set of them.
+            // As an example, the Necroking map contains a tile with rock shadow which is marked as object.
+            // Most likely these maps are hacked but since we are reading from the old map format we cannot assume things and assert them.
         }
         else {
             _tilePassabilityDirections = 0;
