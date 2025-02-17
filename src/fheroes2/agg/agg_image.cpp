@@ -158,7 +158,6 @@ namespace
                                                 ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
-                                                ICN::BUTTON_EXIT_GOOD,
                                                 ICN::BUTTON_RESET_GOOD,
                                                 ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_CASTLE_GOOD,
@@ -946,8 +945,22 @@ namespace
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL );
 
             if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 3 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 4 );
+                // We avoid copying the embedded shadows so that we can generate our own.
+                fheroes2::Sprite & released = _icnVsSprite[id][0];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 3 );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 4 );
+                const int32_t originalWidth = originalReleased.width();
+                const int32_t originalHeight = originalReleased.height();
+                released.resize( originalWidth - 2, originalHeight - 1 );
+                pressed.resize( originalWidth - 2, originalHeight - 1 );
+                // We use this copy function to ensure that the output image has a transform layer because the original doesn't.
+                Copy( originalReleased, 2, 0, released, 0, 0, originalWidth - 2, originalHeight - 1 );
+                Copy( originalPressed, 2, 0, pressed, 0, 0, originalWidth - 2, originalHeight - 1 );
+
+                for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
+                    setButtonCornersTransparent( image );
+                }
                 break;
             }
 
@@ -1698,13 +1711,6 @@ namespace
             // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
             // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedSprite() instead.
             createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::STONEBAK, { 70, 25 } );
-
-            break;
-        }
-        case ICN::BUTTON_EXIT_GOOD: {
-            _icnVsSprite[id].resize( 2 );
-
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
