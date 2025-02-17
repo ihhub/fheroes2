@@ -524,6 +524,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
     const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
     fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -546,14 +547,18 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     if ( flags & UPGRADE ) {
         const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
-        buttonUpgrade = std::make_unique<fheroes2::Button>( pos_rt.x + 280, pos_rt.y + 192, upgradeButtonIcnID, 0, 1 );
+        const fheroes2::Point upgradeButtonPosition{ pos_rt.x + 280, pos_rt.y + 192 };
+        buttonUpgrade = std::make_unique<fheroes2::Button>( upgradeButtonPosition.x, upgradeButtonPosition.y, upgradeButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( upgradeButtonIcnID, 0 ), display, upgradeButtonPosition, { -5, 5 } );
 
         buttonUpgrade->draw();
     }
 
     if ( flags & DISMISS ) {
         const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
-        buttonDismiss = std::make_unique<fheroes2::Button>( pos_rt.x + 280, pos_rt.y + 221, dismissButtonIcnID, 0, 1 );
+        const fheroes2::Point dismissButtonPosition{ pos_rt.x + 280, pos_rt.y + 221 };
+        buttonDismiss = std::make_unique<fheroes2::Button>( dismissButtonPosition.x, dismissButtonPosition.y, dismissButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( dismissButtonIcnID, 0 ), display, dismissButtonPosition, { -5, 5 } );
 
         buttonDismiss->draw();
     }
@@ -625,6 +630,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         }
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            // TODO: Only redraw the half of the window containing the creature. Note that fire-breathing creatures spew fire into the other half,
+            // so the animation has to be changed to only walking animation. Also their walking animation overlaps with the creature name.
             fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
             DrawMonsterStats( monsterStatOffset, troop );
@@ -635,16 +642,19 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
             DrawMonsterInfo( pos_rt.getPosition(), troop );
             DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
-
+            // TODO: Remove these extra shadow drawings once the dialog has been reworked and proper restorers are in place.
             if ( buttonUpgrade ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_UPGRADE_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 192 }, { -5, 5 } );
                 buttonUpgrade->draw();
             }
 
             if ( buttonDismiss ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_DISMISS_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 221 }, { -5, 5 } );
                 buttonDismiss->draw();
             }
 
             if ( buttonExit.isEnabled() ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
                 buttonExit.draw();
             }
 
