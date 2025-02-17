@@ -938,18 +938,33 @@ namespace
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
+        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
+        case ICN::BUTTON_SMALL_UPGRADE_EVIL:
         case ICN::BUTTON_SMALL_EXIT_GOOD:
-        case ICN::BUTTON_SMALL_EXIT_EVIL: {
+        case ICN::BUTTON_SMALL_EXIT_EVIL:
+        case ICN::BUTTON_SMALL_DISMISS_GOOD:
+        case ICN::BUTTON_SMALL_DISMISS_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL || id == ICN::BUTTON_SMALL_DISMISS_EVIL || id == ICN::BUTTON_SMALL_UPGRADE_EVIL );
 
             if ( useOriginalResources() ) {
                 // We avoid copying the embedded shadows so that we can generate our own.
                 fheroes2::Sprite & released = _icnVsSprite[id][0];
                 fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 3 );
-                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 4 );
+                const int buttonIcnID = isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY;
+                int buttonIcnIndex = 0;
+                if ( id == ICN::BUTTON_SMALL_DISMISS_GOOD || id == ICN::BUTTON_SMALL_DISMISS_EVIL ) {
+                    buttonIcnIndex = 1;
+                }
+                else if ( id == ICN::BUTTON_SMALL_EXIT_GOOD || id == ICN::BUTTON_SMALL_EXIT_EVIL ) {
+                    buttonIcnIndex = 3;
+                }
+                else {
+                    buttonIcnIndex = 5;
+                }
+                const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( buttonIcnID, buttonIcnIndex );
+                const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( buttonIcnID, buttonIcnIndex + 1 );
                 const int32_t originalWidth = originalReleased.width();
                 const int32_t originalHeight = originalReleased.height();
                 released.resize( originalWidth - 2, originalHeight - 1 );
@@ -963,42 +978,18 @@ namespace
                 }
                 break;
             }
-
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_SMALL_DISMISS_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_DISMISS_EVIL );
-
-            if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 1 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 2 );
-                break;
+            const char * text;
+            if ( id == ICN::BUTTON_SMALL_DISMISS_GOOD || id == ICN::BUTTON_SMALL_DISMISS_EVIL ) {
+                text = gettext_noop( "DISMISS" );
+            }
+            else if ( id == ICN::BUTTON_SMALL_EXIT_GOOD || id == ICN::BUTTON_SMALL_EXIT_EVIL ) {
+                text = gettext_noop( "EXIT" );
+            }
+            else {
+                text = gettext_noop( "UPGRADE" );
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
-        case ICN::BUTTON_SMALL_UPGRADE_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_UPGRADE_EVIL );
-
-            if ( useOriginalResources() ) {
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 5 );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 6 );
-                break;
-            }
-
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
