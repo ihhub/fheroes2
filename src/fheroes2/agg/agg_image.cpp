@@ -1301,7 +1301,7 @@ namespace
         case ICN::BUTTON_LOAD_MAP_GOOD:
         case ICN::BUTTON_NEW_GAME_EVIL:
         case ICN::BUTTON_NEW_GAME_GOOD:
-        case ICN::BUTTON_NEW_MAP_GOOD: 
+        case ICN::BUTTON_NEW_MAP_GOOD:
         case ICN::BUTTON_QUIT_EVIL:
         case ICN::BUTTON_QUIT_GOOD:
         case ICN::BUTTON_SAVE_GAME_EVIL:
