@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -186,6 +186,7 @@ namespace Skill
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
         static int getHeroDefaultSkillValue( const int skill, const int race );
+        static std::pair<int, int> getSkillValueRange( const int skill );
 
     protected:
         void LoadDefaults( int type, int race );
