@@ -242,6 +242,19 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     return true;
 }
 
+bool Difficulty::allowAIToReuseTeleporters( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        break;
+    }
+    return false;
+}
+
 bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
 {
     switch ( difficulty ) {

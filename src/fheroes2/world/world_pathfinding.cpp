@@ -813,7 +813,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     MapsIndexes teleports;
 
     // We shouldn't use teleport at the starting tile
-    if ( !isFirstNode ) {
+    if ( !isFirstNode || Difficulty::allowAIToReuseTeleporters( Game::getDifficulty() ) ) {
         teleports = world.GetTeleportEndPoints( currentNodeIdx );
 
         if ( teleports.empty() ) {
