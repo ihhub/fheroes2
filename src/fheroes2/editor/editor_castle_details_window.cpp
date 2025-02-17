@@ -363,9 +363,9 @@ namespace Editor
             = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
-        // Build restrict mode button.
+        // Build restrict mode button. We use center_center padding to make sure localized variable-width buttons are centered too.
         fheroes2::ButtonSprite buttonRestrictBuilding;
-        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 41, -32 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
 
         const bool isNeutral = ( color == Color::NONE );
 
@@ -448,7 +448,7 @@ namespace Editor
 
         // Exit button.
         fheroes2::Button buttonExit;
-        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 25 },
+        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 24 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         // Status bar.
