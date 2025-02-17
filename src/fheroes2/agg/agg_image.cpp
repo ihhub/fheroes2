@@ -447,8 +447,11 @@ namespace
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
     void setButtonCornersTransparent( fheroes2::Sprite & buttonSprite )
     {
-        // There is no transform layer to add transparency to.
-        assert( !buttonSprite.singleLayer() );
+        if ( buttonSprite.singleLayer() ) {
+            // There is no transform layer to add transparency to.
+            assert( 0 );
+            return;
+        }
 
         const ptrdiff_t imageWidth = buttonSprite.width();
         const ptrdiff_t imageHeight = buttonSprite.height();
