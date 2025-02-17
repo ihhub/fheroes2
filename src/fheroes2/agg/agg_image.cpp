@@ -141,7 +141,7 @@ namespace
                                                 ICN::BUTTON_4_PLAYERS,
                                                 ICN::BUTTON_5_PLAYERS,
                                                 ICN::BUTTON_6_PLAYERS,
-                                                ICN::BTNBATTLEONLY,
+                                                ICN::BUTTON_BATTLE_ONLY,
                                                 ICN::BUTTON_GIFT_GOOD,
                                                 ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -447,6 +447,9 @@ namespace
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
     void setButtonCornersTransparent( fheroes2::Sprite & buttonSprite )
     {
+        // There is no transform layer to add transparency to.
+        assert( !buttonSprite.singleLayer() );
+
         const ptrdiff_t imageWidth = buttonSprite.width();
         const ptrdiff_t imageHeight = buttonSprite.height();
 
@@ -467,7 +470,7 @@ namespace
     void fillTransparentButtonText( fheroes2::Sprite & released )
     {
         fheroes2::Image background( released.width(), released.height() );
-        Fill( background, 0, 0, released.width(), released.height(), 10 );
+        background.fill( 10 );
         Blit( released, background );
         released = background;
         setButtonCornersTransparent( released );
@@ -938,12 +941,12 @@ namespace
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
-        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
-        case ICN::BUTTON_SMALL_UPGRADE_EVIL:
+        case ICN::BUTTON_SMALL_DISMISS_GOOD:
+        case ICN::BUTTON_SMALL_DISMISS_EVIL:
         case ICN::BUTTON_SMALL_EXIT_GOOD:
         case ICN::BUTTON_SMALL_EXIT_EVIL:
-        case ICN::BUTTON_SMALL_DISMISS_GOOD:
-        case ICN::BUTTON_SMALL_DISMISS_EVIL: {
+        case ICN::BUTTON_SMALL_UPGRADE_GOOD:
+        case ICN::BUTTON_SMALL_UPGRADE_EVIL: {
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL || id == ICN::BUTTON_SMALL_DISMISS_EVIL || id == ICN::BUTTON_SMALL_UPGRADE_EVIL );
@@ -1234,18 +1237,18 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_GIFT_EVIL:
         case ICN::BUTTON_LOAD_MAP_EVIL:
-        case ICN::BUTTON_SAVE_MAP_EVIL:
+        case ICN::BUTTON_MAP_SELECT_EVIL:
         case ICN::BUTTON_NEW_MAP_EVIL:
-        case ICN::UNIFORM_EVIL_MAX_BUTTON:
-        case ICN::UNIFORM_EVIL_MIN_BUTTON:
-        case ICN::BUTTON_SMALL_MAX_EVIL:
-        case ICN::BUTTON_SMALL_MIN_EVIL:
+        case ICN::BUTTON_SAVE_MAP_EVIL:
         case ICN::BUTTON_SMALL_ACCEPT_EVIL:
         case ICN::BUTTON_SMALL_DECLINE_EVIL:
-        case ICN::BUTTON_GIFT_EVIL:
+        case ICN::BUTTON_SMALL_MAX_EVIL:
+        case ICN::BUTTON_SMALL_MIN_EVIL:
         case ICN::BUTTON_SMALL_RESTART_EVIL:
-        case ICN::BUTTON_MAP_SELECT_EVIL: {
+        case ICN::UNIFORM_EVIL_MAX_BUTTON:
+        case ICN::UNIFORM_EVIL_MIN_BUTTON: {
             // We do palette swaps for these for one out of either two reasons: to generate completely new buttons, or to preserve
             // language-specific generations from generateLanguageSpecificImages().
             _icnVsSprite[id].resize( 2 );
@@ -1293,17 +1296,17 @@ namespace
         }
         case ICN::BUTTON_INFO_EVIL:
         case ICN::BUTTON_INFO_GOOD:
+        case ICN::BUTTON_LOAD_GAME_EVIL:
+        case ICN::BUTTON_LOAD_GAME_GOOD:
+        case ICN::BUTTON_LOAD_MAP_GOOD:
+        case ICN::BUTTON_NEW_GAME_EVIL:
+        case ICN::BUTTON_NEW_GAME_GOOD:
+        case ICN::BUTTON_NEW_MAP_GOOD: 
         case ICN::BUTTON_QUIT_EVIL:
         case ICN::BUTTON_QUIT_GOOD:
         case ICN::BUTTON_SAVE_GAME_EVIL:
         case ICN::BUTTON_SAVE_GAME_GOOD:
-        case ICN::BUTTON_LOAD_GAME_EVIL:
-        case ICN::BUTTON_LOAD_GAME_GOOD:
-        case ICN::BUTTON_NEW_GAME_EVIL:
-        case ICN::BUTTON_NEW_GAME_GOOD:
-        case ICN::BUTTON_SAVE_MAP_GOOD:
-        case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_NEW_MAP_GOOD: {
+        case ICN::BUTTON_SAVE_MAP_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_NEW_GAME_EVIL || id == ICN::BUTTON_LOAD_GAME_EVIL || id == ICN::BUTTON_SAVE_GAME_EVIL
@@ -1416,23 +1419,23 @@ namespace
 
             break;
         }
-        case ICN::BTNBATTLEONLY:
-        case ICN::BUTTON_STANDARD_GAME:
-        case ICN::BUTTON_CAMPAIGN_GAME:
-        case ICN::BUTTON_MULTIPLAYER_GAME:
-        case ICN::BUTTON_LARGE_CANCEL:
-        case ICN::BUTTON_LARGE_CONFIG:
-        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
-        case ICN::BUTTON_EXPANSION_CAMPAIGN:
-        case ICN::BUTTON_HOT_SEAT:
         case ICN::BUTTON_2_PLAYERS:
         case ICN::BUTTON_3_PLAYERS:
         case ICN::BUTTON_4_PLAYERS:
         case ICN::BUTTON_5_PLAYERS:
-        case ICN::BUTTON_6_PLAYERS: {
+        case ICN::BUTTON_6_PLAYERS:
+        case ICN::BUTTON_BATTLE_ONLY:
+        case ICN::BUTTON_CAMPAIGN_GAME:
+        case ICN::BUTTON_EXPANSION_CAMPAIGN:
+        case ICN::BUTTON_HOT_SEAT:
+        case ICN::BUTTON_LARGE_CANCEL:
+        case ICN::BUTTON_LARGE_CONFIG:
+        case ICN::BUTTON_MULTIPLAYER_GAME:
+        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
+        case ICN::BUTTON_STANDARD_GAME: {
             _icnVsSprite[id].resize( 2 );
 
-            if ( useOriginalResources() && id != ICN::BTNBATTLEONLY ) {
+            if ( useOriginalResources() && id != ICN::BUTTON_BATTLE_ONLY ) {
                 int buttonIcnID = ICN::UNKNOWN;
                 std::pair<int, int> icnIndex;
                 switch ( id ) {
@@ -1520,7 +1523,7 @@ namespace
             }
             const char * text = gettext_noop( "STANDARD\nGAME" );
             switch ( id ) {
-            case ICN::BTNBATTLEONLY: {
+            case ICN::BUTTON_BATTLE_ONLY: {
                 text = gettext_noop( "BATTLE\nONLY" );
                 break;
             }
@@ -1831,7 +1834,7 @@ namespace
     bool generateGermanSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BTNBATTLEONLY:
+        case ICN::BUTTON_BATTLE_ONLY:
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
@@ -1896,7 +1899,7 @@ namespace
     bool generateFrenchSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BTNBATTLEONLY: {
+        case ICN::BUTTON_BATTLE_ONLY: {
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
@@ -2084,7 +2087,7 @@ namespace
     bool generatePolishSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BTNBATTLEONLY: {
+        case ICN::BUTTON_BATTLE_ONLY: {
             _icnVsSprite[id].resize( 2 );
             for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][i];

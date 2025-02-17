@@ -909,7 +909,7 @@ namespace ICN
         YELLOW_FONT,
         YELLOW_SMALLFONT,
         BUTTON_WELL_MAX,
-        BTNBATTLEONLY,
+        BUTTON_BATTLE_ONLY,
         BUTTON_GIFT_GOOD,
         BUTTON_GIFT_EVIL,
         CSLMARKER,
