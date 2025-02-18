@@ -888,7 +888,7 @@ namespace Interface
                     rmgConfig.playerCount = _playerCount;
                     rmgConfig.regionSizeLimit = _regionSizeLimit;
 
-                    if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
+                    if ( Maps::Generator::generateMap( _mapFormat, rmgConfig ) ) {
                         _redraw |= mapUpdateFlags;
 
                         action.commit();

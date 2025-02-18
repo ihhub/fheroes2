@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,7 +52,7 @@
 namespace
 {
     // ObjectInfo ObjctGroup based indicies do not match old objects
-    const int neutralCOLOR = 6;
+    const int neutralColor = 6;
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
@@ -71,10 +71,10 @@ namespace
 
     struct Node
     {
-        int index = -1;
+        int index{ -1 };
         NodeType type = NodeType::OPEN;
-        uint32_t region = 0;
-        uint16_t mapObject = 0;
+        uint32_t region{ 0 };
+        uint16_t mapObject{ 0 };
         uint16_t passable = DIRECTION_ALL;
 
         Node() = default;
@@ -87,15 +87,11 @@ namespace
 
     class NodeCache
     {
-        int32_t mapSize = 0;
-        Node outOfBounds;
-        std::vector<Node> data;
-
     public:
         NodeCache( int32_t width, int32_t height )
             : mapSize( width )
             , outOfBounds( -1 )
-            , data( width * height )
+            , data( static_cast<size_t>( width ) * height )
         {
             outOfBounds.type = NodeType::BORDER;
 
@@ -122,17 +118,22 @@ namespace
         {
             return getNode( { index % mapSize, index / mapSize } );
         }
+
+    private:
+        int32_t mapSize{ 0 };
+        Node outOfBounds;
+        std::vector<Node> data;
     };
 
     struct Region
     {
-        uint32_t _id{};
-        int32_t _centerIndex = -1;
+        uint32_t _id{ 0 };
+        int32_t _centerIndex{ -1 };
         std::set<uint32_t> _neighbours;
         std::vector<Node> _nodes;
-        size_t _sizeLimit{};
-        size_t _lastProcessedNode{};
-        int _colorIndex = neutralCOLOR;
+        size_t _sizeLimit{ 0 };
+        size_t _lastProcessedNode{ 0 };
+        int _colorIndex = neutralColor;
         int _groundType = Maps::Ground::GRASS;
 
         Region() = default;
@@ -305,7 +306,7 @@ namespace
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, static_cast<uint32_t>( type ) ) ) {
+        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
             markObjectPlacement( data, objectInfo, tilePos, true );
             return true;
         }
@@ -377,7 +378,7 @@ namespace
 namespace Maps::Generator
 {
 
-    bool generateWorld( Map_Format::MapFormat & mapFormat, const Configuration & config )
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config )
     {
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
             assert( config.playerCount <= 6 );
@@ -408,7 +409,7 @@ namespace Maps::Generator
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, neutralCOLOR, Ground::WATER, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, neutralColor, Ground::WATER, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
         const int innerLayer = std::min( neutralRegionCount, playerCount );
@@ -436,7 +437,7 @@ namespace Maps::Generator
                 const bool isPlayerRegion = layer == 1 && ( i % factor ) == 0;
 
                 const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
-                const int regionColor = isPlayerRegion ? i / factor : neutralCOLOR;
+                const int regionColor = isPlayerRegion ? i / factor : neutralColor;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
@@ -460,7 +461,7 @@ namespace Maps::Generator
         // Step 4. We're ready to save the result; reset the current world first
         world.generateForEditor( width );
         mapFormat.tiles.clear();
-        mapFormat.tiles.resize( width * height );
+        mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
 
         for ( Region & region : mapRegions ) {
             if ( region._id == 0 )
@@ -501,7 +502,7 @@ namespace Maps::Generator
                 }
             }
 
-            if ( region._colorIndex != neutralCOLOR && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+            if ( region._colorIndex != neutralColor && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
                 // return early if we can't place a starting player castle
                 return false;
             }

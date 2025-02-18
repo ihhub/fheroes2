@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,7 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
+
 #include <cstdint>
 
 namespace Maps::Map_Format
@@ -34,5 +36,5 @@ namespace Maps::Generator
         bool basicOnly = true;
     };
 
-    bool generateWorld( Map_Format::MapFormat & mapFormat, const Configuration & config );
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config );
 }
