@@ -898,13 +898,13 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
-                    int32_t newCount = _playerCount;
+                    int32_t newCount = static_cast<int32_t>( _playerCount );
                     if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
-                        _playerCount = newCount;
+                        _playerCount = static_cast<uint32_t>( newCount );
                     }
-                    newCount = _regionSizeLimit;
+                    newCount = static_cast<int32_t>( _regionSizeLimit );
                     if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
-                        _regionSizeLimit = newCount;
+                        _regionSizeLimit = static_cast<uint32_t>( newCount );
                     }
                 }
 #endif

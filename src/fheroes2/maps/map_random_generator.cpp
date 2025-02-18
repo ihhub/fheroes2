@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                             *
+ *   Copyright (C) 2025                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -177,7 +177,7 @@ namespace
                 break;
             }
 
-            fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
+            const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
             Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
             if ( newTile.passable & getDirectionBitmask( direction, true ) ) {
                 if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
@@ -213,7 +213,7 @@ namespace
                 continue;
             }
 
-            Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
+            const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
 
             if ( node.index == -1 || node.type != NodeType::OPEN ) {
                 return false;
@@ -224,7 +224,7 @@ namespace
         }
 
         for ( const auto & partInfo : info.topLevelParts ) {
-            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
+            const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.type != NodeType::OPEN ) {
                 return false;
@@ -236,7 +236,7 @@ namespace
 
         if ( isAction ) {
             for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
-                Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
+                const Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
                 if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
                     return false;
                 }
@@ -321,7 +321,7 @@ namespace
         const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.size - 3 );
 
         auto & tile = world.getTile( castleY * mapFormat.size + castleX );
-        fheroes2::Point tilePos = tile.GetCenter();
+        const fheroes2::Point tilePos = tile.GetCenter();
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
 
@@ -463,7 +463,7 @@ namespace Maps::Generator
         mapFormat.tiles.clear();
         mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
 
-        for ( Region & region : mapRegions ) {
+        for ( const Region & region : mapRegions ) {
             if ( region._id == 0 )
                 continue;
 
@@ -472,7 +472,7 @@ namespace Maps::Generator
             }
 
             // Fix missing references
-            for ( uint32_t adjacent : region._neighbours ) {
+            for ( const uint32_t adjacent : region._neighbours ) {
                 mapRegions[adjacent]._neighbours.insert( region._id );
             }
         }
