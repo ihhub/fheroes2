@@ -282,7 +282,7 @@ namespace
         }
     }
 
-    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -301,7 +301,7 @@ namespace
         return true;
     }
 
-    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type )
+    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tile & tile, Maps::ObjectGroup groupType, int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
@@ -319,7 +319,7 @@ namespace
         const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapFormat.size - 4 );
         const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.size - 3 );
 
-        auto & tile = world.GetTiles( castleY * mapFormat.size + castleX );
+        auto & tile = world.getTile( castleY * mapFormat.size + castleX );
         fheroes2::Point tilePos = tile.GetCenter();
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
@@ -348,13 +348,13 @@ namespace
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            if ( !putObjectOnMap( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
                 return false;
             }
 
             Maps::setLastObjectUID( objectId );
 
-            if ( !putObjectOnMap( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
                 return false;
             }
 
@@ -368,7 +368,7 @@ namespace
     bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
     {
         const auto & node = Rand::Get( region._nodes );
-        Maps::Tiles & mineTile = world.GetTiles( node.index );
+        Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
@@ -467,7 +467,7 @@ namespace Maps::Generator
                 continue;
 
             for ( const Node & node : region._nodes ) {
-                world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
+                world.getTile( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
             }
 
             // Fix missing references
@@ -524,7 +524,7 @@ namespace Maps::Generator
                 }
             }
 
-            Maps::updateRoadOnTile( world.GetTiles( region._centerIndex ), true );
+            Maps::updateRoadOnTile( world.getTile( region._centerIndex ), true );
         }
 
         // set up region connectors based on frequency settings & border length
