@@ -956,12 +956,14 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
     _considerRetreat = false;
     _defensiveTactics = false;
     _cautiousOffensive = false;
+    _avoidStackingUnits = false;
 
     if ( enemyForce.empty() ) {
         return;
     }
 
     double sumEnemyStr = 0.0;
+    double areaAttackThreat = 0.0;
 
     for ( const Battle::Unit * unit : enemyForce ) {
         assert( unit != nullptr );
@@ -976,6 +978,9 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
         if ( unit->isArchers() && !unit->isImmovable() ) {
             _enemyRangedUnitsOnly += unitStr;
+            if ( unit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !unit->isHandFighting() ) {
+                areaAttackThreat += unitStr;
+            }
         }
 
         // The average speed is weighted by the troop strength
@@ -988,6 +993,10 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
     if ( sumEnemyStr > 0.0 ) {
         _enemyAverageSpeed /= sumEnemyStr;
+    }
+
+    if ( areaAttackThreat / sumEnemyStr > 0.1 ) {
+        _avoidStackingUnits = true;
     }
 
     uint32_t initialUnitCount = 0;
@@ -1709,8 +1718,8 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                 continue;
             }
 
-            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, frnd]() -> CellDistanceInfo {
-                const Battle::Indexes nearbyIndexes = [&currentUnit, frnd]() {
+            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, avoidStackingUnits = _avoidStackingUnits, frnd]() -> CellDistanceInfo {
+                const Battle::Indexes nearbyIndexes = [&currentUnit, avoidStackingUnits, frnd]() {
                     Battle::Indexes result;
                     result.reserve( 8 );
 
@@ -1762,7 +1771,43 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                                 continue;
                             }
 
-                            const int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+                            int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+
+                            if ( avoidStackingUnits ) {
+                                // In this mode, the covering units should not be positioned close to the shooter or to each other. Let's try to position the covering
+                                // unit one cell further away, and if this fails, then ignore this position.
+                                if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                    continue;
+                                }
+
+                                nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+
+                                if ( currentUnit.isWide() ) {
+                                    // If the shooter is covered in front by a wide unit, then this unit should be located one more cell further away.
+                                    if ( dir == ( frnd->isReflect() ? Battle::LEFT : Battle::RIGHT ) ) {
+                                        if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                            continue;
+                                        }
+
+                                        nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+                                    }
+                                    // If a wide unit covers a shooter from behind (which is rare, but it can happen) it is necessary to check that the covering unit
+                                    // will not be located close to the shooter - which can happen if there is any obstacle in place of the intended tail of the unit.
+                                    else if ( dir == ( frnd->isReflect() ? Battle::RIGHT : Battle::LEFT ) ) {
+                                        const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearbyIdx );
+                                        if ( pos.GetHead() == nullptr ) {
+                                            continue;
+                                        }
+
+                                        assert( pos.isValidForUnit( currentUnit ) );
+                                        assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
+
+                                        if ( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 ) {
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
 
                             if ( std::find( result.begin(), result.end(), nearbyIdx ) != result.end() ) {
                                 continue;
@@ -1782,7 +1827,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     }
 
                     assert( pos.isValidForUnit( currentUnit ) );
-                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
+                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
 
                     if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                         continue;
