@@ -35,7 +35,7 @@ namespace
     // Ideally, we need to store only difference between before and after an action
     // but for simplification purposes we chose this way.
     // TODO: optimize this class (if possible) to store less data.
-    class MapAction : public fheroes2::Action
+    class MapAction final : public fheroes2::Action
     {
     public:
         explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
@@ -59,6 +59,8 @@ namespace
             }
 
             _afterMapFormat = _mapFormat;
+
+            _latestObjectUIDAfter = Maps::getLastObjectUID();
 
             return true;
         }

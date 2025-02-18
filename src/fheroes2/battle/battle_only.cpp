@@ -215,9 +215,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawOpponentsStats = false;
         bool needRedrawControlInfo = false;
 
-        buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
-        buttonExit.isEnabled() && le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        buttonReset.isEnabled() && le.MousePressLeft( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
+        if ( buttonStart.isEnabled() ) {
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStart.area() ) );
+        }
+        if ( buttonExit.isEnabled() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        }
+        if ( buttonReset.isEnabled() ) {
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonReset.area() ) );
+        }
 
         if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
@@ -235,13 +241,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             break;
         }
 
-        if ( le.MousePressRight( buttonStart.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonStart.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Start" ), _( "Start the battle." ), 0 );
         }
-        else if ( le.MousePressRight( buttonExit.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
-        else if ( le.MousePressRight( buttonReset.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonReset.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
         }
 
@@ -283,7 +289,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             const ArmyUI & firstUI = armyInfo[firstId].ui;
             const ArmyUI & secondUI = armyInfo[secondId].ui;
 
-            if ( firstUI.army != nullptr && le.MouseCursor( firstUI.army->GetArea() ) && firstUI.army->QueueEventProcessing() ) {
+            if ( firstUI.army != nullptr && le.isMouseCursorPosInArea( firstUI.army->GetArea() ) && firstUI.army->QueueEventProcessing() ) {
                 if ( firstUI.artifact != nullptr && firstUI.artifact->isSelected() ) {
                     firstUI.artifact->ResetSelected();
                 }
@@ -298,7 +304,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
                 armyInfo[firstId].needRedraw = true;
             }
-            else if ( firstUI.artifact != nullptr && le.MouseCursor( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
+            else if ( firstUI.artifact != nullptr && le.isMouseCursorPosInArea( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
                     firstUI.army->ResetSelected();
                 }
@@ -315,19 +321,20 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 updateSpellPoints = true;
                 needRedrawOpponentsStats = true;
             }
-            else if ( firstUI.morale != nullptr && le.MouseCursor( firstUI.morale->GetArea() ) ) {
+            else if ( firstUI.morale != nullptr && le.isMouseCursorPosInArea( firstUI.morale->GetArea() ) ) {
                 MoraleIndicator::QueueEventProcessing( *firstUI.morale );
             }
-            else if ( firstUI.luck != nullptr && le.MouseCursor( firstUI.luck->GetArea() ) ) {
+            else if ( firstUI.luck != nullptr && le.isMouseCursorPosInArea( firstUI.luck->GetArea() ) ) {
                 LuckIndicator::QueueEventProcessing( *firstUI.luck );
             }
-            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) ) {
+            else if ( firstUI.primarySkill != nullptr && le.isMouseCursorPosInArea( firstUI.primarySkill->GetArea() ) ) {
                 if ( firstUI.primarySkill->QueueEventProcessing() ) {
                     updateSpellPoints = true;
                     needRedrawOpponentsStats = true;
                 }
             }
-            else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
+            else if ( firstUI.secondarySkill != nullptr && le.isMouseCursorPosInArea( firstUI.secondarySkill->GetArea() )
+                      && firstUI.secondarySkill->QueueEventProcessing() ) {
                 armyInfo[firstId].needRedraw = true;
             }
         }

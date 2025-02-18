@@ -9,11 +9,12 @@ and user interface improvements), breathing new life into one of the most addict
 You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
 <p align="center">
-    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820">
+    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" alt="Screenshot of the world map">
 </p>
 
 <p align="center">
-    <img src="images/screenshots/screenshot_battle.png?raw=true" width="410"> <img src="images/screenshots/screenshot_castle.png?raw=true" width="410">
+    <img src="images/screenshots/screenshot_battle.png?raw=true" width="410" alt="Screenshot of the battle screen">
+    <img src="images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
 </p>
 
 ## Download and install
@@ -52,8 +53,8 @@ If you would like to help translating the project, please read the [**translatio
 
 ## Donation
 
-We accept donations via [**Patreon**](https://www.patreon.com/fheroes2), [**PayPal**](https://www.paypal.com/paypalme/fheroes2) or [**Boosty**](https://boosty.to/fheroes2). All donations will be used only for the future project development as we do not
-consider this project as a source of income by any means.
+We accept donations via [**Patreon**](https://www.patreon.com/fheroes2), [**PayPal**](https://www.paypal.com/paypalme/fheroes2) or [**Boosty**](https://boosty.to/fheroes2).
+All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)

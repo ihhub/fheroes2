@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "position.h"
+
 #include "maps.h"
 #include "serialize.h"
 
@@ -44,25 +45,25 @@ void MapPosition::SetIndex( const int32_t index )
     center = Maps::isValidAbsIndex( index ) ? Maps::GetPoint( index ) : fheroes2::Point( -1, -1 );
 }
 
-StreamBase & operator<<( StreamBase & sb, const MapPosition & st )
+OStreamBase & operator<<( OStreamBase & stream, const MapPosition & st )
 {
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t x = static_cast<int16_t>( st.center.x );
     const int16_t y = static_cast<int16_t>( st.center.y );
 
-    return sb << x << y;
+    return stream << x << y;
 }
 
-StreamBase & operator>>( StreamBase & sb, MapPosition & st )
+IStreamBase & operator>>( IStreamBase & stream, MapPosition & st )
 {
     // TODO: before 0.9.4 Point was int16_t type
     int16_t x = 0;
     int16_t y = 0;
 
-    sb >> x >> y;
+    stream >> x >> y;
 
     st.center.x = x;
     st.center.y = y;
 
-    return sb;
+    return stream;
 }

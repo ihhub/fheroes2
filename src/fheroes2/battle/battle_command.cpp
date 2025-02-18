@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -63,8 +63,8 @@ uint32_t Battle::Command::updateSeed( uint32_t seed ) const
         break;
 
     // These commands should never affect the seed generation
-    case CommandType::AUTO_SWITCH:
-    case CommandType::AUTO_FINISH:
+    case CommandType::TOGGLE_AUTO_COMBAT:
+    case CommandType::QUICK_COMBAT:
         break;
 
     default:

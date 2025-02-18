@@ -1,13 +1,14 @@
 [
-    { include: [ "<bits/chrono.h>",          private, "<chrono>",       public ] },
-    { include: [ "<bits/getopt_core.h>",     private, "<unistd.h>",     public ] },
-    { include: [ "<bits/std_abs.h>",         private, "<cmath>",        public ] },
-    { include: [ "<bits/std_abs.h>",         private, "<cstdlib>",      public ] },
-    { include: [ "<bits/utility.h>",         private, "<utility>",      public ] },
+    { include: [ "<bits/chrono.h>",            private, "<chrono>",       public ] },
+    { include: [ "<bits/getopt_core.h>",       private, "<unistd.h>",     public ] },
+    { include: [ "<bits/std_abs.h>",           private, "<cmath>",        public ] },
+    { include: [ "<bits/std_abs.h>",           private, "<cstdlib>",      public ] },
+    { include: [ "<bits/utility.h>",           private, "<utility>",      public ] },
 
-    { include: [ "<bits/types/struct_tm.h>", private, "<ctime>",        public ] },
+    { include: [ "<bits/types/struct_FILE.h>", private, "<cstdio>",       public ] },
+    { include: [ "<bits/types/struct_tm.h>",   private, "<ctime>",        public ] },
 
-    { include: [ "<ext/alloc_traits.h>",     private, "<memory>",       public ] },
+    { include: [ "<ext/alloc_traits.h>",       private, "<memory>",       public ] },
 
-    { include: [ "<begin_code.h>",           private, "<SDL_stdinc.h>", public ] }
+    { include: [ "<begin_code.h>",             private, "<SDL_stdinc.h>", public ] }
 ]

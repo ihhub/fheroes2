@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,14 +24,14 @@
 #include <cassert>
 
 #include "agg_image.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 
 namespace
 {
-    const int32_t borderSize{ BORDERWIDTH };
+    const int32_t borderSize{ fheroes2::borderWidthPx };
 
     // Offset from border edges (size of evil interface corners is 43 pixels) - these edges (corners) will not be copied to fill the border.
     const int32_t borderEdgeOffset{ 43 };
@@ -71,7 +71,7 @@ namespace fheroes2
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        // Notice: ICN::SURDRBKE and ICN::SURDRBKG has 16 (equals to BORDERWIDTH) pixels shadow from the left and the bottom sides.
+        // Notice: ICN::SURDRBKE and ICN::SURDRBKG has 16 (equals to borderWidthPx) pixels shadow from the left and the bottom sides.
         const Sprite & horizontalSprite = AGG::GetICN( ( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
         const Sprite & verticalSprite = AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
 
@@ -192,7 +192,7 @@ namespace fheroes2
         CreateDitheringTransition( verticalSprite, rightCornerSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightCornerOffsetX, optputBottomCornerEdgeY,
                                    cornerSize, transitionSize, false, false );
 
-        // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to BORDERWIDTH) pixels of shadow at the left and bottom sides.
+        // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to borderWidthPx) pixels of shadow at the left and bottom sides.
         const int32_t horizontalSpriteCopyWidth = std::min( _windowArea.width, horizontalSpriteWidth ) - doubleBorderEdgeOffset;
         const int32_t horizontalSpriteCopies
             = ( _windowArea.width - doubleBorderEdgeOffset - 1 - transitionSize ) / ( horizontalSpriteWidth - doubleBorderEdgeOffset - transitionSize );
@@ -343,13 +343,13 @@ namespace fheroes2
         }
     }
 
-    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const int32_t buttonWidth, const Point & offset,
+    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
                                              const bool isEvilInterface, const Padding padding )
     {
         Sprite released;
         Sprite pressed;
 
-        makeButtonSprites( released, pressed, buttonText, buttonWidth, isEvilInterface, false );
+        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
         const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
 

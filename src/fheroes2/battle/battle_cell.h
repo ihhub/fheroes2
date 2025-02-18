@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_CELL_H
-#define H2BATTLE_CELL_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -31,14 +30,11 @@
 
 #include "math_base.h"
 
-#define CELLW 44
-#define CELLH 52
-
 namespace Battle
 {
     class Unit;
 
-    enum direction_t
+    enum CellDirection : int
     {
         UNKNOWN = 0x00,
         TOP_LEFT = 0x01,
@@ -56,6 +52,11 @@ namespace Battle
     class Cell final
     {
     public:
+        // Width of the rendered cell in pixels
+        static constexpr int widthPx{ 44 };
+        // Height of the rendered cell in pixels
+        static constexpr int heightPx{ 52 };
+
         explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
@@ -72,7 +73,7 @@ namespace Battle
         const Unit * GetUnit() const;
         Unit * GetUnit();
 
-        direction_t GetTriangleDirection( const fheroes2::Point & dst ) const;
+        CellDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
 
         bool isPositionIncludePoint( const fheroes2::Point & pt ) const;
 
@@ -157,5 +158,3 @@ namespace Battle
         bool operator<( const Position & other ) const;
     };
 }
-
-#endif

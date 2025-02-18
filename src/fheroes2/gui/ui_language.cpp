@@ -85,7 +85,7 @@ namespace fheroes2
 
     SupportedLanguage getResourceLanguage()
     {
-        const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( ICN::GetString( ICN::FONT ) );
+        const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::FONT ), false );
         if ( data.empty() ) {
             // How is it possible to run the game without a font?
             assert( 0 );

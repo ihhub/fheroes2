@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,11 +84,6 @@ namespace Interface
         {
             return _selectedInstrument == Instrument::LANDSCAPE_OBJECTS || _selectedInstrument == Instrument::ADVENTURE_OBJECTS
                    || _selectedInstrument == Instrument::KINGDOM_OBJECTS || _selectedInstrument == Instrument::MONSTERS;
-        }
-
-        uint32_t getEraseTypes() const
-        {
-            return _eraseTypes;
         }
 
         std::set<Maps::ObjectGroup> getEraseObjectGroups() const;
@@ -250,14 +245,14 @@ namespace Interface
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;
-        fheroes2::Button _buttonNew;
+        fheroes2::Button _buttonRedo;
         fheroes2::Button _buttonSpecs;
         fheroes2::Button _buttonFile;
         fheroes2::Button _buttonSystem;
 
         fheroes2::Rect _rectMagnify;
         fheroes2::Rect _rectUndo;
-        fheroes2::Rect _rectNew;
+        fheroes2::Rect _rectRedo;
         fheroes2::Rect _rectSpecs;
         fheroes2::Rect _rectFile;
         fheroes2::Rect _rectSystem;

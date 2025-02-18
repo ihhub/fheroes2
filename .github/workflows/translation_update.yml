@@ -28,33 +28,33 @@ jobs:
         git config user.email "action@github.com"
     - name: Create PR branch
       run: |
-        PR_BRANCH="translation-update-$(uuidgen)"
+        PR_BRANCH=translation-update-$(uuidgen)
         git switch -c "$PR_BRANCH"
         echo "PR_BRANCH=$PR_BRANCH" >> "$GITHUB_ENV"
     - name: Generate POT
       run: |
-        make -C src/dist -j 2 pot
+        make -C src/dist/fheroes2 -j "$(nproc)" pot
     - name: Merge PO with POT
       run: |
-        make -C files/lang -j 2 merge
+        make -C files/lang -j "$(nproc)" merge
     - name: Generate statistics
       run: |
         mkdir -p docs/json
         for PO_FILE in files/lang/*.po; do
-            STATISTICS="$(msgfmt --statistics --output-file=/dev/null -- "$PO_FILE" 2>&1)"
+            STATISTICS=$(msgfmt --statistics --output-file=/dev/null -- "$PO_FILE" 2>&1)
             echo "$PO_FILE: $STATISTICS"
             if [[ "$STATISTICS" =~ ([0-9]+)\ translated\ messages? ]]; then
-                TRANSLATED="${BASH_REMATCH[1]}"
+                TRANSLATED=${BASH_REMATCH[1]}
             else
                 TRANSLATED=0
             fi
             if [[ "$STATISTICS" =~ ([0-9]+)\ fuzzy\ translations? ]]; then
-                FUZZY="${BASH_REMATCH[1]}"
+                FUZZY=${BASH_REMATCH[1]}
             else
                 FUZZY=0
             fi
             if [[ "$STATISTICS" =~ ([0-9]+)\ untranslated\ messages? ]]; then
-                UNTRANSLATED="${BASH_REMATCH[1]}"
+                UNTRANSLATED=${BASH_REMATCH[1]}
             else
                 UNTRANSLATED=0
             fi
@@ -64,11 +64,11 @@ jobs:
             else
                 PERCENT=$((TRANSLATED * 100 / OVERALL))
             fi
-            LANGUAGE="$(basename "${PO_FILE%.po}")"
+            LANGUAGE=$(basename "${PO_FILE%.po}")
             if [[ "$(head -n1 -- "$PO_FILE")" =~ ^\#\ (.+)\ translation ]]; then
-                LABEL="${BASH_REMATCH[1]}"
+                LABEL=${BASH_REMATCH[1]}
             else
-                LABEL="$LANGUAGE"
+                LABEL=$LANGUAGE
             fi
             if ((PERCENT < 75)); then
                 COLOR="red"
@@ -82,7 +82,7 @@ jobs:
     - name: Commit changes
       run: |
         git diff --name-only -z -- files/lang/*.po \
-        | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then git add -- "$NAME"; fi; done' dummy
+            | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then git add -- "$NAME"; fi; done' dummy
         git add -- docs/json/lang_*.json
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi
     - name: Create PR

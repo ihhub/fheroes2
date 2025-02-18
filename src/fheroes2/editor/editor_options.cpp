@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,9 +22,12 @@
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
@@ -33,9 +36,7 @@
 #include "editor_interface.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
-#include "gamedefs.h"
 #include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
 #include "math_base.h"
@@ -47,6 +48,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -60,11 +62,16 @@ namespace
         Animation,
         Passabiility,
         UpdateSettings,
+        InterfaceType,
+        CursorType,
+        UpdateScrollSpeed,
+        IncreaseScrollSpeed,
+        DecreaseScrollSpeed,
         Close
     };
 
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 36, 47 };
+    const fheroes2::Point optionOffset{ 20, 31 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -73,6 +80,11 @@ namespace
     const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect animationRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect passabilityRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
+                                         optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
+                                        optionWindowSize };
+    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
                                          optionWindowSize };
 
     void drawLanguage( const fheroes2::Rect & optionRoi )
@@ -125,25 +137,9 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const int dialogIcnId = isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG;
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
-
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
-
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
-        fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
-
-        const fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
-
-        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        const fheroes2::Rect windowRoi = background.activeArea();
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -151,33 +147,42 @@ namespace
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowAnimationRoi( animationRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowPassabilityRoi( passabilityRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi]() {
+        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi,
+                                  &windowInterfaceTypeRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
+            const Settings & conf = Settings::Get();
+
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
             drawHotKeyOptions( windowHotKeyRoi );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.isEvilInterfaceEnabled() );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
-        okayButton.draw();
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        // Render the whole screen as interface type or resolution could have been changed.
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -198,26 +203,50 @@ namespace
             if ( le.MouseClickLeft( windowPassabilityRoi ) ) {
                 return DialogAction::Passabiility;
             }
+            if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
+                return DialogAction::InterfaceType;
+            }
+            if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
+                return DialogAction::CursorType;
+            }
+            if ( le.MouseClickLeft( windowScrollSpeedRoi ) ) {
+                return DialogAction::UpdateScrollSpeed;
+            }
+            if ( le.isMouseWheelUpInArea( windowScrollSpeedRoi ) ) {
+                return DialogAction::IncreaseScrollSpeed;
+            }
+            if ( le.isMouseWheelDownInArea( windowScrollSpeedRoi ) ) {
+                return DialogAction::DecreaseScrollSpeed;
+            }
 
-            if ( le.MousePressRight( windowLanguageRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowLanguageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Language" ), _( "Change the language of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowGraphicsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowGraphicsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Graphics" ), _( "Change the graphics settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowAudioRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowAudioRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowHotKeyRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowHotKeyRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowAnimationRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowAnimationRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Animation" ), _( "Toggle animation of the objects." ), 0 );
             }
-            else if ( le.MousePressRight( windowPassabilityRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowPassabilityRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle display of objects' passability." ), 0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowInterfaceTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
+            }
+            if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
@@ -230,14 +259,15 @@ namespace Editor
 {
     void openEditorSettings()
     {
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
         // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
-        auto redrawEditorMap = [&conf]() {
+        auto redrawEditor = [&conf]() {
             Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
-            editorInterface.reset();
             // Since the radar interface has a restorer we must redraw it first to avoid the restorer doing something nasty.
             editorInterface.redraw( Interface::REDRAW_RADAR );
 
@@ -247,6 +277,12 @@ namespace Editor
             }
 
             editorInterface.redraw( redrawOptions & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebuildEditor = [&redrawEditor]() {
+            Interface::EditorInterface::Get().reset();
+
+            redrawEditor();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -260,7 +296,7 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
@@ -271,18 +307,18 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawEditorMap();
+                redrawEditor();
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebuildEditor );
 
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
 
                 action = DialogAction::Configuration;
                 break;
@@ -308,7 +344,38 @@ namespace Editor
                 conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
                 saveConfiguration = true;
 
-                redrawEditorMap();
+                redrawEditor();
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::InterfaceType:
+                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                rebuildEditor();
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::CursorType:
+                conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::UpdateScrollSpeed:
+                conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::IncreaseScrollSpeed:
+                conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
+                saveConfiguration = true;
+
+                action = DialogAction::Configuration;
+                break;
+            case DialogAction::DecreaseScrollSpeed:
+                conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
+                saveConfiguration = true;
 
                 action = DialogAction::Configuration;
                 break;

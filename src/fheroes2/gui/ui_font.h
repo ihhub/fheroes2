@@ -20,13 +20,15 @@
 
 #pragma once
 
+#include <cstdint>
 #include <vector>
-
-#include "game_language.h"
 
 namespace fheroes2
 {
+    class Image;
     class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
 
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
@@ -40,4 +42,6 @@ namespace fheroes2
     void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite );
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite );
+
+    void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor );
 }

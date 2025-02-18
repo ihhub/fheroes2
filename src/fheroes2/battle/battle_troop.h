@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_TROOP_H
-#define H2BATTLE_TROOP_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -74,8 +73,11 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
+        Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid );
+
         Unit( const Unit & ) = delete;
+
+        ~Unit() override = default;
 
         Unit & operator=( const Unit & ) = delete;
 
@@ -147,12 +149,7 @@ namespace Battle
 
         int GetArmyColor() const
         {
-            return ArmyTroop::GetColor();
-        }
-
-        int GetColor() const override
-        {
-            return GetArmyColor();
+            return GetColor();
         }
 
         // Returns the current color of the unit according to its current combat state (the unit
@@ -207,15 +204,14 @@ namespace Battle
 
         bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
         bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
-        bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
         void PostAttackAction( const Unit & enemy );
 
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
-        void SetBlindRetaliation( bool value );
+        void SetBlindRetaliation( const bool value );
 
-        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                        const bool ignoreDefendingHero ) const;
 
         bool SwitchAnimation( int rule, bool reverse = false );
@@ -302,10 +298,10 @@ namespace Battle
 
     private:
         uint32_t ApplyDamage( const uint32_t dmg );
-        uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
+        uint32_t Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
 
         // Applies a damage-causing spell to this unit
-        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target );
+        void SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target );
         // Applies a restoring or reviving spell to this unit
         void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero );
         // Applies a spell to this unit that changes its parameters
@@ -323,7 +319,7 @@ namespace Battle
         uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
-        uint32_t disruptingray;
+        uint32_t _disruptingRaysNum;
         bool reflect;
 
         Position position;
@@ -337,5 +333,3 @@ namespace Battle
         uint8_t customAlphaMask;
     };
 }
-
-#endif

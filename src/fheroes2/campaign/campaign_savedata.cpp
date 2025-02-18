@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cstddef>
 #include <map>
-#include <memory>
 #include <utility>
 
 #include "army.h"
@@ -159,21 +158,21 @@ namespace Campaign
         return obtainedAwards;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
+    OStreamBase & operator<<( OStreamBase & stream, const CampaignSaveData & data )
     {
-        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
-                   << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
+        return stream << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
+                      << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
     }
 
-    StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
+    IStreamBase & operator>>( IStreamBase & stream, CampaignSaveData & data )
     {
-        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonusId >> data._finishedMaps
+        stream >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonusId >> data._finishedMaps
             >> data._bonusesForFinishedMaps;
 
         // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
         data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
 
-        return msg >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        return stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()

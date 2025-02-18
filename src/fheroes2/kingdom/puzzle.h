@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,18 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2PUZZLE_H
-#define H2PUZZLE_H
+#pragma once
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
-#define PUZZLETILES 48
+class IStreamBase;
+class OStreamBase;
 
-class StreamBase;
+inline constexpr size_t numOfPuzzleTiles{ 48 };
 
-class Puzzle : public std::bitset<PUZZLETILES>
+class Puzzle : public std::bitset<numOfPuzzleTiles>
 {
 public:
     Puzzle();
@@ -48,7 +49,5 @@ public:
     std::vector<uint8_t> zone4_order{ 20, 21, 26, 27 };
 };
 
-StreamBase & operator<<( StreamBase &, const Puzzle & );
-StreamBase & operator>>( StreamBase &, Puzzle & );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl );
+IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl );

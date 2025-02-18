@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMY_H
-#define H2ARMY_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -33,7 +32,8 @@
 #include "monster.h"
 #include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Castle;
 class HeroBase;
@@ -42,7 +42,7 @@ class Troop;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Troops : protected std::vector<Troop *>
@@ -51,15 +51,16 @@ public:
     Troops() = default;
 
     Troops( const Troops & troops );
+    Troops( Troops && ) = default;
 
     virtual ~Troops();
 
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop *, const Troop * );
-    void Assign( const Troops & );
-    void Insert( const Troops & );
-    void PushBack( const Monster &, uint32_t );
+    void Assign( const Troop * troopsBegin, const Troop * troopsEnd );
+    void Assign( const Troops & troops );
+    void Insert( const Troops & troops );
+    void PushBack( const Monster & mons, const uint32_t count );
     void PopBack();
 
     size_t Size() const
@@ -96,7 +97,7 @@ public:
     void Clean();
     void UpgradeTroops( const Castle & castle ) const;
 
-    Troop * GetFirstValid();
+    Troop * GetFirstValid() const;
     Troop * GetWeakestTroop() const;
     Troop * GetSlowestTroop() const;
 
@@ -171,25 +172,20 @@ public:
 
     static void SwapTroops( Troop &, Troop & );
 
-    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
-
-    // Returns the strength of the average starting army for a given hero (not taking into account the hero's bonuses)
-    static double getStrengthOfAverageStartingArmy( const Heroes * hero );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
     explicit Army( HeroBase * cmdr = nullptr );
-    explicit Army( const Maps::Tiles & tile );
+    explicit Army( const Maps::Tile & tile );
 
     Army( const Army & ) = delete;
-    Army( Army && ) = delete;
-
-    Army & operator=( const Army & ) = delete;
-    Army & operator=( Army && ) = delete;
 
     ~Army() override = default;
+
+    Army & operator=( const Army & ) = delete;
 
     const Troops & getTroops() const;
 
@@ -197,7 +193,7 @@ public:
     // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
     // of the commanding hero's faction.
     void Reset( const bool defaultArmy = false );
-    void setFromTile( const Maps::Tiles & tile );
+    void setFromTile( const Maps::Tile & tile );
 
     int GetColor() const;
     int GetControl() const override;
@@ -232,8 +228,12 @@ public:
 
     void JoinStrongestFromArmy( Army & giver );
 
-    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    // Implements the necessary logic to move unit stacks from army to army in the heroes meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
+    // Implements the necessary logic to swap all unit stacks from an army to another army in the heroes meeting dialog and in the
+    // castle dialog - provided that there is at least one occupied slot in the castle garrison. It's the caller's responsibility
+    // to ensure that this is indeed the case.
+    void SwapTroops( Army & from );
 
     void SetSpreadFormation( const bool spread )
     {
@@ -259,8 +259,8 @@ public:
     void ArrangeForWhirlpool();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Army & );
-    friend StreamBase & operator>>( StreamBase &, Army & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Army & army );
+    friend IStreamBase & operator>>( IStreamBase & stream, Army & army );
 
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
@@ -272,8 +272,3 @@ private:
     bool _isSpreadCombatFormation;
     int color;
 };
-
-StreamBase & operator<<( StreamBase &, const Army & );
-StreamBase & operator>>( StreamBase &, Army & );
-
-#endif

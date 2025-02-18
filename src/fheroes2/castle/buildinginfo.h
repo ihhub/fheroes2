@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BUILDINGINFO_H
-#define H2BUILDINGINFO_H
+#pragma once
 
 #include <cstdint>
 #include <string>
 #include <vector>
 
-#include "castle.h"
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
@@ -39,16 +37,20 @@ namespace fheroes2
     class ButtonBase;
 }
 
+class Castle;
 class StatusBar;
+
+enum BuildingType : uint32_t;
+enum class BuildingStatus : int32_t;
 
 class BuildingInfo
 {
 public:
-    BuildingInfo( const Castle & c, const building_t b );
+    BuildingInfo( const Castle & c, const BuildingType b );
 
     uint32_t getBuilding() const
     {
-        return building;
+        return _buildingType;
     }
 
     void SetPos( int32_t, int32_t );
@@ -73,10 +75,10 @@ private:
     std::string GetConditionDescription() const;
 
     const Castle & castle;
-    uint32_t building;
+    uint32_t _buildingType;
     std::string description;
     fheroes2::Rect area;
-    int bcond;
+    BuildingStatus _status;
 };
 
 struct DwellingItem
@@ -88,7 +90,7 @@ struct DwellingItem
     const uint32_t dwType;
 };
 
-class DwellingsBar : public Interface::ItemsBar<DwellingItem>
+class DwellingsBar final : public Interface::ItemsBar<DwellingItem>
 {
 public:
     DwellingsBar( Castle & cstl, const fheroes2::Size & sz );
@@ -99,10 +101,8 @@ public:
     bool ActionBarLeftMouseSingleClick( DwellingItem & dwl ) override;
     bool ActionBarRightMouseHold( DwellingItem & dwl ) override;
 
-protected:
+private:
     Castle & castle;
     fheroes2::Image backsf;
     std::vector<DwellingItem> content;
 };
-
-#endif

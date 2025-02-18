@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,13 +34,13 @@ Funds ProfitConditions::FromBuilding( uint32_t building, int race )
 {
     switch ( building ) {
     case BUILD_CASTLE:
-        return Funds( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
+        return Funds( Cost{ 1000, 0, 0, 0, 0, 0, 0 } );
     case BUILD_TENT:
     case BUILD_STATUE:
-        return Funds( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
+        return Funds( Cost{ 250, 0, 0, 0, 0, 0, 0 } );
     case BUILD_SPEC:
         if ( race == Race::WRLK )
-            return Funds( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+            return Funds( Cost{ 500, 0, 0, 0, 0, 0, 0 } );
         break;
     default:
         break;
@@ -99,19 +99,19 @@ Funds ProfitConditions::FromMine( int type )
 {
     switch ( type ) {
     case Resource::ORE:
-        return Funds( cost_t{ 0, 0, 0, 2, 0, 0, 0 } );
+        return Funds( Cost{ 0, 0, 0, 2, 0, 0, 0 } );
     case Resource::WOOD:
-        return Funds( cost_t{ 0, 2, 0, 0, 0, 0, 0 } );
+        return Funds( Cost{ 0, 2, 0, 0, 0, 0, 0 } );
     case Resource::MERCURY:
-        return Funds( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
+        return Funds( Cost{ 0, 0, 1, 0, 0, 0, 0 } );
     case Resource::SULFUR:
-        return Funds( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
+        return Funds( Cost{ 0, 0, 0, 0, 1, 0, 0 } );
     case Resource::CRYSTAL:
-        return Funds( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
+        return Funds( Cost{ 0, 0, 0, 0, 0, 1, 0 } );
     case Resource::GEMS:
-        return Funds( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
+        return Funds( Cost{ 0, 0, 0, 0, 0, 0, 1 } );
     case Resource::GOLD:
-        return Funds( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
+        return Funds( Cost{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
         // Did you add a new type of resources? Add the logic here!
         assert( 0 );

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>fheroes2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progress.min.js" integrity="sha512-CklrzCqwODBOEJHJq73SZrgWC7xcxssgg5M1xokosfDDz2/nLTCuMDyc51gbJtb8DriV4EYjJSlklPH5Ejn9XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/progress.js/0.1.0/progressjs.min.css" integrity="sha512-ovRFHsWpnYUBNZd/8CmbaWAKBDO8xb0l5Y8PdIae1O5RXO2QyU3CZGNzuYuE0CQHKazIzWMQpnTn26WpPjexfw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+      body { margin: 0; height: 0; font-family: "Roboto", serif;}
+      #canvas {
+          height: 100vh;
+          width: 100vw;
+          display: block;
+          margin: 0 auto;
+          background: url(./fheroes2.jpeg) center center;
+          background-size: cover;
+          position: absolute;
+          z-index: 10;
+      }
+      #uploader, #launcher {
+          z-index: 100;
+          position: absolute;
+          color: #fff;
+          font-size: 30px;
+          -webkit-text-stroke: 1px #000;
+          height: 100vh;
+          width: 100vw;
+      }
+      #launcher {
+          display: none;
+          -webkit-text-stroke: 1px #fff;
+      }
+      #uploader input[type=file] {
+          display: none
+      }
+      #uploader label {
+          text-align: center;
+          display: block;
+          cursor: pointer;
+          height: 100vh;
+          width: 100vw;
+          position: absolute;
+      }
+      #uploader label span {
+          padding: 10vh 0 0 0;
+          display: block;
+      }
+      #launcher button {
+          font-size: 30px;
+      }
+      #launcher .buttons {
+          text-align: center;
+          padding: 10vh 0 0 0;
+      }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="640" height="400"></canvas>
+<div id="uploader">
+  <label>
+    <span>Click to select your Heroes 2 folder</span>
+    <input
+        type="file"
+        directory="directory"
+        multiple
+        webkitdirectory="webkitdirectory"
+        id="files"
+    />
+  </label>
+</div>
+<div id="launcher">
+  <div class="buttons">
+    <button onclick="Module.startGame()">Start game</button>
+    <button onclick="Module.deleteFiles()">Delete files</button>
+  </div>
+</div>
+<script>
+    const S_IFMT = 61440; /* 0x0170000 type of file */
+    const S_IFDIR = 16384;  /* 0x0040000 directory */
+    const progressBar = progressJs("#canvas").setOptions({
+        theme: 'blueOverlayRadiusWithPercentBar',
+        overlayMode: true,
+        considerTransition: true
+    });
+    const canvas = document.querySelector('canvas');
+    canvas.oncontextmenu = event => event.preventDefault();
+    Object.assign(window, { Module: {
+            preRun: [
+                () => Object.assign(window.ENV, {
+                    FHEROES2_DATA: `/fheroes2/data`,
+                    HOME: '/fheroes2'
+                }),
+                () => {
+                    addRunDependency('syncfs');
+                    FS.mkdir('/fheroes2');
+                    FS.mount(IDBFS, { root: '/' }, '/fheroes2');
+                    FS.syncfs(true, (err) => {
+                        if (err) throw err;
+                        try {
+                            if (Object.keys(FS.lookupPath(`${ENV.FHEROES2_DATA}`)).length === 0) return;
+                            document.querySelector('#uploader').style.display = 'none';
+                            document.querySelector('#launcher').style.display = 'block';
+                        }
+                        catch (ignore) {
+                            FS.mkdir(`${ENV.FHEROES2_DATA}`);
+                        }
+                    });
+                },
+                () => {
+                    document.querySelector('input[type=file]').addEventListener('input', e => {
+                        const files = [...e.target.files];
+                        const requiredFiles = ['data/HEROES2.AGG', 'data/HEROES2X.AGG']
+                        if (files.length === 1) return Module.clearInput('zip archives are not supported yet, sorry');
+                        if (files.length > 3000) return Module.clearInput('wrong directory, or your maps collection is really awesome.');
+                        const requiredResolved = files.filter(({ webkitRelativePath: path }) =>
+                            requiredFiles.some(rq => path.toLocaleLowerCase().endsWith(rq.toLocaleLowerCase()))).length === 2;
+                        if (!requiredResolved) return Module.clearInput('wrong directory');
+                        const whitListed = ['data', 'heroes2', 'maps', 'music'];
+                        files.filter(file => {
+                            const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
+                            if (fileName.startsWith('.')) return false;
+                            return path
+                                .map(folder => folder.toLocaleLowerCase())
+                                .some(folder => whitListed.includes(folder))
+                        }).reduce((uploaded, file, _ignore, queue) => {
+                            const [fileName, ...path] = file.webkitRelativePath.split('/').reverse();
+                            const [ignore, ...relativePath] = path.reverse();
+                            Module.mkdirWithParents(`${ENV.FHEROES2_DATA}/${relativePath.join('/')}`);
+
+                            const reader = new FileReader();
+                            reader.addEventListener('error', console.error);
+                            reader.addEventListener('loadend', ({ target: { result } }) => {
+                                FS.writeFile(`${ENV.FHEROES2_DATA}/${relativePath.join('/')}/${fileName}`, new Uint8Array(result), {
+                                    encoding: 'binary'
+                                });
+                                uploaded.push(file);
+                                if (uploaded.length === queue.length) {
+                                    FS.syncfs(false, err => {
+                                        if (err) return Module.clearInput('Failed to sync FS');
+                                        document.querySelector('#uploader').style.display = 'none';
+                                        document.querySelector('#launcher').style.display = 'block';
+                                    })
+                                }
+                            });
+                            reader.readAsArrayBuffer(file);
+                            return uploaded;
+                        }, []);
+                    })
+                }
+            ],
+            clearInput: (msg = '') => {
+                document.querySelector('input[type=file]').value = null;
+                msg && alert(msg);
+            },
+            mkdirWithParents: path => {
+                const parts = path.split('/');
+                try { FS.lookupPath(parts.join('/')) }
+                catch (ignore) {
+                    parts.reduce((p, part) => {
+                        p = [...p, part];
+                        if (!part) return p;
+                        try { FS.lookupPath(p.join('/')) }
+                        catch (ignore) { FS.mkdir(p.join('/')) }
+                        return p;
+                    }, []);
+                }
+            },
+            clearPath: path => {
+                try {
+                    Object.keys(FS.lookupPath(path).node.contents).forEach(node =>
+                        (FS.stat(`${path}/${node}`).mode & S_IFMT) === S_IFDIR
+                            ? Module.clearPath(`${path}/${node}`)
+                            : FS.unlink(`${path}/${node}`));
+                    FS.rmdir(`${path}`)
+                } catch (ignore) {}
+            },
+            startGame: () => {
+                removeRunDependency('syncfs');
+                document.querySelector('#uploader').style.display = 'none';
+                document.querySelector('#launcher').style.display = 'none';
+            },
+            deleteFiles: () => {
+                if (false === confirm('Are you sure?')) return;
+                Module.clearPath(ENV.FHEROES2_DATA);
+                FS.syncfs(false, ignore => {});
+                Module.clearInput();
+                document.querySelector('#uploader').style.display = 'block';
+                document.querySelector('#launcher').style.display = 'none';
+            },
+            setStatus: status => {
+                const dlProgressRE = /(?<progress>\d+)\/(?<total>\d+)/ig;
+                if (!status || !dlProgressRE.test(status)) {
+                    if ((status ?? '').startsWith('Downloading data')) progressBar.start();
+                    return;
+                }
+                dlProgressRE.lastIndex = 0;
+                const {groups: {progress, total}} = [...status.matchAll(dlProgressRE)][0];
+                const done = Math.round(progress / total * 100);
+                progressBar.set(done);
+                if (100 === done) progressBar.end();
+            },
+            canvas
+        }
+    });
+
+    document.head.append(Object.assign(document.createElement('script'), {src: './fheroes2.js'}));
+</script>
+</body>

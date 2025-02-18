@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
@@ -22,8 +22,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HEROESBASE_H
-#define H2HEROESBASE_H
+#pragma once
 
 #include <cstdint>
 #include <functional>
@@ -38,7 +37,8 @@
 #include "spell_book.h"
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace fheroes2
 {
@@ -92,7 +92,7 @@ public:
     virtual uint32_t GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
-    virtual uint32_t GetSecondaryValues( int skill ) const = 0;
+    virtual uint32_t GetSecondarySkillValue( int skill ) const = 0;
 
     virtual void ActionAfterBattle() = 0;
     virtual void ActionPreBattle() = 0;
@@ -140,7 +140,7 @@ public:
 
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
-                         const std::function<void( const std::string & )> * statusCallback ) const;
+                         const std::function<void( const std::string & )> & statusCallback ) const;
 
     bool HaveSpellBook() const
     {
@@ -171,8 +171,8 @@ public:
     void LoadDefaults( const int type, const int race );
 
 protected:
-    friend StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-    friend StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
+    friend OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+    friend IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
     uint32_t magic_point;
     uint32_t move_point;
@@ -181,7 +181,5 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
-StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
+IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );

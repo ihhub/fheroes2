@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,10 +25,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream> // IWYU pragma: keep
+#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <memory>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -50,11 +49,11 @@ namespace
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::string baseName = System::GetBasename( argv[0] );
+        const std::string toolName = System::GetFileName( argv[0] );
 
-        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
+        std::cerr << toolName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
                   << std::endl
-                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
+                  << "Syntax: " << toolName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -68,7 +67,7 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
         if ( palette.size() != validPaletteSize ) {
             std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return EXIT_FAILURE;
@@ -149,7 +148,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), buf.data() + dataSize, header );
 
             std::ostringstream spriteIdxStream;
             spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
@@ -164,7 +163,17 @@ int main( int argc, char ** argv )
                 outputFileName += ".bmp";
             }
 
-            offsetStream << spriteIdxStr << " [" << header.offsetX << ", " << header.offsetY << "]" << std::endl;
+            offsetStream << spriteIdxStr << " [" << header.offsetX << ", " << header.offsetY << "]";
+            if ( header.animationFrames > 0 ) {
+                if ( header.animationFrames != 32 ) {
+                    offsetStream << ", animation frames count = " << std::to_string( header.animationFrames );
+                }
+                else {
+                    offsetStream << ", monochromatic image";
+                }
+            }
+            offsetStream << std::endl;
+
             if ( !offsetStream ) {
                 std::cerr << "Error writing to file " << offsetFilePath << std::endl;
                 return EXIT_FAILURE;

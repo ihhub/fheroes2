@@ -15,11 +15,11 @@ jobs:
   style:
     name: Code style check
     uses: ./.github/workflows/code_style_check.yml
-  clang:
-    name: Clang Analyzer
+  codechecker:
+    name: CodeChecker
     needs:
     - style
-    uses: ./.github/workflows/clang_analyzer.yml
+    uses: ./.github/workflows/codechecker.yml
   iwyu:
     name: IWYU
     needs:

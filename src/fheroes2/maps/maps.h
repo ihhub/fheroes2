@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,25 +20,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_H
-#define H2MAPS_H
+
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
-
-#define TILEWIDTH 32
 
 class Heroes;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
-    enum mapsize_t : int
+    struct ObjectPart;
+
+    enum MapSize : int
     {
         ZERO = 0,
         SMALL = 36,
@@ -74,7 +79,6 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
-    Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
@@ -90,10 +94,13 @@ namespace Maps
     // This function always ignores heroes.
     Indexes GetObjectPositions( const MP2::MapObjectType objectType );
 
+    // This is a very slow function by performance. Use it only while loading a map.
+    std::vector<std::pair<int32_t, const ObjectPart *>> getObjectParts( const MP2::MapObjectType objectType );
+
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor );
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scoutingDistance, const int playerColor );
+    void ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
 
     // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
     // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to
@@ -121,5 +128,3 @@ namespace Maps
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void ReplaceRandomCastleObjectId( const fheroes2::Point & );
 }
-
-#endif

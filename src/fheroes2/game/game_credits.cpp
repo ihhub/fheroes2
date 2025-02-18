@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -310,7 +310,8 @@ namespace
                                 "Bolsch\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
-                                "Christophe Didion\n" );
+                                "Christophe Didion\n"
+                                "Christopher Elliott" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
@@ -327,6 +328,7 @@ namespace
                      "Matt Taylor\n"
                      "Matthew Pfluger\n"
                      "Michael Van Wambeke\n"
+                     "Reximus\n"
                      "Siarzuk Piatrouski\n"
                      "slvclw\n"
                      "TechnoCore\n"
@@ -378,7 +380,7 @@ namespace
         offsetY = textInitialOffsetY;
         offsetX += textInitialOffsetX;
 
-        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.gg/xF85vbZ" );
+        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.com/servers/fheroes2-733093692860137523" );
         offsetY += 10;
 
         fheroes2::Sprite labyrinth = fheroes2::AGG::GetICN( ICN::TWNWUP_3, 0 );
@@ -757,7 +759,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
             break;
         }
 

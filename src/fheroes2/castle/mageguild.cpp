@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -113,8 +113,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         assert( freeSlots > 0 );
 
         // Check for possible duplicates
-        const auto [dummy, inserted] = spellsInUse.insert( spell );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spell ); !inserted ) {
             return;
         }
 
@@ -198,12 +197,12 @@ void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) 
     }
 }
 
-StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )
+OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild )
 {
-    return msg << guild.general << guild.library;
+    return stream << guild.general << guild.library;
 }
 
-StreamBase & operator>>( StreamBase & msg, MageGuild & guild )
+IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild )
 {
-    return msg >> guild.general >> guild.library;
+    return stream >> guild.general >> guild.library;
 }
