@@ -20,7 +20,8 @@
 
 #include "h2d.h"
 
-#include <ostream>
+#include <functional>
+#include <set>
 #include <stdexcept>
 
 #include "h2d_file.h"
