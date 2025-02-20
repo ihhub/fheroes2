@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 msgid ""
 "NEW\n"
@@ -266,6 +266,9 @@ msgstr ""
 "L\n"
 "A\n"
 "T"
+
+msgid "SKIP"
+msgstr "PASS"
 
 msgid ""
 "P\n"

@@ -316,6 +316,13 @@ msgstr ""
 "А\n"
 "Я"
 
+
+msgid "SKIP"
+msgstr "ПРОП"
+
+msgid "AUTO"
+msgstr "АВТО"
+
 msgid "RUMORS"
 msgstr "СЛУХИ"
 

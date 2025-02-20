@@ -1013,8 +1013,8 @@ bool Battle::OpponentSprite::updateAnimationState()
 }
 
 Battle::Status::Status()
-    : _upperBackground( fheroes2::AGG::GetICN( ICN::TEXTBAR, 8 ) )
-    , _lowerBackground( fheroes2::AGG::GetICN( ICN::TEXTBAR, 9 ) )
+    : _upperBackground( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 0 ) )
+    , _lowerBackground( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 1 ) )
 {
     width = _upperBackground.width();
     height = _upperBackground.height() + _lowerBackground.height();
@@ -1295,8 +1295,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    _buttonAuto.setICNInfo( ICN::TEXTBAR, 4, 5 );
-    _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
+    _buttonAuto.setICNInfo( ICN::BUTTON_AUTO, 0, 1 );
+    _buttonSettings.setICNInfo( ICN::BUTTON_BATTLE_SETTINGS, 0, 1 );
 
     // opponents
     if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
@@ -1317,7 +1317,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _buttonAuto.setPosition( area.x, satusOffsetY );
     _buttonSettings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    _buttonSkip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    _buttonSkip.setICNInfo( ICN::BUTTON_SKIP, 0, 1 );
     _buttonSkip.setPosition( area.x + area.width - _buttonSkip.area().width, area.y + area.height - _buttonSkip.area().height );
 
     status.setPosition( area.x + settingsRect.width, satusOffsetY );
