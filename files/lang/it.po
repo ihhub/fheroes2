@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 14:16+0000\n"
+"POT-Creation-Date: 2025-02-21 14:01+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -18,40 +18,36 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-10-08 00:00+0800\n"
 "X-Generator: Poedit 3.2\n"
 
-msgid ""
-"NEW\n"
-"GAME"
+msgid "SELECT"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
+msgstr ""
+
+msgid "HEROES"
 msgstr ""
 
 msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-
-msgid "INFO"
-msgstr ""
-
-msgid "QUIT"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"LOAD\n"
-"MAP"
+"TOWNS/\n"
+"CASTLES"
 msgstr ""
 
 msgid "CANCEL"
@@ -78,45 +74,97 @@ msgstr ""
 msgid "NO"
 msgstr ""
 
-msgid "EXIT"
-msgstr ""
-
-msgid "smallerButton|EXIT"
-msgstr ""
-
 msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
 msgstr ""
 
+msgid "GIFT"
+msgstr ""
+
 msgid "RESTART"
 msgstr ""
 
-msgid "HEROES"
+msgid "MAX"
+msgstr "MAX"
+
+msgid "MIN"
 msgstr ""
 
 msgid ""
-"TOWNS/\n"
-"CASTLES"
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
 msgstr ""
 
-msgid "S"
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
 msgstr ""
 
-msgid "M"
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
 msgstr ""
 
-msgid "L"
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 msgstr ""
 
-msgid "X-L"
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
 
-msgid "ALL"
+msgid ""
+"NEW\n"
+"MAP"
 msgstr ""
 
-msgid "SELECT"
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid "INFO"
 msgstr ""
 
 msgid ""
@@ -171,19 +219,10 @@ msgstr ""
 msgid "6 PLAYERS"
 msgstr ""
 
-msgid "GIFT"
-msgstr ""
-
-msgid "MAX"
-msgstr "MAX"
-
 msgid "DIFFICULTY"
 msgstr ""
 
 msgid "VIEW INTRO"
-msgstr ""
-
-msgid "MIN"
 msgstr ""
 
 msgid "RESET"
@@ -198,24 +237,14 @@ msgstr ""
 msgid "CASTLE"
 msgstr ""
 
-msgid "RESTRICT"
+msgid ""
+"AUTO\n"
+"COMBAT"
 msgstr ""
 
 msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid ""
@@ -225,47 +254,6 @@ msgid ""
 "R\n"
 "O\n"
 "L"
-msgstr ""
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid "RUMORS"
-msgstr ""
-
-msgid "EVENTS"
-msgstr ""
-
-msgid "LANGUAGE"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -3810,6 +3798,9 @@ msgstr "Castello Celeste"
 msgid "Default Buildings"
 msgstr "Frombolieri"
 
+msgid "RESTRICT"
+msgstr ""
+
 msgid "Default Army"
 msgstr ""
 
@@ -4601,6 +4592,15 @@ msgstr ""
 "\n"
 "\n"
 "Percorso: "
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
