@@ -540,7 +540,7 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
     fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
     fheroes2::Button buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
-    fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
+    fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BUTTON_BATTLE_ONLY, 0, 1 );
     fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_LARGE_CONFIG, 0, 1 );
     fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 

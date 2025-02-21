@@ -731,7 +731,7 @@ namespace Dialog
         setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
 
         // Render dialog buttons.
-        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel, isEvilInterface );
+        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
     }
 
     void ItemSelectionWindow::updateScrollBarImage()
@@ -1027,12 +1027,10 @@ int Dialog::selectHeroType( const int heroType )
     pos.x = area.x + area.width / 2;
     pos.y += 175;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     fheroes2::Rect heroRoi;
@@ -1258,12 +1256,12 @@ void Dialog::selectTownType( int & type, int & color )
     pos.x = area.x + area.width / 2;
     pos.y += 260;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
     const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
@@ -1659,7 +1657,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     display.render( background.totalArea() );
 

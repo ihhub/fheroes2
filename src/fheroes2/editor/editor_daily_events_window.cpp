@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -192,12 +192,12 @@ namespace Editor
         const fheroes2::Rect eventsRoi{ windowArea.x + elementOffset, offsetY, eventsArea.width, eventsArea.height };
         background.applyTextBackgroundShading( eventsRoi );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         EventListBox eventList( eventsRoi.getPosition(), language );
         eventList.initListBackgroundRestorer( eventsRoi );
 
         eventList.SetAreaItems( { eventsRoi.x, eventsRoi.y, eventsRoi.width, eventsRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = eventsRoi.x + eventsRoi.width + 5;
         background.renderScrollbarBackground( { scrollbarOffsetX, eventsRoi.y, eventsRoi.width, eventsRoi.height }, isEvilInterface );
@@ -235,7 +235,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 

@@ -289,8 +289,6 @@ namespace
 
         fheroes2::ImageRestorer textInputAndDateBackground( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         if ( !isEditing && lists.empty() ) {
@@ -298,7 +296,7 @@ namespace
         }
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         // Virtual keyboard button is used only in save game mode (when 'isEditing' is true ).
         std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
@@ -309,6 +307,8 @@ namespace
         listbox.initListBackgroundRestorer( listRoi );
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = area.x + area.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -376,7 +376,7 @@ namespace
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }
