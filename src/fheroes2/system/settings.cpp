@@ -507,7 +507,7 @@ std::string Settings::String() const
     os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << std::endl << "# enable cursor software rendering: on/off" << std::endl;
     os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
