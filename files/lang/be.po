@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 14:16+0000\n"
+"POT-Creation-Date: 2025-02-21 14:01+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,54 +19,37 @@ msgstr ""
 "X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-msgid ""
-"NEW\n"
-"GAME"
-msgstr "НОВАЯ"
-
-msgid ""
-"SAVE\n"
-"GAME"
+msgid "SELECT"
 msgstr ""
-"ЗАХА-\n"
-"ВАЦЬ"
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr "УСЕ"
+
+msgid "EXIT"
+msgstr "ВЫЙСЦІ"
+
+msgid "smallerButton|EXIT"
+msgstr ""
+
+msgid "HEROES"
+msgstr ""
 
 msgid ""
-"LOAD\n"
-"GAME"
+"TOWNS/\n"
+"CASTLES"
 msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
-
-msgid "INFO"
-msgstr "ДАВЕДКА"
-
-msgid "QUIT"
-msgstr ""
-"ЗАВЯР-\n"
-"ШЫЦЬ"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr "НОВАЯ"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАХА-\n"
-"ВАЦЬ"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
 
 msgid "CANCEL"
 msgstr "НАЗАД"
@@ -92,46 +75,111 @@ msgstr "ТАК"
 msgid "NO"
 msgstr "НЕ"
 
-msgid "EXIT"
-msgstr "ВЫЙСЦІ"
-
-msgid "smallerButton|EXIT"
-msgstr ""
-
 msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
 msgstr "ПАЛЕПШЫЦЬ"
 
+msgid "GIFT"
+msgstr "АДДАЦЬ"
+
 msgid "RESTART"
 msgstr "НАНОВА"
 
-msgid "HEROES"
+msgid "MAX"
+msgstr "МАКС"
+
+msgid "MIN"
+msgstr "МІН"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
 msgstr ""
 
 msgid ""
-"TOWNS/\n"
-"CASTLES"
+"E\n"
+"X\n"
+"I\n"
+"T"
 msgstr ""
 
-msgid "S"
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
 msgstr ""
 
-msgid "M"
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 msgstr ""
 
-msgid "L"
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
 
-msgid "X-L"
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr "НОВАЯ"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
 msgstr ""
+"ЗАХА-\n"
+"ВАЦЬ"
 
-msgid "ALL"
-msgstr "УСЕ"
+msgid ""
+"NEW\n"
+"GAME"
+msgstr "НОВАЯ"
 
-msgid "SELECT"
+msgid ""
+"LOAD\n"
+"GAME"
 msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ЗАХА-\n"
+"ВАЦЬ"
+
+msgid "QUIT"
+msgstr ""
+"ЗАВЯР-\n"
+"ШЫЦЬ"
+
+msgid "INFO"
+msgstr "ДАВЕДКА"
 
 msgid ""
 "STANDARD\n"
@@ -194,20 +242,11 @@ msgstr "5 ГУЛЬЦОЎ"
 msgid "6 PLAYERS"
 msgstr "6 ГУЛЬЦОЎ"
 
-msgid "GIFT"
-msgstr "АДДАЦЬ"
-
-msgid "MAX"
-msgstr "МАКС"
-
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
 
 msgid "VIEW INTRO"
 msgstr ""
-
-msgid "MIN"
-msgstr "МІН"
 
 msgid "RESET"
 msgstr ""
@@ -222,25 +261,14 @@ msgstr ""
 msgid "CASTLE"
 msgstr ""
 
-#, fuzzy
-msgid "RESTRICT"
-msgstr "НАНОВА"
-
 msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
+"AUTO\n"
+"COMBAT"
 msgstr ""
 
 msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid ""
@@ -250,47 +278,6 @@ msgid ""
 "R\n"
 "O\n"
 "L"
-msgstr ""
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid "RUMORS"
-msgstr ""
-
-msgid "EVENTS"
-msgstr ""
-
-msgid "LANGUAGE"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
 msgstr ""
 
 msgid "Warrior"
@@ -3742,6 +3729,10 @@ msgstr "Воблачны замак"
 msgid "Default Buildings"
 msgstr "Хобіты"
 
+#, fuzzy
+msgid "RESTRICT"
+msgstr "НАНОВА"
+
 msgid "Default Army"
 msgstr ""
 
@@ -4487,6 +4478,15 @@ msgstr "Складанасць мапы:"
 #, fuzzy
 msgid "Map Description"
 msgstr "Апісанне"
+
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "

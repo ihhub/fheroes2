@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,7 @@
 #include "image.h"
 #include "interface_gamearea.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -120,30 +121,39 @@ namespace
 
         area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, part.icnIndex, Game::getAdventureMapAnimationIndex() );
-        if ( animationIndex > 0 ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
-
-            area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
+        const auto * objectInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectInfo == nullptr ) {
+            return;
         }
+
+        if ( objectInfo->animationFrames == 0 ) {
+            return;
+        }
+
+        const uint32_t secondaryFrameIndex = part.icnIndex + ( Game::getAdventureMapAnimationIndex() % objectInfo->animationFrames ) + 1;
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, secondaryFrameIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
+
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
     }
 
     void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tile & tile )
     {
-        assert( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart().icnIndex != 255 );
+        const auto & part = tile.getMainObjectPart();
 
-        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart().icnType );
+        assert( part.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && part.icnIndex != 255 );
+
+        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( part.icnType );
         if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.getMainObjectType() ) ) {
             return;
         }
 
-        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
+        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( part._uid );
 
-        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.getMainObjectPart().icnIndex );
+        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, part.icnIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= fheroes2::tileWidthPx && mainObjectSprite.y() >= 0
@@ -151,19 +161,29 @@ namespace
 
         area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
 
-        // Render possible animation image.
-        // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-        const uint32_t mainObjectAnimationIndex
-            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart().icnIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
-        if ( mainObjectAnimationIndex > 0 ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
-
-            area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
+        const auto * objectInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectInfo == nullptr ) {
+            return;
         }
+
+        if ( objectInfo->animationFrames == 0 ) {
+            return;
+        }
+
+        uint32_t secondaryFrameIndex = part.icnIndex + ( Game::getAdventureMapAnimationIndex() % objectInfo->animationFrames ) + 1;
+
+        if ( objectInfo->objectType == MP2::OBJ_MAGIC_GARDEN && tile.metadata()[1] == 0 ) {
+            // This is a special case only for Magic Garden object.
+            secondaryFrameIndex = part.icnIndex + objectInfo->animationFrames + 1;
+        }
+
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, secondaryFrameIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
+
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
     }
 
     const fheroes2::Image & PassableViewSurface( const int passable, const bool isActionObject )

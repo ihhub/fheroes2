@@ -343,11 +343,30 @@ namespace fheroes2
         }
     }
 
-    void StandardWindow::renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
-                                             const bool isEvilInterface, const Padding padding )
+    void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
     {
         Sprite released;
         Sprite pressed;
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        getTextAdaptedSprite( released, pressed, buttonText, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                              isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+        const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
+        button.setSprite( released, pressed );
+        button.setPosition( pos.x, pos.y );
+        addGradientShadow( released, _output, button.area().getPosition(), { -5, 5 } );
+        button.draw();
+    }
+
+    void StandardWindow::renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
+                                                   const Padding padding )
+    {
+        Sprite released;
+        Sprite pressed;
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -372,9 +391,11 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface )
+    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
     {
         const Point buttonOffset( 20, 7 );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );

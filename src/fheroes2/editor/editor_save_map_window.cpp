@@ -250,13 +250,11 @@ namespace Editor
 
         fheroes2::ImageRestorer fileNameBackground( display, fileNameRoi.x, fileNameRoi.y, fileNameRoi.width, fileNameRoi.height );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         FileInfoListBox listbox( area.getPosition() );
 
@@ -264,6 +262,8 @@ namespace Editor
         listbox.initListBackgroundRestorer( listRoi );
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + listAreaOffsetY, listRoi.width, listRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = area.x + area.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -314,7 +314,7 @@ namespace Editor
 
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
-        background.renderButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        background.renderCustomButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 

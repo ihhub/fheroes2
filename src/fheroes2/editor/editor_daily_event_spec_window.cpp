@@ -42,7 +42,6 @@
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -80,7 +79,6 @@ namespace Editor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2, messageArea.height + 220, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
@@ -208,7 +206,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
