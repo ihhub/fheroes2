@@ -236,8 +236,8 @@ bool Settings::Read( const std::string & filePath )
         setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
-    // This code handles a configuration file's parameter made by an older versions of the engine.
-    // The original "use evil interface" parameter is not longer being set.
+    // This code handles a configuration file's parameter made by older versions of the engine.
+    // The original "use evil interface" parameter is no longer being set.
     if ( config.Exists( "use evil interface" ) ) {
         const bool isEvil = config.StrParams( "use evil interface" ) == "on";
         setInterfaceType( isEvil ? InterfaceType::EVIL : InterfaceType::GOOD );
