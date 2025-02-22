@@ -504,7 +504,6 @@ namespace fheroes2
         // If some characters were deleted and we have space for new characters.
         int32_t currentWidth
             = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ), charHandler, true );
-        ;
         const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
 
         while ( _textOffset > 0 ) {

@@ -371,7 +371,7 @@ namespace
         };
 
         listbox.Redraw();
-        fheroes2::TextInput textInput( filename, fheroes2::FontType::normalWhite() );
+        fheroes2::TextInput textInput;
         redrawTextInputField( textInput, filename, textInputRoi, 0, isEditing );
 
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
