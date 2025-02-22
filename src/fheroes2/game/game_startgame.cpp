@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -699,6 +699,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+    if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+    }
+
     reset();
 
     _radar.Build();
@@ -720,7 +726,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
-
     if ( !isLoadedFromSave || world.CountDay() == 1 ) {
         // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
@@ -728,11 +733,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
     }
 
-    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
-        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
-        conf.SetCurrentColor( Players::HumanColors() );
-
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
@@ -784,7 +785,13 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
+                    conf.SetCurrentColor( playerColor );
+
                     if ( isHotSeatGame ) {
+                        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
+                            reset();
+                        }
+
                         _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 
@@ -792,7 +799,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
-                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
                         validateFadeInAndRender();
 
@@ -803,8 +810,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
-
-                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 

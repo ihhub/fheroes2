@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <sstream>
 #include <utility>
@@ -35,6 +36,7 @@
 #include "game.h"
 #include "game_io.h"
 #include "logging.h"
+#include "race.h"
 #include "render_processor.h"
 #include "save_format_version.h"
 #include "screen.h"
@@ -68,7 +70,7 @@ namespace
         GAME_3D_AUDIO = 0x00010000,
         GAME_SYSTEM_INFO = 0x00020000,
         GAME_CURSOR_SOFT_EMULATION = 0x00040000,
-        GAME_EVIL_INTERFACE = 0x00080000,
+        UNUSED_GAME_EVIL_INTERFACE = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
         GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
@@ -234,8 +236,23 @@ bool Settings::Read( const std::string & filePath )
         setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
+    // This code handles a configuration file's parameter made by older versions of the engine.
+    // The original "use evil interface" parameter is no longer being set.
     if ( config.Exists( "use evil interface" ) ) {
-        setEvilInterface( config.StrParams( "use evil interface" ) == "on" );
+        const bool isEvil = config.StrParams( "use evil interface" ) == "on";
+        setInterfaceType( isEvil ? InterfaceType::EVIL : InterfaceType::GOOD );
+    }
+    else if ( config.Exists( "interface type" ) ) {
+        const std::string interfaceType = config.StrParams( "interface type" );
+        if ( interfaceType == "good" ) {
+            setInterfaceType( InterfaceType::GOOD );
+        }
+        else if ( interfaceType == "evil" ) {
+            setInterfaceType( InterfaceType::EVIL );
+        }
+        else {
+            setInterfaceType( InterfaceType::DYNAMIC );
+        }
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -429,8 +446,21 @@ std::string Settings::String() const
     os << std::endl << "# show turn order during battle: on/off" << std::endl;
     os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# use evil interface style: on/off" << std::endl;
-    os << "use evil interface = " << ( _gameOptions.Modes( GAME_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+    os << std::endl << "# interface type: good/evil/dynamic" << std::endl;
+    switch ( _interfaceType ) {
+    case InterfaceType::GOOD:
+        os << "interface type = good" << std::endl;
+        break;
+    case InterfaceType::EVIL:
+        os << "interface type = evil" << std::endl;
+        break;
+    case InterfaceType::DYNAMIC:
+        os << "interface type = dynamic" << std::endl;
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -477,7 +507,7 @@ std::string Settings::String() const
     os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << std::endl << "# enable cursor software rendering: on/off" << std::endl;
     os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
@@ -813,16 +843,6 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
-void Settings::setEvilInterface( const bool enable )
-{
-    if ( enable ) {
-        _gameOptions.SetModes( GAME_EVIL_INTERFACE );
-    }
-    else {
-        _gameOptions.ResetModes( GAME_EVIL_INTERFACE );
-    }
-}
-
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
@@ -882,7 +902,35 @@ bool Settings::isHideInterfaceEnabled() const
 
 bool Settings::isEvilInterfaceEnabled() const
 {
-    return _gameOptions.Modes( GAME_EVIL_INTERFACE );
+    switch ( _interfaceType ) {
+    case InterfaceType::GOOD:
+        return false;
+    case InterfaceType::EVIL:
+        return true;
+    case InterfaceType::DYNAMIC: {
+        const Player * player = GetPlayers().GetCurrent();
+        if ( !player ) {
+            return false;
+        }
+
+        if ( player->isControlHuman() ) {
+            return Race::isEvilRace( player->GetRace() );
+        }
+
+        // Keep the UI of the last player during the AI turn
+        for ( auto iter = GetPlayers().rbegin(); iter != GetPlayers().rend(); ++iter ) {
+            if ( *iter && ( *iter )->isControlHuman() ) {
+                return Race::isEvilRace( ( *iter )->GetRace() );
+            }
+        }
+        break;
+    }
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return false;
 }
 
 bool Settings::isEditorAnimationEnabled() const

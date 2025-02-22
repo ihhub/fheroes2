@@ -106,7 +106,7 @@ namespace
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
         const auto drawOptions = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            drawInterfaceType( windowInterfaceTypeRoi, conf.isEvilInterfaceEnabled() );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
             drawInterfacePresence( windowInterfacePresenceRoi );
             drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
             drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
@@ -217,7 +217,15 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                    conf.setInterfaceType( InterfaceType::GOOD );
+                }
+                else if ( conf.getInterfaceType() == InterfaceType::GOOD ) {
+                    conf.setInterfaceType( InterfaceType::EVIL );
+                }
+                else {
+                    conf.setInterfaceType( InterfaceType::DYNAMIC );
+                }
                 updateUI();
                 saveConfiguration = true;
 
