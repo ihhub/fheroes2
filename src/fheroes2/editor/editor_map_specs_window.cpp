@@ -2249,14 +2249,17 @@ namespace Editor
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         fheroes2::ButtonSprite buttonRumors;
-        background.renderTextAdaptedButtonSprite( buttonRumors, gettext_noop( "RUMORS" ), { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RUMORS" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonRumors, translatedText, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonEvents;
-        background.renderTextAdaptedButtonSprite( buttonEvents, gettext_noop( "EVENTS" ), { 20 + buttonRumors.area().width + 10, 6 },
+        translatedText = fheroes2::getSupportedText( gettext_noop( "EVENTS" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonEvents, translatedText, { 20 + buttonRumors.area().width + 10, 6 },
                                                   fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonLanguage;
-        background.renderTextAdaptedButtonSprite( buttonLanguage, gettext_noop( "LANGUAGE" ), { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
+        translatedText = fheroes2::getSupportedText( gettext_noop( "LANGUAGE" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonLanguage, translatedText, { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
                                                   fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {

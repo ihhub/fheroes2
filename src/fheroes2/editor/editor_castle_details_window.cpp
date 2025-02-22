@@ -365,7 +365,9 @@ namespace Editor
 
         // Build restrict mode button. We use center_center padding to make sure localized variable-width buttons are centered too.
         fheroes2::ButtonSprite buttonRestrictBuilding;
-        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, gettext_noop( "RESTRICT" ), { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+
+        const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RESTRICT" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
 
         const bool isNeutral = ( color == Color::NONE );
 

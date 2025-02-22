@@ -91,6 +91,11 @@ namespace fheroes2
         {
             return { FontSize::LARGE, FontColor::WHITE };
         }
+
+        static FontType buttonReleasedWhite()
+        {
+            return { FontSize::BUTTON_RELEASED, FontColor::WHITE };
+        }
     };
 
     struct TextLineInfo

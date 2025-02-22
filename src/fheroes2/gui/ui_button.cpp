@@ -837,7 +837,7 @@ namespace fheroes2
         }
     }
 
-    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * untranslatedText, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
         FontColor buttonFont = FontColor::WHITE;
         Point textAreaMargins = { 0, 3 };
@@ -852,13 +852,8 @@ namespace fheroes2
 
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaMargins, minimumTextArea, maximumTextArea, backgroundBorders, releasedOffset, pressedOffset );
 
-        const FontType releasedButtonFont{ FontSize::BUTTON_RELEASED, buttonFont };
-
-        // TODO: do not do translations for button generation. We shouldn't assume that we receive a non-translated string.
-        const char * supportedText = getSupportedText( untranslatedText, releasedButtonFont );
-
-        const Text releasedText( supportedText, releasedButtonFont );
-        const Text pressedText( supportedText, { FontSize::BUTTON_PRESSED, buttonFont } );
+        const Text releasedText( text, { FontSize::BUTTON_RELEASED, buttonFont } );
+        const Text pressedText( text, { FontSize::BUTTON_PRESSED, buttonFont } );
 
         // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
         const int32_t textWidth = releasedText.width( maximumTextArea.width );
