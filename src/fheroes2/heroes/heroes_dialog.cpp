@@ -461,7 +461,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Dismiss hero.
         else if ( buttonDismiss && buttonDismiss->isEnabled() ) {
-            buttonDismiss->drawOnState( ( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) );
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) );
 
             if ( ( le.MouseClickLeft( buttonDismiss->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
                  && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {

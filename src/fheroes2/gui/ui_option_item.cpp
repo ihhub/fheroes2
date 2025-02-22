@@ -100,14 +100,14 @@ namespace fheroes2
         uint32_t icnInx = 15;
         std::string value;
         switch ( interfaceType ) {
-        case DYNAMIC:
+        case InterfaceType::DYNAMIC:
             value = _( "Dynamic" );
             break;
-        case GOOD:
+        case InterfaceType::GOOD:
             icnInx = 16;
             value = _( "Good" );
             break;
-        case EVIL:
+        case InterfaceType::EVIL:
             icnInx = 17;
             value = _( "Evil" );
             break;

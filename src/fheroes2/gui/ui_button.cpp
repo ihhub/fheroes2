@@ -724,7 +724,7 @@ namespace fheroes2
         }
     }
 
-    void OptionButtonGroup::unsubscribeAll()
+    void OptionButtonGroup::unsubscribeAll() const
     {
         for ( ButtonBase * button : _button ) {
             button->unsubscribe();
