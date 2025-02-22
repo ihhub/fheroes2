@@ -336,7 +336,7 @@ namespace fheroes2
         std::vector<ButtonBase *> _button;
 
         void subscribeAll();
-        void unsubscribeAll();
+        void unsubscribeAll() const;
     };
 
     // Make transparent edges around buttons making the pressed state appear without parts of the released state

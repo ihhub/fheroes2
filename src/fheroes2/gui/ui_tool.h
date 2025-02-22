@@ -35,7 +35,7 @@
 #include "ui_base.h"
 #include "ui_text.h"
 
-enum InterfaceType : uint8_t;
+enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {

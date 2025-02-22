@@ -448,13 +448,13 @@ std::string Settings::String() const
 
     os << std::endl << "# interface type: good/evil/dynamic" << std::endl;
     switch ( _interfaceType ) {
-    case GOOD:
+    case InterfaceType::GOOD:
         os << "interface type = good" << std::endl;
         break;
-    case EVIL:
+    case InterfaceType::EVIL:
         os << "interface type = evil" << std::endl;
         break;
-    case DYNAMIC:
+    case InterfaceType::DYNAMIC:
         os << "interface type = dynamic" << std::endl;
         break;
     default:

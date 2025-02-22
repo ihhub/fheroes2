@@ -64,7 +64,7 @@ enum class ZoomLevel : uint8_t
     ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
 };
 
-enum InterfaceType : uint8_t
+enum class InterfaceType : uint8_t
 {
     GOOD = 0,
     EVIL = 1,

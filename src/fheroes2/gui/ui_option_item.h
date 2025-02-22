@@ -25,7 +25,7 @@
 
 #include "math_base.h"
 
-enum InterfaceType : uint8_t;
+enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {
