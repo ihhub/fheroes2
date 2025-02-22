@@ -1660,8 +1660,8 @@ namespace
 
                 // Generate the DIFFICULTY button because it is not present in the original resources
                 const char * text = fheroes2::getSupportedText( gettext_noop( "DIFFICULTY" ), fheroes2::FontType::buttonReleasedWhite() );
-                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], text,
-                                                isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                                buttonBackground );
                 break;
             }
             createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
