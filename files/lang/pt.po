@@ -4144,7 +4144,7 @@ msgid ""
 "START\n"
 "MAP"
 msgstr ""
-"START\n"
+"INICIAR\n"
 "MAPA"
 
 msgid "Main Menu"
