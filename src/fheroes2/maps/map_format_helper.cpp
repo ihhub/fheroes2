@@ -584,7 +584,7 @@ namespace
         const int newGround = Maps::Ground::getGroundByImageIndex( terrainImageIndex );
 
         if ( ( Maps::doesContainRoads( tile ) || doesContainStreams( tile ) ) && ( newGround != Maps::Ground::WATER )
-            && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
+             && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
             // There cannot be extra objects under the roads and streams.
             tile.terrainIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::getGroundByImageIndex( terrainImageIndex ), false );
         }
@@ -1375,7 +1375,8 @@ namespace Maps
     {
         auto & tile = map.tiles[tileIndex];
 
-        const uint8_t imageIndex = getRoadImageForTile( map, tileIndex, getRoadDirecton( map, tileIndex ) | ( forceRoadOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
+        const uint8_t imageIndex
+            = getRoadImageForTile( map, tileIndex, getRoadDirecton( map, tileIndex ) | ( forceRoadOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
         if ( imageIndex == 255U ) {
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
