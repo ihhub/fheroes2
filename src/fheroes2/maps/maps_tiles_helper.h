@@ -174,7 +174,6 @@ namespace Maps
     // The functions below are used only in the map Editor.
 
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
-    bool updateRoadOnTile( Tile & tile, const bool setRoad );
 
     bool setObjectOnTile( Tile & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
