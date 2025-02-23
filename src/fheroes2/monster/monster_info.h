@@ -178,8 +178,8 @@ namespace fheroes2
 
     struct MonsterGeneralStats
     {
-        const char * name;
-        const char * pluralName;
+        const char * untranslatedName;
+        const char * untranslatedPluralName;
 
         uint32_t baseGrowth;
         uint32_t race;

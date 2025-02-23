@@ -399,17 +399,7 @@ namespace
         fheroes2::ApplyPalette( pressed, goodToEvilPalette );
     }
 
-    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * untranslatedText, const bool isEvilInterface,
-                             const int backgroundIcnId, fheroes2::Size buttonSize )
-    {
-        // TODO: do not do translations for button generation. We shouldn't assume that we receive a non-translated string.
-        const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-        const char * text = fheroes2::getSupportedText( untranslatedText, fheroes2::FontType{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
-
-        fheroes2::makeButtonSprites( released, pressed, text, buttonSize, isEvilInterface, backgroundIcnId );
-    }
-
-    void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
+    void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & untranslatedTexts )
     {
         int emptyButtonIcnID = 0;
         int buttonBackgroundICN = ICN::UNKNOWN;
@@ -432,9 +422,11 @@ namespace
             break;
         }
 
-        for ( size_t i = 0; i < texts.size(); ++i ) {
+        for ( size_t i = 0; i < untranslatedTexts.size(); ++i ) {
             const size_t icnIndex = 2 * i;
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID,
+
+            const char * translatedText = fheroes2::getSupportedText( untranslatedTexts[i], fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], translatedText, emptyButtonIcnID,
                                             buttonBackgroundICN );
         }
     }
@@ -620,7 +612,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "SELECT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -633,7 +626,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), false, ICN::STONEBAK, { 46, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "S" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -646,7 +640,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), false, ICN::STONEBAK, { 46, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "M" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -659,7 +654,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), false, ICN::STONEBAK, { 46, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "L" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -672,7 +668,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), false, ICN::STONEBAK, { 46, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "X-L" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -685,7 +682,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), false, ICN::STONEBAK, { 58, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "ALL" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 58, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -698,7 +696,8 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -712,7 +711,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::BLACKBAK, { 70, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 25 }, false, ICN::BLACKBAK );
 
             break;
         }
@@ -729,8 +729,9 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface,
-                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 70, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -746,8 +747,9 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), isEvilInterface,
-                                isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 70, 35 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 35 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -760,7 +762,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::BROWNBAK, { 89, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 89, 25 }, false, ICN::BROWNBAK );
 
             break;
         }
@@ -773,7 +776,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), false, ICN::BROWNBAK, { 89, 42 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "HEROES" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 89, 42 }, false, ICN::BROWNBAK );
 
             break;
         }
@@ -786,7 +790,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), false, ICN::BROWNBAK, { 90, 42 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "TOWNS/\nCASTLES" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 90, 42 }, false, ICN::BROWNBAK );
 
             break;
         }
@@ -806,7 +811,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "CANCEL" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
@@ -827,8 +833,9 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                            isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -848,7 +855,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "ACCEPT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
@@ -869,7 +877,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "DECLINE" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
@@ -886,8 +895,8 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "LEARN" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -904,7 +913,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "TRADE" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
@@ -921,8 +931,8 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "YES" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
@@ -939,8 +949,8 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "NO" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
@@ -995,6 +1005,7 @@ namespace
                 text = gettext_noop( "UPGRADE" );
             }
 
+            text = fheroes2::getSupportedText( text, fheroes2::FontType::buttonReleasedWhite() );
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -1005,8 +1016,8 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_GIFT_EVIL );
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "GIFT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -1020,7 +1031,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "RESTART" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
@@ -1042,7 +1054,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), false, ICN::STONEBAK, { 61, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "MAX" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 61, 25 }, false, ICN::STONEBAK );
 
             break;
         }
@@ -1051,8 +1064,9 @@ namespace
 
             const bool isEvilInterface = id == ICN::BUTTON_SMALL_MIN_EVIL;
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
-                                { fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ).width() - 10, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "MIN" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ).width() - 10, 25 },
+                                         isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1088,8 +1102,8 @@ namespace
                 break;
             }
 
-            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ),
-                                            isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                             isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
@@ -1106,7 +1120,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "CANCEL" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -1124,7 +1139,8 @@ namespace
                 break;
             }
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+            const char * text = fheroes2::getSupportedText( gettext_noop( "EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
             break;
@@ -1154,8 +1170,9 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
-                                  ICN::REDBAK_SMALL_VERTICAL );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
 
             break;
         }
@@ -1184,7 +1201,9 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "E\nX\nI\nT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
 
             break;
         }
@@ -1418,7 +1437,9 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, { 86, 56 } );
+            text = fheroes2::getSupportedText( text, fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 86, 56 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1582,7 +1603,8 @@ namespace
                 break;
             }
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], text, false, ICN::STONEBAK, { 117, 56 } );
+            text = fheroes2::getSupportedText( text, fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 117, 56 }, false, ICN::STONEBAK );
 
             fheroes2::Sprite & released = _icnVsSprite[id][0];
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
@@ -1635,9 +1657,11 @@ namespace
                     setButtonCornersTransparent( released );
                     fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
                 }
+
                 // Generate the DIFFICULTY button because it is not present in the original resources
-                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
-                                                isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
+                const char * text = fheroes2::getSupportedText( gettext_noop( "DIFFICULTY" ), fheroes2::FontType::buttonReleasedWhite() );
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                                buttonBackground );
                 break;
             }
             createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -1685,8 +1709,10 @@ namespace
 
                     fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
                 }
+
                 // generate the DIFFICULTY button as it is not present in the original resources
-                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON, ICN::STONEBAK_SMALL_POL );
+                const char * text = fheroes2::getSupportedText( gettext_noop( "DIFFICULTY" ), fheroes2::FontType::buttonReleasedWhite() );
+                fheroes2::getTextAdaptedSprite( _icnVsSprite[id][8], _icnVsSprite[id][9], text, ICN::EMPTY_POL_BUTTON, ICN::STONEBAK_SMALL_POL );
                 break;
             }
             createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -1707,28 +1733,32 @@ namespace
 
             // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
             // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedSprite() instead.
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), false, ICN::STONEBAK, { 70, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 25 }, false, ICN::STONEBAK );
 
             break;
         }
         case ICN::BUTTON_RESET_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESET" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "RESET" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
         case ICN::BUTTON_START_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "START" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
             break;
         }
         case ICN::BUTTON_WELL_MAX: {
             _icnVsSprite[id].resize( 2 );
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "MAX" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1745,8 +1775,10 @@ namespace
             // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
             const bool isEvilInterface = id == ICN::BUTTON_CASTLE_EVIL;
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CASTLE" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
-                                { width, 25 } );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1764,8 +1796,9 @@ namespace
             const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
             const bool isEvilInterface = id == ICN::BUTTON_TOWN_EVIL;
 
-            createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWN" ), isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK,
-                                { width, 25 } );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1775,8 +1808,9 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_COMBAT_EVIL );
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO\nCOMBAT" ),
-                                  isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1786,8 +1820,9 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_QUICK_COMBAT_EVIL );
 
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUICK\nCOMBAT" ),
-                                  isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1798,8 +1833,9 @@ namespace
             // be off-centered when we are displaying one letter per line
             const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
-                                  ICN::REDBAK_SMALL_VERTICAL );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "P\nA\nT\nR\nO\nL" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
 
             break;
         }

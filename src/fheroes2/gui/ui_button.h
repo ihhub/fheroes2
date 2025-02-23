@@ -339,6 +339,12 @@ namespace fheroes2
         void unsubscribeAll() const;
     };
 
+    // !!! IMPORTANT !!!
+    // None of the functions below translate the text for a button.
+    // It is the caller's responsibility to pass a translated text if required.
+    // If you want to translate text call this function.
+    const char * getSupportedText( const char * untranslatedText, const FontType font );
+
     // Make transparent edges around buttons making the pressed state appear without parts of the released state
     void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID );
 
@@ -355,13 +361,10 @@ namespace fheroes2
 
     // Generates released and pressed button sprites with the width and height necessary to fit a provided text using an empty button template ICN and a chosen background
     // ICN.
-    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * untranslatedText, const int icnId, const int buttonBackgroundIcnID );
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
     // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
-
-    // TODO: find a better place where to put this function.
-    const char * getSupportedText( const char * untranslatedText, const FontType font );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
                              const Size & buttonSize, const FontColor fontColor );
