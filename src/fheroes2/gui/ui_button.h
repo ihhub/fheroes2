@@ -341,7 +341,7 @@ namespace fheroes2
 
     // !!! IMPORTANT !!!
     // None of the functions below translate the text for a button.
-    // It is a caller responsibility to pass a translated text if required.
+    // It is the caller's responsibility to pass a translated text if required.
     // If you want to translate text call this function.
     const char * getSupportedText( const char * untranslatedText, const FontType font );
 
