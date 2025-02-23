@@ -287,7 +287,7 @@ namespace
         }
     }
 
-    const bool isCastleObject( const MP2::MapObjectType type )
+    bool isCastleObject( const MP2::MapObjectType type )
     {
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
@@ -1306,7 +1306,7 @@ namespace Maps
 
     bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad )
     {
-        assert( tileIndex < map.tiles.size() );
+        assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
 
         auto & tile = map.tiles[tileIndex];
         const int groundType = Ground::getGroundByImageIndex( tile.terrainIndex );
