@@ -316,11 +316,9 @@ namespace
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
         for ( const auto & object : tile.objects ) {
-            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                if ( isCastleObject( townObjects[object.index].objectType ) ) {
-                    // A castle has an entrance with a road.
-                    return true;
-                }
+            if ( ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) && isCastleObject( townObjects[object.index].objectType ) ) {
+                // A castle has an entrance with a road.
+                return true;
             }
         }
 
@@ -355,8 +353,8 @@ namespace
     uint8_t getRoadImageForTile( const Maps::Map_Format::MapFormat & map, const int32_t tileIndex, const int roadDirection )
     {
         // To place some roads we need to check not only the road directions around this tile, but also the road ICN index at the nearby tile.
-        auto checkRoadIcnIndex = [&map]( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
-            const auto & currentTile = map.tiles[tileIndex];
+        auto checkRoadIcnIndex = [&map]( const int32_t mapTileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
+            const auto & currentTile = map.tiles[mapTileIndex];
 
             const auto & roadObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ROADS );
 
@@ -1326,11 +1324,9 @@ namespace Maps
                 isRoadSetPreviously = true;
             }
 
-            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                if ( isCastleObject( townObjects[object.index].objectType ) ) {
-                    // A castle has an entrance with a road.
-                    isCastleEntrance = true;
-                }
+            if ( ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) && isCastleObject( townObjects[object.index].objectType ) ) {
+                // A castle has an entrance with a road.
+                isCastleEntrance = true;
             }
         }
 
