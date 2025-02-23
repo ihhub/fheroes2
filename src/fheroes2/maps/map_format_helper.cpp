@@ -25,10 +25,12 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 #include <initializer_list>
-#include <list>
 #include <map>
+#include <ostream>
 #include <set>
+#include <string>
 #include <utility>
 
 #include "army.h"
@@ -328,7 +330,7 @@ namespace
     // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
     int getRoadDirecton( const Maps::Map_Format::MapFormat & map, const int32_t mainTileIndex )
     {
-        auto & tile = map.tiles[mainTileIndex];
+        const auto & tile = map.tiles[mainTileIndex];
 
         // Castle entrance (active tile) is considered as a road, but it is not a real road so it should not be taken into account here.
         int roadDirection = 0;
@@ -1402,7 +1404,7 @@ namespace Maps
             info.group = ObjectGroup::ROADS;
             info.index = imageIndex;
 
-            tile.objects.emplace_back( std::move( info ) );
+            tile.objects.emplace_back( info );
         }
     }
 
