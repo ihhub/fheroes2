@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ВЫБАР"
 
 msgid "S"
 msgstr ""
@@ -41,15 +41,17 @@ msgid "EXIT"
 msgstr "ВЫЙСЦІ"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "ВЫЙСЦІ"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОІ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ГАРАДЫ/\n"
+"ЗАМКІ"
 
 msgid "CANCEL"
 msgstr "НАЗАД"
@@ -64,10 +66,10 @@ msgid "DECLINE"
 msgstr "АДМОВІЦЬ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ВЫВУЧЫЦЬ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "МЯНЯЦЬ"
 
 msgid "YES"
 msgstr "ТАК"
@@ -76,7 +78,7 @@ msgid "NO"
 msgstr "НЕ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ВЫЗВАЛІЦЬ"
 
 msgid "UPGRADE"
 msgstr "ПАЛЕПШЫЦЬ"
@@ -109,6 +111,12 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"В\n"
+"Ы\n"
+"Й\n"
+"С\n"
+"Ц\n"
+"І"
 
 msgid ""
 "C\n"
@@ -120,6 +128,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"К\n"
+"А\n"
+"М\n"
+"П\n"
+"А\n"
+"Н\n"
+"І\n"
+"Я"
 
 msgid ""
 "S\n"
@@ -2882,10 +2898,10 @@ msgid "Load a previously saved game."
 msgstr "Працягнуць захаваную гульню."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Захаваць гульню"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Захаваць бягучую гульню"
 
 msgid "Quit"
 msgstr "Скончыць"
@@ -10927,124 +10943,134 @@ msgid "Randomly selected 5th level spell."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Акамяненне"
 
 msgid ""
 "Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Ператварае парожаную істоту ў камень. Акамянелая істота атрымлівае "
+"палову шкоды ад прамой атакі."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "У Вас няма Магічнай Кнігі, таму Вы не можаце скарыстаць заклінанне."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Няма заклінанняў для скарыстання"
 
 msgid "Your hero has %{sp} spell points remaining out of %{max}."
-msgstr ""
+msgstr "У Вашага героя засталося %{sp} ачкоў магіі з %{max}."
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Прагляд паходных заклінанняў"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Прагляд баявых заклінанняў"
 
 msgid "View previous page"
-msgstr ""
+msgstr "Папярэдняя старонка"
 
 msgid "View next page"
-msgstr ""
+msgstr "Наступная старонка"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Загарнуць кнігу заклінанняў"
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Прагледзець %{spell}"
 
 msgid "This spell does %{damage} points of damage."
-msgstr ""
+msgstr "Гэта заклінанне наносіць %{damage} шкоды."
 
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
 msgstr ""
+"Гэта заклінанне выклікае\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Гэта заклінанне аднаўляе %{hp} здароўя"
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Гэта заклінанне выклікае %{count} %{monster} для аховы шахты"
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Гэта заклінанне перанясе героя ў %{town}""
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Гэты горад заняты Вашым героем: %{hero}"
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Гэта заклінанне дазваляе ўзяць пад кантроль атрад,\n"
+"сумарнае здароўе якога не вышэй за\n"
+"%{hp} здароўя."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Унікальны Артэфакт - гэта %{name}"
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Унікальны Артэфакт схаваны на %{name}е"
 
 msgid "north-west"
-msgstr ""
+msgstr "паўночны захад"
 
 msgid "north"
-msgstr ""
+msgstr "поўнач"
 
 msgid "north-east"
-msgstr ""
+msgstr "паўночны ўсход"
 
 msgid "west"
-msgstr ""
+msgstr "захад"
 
 msgid "center"
-msgstr ""
+msgstr "сярэдзін"
 
 msgid "east"
-msgstr ""
+msgstr "усход"
 
 msgid "south-west"
-msgstr ""
+msgstr "паўднёвы захад"
 
 msgid "south"
-msgstr ""
+msgstr "поўдзень"
 
 msgid "south-east"
-msgstr ""
+msgstr "паўднёвы ўсход"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Праўда недзе побач"
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Цёмны бок мацней"
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Канец свету блізкі."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Парэшткі лорда закапаныя ля падмурка арэны"
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Чорны Цмок пераможа Тытана ў любы дзень тыдня."
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Ён сказаў ёй: Бэ бэ бэ... а потым яна сказала: Бла, бла, бла..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Адраджаецца невядомая сіла..."
 
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+"Новую версію гульні можна знайсці на сайце\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
 
 #~ msgid "Enable auto combat"
 #~ msgstr "Уключыць аўта-бой"
