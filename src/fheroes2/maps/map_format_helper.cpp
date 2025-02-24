@@ -1315,7 +1315,7 @@ namespace Maps
             return false;
         }
 
-        bool isRoadSetPreviously = doesContainRoads( tile );
+        const bool isRoadSetPreviously = doesContainRoads( tile );
         bool isCastleEntrance = false;
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
