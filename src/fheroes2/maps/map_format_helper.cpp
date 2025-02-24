@@ -1315,15 +1315,11 @@ namespace Maps
             return false;
         }
 
-        bool isRoadSetPreviously = false;
+        bool isRoadSetPreviously = doesContainRoads( tile );
         bool isCastleEntrance = false;
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
         for ( const auto & object : tile.objects ) {
-            if ( object.group == Maps::ObjectGroup::ROADS ) {
-                isRoadSetPreviously = true;
-            }
-
             if ( ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) && isCastleObject( townObjects[object.index].objectType ) ) {
                 // A castle has an entrance with a road.
                 isCastleEntrance = true;
@@ -1385,7 +1381,7 @@ namespace Maps
             return;
         }
 
-        if ( doesContainRoads( tile ) ) {
+        if ( std::any_of( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } ) ) {
             // Since the tile has a road object, update it.
             for ( auto & object : tile.objects ) {
                 if ( object.group == ObjectGroup::ROADS ) {
@@ -1408,7 +1404,9 @@ namespace Maps
     {
         for ( const auto & object : tile.objects ) {
             if ( object.group == ObjectGroup::ROADS ) {
-                return true;
+                // NOTICE: only the next original road sprites are considered as a road for hero. The others are extra road edges.
+                static const std::set<uint32_t> allowedIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
+                return ( allowedIndecies.count( object.index ) == 1 );
             }
         }
 
