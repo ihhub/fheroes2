@@ -325,7 +325,7 @@ namespace fheroes2
         return 0;
     }
 
-    int32_t getMineObjectInfoId( const int resource, const int groundType )
+    int32_t getMineObjectInfoId( const int resourceType, const int groundType )
     {
         // 8 terrain and 5 resources
         // 2 abandoned mines: grass & dirt
@@ -337,7 +337,7 @@ namespace fheroes2
 
         const int groundIndex = mineIndexFromGroundType( groundType );
 
-        switch ( resource ) {
+        switch ( resourceType ) {
         case Resource::ORE:
             return groundIndex * 5;
         case Resource::SULFUR:

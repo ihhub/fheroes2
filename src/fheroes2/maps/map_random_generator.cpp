@@ -51,13 +51,13 @@
 namespace
 {
     // ObjectInfo ObjctGroup based indicies do not match old objects
-    const int neutralColor = 6;
+    const int neutralColorIndex{ Color::GetIndex( Color::UNUSED ) };
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
-    const std::vector<fheroes2::Point> directionOffsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
+    const std::array<fheroes2::Point, 8> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
 
     enum class NodeType
     {
@@ -74,7 +74,7 @@ namespace
         NodeType type = NodeType::OPEN;
         uint32_t region{ 0 };
         uint16_t mapObject{ 0 };
-        uint16_t passable = DIRECTION_ALL;
+        uint16_t passability = DIRECTION_ALL;
 
         Node() = default;
         explicit Node( int index_ )
@@ -132,7 +132,7 @@ namespace
         std::vector<Node> _nodes;
         size_t _sizeLimit{ 0 };
         size_t _lastProcessedNode{ 0 };
-        int _colorIndex = neutralColor;
+        int _colorIndex = neutralColorIndex;
         int _groundType = Maps::Ground::GRASS;
 
         Region() = default;
@@ -178,7 +178,7 @@ namespace
 
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
             Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
-            if ( newTile.passable & getDirectionBitmask( direction, true ) ) {
+            if ( newTile.passability & getDirectionBitmask( direction, true ) ) {
                 if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                     newTile.region = region._id;
                     region._nodes.push_back( newTile );
@@ -377,7 +377,7 @@ namespace
 namespace Maps::Generator
 {
 
-    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config )
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, int32_t width, int32_t height )
     {
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
             assert( config.playerCount <= 6 );
@@ -387,20 +387,16 @@ namespace Maps::Generator
             return false;
         }
 
-        const int32_t width = world.w();
-        const int32_t height = world.h();
-
         NodeCache data( width, height );
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
-            x = std::max( std::min( x, width - 1 ), 0 );
-            y = std::max( std::min( y, height - 1 ), 0 );
+            x = std::clamp( x, 0, width - 1 );
+            y = std::clamp( y, 0, height - 1 );
             return x * width + y;
         };
 
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
-        const int playerCount = static_cast<int>( config.playerCount );
 
         // Aiming for region size to be ~400 tiles in a 300-600 range
         // const int minimumRegionCount = playerCount + 1;
@@ -408,11 +404,11 @@ namespace Maps::Generator
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, neutralColor, Ground::WATER, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 0 } };
 
-        const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
-        const int innerLayer = std::min( neutralRegionCount, playerCount );
-        const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), playerCount );
+        const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
+        const int innerLayer = std::min( neutralRegionCount, config.playerCount );
+        const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), config.playerCount );
 
         const double radius = sqrt( ( innerLayer + outerLayer ) * config.regionSizeLimit / M_PI );
         const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
@@ -432,11 +428,11 @@ namespace Maps::Generator
                 const int y = height / 2 + static_cast<int>( sin( radians ) * distance );
                 const int centerTile = mapBoundsCheck( x, y );
 
-                const int factor = regionCount / playerCount;
+                const int factor = regionCount / config.playerCount;
                 const bool isPlayerRegion = layer == 1 && ( i % factor ) == 0;
 
                 const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
-                const int regionColor = isPlayerRegion ? i / factor : neutralColor;
+                const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
@@ -452,8 +448,9 @@ namespace Maps::Generator
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 regionExpansion( data, region );
-                if ( region._lastProcessedNode != region._nodes.size() )
+                if ( region._lastProcessedNode != region._nodes.size() ) {
                     stillRoomToExpand = true;
+                }
             }
         }
 
@@ -463,8 +460,9 @@ namespace Maps::Generator
         mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
 
         for ( const Region & region : mapRegions ) {
-            if ( region._id == 0 )
+            if ( region._id == 0 ) {
                 continue;
+            }
 
             for ( const Node & node : region._nodes ) {
                 world.getTile( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
@@ -478,8 +476,9 @@ namespace Maps::Generator
 
         // Step 5. Object placement
         for ( Region & region : mapRegions ) {
-            if ( region._id == 0 )
+            if ( region._id == 0 ) {
                 continue;
+            }
 
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Region #" << region._id << " size " << region._nodes.size() << " has " << region._neighbours.size() << "neighbours" )
 
@@ -501,7 +500,7 @@ namespace Maps::Generator
                 }
             }
 
-            if ( region._colorIndex != neutralColor && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+            if ( region._colorIndex != neutralColorIndex && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
                 // return early if we can't place a starting player castle
                 return false;
             }

@@ -31,10 +31,10 @@ namespace Maps::Generator
 {
     struct Configuration
     {
-        uint32_t playerCount = 2;
-        uint32_t regionSizeLimit = 300;
+        int32_t playerCount = 2;
+        int32_t regionSizeLimit = 300;
         bool basicOnly = true;
     };
 
-    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config );
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, int32_t width, int32_t height );
 }

@@ -888,7 +888,7 @@ namespace Interface
                     rmgConfig.playerCount = _playerCount;
                     rmgConfig.regionSizeLimit = _regionSizeLimit;
 
-                    if ( Maps::Generator::generateMap( _mapFormat, rmgConfig ) ) {
+                    if ( Maps::Generator::generateMap( _mapFormat, rmgConfig, world.w(), world.h() ) ) {
                         _redraw |= mapUpdateFlags;
 
                         action.commit();
@@ -898,13 +898,13 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
-                    int32_t newCount = static_cast<int32_t>( _playerCount );
+                    int32_t newCount = _playerCount;
                     if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
-                        _playerCount = static_cast<uint32_t>( newCount );
+                        _playerCount = newCount;
                     }
-                    newCount = static_cast<int32_t>( _regionSizeLimit );
+                    newCount = _regionSizeLimit;
                     if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
-                        _regionSizeLimit = static_cast<uint32_t>( newCount );
+                        _regionSizeLimit = newCount;
                     }
                 }
 #endif
