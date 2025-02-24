@@ -27,7 +27,6 @@
 
 #include "agg_image.h"
 #include "icn.h"
-#include "logging.h"
 #include "ui_language.h"
 
 namespace
