@@ -61,6 +61,11 @@
 
 namespace
 {
+    bool isArtifactValidForTransfer( const Artifact & art )
+    {
+        return art.isValid() && art.GetID() != Artifact::MAGIC_BOOK;
+    }
+
     std::vector<Artifact *> planArtifactTransfer( const BagArtifacts & winnerBag, BagArtifacts & loserBag )
     {
         size_t availableArtifactSlots = std::count_if( winnerBag.begin(), winnerBag.end(), []( const Artifact & art ) { return !art.isValid(); } );
@@ -76,7 +81,7 @@ namespace
                 break;
             }
 
-            if ( !art.isValid() || art.GetID() == Artifact::MAGIC_BOOK ) {
+            if ( !isArtifactValidForTransfer( art ) ) {
                 continue;
             }
 
@@ -99,9 +104,10 @@ namespace
     std::vector<Artifact> getArtifactsToTransfer( const BagArtifacts & winnerBag, BagArtifacts & loserBag )
     {
         std::vector<Artifact> artifacts;
+        artifacts.reserve( BagArtifacts::maxCapacity );
 
         for ( const Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
-            assert( art != nullptr );
+            assert( art != nullptr && isArtifactValidForTransfer( *art ) );
 
             artifacts.push_back( *art );
         }
@@ -112,7 +118,7 @@ namespace
     void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag )
     {
         for ( Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
-            assert( art != nullptr );
+            assert( art != nullptr && isArtifactValidForTransfer( *art ) );
 
             // Ultimate artifacts never go to the winner.
             if ( !art->isUltimate() ) {
