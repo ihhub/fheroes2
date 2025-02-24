@@ -340,9 +340,10 @@ namespace
 
                     needRedraw |= Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
 
-                    ++objectIter;
+                    // There could be only one "real" road on a tile.
+                    break;
                 }
-                else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
+                if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
 

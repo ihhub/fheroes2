@@ -1359,7 +1359,7 @@ namespace Maps
             updateRoadSpritesAround( map, tileIndex );
 
             // After removing the road from the tile it may have road sprites for the nearby tiles with road.
-            removeRoads( tile );
+            updateRoadSpriteOnTile( map, tileIndex, false );
         }
 
         return true;
