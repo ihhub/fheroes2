@@ -100,7 +100,7 @@ namespace
     {
         std::vector<Artifact> artifacts;
 
-        for ( Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
+        for ( const Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
             assert( art != nullptr );
 
             artifacts.push_back( *art );
