@@ -338,12 +338,17 @@ namespace
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
 
-                    needRedraw |= Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
+                    if ( Maps::doesContainRoads( mapTile ) ) {
+                        needRedraw |= Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
 
-                    // There could be only one "real" road on a tile.
-                    break;
+                        // Current 'objectIter'is deleted. Update it to the begin.
+                        objectIter = mapTile.objects.begin();
+                    }
+                    else {
+                        ++objectIter;
+                    }
                 }
-                if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
+                else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
 
