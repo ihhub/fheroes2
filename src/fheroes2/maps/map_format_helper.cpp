@@ -579,7 +579,7 @@ namespace
         updateRoadSpritesInArea( map, centerTileIndex, 3, true );
     }
 
-    void setTerrain( Maps::Map_Format::TileInfo & tile, const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
+    void setTerrain( Maps::Map_Format::TileInfo & tile, const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip, const int32_t tileIndex )
     {
         tile.terrainFlag = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
@@ -592,6 +592,10 @@ namespace
         }
         else {
             tile.terrainIndex = terrainImageIndex;
+        }
+
+        if ( tileIndex >= 0 && tileIndex < world.w() * world.h() ) {
+            world.getTile( tileIndex ).setTerrain( tile.terrainIndex, tile.terrainFlag );
         }
     }
 }
@@ -627,7 +631,7 @@ namespace Maps
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
             auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-            worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlag & 2, map.tiles[i].terrainFlag & 1 );
+            worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlag );
         }
 
         // Read objects from all tiles and place them based on their IDs.
@@ -1335,7 +1339,7 @@ namespace Maps
 
             if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
                 // We need to set terrain image without extra objects under the road.
-                setTerrain( tile, Ground::getRandomTerrainImageIndex( groundType, false ), false, false );
+                setTerrain( tile, Ground::getRandomTerrainImageIndex( groundType, false ), false, false, tileIndex );
             }
         }
         else {
