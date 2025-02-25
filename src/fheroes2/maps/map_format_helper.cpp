@@ -294,10 +294,12 @@ namespace
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
 
-    void removeRoads( Maps::Map_Format::TileInfo & tile )
+    void removeRoads( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
     {
         tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
                             tile.objects.end() );
+
+        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
     }
 
     bool doesContainStreams( const Maps::Map_Format::TileInfo & tile )
@@ -1337,7 +1339,7 @@ namespace Maps
             }
         }
         else {
-            removeRoads( tile );
+            removeRoads( tile, tileIndex );
 
             updateRoadSpritesAround( map, tileIndex );
 
@@ -1358,7 +1360,7 @@ namespace Maps
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
                 // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                removeRoads( tile );
+                removeRoads( tile, tileIndex );
             }
 
             return;
