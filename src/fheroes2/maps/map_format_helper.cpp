@@ -1364,19 +1364,13 @@ namespace Maps
             return;
         }
 
-        if ( std::any_of( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } ) ) {
+        auto roadObjectIter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
+        if ( roadObjectIter != tile.objects.end() ) {
             // Since the tile has a road object, update it.
-            for ( auto & object : tile.objects ) {
-                if ( object.group == ObjectGroup::ROADS ) {
-                    object.index = imageIndex;
+            roadObjectIter->index = imageIndex;
 
-                    Maps::Tile & worldTile = world.getTile( tileIndex );
-                    Maps::Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
-
-                    // Currently there can be only one road object on a tile.
-                    break;
-                }
-            }
+            Maps::Tile & worldTile = world.getTile( tileIndex );
+            Maps::Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
         }
         else {
             // This tile has no roads. Add one.
