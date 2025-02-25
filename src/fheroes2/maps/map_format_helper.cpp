@@ -1315,24 +1315,7 @@ namespace Maps
             return false;
         }
 
-        const bool isRoadSetPreviously = doesContainRoads( tile );
-        bool isCastleEntrance = false;
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-
-        for ( const auto & object : tile.objects ) {
-            if ( ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) && isCastleObject( townObjects[object.index].objectType ) ) {
-                // A castle has an entrance with a road.
-                isCastleEntrance = true;
-            }
-        }
-
-        if ( isCastleEntrance && isRoadSetPreviously ) {
-            // This is wrong. Remove the road.
-            removeRoads( tile );
-            return true;
-        }
-
-        if ( isRoadSetPreviously == setRoad ) {
+        if ( doesContainRoads( tile ) == setRoad ) {
             // Nothing to do here.
             return false;
         }
