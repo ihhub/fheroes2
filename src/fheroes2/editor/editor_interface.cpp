@@ -1626,9 +1626,6 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
 
                 action.commit();
-
-                // TODO: Find another way not to read the whole info of the map after updating several tiles.
-                Maps::readMapInEditor( _mapFormat );
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
@@ -1828,7 +1825,8 @@ namespace Interface
             const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
 
             if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
-                Maps::updateRoadSpriteOnTile( _mapFormat, tile.GetIndex(), false );
+                // Update road if there is one in front of the town/castle entrance.
+                Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
             }
 
             // By default use random (default) army for the neutral race town/castle.
@@ -1837,7 +1835,7 @@ namespace Interface
             }
 
             // Add flags.
-            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * ( world.h() - 1 ) );
+            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
             if ( !_setObjectOnTile( world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
@@ -1852,13 +1850,7 @@ namespace Interface
 
             world.addCastle( tile.GetIndex(), Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) ), Color::IndexToColor( color ) );
 
-            // Update road if there is one in front of the town/castle entrance.
-            Maps::updateRoadSpriteOnTile( _mapFormat, tile.GetIndex() + world.w(), false );
-
             action.commit();
-
-            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-            Maps::readMapInEditor( _mapFormat );
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );

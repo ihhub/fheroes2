@@ -1386,6 +1386,12 @@ namespace Maps
             for ( auto & object : tile.objects ) {
                 if ( object.group == ObjectGroup::ROADS ) {
                     object.index = imageIndex;
+
+                    Maps::Tile & worldTile = world.getTile( tileIndex );
+                    Maps::Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
+
+                    // Currently there can be only one road object on a tile.
+                    break;
                 }
             }
         }
@@ -1396,7 +1402,9 @@ namespace Maps
             info.group = ObjectGroup::ROADS;
             info.index = imageIndex;
 
-            tile.objects.emplace_back( info );
+            readTileObject( world.getTile( tileIndex ), info );
+
+            tile.objects.emplace_back( std::move( info ) );
         }
     }
 
