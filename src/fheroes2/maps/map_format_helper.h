@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,6 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info );
     bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
     void writeTile( const Tile & tile, Map_Format::TileInfo & info );
@@ -85,4 +84,10 @@ namespace Maps
     void saveCastleArmy( const Army & army, Map_Format::CastleMetadata & metadata );
     bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
     void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
+
+    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
+
+    void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
+
+    bool doesContainRoads( const Maps::Map_Format::TileInfo & tile );
 }

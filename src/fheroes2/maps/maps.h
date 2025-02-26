@@ -73,6 +73,7 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t width, const int32_t height, const int32_t maxDistanceFromTile );
 
     MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -174,7 +174,6 @@ namespace Maps
     // The functions below are used only in the map Editor.
 
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
-    bool updateRoadOnTile( Tile & tile, const bool setRoad );
 
     bool setObjectOnTile( Tile & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
