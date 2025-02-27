@@ -69,6 +69,9 @@ namespace Difficulty
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
 
+    // Returns true if AI to use stone liths or whirlpool while standing on it
+    bool allowAIToReuseTeleporters( const int difficulty );
+
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }
