@@ -934,12 +934,10 @@ namespace fheroes2
             height += 16;
         }
 
-        // std::vector<ButtonSprite> buttonSprites;
         for ( const Text & buttonText : buttonTexts ) {
             Sprite released;
             Sprite pressed;
             makeButtonSprites( released, pressed, buttonText.text(), { multiLinedWidth, height }, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-            // buttonSprites.push_back( ButtonSprite( 0, 0, released, pressed ) );
             buttonGroup.createButton( 0, 0, released, pressed, 1 );
         }
     }
