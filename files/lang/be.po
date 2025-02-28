@@ -470,7 +470,7 @@ msgid "Move the %{name}"
 msgstr "Перамясціць: %{name}"
 
 msgid "Set %{monster} Count"
-msgstr "%{monster}: увядзіце колькасць""
+msgstr "%{monster}: увядзіце колькасць"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -963,7 +963,7 @@ msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "%{spell} наносіць %{damage} шкоды ўсёй нежыці."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-"msgstr "%{spell} наносіць %{damage} шкоды; загінулі: %{count}."
+msgstr "%{spell} наносіць %{damage} шкоды, загінулі: %{count}."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} наносіць %{damage} шкоды."
@@ -1142,7 +1142,7 @@ msgid "Elven Alliance"
 msgstr "Альянс з эльфамі"
 
 msgid "Kraeger defeated"
-msgstr "msgstr "Крэгер пераможаны""
+msgstr "Крэгер пераможаны"
 
 msgid "Wayward Son"
 msgstr "Наравісты сын"
@@ -1248,7 +1248,7 @@ msgstr ""
 "Збярыце як мага больш войскаў, каб за 8 тыдняў захапіць варожы замак. Вам "
 "супрацьстаіць толькі адзін вораг, але вы мусіце прайсці доўгую дарогу да яго "
 "замка. Усе войскі, якія застануцца пад катролем вашага героя напрыканцы "
-"сцэнара, будуць прымаць удзел у апошнім баі.
+"сцэнара, будуць прымаць удзел у апошнім баі."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
@@ -3837,7 +3837,7 @@ msgid "RESTRICT"
 msgstr "НАНОВА"
 
 msgid "Default Army"
-msgstr "msgstr "Стандартнае войска""
+msgstr "Стандартнае войска"
 
 #, fuzzy
 msgid "Castle Army"
@@ -5471,7 +5471,6 @@ msgstr "За адным камп'ютарам"
 msgid ""
 "Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr ""
 msgstr ""
 "Гуляйце за адным камп'ютарам з адным-пяццю іншымі гульцамі, перадаючы "
 "кіраванне па чарзе."
