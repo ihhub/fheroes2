@@ -3286,7 +3286,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     for ( size_t i = 0; i < 2; i++ ) {
         // TODO: Find a way to add shadows. Change addGradient Shadow to not take in sprite but instead Size and bool singleLayered
-        //addGradientShadow( autoButtons.button( i )./*_getReleased()*/, display, autoButtons[i].area().getPosition(), { -5, 5 } );
+        // addGradientShadow( autoButtons.button( i )./*_getReleased()*/, display, autoButtons[i].area().getPosition(), { -5, 5 } );
         autoButtons.button( i ).draw();
     }
 
