@@ -904,7 +904,7 @@ namespace fheroes2
         renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
     }
 
-    void makeSymmetricButtonGroup( ButtonGroup & buttonGroup, const std::vector<const char *> texts )
+    void makeSymmetricButtonGroup( ButtonGroup & buttonGroup, const std::vector<const char *> & texts )
     {
         if ( texts.size() < 2 ) {
             // You are trying to make a group of buttons with 0 or only one text.
@@ -915,9 +915,10 @@ namespace fheroes2
         const FontType buttonFontType = { FontSize::BUTTON_RELEASED, isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE };
 
         std::vector<Text> buttonTexts;
+        buttonTexts.reserve( texts.size() );
 
         for ( const char * text : texts ) {
-            buttonTexts.push_back( { text, buttonFontType } );
+            buttonTexts.emplace_back( text, buttonFontType );
         }
         auto max_iter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() > b.width(); } );
 
@@ -934,7 +935,7 @@ namespace fheroes2
         }
 
         // std::vector<ButtonSprite> buttonSprites;
-        for ( Text buttonText : buttonTexts ) {
+        for ( const Text & buttonText : buttonTexts ) {
             Sprite released;
             Sprite pressed;
             makeButtonSprites( released, pressed, buttonText.text(), { multiLinedWidth, height }, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
