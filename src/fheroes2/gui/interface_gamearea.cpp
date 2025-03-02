@@ -495,7 +495,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
                     std::vector<fheroes2::ObjectRenderingInfo> temp;
-                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, tile.GetCenter(), alphaValue );
+                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue );
                     continue;
                 }
 
@@ -531,7 +531,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
                 auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
 
-                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue );
 
                 continue;
             }
@@ -550,7 +550,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = getBoatSpritesPerTile( tile );
                 auto spriteShadowInfo = getBoatShadowSpritesPerTile( tile );
 
-                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue );
 
                 continue;
             }
@@ -564,7 +564,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
-                    populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
+                    populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, { posX, posY }, alphaValue );
                 }
             }
         }
