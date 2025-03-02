@@ -508,8 +508,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
                 if ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) {
-                    // AI heroes can go out of fog so we have to render them one step earlier than getting out of fog.
-                    if ( hero->isControlAI() && hero->isMoveEnabled() ) {
+                    // Enemy heroes can go out of fog (our heroes are always seen) so we have to render them one step earlier than getting out of fog.
+                    if ( hero->isMoveEnabled() ) {
                         // Check if the next AI hero path point will not be seen on map to skip it.
                         if ( world.getTile( hero->GetPath().GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) {
                             continue;
