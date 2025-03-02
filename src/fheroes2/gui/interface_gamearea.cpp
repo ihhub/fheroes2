@@ -503,21 +503,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL ) : true;
                 const Heroes * hero = tile.getHero();
 
+                // We do not render heroes and boats that are covered with the fog.
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
-                if ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) {
-                    // Enemy heroes can go out of fog (our heroes are always seen) so we have to render them one step earlier than getting out of fog.
-                    if ( hero->isMoveEnabled() ) {
-                        // Check if the next AI hero path point will not be seen on map to skip it.
-                        if ( world.getTile( hero->GetPath().GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
+                // While moving enemy heroes can go out of the fog so we need to render them one step earlier than getting out of the fog.
+                if ( isTileUnderFog && ( !hero->isShipMaster() || ( posY > 0 ? ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL ) : true ) )
+                     && ( !hero->isMoveEnabled() || ( world.getTile( hero->GetPath().GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) ) {
+                    continue;
                 }
 
                 populateHeroObjectInfo( tileUnfit, hero );
