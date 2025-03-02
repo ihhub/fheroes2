@@ -655,7 +655,7 @@ namespace Maps
     void redrawFlyingGhostsOnMap( const Tile & tile, fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor )
     {
         const MP2::MapObjectType objectType = tile.getMainObjectType( false );
-        if ( ( objectType != MP2::OBJ_ABANDONED_MINE ) && !( ( objectType == MP2::OBJ_MINE ) && ( Maps::getMineSpellIdFromTile( tile ) == Spell::HAUNT ) ) ) {
+        if ( ( objectType != MP2::OBJ_ABANDONED_MINE ) && ( ( objectType != MP2::OBJ_MINE ) || ( Maps::getMineSpellIdFromTile( tile ) != Spell::HAUNT ) ) ) {
             // No ghost animation is needed.
             return;
         }
