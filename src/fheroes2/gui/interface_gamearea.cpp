@@ -253,7 +253,7 @@ namespace
                     tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
-            else if ( imagePos.y != 0 && ( world.getTile( heroPos.x, heroPos.y ).getFogDirection() & Direction::TOP ) != Direction::TOP ) {
+            else if ( ( world.getTile( heroPos.x, heroPos.y ).getFogDirection() & Direction::TOP ) != Direction::TOP ) {
                 if ( imagePos.x < 0 ) {
                     tileUnfit.topImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
