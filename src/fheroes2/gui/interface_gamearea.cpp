@@ -299,7 +299,8 @@ namespace
         const Maps::Tile & tileBelow = world.getTile( x, y + 1 );
 
         for ( const auto & lowerPart : tileBelow.getTopObjectParts() ) {
-            if ( lowerPart._uid == uid ) {
+            // NOTICE: Flags are put over the objects as a top object part and have the same UID but they do not make the object taller.
+            if ( lowerPart._uid == uid && lowerPart.icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
                 // This is a tall object.
                 return true;
             }
@@ -311,29 +312,19 @@ namespace
 
 Interface::GameArea::GameArea( BaseInterface & interface )
     : _interface( interface )
-    , _minLeftOffset( 0 )
-    , _maxLeftOffset( 0 )
-    , _minTopOffset( 0 )
-    , _maxTopOffset( 0 )
-    , _prevIndexPos( 0 )
-    , scrollDirection( 0 )
-    , updateCursor( false )
-    , _mouseDraggingInitiated( false )
-    , _mouseDraggingMovement( false )
-    , _needRedrawByMouseDragging( false )
-    , _isFastScrollEnabled( false )
-    , _resetMousePositionForFastScroll( false )
 {
     // Do nothing.
 }
 
 void Interface::GameArea::generate( const fheroes2::Size & screenSize, const bool withoutBorders )
 {
-    if ( withoutBorders )
+    if ( withoutBorders ) {
         SetAreaPosition( 0, 0, screenSize.width, screenSize.height );
-    else
+    }
+    else {
         SetAreaPosition( fheroes2::borderWidthPx, fheroes2::borderWidthPx, screenSize.width - fheroes2::radarWidthPx - 3 * fheroes2::borderWidthPx,
                          screenSize.height - 2 * fheroes2::borderWidthPx );
+    }
 }
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
@@ -403,10 +394,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 {
     const fheroes2::Rect & tileROI = GetVisibleTileROI();
 
-    int32_t minX = tileROI.x;
-    int32_t minY = tileROI.y;
     int32_t maxX = tileROI.x + tileROI.width;
     int32_t maxY = tileROI.y + tileROI.height;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
 
 #ifdef WITH_DEBUG
     const bool renderFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
@@ -418,20 +409,20 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = 0; y < tileROI.height; ++y ) {
         fheroes2::Point offset( tileROI.x, tileROI.y + y );
 
-        if ( offset.y < 0 || offset.y >= world.h() ) {
+        if ( offset.y < 0 || offset.y >= worldHeight ) {
             for ( ; offset.x < maxX; ++offset.x ) {
                 Maps::redrawEmptyTile( dst, offset, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
-                if ( offset.x < 0 || offset.x >= world.w() ) {
+                if ( offset.x < 0 || offset.x >= worldWidth ) {
                     Maps::redrawEmptyTile( dst, offset, *this );
                 }
                 else {
                     const Maps::Tile & tile = world.getTile( offset.x, offset.y );
                     // Do not render terrain on the tiles fully covered with the fog.
-                    if ( tile.getFogDirection() != DIRECTION_ALL || !renderFog ) {
+                    if ( !renderFog || tile.getFogDirection() != DIRECTION_ALL ) {
                         DrawTile( dst, getTileSurface( tile ), offset );
                     }
                 }
@@ -439,10 +430,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    minX = std::max( minX, 0 );
-    minY = std::max( minY, 0 );
-    maxX = std::min( maxX, world.w() );
-    maxY = std::min( maxY, world.h() );
+    const int32_t minX = std::max( tileROI.x, 0 );
+    const int32_t minY = std::max( tileROI.y, 0 );
+    maxX = std::min( maxX, worldWidth );
+    maxY = std::min( maxY, worldHeight );
 
     if ( minX >= maxX || minY >= maxY ) {
         // This can't be true! Please check your code changes as we shouldn't have an empty area.
@@ -480,24 +471,26 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Also cover extra tiles from right and bottom sides because these objects are usually bigger than 1x1 tiles.
     const int32_t roiToRenderMinX = std::max( minX - 1, 0 );
     const int32_t roiToRenderMinY = std::max( minY - 1, 0 );
-    const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
-    const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
+    const int32_t roiToRenderMaxX = std::min( maxX + 2, worldWidth );
+    const int32_t roiToRenderMaxY = std::min( maxY + 2, worldHeight );
 
     const bool isEditor = _interface.isEditor();
 
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
+        const int32_t offset = posY * worldWidth;
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
-            const Maps::Tile & tile = world.getTile( posX, posY );
+            const int32_t tileIndex = offset + posX;
+            const Maps::Tile & tile = world.getTile( tileIndex );
 
             MP2::MapObjectType objectType = tile.getMainObjectType();
 
             // We will skip objects which are fully under the fog.
-            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
+            const bool isTileUnderFog = renderFog && ( tile.getFogDirection() == DIRECTION_ALL );
 
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
                 if ( isEditor ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
+                    const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
@@ -510,7 +503,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL ) : true;
                 const Heroes * hero = tile.getHero();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
@@ -541,7 +534,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
+                const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_MONSTER );
 
                 auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
                 auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
@@ -553,14 +546,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             case MP2::OBJ_BOAT: {
                 // Boats are 2 tiles high so we have to populate info for boat one tile lower than the fog.
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL ) : true;
 
                 if ( !drawHeroes || ( isTileUnderFog && isUpperTileUnderFog ) ) {
                     // Boats can be occupied by heroes so they are considered as the same objects.
                     continue;
                 }
 
-                const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_BOAT );
+                const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_BOAT );
 
                 auto spriteInfo = getBoatSpritesPerTile( tile );
                 auto spriteShadowInfo = getBoatShadowSpritesPerTile( tile );
@@ -575,7 +568,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINE ) {
+            if ( objectType == MP2::OBJ_MINE && !isTileUnderFog ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
@@ -587,10 +580,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Render all terrain and background layer object.
     for ( int32_t y = minY; y < maxY; ++y ) {
+        const int32_t offset = y * worldWidth;
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tile & tile = world.getTile( x, y );
+            const Maps::Tile & tile = world.getTile( x + offset );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
+            if ( renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) ) {
                 continue;
             }
 
@@ -605,10 +599,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     renderImagesOnTiles( dst, tileUnfit.bottomBackgroundImages, *this );
 
     for ( int32_t y = minY; y < maxY; ++y ) {
+        const int32_t offset = y * worldWidth;
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tile & tile = world.getTile( x, y );
+            const Maps::Tile & tile = world.getTile( x + offset );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
+            if ( renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) ) {
                 continue;
             }
 
@@ -626,10 +621,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     renderImagesOnTiles( dst, tileUnfit.lowPriorityBottomImages, *this );
 
     for ( int32_t y = minY; y < maxY; ++y ) {
+        const int32_t offset = y * worldWidth;
         for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tile & tile = world.getTile( x, y );
+            const Maps::Tile & tile = world.getTile( x + offset );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
+            if ( renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) ) {
                 continue;
             }
 
@@ -644,24 +640,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // High priority images are drawn after any other object on this tile.
     renderImagesOnTiles( dst, tileUnfit.highPriorityBottomImages, *this );
 
-    std::vector<const Maps::ObjectPart *> topLayerTallObjects;
+    std::vector<std::pair<const Maps::ObjectPart *, int32_t>> topLayerTallObjects;
 
     // Expand  ROI to properly render very tall objects (1 tile - left and right; 2 tiles - bottom): Abandoned mine Ghosts, Flag on the Alchemist lab, and others.
-    const int32_t roiExtraObjectsMaxX = std::min( maxX + 1, world.w() );
+    const int32_t roiExtraObjectsMaxX = std::min( maxX + 1, worldWidth );
     for ( int32_t y = minY; y < roiToRenderMaxY; ++y ) {
+        const int32_t offset = y * worldWidth;
         for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
-            const Maps::Tile & tile = world.getTile( x, y );
+            const int32_t tileIndex = x + offset;
+            const Maps::Tile & tile = world.getTile( tileIndex );
 
-            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
-            if ( isTileUnderFog ) {
-                // To correctly render tall extra objects (ghosts over abandoned mine) it is needed to analyze one tile to the bottom direction under fog.
-                const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.getTile( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
-                if ( isUpperTileUnderFog ) {
-                    // If current tile and the bottom one are both under the fog
-                    continue;
-                }
-
-                redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
+            if ( renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) ) {
+                // Do not render parts fully covered with fog.
                 continue;
             }
 
@@ -669,26 +659,47 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
             // any other level 2 objects with the same UID.
 
-            topLayerTallObjects.clear();
             for ( const auto & part : tile.getTopObjectParts() ) {
                 if ( isTallTopLayerObject( x, y, part._uid ) ) {
-                    topLayerTallObjects.emplace_back( &part );
+                    topLayerTallObjects.emplace_back( &part, tileIndex );
                 }
                 else {
-                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, part );
+                    redrawTopLayerObject( tile, dst, isPuzzleDraw, { x, y }, *this, part );
                 }
-            }
-
-            redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
-
-            for ( const auto * part : topLayerTallObjects ) {
-                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *part );
             }
         }
     }
 
     // Draw upper part of tile-unfit sprites.
     renderImagesOnTiles( dst, tileUnfit.topImages, *this );
+
+    // Draw the top part of tall objects.
+    for ( const auto & [part, tileIndex] : topLayerTallObjects ) {
+        redrawTopLayerObject( world.getTile( tileIndex ), dst, isPuzzleDraw, Maps::GetPoint( tileIndex ), *this, *part );
+    }
+
+    // Draw flying ghosts animation for Haunted and Abandoned Mines over all other objects.
+    if ( !isPuzzleDraw ) {
+        // There can not be a mine entrance at the top map row.
+        for ( int32_t y = std::max( minY, 1 ); y < roiToRenderMaxY; ++y ) {
+            const int32_t offset = y * worldWidth;
+            for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
+                const int32_t tileIndex = x + offset;
+                const Maps::Tile & tile = world.getTile( tileIndex );
+
+                // To correctly render ghosts over abandoned mine it is needed to analyze one tile to the top direction under fog.
+                const bool areGhostsUnderFog
+                    = renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) && ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL );
+
+                if ( areGhostsUnderFog ) {
+                    // Current tile and the top one are both fully under the fog.
+                    continue;
+                }
+
+                redrawFlyingGhostsOnMap( tile, dst, { x, y }, *this, isEditor );
+            }
+        }
+    }
 
     // Draw hero's route. It should be drawn on top of everything.
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
@@ -751,8 +762,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const int32_t friendColors = Players::FriendColors();
 
         for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t offset = y * worldWidth;
             for ( int32_t x = minX; x < maxX; ++x ) {
-                redrawPassable( world.getTile( x, y ), dst, friendColors, *this, isEditor );
+                redrawPassable( world.getTile( x + offset ), dst, friendColors, *this, isEditor );
             }
         }
     }
@@ -760,8 +772,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const bool drawTowns = ( flag & LEVEL_TOWNS );
 
         for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t offset = y * worldWidth;
             for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tile & tile = world.getTile( x, y );
+                const Maps::Tile & tile = world.getTile( x + offset );
 
                 if ( tile.getFogDirection() != Direction::UNKNOWN ) {
                     drawFog( tile, dst, *this );
