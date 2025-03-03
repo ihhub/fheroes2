@@ -496,7 +496,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             MP2::MapObjectType objectType = tile.getMainObjectType();
 
             // We will skip objects which are fully under the fog.
-            const uint16_t fogDirection = renderFog ? tile.getFogDirection() : Direction::UNKNOWN;
+            const uint16_t fogDirection = renderFog ? tile.getFogDirection() : 0;
             const bool isTileUnderFog = ( fogDirection == DIRECTION_ALL );
 
             switch ( objectType ) {
