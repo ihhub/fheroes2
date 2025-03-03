@@ -80,7 +80,8 @@ namespace
     };
 
     void populateStaticTileUnfitObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<fheroes2::ObjectRenderingInfo> & imageInfo,
-                                            std::vector<fheroes2::ObjectRenderingInfo> & shadowInfo, const fheroes2::Point & offset, const uint8_t alphaValue )
+                                            std::vector<fheroes2::ObjectRenderingInfo> & shadowInfo, const fheroes2::Point & offset, const uint8_t alphaValue,
+                                            const uint16_t fogDirection )
     {
         for ( auto & objectInfo : imageInfo ) {
             const fheroes2::Point imagePos = objectInfo.tileOffset;
@@ -103,6 +104,11 @@ namespace
                 }
             }
             else {
+                if ( offset.y == 0 && ( fogDirection & Direction::TOP ) == Direction::TOP ) {
+                    // Do not render object over the top map border if there is a nearby fog.
+                    continue;
+                }
+
                 if ( imagePos.x < 0 ) {
                     tileUnfit.topImages[imagePos + offset].emplace_front( objectInfo );
                 }
@@ -146,7 +152,7 @@ namespace
         }
     }
 
-    void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero )
+    void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero, const uint16_t fogDirection )
     {
         assert( hero != nullptr );
 
@@ -232,7 +238,7 @@ namespace
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
-                // Hero horse or boat should not be rendered over the bottom map border.
+                // Hero's horse or boat should not be rendered over the bottom map border.
                 if ( ( heroPos.y + imagePos.y ) >= worldHeight ) {
                     continue;
                 }
@@ -253,8 +259,12 @@ namespace
                     tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
-            // TODO: Use "fog directions" to emplace only needed image parts here and in other "populate ObjectInfo" functions.
-            else if ( ( heroPos.y != 0 ) || ( world.getTile( heroPos.x, heroPos.y ).getFogDirection() & Direction::TOP ) != Direction::TOP ) {
+            else {
+                if ( heroPos.y == 0 && ( fogDirection & Direction::TOP ) == Direction::TOP ) {
+                    // Do not render hero's flag over the top map border if there is a nearby fog.
+                    continue;
+                }
+
                 if ( imagePos.x < 0 ) {
                     tileUnfit.topImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
@@ -486,7 +496,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             MP2::MapObjectType objectType = tile.getMainObjectType();
 
             // We will skip objects which are fully under the fog.
-            const bool isTileUnderFog = renderFog && ( tile.getFogDirection() == DIRECTION_ALL );
+            const uint16_t fogDirection = renderFog ? tile.getFogDirection() : Direction::UNKNOWN;
+            const bool isTileUnderFog = ( fogDirection == DIRECTION_ALL );
 
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
@@ -496,7 +507,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
                     std::vector<fheroes2::ObjectRenderingInfo> temp;
-                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue );
+                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue, fogDirection );
                     continue;
                 }
 
@@ -514,7 +525,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                populateHeroObjectInfo( tileUnfit, hero );
+                populateHeroObjectInfo( tileUnfit, hero, fogDirection );
 
                 // Update object type as it could be an object under the hero.
                 objectType = tile.getMainObjectType( false );
@@ -532,7 +543,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = getMonsterSpritesPerTile( tile, isEditor );
                 auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, isEditor );
 
-                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue );
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue, fogDirection );
 
                 continue;
             }
@@ -551,7 +562,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = getBoatSpritesPerTile( tile );
                 auto spriteShadowInfo = getBoatShadowSpritesPerTile( tile );
 
-                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue );
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, { posX, posY }, alphaValue, fogDirection );
 
                 continue;
             }
