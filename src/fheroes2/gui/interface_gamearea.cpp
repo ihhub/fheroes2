@@ -55,6 +55,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "spell.h"
 #include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
