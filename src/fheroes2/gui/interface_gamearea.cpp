@@ -487,6 +487,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const bool isEditor = _interface.isEditor();
 
+    std::vector<fheroes2::Point> ghostAnimationPos;
+
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         const int32_t offset = posY * worldWidth;
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
@@ -572,7 +574,17 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINE && !isTileUnderFog ) {
+            if ( !isPuzzleDraw && ( objectType == MP2::OBJ_ABANDONED_MINE || ( objectType == MP2::OBJ_MINE && Maps::getMineSpellIdFromTile( tile ) == Spell::HAUNT ) ) ) {
+                // To correctly render ghosts over abandoned mine it is needed to analyze one tile to the top direction under fog.
+                const bool areGhostsUnderFog = renderFog && isTileUnderFog && ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL );
+                if ( areGhostsUnderFog ) {
+                    // Current tile and the top one are both fully under the fog.
+                    continue;
+                }
+
+                ghostAnimationPos.emplace_back( posX, posY );
+            }
+            else if ( objectType == MP2::OBJ_MINE && !isTileUnderFog ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.getMainObjectPart()._uid );
@@ -668,7 +680,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     topLayerTallObjects.emplace_back( &part, tileIndex );
                 }
                 else {
-                    redrawTopLayerObject( tile, dst, isPuzzleDraw, { x, y }, *this, part );
+                    Maps::redrawTopLayerObject( tile, dst, isPuzzleDraw, { x, y }, *this, part );
                 }
             }
         }
@@ -679,30 +691,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Draw the top part of tall objects.
     for ( const auto & [part, tileIndex] : topLayerTallObjects ) {
-        redrawTopLayerObject( world.getTile( tileIndex ), dst, isPuzzleDraw, Maps::GetPoint( tileIndex ), *this, *part );
+        Maps::redrawTopLayerObject( world.getTile( tileIndex ), dst, isPuzzleDraw, Maps::GetPoint( tileIndex ), *this, *part );
     }
 
     // Draw flying ghosts animation for Haunted and Abandoned Mines over all other objects.
-    if ( !isPuzzleDraw ) {
-        // There can not be a mine entrance at the top map row.
-        for ( int32_t y = std::max( minY, 1 ); y < roiToRenderMaxY; ++y ) {
-            const int32_t offset = y * worldWidth;
-            for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
-                const int32_t tileIndex = x + offset;
-                const Maps::Tile & tile = world.getTile( tileIndex );
-
-                // To correctly render ghosts over abandoned mine it is needed to analyze one tile to the top direction under fog.
-                const bool areGhostsUnderFog
-                    = renderFog && ( tile.getFogDirection() == DIRECTION_ALL ) && ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL );
-
-                if ( areGhostsUnderFog ) {
-                    // Current tile and the top one are both fully under the fog.
-                    continue;
-                }
-
-                redrawFlyingGhostsOnMap( tile, dst, { x, y }, *this, isEditor );
-            }
-        }
+    for ( const auto & pos : ghostAnimationPos ) {
+        Maps::redrawFlyingGhostsOnMap( dst, pos, *this, isEditor );
     }
 
     // Draw hero's route. It should be drawn on top of everything.

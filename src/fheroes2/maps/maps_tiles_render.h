@@ -50,7 +50,7 @@ namespace Maps
 
     void redrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
 
-    void redrawFlyingGhostsOnMap( const Tile & tile, fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor );
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor );
     void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const fheroes2::Point & pos, const Interface::GameArea & area,
                                const ObjectPart & part );
 

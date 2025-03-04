@@ -652,13 +652,8 @@ namespace Maps
         }
     }
 
-    void redrawFlyingGhostsOnMap( const Tile & tile, fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor )
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor )
     {
-        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
-        if ( ( objectType != MP2::OBJ_ABANDONED_MINE ) && ( ( objectType != MP2::OBJ_MINE ) || ( Maps::getMineSpellIdFromTile( tile ) != Spell::HAUNT ) ) ) {
-            // No ghost animation is needed.
-            return;
-        }
         // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
         // TODO: consider adding this sprite as a part of an object part.
 
