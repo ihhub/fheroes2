@@ -160,10 +160,7 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
                                                 ICN::BUTTON_START_GOOD,
-                                                ICN::BUTTON_CASTLE_GOOD,
-                                                ICN::BUTTON_CASTLE_EVIL,
-                                                ICN::BUTTON_TOWN_GOOD,
-                                                ICN::BUTTON_TOWN_EVIL,
+                                                ICN::BUTTONS_TOWN_CASTLE,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -176,11 +173,7 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
-                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::BUTTON_AUTO_COMBAT_GOOD,
-                                                ICN::BUTTON_AUTO_COMBAT_EVIL,
-                                                ICN::BUTTON_QUICK_COMBAT_GOOD,
-                                                ICN::BUTTON_QUICK_COMBAT_EVIL };
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1762,67 +1755,13 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_CASTLE_GOOD:
-        case ICN::BUTTON_CASTLE_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
+        case ICN::BUTTONS_TOWN_CASTLE: {
             // Town and Castle buttons must have the same width.
-            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
-            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
+            _icnVsSprite[id].resize( 4 );
 
-            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
-            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
-            const bool isEvilInterface = id == ICN::BUTTON_CASTLE_EVIL;
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_TOWN_GOOD:
-        case ICN::BUTTON_TOWN_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            // Town and Castle buttons must have the same width.
-            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
-            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
-
-            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
-            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
-            const bool isEvilInterface = id == ICN::BUTTON_TOWN_EVIL;
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_AUTO_COMBAT_GOOD:
-        case ICN::BUTTON_AUTO_COMBAT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_COMBAT_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_QUICK_COMBAT_GOOD:
-        case ICN::BUTTON_QUICK_COMBAT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_QUICK_COMBAT_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            fheroes2::makeSymmetricButtonBackgroundSprites( _icnVsSprite[id],
+                                                            { fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() ),
+                                                              fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() ) } );
 
             break;
         }

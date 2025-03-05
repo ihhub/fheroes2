@@ -1263,10 +1263,10 @@ void Dialog::selectTownType( int & type, int & color )
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
+    const int32_t townButtonIcnId = ICN::BUTTONS_TOWN_CASTLE;
     const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
     fheroes2::Button buttonTown{ 0, 0, townButtonIcnId, 0, 1 };
-    fheroes2::Button buttonCastle{ 0, 0, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1 };
+    fheroes2::Button buttonCastle{ 0, 0, townButtonIcnId, 2, 3 };
 
     const fheroes2::Point buttonOffset{ area.x + ( area.width - townButtonImage.width() ) / 2, area.y + area.height - townButtonImage.height() - 7 };
     buttonTown.setPosition( buttonOffset.x, buttonOffset.y );

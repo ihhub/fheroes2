@@ -367,7 +367,7 @@ namespace fheroes2
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
 
     // Generates a group of text buttons that have the same dimensions according to the widest and tallest text.
-    void makeSymmetricButtonGroup( ButtonGroup & buttonGroup, const std::vector<const char *> & buttonTexts );
+    void makeSymmetricButtonBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
                              const Size & buttonSize, const FontColor fontColor );

@@ -904,41 +904,45 @@ namespace fheroes2
         renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
     }
 
-    void makeSymmetricButtonGroup( ButtonGroup & buttonGroup, const std::vector<const char *> & texts )
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts )
     {
-        if ( texts.size() < 2 ) {
-            // You are trying to make a group of buttons with 0 or only one text.
-            assert( 0 );
-            // implement getTextAdaptedButtonSprite() to return something?, or not if text vector is empty
-        }
+        // There should be double as many texts as there are sprites since there are pressed and released states for every text.
+        assert( backgroundSprites.size() == texts.size() * 2 );
+
+        // You are trying to make a group of buttons with 0 or only one text.
+        assert( texts.size() > 1 );
+
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const FontType buttonFontType = { FontSize::BUTTON_RELEASED, isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE };
 
         std::vector<Text> buttonTexts;
-        buttonTexts.reserve( texts.size() );
 
         for ( const char * text : texts ) {
             buttonTexts.emplace_back( text, buttonFontType );
         }
-        auto max_iter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() > b.width(); } );
+        const int32_t textWidthA = buttonTexts[0].width();
+        const int32_t textWidthB = buttonTexts[1].width();
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() < b.width(); } );
 
-        const int32_t width = ( *max_iter ).width( ( *max_iter ).width() );
-        const int32_t multiLinedWidth = ( *max_iter ).width( width );
+        const int32_t width = ( *maxIter ).width( ( *maxIter ).width() ) + 6;
+        const int32_t multiLinedWidth = ( *maxIter ).width( width ) + 6;
 
-        auto max_iter2 = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.height() > b.height(); } );
+        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.height() > b.height(); } );
 
-        int32_t height = ( *max_iter2 ).height( multiLinedWidth );
+        int32_t height = ( *maxIter ).height( multiLinedWidth );
+        // The actual button background is 10 pixels taller than the text.
+        height += 10;
 
         // Add extra y-margin for multi-lined texts.
-        if ( height > 17 ) {
+        if ( height > 27 ) {
             height += 16;
         }
 
-        for ( const Text & buttonText : buttonTexts ) {
-            Sprite released;
-            Sprite pressed;
-            makeButtonSprites( released, pressed, buttonText.text(), { multiLinedWidth, height }, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-            buttonGroup.createButton( 0, 0, released, pressed, 1 );
+        for ( int i = 0; i < buttonTexts.size(); i++ ) {
+            Sprite & released = backgroundSprites[i * 2];
+            Sprite & pressed = backgroundSprites[i * 2 + 1];
+            makeButtonSprites( released, pressed, buttonTexts[i].text(), { multiLinedWidth, height }, isEvilInterface,
+                               isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
         }
     }
 
