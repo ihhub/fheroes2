@@ -1760,8 +1760,8 @@ namespace
             _icnVsSprite[id].resize( 4 );
 
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
-                                                            { fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() ),
-                                                              fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() ) } );
+                                                      { fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() ),
+                                                        fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() ) } );
 
             break;
         }
