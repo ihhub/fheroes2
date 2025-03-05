@@ -1784,6 +1784,20 @@ namespace
         }
     }
 
+    uint32_t selectGoldOrExp( std::string hdr, uint32_t gold, Heroes & hero )
+    {
+        const uint32_t expr = gold > 500 ? gold - 500 : 500;
+        std::string msg = _(
+            "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
+
+        if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
+            gold = 0;
+            hero.IncreaseExperience( expr );
+        }
+
+        return gold;
+    }
+
     void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -1843,27 +1857,12 @@ namespace
             const Artifact & art = getArtifactFromTile( tile );
 
             if ( gold ) {
-                const uint32_t expr = gold > 500 ? gold - 500 : 500;
-                msg = _(
-                    "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
-
-                if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
-                    gold = 0;
-                    hero.IncreaseExperience( expr );
-                }
+                gold = selectGoldOrExp( hdr, gold, hero );
             }
             else if ( art.isValid() ) {
                 if ( hero.IsFullBagArtifacts() ) {
                     gold = GoldInsteadArtifact( objectType );
-                    
-                    const uint32_t expr = gold > 500 ? gold - 500 : 500;
-                    msg = _(
-                        "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
-
-                    if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
-                        gold = 0;
-                        hero.IncreaseExperience( expr );
-                    }
+                    gold = selectGoldOrExp( hdr, gold, hero );
                 }
                 else {
                     msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
