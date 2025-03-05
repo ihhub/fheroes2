@@ -3259,8 +3259,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
     std::vector<fheroes2::Sprite> autoButtons;
     autoButtons.resize( 4 );
-    fheroes2::makeSymmetricButtonBackgroundSprites( autoButtons, { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ),
-                                                       fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
+    fheroes2::makeSymmetricBackgroundSprites( autoButtons, { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ),
+                                                             fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
 
     const int32_t autoButtonsXOffset = 20;
     const int32_t autoButtonsYOffset = 15;
@@ -3286,7 +3286,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     buttonSprites.resize( 2 );
     buttonSprites[0].setPosition( roiArea.x + autoButtonsXOffset, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
     buttonSprites[1].setPosition( roiArea.x + roiArea.width - autoButtonsXOffset - autoButtonsWidth, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
-    
+
     for ( size_t i = 0; i < 2; i++ ) {
         buttonSprites[i].setSprite( autoButtons[i * 2], autoButtons[i * 2 + 1] );
         // TODO: Add the shadow generation as a method of ButtonGroup class to have access to _getReleased().
@@ -3311,8 +3311,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
              && EventStartAutoCombat( unit, actions ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( buttonSprites[1].area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) )
-             && EventQuickCombat( actions ) ) {
+        if ( ( le.MouseClickLeft( buttonSprites[1].area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
             return;
         }
 

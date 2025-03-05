@@ -920,8 +920,7 @@ namespace fheroes2
         for ( const char * text : texts ) {
             buttonTexts.emplace_back( text, buttonFontType );
         }
-        const int32_t textWidthA = buttonTexts[0].width();
-        const int32_t textWidthB = buttonTexts[1].width();
+
         auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() < b.width(); } );
 
         const int32_t width = ( *maxIter ).width( ( *maxIter ).width() ) + 6;
@@ -938,7 +937,7 @@ namespace fheroes2
             height += 16;
         }
 
-        for ( int i = 0; i < buttonTexts.size(); i++ ) {
+        for ( size_t i = 0; i < buttonTexts.size(); i++ ) {
             Sprite & released = backgroundSprites[i * 2];
             Sprite & pressed = backgroundSprites[i * 2 + 1];
             makeButtonSprites( released, pressed, buttonTexts[i].text(), { multiLinedWidth, height }, isEvilInterface,
