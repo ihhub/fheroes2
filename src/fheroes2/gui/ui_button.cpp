@@ -916,7 +916,7 @@ namespace fheroes2
         const FontType buttonFontType = { FontSize::BUTTON_RELEASED, isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE };
 
         std::vector<Text> buttonTexts;
-
+        buttonTexts.reserve( texts.size() );
         for ( const char * text : texts ) {
             buttonTexts.emplace_back( text, buttonFontType );
         }
