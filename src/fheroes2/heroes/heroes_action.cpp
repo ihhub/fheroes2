@@ -1784,10 +1784,10 @@ namespace
         }
     }
 
-    uint32_t selectGoldOrExp( std::string hdr, uint32_t gold, Heroes & hero )
+    uint32_t selectGoldOrExp( const std::string & hdr, uint32_t gold, Heroes & hero )
     {
         const uint32_t expr = gold > 500 ? gold - 500 : 500;
-        std::string msg = _(
+        std::string const msg = _(
             "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
 
         if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
