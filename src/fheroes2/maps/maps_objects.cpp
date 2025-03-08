@@ -315,7 +315,7 @@ void MapSign::setDefaultMessage()
 {
     message.language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
-    // This container must not be static as it depends on in-game language.
+    // This container must not be static as it depends on an in-game language.
     const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
     message.text = Rand::Get( randomMessage );
 }
