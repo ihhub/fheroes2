@@ -539,6 +539,8 @@ public:
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
 
+    std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
+
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );

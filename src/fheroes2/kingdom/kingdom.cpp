@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -434,6 +434,17 @@ bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) co
 bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
 {
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
+}
+
+std::set<MP2::MapObjectType> Kingdom::getAllVisitedObjectTypes() const
+{
+    std::set<MP2::MapObjectType> objectTypes;
+
+    for ( const auto & object : visit_object ) {
+        objectTypes.emplace( object.second );
+    }
+
+    return objectTypes;
 }
 
 uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
