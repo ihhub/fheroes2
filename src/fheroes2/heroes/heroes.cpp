@@ -1180,11 +1180,6 @@ void Heroes::ActionNewWeek()
     visit_object.remove_if( Visit::isWeekLife );
 }
 
-void Heroes::ActionNewMonth()
-{
-    visit_object.remove_if( Visit::isMonthLife );
-}
-
 void Heroes::ActionAfterBattle()
 {
     visit_object.remove_if( Visit::isBattleLife );
@@ -2437,15 +2432,6 @@ void AllHeroes::NewWeek() const
         assert( hero != nullptr );
 
         hero->ActionNewWeek();
-    } );
-}
-
-void AllHeroes::NewMonth() const
-{
-    std::for_each( begin(), end(), []( Heroes * hero ) {
-        assert( hero != nullptr );
-
-        hero->ActionNewMonth();
     } );
 }
 

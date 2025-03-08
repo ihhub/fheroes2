@@ -346,8 +346,6 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
 
             castle->MageGuildEducateHero( hero );
-            hero.SetVisited( dstIndex );
-
             return;
         }
 
@@ -443,7 +441,6 @@ namespace
         captureCastle();
 
         castle->MageGuildEducateHero( hero );
-        hero.SetVisited( dstIndex );
     }
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )

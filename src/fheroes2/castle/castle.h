@@ -276,10 +276,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth() const
-    {
-        // Do nothing.
-    }
 
     void ActionPreBattle();
     void ActionAfterBattle( const bool attackerWins );
@@ -559,7 +555,6 @@ public:
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator

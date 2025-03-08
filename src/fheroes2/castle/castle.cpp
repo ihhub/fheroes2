@@ -2379,15 +2379,6 @@ void AllCastles::NewWeek() const
     } );
 }
 
-void AllCastles::NewMonth() const
-{
-    std::for_each( begin(), end(), []( const Castle * castle ) {
-        assert( castle != nullptr );
-
-        castle->ActionNewMonth();
-    } );
-}
-
 OStreamBase & operator<<( OStreamBase & stream, const Castle & castle )
 {
     const ColorBase & color = castle;
