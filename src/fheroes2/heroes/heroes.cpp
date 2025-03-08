@@ -1313,7 +1313,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
 
 std::set<MP2::MapObjectType> Heroes::getAllVisitedObjectTypes() const
 {
-    std::set<MP2::MapObjectType> objectTypes = GetKingdom().getAllVisitedObjectTypes();
+    std::set<MP2::MapObjectType> objectTypes;
 
     for ( const auto & object : visit_object ) {
         objectTypes.emplace( object.second );

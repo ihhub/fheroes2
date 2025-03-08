@@ -191,8 +191,6 @@ public:
     bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
-
     bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
 
     bool opponentsCanRecruitMoreHeroes() const;
