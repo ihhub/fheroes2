@@ -390,7 +390,7 @@ OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj )
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 {
     stream >> static_cast<MapBaseObject &>( obj );
-    
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1107_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1107_RELEASE ) {
         stream >> obj.message.text;

@@ -340,7 +340,6 @@ namespace
             return;
         }
 
-
         const fheroes2::Text title{ MP2::StringObject( MP2::OBJ_SIGN ), fheroes2::FontType::normalYellow() };
         const fheroes2::Text body{ sign->message.text, fheroes2::FontType::normalWhite(), sign->message.language };
         fheroes2::showMessage( title, body, Dialog::OK );
