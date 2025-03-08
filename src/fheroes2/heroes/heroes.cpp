@@ -1285,16 +1285,54 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-void Heroes::SetVisited( int32_t index, Visit::Type type )
+void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type )
 {
-    const Maps::Tile & tile = world.getTile( index );
+    const Maps::Tile & tile = world.getTile( tileIndex );
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
+    if ( !MP2::isOffGameActionObject( objectType ) ) {
+        // Something is wrong as how are going to visit a non-action object?!
+        assert( 0 );
+        return;
+    }
+
+    const uint32_t objectUID = tile.getMainObjectPart()._uid;
 
     if ( Visit::GLOBAL == type ) {
-        GetKingdom().SetVisited( index, objectType );
+        GetKingdom().SetVisited( tileIndex, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.emplace_front( index, objectType );
+    else if ( !isVisited( tile ) ) {
+        visit_object.emplace_front( tileIndex, objectType );
+    }
+
+    // An object could be bigger than 1 tile so we need to check all its tiles.
+    std::deque<int32_t> tileToVisit;
+    std::set<int32_t> visitedTiles;
+    visitedTiles.emplace( tileIndex );
+    tileToVisit.emplace_back( tileIndex );
+
+    while ( !tileToVisit.empty() ) {
+        const auto indexes = Maps::getAroundIndexes( tileToVisit.front() );
+        for ( const int32_t index : indexes ) {
+            if ( visitedTiles.count( index ) > 0 ) {
+                continue;
+            }
+
+            visitedTiles.emplace( index );
+
+            const Maps::Tile & currentTile = world.getTile( index );
+            if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
+                if ( Visit::GLOBAL == type ) {
+                    GetKingdom().SetVisited( index, objectType );
+                }
+                else if ( !isVisited( currentTile ) ) {
+                    visit_object.emplace_front( index, objectType );
+                }
+
+                tileToVisit.emplace_back( index );
+            }
+        }
+
+        tileToVisit.pop_front();
     }
 }
 
@@ -1303,37 +1341,46 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     const Maps::Tile & tile = world.getTile( tileIndex );
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
+    if ( !MP2::isOffGameActionObject( objectType ) ) {
+        // Something is wrong as how are going to visit a non-action object?!
+        assert( 0 );
+        return;
+    }
+
+    const uint32_t objectUID = tile.getMainObjectPart()._uid;
+
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
         world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
-}
 
-void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
-{
-    const Maps::Tile & tile = world.getTile( index );
-    const uint32_t uid = tile.getMainObjectPart()._uid;
-    int wide = 0;
+    // An object could be bigger than 1 tile so we need to check all its tiles.
+    std::deque<int32_t> tileToVisit;
+    std::set<int32_t> visitedTiles;
+    visitedTiles.emplace( tileIndex );
+    tileToVisit.emplace_back( tileIndex );
 
-    switch ( objectType ) {
-    case MP2::OBJ_SKELETON:
-    case MP2::OBJ_OASIS:
-    case MP2::OBJ_STANDING_STONES:
-    case MP2::OBJ_ARTESIAN_SPRING:
-        wide = 2;
-        break;
-    case MP2::OBJ_WATERING_HOLE:
-        wide = 4;
-        break;
-    default:
-        break;
-    }
+    while ( !tileToVisit.empty() ) {
+        const auto indexes = Maps::getAroundIndexes( tileToVisit.front() );
+        for ( const int32_t index : indexes ) {
+            if ( visitedTiles.count( index ) > 0 ) {
+                continue;
+            }
 
-    if ( tile.getMainObjectType( false ) == objectType && wide ) {
-        for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.getTile( ii ).getMainObjectPart()._uid == uid )
-                SetVisited( ii, type );
+            visitedTiles.emplace( index );
+
+            const Maps::Tile & currentTile = world.getTile( index );
+            if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
+                for ( const int friendColor : friendColors ) {
+                    world.GetKingdom( friendColor ).SetVisited( index, objectType );
+                }
+
+                tileToVisit.emplace_back( index );
+            }
+        }
+
+        tileToVisit.pop_front();
     }
 }
 

@@ -897,7 +897,7 @@ namespace
             fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void ActionToWagon( Heroes & hero, int32_t dst_index )
@@ -1340,7 +1340,6 @@ namespace
             }
 
             hero.SetVisited( dst_index );
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -1508,9 +1507,6 @@ namespace
             fheroes2::showStandardTextMessage( std::move( title ), std::move( msg ), Dialog::OK, elementUI );
 
             hero.IncreaseMovePoints( move );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -2553,7 +2549,7 @@ namespace
             }
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )

@@ -530,12 +530,11 @@ public:
     }
 
     // set visited cell
-    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
+    void SetVisited( const int32_t tileIndex, const Visit::Type type = Visit::LOCAL );
 
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
 
