@@ -5018,6 +5018,40 @@ namespace
                 }
             }
         }
+
+        // Some logic in the code depends on maximum area of action object parts.
+        // Let's calculate this area and verify that we didn't exceed it.
+        fheroes2::Size maxActionObjectSize{ 1, 1 };
+
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                if ( !MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+                    continue;
+                }
+
+                fheroes2::Point minOffset;
+                fheroes2::Point maxOffset;
+
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    if ( info.objectType == objectInfo.objectType ) {
+                        minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                        minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                        maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                        maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
+                    }
+                }
+
+                fheroes2::Size objectSize{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+
+                maxActionObjectSize.width = std::max( maxActionObjectSize.width, objectSize.width );
+                maxActionObjectSize.height = std::max( maxActionObjectSize.height, objectSize.height );
+            }
+        }
+
+        // If this assertion blows up some in-game logic might break.
+        // Make sure that you check the code related to object parts search
+        // as some places use hardcoded values for optimization purposes.
+        assert( maxActionObjectSize.width == 4 && maxActionObjectSize.height == 2 );
 #endif
 
         isPopulated = true;

@@ -1306,34 +1306,18 @@ void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type )
     }
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
-    std::deque<int32_t> tileToVisit;
-    std::set<int32_t> visitedTiles;
-    visitedTiles.emplace( tileIndex );
-    tileToVisit.emplace_back( tileIndex );
-
-    while ( !tileToVisit.empty() ) {
-        const auto indexes = Maps::getAroundIndexes( tileToVisit.front() );
-        for ( const int32_t index : indexes ) {
-            if ( visitedTiles.count( index ) > 0 ) {
-                continue;
+    // The maximum action object size is 4 x 2 tiles. So, we need to search with a radius of 3.
+    const auto indexes = Maps::getAroundIndexes( tileIndex, 3 );
+    for ( const int32_t index : indexes ) {
+        const Maps::Tile & currentTile = world.getTile( index );
+        if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
+            if ( Visit::GLOBAL == type ) {
+                GetKingdom().SetVisited( index, objectType );
             }
-
-            visitedTiles.emplace( index );
-
-            const Maps::Tile & currentTile = world.getTile( index );
-            if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
-                if ( Visit::GLOBAL == type ) {
-                    GetKingdom().SetVisited( index, objectType );
-                }
-                else if ( !isVisited( currentTile ) ) {
-                    visit_object.emplace_front( index, objectType );
-                }
-
-                tileToVisit.emplace_back( index );
+            else if ( !isVisited( currentTile ) ) {
+                visit_object.emplace_front( index, objectType );
             }
         }
-
-        tileToVisit.pop_front();
     }
 }
 
@@ -1357,31 +1341,15 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
-    std::deque<int32_t> tileToVisit;
-    std::set<int32_t> visitedTiles;
-    visitedTiles.emplace( tileIndex );
-    tileToVisit.emplace_back( tileIndex );
-
-    while ( !tileToVisit.empty() ) {
-        const auto indexes = Maps::getAroundIndexes( tileToVisit.front() );
-        for ( const int32_t index : indexes ) {
-            if ( visitedTiles.count( index ) > 0 ) {
-                continue;
-            }
-
-            visitedTiles.emplace( index );
-
-            const Maps::Tile & currentTile = world.getTile( index );
-            if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
-                for ( const int friendColor : friendColors ) {
-                    world.GetKingdom( friendColor ).SetVisited( index, objectType );
-                }
-
-                tileToVisit.emplace_back( index );
+    // The maximum action object size is 4 x 2 tiles. So, we need to search with a radius of 3.
+    const auto indexes = Maps::getAroundIndexes( tileIndex, 3 );
+    for ( const int32_t index : indexes ) {
+        const Maps::Tile & currentTile = world.getTile( index );
+        if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
+            for ( const int friendColor : friendColors ) {
+                world.GetKingdom( friendColor ).SetVisited( index, objectType );
             }
         }
-
-        tileToVisit.pop_front();
     }
 }
 
