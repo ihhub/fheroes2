@@ -486,7 +486,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
@@ -815,7 +814,6 @@ public:
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;

@@ -531,10 +531,6 @@ void World::NewDay()
     // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
-
-        vec_kingdoms.NewMonth();
-        vec_castles.NewMonth();
-        vec_heroes.NewMonth();
     }
 
     // then the routine of the new week

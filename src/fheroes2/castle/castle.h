@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -276,10 +276,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth() const
-    {
-        // Do nothing.
-    }
 
     void ActionPreBattle();
     void ActionAfterBattle( const bool attackerWins );
@@ -559,7 +555,6 @@ public:
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator
