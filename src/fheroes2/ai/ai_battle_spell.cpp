@@ -680,8 +680,8 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     const double bloodLustAttackIncrease = Spell( Spell::BLOODLUST ).ExtraValue();
     const double dragonSlayerAttackIncrease = spell.ExtraValue();
 
-    const double dragonSlayerRatio
-        = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * numOfSlotsWithEnemyDragons / static_cast<double>( enemies.size() );
+    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * static_cast<double>( numOfSlotsWithEnemyDragons )
+                                     / static_cast<double>( enemies.size() );
 
     SpellcastOutcome bestOutcome;
 
