@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -163,6 +163,11 @@ namespace Interface
 
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+#if defined( WITH_DEBUG )
+        int32_t _playerCount = 2;
+        int32_t _regionSizeLimit = 600;
+#endif
 
         std::function<void( const int32_t )> _cursorUpdater;
 
