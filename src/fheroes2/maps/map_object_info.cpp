@@ -5041,7 +5041,7 @@ namespace
                     }
                 }
 
-                fheroes2::Size objectSize{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+                const fheroes2::Size objectSize{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
 
                 maxActionObjectSize.width = std::max( maxActionObjectSize.width, objectSize.width );
                 maxActionObjectSize.height = std::max( maxActionObjectSize.height, objectSize.height );
