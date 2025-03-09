@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,12 +40,12 @@ namespace fheroes2
     template <typename _Type>
     struct PointBase2D
     {
-        PointBase2D()
+        constexpr PointBase2D()
             : x( 0 )
             , y( 0 )
         {}
 
-        PointBase2D( _Type _x, _Type _y )
+        constexpr PointBase2D( _Type _x, _Type _y )
             : x( _x )
             , y( _y )
         {}
@@ -96,12 +96,12 @@ namespace fheroes2
     template <typename _Type>
     struct SizeBase2D
     {
-        SizeBase2D()
+        constexpr SizeBase2D()
             : width( 0 )
             , height( 0 )
         {}
 
-        SizeBase2D( _Type _width, _Type _height )
+        constexpr SizeBase2D( _Type _width, _Type _height )
             : width( _width )
             , height( _height )
         {}
@@ -152,14 +152,14 @@ namespace fheroes2
     template <typename _TypePoint, typename _TypeSize>
     struct RectBase2D
     {
-        RectBase2D()
+        constexpr RectBase2D()
             : x( 0 )
             , y( 0 )
             , width( 0 )
             , height( 0 )
         {}
 
-        RectBase2D( _TypePoint _x, _TypePoint _y, _TypeSize _width, _TypeSize _height )
+        constexpr RectBase2D( _TypePoint _x, _TypePoint _y, _TypeSize _width, _TypeSize _height )
             : x( _x )
             , y( _y )
             , width( _width )

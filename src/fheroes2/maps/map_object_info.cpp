@@ -5020,9 +5020,8 @@ namespace
             }
         }
 
-        // Some logic in the code depends on maximum area of action object parts.
-        // Let's calculate this area and verify that we didn't exceed it.
-        fheroes2::Size maxActionObjectSize{ 1, 1 };
+        // Calculate the maximum possible dimensions of the area occupied by the parts of multi-tile action objects and verify them.
+        fheroes2::Size maxObjDim{ 1, 1 };
 
         for ( const auto & objects : objectData ) {
             for ( const auto & objectInfo : objects ) {
@@ -5042,17 +5041,16 @@ namespace
                     }
                 }
 
-                const fheroes2::Size objectSize{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+                const fheroes2::Size objDim{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
 
-                maxActionObjectSize.width = std::max( maxActionObjectSize.width, objectSize.width );
-                maxActionObjectSize.height = std::max( maxActionObjectSize.height, objectSize.height );
+                maxObjDim.width = std::max( maxObjDim.width, objDim.width );
+                maxObjDim.height = std::max( maxObjDim.height, objDim.height );
             }
         }
 
-        // If this assertion blows up some in-game logic might break.
-        // Make sure that you check the code related to object parts search
-        // as some places use hardcoded values for optimization purposes.
-        assert( maxActionObjectSize.width == 4 && maxActionObjectSize.height == 2 );
+        // If this assertion blows up then some in-game logic might break. If a new object of a non-standard
+        // size has been added, consider updating the maximum action object dimensions.
+        assert( maxObjDim == Maps::maxActionObjectDimensions );
 #endif
 
         isPopulated = true;

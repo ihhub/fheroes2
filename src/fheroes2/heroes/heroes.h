@@ -529,10 +529,10 @@ public:
         }
     }
 
-    // set visited cell
+    // Set the visited state for the tile with the given index
     void SetVisited( const int32_t tileIndex, const Visit::Type type = Visit::LOCAL );
 
-    // Set global visited state for itself and for allies.
+    // Set the global visited state for the tile with the given index both for this hero's kingdom and its allies
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;

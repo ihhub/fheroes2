@@ -1317,9 +1317,10 @@ std::set<MP2::MapObjectType> Heroes::getAllVisitedObjectTypes() const
     return objectTypes;
 }
 
-void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type )
+void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type /* = Visit::LOCAL */ )
 {
     const Maps::Tile & tile = world.getTile( tileIndex );
+
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
     if ( !MP2::isOffGameActionObject( objectType ) ) {
         // Something is wrong as how are going to visit a non-action object?!
@@ -1337,17 +1338,24 @@ void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type )
     }
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
-    // The maximum action object size is 4 x 2 tiles. So, we need to search with a radius of 3.
-    const auto indexes = Maps::getAroundIndexes( tileIndex, 3 );
-    for ( const int32_t index : indexes ) {
+    constexpr int32_t searchDist = []() constexpr {
+        const int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        assert( max > 0 );
+
+        return max - 1;
+    }();
+
+    for ( const int32_t index : Maps::getAroundIndexes( tileIndex, searchDist ) ) {
         const Maps::Tile & currentTile = world.getTile( index );
-        if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
-            if ( Visit::GLOBAL == type ) {
-                GetKingdom().SetVisited( index, objectType );
-            }
-            else if ( !isVisited( currentTile ) ) {
-                visit_object.emplace_front( index, objectType );
-            }
+        if ( currentTile.getMainObjectType( false ) != objectType || currentTile.getMainObjectPart()._uid != objectUID ) {
+            continue;
+        }
+
+        if ( Visit::GLOBAL == type ) {
+            GetKingdom().SetVisited( index, objectType );
+        }
+        else if ( !isVisited( currentTile ) ) {
+            visit_object.emplace_front( index, objectType );
         }
     }
 }
@@ -1355,8 +1363,8 @@ void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type )
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tile & tile = world.getTile( tileIndex );
-    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
+    const MP2::MapObjectType objectType = tile.getMainObjectType( false );
     if ( !MP2::isOffGameActionObject( objectType ) ) {
         // Something is wrong as how are going to visit a non-action object?!
         assert( 0 );
@@ -1372,14 +1380,21 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
-    // The maximum action object size is 4 x 2 tiles. So, we need to search with a radius of 3.
-    const auto indexes = Maps::getAroundIndexes( tileIndex, 3 );
-    for ( const int32_t index : indexes ) {
+    constexpr int32_t searchDist = []() constexpr {
+        const int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        assert( max > 0 );
+
+        return max - 1;
+    }();
+
+    for ( const int32_t index : Maps::getAroundIndexes( tileIndex, searchDist ) ) {
         const Maps::Tile & currentTile = world.getTile( index );
-        if ( currentTile.getMainObjectType( false ) == objectType && currentTile.getMainObjectPart()._uid == objectUID ) {
-            for ( const int friendColor : friendColors ) {
-                world.GetKingdom( friendColor ).SetVisited( index, objectType );
-            }
+        if ( currentTile.getMainObjectType( false ) != objectType || currentTile.getMainObjectPart()._uid != objectUID ) {
+            continue;
+        }
+
+        for ( const int friendColor : friendColors ) {
+            world.GetKingdom( friendColor ).SetVisited( index, objectType );
         }
     }
 }
