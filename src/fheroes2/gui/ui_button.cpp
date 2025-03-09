@@ -904,6 +904,47 @@ namespace fheroes2
         renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
     }
 
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts )
+    {
+        // There should be double as many texts as there are sprites since there are pressed and released states for every text.
+        assert( backgroundSprites.size() == texts.size() * 2 );
+
+        // You are trying to make a group of buttons with 0 or only one text.
+        assert( texts.size() > 1 );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const FontType buttonFontType = { FontSize::BUTTON_RELEASED, isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE };
+
+        std::vector<Text> buttonTexts;
+        buttonTexts.reserve( texts.size() );
+        for ( const char * text : texts ) {
+            buttonTexts.emplace_back( text, buttonFontType );
+        }
+
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() < b.width(); } );
+
+        const int32_t width = ( *maxIter ).width( ( *maxIter ).width() ) + 6;
+        const int32_t multiLinedWidth = ( *maxIter ).width( width ) + 6;
+
+        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.height() > b.height(); } );
+
+        int32_t height = ( *maxIter ).height( multiLinedWidth );
+        // The actual button background is 10 pixels taller than the text.
+        height += 10;
+
+        // Add extra y-margin for multi-lined texts.
+        if ( height > 27 ) {
+            height += 16;
+        }
+
+        for ( size_t i = 0; i < buttonTexts.size(); i++ ) {
+            Sprite & released = backgroundSprites[i * 2];
+            Sprite & pressed = backgroundSprites[i * 2 + 1];
+            makeButtonSprites( released, pressed, buttonTexts[i].text(), { multiLinedWidth, height }, isEvilInterface,
+                               isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+        }
+    }
+
     const char * getSupportedText( const char * untranslatedText, const FontType font )
     {
         const char * translatedText = _( untranslatedText );
