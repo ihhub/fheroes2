@@ -675,13 +675,20 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
         return {};
     }
 
-    // Make an estimation based on the value of Blood Lust since this spell also increases Attack but against every creature.
-    // If the enemy army consists of other monsters that are not Dragons then Dragon Slayer spell isn't that valuable anymore.
-    const double bloodLustAttackIncrease = Spell( Spell::BLOODLUST ).ExtraValue();
-    const double dragonSlayerAttackIncrease = spell.ExtraValue();
+    const auto getSpellAttackBonus = []( const Spell & sp ) {
+        const uint32_t bonus = sp.ExtraValue();
+        assert( bonus > 0 );
 
-    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * static_cast<double>( numOfSlotsWithEnemyDragons )
-                                     / static_cast<double>( enemies.size() );
+        return bonus;
+    };
+
+    // Make an estimation based on the value of Bloodlust since this spell also increases Attack but against every creature.
+    // If the enemy army consists of other monsters that are not Dragons then Dragon Slayer spell isn't that valuable anymore.
+    const double bloodlustAttackBonus = getSpellAttackBonus( Spell::BLOODLUST );
+    const double dragonSlayerAttackBonus = getSpellAttackBonus( spell );
+
+    const double dragonSlayerRatio
+        = bloodLustRatio * dragonSlayerAttackBonus / bloodlustAttackBonus * static_cast<double>( numOfSlotsWithEnemyDragons ) / static_cast<double>( enemies.size() );
 
     SpellcastOutcome bestOutcome;
 
