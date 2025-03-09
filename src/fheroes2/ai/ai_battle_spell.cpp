@@ -663,7 +663,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
 {
     assert( spell.GetID() == Spell::DRAGONSLAYER );
 
-    size_t enemyDragons = 0;
+    int32_t enemyDragons = 0;
 
     // Check whether the enemy army has any Dragons.
     for ( const Battle::Unit * unit : enemies ) {
@@ -682,7 +682,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     const double bloodLustAttackIncrease = Spell( Spell::BLOODLUST ).ExtraValue();
     const double dragonSlayerAttackIncrease = spell.ExtraValue();
 
-    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * enemyDragons / enemies.size();
+    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * enemyDragons / static_cast<double>( enemies.size() );
 
     SpellcastOutcome bestOutcome;
 
@@ -691,8 +691,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
             continue;
         }
 
-        double unitValue = unit->GetStrength() * dragonSlayerRatio * spellDurationMultiplier( *unit );
-
+        const double unitValue = unit->GetStrength() * dragonSlayerRatio * spellDurationMultiplier( *unit );
         bestOutcome.updateOutcome( unitValue, unit->GetHeadIndex(), false );
     }
 
