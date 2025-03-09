@@ -54,6 +54,7 @@
 #include "m82.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
