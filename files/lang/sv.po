@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-22 01:59+0000\n"
-"PO-Revision-Date: 2025-02-16 20:03+0100\n"
+"PO-Revision-Date: 2025-03-06 18:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -52,7 +52,7 @@ msgid ""
 "CASTLES"
 msgstr ""
 "STÄDER/\n"
-"SLOTT"
+"BORGAR"
 
 msgid "CANCEL"
 msgstr "AVBRYT"
@@ -288,7 +288,7 @@ msgid "TOWN"
 msgstr "STAD"
 
 msgid "CASTLE"
-msgstr "SLOTT"
+msgstr "BORG"
 
 msgid ""
 "AUTO\n"
@@ -2036,7 +2036,7 @@ msgid "Exit this menu without doing anything."
 msgstr "Stäng denna meny utan att göra någonting."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr "Kan ej bygga %{name}. Slottet är för långt borta från ett hav."
+msgstr "Kan ej bygga %{name}. Borgen är för långt borta från ett hav."
 
 msgid "This building has been disabled."
 msgstr "Byggnaden har inaktiverats."
@@ -2605,7 +2605,7 @@ msgid "Moat"
 msgstr "Vallgrav"
 
 msgid "Castle"
-msgstr "Slott"
+msgstr "Borg"
 
 msgid "Tent"
 msgstr "Tält"
@@ -2681,7 +2681,7 @@ msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
-"Slottet förbättrar stadens försvar och ökar dess inkomst till %{count} guld "
+"Borgen förbättrar stadens försvar och ökar dess inkomst till %{count} guld "
 "per dag."
 
 msgid ""
@@ -2738,7 +2738,7 @@ msgid "Town"
 msgstr "Stad"
 
 msgid "Exit Castle"
-msgstr "Lämna Slottet"
+msgstr "Lämna Borgen"
 
 msgid "Exit Town"
 msgstr "Lämna Staden"
@@ -2809,10 +2809,10 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Grupperad'"
 
 msgid "Exit Castle Options"
-msgstr "Lämna Slottsalternativ"
+msgstr "Lämna Borgalternativ"
 
 msgid "Castle Options"
-msgstr "Slottalternativ"
+msgstr "Borgalternativ"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."
@@ -3540,7 +3540,7 @@ msgid "Select Ocean Object:"
 msgstr "Välj Havsföremål:"
 
 msgid "Castle/town placing"
-msgstr "Slott/stadsplacering"
+msgstr "Borg/stadsplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
@@ -3838,7 +3838,7 @@ msgid "Number of Towns:"
 msgstr "Antal Städer:"
 
 msgid "Number of Castles:"
-msgstr "Antal Slott:"
+msgstr "Antal Borgar:"
 
 msgid "Number of Heroes:"
 msgstr "Antal Hjältar:"
@@ -3877,13 +3877,13 @@ msgid "Best Monster:"
 msgstr "Bästa Varelse:"
 
 msgid "Random Castle Name"
-msgstr "Slumpat Slottsnamn"
+msgstr "Slumpat Borgnamn"
 
 msgid "Random Town Name"
 msgstr "Slumpat Stadsnamn"
 
 msgid "Allow Castle build"
-msgstr "Tillåt Slottsbygge"
+msgstr "Tillåt Borgbygge"
 
 msgid "Default Buildings"
 msgstr "Standardbyggnader"
@@ -3895,18 +3895,17 @@ msgid "Default Army"
 msgstr "Standardarmé"
 
 msgid "Castle Army"
-msgstr "Slottsarmé"
+msgstr "Borgarmé"
 
 msgid "Town Army"
 msgstr "Stadsarmé"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
 msgstr ""
-"Klicka för att ändra Slottsnamn. Högerklicka för att återställa till "
-"standard."
+"Klicka för att ändra Borgnamn. Högerklicka för att återställa till standard."
 
 msgid "Enter Castle name"
-msgstr "Skriv Slottsnamn"
+msgstr "Skriv Borgnamn"
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillåt att en borg byggs i denna stad."
@@ -3926,7 +3925,7 @@ msgid "Use default defenders army."
 msgstr "Använd försvararnas standardarmé."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Ange anpassad Slottsarmé. Högerklicka för att återställa enheten."
+msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
 
 msgid "Message Text:"
 msgstr "Meddelandetext:"
@@ -4319,7 +4318,7 @@ msgid "editorErasure|Adventure non pickable objects"
 msgstr "Ej tagbara äventyrsföremål"
 
 msgid "editorErasure|Castles"
-msgstr "Slott"
+msgstr "Borgar"
 
 msgid "editorErasure|Adventure pickable objects"
 msgstr "Tagbara äventyrsföremål"
@@ -6400,7 +6399,7 @@ msgid "Very Fast"
 msgstr "Mkt. snabb"
 
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisk"
 
 msgid "Good"
 msgstr "God"
@@ -8543,7 +8542,7 @@ msgstr "%{skill} höjer hjältens tur med %{count}."
 msgid ""
 "%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
-msgstr "%{skill} ökar katapultens sannolikhet att träffa och skada borgsmurar."
+msgstr "%{skill} ökar katapultens sannolikhet att träffa och skada borgmurar."
 
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
@@ -8674,7 +8673,7 @@ msgid "Skills"
 msgstr "Förmågor"
 
 msgid "Town/Castle"
-msgstr "Stad/Slott"
+msgstr "Stad/Borg"
 
 msgid "Garrison"
 msgstr "Garnison"
@@ -8686,10 +8685,10 @@ msgid "View Heroes."
 msgstr "Visa Hjältar."
 
 msgid "Towns/Castles"
-msgstr "Städer/Slott"
+msgstr "Städer/Borgar"
 
 msgid "View Towns and Castles."
-msgstr "Visa Städer och Slott"
+msgstr "Visa Städer och Borgar"
 
 msgid "luck|Cursed"
 msgstr "Förhäxad"
@@ -9142,7 +9141,7 @@ msgid "Random Town"
 msgstr "Slumpad Stad"
 
 msgid "Random Castle"
-msgstr "Slumpat Slott"
+msgstr "Slumpad Borg"
 
 msgid "Eye of the Magi"
 msgstr "De vise männens öga"
