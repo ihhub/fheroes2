@@ -663,16 +663,14 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
 {
     assert( spell.GetID() == Spell::DRAGONSLAYER );
 
-    int32_t enemyDragons = 0;
-
     // Check whether the enemy army has any Dragons.
-    for ( const Battle::Unit * unit : enemies ) {
-        if ( unit->isDragons() ) {
-            ++enemyDragons;
-        }
-    }
+    const auto numOfSlotsWithEnemyDragons = std::count_if( enemies.begin(), enemies.end(), []( const Battle::Unit * unit ) {
+        assert( unit != nullptr );
 
-    if ( enemyDragons == 0 ) {
+        return unit->isDragons();
+    } );
+
+    if ( numOfSlotsWithEnemyDragons == 0 ) {
         // This spell is useless as no Dragons exist in the enemy army.
         return {};
     }
@@ -682,7 +680,8 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     const double bloodLustAttackIncrease = Spell( Spell::BLOODLUST ).ExtraValue();
     const double dragonSlayerAttackIncrease = spell.ExtraValue();
 
-    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * enemyDragons / static_cast<double>( enemies.size() );
+    const double dragonSlayerRatio
+        = bloodLustRatio * dragonSlayerAttackIncrease / bloodLustAttackIncrease * numOfSlotsWithEnemyDragons / static_cast<double>( enemies.size() );
 
     SpellcastOutcome bestOutcome;
 
