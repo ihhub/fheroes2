@@ -99,43 +99,73 @@ namespace
         return { Heroes::LORDKILBURN, Heroes::CELIA };
     }
 
-    int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
+    int getObjectMoraleModifiers( const std::set<MP2::MapObjectType> & objectTypes, std::string * output )
     {
         int result = 0;
 
         for ( const MP2::MapObjectType objectType : objectTypes ) {
-            if ( hero.isObjectTypeVisited( objectType ) ) {
-                result += GameStatic::ObjectVisitedModifiers( objectType );
-
-                if ( strs ) {
-                    switch ( objectType ) {
-                    case MP2::OBJ_GRAVEYARD:
-                    case MP2::OBJ_NON_ACTION_GRAVEYARD:
-                    case MP2::OBJ_SHIPWRECK:
-                    case MP2::OBJ_NON_ACTION_SHIPWRECK:
-                    case MP2::OBJ_DERELICT_SHIP:
-                    case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
-                        StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
-                        strs->append( modRobber );
-                        break;
-                    }
-                    case MP2::OBJ_PYRAMID:
-                    case MP2::OBJ_NON_ACTION_PYRAMID: {
-                        std::string modRaided = _( "pyramid|%{object} raided" );
-                        StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
-                        strs->append( modRaided );
-                        break;
-                    }
-                    default:
-                        strs->append( MP2::StringObject( objectType ) );
-                        break;
-                    }
-
-                    fheroes2::appendModifierToString( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
-                    strs->append( "\n" );
-                }
+            const int32_t modifier = GameStatic::getObjectMoraleEffect( objectType );
+            if ( modifier == 0 ) {
+                continue;
             }
+
+            result += modifier;
+
+            if ( output == nullptr ) {
+                continue;
+            }
+
+            switch ( objectType ) {
+            case MP2::OBJ_DERELICT_SHIP:
+            case MP2::OBJ_GRAVEYARD:
+            case MP2::OBJ_SHIPWRECK: {
+                std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
+                StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
+                output->append( modRobber );
+                break;
+            }
+            default:
+                output->append( MP2::StringObject( objectType ) );
+                break;
+            }
+
+            fheroes2::appendModifierToString( *output, modifier );
+            output->append( "\n" );
+        }
+
+        return result;
+    }
+
+    int getObjectLuckModifiers( const std::set<MP2::MapObjectType> & objectTypes, std::string * output )
+    {
+        int result = 0;
+
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            const int32_t modifier = GameStatic::getObjectLuckEffect( objectType );
+            if ( modifier == 0 ) {
+                continue;
+            }
+
+            result += modifier;
+
+            if ( output == nullptr ) {
+                continue;
+            }
+
+            switch ( objectType ) {
+            case MP2::OBJ_PYRAMID: {
+                std::string modRaided = _( "pyramid|%{object} raided" );
+                StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
+                output->append( modRaided );
+                break;
+            }
+            default:
+                output->append( MP2::StringObject( objectType ) );
+                break;
+            }
+
+            fheroes2::appendModifierToString( *output, modifier );
+            output->append( "\n" );
         }
 
         return result;
@@ -1042,10 +1072,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     // bonus leadership
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
-    // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,         MP2::OBJ_WATERING_HOLE, MP2::OBJ_TEMPLE,
-                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICT_SHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+    result += getObjectMoraleModifiers( getAllVisitedObjectTypes(), strs );
 
     // bonus artifact
     result += GetMoraleModificator( strs );
@@ -1080,8 +1107,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIE_RING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+    result += getObjectLuckModifiers( getAllVisitedObjectTypes(), strs );
 
     // bonus artifact
     result += GetLuckModificator( strs );
@@ -1278,6 +1304,17 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
     }
 
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
+}
+
+std::set<MP2::MapObjectType> Heroes::getAllVisitedObjectTypes() const
+{
+    std::set<MP2::MapObjectType> objectTypes;
+
+    for ( const auto & object : visit_object ) {
+        objectTypes.emplace( object.second );
+    }
+
+    return objectTypes;
 }
 
 void Heroes::SetVisited( int32_t index, Visit::Type type )
