@@ -7,9 +7,9 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-22 01:59+0000\n"
-"PO-Revision-Date: 2023-09-04 21:55+0200\n"
+"PO-Revision-Date: 2025-02-26 22:14+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3263,7 +3263,7 @@ msgstr ""
 "%{skill2}"
 
 msgid "Learn %{secondary-skill}"
-msgstr ""
+msgstr "%{secondary-skill} megtanulása"
 
 msgid "n/a"
 msgstr "n/a"
@@ -4011,22 +4011,17 @@ msgstr "Esemény törlése"
 msgid "Delete an existing event."
 msgstr "Meglévő esemény törlése."
 
-#, fuzzy
 msgid "Effects:"
-msgstr "Effektusok"
+msgstr "Effektusok:"
 
-#, fuzzy
 msgid "Conditions:"
-msgstr ""
-"Vesztési\n"
-"feltételek"
+msgstr "Feltételek:"
 
 msgid "Cancel event after first visit"
 msgstr "Esemény törlése az első látogatás után"
 
-#, fuzzy
 msgid "Computer colors allowed to get the event:"
-msgstr "Gépi játékosok, akiknek megengedett az esemény:"
+msgstr "Gépi játékosok színei, akiknek megengedett az esemény:"
 
 msgid "Set Experience value"
 msgstr "Tapasztalati érték beállítása"
@@ -4034,37 +4029,32 @@ msgstr "Tapasztalati érték beállítása"
 msgid "Artifact"
 msgstr "Varázstárgy"
 
-#, fuzzy
 msgid "No artifact will be given by the event."
-msgstr "Nincs varázstárgy jutalom."
+msgstr "Az esemény nem ad varázstárgyat."
 
 msgid "Delete Artifact"
 msgstr "Varázstárgy törlése"
 
-#, fuzzy
 msgid "Delete an artifact from the event."
-msgstr "Varázstárgy törlése a jutalmak közül."
+msgstr "Varázstárgy törlése az eseményből."
 
 msgid "No Secondary Skill will be given by the event."
-msgstr ""
+msgstr "Az esemény nem ad másodlagos képességet."
 
-#, fuzzy
 msgid "Secondary Skill"
-msgstr "Képesség kiválasztása:"
+msgstr "Másodlagos képesség"
 
 msgid "Delete Secondary Skill"
-msgstr ""
+msgstr "Másodlagos képesség törlése"
 
 msgid "Delete the Secondary Skill from the event."
-msgstr ""
+msgstr "Másodlagos képesség törlése az eseményből."
 
-#, fuzzy
 msgid "No resources will be part of this event."
-msgstr "Nincs erőforrás jutalom."
+msgstr "Ehhez az eseményhez semmilyen erőforrás nem tartozik."
 
-#, fuzzy
 msgid "These resources will be a part of the event."
-msgstr "Nincs erőforrás jutalom."
+msgstr "Ezek az erőforrások az esemény részét képezik."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4119,25 +4109,28 @@ msgid ""
 "MAIN\n"
 "MENU"
 msgstr ""
+"FŐ-\n"
+"MENÜ"
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "START"
+msgstr ""
+"TÉRKÉP\n"
+"INDÍTÁS"
 
 msgid "Main Menu"
 msgstr "Főmenü"
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Biztos hogy vissza akarsz lépni a főmenübe? Minden változtatás el fog veszni."
+"Szeretnél visszatérni a játék főmenüjébe? (Az aktuális térkép nem mentett "
+"módosításai elvesznek.)"
 
 msgid "Unsaved Changes"
-msgstr ""
+msgstr "Nem mentett módosítások"
 
 msgid ""
 "This map has either terrain changes, undo history or has not yet been saved "
@@ -4145,26 +4138,30 @@ msgid ""
 "\n"
 "Do you wish to save the current map?"
 msgstr ""
+"Ez a térkép vagy terepváltozásokat, vagy előzmények visszavonását "
+"tartalmazza, vagy még nincs elmentve.\n"
+"\n"
+"Szeretné menteni az aktuális térképet?"
 
 msgid "Unplayable Map"
-msgstr ""
+msgstr "Nem játszható térkép"
 
 msgid ""
 "This map is not playable. You need at least one human player for the map to "
 "be playable."
 msgstr ""
+"Ez a térkép nem játszható. Legalább egy emberi játékosra van szükség ahhoz, "
+"hogy a térkép játszható legyen."
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Start"
+msgstr "Térkép indítása"
 
-#, fuzzy
 msgid ""
 "Do you wish to leave the Editor and start the map? (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép "
-"változtatásai el fognak veszni.)"
+"Szeretnéd elhagyni a szerkesztőt, és elindítani a térképet? (Az aktuális "
+"térkép nem mentett módosításai elvesznek.)"
 
 msgid "Create a new map from scratch."
 msgstr "Teljesen új térkép létrehozása."
@@ -4187,12 +4184,11 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
-#, fuzzy
 msgid "Return to the game's Main Menu."
-msgstr "Kattints a főmenübe való visszatéréshez."
+msgstr "Visszatérés a játék főmenüjébe."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
-msgstr ""
+msgstr "Hagyja el a szerkesztőt és játsszon a térképpel normál játék módban."
 
 msgid "Input %{object} text"
 msgstr "%{object} szöveg megadása"
@@ -4207,7 +4203,7 @@ msgid "This artifact"
 msgstr "Ez a varázstárgy"
 
 msgid "The total number of obelisks is %{count}."
-msgstr ""
+msgstr "Az obeliszkek száma összesen: %{count}."
 
 msgid "Roads"
 msgstr "Utak"
@@ -4481,11 +4477,10 @@ msgid "Undo your last action."
 msgstr "Utolsó cselekedet visszavonása."
 
 msgid "Redo"
-msgstr ""
+msgstr "Mégis"
 
-#, fuzzy
 msgid "Redo the last undone action."
-msgstr "Utolsó cselekedet visszavonása."
+msgstr "Utolsó visszavont cselekedet megismétlése."
 
 msgid "Edit map title, description, and other general information."
 msgstr "A pályanevek, leírások és egyéb általános információk szerkesztése."
@@ -4731,9 +4726,8 @@ msgstr ""
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
 
-#, fuzzy
 msgid "editor|%{count} %{resource}"
-msgstr "A számításba veendő %{resource} kiválasztása:"
+msgstr "%{count} %{resource}"
 
 msgid "Animation"
 msgstr "Animáció"
@@ -6310,7 +6304,7 @@ msgstr ""
 "képesség"
 
 msgid "The available values range from %{min} to %{max}."
-msgstr ""
+msgstr "Az igénybe vehető álló értéktartomány %{min} és %{max} között van."
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -6416,7 +6410,7 @@ msgid "Very Fast"
 msgstr "Nagyon gyors"
 
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamikus"
 
 msgid "Good"
 msgstr "Jó"
@@ -8203,7 +8197,7 @@ msgstr ""
 " Következő szint: %{exp2}."
 
 msgid "million|M"
-msgstr ""
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "%{level} szint"
@@ -11579,11 +11573,12 @@ msgstr "Felezi az összes ellenség sebességét."
 msgid "spell|Blind"
 msgstr "Vakítás"
 
-#, fuzzy
 msgid ""
 "Clouds the affected creatures' eyes, preventing them from moving and reduces "
 "the damage when retaliating by %{count} percent."
-msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
+msgstr ""
+"Elhomályosítja az érintett lények látását, megakadályozza azok mozgását, "
+"továbbá %{count} százalékkal csökkenti a visszatámadással okozott károkat."
 
 msgid "Bless"
 msgstr "Áldás"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -182,7 +182,6 @@ public:
     void ActionBeforeTurn();
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog );
 
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
@@ -249,7 +248,6 @@ public:
 
     void NewDay();
     void NewWeek();
-    void NewMonth();
 
     Kingdom & GetKingdom( const int color );
     const Kingdom & GetKingdom( const int color ) const;

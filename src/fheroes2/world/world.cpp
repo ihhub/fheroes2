@@ -388,7 +388,7 @@ void World::generateBattleOnlyMap()
         vec_tiles[i] = {};
 
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
-        vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), false, false );
+        vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), 0 );
     }
 }
 
@@ -424,7 +424,7 @@ void World::generateForEditor( const int32_t size )
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
 
         const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
-        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag & 1, terrainFlag & 2 );
+        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag );
     }
 }
 
@@ -531,10 +531,6 @@ void World::NewDay()
     // first the routine of the new month
     if ( BeginMonth() ) {
         NewMonth();
-
-        vec_kingdoms.NewMonth();
-        vec_castles.NewMonth();
-        vec_heroes.NewMonth();
     }
 
     // then the routine of the new week

@@ -62,7 +62,11 @@ namespace GameStatic
 
     uint32_t GetHeroesRestoreSpellPointsPerDay();
 
-    int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
+    // Returns 0 if no effects exist.
+    int32_t getObjectLuckEffect( const MP2::MapObjectType objectType );
+
+    // Returns 0 if no effects exist.
+    int32_t getObjectMoraleEffect( const MP2::MapObjectType objectType );
 
     int GetBattleMoatReduceDefense();
     // Returns the percentage penalty for the damage dealt by shooters firing at targets protected by castle walls.

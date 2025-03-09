@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,8 +50,9 @@ namespace Maps
 
     void redrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
 
-    void redrawTopLayerExtraObjects( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area );
-    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part );
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor );
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const fheroes2::Point & pos, const Interface::GameArea & area,
+                               const ObjectPart & part );
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 

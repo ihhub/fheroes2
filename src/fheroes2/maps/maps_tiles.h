@@ -305,6 +305,12 @@ namespace Maps
 
         void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip );
 
+        void setTerrain( const uint16_t terrainImageIndex, const uint8_t terrainFlags )
+        {
+            _terrainFlags = terrainFlags;
+            _terrainImageIndex = terrainImageIndex;
+        }
+
         Heroes * getHero() const;
         void setHero( Heroes * hero );
 

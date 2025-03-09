@@ -29,6 +29,7 @@
 #include <exception>
 #include <list>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -486,7 +487,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
@@ -537,6 +537,8 @@ public:
 
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
+
+    std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
@@ -814,7 +816,6 @@ public:
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;
