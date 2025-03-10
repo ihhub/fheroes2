@@ -160,7 +160,6 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
                                                 ICN::BUTTON_START_GOOD,
-                                                ICN::BUTTONS_TOWN_CASTLE,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -1752,16 +1751,6 @@ namespace
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "MAX" ), fheroes2::FontType::buttonReleasedWhite() );
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
-
-            break;
-        }
-        case ICN::BUTTONS_TOWN_CASTLE: {
-            // Town and Castle buttons must have the same width.
-            _icnVsSprite[id].resize( 4 );
-
-            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
-                                                      { fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() ),
-                                                        fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() ) } );
 
             break;
         }
