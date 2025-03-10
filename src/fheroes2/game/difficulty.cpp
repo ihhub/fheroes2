@@ -242,7 +242,7 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     return true;
 }
 
-int32_t Difficulty::getGuardianSpellMultipler( const int difficulty )
+int32_t Difficulty::getGuardianSpellMultiplier( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:

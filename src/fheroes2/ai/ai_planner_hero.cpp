@@ -2120,10 +2120,10 @@ void AI::Planner::castAdventureSpellOnStandingObject( Heroes & hero )
         // Shuffle spells as all of them seem to be equal in power.
         Rand::Shuffle( spells );
 
-        const int32_t spellMultipler = Difficulty::getGuardianSpellMultipler( Game::getDifficulty() );
+        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
 
         for ( const Spell spell : spells ) {
-            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultipler * spell.spellPoints( &hero ) ) {
+            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
                 // Looks like this hero knows the spell and casting it won't take too many spell points.
                 // So, let's do it!
                 hero.ActionSpellCast( spell );
