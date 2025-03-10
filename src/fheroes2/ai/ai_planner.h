@@ -175,8 +175,6 @@ namespace AI
         double getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                const uint32_t distanceToObject ) const;
 
-        void castAdventureSpellOnStandingObject( Heroes & hero );
-
         // Returns the strength of the army guarding the given tile. Note that the army is obtained by calling
         // Army::setFromTile(), so this method is not suitable for hero armies or castle garrisons.
         double getTileArmyStrength( const Maps::Tile & tile );
@@ -185,6 +183,8 @@ namespace AI
         static void CastlePreBattle( Castle & castle );
 
         static Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
+
+        static void castAdventureSpellOnStandingObject( Heroes & hero );
 
     private:
         Planner() = default;
