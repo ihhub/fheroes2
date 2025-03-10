@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -288,12 +288,6 @@ void Kingdom::ActionNewWeek()
     GetRecruits();
 }
 
-void Kingdom::ActionNewMonth()
-{
-    // Clear the visited objects with a lifetime of one month, even if this kingdom has already been vanquished
-    visit_object.remove_if( Visit::isMonthLife );
-}
-
 void Kingdom::AddHero( Heroes * hero )
 {
     if ( hero == nullptr ) {
@@ -342,8 +336,9 @@ void Kingdom::AddCastle( Castle * castle )
         }
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) )
-            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
+        if ( player && player->isColor( GetColor() ) ) {
+            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
+        }
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
@@ -419,9 +414,9 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
            && ( resource.gold >= funds.gold || 0 == funds.gold );
 }
 
-bool Kingdom::isVisited( const Maps::Tiles & tile ) const
+bool Kingdom::isVisited( const Maps::Tile & tile ) const
 {
-    return isVisited( tile.GetIndex(), tile.GetObject( false ) );
+    return isVisited( tile.GetIndex(), tile.getMainObjectType( false ) );
 }
 
 bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) const
@@ -447,7 +442,7 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
         visit_object.emplace_front( index, objectType );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
 {
     if ( !MP2::isInGameActionObject( objectType ) )
         return false;
@@ -456,14 +451,14 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
         return false;
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
-    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
+    if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
         return color == tileColor || !Players::isFriends( color, tileColor );
     }
 
-    // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
+    // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
     if ( objectType == MP2::OBJ_HERO ) {
         const Heroes * hero = tile.getHero();
 
@@ -605,7 +600,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
         // Check if there is a hero placed by the map creator near the castle entrance (castle position + point(0, 1))
         const fheroes2::Point & cp = castle->GetCenter();
-        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
+        Heroes * hero = world.getTile( cp.x, cp.y + 1 ).getHero();
 
         // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {
@@ -852,11 +847,6 @@ void Kingdoms::NewDay()
 void Kingdoms::NewWeek()
 {
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
-}
-
-void Kingdoms::NewMonth()
-{
-    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewMonth(); } );
 }
 
 int Kingdoms::GetNotLossColors() const

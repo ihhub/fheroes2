@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_INTERFACE_H
-#define H2BATTLE_INTERFACE_H
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -182,17 +181,21 @@ namespace Battle
 
         Status & operator=( const Status & ) = delete;
 
-        void SetPosition( const int32_t cx, const int32_t cy );
+        void setPosition( const int32_t cx, const int32_t cy )
+        {
+            x = cx;
+            y = cy;
+        }
 
-        void SetLogs( StatusListBox * logs )
+        void setLogs( StatusListBox * logs )
         {
             _battleStatusLog = logs;
         }
 
-        void SetMessage( const std::string & messageString, const bool top = false );
-        void Redraw( fheroes2::Image & output ) const;
+        void setMessage( std::string messageString, const bool top );
+        void redraw( fheroes2::Image & output ) const;
 
-        const std::string & GetMessage() const
+        const std::string & getMessage() const
         {
             return _lastMessage;
         }
@@ -217,9 +220,15 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
-        void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const int opponentColor )
+        {
+            _area = roi;
+            _orderOfUnits = units;
+            _opponentColor = opponentColor;
+        }
+
+        void redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
+        void queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t
@@ -236,11 +245,11 @@ namespace Battle
 
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                         fheroes2::Image & output ) const;
+        void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                          fheroes2::Image & output ) const;
 
-        std::weak_ptr<const Units> _orders;
-        int _army2Color{ 0 };
+        std::weak_ptr<const Units> _orderOfUnits;
+        int _opponentColor{ 0 };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
     };
@@ -248,26 +257,37 @@ namespace Battle
     class PopupDamageInfo : public Dialog::FrameBorder
     {
     public:
-        PopupDamageInfo();
+        PopupDamageInfo()
+            : Dialog::FrameBorder( 5 )
+        {
+            // Do nothing.
+        }
+
         PopupDamageInfo( const PopupDamageInfo & ) = delete;
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
-        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
-        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
-        void Reset();
-        void Redraw() const;
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect )
+        {
+            _battleUIRect = battleUIRect;
+        }
+
+        void setAttackInfo( const Unit * attacker, const Unit * defender );
+        void setSpellAttackInfo( const HeroBase * hero, const Unit * defender, const Spell & spell );
+        void reset();
+        void redraw() const;
 
     private:
-        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+        bool _setDamageInfoBase( const Unit * defender );
+        void _makeDamageImage();
 
+        fheroes2::Sprite _damageImage;
         fheroes2::Rect _battleUIRect;
-        const Cell * _cell;
-        const Unit * _defender;
-        uint32_t _minDamage;
-        uint32_t _maxDamage;
-        bool _redraw;
+        const Battle::Unit * _defender{ nullptr };
+        uint32_t _minDamage{ 0 };
+        uint32_t _maxDamage{ 0 };
+        bool _redraw{ false };
+        bool _needDelay{ true };
     };
 
     class Interface
@@ -301,7 +321,7 @@ namespace Battle
 
         fheroes2::Point getRelativeMouseCursorPos() const;
 
-        void SetStatus( const std::string & message, const bool top = false );
+        void setStatus( const std::string & message, const bool top );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
         void FadeArena( const bool clearMessageLog );
 
@@ -394,18 +414,16 @@ namespace Battle
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
-        void InterruptAutoBattleIfRequested( LocalEvent & le );
+        void InterruptAutoCombatIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
         void _openBattleSettingsDialog();
-        void EventStartAutoBattle( const Unit & unit, Actions & actions );
-        void EventAutoFinish( Actions & actions );
+        bool EventStartAutoCombat( const Unit & unit, Actions & actions );
+        bool EventQuickCombat( Actions & actions );
+        void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
-        void ButtonAutoAction( const Unit & unit, Actions & actions );
-        void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & actions );
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
@@ -427,9 +445,9 @@ namespace Battle
         int _battleGroundIcn{ ICN::UNKNOWN };
         int _borderObjectsIcn{ ICN::UNKNOWN };
 
-        fheroes2::Button btn_auto;
-        fheroes2::Button btn_settings;
-        fheroes2::Button btn_skip;
+        fheroes2::Button _buttonAuto;
+        fheroes2::Button _buttonSettings;
+        fheroes2::Button _buttonSkip;
         Status status;
 
         std::unique_ptr<OpponentSprite> _opponent1;
@@ -441,7 +459,7 @@ namespace Battle
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
 
-        int _interruptAutoBattleForColor{ 0 };
+        int _interruptAutoCombatForColor{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
@@ -598,5 +616,3 @@ namespace Battle
         };
     };
 }
-
-#endif

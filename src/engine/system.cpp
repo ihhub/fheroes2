@@ -26,7 +26,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <functional>
-#include <initializer_list>
 #include <map>
 #include <memory>
 #include <system_error>
@@ -43,7 +42,7 @@
 #include <algorithm>
 #endif
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
 #include <dirent.h>
 #include <strings.h>
 #endif
@@ -57,6 +56,7 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
+#include <SDL_touch.h>
 #include <SDL_version.h>
 
 #if defined( ANDROID )
@@ -76,12 +76,6 @@
 
 namespace
 {
-#if defined( _WIN32 )
-    constexpr char dirSep{ '\\' };
-#else
-    constexpr char dirSep{ '/' };
-#endif
-
 #if !defined( __linux__ ) || defined( ANDROID )
     std::string GetHomeDirectory( const std::string_view appName )
     {
@@ -96,7 +90,7 @@ namespace
             return storagePath;
         }
 
-        return { "." };
+        return {};
 #endif
         {
             const char * homeEnvPath = getenv( "HOME" );
@@ -106,7 +100,7 @@ namespace
                 return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
             }
 
-            return { "." };
+            return {};
 #endif
 
             if ( homeEnvPath != nullptr ) {
@@ -124,18 +118,9 @@ namespace
         }
 #endif
 
-        return { "." };
+        return {};
     }
 #endif
-
-    std::string_view trimTrailingSeparators( std::string_view path )
-    {
-        while ( path.size() > 1 && path.back() == dirSep ) {
-            path.remove_suffix( 1 );
-        }
-
-        return path;
-    }
 
     bool globMatch( const std::string_view string, const std::string_view wildcard )
     {
@@ -289,6 +274,11 @@ bool System::isHandheldDevice()
 #endif
 }
 
+bool System::isTouchInputAvailable()
+{
+    return SDL_GetNumTouchDevices() > 0;
+}
+
 bool System::isVirtualKeyboardSupported()
 {
 #if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -325,15 +315,7 @@ bool System::Unlink( const std::string_view path )
 
 std::string System::concatPath( const std::string_view left, const std::string_view right )
 {
-    // Avoid memory allocation while concatenating string. Allocate needed size at once.
-    std::string temp;
-    temp.reserve( left.size() + 1 + right.size() );
-
-    temp += left;
-    temp += dirSep;
-    temp += right;
-
-    return temp;
+    return fsPathToString( std::filesystem::path{ left }.append( right ) );
 }
 
 void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
@@ -367,14 +349,13 @@ std::string System::GetConfigDirectory( const std::string_view appName )
             return concatPath( concatPath( homeEnv, ".config" ), appName );
         }
 
-        return { "." };
+        return {};
 #else
         return GetHomeDirectory( appName );
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
         assert( 0 );
     }
 
@@ -400,80 +381,38 @@ std::string System::GetDataDirectory( const std::string_view appName )
             return concatPath( concatPath( homeEnv, ".local/share" ), appName );
         }
 
-        return { "." };
+        return {};
 #elif defined( MACOS_APP_BUNDLE )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
             return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
 
-        return { "." };
+        return {};
 #else
         return GetHomeDirectory( appName );
 #endif
     }();
 
-    const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result );
-    if ( !inserted ) {
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
         assert( 0 );
     }
 
     return result;
 }
 
-std::string System::GetDirname( std::string_view path )
+std::string System::GetParentDirectory( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( dirSep );
-
-    if ( pos == std::string::npos ) {
-        return { "." };
-    }
-    if ( pos == 0 ) {
-        return { std::initializer_list<char>{ dirSep } };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
+    return fsPathToString( std::filesystem::path{ path }.parent_path() );
 }
 
-std::string System::GetBasename( std::string_view path )
+std::string System::GetFileName( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( dirSep );
-
-    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
-        return std::string{ path };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ path.substr( pos + 1 ) };
+    return fsPathToString( std::filesystem::path{ path }.filename() );
 }
 
 std::string System::GetStem( const std::string_view path )
 {
-    std::string res = GetBasename( path );
-
-    const size_t pos = res.rfind( '.' );
-
-    if ( pos != 0 && pos != std::string::npos ) {
-        res.resize( pos );
-    }
-
-    return res;
+    return fsPathToString( std::filesystem::path{ path }.stem() );
 }
 
 bool System::IsFile( const std::string_view path )
@@ -514,15 +453,15 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID )
-    static_assert( dirSep == '/', "The following code assumes the use of POSIX IEEE Std 1003.1-2001 pathnames, check the logic" );
-
-    // The following code is based on https://github.com/OneSadCookie/fcaseopen
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
+    // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 
     if ( path.empty() ) {
         return false;
     }
+
+    constexpr char dirSep{ '/' };
 
     std::unique_ptr<DIR, int ( * )( DIR * )> dir( path.front() == dirSep ? opendir( "/" ) : opendir( "." ), closedir );
 

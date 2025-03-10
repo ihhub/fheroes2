@@ -124,16 +124,14 @@ namespace fheroes2
         // Verify that all offsets are unique.
         std::map<MP2::ObjectIcnType, std::set<Point>> uniqueOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
-            const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset ); !inserted ) {
                 // The object hasn't formed properly!
                 assert( 0 );
             }
         }
 
         for ( const auto & objectPart : object.topLevelParts ) {
-            const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset );
-            if ( !inserted ) {
+            if ( const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset ); !inserted ) {
                 // The object hasn't formed properly!
                 assert( 0 );
             }

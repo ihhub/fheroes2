@@ -59,6 +59,12 @@ public:
     }
 
 private:
+    // This virtual method is (indirectly) called from the constructor, make it clear that it cannot be overridden in subclasses
+    void SetContentItems() final
+    {
+        Interface::ItemsBar<int>::SetContentItems();
+    }
+
     Heroes * _hero;
     fheroes2::Image backsf;
     bool _useSmallSize{ false };

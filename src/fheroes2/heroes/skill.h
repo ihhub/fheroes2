@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SKILL_H
-#define H2SKILL_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -123,7 +122,6 @@ namespace Skill
         // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
-        static int RandForWitchsHut();
         static const char * String( int );
     };
 
@@ -131,13 +129,7 @@ namespace Skill
     {
     public:
         SecSkills();
-        explicit SecSkills( int race );
-        SecSkills( const SecSkills & ) = delete;
-
-        ~SecSkills() = default;
-
-        SecSkills & operator=( const SecSkills & ) = delete;
-        SecSkills & operator=( SecSkills && ) = default;
+        explicit SecSkills( const int race );
 
         int Count() const;
         int GetLevel( int skill ) const;
@@ -156,7 +148,6 @@ namespace Skill
         std::vector<Secondary> & ToVector();
         const std::vector<Secondary> & ToVector() const;
 
-    private:
         friend OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
         friend IStreamBase & operator>>( IStreamBase & stream, SecSkills & ss );
     };
@@ -164,7 +155,6 @@ namespace Skill
     class Primary
     {
     public:
-        Primary();
         virtual ~Primary() = default;
 
         enum
@@ -196,6 +186,7 @@ namespace Skill
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
         static int getHeroDefaultSkillValue( const int skill, const int race );
+        static std::pair<int, int> getSkillValueRange( const int skill );
 
     protected:
         void LoadDefaults( int type, int race );
@@ -203,10 +194,10 @@ namespace Skill
         friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
         friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
-        int attack;
-        int defense;
-        int power;
-        int knowledge;
+        int attack{ 0 };
+        int defense{ 0 };
+        int power{ 0 };
+        int knowledge{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );
@@ -215,4 +206,3 @@ namespace Skill
     OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
     IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 }
-#endif

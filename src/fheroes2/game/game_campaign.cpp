@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1029,7 +1029,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
             if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -1307,7 +1307,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
-    const fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
+    const fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ? InterfaceType::GOOD : InterfaceType::EVIL );
 
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
@@ -1504,11 +1504,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     bool updateDisplay = false;
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) ? buttonDifficulty.drawOnPress() : buttonDifficulty.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) );
+        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) );
+        buttonRestart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) );
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {

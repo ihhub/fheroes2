@@ -20,10 +20,16 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace Editor
 {
-    bool openRumorWindow( std::vector<std::string> & rumors );
+    bool openRumorWindow( std::vector<std::string> & rumors, const fheroes2::SupportedLanguage language );
 }

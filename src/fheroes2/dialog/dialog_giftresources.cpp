@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -201,8 +201,8 @@ namespace
                     fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK );
                 }
                 else {
-                    std::string msg = _( "Select count %{resource}:" );
-                    StringReplace( msg, "%{resource}", Resource::String( rs ) );
+                    std::string msg = _( "Set %{resource-type} Count" );
+                    StringReplace( msg, "%{resource-type}", Resource::String( rs ) );
 
                     if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
                         int32_t * from = funds.GetPtr( rs );

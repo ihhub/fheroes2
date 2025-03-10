@@ -20,7 +20,6 @@
 
 #include "ai_planner.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -33,7 +32,6 @@
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "profit.h"
 #include "resource.h"
 #include "route.h"
@@ -51,9 +49,9 @@ void AI::Planner::resetPathfinder()
     _pathfinder.reset();
 }
 
-void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
+void AI::Planner::revealFog( const Maps::Tile & tile, const Kingdom & kingdom )
 {
-    const MP2::MapObjectType object = tile.GetObject();
+    const MP2::MapObjectType object = tile.getMainObjectType();
     if ( !MP2::isInGameActionObject( object ) ) {
         return;
     }
@@ -78,22 +76,18 @@ void AI::Planner::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     }
 }
 
-double AI::Planner::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+double AI::Planner::getTileArmyStrength( const Maps::Tile & tile )
 {
-    if ( !isMonsterStrengthCacheable( objectType ) ) {
-        return Army( tile ).GetStrength();
+    const auto [iter, inserted] = _tileArmyStrengthValues.try_emplace( tile.GetIndex(), 0.0 );
+    if ( inserted ) {
+        // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+        static Army tileArmy;
+        tileArmy.setFromTile( tile );
+
+        iter->second = tileArmy.GetStrength();
     }
 
-    const int32_t tileId = tile.GetIndex();
-
-    auto iter = _neutralMonsterStrengthCache.find( tileId );
-    if ( iter != _neutralMonsterStrengthCache.end() ) {
-        // Cache hit.
-        return iter->second;
-    }
-
-    auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
-    return newEntry.first->second;
+    return iter->second;
 }
 
 double AI::Planner::getResourcePriorityModifier( const int resource, const bool isMine ) const
@@ -185,20 +179,15 @@ double AI::Planner::getFundsValueBasedOnPriority( const Funds & funds ) const
 
 void AI::Planner::updateMapActionObjectCache( const int mapIndex )
 {
-    const Maps::Tiles & tile = world.GetTiles( mapIndex );
-    const MP2::MapObjectType objectType = tile.GetObject();
-    auto iter = std::lower_bound( _mapActionObjects.begin(), _mapActionObjects.end(), IndexObject{ mapIndex, objectType },
-                                  []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
+    const MP2::MapObjectType objectType = world.getTile( mapIndex ).getMainObjectType();
 
-    if ( iter != _mapActionObjects.end() && iter->first == mapIndex ) {
-        if ( MP2::isInGameActionObject( objectType ) ) {
-            iter->second = objectType;
-        }
-        else {
-            _mapActionObjects.erase( iter );
-        }
+    if ( !MP2::isInGameActionObject( objectType ) ) {
+        _mapActionObjects.erase( mapIndex );
+
+        return;
     }
-    else if ( MP2::isInGameActionObject( objectType ) ) {
-        _mapActionObjects.emplace( iter, IndexObject{ mapIndex, objectType } );
+
+    if ( const auto [iter, inserted] = _mapActionObjects.try_emplace( mapIndex, objectType ); !inserted ) {
+        iter->second = objectType;
     }
 }

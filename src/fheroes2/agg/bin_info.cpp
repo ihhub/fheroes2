@@ -58,7 +58,7 @@ namespace
                 return mapIterator->second;
             }
 
-            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ) ) );
+            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ), false ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;

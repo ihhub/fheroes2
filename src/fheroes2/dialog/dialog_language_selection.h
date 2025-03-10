@@ -28,5 +28,5 @@ namespace fheroes2
     enum class SupportedLanguage : uint8_t;
 
     // UI window to select a language by user.
-    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage );
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage, const bool isGameLanguage );
 }

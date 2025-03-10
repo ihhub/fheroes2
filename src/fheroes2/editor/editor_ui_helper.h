@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -70,7 +70,7 @@ namespace Editor
                                 const int32_t boxOffsetY, fheroes2::Image & output );
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
-                                         const bool isEvil );
+                                         const bool isEvil, const int32_t maxWidth );
 
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi );
 

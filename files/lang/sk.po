@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2025-02-22 01:59+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -18,75 +18,46 @@ msgstr ""
 "1 : 2 );\n"
 "X-Generator: Poedit 3.3.2\n"
 
-msgid ""
-"BATTLE\n"
-"ONLY"
+msgid "SELECT"
+msgstr "ZVOĽ"
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "CELÝ"
+
+msgid "EXIT"
+msgstr "PREČ"
+
+msgid "smallerButton|EXIT"
+msgstr "ODÍĎ"
+
+msgid "HEROES"
 msgstr ""
-"RÝCHLY\n"
-"BOJ"
+"HRDI-\n"
+"NOVIA"
 
 msgid ""
-"NEW\n"
-"GAME"
+"TOWNS/\n"
+"CASTLES"
 msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ULOŽIŤ\n"
-"HRU"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"NA-\n"
-"HRAŤ\n"
-"HRU"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid "QUIT"
-msgstr ""
-"OPUSŤ\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ULOŽIŤ\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"NA-\n"
-"HRAŤ\n"
-"HRU"
+"MESTÁ/\n"
+"HRADY"
 
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
 
 msgid "OKAY"
-msgstr "OK"
-
-msgid "smallerButton|OKAY"
 msgstr "OK"
 
 msgid "ACCEPT"
@@ -107,50 +78,142 @@ msgstr "ÁNO"
 msgid "NO"
 msgstr "NIE"
 
-msgid "EXIT"
-msgstr "PREČ"
-
-msgid "smallerButton|EXIT"
-msgstr "ODÍĎ"
-
 msgid "DISMISS"
 msgstr "PREPUSŤ"
 
 msgid "UPGRADE"
 msgstr "POVÝŠ"
 
+msgid "GIFT"
+msgstr "DARUJ"
+
 msgid "RESTART"
 msgstr "REŠTART"
 
-msgid "HEROES"
-msgstr ""
-"HRDI-\n"
-"NOVIA"
+msgid "MAX"
+msgstr "MAX"
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid ""
-"TOWNS/\n"
-"CASTLES"
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
 msgstr ""
-"MESTÁ/\n"
-"HRADY"
+"P\n"
+"R\n"
+"E\n"
+"P\n"
+"U\n"
+"S\n"
+"Ť"
 
-msgid "S"
-msgstr "S"
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"P\n"
+"R\n"
+"E\n"
+"Č"
 
-msgid "M"
-msgstr "M"
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ň"
 
-msgid "L"
-msgstr "L"
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"Š\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
-msgid "X-L"
-msgstr "X-L"
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NA-\n"
+"HRAŤ\n"
+"HRU"
 
-msgid "ALL"
-msgstr "CELÝ"
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
 
-msgid "SELECT"
-msgstr "ZVOĽ"
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIŤ\n"
+"HRU"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"NA-\n"
+"HRAŤ\n"
+"HRU"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ULOŽIŤ\n"
+"HRU"
+
+msgid "QUIT"
+msgstr ""
+"OPUSŤ\n"
+"HRU"
+
+msgid "INFO"
+msgstr "INFO"
 
 msgid ""
 "STANDARD\n"
@@ -158,6 +221,13 @@ msgid ""
 msgstr ""
 "BEŽNÁ\n"
 "HRA"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"RÝCHLY\n"
+"BOJ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -210,20 +280,11 @@ msgstr "5 HRÁČOV"
 msgid "6 PLAYERS"
 msgstr "6 HRÁČOV"
 
-msgid "GIFT"
-msgstr "DARUJ"
-
-msgid "MAX"
-msgstr "MAX"
-
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
 
 msgid "VIEW INTRO"
 msgstr "ZOBRAZIŤ INTRO"
-
-msgid "MIN"
-msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
@@ -232,46 +293,24 @@ msgstr ""
 msgid "START"
 msgstr "REŠTART"
 
+msgid "TOWN"
+msgstr ""
+
 #, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MESTÁ/\n"
 "HRADY"
 
-msgid "TOWN"
+msgid ""
+"AUTO\n"
+"COMBAT"
 msgstr ""
-
-#, fuzzy
-msgid "RESTRICT"
-msgstr "REŠTART"
 
 msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
+"QUICK\n"
+"COMBAT"
 msgstr ""
-"P\n"
-"R\n"
-"E\n"
-"P\n"
-"U\n"
-"S\n"
-"Ť"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"P\n"
-"R\n"
-"E\n"
-"Č"
 
 msgid ""
 "P\n"
@@ -280,48 +319,6 @@ msgid ""
 "R\n"
 "O\n"
 "L"
-msgstr ""
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"K\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"Ň"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"Š\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-
-msgid "RUMORS"
-msgstr ""
-
-msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -480,10 +477,12 @@ msgstr[0] "%{name} zničil polovicu nepriateľov!"
 msgstr[1] "%{name} zničili polovicu nepriateľov!"
 msgstr[2] "%{name} zničili polovicu nepriateľov!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} vypol automatizovaný boj"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} zapol automatizovaný boj"
 
 msgid "Spell failed!"
@@ -494,6 +493,9 @@ msgid ""
 "combat spells."
 msgstr ""
 "Tento boj je ovplyvnený artefaktom Guľa negácie, ktorá znemožní kúzliť."
+
+msgid "You cannot cast spells without a commanding hero."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "V tomto kole už bolo použité kúzlo."
@@ -812,14 +814,18 @@ msgstr "Zobraz info o balistovi"
 msgid "Ballista"
 msgstr "Balista"
 
-msgid "Enable auto combat"
-msgstr "Povoľ automatizovaný boj"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Umožní počítaču vybojovať boj za teba."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Auto boj"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Auto boj"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Nastav systémové možnosti"
@@ -867,11 +873,36 @@ msgstr "Panel správ"
 msgid "Shows the results of individual monster's actions."
 msgstr "Ukáže výsledky činností jednotlivých bojovníkov."
 
-msgid "Are you sure you want to enable auto combat?"
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Určite chceš povoliť automatický boj?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Umožní počítaču vybojovať boj za teba."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Auto boj"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Auto boj"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -1008,7 +1039,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Zrkadlový obraz je zničený!"
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Určite chceš prerušiť automatizovaný súboj?"
 
 msgid "Error"
@@ -3158,8 +3189,9 @@ msgstr "Najprv zvoľ príjemcov!"
 msgid "You cannot select %{resource}!"
 msgstr "Nemôžeš zvoliť %{resource}!"
 
-msgid "Select count %{resource}:"
-msgstr "Zvoľ počet - %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "Streľ do: %{monster}"
 
 msgid "Select Recipients"
 msgstr "Zvoľ príjemcov"
@@ -3225,15 +3257,6 @@ msgstr "Udalosť"
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
-msgid "Evil"
-msgstr "Zlo"
-
-msgid "Good"
-msgstr "Dobro"
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
 msgid "Hide"
 msgstr "Skry"
 
@@ -3243,20 +3266,8 @@ msgstr "Zobraz"
 msgid "Interface"
 msgstr "Rozhranie"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normálna"
-
-msgid "Fast"
-msgstr "Rýchla"
-
-msgid "Very Fast"
-msgstr "Veľmi rýchla"
-
-msgid "Scroll Speed"
-msgstr "Rýchlosť posunu"
+msgid "Interface Type"
+msgstr "Typ rozhrania"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
@@ -3264,10 +3275,17 @@ msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
 
+msgid "Scroll Speed"
+msgstr "Rýchlosť posunu"
+
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
 
 msgid "Select Game Language:"
+msgstr "Zvoľ jazyk hry:"
+
+#, fuzzy
+msgid "Select Language:"
 msgstr "Zvoľ jazyk hry:"
 
 msgid "Click to choose the selected language."
@@ -3296,6 +3314,9 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr "Smieš sa naučiť buď:"
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "nie je"
@@ -3401,8 +3422,8 @@ msgstr "Obrancovia:"
 msgid "Unknown"
 msgstr "Neznáme"
 
-msgid "%{name} (Level %{level})"
-msgstr "%{name} na úrovni %{level}"
+msgid "heroQuickInfo|(Level %{level})"
+msgstr "na úrovni %{level}"
 
 msgid "Attack:"
 msgstr "Útok:"
@@ -3510,8 +3531,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr "Určite chceš vymazať súbor:"
 
-msgid "Warning!"
-msgstr "Pozor!"
+msgid "Warning"
+msgstr "Pozor"
 
 msgid "Click to save the current game."
 msgstr "Klikni pre uloženie terajšej hry."
@@ -3695,6 +3716,13 @@ msgstr "Cena vernosti"
 msgid "Resurrection"
 msgstr "Vzkriesenie"
 
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Jazyk"
+
 msgid "Lose all your heroes and towns."
 msgstr "Strať všetkých hrdinov a mestá."
 
@@ -3819,7 +3847,8 @@ msgstr "Auto bez kúziel"
 msgid "Battles"
 msgstr "Boje"
 
-msgid "autoBattle|Manual"
+#, fuzzy
+msgid "combatMode|Manual"
 msgstr "Manuálne"
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3935,6 +3964,10 @@ msgstr "Oblačné mesto"
 #, fuzzy
 msgid "Default Buildings"
 msgstr "predvolená činnosť"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "REŠTART"
 
 #, fuzzy
 msgid "Default Army"
@@ -4066,20 +4099,57 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr "Načítať existujúcu mapu."
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Zvukové efekty"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Podmienky\n"
+"prehry"
+
 msgid "Cancel event after first visit"
 msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Skúsenosti"
 
 msgid "Artifact"
 msgstr "Artefakt"
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 #, fuzzy
 msgid "Delete Artifact"
 msgstr "Zvoľ artefakt:"
 
-msgid "Delete an artifact from the reward."
+#, fuzzy
+msgid "Delete an artifact from the event."
+msgstr "Načítať existujúcu mapu."
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+#, fuzzy
+msgid "Secondary Skill"
+msgstr "Zvoľ zručnosť:"
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -4135,6 +4205,58 @@ msgstr ""
 "Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "REŠTART"
+
+msgid "Main Menu"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Reštart"
+
+#, fuzzy
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Určite chceš načítať novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
 #, fuzzy
 msgid "Create a new map from scratch."
 msgstr "nová mapa, od nuly"
@@ -4157,6 +4279,13 @@ msgstr "Uložiť aktuálnu mapu."
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr ""
 
@@ -4170,6 +4299,9 @@ msgstr ""
 #, fuzzy
 msgid "This artifact"
 msgstr "s jedným artefaktom."
+
+msgid "The total number of obelisks is %{count}."
+msgstr ""
 
 #, fuzzy
 msgid "Roads"
@@ -4458,6 +4590,12 @@ msgstr "Vrátiť"
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr "Upraviť názov mapy, popis a ďalšie všeobecné informácie."
 
@@ -4505,9 +4643,6 @@ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
 
 msgid "No maps available!"
 msgstr "Žiadne dostupné mapy!"
-
-msgid "Warning"
-msgstr "Pozor"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -4649,17 +4784,32 @@ msgstr ""
 "\n"
 "Umiestnenie: "
 
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Zvolený opis"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4679,6 +4829,10 @@ msgstr "Klikni pre výber zvoleného rozlíšenia."
 #, fuzzy
 msgid "Events"
 msgstr "Udalosť"
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Zmeň jazyk hry."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4717,6 +4871,10 @@ msgstr ""
 "scenára. Ťažšie mapy môžu obsahovať viac alebo silnejších nepriateľov, menej "
 "zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
 "hráča."
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "Zvoľ počet - %{resource}:"
 
 #, fuzzy
 msgid "Animation"
@@ -4827,6 +4985,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4850,6 +5014,9 @@ msgstr "a viac..."
 
 msgid "Easy"
 msgstr "Ľahká"
+
+msgid "Normal"
+msgstr "Normálna"
 
 msgid "Hard"
 msgstr "Ťažká"
@@ -5151,6 +5318,10 @@ msgstr "prepni celú obrazovku"
 msgid "hotkey|toggle text support mode"
 msgstr "prepni mód podpory textu"
 
+#, fuzzy
+msgid "hotkey|toggle developer mode"
+msgstr "prepni mód podpory textu"
+
 msgid "hotkey|new game"
 msgstr "nová hra"
 
@@ -5394,11 +5565,13 @@ msgstr "uteč z boja"
 msgid "hotkey|surrender during battle"
 msgstr "vzdaj sa počas boja"
 
-msgid "hotkey|toggle battle auto mode"
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
 msgstr "prepni boj do automatického módu"
 
-msgid "hotkey|finish the battle in auto mode"
-msgstr "ukonči boj v automatickom móde"
+#, fuzzy
+msgid "hotkey|quick combat"
+msgstr "ukonči"
 
 msgid "hotkey|battle options"
 msgstr "možnosti boja"
@@ -5466,6 +5639,10 @@ msgstr "povýš jednotku"
 msgid "hotkey|dismiss hero or troop"
 msgstr "prepusti jednotku alebo hrdinu"
 
+#, fuzzy
+msgid "hotkey|exchange all troops"
+msgstr "povýš jednotku"
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5483,9 +5660,6 @@ msgid "Default Actions"
 msgstr "predvolená činnosť"
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -5569,49 +5743,29 @@ msgstr ""
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Tím fheroes2 Resurrection uvádza"
 
-msgid "Greetings!"
-msgstr "Zdravím ťa!"
-
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2!"
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2! Pred "
 "spustením hry si vyber rozlíšenie."
 
-msgid "Please Remember"
-msgstr "Nezabudni, prosím"
-
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Rozlíšenie hry si vždy môžeš zmeniť kliknutím na "
-
-msgid "door"
-msgstr "dvere"
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-#, fuzzy
-msgid "NEW GAME"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
-msgstr ""
+msgid "Greetings!"
+msgstr "Zdravím ťa!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -6317,6 +6471,9 @@ msgid ""
 "skill"
 msgstr "Obrana"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
 
@@ -6325,6 +6482,14 @@ msgstr "MEDZERNÍK"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Príjmy kráľovstva"
@@ -6397,6 +6562,24 @@ msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr "Vietnamsky"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Fast"
+msgstr "Rýchla"
+
+msgid "Very Fast"
+msgstr "Veľmi rýchla"
+
+msgid "Dynamic"
+msgstr ""
+
+msgid "Good"
+msgstr "Dobro"
+
+msgid "Evil"
+msgstr "Zlo"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -7859,18 +8042,23 @@ msgstr ""
 "\"Mám pre teba hádanku,\" hovorí Sfinga. \"Odpovedz správne a dostane sa ti "
 "odmeny. Ak odpovieš nesprávne, zjem ťa. Prijímaš túto výzvu?\""
 
+#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Your answer?"
+"'"
 msgstr ""
 "Sfinga ti položí nasledujúcu hádanku:\n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Tvoja odpoveď?"
+
+msgid ""
+"sphinx|'\n"
+"\n"
+"Your answer?"
+msgstr ""
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8058,10 +8246,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-#, fuzzy
-msgid "Set Experience value"
-msgstr "Skúsenosti"
-
 msgid "View Experience Info"
 msgstr "Zobraz info o skúsenostiach"
 
@@ -8175,6 +8359,9 @@ msgid ""
 msgstr ""
 "Súčasné skúsenosti %{exp1}.\n"
 " Ďalšia úroveň %{exp2}."
+
+msgid "million|M"
+msgstr ""
 
 msgid "Level %{level}"
 msgstr "Úroveň %{level}"
@@ -8846,6 +9033,12 @@ msgstr "Spaľujúca"
 
 msgid "speed|Instant"
 msgstr "Okamžitá"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr "Veverice"
@@ -9839,6 +10032,9 @@ msgstr "% imunity voči kúzlu %{spell}"
 msgid "% damage from Elemental spells"
 msgstr "% poškodenia od elementálnych kúziel"
 
+msgid "% damage from %{spell} spell"
+msgstr "% poškodenia od kúzla %{spell}"
+
 msgid "% chance to Dispel beneficial spells"
 msgstr "% šanca na rozptýlenie prospešných kúziel"
 
@@ -9905,20 +10101,51 @@ msgstr "Elementál"
 msgid "No Morale"
 msgstr "Žiadna morálka"
 
-msgid "200% damage from Fire spells"
+#, fuzzy
+msgid "Earth creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Air creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Fire creature"
+msgstr "Najať bojovníkov"
+
+#, fuzzy
+msgid "Water creature"
+msgstr "Jazero s vodou"
+
+#, fuzzy
+msgid "Double damage from Fire spells"
 msgstr "Dvojité poškodenie od kúziel ohňa"
 
-msgid "200% damage from Cold spells"
+#, fuzzy
+msgid "Double damage from Cold spells"
 msgstr "Dvojité poškodenie od kúziel chladu"
 
-msgid "% damage from %{spell} spell"
-msgstr "% poškodenia od kúzla %{spell}"
+#, fuzzy
+msgid "Double damage from Earth creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
-msgid "% immunity to "
-msgstr "% imunity voči: "
+#, fuzzy
+msgid "Double damage from Air creatures"
+msgstr "Dvojité poškodenie nemŕtvym"
+
+#, fuzzy
+msgid "Double damage from Fire creatures"
+msgstr "Dvojité poškodenie od kúziel ohňa"
+
+#, fuzzy
+msgid "Double damage from Water creatures"
+msgstr "Odstráni všetky kúzla zo všetkých tvorov."
 
 msgid "Lightning"
 msgstr "Blesk"
+
+msgid "% immunity to "
+msgstr "% imunity voči: "
 
 msgid "% damage from "
 msgstr "% poškodenie od: "
@@ -11560,11 +11787,14 @@ msgstr "Hromadné spomalenie"
 msgid "Slows all enemies to half movement rate."
 msgstr "Spomaľuje všetkých nepriateľov na polovicu rýchlosti pohybu."
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
-
 msgid "spell|Blind"
 msgstr "Slepota"
+
+#, fuzzy
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
+msgstr "Zakryje oči postihnutých tvorov a zabráni im v pohybe."
 
 msgid "Bless"
 msgstr "Požehnanie"
@@ -12093,6 +12323,36 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Select count %{resource}:"
+#~ msgstr "Zvoľ počet - %{resource}:"
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Povoľ automatizovaný boj"
+
+#~ msgid "hotkey|finish the battle in auto mode"
+#~ msgstr "ukonči boj v automatickom móde"
+
+#~ msgid "Please Remember"
+#~ msgstr "Nezabudni, prosím"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Rozlíšenie hry si vždy môžeš zmeniť kliknutím na "
+
+#~ msgid "door"
+#~ msgstr "dvere"
+
+#, fuzzy
+#~ msgid "NEW GAME"
+#~ msgstr ""
+#~ "NOVÁ\n"
+#~ "HRA"
+
+#~ msgid "Warning!"
+#~ msgstr "Pozor!"
 
 #~ msgid "Dummy 1"
 #~ msgstr "Atrapa 1"

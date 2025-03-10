@@ -23,6 +23,8 @@
 
 #include "color.h"
 
+#include <cassert>
+
 #include "players.h"
 #include "serialize.h"
 #include "tools.h"
@@ -45,7 +47,7 @@ namespace
     };
 }
 
-std::string Color::String( int color )
+std::string Color::String( const int color )
 {
     switch ( color ) {
     case Color::BLUE:
@@ -69,7 +71,7 @@ std::string Color::String( int color )
     return "None";
 }
 
-int Color::GetIndex( int color )
+int Color::GetIndex( const int color )
 {
     switch ( color ) {
     case BLUE:
@@ -92,42 +94,31 @@ int Color::GetIndex( int color )
     return 6;
 }
 
-int Color::Count( int colors )
+int Color::Count( const int colors )
 {
     return CountBits( colors & ALL );
 }
 
-int Color::FromInt( int col )
+int Color::GetFirst( const int colors )
 {
-    switch ( col ) {
-    case BLUE:
-    case GREEN:
-    case RED:
-    case YELLOW:
-    case ORANGE:
-    case PURPLE:
-        return col;
-    default:
-        break;
-    }
-
-    return NONE;
-}
-
-int Color::GetFirst( int colors )
-{
-    if ( colors & BLUE )
+    if ( colors & BLUE ) {
         return BLUE;
-    else if ( colors & GREEN )
+    }
+    if ( colors & GREEN ) {
         return GREEN;
-    else if ( colors & RED )
+    }
+    if ( colors & RED ) {
         return RED;
-    else if ( colors & YELLOW )
+    }
+    if ( colors & YELLOW ) {
         return YELLOW;
-    else if ( colors & ORANGE )
+    }
+    if ( colors & ORANGE ) {
         return ORANGE;
-    else if ( colors & PURPLE )
+    }
+    if ( colors & PURPLE ) {
         return PURPLE;
+    }
 
     return NONE;
 }
@@ -206,32 +197,54 @@ const char * fheroes2::getTentColorName( const int color )
     return "None";
 }
 
-Colors::Colors( int colors )
+Colors::Colors( const int colors /* = Color::ALL */ )
 {
     reserve( 6 );
 
-    if ( colors & Color::BLUE )
+    if ( colors & Color::BLUE ) {
         push_back( Color::BLUE );
-    if ( colors & Color::GREEN )
+    }
+    if ( colors & Color::GREEN ) {
         push_back( Color::GREEN );
-    if ( colors & Color::RED )
+    }
+    if ( colors & Color::RED ) {
         push_back( Color::RED );
-    if ( colors & Color::YELLOW )
+    }
+    if ( colors & Color::YELLOW ) {
         push_back( Color::YELLOW );
-    if ( colors & Color::ORANGE )
+    }
+    if ( colors & Color::ORANGE ) {
         push_back( Color::ORANGE );
-    if ( colors & Color::PURPLE )
+    }
+    if ( colors & Color::PURPLE ) {
         push_back( Color::PURPLE );
+    }
 }
 
-bool ColorBase::isFriends( int col ) const
+bool ColorBase::isFriends( const int col ) const
 {
     return ( col & Color::ALL ) && ( color == col || Players::isFriends( color, col ) );
 }
 
-void ColorBase::SetColor( int col )
+void ColorBase::SetColor( const int col )
 {
-    color = Color::FromInt( col );
+    switch ( col ) {
+    case Color::NONE:
+    case Color::BLUE:
+    case Color::GREEN:
+    case Color::RED:
+    case Color::YELLOW:
+    case Color::ORANGE:
+    case Color::PURPLE:
+        color = col;
+        break;
+    default:
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+        color = Color::NONE;
+        break;
+    }
 }
 
 Kingdom & ColorBase::GetKingdom() const

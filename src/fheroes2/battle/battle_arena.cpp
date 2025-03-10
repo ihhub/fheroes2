@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,9 +73,55 @@ namespace
 {
     Battle::Arena * arena = nullptr;
 
+    template <typename T>
+    Battle::Unit * getLastResurrectableUnitFromGraveyardTmpl( const Battle::Graveyard & graveyard, const HeroBase * commander, const int32_t index, const T & spells )
+    {
+        if ( commander == nullptr ) {
+            return nullptr;
+        }
+
+        // Declare this variable both constexpr and static because different compilers disagree on whether there is a need to capture it in lambda expressions or not
+        static constexpr bool isSingleSpell{ std::is_same_v<std::remove_cv_t<std::remove_reference_t<decltype( spells )>>, Spell> };
+
+        if constexpr ( isSingleSpell ) {
+            if ( !spells.isResurrect() ) {
+                return nullptr;
+            }
+        }
+        else {
+            if ( !std::all_of( spells.begin(), spells.end(), []( const Spell & spell ) { return spell.isResurrect(); } ) ) {
+                return nullptr;
+            }
+        }
+
+        const std::vector<Battle::Unit *> units = graveyard.getUnits( index );
+
+        const auto iter = std::find_if( units.rbegin(), units.rend(), [commander, &spells]( const Battle::Unit * unit ) {
+            assert( unit != nullptr && !unit->isValid() );
+
+            if ( unit->GetArmyColor() != commander->GetColor() ) {
+                return false;
+            }
+
+            if constexpr ( isSingleSpell ) {
+                return unit->AllowApplySpell( spells, commander );
+            }
+            else {
+                return std::any_of( spells.begin(), spells.end(), [commander, unit]( const Spell & spell ) { return unit->AllowApplySpell( spell, commander ); } );
+            }
+        } );
+
+        if ( iter == units.rend() ) {
+            return nullptr;
+        }
+
+        return *iter;
+    }
+
     int GetCovr( int ground, std::mt19937 & gen )
     {
         std::vector<int> covrs;
+        covrs.reserve( 6 );
 
         switch ( ground ) {
         case Maps::Ground::SNOW:
@@ -264,7 +310,7 @@ Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
     assert( arena != nullptr );
 
-    return &arena->graveyard;
+    return &arena->_graveyard;
 }
 
 Battle::Interface * Battle::Arena::GetInterface()
@@ -303,7 +349,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     , _isTown( castle != nullptr )
     , _randomGenerator( randomGenerator )
 {
-    usage_spells.reserve( 20 );
+    _usedSpells.reserve( 20 );
 
     assert( arena == nullptr );
     arena = this;
@@ -316,7 +362,6 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         castle = nullptr;
     }
 
-    // init interface
     if ( isShowInterface ) {
         _interface = std::make_unique<Interface>( *this, tileIndex );
         board.SetArea( _interface->GetArea() );
@@ -326,12 +371,12 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         _interface->SetOrderOfUnits( _orderOfUnits );
     }
     else {
-        // no interface - force auto battle mode for human player
+        // There is no interface - force the auto combat mode for the human player
         if ( army1.isControlHuman() ) {
-            _autoBattleColors |= army1.GetColor();
+            _autoCombatColors |= army1.GetColor();
         }
         if ( army2.isControlHuman() ) {
-            _autoBattleColors |= army2.GetColor();
+            _autoCombatColors |= army2.GetColor();
         }
     }
 
@@ -382,13 +427,13 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( _covrIcnId != ICN::UNKNOWN ) {
             board.SetCovrObjects( _covrIcnId );
         }
 
-        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+        board.SetCobjObjects( world.getTile( tileIndex ), seededGen );
     }
 
     AI::BattlePlanner::Get().battleBegins();
@@ -438,8 +483,8 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
-            // therefore should be handled first, before any other actions. Just skip the rest of the branches.
+            // Pending actions from the user interface (such as toggling the auto combat on/off) have "already occurred"
+            // and therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
         else if ( _currentUnit->GetSpeed() == Speed::STANDING ) {
             // Unit has either finished its turn, is dead, or has become immovable due to some spell. Even if the
@@ -460,7 +505,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoCombatColors ) ) {
                 AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
@@ -665,7 +710,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     }
 
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
-    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
+    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t> );
 
     Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 
@@ -684,8 +729,8 @@ void Battle::Arena::CatapultAction()
 
     std::map<CastleDefenseStructure, int> stateOfCatapultTargets;
     for ( const CastleDefenseStructure target : Catapult::getAllowedTargets() ) {
-        const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = stateOfCatapultTargets.try_emplace( target, getCastleDefenseStructureCondition( target, SiegeWeaponType::Catapult ) );
+             !inserted ) {
             assert( 0 );
         }
     }
@@ -781,37 +826,42 @@ int Battle::Arena::GetOppositeColor( const int col ) const
 
 Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
-    Units::iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
-    Units::const_iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    if ( const auto iter = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army1->end() ) {
+        return *iter;
+    }
 
-    if ( it != _army1->end() )
-        return *it;
+    if ( const auto iter = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } ); iter != _army2->end() ) {
+        return *iter;
+    }
 
-    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
-
-    return it != _army2->end() ? *it : nullptr;
+    return nullptr;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
-    if ( _interface )
-        _interface->FadeArena( clearMessageLog );
+    if ( !_interface ) {
+        return;
+    }
+
+    _interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells() const
+const SpellStorage & Battle::Arena::GetUsedSpells() const
 {
-    return usage_spells;
+    return _usedSpells;
 }
 
 int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
@@ -872,7 +922,6 @@ bool Battle::Arena::isSpellcastDisabled() const
 
 bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ ) const
 {
-    // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
         if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
@@ -880,71 +929,82 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
         return true;
     }
 
-    const HeroBase * current_commander = GetCurrentCommander();
-
-    // check casted
-    if ( current_commander ) {
-        if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
-            if ( msg ) {
-                *msg = _( "You have already cast a spell this round." );
-            }
-            return true;
+    const HeroBase * commander = GetCurrentCommander();
+    if ( commander == nullptr ) {
+        // This should not normally happen, but there are places where the ability to "basically"
+        // cast a spell is checked before checking for the presence of a commanding hero.
+        if ( msg ) {
+            *msg = _( "You cannot cast spells without a commanding hero." );
         }
+        return true;
+    }
 
-        if ( spell == Spell::EARTHQUAKE && !castle ) {
-            if ( msg ) {
-                *msg = _( "That spell will have no effect!" );
-            }
-            return true;
+    if ( commander->Modes( Heroes::SPELLCASTED ) ) {
+        if ( msg ) {
+            *msg = _( "You have already cast a spell this round." );
         }
-        else if ( spell.isSummon() ) {
-            const Monster mons( spell );
-            assert( mons.isValid() && mons.isElemental() );
+        return true;
+    }
 
-            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            if ( elem && elem->GetID() != mons.GetID() ) {
-                if ( msg ) {
-                    *msg = _( "You may only summon one type of elemental per combat." );
-                }
-                return true;
-            }
+    // An empty spell can be used to test the ability to cast spells in principle
+    if ( !spell.isValid() ) {
+        return false;
+    }
 
-            if ( 0 > GetFreePositionNearHero( GetCurrentColor() ) ) {
-                if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
-                }
-                return true;
-            }
-        }
-        else if ( spell.isValid() ) {
-            // check army
-            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const Battle::Unit * b = ( *it ).GetUnit();
-
-                if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander ) ) {
-                        return false;
-                    }
-                }
-                else {
-                    // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
-                        return false;
-                    }
-                }
-            }
-
+    if ( spell == Spell::EARTHQUAKE ) {
+        if ( castle == nullptr ) {
             if ( msg ) {
                 *msg = _( "That spell will have no effect!" );
             }
             return true;
+        }
+
+        return false;
+    }
+
+    if ( spell.isSummon() ) {
+        const Monster mons( spell );
+        assert( mons.isValid() && mons.isElemental() );
+
+        const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
+        if ( elem && elem->GetID() != mons.GetID() ) {
+            if ( msg ) {
+                *msg = _( "You may only summon one type of elemental per combat." );
+            }
+            return true;
+        }
+
+        if ( GetFreePositionNearHero( GetCurrentColor() ) < 0 ) {
+            if ( msg ) {
+                *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    for ( const Cell & cell : board ) {
+        if ( const Battle::Unit * unit = cell.GetUnit(); unit != nullptr ) {
+            if ( unit->AllowApplySpell( spell, commander ) ) {
+                return false;
+            }
+
+            continue;
+        }
+
+        if ( isAbleToResurrectFromGraveyard( cell.GetIndex(), spell ) ) {
+            return false;
         }
     }
 
-    return false;
+    if ( msg ) {
+        *msg = _( "That spell will have no effect!" );
+    }
+    return true;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const
+bool Battle::Arena::isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const
 {
     if ( !spell.isResurrect() ) {
         return false;
@@ -955,7 +1015,7 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
         return false;
     }
 
-    const Unit * unit = GraveyardLastTroop( index );
+    const Unit * unit = getLastResurrectableUnitFromGraveyard( index, spell );
     if ( unit == nullptr ) {
         return false;
     }
@@ -987,31 +1047,46 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastUnitFromGraveyard( const int32_t index ) const
 {
-    return GetTroopUID( graveyard.GetLastTroopUID( index ) );
+    return _graveyard.getLastUnit( index );
 }
 
-std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
+const Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index ) const
 {
-    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
+    static const std::vector<Spell> resurrectionSpells = []() {
+        std::vector<Spell> result;
 
-    std::vector<const Unit *> result;
-    result.reserve( troopUIDs.size() );
+        for ( int spellId = Spell::NONE; spellId < Spell::SPELL_COUNT; ++spellId ) {
+            const Spell spell( spellId );
+            if ( !spell.isResurrect() ) {
+                continue;
+            }
 
-    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
-        const Unit * unit = GetTroopUID( uid );
-        assert( unit != nullptr );
+            result.push_back( spell );
+        }
 
-        result.push_back( unit );
-    } );
+        return result;
+    }();
 
-    return result;
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, resurrectionSpells );
 }
 
-Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
+Battle::Unit * Battle::Arena::getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const
 {
-    return graveyard.GetOccupiedCells();
+    return getLastResurrectableUnitFromGraveyardTmpl( _graveyard, GetCurrentCommander(), index, spell );
+}
+
+std::vector<const Battle::Unit *> Battle::Arena::getGraveyardUnits( const int32_t index ) const
+{
+    const std::vector<Battle::Unit *> units = _graveyard.getUnits( index );
+
+    return { units.begin(), units.end() };
+}
+
+Battle::Indexes Battle::Arena::getCellsOccupiedByGraveyard() const
+{
+    return _graveyard.getOccupiedCells();
 }
 
 void Battle::Arena::applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage )
@@ -1356,14 +1431,14 @@ Battle::Result & Battle::Arena::GetResult()
     return result_game;
 }
 
-bool Battle::Arena::AutoBattleInProgress() const
+bool Battle::Arena::AutoCombatInProgress() const
 {
     if ( _currentUnit == nullptr ) {
         return false;
     }
 
-    if ( _autoBattleColors & GetCurrentColor() ) {
-        // Auto battle mode cannot be enabled for a player controlled by AI
+    if ( _autoCombatColors & GetCurrentColor() ) {
+        // Auto combat mode cannot be enabled for a player controlled by the AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
         return true;
@@ -1372,7 +1447,7 @@ bool Battle::Arena::AutoBattleInProgress() const
     return false;
 }
 
-bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+bool Battle::Arena::EnemyOfAIHasAutoCombatInProgress() const
 {
     if ( _currentUnit == nullptr ) {
         return false;
@@ -1388,10 +1463,10 @@ bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
         return false;
     }
 
-    return ( _autoBattleColors & enemyForce.GetColor() );
+    return ( _autoCombatColors & enemyForce.GetColor() );
 }
 
-bool Battle::Arena::CanToggleAutoBattle() const
+bool Battle::Arena::CanToggleAutoCombat() const
 {
     if ( _currentUnit == nullptr ) {
         return false;

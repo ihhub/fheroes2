@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,12 +25,14 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -116,6 +118,11 @@ public:
 
     StreamBase & operator=( const StreamBase & ) = delete;
 
+    void setFail()
+    {
+        setFail( true );
+    }
+
     void setBigendian( bool f );
 
     bool fail() const
@@ -130,10 +137,6 @@ public:
 
 protected:
     StreamBase() = default;
-
-    StreamBase( StreamBase && stream ) noexcept;
-
-    StreamBase & operator=( StreamBase && stream ) noexcept;
 
     void setFail( bool f );
 
@@ -187,10 +190,40 @@ public:
 
     IStreamBase & operator>>( fheroes2::Point & v );
 
+    template <typename Type, std::enable_if_t<std::is_enum_v<Type>, bool> = true>
+    IStreamBase & operator>>( Type & v )
+    {
+        std::underlying_type_t<Type> temp{};
+        *this >> temp;
+
+        v = static_cast<Type>( temp );
+
+        return *this;
+    }
+
     template <class Type1, class Type2>
     IStreamBase & operator>>( std::pair<Type1, Type2> & v )
     {
         return *this >> v.first >> v.second;
+    }
+
+    template <class Type>
+    IStreamBase & operator>>( std::optional<Type> & v )
+    {
+        bool hasValue{};
+        *this >> hasValue;
+
+        if ( hasValue ) {
+            Type temp{};
+            *this >> temp;
+
+            v = std::move( temp );
+        }
+        else {
+            v = {};
+        }
+
+        return *this;
     }
 
     template <class Type>
@@ -221,11 +254,11 @@ public:
         v.clear();
 
         for ( uint32_t i = 0; i < size; ++i ) {
-            std::pair<Type1, Type2> pr;
+            std::pair<Type1, Type2> temp{};
 
-            *this >> pr;
+            *this >> temp;
 
-            v.emplace( std::move( pr ) );
+            v.emplace( std::move( temp ) );
         }
 
         return *this;
@@ -236,7 +269,7 @@ public:
     {
         const uint32_t size = get32();
         if ( size != v.size() ) {
-            setFail( true );
+            setFail();
 
             v = {};
 
@@ -251,19 +284,7 @@ public:
 protected:
     IStreamBase() = default;
 
-    IStreamBase( IStreamBase && ) = default;
-
-    // All this operator does is call the corresponding base class operator. It is not recommended to
-    // declare these operators as default in the case of a virtual base, even if they are trivial, to
-    // catch a situation where, in the case of the diamond inheritance, the corresponding operator of
-    // the base class will be called multiple times. GCC has a special warning for this case (see the
-    // description of the -Wno-virtual-move-assign switch).
-    IStreamBase & operator=( IStreamBase && stream ) noexcept;
-
     virtual uint8_t get8() = 0;
-
-    virtual size_t sizeg() = 0;
-    virtual size_t tellg() = 0;
 };
 
 // Interface that declares the methods needed to write to a stream
@@ -303,10 +324,29 @@ public:
 
     OStreamBase & operator<<( const fheroes2::Point & v );
 
+    template <typename Type, std::enable_if_t<std::is_enum_v<Type>, bool> = true>
+    OStreamBase & operator<<( const Type v )
+    {
+        return *this << static_cast<std::underlying_type_t<Type>>( v );
+    }
+
     template <class Type1, class Type2>
     OStreamBase & operator<<( const std::pair<Type1, Type2> & v )
     {
         return *this << v.first << v.second;
+    }
+
+    template <class Type>
+    OStreamBase & operator<<( const std::optional<Type> & v )
+    {
+        const bool hasValue = v.has_value();
+        *this << hasValue;
+
+        if ( hasValue ) {
+            *this << *v;
+        }
+
+        return *this;
     }
 
     template <class Type>
@@ -352,12 +392,7 @@ public:
 protected:
     OStreamBase() = default;
 
-    OStreamBase( OStreamBase && ) = default;
-
     virtual void put8( const uint8_t ) = 0;
-
-    virtual size_t sizep() = 0;
-    virtual size_t tellp() = 0;
 };
 
 // Interface that declares a stream with an in-memory storage backend that can be read from
@@ -365,14 +400,14 @@ class IStreamBuf : public IStreamBase
 {
 public:
     virtual const uint8_t * data() const = 0;
-    virtual size_t size() = 0;
+    virtual size_t size() const = 0;
 
 protected:
     IStreamBuf() = default;
 };
 
 // Class template for a stream with an in-memory storage backend that can store either const or non-const data as desired
-template <typename T, typename = typename std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>>>
+template <typename T, std::enable_if_t<std::is_same_v<T, uint8_t> || std::is_same_v<T, const uint8_t>, bool> = true>
 class StreamBufTmpl : public IStreamBuf
 {
 public:
@@ -387,91 +422,96 @@ public:
         return _itget;
     }
 
-    size_t size() override
+    size_t size() const override
     {
         return sizeg();
     }
 
-    size_t tell()
+    size_t tell() const
     {
         return tellg();
     }
 
-    void seek( size_t sz )
+    void seek( const size_t pos )
     {
-        _itget = ( _itbeg + sz < _itend ? _itbeg + sz : _itend );
+        assert( _itbeg <= _itput );
+
+        const size_t putPos = _itput - _itbeg;
+
+        _itget = ( pos < putPos ? _itbeg + pos : _itput );
     }
 
-    void skip( size_t sz ) override
+    void skip( size_t size ) override
     {
-        _itget += ( sz <= sizeg() ? sz : sizeg() );
+        _itget += ( size < sizeg() ? size : sizeg() );
     }
 
     uint16_t getBE16() override
     {
-        uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
+        uint16_t v = ( static_cast<uint16_t>( get8() ) << 8 );
 
-        result |= get8();
+        v |= get8();
 
-        return result;
+        return v;
     }
 
     uint16_t getLE16() override
     {
-        uint16_t result = get8();
+        uint16_t v = get8();
 
-        result |= ( static_cast<uint16_t>( get8() ) << 8 );
+        v |= ( static_cast<uint16_t>( get8() ) << 8 );
 
-        return result;
+        return v;
     }
 
     uint32_t getBE32() override
     {
-        uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
+        uint32_t v = ( static_cast<uint32_t>( get8() ) << 24 );
 
-        result |= ( static_cast<uint32_t>( get8() ) << 16 );
-        result |= ( static_cast<uint32_t>( get8() ) << 8 );
-        result |= get8();
+        v |= ( static_cast<uint32_t>( get8() ) << 16 );
+        v |= ( static_cast<uint32_t>( get8() ) << 8 );
+        v |= get8();
 
-        return result;
+        return v;
     }
 
     uint32_t getLE32() override
     {
-        uint32_t result = get8();
+        uint32_t v = get8();
 
-        result |= ( static_cast<uint32_t>( get8() ) << 8 );
-        result |= ( static_cast<uint32_t>( get8() ) << 16 );
-        result |= ( static_cast<uint32_t>( get8() ) << 24 );
+        v |= ( static_cast<uint32_t>( get8() ) << 8 );
+        v |= ( static_cast<uint32_t>( get8() ) << 16 );
+        v |= ( static_cast<uint32_t>( get8() ) << 24 );
 
-        return result;
+        return v;
     }
 
     // If a zero size is specified, then all still unread data is returned
-    std::vector<uint8_t> getRaw( size_t sz ) override
+    std::vector<uint8_t> getRaw( size_t size ) override
     {
-        const size_t actualSize = sizeg();
-        const size_t resultSize = sz > 0 ? sz : actualSize;
-        const size_t sizeToCopy = std::min( resultSize, actualSize );
+        const size_t remainSize = sizeg();
+        const size_t resultSize = size > 0 ? size : remainSize;
+        const size_t sizeToCopy = std::min( resultSize, remainSize );
 
-        std::vector<uint8_t> result( resultSize, 0 );
+        std::vector<uint8_t> v( resultSize, 0 );
 
-        std::copy( _itget, _itget + sizeToCopy, result.data() );
+        std::copy( _itget, _itget + sizeToCopy, v.data() );
 
         _itget += sizeToCopy;
 
-        return result;
+        return v;
     }
 
-    // If a zero size is specified, then all still unread data is read, and from this data, a string is
-    // formed that ends with the first null character found (or includes all data if no null character
-    // was found), and this string is returned
-    std::string toString( const size_t sz = 0 )
+    // Reads no more than 'size' bytes of data (if a zero size is specified, then all still unread data
+    // is read), forms a string that ends with the first null character found in this data (or includes
+    // all data if this data does not contain null characters), and returns this string
+    std::string getString( const size_t size = 0 )
     {
-        const size_t length = ( sz > 0 && sz < sizeg() ) ? sz : sizeg();
+        const size_t remainSize = sizeg();
+        const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
 
         T * strBeg = _itget;
-        _itget += length;
+        _itget += sizeToSkip;
 
         return { strBeg, std::find( strBeg, _itget, 0 ) };
     }
@@ -479,39 +519,18 @@ public:
 protected:
     StreamBufTmpl() = default;
 
-    StreamBufTmpl( StreamBufTmpl && stream ) noexcept
-        : IStreamBuf( std::move( stream ) )
+    size_t sizeg() const
     {
-        std::swap( _itbeg, stream._itbeg );
-        std::swap( _itget, stream._itget );
-        std::swap( _itput, stream._itput );
-        std::swap( _itend, stream._itend );
-    }
+        assert( _itget <= _itput );
 
-    StreamBufTmpl & operator=( StreamBufTmpl && stream ) noexcept
-    {
-        if ( this == &stream ) {
-            return *this;
-        }
-
-        IStreamBuf::operator=( std::move( stream ) );
-
-        std::swap( _itbeg, stream._itbeg );
-        std::swap( _itget, stream._itget );
-        std::swap( _itput, stream._itput );
-        std::swap( _itend, stream._itend );
-
-        return *this;
-    }
-
-    size_t tellg() override
-    {
-        return _itget - _itbeg;
-    }
-
-    size_t sizeg() override
-    {
         return _itput - _itget;
+    }
+
+    size_t tellg() const
+    {
+        assert( _itbeg <= _itget );
+
+        return _itget - _itbeg;
     }
 
     uint8_t get8() override
@@ -520,13 +539,15 @@ protected:
             return *( _itget++ );
         }
 
-        setFail( true );
+        setFail();
 
         return 0;
     }
 
     size_t capacity() const
     {
+        assert( _itbeg <= _itend );
+
         return _itend - _itbeg;
     }
 
@@ -544,59 +565,61 @@ public:
         : RWStreamBuf( 0 )
     {}
 
-    explicit RWStreamBuf( const size_t sz );
+    explicit RWStreamBuf( const size_t size );
 
     RWStreamBuf( const RWStreamBuf & ) = delete;
-    RWStreamBuf( RWStreamBuf && ) = default;
 
     ~RWStreamBuf() override = default;
 
     RWStreamBuf & operator=( const RWStreamBuf & ) = delete;
-    RWStreamBuf & operator=( RWStreamBuf && stream ) noexcept;
 
     void putBE32( uint32_t v ) override;
     void putLE32( uint32_t v ) override;
     void putBE16( uint16_t v ) override;
     void putLE16( uint16_t v ) override;
 
-    void putRaw( const void * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t size ) override;
 
 private:
-    friend class StreamFile;
-
     void put8( const uint8_t v ) override;
 
-    size_t sizep() override;
-    size_t tellp() override;
+    size_t sizep() const;
+    size_t tellp() const;
 
     void reallocBuf( size_t size );
-
-    // After using this method to write data, update the cursor by calling the advance() method.
-    uint8_t * rwData()
-    {
-        return _itput;
-    }
-
-    // Advances the cursor intended for writing data forward by a specified number of bytes.
-    void advance( const size_t size )
-    {
-        _itput += size;
-    }
 
     std::unique_ptr<uint8_t[]> _buf;
 };
 
-// Stream with read-only in-memory storage backed by a const vector instance
+// Stream with read-only in-memory storage backed by a const vector instance (either internal or external, depending on the constructor used)
 class ROStreamBuf final : public StreamBufTmpl<const uint8_t>
 {
 public:
+    // Creates a non-owning stream on top of an external buffer ("view mode")
     explicit ROStreamBuf( const std::vector<uint8_t> & buf );
+    // Takes ownership of the given buffer (through the move operation) and creates a stream on top of it
+    explicit ROStreamBuf( std::vector<uint8_t> && buf );
 
     ROStreamBuf( const ROStreamBuf & ) = delete;
 
     ~ROStreamBuf() override = default;
 
     ROStreamBuf & operator=( const ROStreamBuf & ) = delete;
+
+    // If a zero size is specified, then a view of all still unread data is returned
+    std::pair<const uint8_t *, size_t> getRawView( const size_t size = 0 );
+
+    // Returns a string view of no more than 'size' bytes of data ending with the first null character found in
+    // this data (or of all the data in the corresponding range if this data does not contain null characters).
+    // If a zero size is specified, then the entire unread amount of data is considered. Advances the cursor
+    // intended for reading data forward by the full amount of the data used (regardless of the presence of null
+    // characters in this data).
+    std::string_view getStringView( const size_t size = 0 );
+
+private:
+    // Buffer to which the transfer of ownership of the external buffer takes place. This buffer is not used in
+    // the non-owning ("view") mode.
+    const std::vector<uint8_t> _buf;
 };
 
 // Stream with a file storage backend that supports both reading and writing
@@ -618,36 +641,33 @@ public:
     void close();
 
     // If a zero size is specified, then all still unread data is returned
-    RWStreamBuf toStreamBuf( const size_t size = 0 );
+    ROStreamBuf getStreamBuf( const size_t size = 0 );
 
-    void seek( size_t );
-    void skip( size_t ) override;
+    void seek( const size_t pos );
+    void skip( size_t size ) override;
 
     uint16_t getBE16() override;
     uint16_t getLE16() override;
     uint32_t getBE32() override;
     uint32_t getLE32() override;
 
-    void putBE16( uint16_t ) override;
-    void putLE16( uint16_t ) override;
-    void putBE32( uint32_t ) override;
-    void putLE32( uint32_t ) override;
+    void putBE16( uint16_t v ) override;
+    void putLE16( uint16_t v ) override;
+    void putBE32( uint32_t v ) override;
+    void putLE32( uint32_t v ) override;
 
     // If a zero size is specified, then all still unread data is returned
     std::vector<uint8_t> getRaw( const size_t size ) override;
 
-    void putRaw( const void * ptr, size_t sz ) override;
+    void putRaw( const void * ptr, size_t size ) override;
 
-    // If a zero size is specified, then all still unread data is read, and from this data, a string is
-    // formed that ends with the first null character found (or includes all data if no null character
-    // was found), and this string is returned
-    std::string toString( const size_t size = 0 );
+    // Reads no more than 'size' bytes of data (if a zero size is specified, then all still unread data
+    // is read), forms a string that ends with the first null character found in this data (or includes
+    // all data if this data does not contain null characters), and returns this string
+    std::string getString( const size_t size = 0 );
 
 private:
-    size_t sizeg() override;
-    size_t sizep() override;
-    size_t tellg() override;
-    size_t tellp() override;
+    size_t sizeg();
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
@@ -659,51 +679,53 @@ private:
             return 0;
         }
 
-        T val;
+        T v;
 
-        if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+        if ( std::fread( &v, sizeof( T ), 1, _file.get() ) != 1 ) {
+            setFail();
 
             return 0;
         }
 
-        return val;
+        return v;
     }
 
     template <typename T>
-    void putUint( const T val )
+    void putUint( const T v )
     {
         if ( !_file ) {
             return;
         }
 
-        if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
-            setFail( true );
+        if ( std::fwrite( &v, sizeof( T ), 1, _file.get() ) != 1 ) {
+            setFail();
         }
     }
 
-    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, []( std::FILE * f ) { return std::fclose( f ); } };
+    static int closeFile( std::FILE * f );
+
+    std::unique_ptr<std::FILE, int ( * )( std::FILE * )> _file{ nullptr, closeFile };
 };
 
 namespace fheroes2
 {
     // Get a value of type T in the system byte order from the buffer in which it was originally stored in the little-endian byte order
-    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>>>
+    template <typename T, std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, bool> = true>
     T getLEValue( const char * data, const size_t base, const size_t offset = 0 )
     {
         const char * begin = data + base + offset * sizeof( T );
         const char * end = begin + sizeof( T );
 
-        T result;
+        T v;
 
 #if defined( BYTE_ORDER ) && defined( LITTLE_ENDIAN ) && BYTE_ORDER == LITTLE_ENDIAN
-        std::copy( begin, end, reinterpret_cast<char *>( &result ) );
+        std::copy( begin, end, reinterpret_cast<char *>( &v ) );
 #elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
-        std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
+        std::reverse_copy( begin, end, reinterpret_cast<char *>( &v ) );
 #else
 #error "Unknown byte order"
 #endif
 
-        return result;
+        return v;
     }
 }

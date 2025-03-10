@@ -113,8 +113,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         assert( freeSlots > 0 );
 
         // Check for possible duplicates
-        const auto [dummy, inserted] = spellsInUse.insert( spell );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spell ); !inserted ) {
             return;
         }
 

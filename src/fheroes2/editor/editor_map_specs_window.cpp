@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +28,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,6 +39,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
@@ -63,15 +65,18 @@
 #include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace
 {
-    // In original Editor map name is limited to 17 characters. We keep this limit to fit the Select Scenario dialog.
-    const int32_t maxMapNameLength = 17;
-
     const int32_t descriptionBoxWidth = 292;
     const int32_t descriptionBoxHeight = 90;
 
@@ -998,7 +1003,7 @@ namespace
                 }
 
                 _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface );
+                                                                       roi.y + _selectConditionRoi.height + 35, _isEvilInterface, roi.width - 5 );
 
                 if ( _isNormalVictoryAllowed ) {
                     _allowNormalVictory.show();
@@ -1011,7 +1016,7 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
 
                     if ( _isVictoryConditionApplicableForAI ) {
                         _allowVictoryConditionForAI.show();
@@ -1089,7 +1094,7 @@ namespace
                     }
 
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface );
+                                                                           roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
                 }
 
                 const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
@@ -1161,9 +1166,9 @@ namespace
                     }
 
                     _allowVictoryConditionForAIRoi = Editor::drawCheckboxWithText( _allowVictoryConditionForAI, _( "Allow this condition also for AI" ), output,
-                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface );
+                                                                                   roi.x + 5, roi.y + valueSectionUiSize.height + 10, _isEvilInterface, roi.width - 5 );
                     _allowNormalVictoryRoi = Editor::drawCheckboxWithText( _allowNormalVictory, _( "Allow standard victory conditions" ), output, roi.x + 5,
-                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface );
+                                                                           roi.y + valueSectionUiSize.height + 35, _isEvilInterface, roi.width - 5 );
                 }
 
                 _goldAccumulationValue.draw( output );
@@ -1748,7 +1753,7 @@ namespace
                 break;
             }
             case Maps::FileInfo::LOSS_OUT_OF_TIME: {
-                const fheroes2::Rect roi{ _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
+                const fheroes2::Rect roi = _restorer.rect();
                 const fheroes2::Point uiOffset{ roi.x + ( roi.width - fheroes2::ValueSelectionDialogElement::getArea().width ) / 2, roi.y };
 
                 _outOfTimeValue.setOffset( uiOffset );
@@ -2055,7 +2060,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat )
+    bool mapSpecificationsDialog( Maps::Map_Format::MapFormat & mapFormat, const int32_t maxMapNameLength )
     {
         // Verify victory and loss condition types.
         if ( std::find( supportedVictoryConditions.begin(), supportedVictoryConditions.end(), mapFormat.victoryConditionType ) == supportedVictoryConditions.end() ) {
@@ -2097,7 +2102,8 @@ namespace Editor
         fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+        text.fitToOneRow( mapNameRoi.width );
         text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
         // Players setting (AI or human).
@@ -2172,7 +2178,7 @@ namespace Editor
         background.applyTextBackgroundShading( { descriptionTextRoi.x - 6, descriptionTextRoi.y - 6, descriptionTextRoi.width + 12, descriptionTextRoi.height + 12 } );
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
 
-        text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+        text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
         // Victory conditions.
@@ -2237,40 +2243,70 @@ namespace Editor
         fheroes2::Button buttonCancel;
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
-        const fheroes2::Rect buttonCancelRoi( buttonCancel.area() );
 
         fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancelRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
-        const fheroes2::Rect buttonOkRoi( buttonOk.area() );
+        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
-        fheroes2::Button buttonRumors;
-        const int buttonRumorsIcn = isEvilInterface ? ICN::BUTTON_RUMORS_EVIL : ICN::BUTTON_RUMORS_GOOD;
-        background.renderButton( buttonRumors, buttonRumorsIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
-        const fheroes2::Rect buttonRumorsRoi( buttonRumors.area() );
+        fheroes2::ButtonSprite buttonRumors;
+        const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RUMORS" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonRumors, translatedText, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
-        fheroes2::Button buttonEvents;
-        const int buttonEventsIcn = isEvilInterface ? ICN::BUTTON_EVENTS_EVIL : ICN::BUTTON_EVENTS_GOOD;
-        background.renderButton( buttonEvents, buttonEventsIcn, 0, 1, { 20 + buttonRumorsRoi.width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
-        const fheroes2::Rect buttonEventsRoi( buttonEvents.area() );
+        fheroes2::ButtonSprite buttonEvents;
+        translatedText = fheroes2::getSupportedText( gettext_noop( "EVENTS" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonEvents, translatedText, { 20 + buttonRumors.area().width + 10, 6 },
+                                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+
+        fheroes2::ButtonSprite buttonLanguage;
+        translatedText = fheroes2::getSupportedText( gettext_noop( "LANGUAGE" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonLanguage, translatedText, { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
+                                                  fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+
+        auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
+            text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+            fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+            text.fitToOneRow( mapNameRoi.width );
+            text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
+        };
+
+        auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
+            text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+
+            // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
+            if ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
+                    Dialog::OK );
+
+                // As a temporary solution we cut the end of the text to fit 5 rows.
+                while ( text.rows( descriptionTextRoi.width ) > 5 ) {
+                    mapFormat.description.pop_back();
+                    text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+                }
+            }
+
+            descriptionBackground.restore();
+            text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+        };
 
         LocalEvent & le = LocalEvent::Get();
 
         display.render( background.totalArea() );
 
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkRoi ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancelRoi ) );
-            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumorsRoi ) );
-            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEventsRoi ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumors.area() ) );
+            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEvents.area() ) );
+            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguage.area() ) );
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelRoi ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkRoi ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 break;
             }
 
@@ -2282,32 +2318,51 @@ namespace Editor
                 lossConditionUI.render( display, false );
                 display.render( lossConditionUIRoi );
             }
-            else if ( le.MouseClickLeft( buttonRumorsRoi ) ) {
+            else if ( le.MouseClickLeft( buttonRumors.area() ) ) {
                 auto temp = mapFormat.rumors;
-                if ( openRumorWindow( temp ) ) {
+                if ( openRumorWindow( temp, mapFormat.mainLanguage ) ) {
                     mapFormat.rumors = std::move( temp );
                 }
 
                 display.render( background.totalArea() );
             }
-            else if ( le.MouseClickLeft( buttonEventsRoi ) ) {
+            else if ( le.MouseClickLeft( buttonEvents.area() ) ) {
                 auto temp = mapFormat.dailyEvents;
-                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors ) ) {
+                if ( openDailyEventsWindow( temp, mapFormat.humanPlayerColors, mapFormat.computerPlayerColors, mapFormat.mainLanguage ) ) {
                     mapFormat.dailyEvents = std::move( temp );
                 }
 
                 display.render( background.totalArea() );
             }
+            else if ( le.MouseClickLeft( buttonLanguage.area() ) ) {
+                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+                const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
+                if ( language != mapFormat.mainLanguage ) {
+                    std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
+                                                              "Some texts might not be displayed properly after this. Do you want to proceed?" );
+                    StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
+                    StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
+
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                        mapFormat.mainLanguage = language;
+
+                        renderMapName();
+                        renderMapDescription();
+
+                        display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
+                    }
+                }
+            }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
 
                 std::string editableMapName = mapFormat.name;
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, maxMapNameLength, false, true ) ) {
-                    mapFormat.name = std::move( editableMapName );
-                    text.set( mapFormat.name, fheroes2::FontType::normalWhite() );
-                    fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
-                    text.drawInRoi( mapNameRoi.x, mapNameRoi.y + 3, mapNameRoi.width, display, mapNameRoi );
 
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, mapFormat.mainLanguage ) ) {
+                    mapFormat.name = std::move( editableMapName );
+
+                    renderMapName();
                     display.render( scenarioBoxRoi );
                 }
             }
@@ -2315,27 +2370,13 @@ namespace Editor
                 // TODO: Edit texts directly in this dialog.
                 // TODO: Limit description to 5 text lines.
 
-                std::string signText = mapFormat.description;
-                if ( Dialog::inputString( _( "Change Map Description" ), signText, {}, 150, true, true ) ) {
-                    mapFormat.description = std::move( signText );
+                std::string descripton = mapFormat.description;
 
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true, mapFormat.mainLanguage ) ) {
+                    mapFormat.description = std::move( descripton );
 
-                    // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
-                    if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                        fheroes2::showStandardTextMessage(
-                            _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                            Dialog::OK );
-
-                        // As a temporary solution we cut the end of the text to fit 5 rows.
-                        while ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                            mapFormat.description.pop_back();
-                            text.set( mapFormat.description, fheroes2::FontType::normalWhite() );
-                        }
-                    }
-
-                    descriptionBackground.restore();
-                    text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
+                    renderMapDescription();
                     display.render( descriptionTextRoi );
                 }
             }
@@ -2373,20 +2414,29 @@ namespace Editor
 
                 display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCancelRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonOkRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonRumorsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonRumors.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Rumors" ), _( "Click to edit custom rumors." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonEventsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonEvents.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Events" ), _( "Click to edit daily events." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonLanguage.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::MultiFontText message;
+                message.add( fheroes2::Text{ "\"", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage } );
+                message.add( fheroes2::Text{ "\"\n\n", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ _( "Click to change your map name." ), fheroes2::FontType::normalWhite() } );
+
+                fheroes2::showMessage( fheroes2::Text{ _( "Map Name" ), fheroes2::FontType::normalYellow() }, message, Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( descriptionTextRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Map Description" ), _( "Click to change the description of the current map." ), Dialog::ZERO );

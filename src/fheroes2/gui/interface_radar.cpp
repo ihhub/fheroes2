@@ -171,9 +171,9 @@ void Interface::Radar::SavePosition()
     conf.Save( Settings::configFileName );
 }
 
-void Interface::Radar::SetPos( int32_t ox, int32_t oy )
+void Interface::Radar::SetPos( int32_t x, int32_t y )
 {
-    BorderWindow::SetPosition( ox, oy );
+    BorderWindow::SetPosition( x, y );
 }
 
 void Interface::Radar::Build()
@@ -321,12 +321,12 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
         }
 
         for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Maps::Tile & tile = world.getTile( x, y );
             const bool visibleTile = revealAll || !tile.isFog( playerColor );
 
             uint8_t fillColor = 0;
 
-            const MP2::MapObjectType objectType = tile.GetObject( revealOnlyVisible || revealHeroes );
+            const MP2::MapObjectType objectType = tile.getMainObjectType( revealOnlyVisible || revealHeroes );
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
                 if ( visibleTile || revealHeroes ) {
@@ -354,7 +354,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_NON_ACTION_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
                         fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( mainTileIndex ) );
                         break;
@@ -462,41 +462,40 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* = nu
 
 void Interface::Radar::QueueEventProcessing()
 {
-    const Settings & conf = Settings::Get();
-    LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Rect & rect = GetArea();
-    const fheroes2::Rect & borderArea = GetRect();
+    captureMouse();
 
-    if ( !le.isMouseCursorPosInArea( borderArea ) || le.isMouseCursorPosInArea( rect ) ) {
-        _mouseDraggingMovement = false;
-    }
-
-    // Move border window
-    if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
+    // Move the window border
+    if ( Settings::Get().ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
         _interface.setRedraw( REDRAW_RADAR_CURSOR );
-    }
-    else if ( le.isMouseCursorPosInArea( rect ) ) {
-        // move cursor
-        if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
-            _mouseDraggingMovement = true;
-            const fheroes2::Point & pt = le.getMouseCursorPos();
 
-            if ( rect & pt ) {
-                GameArea & gamearea = _interface.getGameArea();
-                fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
-                const fheroes2::Point prev( visibleROI.x, visibleROI.y );
-                gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
-                visibleROI = gamearea.GetVisibleTileROI();
-                if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    _interface.setRedraw( REDRAW_RADAR_CURSOR );
-                    gamearea.SetRedraw();
-                }
+        return;
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+    const fheroes2::Rect & rect = GetArea();
+
+    if ( !le.isMouseCursorPosInArea( rect ) ) {
+        return;
+    }
+
+    if ( le.MouseClickLeft( rect ) || le.isMouseLeftButtonPressedInArea( rect ) ) {
+        const fheroes2::Point & pt = le.getMouseCursorPos();
+
+        if ( rect & pt ) {
+            GameArea & gamearea = _interface.getGameArea();
+            fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
+            const fheroes2::Point prev( visibleROI.x, visibleROI.y );
+            gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
+            visibleROI = gamearea.GetVisibleTileROI();
+            if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
+                _interface.setRedraw( REDRAW_RADAR_CURSOR );
+                gamearea.SetRedraw();
             }
         }
-        else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
-            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
-        }
+    }
+    else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
+        fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
     }
 }
 

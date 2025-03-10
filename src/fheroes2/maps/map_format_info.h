@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -225,7 +225,7 @@ namespace Maps::Map_Format
 
         int32_t experience{ 0 };
 
-        int8_t secondarySkill{ 0 };
+        uint8_t secondarySkill{ 0 };
         uint8_t secondarySkillLevel{ 0 };
 
         int32_t monsterType{ 0 };
@@ -248,9 +248,9 @@ namespace Maps::Map_Format
         }
     };
 
-    struct ShrineMetadata
+    struct SelectionObjectMetadata
     {
-        std::vector<int32_t> allowedSpells;
+        std::vector<int32_t> selectedItems;
     };
 
     struct DailyEvent
@@ -298,7 +298,8 @@ namespace Maps::Map_Format
         // The world width in tiles. It is equal to the world height since currently all maps are square maps.
         int32_t size{ 0 };
 
-        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
+        // This is the main language of the map. At the moment only one language is being supported.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;
@@ -328,7 +329,7 @@ namespace Maps::Map_Format
 
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
-        std::map<uint32_t, ShrineMetadata> shrineMetadata;
+        std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

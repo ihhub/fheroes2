@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,8 @@
 
 #include "math_base.h"
 
+enum class InterfaceType : uint8_t;
+
 namespace fheroes2
 {
     enum UiOptionTextWidth : int32_t
@@ -36,4 +38,10 @@ namespace fheroes2
     class Sprite;
 
     void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText, const int32_t textMaxWidth );
+
+    void drawScrollSpeed( const fheroes2::Rect & optionRoi, const int speed );
+
+    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType );
+
+    void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor );
 }

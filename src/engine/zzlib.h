@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ZLIB_H
-#define H2ZLIB_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -52,9 +51,7 @@ namespace Compression
     // Zips the contents of the buffer from the current read position to the end of the buffer and writes
     // it to the given output stream. The current read position of the buffer does not change. Returns
     // true on success and false on error.
-    bool zipStreamBuf( IStreamBuf & inputStream, OStreamBase & outputStream );
+    bool zipStreamBuf( const IStreamBuf & inputStream, OStreamBase & outputStream );
 
     fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
 }
-
-#endif

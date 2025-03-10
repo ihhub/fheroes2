@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMEOVER_H
-#define H2GAMEOVER_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -34,7 +33,7 @@ class OStreamBase;
 
 namespace GameOver
 {
-    enum conditions_t : uint32_t
+    enum : uint32_t
     {
         COND_NONE = 0x00000000,
 
@@ -95,5 +94,3 @@ namespace GameOver
     OStreamBase & operator<<( OStreamBase & stream, const Result & res );
     IStreamBase & operator>>( IStreamBase & stream, Result & res );
 }
-
-#endif

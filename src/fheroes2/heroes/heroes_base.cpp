@@ -536,8 +536,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
-            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-            const MP2::MapObjectType object = tile.GetObject( false );
+            const Maps::Tile & tile = world.getTile( hero->GetIndex() );
+            const MP2::MapObjectType object = tile.getMainObjectType( false );
 
             if ( MP2::OBJ_MINE != object ) {
                 if ( res != nullptr ) {
@@ -593,8 +593,6 @@ OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero )
 
 IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero )
 {
-    stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
-        >> hero.bag_artifacts;
-
-    return stream;
+    return stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
+           >> hero.bag_artifacts;
 }

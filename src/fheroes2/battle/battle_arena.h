@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ARENA_H
-#define H2BATTLE_ARENA_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -105,9 +104,9 @@ namespace Battle
         void Turns();
         bool BattleValid() const;
 
-        bool AutoBattleInProgress() const;
-        bool EnemyOfAIHasAutoBattleInProgress() const;
-        bool CanToggleAutoBattle() const;
+        bool AutoCombatInProgress() const;
+        bool EnemyOfAIHasAutoCombatInProgress() const;
+        bool CanToggleAutoCombat() const;
 
         uint32_t GetTurnNumber() const
         {
@@ -142,7 +141,7 @@ namespace Battle
         Unit * GetTroopUID( uint32_t );
         const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells() const;
+        const SpellStorage & GetUsedSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
         int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
@@ -203,10 +202,21 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
-        bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
-        const Unit * GraveyardLastTroop( const int32_t index ) const;
-        std::vector<const Unit *> GetGraveyardTroops( const int32_t index ) const;
-        Indexes GraveyardOccupiedCells() const;
+        bool isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const;
+
+        Indexes getCellsOccupiedByGraveyard() const;
+        std::vector<const Unit *> getGraveyardUnits( const int32_t index ) const;
+
+        // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
+        const Unit * getLastUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be potentially affected by any resurrection
+        // spell during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
+        // during the current turn, or nullptr if there is no such unit.
+        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -274,8 +284,8 @@ namespace Battle
         void ApplyActionSpellCast( Command & cmd );
         void ApplyActionTower( Command & cmd );
         void ApplyActionCatapult( Command & cmd );
-        void ApplyActionAutoSwitch( Command & cmd );
-        void ApplyActionAutoFinish( const Command & cmd );
+        void ApplyActionToggleAutoCombat( Command & cmd );
+        void ApplyActionQuickCombat( const Command & cmd );
 
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
@@ -325,16 +335,16 @@ namespace Battle
         std::unique_ptr<Interface> _interface;
         Result result_game;
 
-        Graveyard graveyard;
-        SpellStorage usage_spells;
+        Graveyard _graveyard;
+        SpellStorage _usedSpells;
 
         Board board;
         BattlePathfinder _battlePathfinder;
         int _covrIcnId{ ICN::UNKNOWN };
 
         uint32_t _turnNumber{ 0 };
-        // A set of colors of players for whom the auto-battle mode is enabled
-        int _autoBattleColors{ 0 };
+        // A set of colors of players for whom the auto combat mode is enabled
+        int _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
@@ -353,5 +363,3 @@ namespace Battle
 
     Arena * GetArena();
 }
-
-#endif

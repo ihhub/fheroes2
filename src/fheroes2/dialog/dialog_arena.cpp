@@ -169,7 +169,7 @@ int Dialog::SelectSkillFromArena()
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -66,6 +66,8 @@
 
 namespace
 {
+    const int32_t dialogHeightDeduction = 150;
+
     // Returns the town type according the given player color, race and castle/town state.
     int getPackedTownType( const int townRace, const bool isCastle )
     {
@@ -668,7 +670,7 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
-    const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 200 );
+    const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - dialogHeightDeduction );
     const int32_t itemsHeight = std::max( 100 + SelectKingdomCastle::itemsOffsetY * static_cast<int32_t>( castles.size() ), 100 + SelectKingdomCastle::itemsOffsetY * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
@@ -729,7 +731,7 @@ namespace Dialog
         setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
 
         // Render dialog buttons.
-        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel, isEvilInterface );
+        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
     }
 
     void ItemSelectionWindow::updateScrollBarImage()
@@ -823,7 +825,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
         }
     }
 
-    SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Skill:" ) );
+    SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Skill:" ) );
 
     listbox.SetListContent( skills );
     if ( skillId != Skill::Secondary::UNKNOWN ) {
@@ -851,7 +853,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
         }
     }
 
-    SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - 200 }, _( "Select Spell:" ) );
+    SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Spell:" ) );
 
     listbox.SetListContent( spells );
     if ( spellId != Spell::NONE ) {
@@ -900,7 +902,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
         artifacts.emplace_back( id );
     }
 
-    SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
+    SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     listbox.SetListContent( artifacts );
     if ( artifactId != Artifact::UNKNOWN ) {
@@ -920,7 +922,7 @@ Monster Dialog::selectMonster( const int monsterId )
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
-    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
     listbox.SetListContent( monsters );
     if ( monsterId != Monster::UNKNOWN ) {
@@ -941,7 +943,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
-    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
+    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Hero:" ) );
 
     listbox.SetListContent( heroes );
     if ( heroId != Heroes::UNKNOWN ) {
@@ -1025,12 +1027,10 @@ int Dialog::selectHeroType( const int heroType )
     pos.x = area.x + area.width / 2;
     pos.y += 175;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     fheroes2::Rect heroRoi;
@@ -1055,8 +1055,8 @@ int Dialog::selectHeroType( const int heroType )
     }
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return heroColor * 7 + heroRace;
@@ -1135,7 +1135,7 @@ int Dialog::selectMonsterType( const int monsterType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
-    MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
     return selectObjectType( monsterType, objectInfo.size(), listbox );
 }
@@ -1144,7 +1144,7 @@ int Dialog::selectArtifactType( const int artifactType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
 
-    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
+    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     return selectObjectType( artifactType, objectInfo.size(), listbox );
 }
@@ -1153,7 +1153,7 @@ int Dialog::selectTreasureType( const int resourceType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
 
-    TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Treasure:" ) );
+    TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Treasure:" ) );
 
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
@@ -1162,7 +1162,7 @@ int Dialog::selectOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
-    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Ocean Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
@@ -1171,7 +1171,7 @@ int Dialog::selectLandscapeOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_WATER );
 
-    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Ocean Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
@@ -1256,18 +1256,22 @@ void Dialog::selectTownType( int & type, int & color )
     pos.x = area.x + area.width / 2;
     pos.y += 260;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    fheroes2::Button buttonTown;
-    fheroes2::Button buttonCastle;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { -50, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
+    const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
+    fheroes2::Button buttonTown{ 0, 0, townButtonIcnId, 0, 1 };
+    fheroes2::Button buttonCastle{ 0, 0, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1 };
+
+    const fheroes2::Point buttonOffset{ area.x + ( area.width - townButtonImage.width() ) / 2, area.y + area.height - townButtonImage.height() - 7 };
+    buttonTown.setPosition( buttonOffset.x, buttonOffset.y );
+    buttonCastle.setPosition( buttonOffset.x, buttonOffset.y );
+    fheroes2::addGradientShadow( townButtonImage, display, buttonOffset, { -5, 5 } );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
@@ -1288,11 +1292,20 @@ void Dialog::selectTownType( int & type, int & color )
         townColor = color;
     }
 
-    isCastle ? buttonCastle.drawOnPress() : buttonTown.drawOnPress();
+    if ( isCastle ) {
+        buttonCastle.disable();
+        buttonTown.enable();
+        buttonTown.draw();
+    }
+    else {
+        buttonCastle.enable();
+        buttonTown.disable();
+        buttonCastle.draw();
+    }
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
             if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
@@ -1336,10 +1349,10 @@ void Dialog::selectTownType( int & type, int & color )
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
+        else if ( buttonTown.isEnabled() && le.isMouseRightButtonPressedInArea( buttonTown.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Town" ), _( "Click to select town placing." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
+        else if ( buttonCastle.isEnabled() && le.isMouseRightButtonPressedInArea( buttonCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Castle" ), _( "Click to select castle placing." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( castleRoi ) ) {
@@ -1378,6 +1391,17 @@ void Dialog::selectTownType( int & type, int & color )
         }
 
         castleBackground.restore();
+
+        if ( isCastle ) {
+            buttonCastle.disable();
+            buttonTown.enable();
+            buttonTown.draw();
+        }
+        else {
+            buttonCastle.enable();
+            buttonTown.disable();
+            buttonCastle.draw();
+        }
 
         // Update town image.
         const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( getPackedTownType( townRace, isCastle ), townColor, basementGround );
@@ -1474,7 +1498,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     uint32_t selectedResourceType = 0;
 
     const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-    if ( type > 0 ) {
+    if ( type >= 0 ) {
         assert( static_cast<size_t>( type ) < allObjectInfo.size() );
 
         if ( allObjectInfo[type].objectType == MP2::OBJ_ABANDONED_MINE ) {
@@ -1633,15 +1657,15 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     display.render( background.totalArea() );
 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         bool needRedraw = listbox.QueueEventProcessing();
 

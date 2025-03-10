@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ARMY_H
-#define H2BATTLE_ARMY_H
+#pragma once
 
 #include <cassert>
 #include <cstdint>
@@ -94,8 +93,8 @@ namespace Battle
                     };
                 }
                 else {
-                    // The build will fail because this lambda does not meet the requirements of UnaryPredicate
-                    return []() {};
+                    // The build should fail because this lambda does not meet the requirements of UnaryPredicate
+                    return []() { assert( 0 ); };
                 }
             };
 
@@ -108,8 +107,8 @@ namespace Battle
 
         Units & operator=( const Units & ) = delete;
 
-        Unit * FindMode( uint32_t mod ) const;
-        Unit * FindUID( uint32_t pid ) const;
+        Unit * FindMode( const uint32_t mod ) const;
+        Unit * FindUID( const uint32_t uid ) const;
 
         void SortFastest();
     };
@@ -118,6 +117,7 @@ namespace Battle
     {
     public:
         Force( Army & parent, bool opposite, TroopsUidGenerator & generator );
+
         Force( const Force & ) = delete;
 
         ~Force() override;
@@ -154,5 +154,3 @@ namespace Battle
         std::vector<uint32_t> uids;
     };
 }
-
-#endif

@@ -27,7 +27,13 @@ namespace Maps::Map_Format
     struct DailyEvent;
 }
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors );
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                         const fheroes2::SupportedLanguage language );
 }

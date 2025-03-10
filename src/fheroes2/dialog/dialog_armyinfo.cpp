@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -519,69 +520,67 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + fheroes2::shadowWidthPx, sprite_dialog.width(), sprite_dialog.height() - 2 * fheroes2::shadowWidthPx );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
-    const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
-    fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 192;
-    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
-
-    const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
-
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
     const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
     const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
-    dst_pt.x = pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
-
-    if ( ( flags & ( BUTTONS | UPGRADE ) ) == ( BUTTONS | UPGRADE ) ) {
-        buttonUpgrade.enable();
-        buttonUpgrade.draw();
-    }
-    else {
-        buttonUpgrade.disable();
-    }
-
-    if ( ( flags & ( BUTTONS | DISMISS ) ) == ( BUTTONS | DISMISS ) ) {
-        buttonDismiss.enable();
-        buttonDismiss.draw();
-    }
-    else {
-        buttonDismiss.disable();
-    }
-
-    if ( flags & BUTTONS ) {
-        buttonExit.draw();
-    }
+    fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     LocalEvent & le = LocalEvent::Get();
+
+    if ( !( flags & BUTTONS ) ) {
+        // This is a case when this dialog was called by the right mouse button press.
+
+        display.render( restorer.rect() );
+
+        while ( le.HandleEvents( true ) ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
+        }
+
+        return Dialog::ZERO;
+    }
+
+    std::unique_ptr<fheroes2::Button> buttonUpgrade;
+    std::unique_ptr<fheroes2::Button> buttonDismiss;
+
+    if ( flags & UPGRADE ) {
+        const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
+        const fheroes2::Point upgradeButtonPosition{ pos_rt.x + 280, pos_rt.y + 192 };
+        buttonUpgrade = std::make_unique<fheroes2::Button>( upgradeButtonPosition.x, upgradeButtonPosition.y, upgradeButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( upgradeButtonIcnID, 0 ), display, upgradeButtonPosition, { -5, 5 } );
+
+        buttonUpgrade->draw();
+    }
+
+    if ( flags & DISMISS ) {
+        const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
+        const fheroes2::Point dismissButtonPosition{ pos_rt.x + 280, pos_rt.y + 221 };
+        buttonDismiss = std::make_unique<fheroes2::Button>( dismissButtonPosition.x, dismissButtonPosition.y, dismissButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( dismissButtonIcnID, 0 ), display, dismissButtonPosition, { -5, 5 } );
+
+        buttonDismiss->draw();
+    }
+
+    buttonExit.draw();
+
     int result = Dialog::ZERO;
 
     display.render( restorer.rect() );
 
-    while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
-        if ( !( flags & BUTTONS ) ) {
-            if ( !le.isMouseRightButtonPressed() ) {
-                break;
-            }
-
-            continue;
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
+        if ( buttonUpgrade ) {
+            buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedInArea( buttonUpgrade->area() ) );
         }
 
-        if ( buttonUpgrade.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
+        if ( buttonDismiss ) {
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) );
         }
 
-        if ( buttonDismiss.isEnabled() ) {
-            le.isMouseLeftButtonPressedInArea( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
-        }
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-
-        if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+        if ( buttonUpgrade && ( le.MouseClickLeft( buttonUpgrade->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
             // If this assertion blows up then you are executing this code for a monster which has no upgrades.
             assert( troop.isAllowUpgrade() );
 
@@ -600,7 +599,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             }
         }
 
-        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
+        if ( buttonDismiss && ( le.MouseClickLeft( buttonDismiss->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
                     == fheroes2::showStandardTextMessage( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ),
                                                           Dialog::YES | Dialog::NO ) ) {
@@ -616,10 +615,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
-        else if ( buttonUpgrade.isEnabled() && le.isMouseRightButtonPressedInArea( buttonUpgrade.area() ) ) {
+        else if ( buttonUpgrade && le.isMouseRightButtonPressedInArea( buttonUpgrade->area() ) ) {
             fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
         }
-        else if ( buttonDismiss.isEnabled() && le.isMouseRightButtonPressedInArea( buttonDismiss.area() ) ) {
+        else if ( buttonDismiss && le.isMouseRightButtonPressedInArea( buttonDismiss->area() ) ) {
             fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
         }
 
@@ -631,6 +630,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         }
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            // TODO: Only redraw the half of the window containing the creature. Note that fire-breathing creatures spew fire into the other half,
+            // so the animation has to be changed to only walking animation. Also their walking animation overlaps with the creature name.
             fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
             DrawMonsterStats( monsterStatOffset, troop );
@@ -641,16 +642,19 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
             DrawMonsterInfo( pos_rt.getPosition(), troop );
             DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
-
-            if ( buttonUpgrade.isEnabled() ) {
-                buttonUpgrade.draw();
+            // TODO: Remove these extra shadow drawings once the dialog has been reworked and proper restorers are in place.
+            if ( buttonUpgrade ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_UPGRADE_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 192 }, { -5, 5 } );
+                buttonUpgrade->draw();
             }
 
-            if ( buttonDismiss.isEnabled() ) {
-                buttonDismiss.draw();
+            if ( buttonDismiss ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_DISMISS_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 221 }, { -5, 5 } );
+                buttonDismiss->draw();
             }
 
             if ( buttonExit.isEnabled() ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
                 buttonExit.draw();
             }
 

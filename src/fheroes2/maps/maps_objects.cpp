@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,17 +25,21 @@
 
 #include <algorithm>
 #include <cassert>
+#include <optional>
 #include <ostream>
 #include <vector>
 
 #include "color.h"
 #include "game_io.h"
 #include "logging.h"
+#include "mp2.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
+#include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 
 void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )
 {
@@ -119,7 +123,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     artifact = dataStream.getLE16() + 1;
 
     // The event applies to AI players as well.
-    computer = ( dataStream.get() != 0 );
+    isComputerPlayerAllowed = ( dataStream.get() != 0 );
 
     // Does event occur only once?
     isSingleTimeEvent = ( dataStream.get() != 0 );
@@ -152,7 +156,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
         colors |= Color::PURPLE;
     }
 
-    message = dataStream.toString();
+    message = dataStream.getString();
 
     setUIDAndIndex( index );
 
@@ -245,7 +249,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     // Get all possible answers.
     for ( uint32_t i = 0; i < 8; ++i ) {
-        std::string answer = dataStream.toString( 13 );
+        const std::string answer = dataStream.getString( 13 );
 
         if ( answerCount > 0 ) {
             --answerCount;
@@ -255,7 +259,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         }
     }
 
-    riddle = dataStream.toString();
+    riddle = dataStream.getString();
     if ( riddle.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
@@ -297,51 +301,76 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
 
     ROStreamBuf dataStream( data );
     dataStream.skip( 9 );
-    message = dataStream.toString();
+    message.text = dataStream.getString();
 
-    if ( message.empty() ) {
+    if ( message.text.empty() ) {
         setDefaultMessage();
     }
 
     setUIDAndIndex( mapIndex );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message.text )
 }
 
 void MapSign::setDefaultMessage()
 {
+    message.language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+
+    // This container must not be static as it depends on an in-game language.
     const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
-    message = Rand::Get( randomMessage );
+    message.text = Rand::Get( randomMessage );
 }
 
-OStreamBase & operator<<( OStreamBase & stream, const MapObjectSimple & obj )
+OStreamBase & operator<<( OStreamBase & stream, const MapBaseObject & obj )
 {
-    return stream << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
+    return stream << static_cast<const MapPosition &>( obj ) << obj.uid;
 }
 
-IStreamBase & operator>>( IStreamBase & stream, MapObjectSimple & obj )
+IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj )
 {
-    return stream >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
+        int dummy;
+
+        stream >> dummy >> obj.uid >> static_cast<MapPosition &>( obj );
+    }
+    else {
+        stream >> static_cast<MapPosition &>( obj ) >> obj.uid;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.isSingleTimeEvent << obj.colors << obj.message;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.resources << obj.artifact << obj.isComputerPlayerAllowed << obj.isSingleTimeEvent << obj.colors
+                  << obj.message << obj.secondarySkill << obj.experience;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
-    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
+        obj.secondarySkill = {};
+        obj.experience = 0;
+    }
+    else {
+        stream >> obj.secondarySkill >> obj.experience;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.riddle << obj.valid << obj.isTruncatedAnswer;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 {
-    stream >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
@@ -356,10 +385,21 @@ IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 
 OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj )
 {
-    return stream << static_cast<const MapObjectSimple &>( obj ) << obj.message;
+    return stream << static_cast<const MapBaseObject &>( obj ) << obj.message;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 {
-    return stream >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1107_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1107_RELEASE ) {
+        stream >> obj.message.text;
+        obj.message.language = {};
+    }
+    else {
+        stream >> obj.message;
+    }
+
+    return stream;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,11 +33,11 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game_delays.h"
-#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -53,21 +53,27 @@
 
 namespace
 {
-    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, const int32_t currentValue, const int32_t minimumValue )
+    bool SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, const int32_t currentValue, const int32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
+
+        if ( ( isMinValue && minButton.isHidden() && maxButton.isVisible() ) || ( !isMinValue && minButton.isVisible() && maxButton.isHidden() ) ) {
+            // The MIN/MAX buttons switch is not needed.
+            return false;
+        }
 
         if ( isMinValue ) {
             minButton.hide();
             maxButton.show();
+            maxButton.draw();
         }
         else {
-            minButton.show();
             maxButton.hide();
+            minButton.show();
+            minButton.draw();
         }
 
-        minButton.draw();
-        maxButton.draw();
+        return true;
     }
 }
 
@@ -97,7 +103,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     }
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{ windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
+    const fheroes2::Rect selectionBoxArea{ windowArea.x + 38, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
                                            valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
@@ -107,10 +113,14 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const fheroes2::Text mainText( _( "MAX" ), fheroes2::FontType::smallWhite() );
-    const int32_t maxAreaOffsetY{ ( 26 - mainText.height() ) / 2 };
-    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + uiHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
-    mainText.draw( rectMax.x, rectMax.y + 2, display );
+    const fheroes2::Point minMaxButtonOffset( selectionBoxArea.x + selectionBoxArea.width + 6, selectionBoxArea.y );
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
+
+    const fheroes2::Rect interactionElementsRect( fheroes2::getBoundaryRect( fheroes2::getBoundaryRect( buttonMin.area(), buttonMax.area() ), selectionBoxArea ) );
+
+    SwitchMaxMinButtons( buttonMin, buttonMax, selectedValue, min );
 
     display.render();
 
@@ -120,21 +130,33 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     LocalEvent & le = LocalEvent::Get();
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        bool redraw_count = false;
+        bool needRedraw = false;
+
+        if ( buttonMax.isVisible() ) {
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+        }
+
+        if ( buttonMin.isVisible() ) {
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
+        }
 
         if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
             valueSelectionElement.setValue( selectedValue );
-            redraw_count = true;
+            needRedraw = true;
         }
-
-        if ( le.MouseClickLeft( rectMax ) ) {
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
+            selectedValue = max;
             valueSelectionElement.setValue( max );
-            redraw_count = true;
+            needRedraw = true;
         }
-
-        if ( valueSelectionElement.processEvents() ) {
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
+            selectedValue = min;
+            valueSelectionElement.setValue( min );
+            needRedraw = true;
+        }
+        else if ( valueSelectionElement.processEvents() ) {
             selectedValue = valueSelectionElement.getValue();
-            redraw_count = true;
+            needRedraw = true;
         }
 
         if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
@@ -142,9 +164,10 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             display.render();
         }
 
-        if ( redraw_count ) {
+        if ( needRedraw ) {
+            const bool redrawMinMax = SwitchMaxMinButtons( buttonMin, buttonMax, valueSelectionElement.getValue(), min );
             valueSelectionElement.draw( display );
-            display.render( selectionBoxArea );
+            display.render( redrawMinMax ? interactionElementsRect : selectionBoxArea );
         }
 
         result = btnGroups.processEvents();
@@ -155,8 +178,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     return result == Dialog::OK;
 }
 
-bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine,
-                          const bool englishOnlyVirtualKeyboard )
+bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
+                          const std::optional<fheroes2::SupportedLanguage> & textLanguage )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -168,12 +191,9 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     const bool hasTitle = !title.empty();
 
-    const fheroes2::Text titlebox( std::move( title ), fheroes2::FontType::normalYellow() );
-    const fheroes2::Text textbox( std::move( header ), fheroes2::FontType::normalWhite() );
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const int32_t titleHeight = hasTitle ? titlebox.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
+    const int32_t titleHeight = hasTitle ? title.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
     const int32_t keyBoardButtonExtraHeight = 20;
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
@@ -181,7 +201,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
-    const int32_t textboxHeight = textbox.height( fheroes2::boxAreaWidthPx );
+    const int32_t textboxHeight = body.height( fheroes2::boxAreaWidthPx );
 
     const int32_t frameBoxHeight = 10 + titleHeight + textboxHeight + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
     const FrameBox box( frameBoxHeight, true );
@@ -189,11 +209,11 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     // Title text.
     if ( hasTitle ) {
-        titlebox.draw( frameBoxArea.x, frameBoxArea.y + 12, fheroes2::boxAreaWidthPx, display );
+        title.draw( frameBoxArea.x, frameBoxArea.y + 12, fheroes2::boxAreaWidthPx, display );
     }
 
     // Header text.
-    textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, fheroes2::boxAreaWidthPx, display );
+    body.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, fheroes2::boxAreaWidthPx, display );
 
     fheroes2::Point dst_pt{ frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2, frameBoxArea.y + 10 + titleHeight + textboxHeight + 10 };
 
@@ -213,9 +233,10 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     bool isCursorVisible = true;
     const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
-    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
+    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
+    text.keepLineTrailingSpaces();
     if ( !isMultiLine ) {
-        text.fitToOneRow( textInputArea.width, false );
+        text.fitToOneRow( textInputArea.width );
     }
     text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
 
@@ -235,11 +256,11 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     // Generate a button to open the Virtual Keyboard window.
     fheroes2::Sprite releasedVirtualKB;
     fheroes2::Sprite pressedVirtualKB;
-    const int32_t buttonVirtualKBWidth = 40;
+    const fheroes2::Size buttonVirtualKBSize{ 40, 25 };
 
-    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBWidth, isEvilInterface, true );
+    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBSize, isEvilInterface, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
     // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
-    fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y - 30,
+    fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBSize.width - 10 ) / 2, dst_pt.y - 30,
                                                                        releasedVirtualKB, pressedVirtualKB, display );
 
     if ( result.empty() ) {
@@ -255,6 +276,9 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
     display.render();
 
+    // We add extra 4 pixels to the click area width to help setting the cursor at the end of the line if it is fully filled with text characters.
+    const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
+
     LocalEvent & le = LocalEvent::Get();
 
     Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
@@ -264,7 +288,10 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
         bool redraw = false;
 
-        buttonOk.drawOnState( buttonOk.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        if ( buttonOk.isEnabled() ) {
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        }
+
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
         buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
 
@@ -278,14 +305,13 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             return false;
         }
 
-        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
-            // TODO: remove this logic once the Editor is ready to support other languages.
-            if ( englishOnlyVirtualKeyboard ) {
-                const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                fheroes2::openVirtualKeyboard( result );
+        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textEditClickArea ) ) ) {
+            if ( textLanguage.has_value() ) {
+                const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
+                fheroes2::openVirtualKeyboard( result, charLimit );
             }
             else {
-                fheroes2::openVirtualKeyboard( result );
+                fheroes2::openVirtualKeyboard( result, charLimit );
             }
 
             if ( charLimit > 0 && result.size() > charLimit ) {
@@ -305,8 +331,14 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             }
             redraw = true;
         }
-        else if ( le.MouseClickLeft( textInputArea ) ) {
-            charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
+        else if ( le.MouseClickLeft( textEditClickArea ) ) {
+            if ( textLanguage.has_value() ) {
+                const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
+                charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
+            }
+            else {
+                charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
+            }
 
             redraw = true;
         }
@@ -342,10 +374,10 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
+            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
 
             if ( !isMultiLine ) {
-                text.fitToOneRow( textInputArea.width, false );
+                text.fitToOneRow( textInputArea.width );
             }
 
             textBackground.restore();
@@ -445,7 +477,6 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
-    const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMin );
 
     LocalEvent & le = LocalEvent::Get();
@@ -458,11 +489,11 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
         bool redraw_count = false;
 
         if ( buttonMax.isVisible() ) {
-            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
         }
 
         if ( buttonMin.isVisible() ) {
-            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
         if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
@@ -470,13 +501,11 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             redraw_count = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
-            le.isMouseLeftButtonPressedInArea( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
             redistributeCount = redistributeMax;
             valueSelectionElement.setValue( redistributeMax );
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
-            le.isMouseLeftButtonPressedInArea( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
             redistributeCount = redistributeMin;
             valueSelectionElement.setValue( redistributeMin );
             redraw_count = true;
@@ -491,7 +520,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
                 if ( le.MouseClickLeft( *it ) ) {
                     ssp.setPosition( it->x, it->y );
                     ssp.show();
-                    display.render();
+                    display.render( pos );
                 }
             }
         }
@@ -511,7 +540,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
                 buttonMin.draw();
             }
 
-            display.render();
+            display.render( pos );
         }
 
         bres = btnGroups.processEvents();

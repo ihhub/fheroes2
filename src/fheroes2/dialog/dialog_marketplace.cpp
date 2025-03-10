@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -91,7 +91,7 @@ namespace
             const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
             const int tradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD;
-            const int giftButtonIcnID = isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD;
+            const int giftButtonIcnID = isEvilInterface ? ICN::BUTTON_GIFT_EVIL : ICN::BUTTON_GIFT_GOOD;
 
             buttonGift.setICNInfo( giftButtonIcnID, 0, 1 );
             buttonTrade.setICNInfo( tradeButtonIcnID, 0, 1 );
@@ -445,16 +445,20 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( buttonGift.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonGift.area() ) ? buttonGift.drawOnPress() : buttonGift.drawOnRelease();
-        if ( buttonTrade.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) ? buttonTrade.drawOnPress() : buttonTrade.drawOnRelease();
-        if ( buttonLeft.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) ? buttonLeft.drawOnPress() : buttonLeft.drawOnRelease();
-        if ( buttonRight.isEnabled() )
-            le.isMouseLeftButtonPressedInArea( buttonRight.area() ) ? buttonRight.drawOnPress() : buttonRight.drawOnRelease();
+        if ( buttonGift.isEnabled() ) {
+            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGift.area() ) );
+        }
+        if ( buttonTrade.isEnabled() ) {
+            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) );
+        }
+        if ( buttonLeft.isEnabled() ) {
+            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) );
+        }
+        if ( buttonRight.isEnabled() ) {
+            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRight.area() ) );
+        }
 
-        le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
@@ -602,7 +606,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // decrease trade resource
         if ( count_buy
-             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
                   || le.isMouseWheelDownInArea( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 

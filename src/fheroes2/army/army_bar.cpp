@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -486,9 +486,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 StringReplace( str, "%{monster}", mons.GetName() );
 
                 int32_t count = 1;
-                auto monsUi = std::make_unique<const fheroes2::MonsterDialogElement>( mons );
+                const fheroes2::MonsterDialogElement monsUi{ mons };
 
-                if ( Dialog::SelectCount( str, 1, 500000, count, 1, monsUi.get() ) ) {
+                if ( Dialog::SelectCount( std::move( str ), 1, 500000, count, 1, &monsUi ) ) {
                     troop.Set( mons, static_cast<uint32_t>( count ) );
                 }
             }

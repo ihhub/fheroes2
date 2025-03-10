@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 08:28+0000\n"
+"POT-Creation-Date: 2025-02-22 01:59+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,70 +19,43 @@ msgstr ""
 "X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-msgid ""
-"BATTLE\n"
-"ONLY"
+msgid "SELECT"
 msgstr ""
-"АСОБНЫ\n"
-"БОЙ"
 
-msgid ""
-"NEW\n"
-"GAME"
-msgstr "НОВАЯ"
-
-msgid ""
-"SAVE\n"
-"GAME"
+msgid "S"
 msgstr ""
-"ЗАХА-\n"
-"ВАЦЬ"
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr "УСЕ"
+
+msgid "EXIT"
+msgstr "ВЫЙСЦІ"
+
+msgid "smallerButton|EXIT"
+msgstr ""
+
+msgid "HEROES"
+msgstr ""
 
 msgid ""
-"LOAD\n"
-"GAME"
+"TOWNS/\n"
+"CASTLES"
 msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
-
-msgid "INFO"
-msgstr "ДАВЕДКА"
-
-msgid "QUIT"
-msgstr ""
-"ЗАВЯР-\n"
-"ШЫЦЬ"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr "НОВАЯ"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАХА-\n"
-"ВАЦЬ"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
 
 msgid "CANCEL"
 msgstr "НАЗАД"
 
 msgid "OKAY"
 msgstr "ДОБРА"
-
-msgid "smallerButton|OKAY"
-msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -102,46 +75,111 @@ msgstr "ТАК"
 msgid "NO"
 msgstr "НЕ"
 
-msgid "EXIT"
-msgstr "ВЫЙСЦІ"
-
-msgid "smallerButton|EXIT"
-msgstr ""
-
 msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
 msgstr "ПАЛЕПШЫЦЬ"
 
+msgid "GIFT"
+msgstr "АДДАЦЬ"
+
 msgid "RESTART"
 msgstr "НАНОВА"
 
-msgid "HEROES"
+msgid "MAX"
+msgstr "МАКС"
+
+msgid "MIN"
+msgstr "МІН"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
 msgstr ""
 
 msgid ""
-"TOWNS/\n"
-"CASTLES"
+"E\n"
+"X\n"
+"I\n"
+"T"
 msgstr ""
 
-msgid "S"
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
 msgstr ""
 
-msgid "M"
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 msgstr ""
 
-msgid "L"
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
 
-msgid "X-L"
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr "НОВАЯ"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
 msgstr ""
+"ЗАХА-\n"
+"ВАЦЬ"
 
-msgid "ALL"
-msgstr "УСЕ"
+msgid ""
+"NEW\n"
+"GAME"
+msgstr "НОВАЯ"
 
-msgid "SELECT"
+msgid ""
+"LOAD\n"
+"GAME"
 msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ЗАХА-\n"
+"ВАЦЬ"
+
+msgid "QUIT"
+msgstr ""
+"ЗАВЯР-\n"
+"ШЫЦЬ"
+
+msgid "INFO"
+msgstr "ДАВЕДКА"
 
 msgid ""
 "STANDARD\n"
@@ -149,6 +187,13 @@ msgid ""
 msgstr ""
 "ЗВЫЧАЙНАЯ\n"
 "ГУЛЬНЯ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"АСОБНЫ\n"
+"БОЙ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -197,20 +242,11 @@ msgstr "5 ГУЛЬЦОЎ"
 msgid "6 PLAYERS"
 msgstr "6 ГУЛЬЦОЎ"
 
-msgid "GIFT"
-msgstr "АДДАЦЬ"
-
-msgid "MAX"
-msgstr "МАКС"
-
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
 
 msgid "VIEW INTRO"
 msgstr ""
-
-msgid "MIN"
-msgstr "МІН"
 
 msgid "RESET"
 msgstr ""
@@ -219,31 +255,20 @@ msgstr ""
 msgid "START"
 msgstr "НАНОВА"
 
-msgid "CASTLE"
-msgstr ""
-
 msgid "TOWN"
 msgstr ""
 
-#, fuzzy
-msgid "RESTRICT"
-msgstr "НАНОВА"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
+msgid "CASTLE"
 msgstr ""
 
 msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
 msgstr ""
 
 msgid ""
@@ -253,34 +278,6 @@ msgid ""
 "R\n"
 "O\n"
 "L"
-msgstr ""
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid "RUMORS"
-msgstr ""
-
-msgid "EVENTS"
 msgstr ""
 
 msgid "Warrior"
@@ -438,10 +435,12 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} выключыў аўта-бой"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} уключыў аўта-бой"
 
 msgid "Spell failed!"
@@ -450,6 +449,9 @@ msgstr "Загавор няўдалы!"
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
+msgstr ""
+
+msgid "You cannot cast spells without a commanding hero."
 msgstr ""
 
 msgid "You have already cast a spell this round."
@@ -759,14 +761,18 @@ msgstr ""
 msgid "Ballista"
 msgstr ""
 
-msgid "Enable auto combat"
-msgstr "Уключыць аўта-бой"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr ""
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Аўта-бой"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Аўта-бой"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr ""
@@ -813,11 +819,34 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 
 #, fuzzy
-msgid "Are you sure you want to enable auto combat?"
+msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
-msgid "Are you sure you want to finish the battle in auto mode?"
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
+
+msgid "The computer continues the combat for you."
 msgstr ""
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Аўта-бой"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Аўта-бой"
 
 #, fuzzy
 msgid "The %{name} skips their turn."
@@ -948,7 +977,7 @@ msgid "The mirror image is destroyed!"
 msgstr ""
 
 #, fuzzy
-msgid "Are you sure you want to interrupt the auto combat?"
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
 msgid "Error"
@@ -2940,8 +2969,11 @@ msgstr ""
 msgid "You cannot select %{resource}!"
 msgstr ""
 
-msgid "Select count %{resource}:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid "Select Recipients"
 msgstr ""
@@ -3007,15 +3039,6 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
 msgid "Hide"
 msgstr ""
 
@@ -3025,21 +3048,7 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Slow"
-msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Звычайная"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Шпаркая"
-
-msgid "Scroll Speed"
+msgid "Interface Type"
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -3048,10 +3057,17 @@ msgstr ""
 msgid "Toggle interface visibility."
 msgstr ""
 
+msgid "Scroll Speed"
+msgstr ""
+
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
 msgid "Select Game Language:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Language:"
 msgstr "Мова"
 
 msgid "Click to choose the selected language."
@@ -3077,6 +3093,9 @@ msgid ""
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
+msgstr ""
+
+msgid "Learn %{secondary-skill}"
 msgstr ""
 
 msgid "n/a"
@@ -3177,7 +3196,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -3279,8 +3298,8 @@ msgstr ""
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
-msgid "Warning!"
-msgstr ""
+msgid "Warning"
+msgstr "Увага"
 
 msgid "Click to save the current game."
 msgstr ""
@@ -3466,6 +3485,13 @@ msgstr "Кошт вернасці"
 msgid "Resurrection"
 msgstr "Раздзяленне экрана"
 
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Мова"
+
 msgid "Lose all your heroes and towns."
 msgstr "Страціціь усіх герояў і гарады."
 
@@ -3589,7 +3615,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3702,6 +3728,10 @@ msgstr "Воблачны замак"
 #, fuzzy
 msgid "Default Buildings"
 msgstr "Хобіты"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "НАНОВА"
 
 msgid "Default Army"
 msgstr ""
@@ -3824,19 +3854,51 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+#, fuzzy
+msgid "Effects:"
+msgstr "Эфекты"
+
+#, fuzzy
+msgid "Conditions:"
+msgstr "Умова паразы"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr ""
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr ""
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+msgid "Secondary Skill"
+msgstr ""
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3880,6 +3942,52 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "НАНОВА"
+
+msgid "Main Menu"
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Вялікія мапы"
+
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
 msgid "Create a new map from scratch."
 msgstr ""
 
@@ -3905,6 +4013,13 @@ msgstr "Назва абранай мапы."
 msgid "Quit out of the map editor."
 msgstr ""
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr ""
 
@@ -3915,6 +4030,9 @@ msgid "%{object} has no properties to change."
 msgstr ""
 
 msgid "This artifact"
+msgstr ""
+
+msgid "The total number of obelisks is %{count}."
 msgstr ""
 
 msgid "Roads"
@@ -4181,6 +4299,12 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4229,9 +4353,6 @@ msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "No maps available!"
 msgstr ""
-
-msgid "Warning"
-msgstr "Увага"
 
 #, fuzzy
 msgid "[%{pos}]: %{race} hero"
@@ -4358,17 +4479,32 @@ msgstr "Складанасць мапы:"
 msgid "Map Description"
 msgstr "Апісанне"
 
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
+
+msgid ""
+"The entered map description exceeds the maximum allowed 5 rows. It will be "
+"shortened to fit the map description field."
+msgstr ""
+
+msgid ""
+"You are about to change the map's language from %{oldLanguage} to "
+"%{newLanguage}. Some texts might not be displayed properly after this. Do "
+"you want to proceed?"
+msgstr ""
+
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Апісанне"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4387,6 +4523,10 @@ msgstr "Пстрыкні, каб ухваліць абранае раздзял�
 
 msgid "Events"
 msgstr ""
+
+#, fuzzy
+msgid "Click to change the language of the map."
+msgstr "Змяніць мову гульні."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4423,6 +4563,9 @@ msgid ""
 msgstr ""
 "Складанасць мапы вызначаецца ейным аўтарам. Болей складаныя мапы могуць "
 "утрымліваць больш ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
+
+msgid "editor|%{count} %{resource}"
+msgstr ""
 
 #, fuzzy
 msgid "Animation"
@@ -4526,6 +4669,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4549,6 +4698,10 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Звычайная"
 
 msgid "Hard"
 msgstr "Цяжкая"
@@ -4830,6 +4983,9 @@ msgstr ""
 msgid "hotkey|toggle text support mode"
 msgstr ""
 
+msgid "hotkey|toggle developer mode"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5082,10 +5238,11 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
+#, fuzzy
+msgid "hotkey|toggle auto combat mode"
+msgstr "Звычайная гульня"
 
-msgid "hotkey|finish the battle in auto mode"
+msgid "hotkey|quick combat"
 msgstr ""
 
 #, fuzzy
@@ -5158,6 +5315,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5172,9 +5332,6 @@ msgid "Default Actions"
 msgstr ""
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -5253,45 +5410,27 @@ msgstr "Супрацьстаянне некалькіх асобаў на адн
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team прадстаўляе"
 
-msgid "Greetings!"
-msgstr ""
-
 #, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Выйсці з Heroes of Might and Magic II."
 
+msgid ""
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
 #, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr "Выйсці з Heroes of Might and Magic II."
 
-msgid "Please Remember"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr "Змяніць мову, раздзяленне экрана і налады гульні."
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-#, fuzzy
-msgid "NEW GAME"
-msgstr "НОВАЯ"
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -5919,6 +6058,9 @@ msgid ""
 "skill"
 msgstr "Абарона"
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr ""
 
@@ -5926,6 +6068,14 @@ msgid "Keyboard|SPACE"
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "The entered value is invalid."
+msgstr ""
+
+msgid ""
+"The entered value is out of range.\n"
+"It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
 
 msgid "Kingdom Income"
@@ -6000,6 +6150,25 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Праглядзець %{name}"
+
+msgid "Slow"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Шпаркая"
+
+msgid "Dynamic"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -7135,7 +7304,11 @@ msgstr ""
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
-"'%{riddle}'\n"
+"'"
+msgstr ""
+
+msgid ""
+"sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
@@ -7282,9 +7455,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
-
 msgid "View Experience Info"
 msgstr ""
 
@@ -7388,6 +7558,9 @@ msgstr ""
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
+msgstr ""
+
+msgid "million|M"
 msgstr ""
 
 msgid "Level %{level}"
@@ -7984,6 +8157,12 @@ msgstr "Нястрымная"
 
 msgid "speed|Instant"
 msgstr "Імгненная"
+
+msgid "Click this button to adjust the level of zoom."
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
 
 msgid "week|Squirrel"
 msgstr ""
@@ -8978,6 +9157,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -9044,19 +9226,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
@@ -10349,10 +10552,12 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
-msgid "spell|Blind"
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 
 msgid "Bless"
@@ -10840,3 +11045,16 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Enable auto combat"
+#~ msgstr "Уключыць аўта-бой"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can always change the language, resolution and settings of the game "
+#~ "by clicking on the "
+#~ msgstr "Змяніць мову, раздзяленне экрана і налады гульні."
+
+#, fuzzy
+#~ msgid "NEW GAME"
+#~ msgstr "НОВАЯ"

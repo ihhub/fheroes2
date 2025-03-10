@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,7 @@
 #include <ctime>
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -104,7 +105,7 @@ namespace
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite() } );
+            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
@@ -146,7 +147,7 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t posX, int32_t posY, bool current )
     {
-        std::string mapFileName( System::GetBasename( info.filename ) );
+        std::string mapFileName( System::GetFileName( info.filename ) );
         assert( !mapFileName.empty() );
 
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
@@ -194,7 +195,7 @@ namespace
 
 namespace Editor
 {
-    bool mapSaveSelectFile( std::string & fileName, std::string & mapName )
+    bool mapSaveSelectFile( std::string & fileName, std::string & mapName, const fheroes2::SupportedLanguage language, const int32_t maxMapNameLength )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -234,12 +235,14 @@ namespace Editor
             mapName = fileName;
         }
 
-        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite() );
+        fheroes2::Text mapNameText( mapName, fheroes2::FontType::normalWhite(), language );
         const fheroes2::Rect mapNameRoi( listRoi.x, area.y + 28, listRoi.width, mapNameText.height() + 4 );
 
         background.applyTextBackgroundShading( mapNameRoi );
         fheroes2::ImageRestorer mapNameBackground( display, mapNameRoi.x, mapNameRoi.y, mapNameRoi.width, mapNameRoi.height );
 
+        const int32_t maxMapNameTextWidth = mapNameRoi.width - 6;
+        mapNameText.fitToOneRow( maxMapNameTextWidth );
         mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
@@ -247,13 +250,11 @@ namespace Editor
 
         fheroes2::ImageRestorer fileNameBackground( display, fileNameRoi.x, fileNameRoi.y, fileNameRoi.width, fileNameRoi.height );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         FileInfoListBox listbox( area.getPosition() );
 
@@ -261,6 +262,8 @@ namespace Editor
         listbox.initListBackgroundRestorer( listRoi );
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + listAreaOffsetY, listRoi.width, listRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = area.x + area.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -311,7 +314,7 @@ namespace Editor
 
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
-        background.renderButtonSprite( buttonVirtualKB, "...", 48, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        background.renderCustomButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
@@ -352,7 +355,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName );
+                    fheroes2::openVirtualKeyboard( fileName, 255 );
                 }
 
                 charInsertPos = fileName.size();
@@ -376,16 +379,17 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
-                // In original Editor map name is limited to 17 characters. We keep this limit to fit Select Scenario dialog.
-                if ( Dialog::inputString( _( "Change Map Name" ), editableMapName, {}, 17, false, true ) ) {
+                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
                         continue;
                     }
 
                     mapName = std::move( editableMapName );
-                    mapNameText.set( mapName, fheroes2::FontType::normalWhite() );
+                    mapNameText.set( mapName, fheroes2::FontType::normalWhite(), language );
                     mapNameBackground.restore();
+                    mapNameText.fitToOneRow( maxMapNameTextWidth );
                     mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
                     display.render( mapNameRoi );
@@ -399,9 +403,9 @@ namespace Editor
 
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
+                msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
-                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
 
@@ -442,7 +446,13 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Map Name" ), _( "Click to change your map name." ), Dialog::ZERO );
+                fheroes2::MultiFontText message;
+                message.add( fheroes2::Text{ "\"", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ mapName, fheroes2::FontType::normalWhite(), language } );
+                message.add( fheroes2::Text{ "\"\n\n", fheroes2::FontType::normalWhite() } );
+                message.add( fheroes2::Text{ _( "Click to change your map name." ), fheroes2::FontType::normalWhite() } );
+
+                fheroes2::showMessage( fheroes2::Text{ _( "Map Name" ), fheroes2::FontType::normalYellow() }, message, Dialog::ZERO );
             }
 
             // Text input cursor blink.

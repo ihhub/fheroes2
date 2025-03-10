@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2TOOLS_H
-#define H2TOOLS_H
+
+#pragma once
 
 #include <bitset>
 #include <cstddef>
@@ -36,7 +36,7 @@
 #include <type_traits>
 #include <vector>
 
-template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
 std::string GetHexString( const T value, const int width = 8 )
 {
     std::ostringstream stream;
@@ -57,7 +57,7 @@ std::vector<std::string> StringSplit( const std::string_view str, const char sep
 
 void StringReplace( std::string & dst, const char * pred, const std::string_view src );
 
-template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
 void StringReplace( std::string & dst, const char * pred, const T value )
 {
     StringReplace( dst, pred, std::to_string( value ) );
@@ -110,7 +110,7 @@ namespace fheroes2
 
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.
-    template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>
+    template <typename To, typename From, std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>, bool> = true>
     constexpr std::optional<To> checkedCast( const From from )
     {
         // Both types have the same signedness
@@ -148,5 +148,3 @@ namespace fheroes2
         }
     }
 }
-
-#endif

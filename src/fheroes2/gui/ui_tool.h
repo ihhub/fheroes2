@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,8 @@
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"
+
+enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {
@@ -174,7 +176,7 @@ namespace fheroes2
     struct GameInterfaceTypeRestorer
     {
         GameInterfaceTypeRestorer() = delete;
-        explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
+        explicit GameInterfaceTypeRestorer( const InterfaceType interfaceType_ );
 
         GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
 
@@ -182,8 +184,8 @@ namespace fheroes2
 
         GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
 
-        const bool isEvilInterface;
-        const bool isOriginalEvilInterface;
+        const InterfaceType interfaceType;
+        const InterfaceType originalInterfaceType;
     };
 
     // Fade display image colors to grayscale part of default game palette.
@@ -216,6 +218,9 @@ namespace fheroes2
     // Returns the character position number in the 'text' string.
     size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset );
+
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 

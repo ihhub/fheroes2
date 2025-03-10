@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SETTINGS_H
-#define H2SETTINGS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -63,6 +62,13 @@ enum class ZoomLevel : uint8_t
     ZoomLevel1 = 1,
     ZoomLevel2 = 2,
     ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+};
+
+enum class InterfaceType : uint8_t
+{
+    GOOD = 0,
+    EVIL = 1,
+    DYNAMIC = 2
 };
 
 class Settings
@@ -192,6 +198,16 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
+    void setInterfaceType( InterfaceType type )
+    {
+        _interfaceType = type;
+    }
+
+    InterfaceType getInterfaceType() const
+    {
+        return _interfaceType;
+    }
+
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -253,7 +269,6 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
-    void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -337,7 +352,7 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    void SetProgramPath( const char * );
+    void SetProgramPath( const char * path );
 
     static std::string GetVersion();
 
@@ -364,7 +379,7 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
 
-    std::string path_program;
+    std::string _programPath;
 
     std::string _gameLanguage;
     // Not saved in the config file or savefile
@@ -383,6 +398,7 @@ private:
 
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
+    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
@@ -394,5 +410,3 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
 IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
-
-#endif

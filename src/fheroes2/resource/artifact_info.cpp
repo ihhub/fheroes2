@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -958,9 +958,9 @@ namespace fheroes2
 
     std::string ArtifactData::getDescription( const int extraParameter ) const
     {
-        std::string description( _( baseDescription ) );
+        std::string description( _( untranslatedBaseDescription ) );
 
-        StringReplace( description, "%{name}", _( name ) );
+        StringReplace( description, "%{name}", _( untranslatedName ) );
 
         std::vector<ArtifactBonus>::const_iterator foundBonus = std::find( bonuses.begin(), bonuses.end(), ArtifactBonus( ArtifactBonusType::ADD_SPELL ) );
         if ( foundBonus != bonuses.end() ) {
@@ -1012,11 +1012,11 @@ namespace fheroes2
 
         std::ostringstream os;
         os << "----------" << std::endl;
-        os << "Name: " << data.name << std::endl;
+        os << "Name: " << data.untranslatedName << std::endl;
         os << "Description: " << data.getDescription( Spell::RANDOM ) << std::endl;
 
-        if ( data.discoveryEventDescription != nullptr ) {
-            os << "Discovery event description: " << data.discoveryEventDescription << std::endl;
+        if ( data.untranslatedDiscoveryEventDescription != nullptr ) {
+            os << "Discovery event description: " << data.untranslatedDiscoveryEventDescription << std::endl;
         }
         else {
             os << "No discovery event description" << std::endl;

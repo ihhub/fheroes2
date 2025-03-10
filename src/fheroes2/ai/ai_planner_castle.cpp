@@ -23,16 +23,20 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "ai_common.h"
 #include "ai_planner.h" // IWYU pragma: associated
 #include "army.h"
+#include "army_troop.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "payment.h"
@@ -172,7 +176,7 @@ namespace
             return true;
         }
 
-        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
+        const size_t neighbourRegions = world.getRegion( world.getTile( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // Force building a shipyard, +1 to cost check since we can have 0 neighbours
@@ -307,24 +311,214 @@ void AI::Planner::updateKingdomBudget( const Kingdom & kingdom )
     }
 }
 
+void AI::Planner::reinforceCastle( Castle & castle )
+{
+    assert( castle.isControlAI() );
+
+    const auto recruitMonster = [&castle]( const Troop & troop ) {
+        // This method can hire a unit to both the castle garrison and the guest hero's army (depending on the availability of suitable slots)
+        if ( castle.RecruitMonster( troop, false ) ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, castle.GetName() << " hires " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() ) )
+
+            return true;
+        }
+
+        return false;
+    };
+
+    // First of all, upgrade the existing units in the garrison and in the guest hero's army (if there is one) and merge the same ones to free
+    // up as much slots as possible for new units
+
+    Army & garrison = castle.GetArmy();
+
+    garrison.UpgradeTroops( castle );
+    garrison.MergeSameMonsterTroops();
+
+    Heroes * guestHero = castle.GetHero();
+    if ( guestHero ) {
+        assert( guestHero->isActive() && guestHero->isControlAI() && guestHero->GetColor() == castle.GetColor() );
+
+        Army & guestHeroArmy = guestHero->GetArmy();
+
+        guestHeroArmy.UpgradeTroops( castle );
+        guestHeroArmy.MergeSameMonsterTroops();
+    }
+
+    // It is allowed to hire non-upgraded units even if an upgraded dwelling is built
+    static const std::array<uint32_t, 12> castleDwellings{ DWELLING_UPGRADE7, DWELLING_UPGRADE6, DWELLING_MONSTER6, DWELLING_UPGRADE5,
+                                                           DWELLING_MONSTER5, DWELLING_UPGRADE4, DWELLING_MONSTER4, DWELLING_UPGRADE3,
+                                                           DWELLING_MONSTER3, DWELLING_UPGRADE2, DWELLING_MONSTER2, DWELLING_MONSTER1 };
+
+    for ( const uint32_t dwelling : castleDwellings ) {
+        if ( !castle.isBuild( dwelling ) ) {
+            continue;
+        }
+
+        const Monster monster( castle.GetRace(), dwelling );
+
+        const uint32_t count = castle.getRecruitLimit( monster, castle.GetKingdom().GetFunds() );
+        if ( count == 0 ) {
+            continue;
+        }
+
+        const Troop troop( monster, count );
+        if ( recruitMonster( troop ) ) {
+            continue;
+        }
+
+        Troop * weakestTroop = nullptr;
+
+        if ( guestHero ) {
+            Army & guestHeroArmy = guestHero->GetArmy();
+
+            // If there is a guest hero in the castle, and there is no slot for a new unit, then we can try to free up a slot by transferring some unit to the guest hero
+            if ( [&castle = std::as_const( castle ), &garrison, &guestHero = std::as_const( *guestHero ), &guestHeroArmy]() {
+                     for ( size_t i = 0; i < garrison.Size(); ++i ) {
+                         Troop * garrisonTroop = garrison.GetTroop( i );
+                         // All garrison slots should be occupied here because we just couldn't find a place for a new unit
+                         assert( garrisonTroop != nullptr && garrisonTroop->isValid() );
+
+                         if ( guestHeroArmy.JoinTroop( *garrisonTroop ) ) {
+                             DEBUG_LOG( DBG_AI, DBG_TRACE,
+                                        castle.GetName() << " transfers " << garrisonTroop->GetCount() << " " << garrisonTroop->GetPluralName( garrisonTroop->GetCount() )
+                                                         << " to the army of the guest hero " << guestHero.GetName() )
+#ifndef WITH_DEBUG
+                             (void)castle;
+                             (void)guestHero;
+#endif
+
+                             garrisonTroop->Reset();
+
+                             return true;
+                         }
+                     }
+
+                     return false;
+                 }() ) {
+                if ( !recruitMonster( troop ) ) {
+                    // We have just successfully transferred a unit from the garrison to the guest hero's army, but we still can't hire a new unit. This shouldn't happen.
+                    assert( 0 );
+                }
+
+                continue;
+            }
+
+            weakestTroop = guestHeroArmy.GetWeakestTroop();
+            // All slots in the guest hero's army should be occupied here because we just couldn't find a place for a new unit
+            assert( weakestTroop != nullptr );
+        }
+
+        {
+            Troop * weakestGarrisonTroop = garrison.GetWeakestTroop();
+            // All garrison slots should be occupied here because we just couldn't find a place for a new unit
+            assert( weakestGarrisonTroop != nullptr );
+
+            // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+            weakestTroop = weakestTroop && Troop( *weakestTroop ).GetStrength() < Troop( *weakestGarrisonTroop ).GetStrength() ? weakestTroop : weakestGarrisonTroop;
+        }
+
+        // If we still can't find a slot, let's try to dismiss the weakest unit of those that are present in the garrison and in the army of the guest hero - provided
+        // that it is weaker than the unit to hire
+
+        assert( weakestTroop != nullptr );
+
+        // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+        if ( Troop( *weakestTroop ).GetStrength() > troop.GetStrength() ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE,
+                       castle.GetName() << " skips hiring " << troop.GetCount() << " " << troop.GetPluralName( troop.GetCount() )
+                                        << " because the weakest unit consisting of " << weakestTroop->GetCount() << " "
+                                        << weakestTroop->GetPluralName( weakestTroop->GetCount() ) << " is stronger" )
+
+            continue;
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_TRACE, castle.GetName() << " dismisses " << weakestTroop->GetCount() << " " << weakestTroop->GetPluralName( weakestTroop->GetCount() ) )
+
+        weakestTroop->Reset();
+
+        if ( !recruitMonster( troop ) ) {
+            // We have just successfully dismissed a unit, but we still can't hire a new unit. This shouldn't happen.
+            assert( 0 );
+        }
+    }
+
+    if ( guestHero ) {
+        Army & guestHeroArmy = guestHero->GetArmy();
+
+        // Transfer the best troops from the garrison to the guest hero
+        guestHeroArmy.JoinStrongestFromArmy( garrison );
+
+        // Check if we should leave some troops in the garrison
+        // TODO: amount of troops left could depend on region's safetyFactor
+        if ( const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
+             castle.isCastle() && _regions.at( regionID ).safetyFactor <= 100 && !garrison.isValid() ) {
+            auto [troopForTransferToGarrison, transferHalf]
+                = [guestHeroRole = guestHero->getAIRole(), &guestHeroArmy = std::as_const( guestHeroArmy )]() -> std::pair<Troop *, bool> {
+                const bool isFighterRole = ( guestHeroRole == Heroes::Role::FIGHTER || guestHeroRole == Heroes::Role::CHAMPION );
+
+                // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+                const double troopsStrength = Troops( guestHeroArmy.getTroops() ).GetStrength();
+                const double significanceRatio = isFighterRole ? 20.0 : 10.0;
+
+                {
+                    Troop * candidateTroop = guestHeroArmy.GetSlowestTroop();
+                    assert( candidateTroop != nullptr );
+
+                    // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+                    if ( Troop( *candidateTroop ).GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, false };
+                    }
+                }
+
+                // if this is an important hero, then all his troops are significant
+                if ( isFighterRole ) {
+                    return {};
+                }
+
+                {
+                    Troop * candidateTroop = guestHeroArmy.GetWeakestTroop();
+                    assert( candidateTroop != nullptr );
+
+                    // We need to compare a strength of troops themselves here (excluding commanding hero's stats)
+                    if ( Troop( *candidateTroop ).GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, true };
+                    }
+                }
+
+                return {};
+            }();
+
+            if ( troopForTransferToGarrison ) {
+                assert( guestHeroArmy.GetOccupiedSlotCount() > 1 );
+
+                const uint32_t initialCount = troopForTransferToGarrison->GetCount();
+                const uint32_t countToTransfer = transferHalf ? initialCount / 2 : initialCount;
+
+                if ( garrison.JoinTroop( troopForTransferToGarrison->GetMonster(), countToTransfer, true ) ) {
+                    if ( countToTransfer == initialCount ) {
+                        troopForTransferToGarrison->Reset();
+                    }
+                    else {
+                        troopForTransferToGarrison->SetCount( initialCount - countToTransfer );
+                    }
+                }
+            }
+        }
+    }
+
+    OptimizeTroopsOrder( garrison );
+
+    if ( guestHero ) {
+        OptimizeTroopsOrder( guestHero->GetArmy() );
+    }
+}
+
 void AI::Planner::CastleTurn( Castle & castle, const bool defensiveStrategy )
 {
     if ( defensiveStrategy ) {
-        const Funds & kingdomFunds = castle.GetKingdom().GetFunds();
-
         // If the castle is potentially under threat, then it makes sense to try to hire the maximum number of troops so that the enemy cannot hire them even if he
         // captures the castle, therefore, it is worth starting with hiring.
-        castle.recruitBestAvailable( kingdomFunds );
-
-        Army & garrison = castle.GetArmy();
-
-        // Then we try to upgrade the existing units in the castle garrison...
-        garrison.UpgradeTroops( castle );
-
-        // ... and then we try to hire troops again, because after upgrading the existing troops, there could be a place for new units.
-        castle.recruitBestAvailable( kingdomFunds );
-
-        OptimizeTroopsOrder( garrison );
+        reinforceCastle( castle );
 
         // Avoid building monster dwellings when defensive as they might fall into enemy's hands. Instead, try to build defensive structures if there is at least some
         // kind of garrison in the castle.
@@ -334,7 +528,7 @@ void AI::Planner::CastleTurn( Castle & castle, const bool defensiveStrategy )
         }
     }
     else {
-        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        const uint32_t regionID = world.getTile( castle.GetIndex() ).GetRegion();
         const RegionStats & stats = _regions[regionID];
 
         CastleDevelopment( castle, stats.safetyFactor, stats.spellLevel );

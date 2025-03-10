@@ -41,13 +41,13 @@ namespace fheroes2
             return false;
         }
 
-        RWStreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
+        ROStreamBuf fileEntries = _stream.getStreamBuf( count * fileRecordSize );
         const size_t nameEntriesSize = _maxFilenameSize * count;
         _stream.seek( size - nameEntriesSize );
-        RWStreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
+        ROStreamBuf nameEntries = _stream.getStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
-            std::string name = nameEntries.toString( _maxFilenameSize );
+            std::string name = nameEntries.getString( _maxFilenameSize );
 
             // Check 32-bit filename hash.
             if ( fileEntries.getLE32() != calculateAggFilenameHash( name ) ) {

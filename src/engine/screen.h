@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -196,13 +196,14 @@ namespace fheroes2
 
         ~Display() override = default;
 
-        // Render a full frame on screen.
+        // Render an entire frame on screen.
         void render()
         {
             render( { 0, 0, width(), height() } );
         }
 
-        void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
+        // Render a part of frame on screen.
+        void render( const Rect & roi );
 
         // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );

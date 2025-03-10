@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -195,11 +195,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     fheroes2::Button buttonReset( cur_pt.x + 30, cur_pt.y + 428, ICN::BUTTON_RESET_GOOD, 0, 1 );
     fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
-    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_EXIT_GOOD, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1 );
 
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     buttonStart.draw();
     buttonExit.draw();
@@ -215,9 +215,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawOpponentsStats = false;
         bool needRedrawControlInfo = false;
 
-        buttonStart.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
-        buttonExit.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        buttonReset.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
+        if ( buttonStart.isEnabled() ) {
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStart.area() ) );
+        }
+        if ( buttonExit.isEnabled() ) {
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        }
+        if ( buttonReset.isEnabled() ) {
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonReset.area() ) );
+        }
 
         if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;

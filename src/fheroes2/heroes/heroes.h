@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,15 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2HEROES_H
-#define H2HEROES_H
+#pragma once
 
-#include <algorithm>
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
 #include <cstdint>
 #include <exception>
 #include <list>
+#include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -58,7 +58,7 @@ namespace Battle
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Map_Format
     {
@@ -70,6 +70,8 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 class Heroes final : public HeroBase, public ColorBase
@@ -249,10 +251,6 @@ public:
         }
 
         AIHeroMeetingUpdater( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater( AIHeroMeetingUpdater && ) = delete;
-
-        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
-        AIHeroMeetingUpdater & operator=( AIHeroMeetingUpdater && ) = delete;
 
         ~AIHeroMeetingUpdater()
         {
@@ -274,6 +272,8 @@ public:
             }
         }
 
+        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
+
     private:
         Heroes & _hero;
         const double _initialArmyStrength;
@@ -284,6 +284,7 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
+
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -477,7 +478,8 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
+                    const fheroes2::SupportedLanguage language );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -485,7 +487,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
@@ -528,15 +529,16 @@ public:
         }
     }
 
-    // set visited cell
-    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
+    // Set the visited state for the tile with the given index
+    void SetVisited( const int32_t tileIndex, const Visit::Type type = Visit::LOCAL );
 
-    // Set global visited state for itself and for allies.
+    // Set the global visited state for the tile with the given index both for this hero's kingdom and its allies
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tiles &, Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
+
+    std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
@@ -686,6 +688,8 @@ public:
     static int GetLevelFromExperience( uint32_t exp );
     static uint32_t GetExperienceFromLevel( int lvl );
 
+    static uint32_t getExperienceMaxValue();
+
     static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
@@ -774,59 +778,67 @@ private:
 struct VecHeroes : public std::vector<Heroes *>
 {
     VecHeroes() = default;
-    VecHeroes( const VecHeroes & ) = delete;
-
-    ~VecHeroes() = default;
-
-    VecHeroes & operator=( const VecHeroes & ) = delete;
-    VecHeroes & operator=( VecHeroes && ) = default;
-
-    Heroes * Get( int hid ) const;
-    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
-struct AllHeroes : public VecHeroes
+class AllHeroes
 {
+public:
     AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
-    ~AllHeroes();
+    ~AllHeroes() = default;
 
     AllHeroes & operator=( const AllHeroes & ) = delete;
 
+    auto begin() const noexcept
+    {
+        return Iterator( _heroes.begin() );
+    }
+
+    auto end() const noexcept
+    {
+        return Iterator( _heroes.end() );
+    }
+
     void Init();
-    void clear();
 
-    void Scout( int colors ) const;
-
-    void ResetModes( const uint32_t modes ) const
+    void Clear()
     {
-        std::for_each( begin(), end(), [modes]( Heroes * hero ) { hero->ResetModes( modes ); } );
+        _heroes.clear();
     }
 
-    void NewDay()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
-    }
+    Heroes * Get( const int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 
-    void NewWeek()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
-    }
+    void Scout( const int colors ) const;
 
-    void NewMonth()
-    {
-        std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
-    }
+    void ResetModes( const uint32_t modes ) const;
+
+    void NewDay() const;
+    void NewWeek() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;
+
+    template <typename BaseIterator>
+    struct Iterator : public BaseIterator
+    {
+        explicit Iterator( BaseIterator && other ) noexcept
+            : BaseIterator( std::move( other ) )
+        {}
+
+        auto * operator*() const noexcept
+        {
+            return BaseIterator::operator*().get();
+        }
+    };
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
+    friend IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
+
+    std::vector<std::unique_ptr<Heroes>> _heroes;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes );
 IStreamBase & operator>>( IStreamBase & stream, VecHeroes & heroes );
-
-OStreamBase & operator<<( OStreamBase & stream, const AllHeroes & heroes );
-IStreamBase & operator>>( IStreamBase & stream, AllHeroes & heroes );
-
-#endif

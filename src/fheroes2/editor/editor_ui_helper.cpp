@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #include "editor_ui_helper.h"
 
+#include <cassert>
 #include <utility>
 
 #include "agg_image.h"
@@ -77,19 +78,25 @@ namespace Editor
     }
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
-                                         const bool isEvil )
+                                         const bool isEvil, const int32_t maxWidth )
     {
+        assert( maxWidth > 0 );
+
         const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
         fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
 
         fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
-        const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
-        checkboxText.draw( posX + 23, posY + 4, output );
+
+        const int32_t textOffsetX{ 23 };
+
+        fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
+        checkboxText.fitToOneRow( maxWidth - textOffsetX );
+        checkboxText.draw( posX + textOffsetX, posY + 4, output );
 
         checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
         checkSprite.setPosition( posX + 2, posY + 2 );
 
-        return { posX, posY, 23 + checkboxText.width(), checkboxBackground.height() };
+        return { posX, posY, textOffsetX + checkboxText.width(), checkboxBackground.height() };
     }
 
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi )

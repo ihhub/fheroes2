@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,10 @@ namespace
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
     std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT )> objectData;
+
+    // This map is used for searching object parts based on their ICN information.
+    // Since we have a lot of objects it is important to speed up the search even if we take several more KB of memory.
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, const Maps::ObjectPartInfo *> objectInfoByIcn;
 
     void populateRoads( std::vector<Maps::ObjectInfo> & objects )
     {
@@ -1228,6 +1232,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 182, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 183, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 15;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 118, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 15;
 
@@ -2970,6 +2975,7 @@ namespace
         {
             Maps::ObjectInfo object{ MP2::OBJ_ARCHER_HOUSE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRA2, 84U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARCHER_HOUSE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRA2, 77U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
@@ -2977,6 +2983,7 @@ namespace
             object.groundLevelParts.back().animationFrames = 6;
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRA2, 63U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ARCHER_HOUSE );
+            object.topLevelParts.back().animationFrames = 6;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -2994,6 +3001,7 @@ namespace
         {
             Maps::ObjectInfo object{ MP2::OBJ_DWARF_COTTAGE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRA2, 114U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DWARF_COTTAGE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRA2, 107U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
@@ -3838,6 +3846,7 @@ namespace
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 11, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP );
+            object.topLevelParts.back().animationFrames = 6;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4165,6 +4174,16 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // Lean-to, grass terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LEAN_TO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 154U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LEAN_TO, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 153U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Sign, snow terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SIGN };
@@ -4413,6 +4432,18 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // A new variant (Resurrection expansion) of Stone Liths.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_STONE_LITHS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 232U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STONE_LITHS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 233U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 234U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_STONE_LITHS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Event, generic terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_EVENT };
@@ -4449,7 +4480,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Observation Tower, generic terrain.
+        // Observation Tower, grass terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 201U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
@@ -4458,6 +4489,47 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, generic terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 235U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 236U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 237U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 198U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Observation Tower, snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OBSERVATION_TOWER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 238U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OBSERVATION_TOWER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 199U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 200U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 239U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 240U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OBSERVATION_TOWER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4512,6 +4584,7 @@ namespace
             object.groundLevelParts.back().animationFrames = 8;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, 9U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, 20U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, 29U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC3, 31U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
@@ -4851,6 +4924,20 @@ namespace
 
         populateExtraBoatDirections( objectData[static_cast<size_t>( Maps::ObjectGroup::MAP_EXTRAS )] );
 
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                // We accept that there could be duplicates so we don't check if the insertion is successful for the map.
+
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    objectInfoByIcn.try_emplace( std::make_pair( info.icnType, info.icnIndex ), &info );
+                }
+
+                for ( const auto & info : objectInfo.topLevelParts ) {
+                    objectInfoByIcn.try_emplace( std::make_pair( info.icnType, info.icnIndex ), &info );
+                }
+            }
+        }
+
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.
         for ( const auto & objects : objectData ) {
@@ -4916,9 +5003,9 @@ namespace
         for ( const auto & objects : objectData ) {
             for ( const auto & objectInfo : objects ) {
                 for ( const auto & info : objectInfo.groundLevelParts ) {
-                    const auto [iter, inserted]
-                        = groundObjectInfoVsObjectType.emplace( std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
-                    if ( !inserted ) {
+                    if ( const auto [iter, inserted]
+                         = groundObjectInfoVsObjectType.emplace( std::make_pair( info.icnType, info.icnIndex ), std::make_pair( info.layerType, info.objectType ) );
+                         !inserted ) {
                         assert( iter->second.first == info.layerType && iter->second.second == info.objectType );
                     }
 
@@ -4932,6 +5019,38 @@ namespace
                 }
             }
         }
+
+        // Calculate the maximum possible dimensions of the area occupied by the parts of multi-tile action objects and verify them.
+        fheroes2::Size maxObjDim{ 1, 1 };
+
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                if ( !MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+                    continue;
+                }
+
+                fheroes2::Point minOffset;
+                fheroes2::Point maxOffset;
+
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    if ( info.objectType == objectInfo.objectType ) {
+                        minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                        minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                        maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                        maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
+                    }
+                }
+
+                const fheroes2::Size objDim{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+
+                maxObjDim.width = std::max( maxObjDim.width, objDim.width );
+                maxObjDim.height = std::max( maxObjDim.height, objDim.height );
+            }
+        }
+
+        // If this assertion blows up then some in-game logic might break. If a new object of a non-standard
+        // size has been added, consider updating the maximum action object dimensions.
+        assert( maxObjDim == Maps::maxActionObjectDimensions );
 #endif
 
         isPopulated = true;
@@ -4961,32 +5080,29 @@ namespace Maps
         return objectInfo[objectIndex];
     }
 
-    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    const ObjectPartInfo * getObjectPartByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
     {
         populateObjectData();
 
-        for ( const auto & group : objectData ) {
-            for ( const auto & object : group ) {
-                assert( !object.groundLevelParts.empty() );
-
-                for ( const auto & info : object.groundLevelParts ) {
-                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
-                    }
-                }
-
-                for ( const auto & info : object.topLevelParts ) {
-                    if ( info.icnType == icnType && info.icnIndex == icnIndex ) {
-                        return info.objectType;
-                    }
-                }
-            }
+        auto iter = objectInfoByIcn.find( std::make_pair( icnType, icnIndex ) );
+        if ( iter != objectInfoByIcn.end() ) {
+            return iter->second;
         }
 
         // You can reach this code by 3 reasons:
         // - you are passing invalid object information
         // - you updated object properties but didn't do object info migration for save files
         // - you are trying to get info of an object created by an original Editor
+        return nullptr;
+    }
+
+    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
+    {
+        const ObjectPartInfo * objectPart = getObjectPartByIcn( icnType, icnIndex );
+        if ( objectPart != nullptr ) {
+            return objectPart->objectType;
+        }
+
         return MP2::OBJ_NONE;
     }
 

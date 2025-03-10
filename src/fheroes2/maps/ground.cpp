@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -166,7 +166,7 @@ const char * Maps::Ground::String( int groundId )
     }
 }
 
-uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
+uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
 {
     //              none   basc   advd   expr
     //    Desert    2.00   1.75   1.50   1.00

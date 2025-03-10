@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SYSTEM_H
-#define H2SYSTEM_H
+#pragma once
 
 #include <ctime>
 #include <filesystem>
@@ -33,6 +32,9 @@
 namespace System
 {
     bool isHandheldDevice();
+
+    // Returns true if the target platform supports touch input, otherwise returns false.
+    bool isTouchInputAvailable();
 
     bool isVirtualKeyboardSupported();
 
@@ -46,11 +48,17 @@ namespace System
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
+
+    // Returns the path to the app settings directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
     std::string GetConfigDirectory( const std::string_view appName );
+
+    // Returns the path to the app data directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
     std::string GetDataDirectory( const std::string_view appName );
 
-    std::string GetDirname( std::string_view path );
-    std::string GetBasename( std::string_view path );
+    std::string GetParentDirectory( std::string_view path );
+    std::string GetFileName( std::string_view path );
     std::string GetStem( const std::string_view path );
 
     bool IsFile( const std::string_view path );
@@ -79,5 +87,3 @@ namespace System
 
     tm GetTM( const time_t time );
 }
-
-#endif

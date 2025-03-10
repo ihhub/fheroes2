@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,10 +48,10 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -68,7 +68,7 @@ namespace
     };
 
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 36, 47 };
+    const fheroes2::Point optionOffset{ 20, 31 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -191,7 +191,7 @@ namespace
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), _( "combatMode|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -199,25 +199,12 @@ namespace
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
-
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
-                                                dialog.height() + fheroes2::borderWidthPx );
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
-        fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
-
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+        const fheroes2::Rect windowRoi = background.activeArea();
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -244,14 +231,16 @@ namespace
 
         drawOptions();
 
-        const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        okayButton.draw();
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            okayButton.draw();
             display.render( emptyDialogRestorer.rect() );
         };
 
@@ -261,14 +250,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.isMouseLeftButtonPressedInArea( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -393,7 +377,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowBattlesRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Battles" ), _( "Toggle instant battle mode." ), 0 );
             }
-            else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -420,11 +404,16 @@ namespace fheroes2
         auto redrawAdventureMap = []() {
             Interface::AdventureMap & adventureMap = Interface::AdventureMap::Get();
 
-            adventureMap.reset();
             // Since radar interface has a restorer we must redraw it first to avoid the restorer do some nasty work.
             adventureMap.redraw( Interface::REDRAW_RADAR );
 
             adventureMap.redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+        };
+
+        auto rebildAdventureMap = [&redrawAdventureMap]() {
+            Interface::AdventureMap::Get().reset();
+
+            redrawAdventureMap();
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -438,7 +427,7 @@ namespace fheroes2
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );
@@ -449,13 +438,15 @@ namespace fheroes2
                                                        Dialog::OK );
                 }
 
+                // We can redraw only status window as it is the only place that has text but to be safe let's redraw everything.
                 redrawAdventureMap();
+
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
@@ -470,7 +461,7 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceSettings:
-                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( rebildAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -32,6 +32,8 @@
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     enum class FontSize : uint8_t
     {
         SMALL,
@@ -89,6 +91,30 @@ namespace fheroes2
         {
             return { FontSize::LARGE, FontColor::WHITE };
         }
+
+        static FontType buttonReleasedWhite()
+        {
+            return { FontSize::BUTTON_RELEASED, FontColor::WHITE };
+        }
+    };
+
+    struct TextLineInfo
+    {
+        TextLineInfo() = default;
+
+        TextLineInfo( const int32_t offsetX_, const int32_t offsetY_, const int32_t lineWidth_, const int32_t count )
+            : offsetX( offsetX_ )
+            , offsetY( offsetY_ )
+            , lineWidth( lineWidth_ )
+            , characterCount( count )
+        {
+            // Do nothing.
+        }
+
+        int32_t offsetX{ 0 };
+        int32_t offsetY{ 0 };
+        int32_t lineWidth{ 0 };
+        int32_t characterCount{ 0 };
     };
 
     int32_t getFontHeight( const FontSize fontSize );
@@ -143,11 +169,18 @@ namespace fheroes2
             _isUniformedVerticalAlignment = isUniform;
         }
 
+        const std::optional<SupportedLanguage> & getLanguage() const
+        {
+            return _language;
+        }
+
     protected:
+        std::optional<SupportedLanguage> _language;
+
         bool _isUniformedVerticalAlignment{ true };
     };
 
-    class Text : public TextBase
+    class Text final : public TextBase
     {
     public:
         friend class MultiFontText;
@@ -159,6 +192,13 @@ namespace fheroes2
             , _fontType( fontType )
         {
             // Do nothing.
+        }
+
+        Text( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            _language = language;
         }
 
         Text( const Text & text ) = default;
@@ -179,32 +219,58 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _text.empty();
+        }
 
         void set( std::string text, const FontType fontType )
         {
             _text = std::move( text );
             _fontType = fontType;
+            _language = std::nullopt;
+        }
+
+        void set( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+            _language = language;
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        // By default it ignores spaces at the end of the text phrase.
-        void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
+        void fitToOneRow( const int32_t maxWidth );
 
-        std::string text() const override;
+        std::string text() const override
+        {
+            return _text;
+        }
 
         FontType getFontType() const
         {
             return _fontType;
         }
 
+        // Sets to keep trailing spaces at each text line end including the end of the text.
+        void keepLineTrailingSpaces()
+        {
+            _keepLineTrailingSpaces = true;
+        }
+
+        // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
+        // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
+        // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
+        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
+
     private:
         std::string _text;
 
         FontType _fontType;
+
+        bool _keepLineTrailingSpaces{ false };
     };
 
-    class MultiFontText : public TextBase
+    class MultiFontText final : public TextBase
     {
     public:
         MultiFontText() = default;
@@ -223,11 +289,16 @@ namespace fheroes2
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
-        bool empty() const override;
+        bool empty() const override
+        {
+            return _texts.empty();
+        }
 
         std::string text() const override;
 
     private:
+        void _getMultiFontTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight ) const;
+
         std::vector<Text> _texts;
     };
 
@@ -258,9 +329,6 @@ namespace fheroes2
         const uint32_t _charLimit;
         const int32_t _spaceCharWidth;
     };
-
-    // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );

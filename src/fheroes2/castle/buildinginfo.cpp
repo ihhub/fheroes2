@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,7 +34,6 @@
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "m82.h"
@@ -492,20 +491,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const Dialog::FrameBox dialogFrame( totalDialogHeight, buttons );
     const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    fheroes2::Point pos{ dialogRoi.x, dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height() };
-    fheroes2::Button buttonOkay( pos.x, pos.y, buttonOkayIcnID, 0, 1 );
-
-    const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-
-    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
-    fheroes2::Button buttonCancel( pos.x, pos.y, buttonCancelIcnID, 0, 1 );
-
-    pos.x = dialogRoi.x + ( dialogRoi.width - buildingFrame.width() ) / 2;
-    pos.y = dialogRoi.y + elementOffset;
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - buildingFrame.width() ) / 2, pos.y = dialogRoi.y + elementOffset };
 
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
@@ -540,45 +526,43 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     rbs.SetPos( pos.x, pos.y );
     rbs.Redraw();
 
-    if ( buttons ) {
-        if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
-            buttonOkay.disable();
+    LocalEvent & le = LocalEvent::Get();
+
+    if ( !buttons ) {
+        // This is a case when this dialog was called by the right mouse button press.
+
+        display.render();
+
+        while ( le.HandleEvents() ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
         }
 
-        buttonOkay.draw();
-        buttonCancel.draw();
+        return false;
     }
-    else {
+
+    fheroes2::ButtonGroup buttonGroup( dialogRoi, Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonBase & buttonOkay = buttonGroup.button( 0 );
+    const fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
+
+    if ( BuildingStatus::ALLOW_BUILD != castle.CheckBuyBuilding( _buildingType ) ) {
         buttonOkay.disable();
-        buttonOkay.hide();
-
-        buttonCancel.disable();
-        buttonCancel.hide();
     }
 
+    buttonGroup.draw();
     display.render();
 
-    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        if ( !buttons && !le.isMouseRightButtonPressed() ) {
-            break;
+        const int result = buttonGroup.processEvents();
+        if ( result != Dialog::ZERO ) {
+            return result == Dialog::OK;
         }
 
-        le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-
-        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) ) {
-            return true;
-        }
-
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            break;
-        }
-
-        if ( buttonOkay.isVisible() && le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), GetConditionDescription(), Dialog::ZERO );
         }
-        else if ( buttonCancel.isVisible() && le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
     }
@@ -721,9 +705,9 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( BuildingStatus::NEED_CASTLE ), Dialog::OK );
     else {
-        const BuildingInfo dwelling( castle, static_cast<BuildingType>( dwType ) );
+        const BuildingInfo _dwelling( castle, static_cast<BuildingType>( dwType ) );
 
-        if ( dwelling.DialogBuyBuilding( true ) ) {
+        if ( _dwelling.DialogBuyBuilding( true ) ) {
             AudioManager::PlaySound( M82::BUILDTWN );
             castle.BuyBuilding( dwType );
         }

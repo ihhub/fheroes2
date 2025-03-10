@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,10 @@
 #include "editor_daily_events_window.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -62,7 +64,12 @@ namespace
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListSingleClick;
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListPressRight;
 
-        using ListBox::ListBox;
+        EventListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
+            : ListBox( pt )
+            , _language( language )
+        {
+            // Do nothing.
+        }
 
         void RedrawItem( const Maps::Map_Format::DailyEvent & event, int32_t posX, int32_t posY, bool current ) override
         {
@@ -71,12 +78,20 @@ namespace
 
             if ( !event.message.empty() ) {
                 message += " \"";
-                message += event.message;
-                message += '\"';
             }
 
-            fheroes2::Text text{ message, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
-            text.fitToOneRow( eventsArea.width - 10 );
+            fheroes2::Text dateText{ message, ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) };
+            const int32_t dateLength = dateText.width();
+            assert( dateLength < eventsArea.width - 10 );
+
+            fheroes2::MultiFontText text;
+            text.add( std::move( dateText ) );
+
+            if ( !event.message.empty() ) {
+                fheroes2::Text messageText{ event.message + '\"', ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ), _language };
+                messageText.fitToOneRow( eventsArea.width - 10 - dateLength );
+                text.add( std::move( messageText ) );
+            }
 
             text.draw( posX + 5, posY + 5, fheroes2::Display::instance() );
         }
@@ -144,6 +159,8 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
 
         bool _isDoubleClicked{ false };
+
+        const fheroes2::SupportedLanguage _language;
     };
 
     void sortEvents( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents )
@@ -155,7 +172,8 @@ namespace
 
 namespace Editor
 {
-    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                                const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -174,12 +192,12 @@ namespace Editor
         const fheroes2::Rect eventsRoi{ windowArea.x + elementOffset, offsetY, eventsArea.width, eventsArea.height };
         background.applyTextBackgroundShading( eventsRoi );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        EventListBox eventList( eventsRoi.getPosition() );
+        EventListBox eventList( eventsRoi.getPosition(), language );
         eventList.initListBackgroundRestorer( eventsRoi );
 
         eventList.SetAreaItems( { eventsRoi.x, eventsRoi.y, eventsRoi.width, eventsRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = eventsRoi.x + eventsRoi.width + 5;
         background.renderScrollbarBackground( { scrollbarOffsetX, eventsRoi.y, eventsRoi.width, eventsRoi.height }, isEvilInterface );
@@ -217,7 +235,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
@@ -248,7 +266,7 @@ namespace Editor
 
             if ( le.MouseClickLeft( buttonAdd.area() ) ) {
                 Maps::Map_Format::DailyEvent temp;
-                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors, language ) ) {
                     dailyEvents.emplace_back( std::move( temp ) );
 
                     sortEvents( dailyEvents );
@@ -267,7 +285,7 @@ namespace Editor
                 eventList.resetDoubleClickedState();
 
                 Maps::Map_Format::DailyEvent temp = eventList.GetCurrent();
-                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors ) ) {
+                if ( editDailyEvent( temp, humanPlayerColors, computerPlayerColors, language ) ) {
                     eventList.GetCurrent() = std::move( temp );
 
                     sortEvents( dailyEvents );

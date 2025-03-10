@@ -90,27 +90,23 @@ void StringReplace( std::string & dst, const char * pred, const std::string_view
 
 std::vector<std::string> StringSplit( const std::string_view str, const char sep )
 {
-    std::vector<std::string> vec;
+    std::vector<std::string> result;
 
-    size_t pos1 = 0;
-    size_t pos2 = 0;
+    size_t startPos = 0;
 
-    while ( pos1 < str.size() ) {
-        pos2 = str.find( sep, pos1 );
-        if ( pos2 == std::string::npos ) {
-            break;
-        }
+    for ( size_t sepPos = str.find( sep ); sepPos != std::string::npos; sepPos = str.find( sep, startPos ) ) {
+        assert( startPos < str.size() && sepPos < str.size() );
 
-        vec.emplace_back( str.substr( pos1, pos2 - pos1 ) );
+        result.emplace_back( str.begin() + startPos, str.begin() + sepPos );
 
-        pos1 = pos2 + 1;
+        startPos = sepPos + 1;
     }
 
-    if ( pos1 < str.size() ) {
-        vec.emplace_back( str.substr( pos1, str.size() - pos1 ) );
-    }
+    assert( startPos <= str.size() );
 
-    return vec;
+    result.emplace_back( str.begin() + startPos, str.end() );
+
+    return result;
 }
 
 std::string insertCharToString( const std::string & inputString, const size_t position, const char character )

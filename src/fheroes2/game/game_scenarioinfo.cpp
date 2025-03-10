@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -65,6 +65,23 @@
 
 namespace
 {
+    void outputNewGameInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Select Map for New Game\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) << " to select a map." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to close the dialog and return to the Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to start the chosen map." )
+    }
+
+    void showCurrentlySelectedMapInfoInTextSupportMode( const Maps::FileInfo & mapInfo )
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Currently selected map:\n" )
+        COUT( mapInfo.getSummary() )
+    }
+
     void updatePlayers( Players & players, const int humanPlayerCount )
     {
         if ( humanPlayerCount < 2 )
@@ -107,10 +124,18 @@ namespace
         text.draw( rt.x, rt.y + 248, rt.width, display );
     }
 
-    void RedrawMapTitle( const fheroes2::Rect & roi )
+    void RedrawMapTitle( const Settings & conf, const fheroes2::Rect & maxRoi, const fheroes2::Rect & centeredRoi )
     {
-        const fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
-        text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
+        const auto & info = conf.getCurrentMapInfo();
+        fheroes2::Text text{ info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() };
+
+        if ( text.width() > centeredRoi.width ) {
+            text.fitToOneRow( maxRoi.width );
+            text.draw( maxRoi.x + ( maxRoi.width - text.width() ), maxRoi.y + 3, text.width(), fheroes2::Display::instance() );
+        }
+        else {
+            text.draw( centeredRoi.x, centeredRoi.y + 3, centeredRoi.width, fheroes2::Display::instance() );
+        }
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
@@ -225,6 +250,7 @@ namespace
 
         Players & players = conf.GetPlayers();
 
+        showCurrentlySelectedMapInfoInTextSupportMode( mapInfo );
         conf.setCurrentMapInfo( mapInfo );
         updatePlayers( players, humanPlayerCount );
         Game::LoadPlayers( mapInfo.filename, players );
@@ -244,8 +270,21 @@ namespace
             fheroes2::addGradientShadow( icon, display, { coordDifficulty[i].x, coordDifficulty[i].y }, { -5, 5 } );
         }
 
+        // We calculate the allowed text width according to the select button's width while ensuring symmetric placement of the map title.
+        const int32_t boxBorder = 6;
+        const int32_t overallBoxTextAreaWidth = ( scenarioBoxRoi.width - ( 2 * boxBorder ) );
+        const int32_t maxTextAreaWidth = overallBoxTextAreaWidth - buttonSelectWidth;
+
+        const fheroes2::Rect maxTextRoi{ scenarioBoxRoi.x + boxBorder, scenarioBoxRoi.y + 5, maxTextAreaWidth, 19 };
+
+        const int32_t halfBoxTextAreaWidth = overallBoxTextAreaWidth / 2;
+        const int32_t rightSideAvailableTextWidth
+            = ( halfBoxTextAreaWidth > buttonSelectWidth ) ? ( halfBoxTextAreaWidth - buttonSelectWidth ) : ( buttonSelectWidth - halfBoxTextAreaWidth );
+
+        const fheroes2::Rect centeredTextRoi{ scenarioBoxRoi.x + boxBorder + buttonSelectWidth, scenarioBoxRoi.y + 5, 2 * rightSideAvailableTextWidth, 19 };
+
         // Set up restorers.
-        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 113, scenarioBoxRoi.y + 5, 141, scenarioBoxRoi.height );
+        fheroes2::ImageRestorer mapTitleArea( display, maxTextRoi.x, maxTextRoi.y, maxTextRoi.width, maxTextRoi.height );
         fheroes2::ImageRestorer opponentsArea( display, roi.x, pointOpponentInfo.y, roi.width, 65 );
         fheroes2::ImageRestorer classArea( display, roi.x, pointClassInfo.y, roi.width, 69 );
         fheroes2::ImageRestorer handicapArea( display, roi.x, pointClassInfo.y + 69, roi.width, 31 );
@@ -253,7 +292,7 @@ namespace
                                             roi.width - buttonOk.area().width - buttonCancel.area().width - 20 * 2, buttonOk.area().height );
 
         // Map name
-        RedrawMapTitle( scenarioBoxRoi );
+        RedrawMapTitle( conf, maxTextRoi, centeredTextRoi );
 
         playersInfo.RedrawInfo( false );
 
@@ -285,9 +324,11 @@ namespace
         }
         levelCursor.redraw();
 
-        display.render();
+        fheroes2::validateFadeInAndRender();
 
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
+
+        outputNewGameInTextSupportMode();
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -303,21 +344,26 @@ namespace
             }
 
             // press button
-            le.isMouseLeftButtonPressedInArea( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonSelectMaps.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMaps.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
+
+                // The previous dialog might still have a pressed button event. We have to clean the state.
+                le.reset();
+
                 const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
                 if ( fi && fi->filename != currentMapName ) {
+                    showCurrentlySelectedMapInfoInTextSupportMode( *fi );
                     Game::SavePlayers( currentMapName, conf.GetPlayers() );
                     conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
-                    RedrawMapTitle( scenarioBoxRoi );
+                    RedrawMapTitle( conf, maxTextRoi, centeredTextRoi );
                     Game::LoadPlayers( fi->filename, players );
 
                     opponentsArea.restore();
@@ -336,12 +382,15 @@ namespace
                                              coordDifficulty[Game::getDifficulty()].y - levelCursorOffset ); // From 0 to 4, see: Difficulty enum
                 }
                 display.render();
+
+                outputNewGameInTextSupportMode();
             }
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 result = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
@@ -349,7 +398,8 @@ namespace
                 fheroes2::fadeOutDisplay();
                 break;
             }
-            else if ( le.MouseClickLeft( roi ) ) {
+
+            if ( le.MouseClickLeft( roi ) ) {
                 const int32_t index = GetRectIndex( coordDifficulty, le.getMouseCursorPos() );
 
                 // select difficulty
@@ -428,6 +478,8 @@ namespace
                 return fheroes2::GameMode::START_GAME;
             }
 
+            fheroes2::drawMainMenuScreen();
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
             return fheroes2::GameMode::MAIN_MENU;
         }
 
@@ -436,6 +488,8 @@ namespace
             return fheroes2::GameMode::START_GAME;
         }
 
+        fheroes2::drawMainMenuScreen();
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 }

@@ -79,11 +79,11 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            le.isMouseLeftButtonPressedInArea( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
-            le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            buttonWorld.drawOnState( le.isMouseLeftButtonPressedInArea( buttonWorld.area() ) );
+            buttonPuzzle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPuzzle.area() ) );
+            buttonInfo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.area() ) );
+            buttonDig.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDig.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                 result = Dialog::WORLD;

@@ -202,13 +202,13 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
+M82::SoundType M82::getAdventureMapTileSound( const Maps::Tile & tile )
 {
     if ( tile.isStream() ) {
         return LOOP0014;
     }
 
-    switch ( tile.GetObject( false ) ) {
+    switch ( tile.getMainObjectType( false ) ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
@@ -221,7 +221,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
     case MP2::OBJ_VOLCANO:
-        switch ( tile.getMainObjectPart()._objectIcnType ) {
+        switch ( tile.getMainObjectPart().icnType ) {
         // Tile with volcanic steam only
         case MP2::OBJ_ICN_TYPE_UNKNOWN:
             return UNKNOWN;

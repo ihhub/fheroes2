@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2RESOURCE_H
-#define H2RESOURCE_H
+
+#pragma once
 
 #include <cstdint>
 #include <limits>
@@ -170,7 +170,7 @@ namespace Resource
     };
 
     // Applies the given function object 'fn' to every valid resource in the 'resources' set
-    template <typename T, typename F, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+    template <typename T, typename F, std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, bool> = true>
     void forEach( const T resources, const F & fn )
     {
         const auto forEachImpl = [&fn]( const auto res ) {
@@ -212,5 +212,3 @@ namespace Resource
         }
     }
 }
-
-#endif

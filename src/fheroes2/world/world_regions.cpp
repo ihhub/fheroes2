@@ -183,7 +183,7 @@ void World::ComputeStaticAnalysis()
     const uint32_t emptyLineFrequency = 7;
 
     // Reset the region information for all tiles
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdateRegion( REGION_NODE_BLOCKED ); } );
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tile & tile ) { tile.UpdateRegion( REGION_NODE_BLOCKED ); } );
 
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector
@@ -211,7 +211,7 @@ void World::ComputeStaticAnalysis()
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
-            const Maps::Tiles & tile = vec_tiles[index];
+            const Maps::Tile & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
                 ++obstacleCount;
@@ -290,7 +290,7 @@ void World::ComputeStaticAnalysis()
                 int centerIndex = -1;
 
                 const int tileIndex = rowIndex + colID;
-                const Maps::Tiles & tile = vec_tiles[tileIndex];
+                const Maps::Tile & tile = vec_tiles[tileIndex];
                 if ( tile.GetPassable() && tile.isWater() ) {
                     centerIndex = tileIndex;
                 }
@@ -298,7 +298,7 @@ void World::ComputeStaticAnalysis()
                     for ( uint8_t direction = 0; direction < 8; ++direction ) {
                         const int newIndex = tileIndex + directionOffsets[direction];
                         if ( newIndex >= 0 && static_cast<size_t>( newIndex ) < totalMapTiles ) {
-                            const Maps::Tiles & newTile = vec_tiles[newIndex];
+                            const Maps::Tile & newTile = vec_tiles[newIndex];
                             if ( newTile.GetPassable() != 0 && tile.isWater() == ( waterOrGround != 0 ) ) {
                                 centerIndex = newIndex;
                                 break;
@@ -321,14 +321,14 @@ void World::ComputeStaticAnalysis()
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
-            const Maps::Tiles & tile = vec_tiles[index];
+            const Maps::Tile & tile = vec_tiles[index];
             MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
             node.index = index;
             node.passable = tile.GetPassable();
             node.isWater = tile.isWater();
 
-            const MP2::MapObjectType objectType = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.getMainObjectType();
             node.mapObject = MP2::isInGameActionObject( objectType, node.isWater ) ? objectType : 0;
             if ( node.passable != 0 ) {
                 node.type = REGION_NODE_OPEN;
