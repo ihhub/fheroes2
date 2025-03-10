@@ -636,7 +636,7 @@ namespace fheroes2
     void ButtonGroup::drawShadows( Display & display )
     {
         for ( const auto & button : _button ) {
-            button.get()->drawShadow( display );
+            button->drawShadow( display );
         }
     }
 
