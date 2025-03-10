@@ -20,6 +20,7 @@
 
 #include "map_object_info.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -5018,6 +5019,38 @@ namespace
                 }
             }
         }
+
+        // Calculate the maximum possible dimensions of the area occupied by the parts of multi-tile action objects and verify them.
+        fheroes2::Size maxObjDim{ 1, 1 };
+
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                if ( !MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+                    continue;
+                }
+
+                fheroes2::Point minOffset;
+                fheroes2::Point maxOffset;
+
+                for ( const auto & info : objectInfo.groundLevelParts ) {
+                    if ( info.objectType == objectInfo.objectType ) {
+                        minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                        minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                        maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                        maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
+                    }
+                }
+
+                const fheroes2::Size objDim{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+
+                maxObjDim.width = std::max( maxObjDim.width, objDim.width );
+                maxObjDim.height = std::max( maxObjDim.height, objDim.height );
+            }
+        }
+
+        // If this assertion blows up then some in-game logic might break. If a new object of a non-standard
+        // size has been added, consider updating the maximum action object dimensions.
+        assert( maxObjDim == Maps::maxActionObjectDimensions );
 #endif
 
         isPopulated = true;

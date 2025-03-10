@@ -2733,7 +2733,6 @@ namespace
                 }
             }
             if ( _icnVsSprite[id].size() > 62 ) {
-                const fheroes2::Point shadowOffset( -1, 2 );
                 for ( size_t i = 0; i < 62; ++i ) {
                     fheroes2::Sprite & modified = _icnVsSprite[id][i];
                     const fheroes2::Point originalOffset( modified.x(), modified.y() );

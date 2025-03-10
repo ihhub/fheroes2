@@ -802,7 +802,7 @@ namespace
             resetObjectMetadata( tile );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToWagon( Heroes & hero, int32_t dst_index )
@@ -1004,9 +1004,6 @@ namespace
             // increase skill
             hero.IncreasePrimarySkill( skill );
             hero.SetVisited( dst_index );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -1104,9 +1101,6 @@ namespace
             // Morale is modified while marking visited object.
             hero.SetVisited( dst_index );
             hero.IncreaseMovePoints( move );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -1133,7 +1127,7 @@ namespace
             hero.SetSpellPoints( max * 2 );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToXanadu( Heroes & hero, int32_t dst_index )
