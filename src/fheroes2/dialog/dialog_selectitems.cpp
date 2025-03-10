@@ -1275,7 +1275,8 @@ void Dialog::selectTownType( int & type, int & color )
 
     buttonTown.setPosition( buttonOffset.x, buttonOffset.y );
     buttonCastle.setPosition( buttonOffset.x, buttonOffset.y );
-    castleTownButtons.drawShadows( display );
+    // We draw the shadow only once for both buttons because the button states overlap.
+    buttonTown.drawShadow( display );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
