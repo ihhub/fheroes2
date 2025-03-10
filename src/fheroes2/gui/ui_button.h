@@ -128,6 +128,8 @@ namespace fheroes2
             return drawOnRelease( output );
         }
 
+        void drawShadow( Display & display );
+
         const Rect & area() const
         {
             return isPressed() ? _areaPressed : _areaReleased;
@@ -270,6 +272,7 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         explicit ButtonGroup( const Rect & area = Rect(), const int buttonTypes = 0 );
+        ButtonGroup( const std::vector<const char *> & texts );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup() = default;
@@ -280,6 +283,8 @@ namespace fheroes2
                            const int returnValue );
         void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
         void addButton( ButtonSprite && button, const int returnValue );
+
+        void drawShadows( Display & display );
 
         // Will draw on screen by default
         void draw( Image & output = Display::instance() ) const;

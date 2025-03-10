@@ -445,6 +445,10 @@ namespace fheroes2
 
         return true;
     }
+    void ButtonBase::drawShadow( Display & display )
+    {
+        fheroes2::addGradientShadow( _getReleased(), display, area().getPosition(), { -5, 5 } );
+    }
 
     bool ButtonBase::drawOnPress( Display & output /* = Display::instance() */ )
     {
@@ -592,6 +596,16 @@ namespace fheroes2
             break;
         }
     }
+    ButtonGroup::ButtonGroup( const std::vector<const char *> & texts )
+    {
+        std::vector<Sprite> sprites;
+        const size_t textCount = texts.size();
+        sprites.resize( ( textCount * 2 ) );
+        makeSymmetricBackgroundSprites( sprites, texts );
+        for ( size_t i = 0; i < textCount; i++ ) {
+            createButton( 0, 0, sprites[i * 2], sprites[i * 2 + 1], static_cast<int>( i ) );
+        }
+    }
 
     void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
                                     const int returnValue )
@@ -616,6 +630,13 @@ namespace fheroes2
     {
         for ( const auto & button : _button ) {
             button->draw( output );
+        }
+    }
+
+    void ButtonGroup::drawShadows( Display & display )
+    {
+        for ( const auto & button : _button ) {
+            button.get()->drawShadow( display );
         }
     }
 
