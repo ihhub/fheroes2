@@ -234,10 +234,9 @@ namespace
             renderInputArea();
         }
 
-        void setCursorPosition( const int32_t clickXPosition, const int32_t startXPosition )
+        void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _info, fheroes2::FontType::normalWhite(), _cursorPosition, clickXPosition, startXPosition );
-
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, _cursorPosition, clickPosition, startPosRoi );
             renderInputArea();
         }
 
@@ -249,6 +248,7 @@ namespace
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
         size_t _cursorPosition{ 0 };
+        fheroes2::TextInput _textUI;
 
         fheroes2::Rect renderInputArea()
         {
@@ -264,11 +264,12 @@ namespace
                                         PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             }
 
-            fheroes2::Text textUI( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
+            _textUI.set( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+            _textUI.setCursorPosition( _cursorPosition );
+            _textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
 
-            textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
-                         windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaBorders, _output );
+            _textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
+                          windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - _textUI.height() ) / 2 + inputAreaBorders, _output );
 
             return outputRoi;
         }
@@ -799,7 +800,7 @@ namespace
             updateButtonStates( buttons, le );
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );
+                renderer.setCursorPosition( le.getMouseCursorPos(), textRoi );
             }
 
             // Text input cursor blink.
