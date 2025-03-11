@@ -1061,7 +1061,7 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1076,11 +1076,15 @@ void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2:
 
         if ( le.MouseClickLeft( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect() );
+            return true;
         }
         else if ( le.isMouseRightButtonPressedInArea( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
+            return true;
         }
     }
+
+    return false;
 }
 
 void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
@@ -2885,7 +2889,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() );
+        if ( _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() ) ) {
+            humanturn_redraw = true;
+        }
     }
     else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
@@ -3055,8 +3061,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                 MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
-            else if ( le.isMouseRightButtonPressed() ) {
-                MousePressRightBoardAction( *cell );
+            else if ( le.isMouseRightButtonPressed() && MousePressRightBoardAction( *cell ) ) {
+                humanturn_redraw = true;
             }
             else if ( le.isMouseLeftButtonPressedInArea( battleFieldRect ) ) {
                 if ( !le.isDragInProgress() && !_swipeAttack.isValid() ) {
@@ -3327,7 +3333,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
+bool Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
     const auto getUnit = [this, &cell]() -> const Unit * {
         if ( const Unit * unit = cell.GetUnit(); unit != nullptr ) {
@@ -3347,7 +3353,10 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 
     if ( const Unit * unit = getUnit(); unit != nullptr ) {
         Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
+        return true;
     }
+
+    return false;
 }
 
 void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions )
