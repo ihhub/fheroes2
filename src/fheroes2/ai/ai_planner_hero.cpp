@@ -2103,7 +2103,7 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, co
     return 0;
 }
 
-void AI::Planner::castAdventureSpellOnStandingObject( Heroes & hero )
+void AI::Planner::castAdventureSpellOnCapturedObject( Heroes & hero )
 {
     if ( !hero.HaveSpellBook() ) {
         // The hero doesn't have a spell book.

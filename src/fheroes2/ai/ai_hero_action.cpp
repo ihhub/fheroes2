@@ -733,7 +733,7 @@ namespace
 
                 setColorOnTile( tile, hero.GetColor() );
 
-                AI::Planner::castAdventureSpellOnStandingObject( hero );
+                AI::Planner::castAdventureSpellOnCapturedObject( hero );
             };
 
             if ( isCaptureObjectProtected( tile ) ) {
