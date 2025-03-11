@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-09 14:16+0000\n"
-"PO-Revision-Date: 2025-02-13 03:06+0100\n"
+"PO-Revision-Date: 2025-03-11 22:44+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -4686,21 +4686,17 @@ msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
 
-#, fuzzy
 msgid "None."
-msgstr "Aucune"
+msgstr "Aucune."
 
-#, fuzzy
 msgid "One side defeats another."
-msgstr "Veuillez choisir un autre héros."
+msgstr "Un camp contre l'autre."
 
-#, fuzzy
 msgid "Accumulate gold."
-msgstr "Amasser %{count} pièces d'or."
+msgstr "Amasser de l'or."
 
-#, fuzzy
 msgid "Run out of time."
-msgstr "Quitter l'éditeur de carte."
+msgstr "A court de temps."
 
 #, fuzzy
 msgid "alliance|1st"
@@ -4722,20 +4718,17 @@ msgstr " alliance"
 msgid "alliance|5th"
 msgstr " alliance"
 
-#, fuzzy
 msgid "Special Loss Condition"
-msgstr "Conditions de défaite"
+msgstr "Conditions de défaite spéciale"
 
-#, fuzzy
 msgid "Special Victory Condition"
-msgstr "Conditions de victoire"
+msgstr "Condition de victoire spéciale"
 
-#, fuzzy
 msgid "Allow standard victory conditions"
-msgstr "Conditions de victoire"
+msgstr "Condition de victoire standard autorisée"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Autorise cette condition pour l'IA"
 
 #, fuzzy
 msgid "Set alliances:"
@@ -4814,33 +4807,29 @@ msgid ""
 msgstr ""
 
 msgid "Change Map Name"
-msgstr ""
+msgstr "Change le nom de la carte"
 
-#, fuzzy
 msgid "Change Map Description"
-msgstr "Description sélectionnée"
+msgstr "Change la description de la carte"
 
 #, fuzzy
 msgid "Click to accept the changes made."
 msgstr "Cliquez pour afficher le village suivant."
 
-#, fuzzy
 msgid "Click to edit custom rumors."
-msgstr "Enregistrer le jeu en cours."
+msgstr "Cliquez pour éditer les rumeurs personnalisées."
 
 msgid "Rumors"
 msgstr "Rumeurs"
 
-#, fuzzy
 msgid "Click to edit daily events."
-msgstr "Cliquez pour quitter les résultats de la bataille."
+msgstr "Cliquez pour éditer les événements journaliers."
 
 msgid "Events"
 msgstr "Événements"
 
-#, fuzzy
 msgid "Click to change the language of the map."
-msgstr "Changer la langue du jeu."
+msgstr "Cliquez pour changer la langue de la carte."
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4885,17 +4874,15 @@ msgstr ""
 msgid "editor|%{count} %{resource}"
 msgstr "Sélectionner %{resource} :"
 
-#, fuzzy
 msgid "Animation"
-msgstr "Annexion"
+msgstr "Animation"
 
 #, fuzzy
 msgid "Passability"
 msgstr "Personnalité :"
 
-#, fuzzy
 msgid "Toggle animation of the objects."
-msgstr "Effacement %{type}."
+msgstr "Active ou Désactive l'animation des objets."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
@@ -8356,7 +8343,7 @@ msgid "View Spell Points Info"
 msgstr "Voir les infos sur les points de magie"
 
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Définir le rayon de patrouille en cases"
 
 #, fuzzy
 msgid "Enter hero's name"
@@ -8423,9 +8410,8 @@ msgstr ""
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Cliquez ici pour sélectionner cette couleur."
+msgstr "Cliquez ici pour activer le mode patrouille du héros."
 
 msgid "Blood Morale"
 msgstr "Moral de sang"
@@ -8716,7 +8702,8 @@ msgstr ""
 "%{count} pour cent."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "%{skill} élimine la pénalité de mouvement pour terrain accidenté."
+msgstr ""
+"%{skill} élimine la pénalité de mouvement pour les terrains accidentés."
 
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
@@ -8742,7 +8729,7 @@ msgid ""
 "their army, and reduces the cost of surrender."
 msgstr ""
 "%{skill} permet au héros de négocier avec des monstres plus faibles que son "
-"armée."
+"armée, et réduit le coût de la reddition."
 
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
@@ -8757,7 +8744,7 @@ msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
 msgstr ""
-"Le coût de la reddition est reduite à %{percent} pour cent du coût total des "
+"Le coût de la reddition est réduit à %{percent} pour cent du coût total des "
 "troupes dans l'armée du héros."
 
 msgid ""
