@@ -74,12 +74,8 @@ namespace
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
     const std::set<int> languageDependentIcnId{ ICN::BUTTON_WELL_MAX,
-                                                ICN::BUTTON_NEW_GAME_GOOD,
-                                                ICN::BUTTON_NEW_GAME_EVIL,
-                                                ICN::BUTTON_SAVE_GAME_GOOD,
-                                                ICN::BUTTON_SAVE_GAME_EVIL,
-                                                ICN::BUTTON_LOAD_GAME_GOOD,
-                                                ICN::BUTTON_LOAD_GAME_EVIL,
+                                                ICN::BUTTONS_FILE_DIALOG_GOOD,
+                                                ICN::BUTTONS_FILE_DIALOG_EVIL,
                                                 ICN::BUTTON_INFO_GOOD,
                                                 ICN::BUTTON_INFO_EVIL,
                                                 ICN::BUTTON_QUIT_GOOD,
@@ -1263,7 +1259,7 @@ namespace
         case ICN::BUTTON_SMALL_RESTART_EVIL:
         case ICN::UNIFORM_EVIL_MAX_BUTTON:
         case ICN::UNIFORM_EVIL_MIN_BUTTON: {
-            // We do palette swaps for these for one out of either two reasons: to generate completely new buttons, or to preserve
+            // We do palette swaps for these due to two reasons: to generate completely new buttons, or to preserve
             // language-specific generations from generateLanguageSpecificImages().
             _icnVsSprite[id].resize( 2 );
 
@@ -1308,23 +1304,38 @@ namespace
             convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID );
             break;
         }
+        case ICN::BUTTONS_FILE_DIALOG_EVIL:
+        case ICN::BUTTONS_FILE_DIALOG_GOOD: {
+            _icnVsSprite[id].resize( 8 );
+
+            const bool isEvilInterface = id == ICN::BUTTONS_FILE_DIALOG_EVIL;
+
+            if ( useOriginalResources() ) {
+                const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
+                for ( int i = 0; i < _icnVsSprite[id].size(); i++ ) {
+                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, i );
+                }
+                break;
+            }
+
+            const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], { fheroes2::getSupportedText( gettext_noop( "NEW\nGAME" ), buttonFontType ),
+                                                                          fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
+                                                                          fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
+                                                                          fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) } );
+
+            break;
+        }
         case ICN::BUTTON_INFO_EVIL:
         case ICN::BUTTON_INFO_GOOD:
-        case ICN::BUTTON_LOAD_GAME_EVIL:
-        case ICN::BUTTON_LOAD_GAME_GOOD:
         case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_NEW_GAME_EVIL:
-        case ICN::BUTTON_NEW_GAME_GOOD:
         case ICN::BUTTON_NEW_MAP_GOOD:
         case ICN::BUTTON_QUIT_EVIL:
         case ICN::BUTTON_QUIT_GOOD:
-        case ICN::BUTTON_SAVE_GAME_EVIL:
-        case ICN::BUTTON_SAVE_GAME_GOOD:
         case ICN::BUTTON_SAVE_MAP_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_NEW_GAME_EVIL || id == ICN::BUTTON_LOAD_GAME_EVIL || id == ICN::BUTTON_SAVE_GAME_EVIL
-                                           || id == ICN::BUTTON_QUIT_EVIL || id == ICN::BUTTON_INFO_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_QUIT_EVIL || id == ICN::BUTTON_INFO_EVIL );
 
             if ( useOriginalResources() ) {
                 int buttonIcnID = ICN::UNKNOWN;
@@ -1342,24 +1353,6 @@ namespace
                 }
                 case ICN::BUTTON_SAVE_MAP_GOOD: {
                     buttonIcnID = ICN::ECPANEL;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_NEW_GAME_EVIL:
-                case ICN::BUTTON_NEW_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_LOAD_GAME_EVIL:
-                case ICN::BUTTON_LOAD_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                case ICN::BUTTON_SAVE_GAME_EVIL:
-                case ICN::BUTTON_SAVE_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                     icnIndex = { 4, 5 };
                     break;
                 }
@@ -1398,21 +1391,6 @@ namespace
             }
             case ICN::BUTTON_SAVE_MAP_GOOD: {
                 text = gettext_noop( "SAVE\nMAP" );
-                break;
-            }
-            case ICN::BUTTON_NEW_GAME_EVIL:
-            case ICN::BUTTON_NEW_GAME_GOOD: {
-                text = gettext_noop( "NEW\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_LOAD_GAME_EVIL:
-            case ICN::BUTTON_LOAD_GAME_GOOD: {
-                text = gettext_noop( "LOAD\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_SAVE_GAME_EVIL:
-            case ICN::BUTTON_SAVE_GAME_GOOD: {
-                text = gettext_noop( "SAVE\nGAME" );
                 break;
             }
             case ICN::BUTTON_QUIT_EVIL:
