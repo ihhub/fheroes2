@@ -1313,7 +1313,7 @@ namespace
             if ( useOriginalResources() ) {
                 const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                 for ( int i = 0; i < _icnVsSprite[id].size(); i++ ) {
-                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, i );
+                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
                 }
                 break;
             }
