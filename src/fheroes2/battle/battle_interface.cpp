@@ -3257,15 +3257,17 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
 
     const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-    std::vector<fheroes2::Sprite> autoSprites;
-    autoSprites.resize( 4 );
-    fheroes2::makeSymmetricBackgroundSprites( autoSprites, { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ),
-                                                             fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
+
+    fheroes2::ButtonGroup autoButtons(
+        { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ), fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
+
+    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
+    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
 
     const int32_t autoButtonsXOffset = 20;
     const int32_t autoButtonsYOffset = 15;
-    const int32_t autoButtonsWidth = autoSprites[0].width();
-    const int32_t autoButtonsHeight = autoSprites[0].height();
+    const int32_t autoButtonsWidth = autoCombatButton.area().width;
+    const int32_t autoButtonsHeight = autoCombatButton.area().height;
     const int32_t buttonSeparation = 37;
     const int32_t titleYOffset = 16;
 
@@ -3282,17 +3284,12 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
     const fheroes2::Rect roiArea = background.activeArea();
-    std::vector<fheroes2::ButtonSprite> autoButtons;
-    autoButtons.resize( 2 );
-    autoButtons[0].setPosition( roiArea.x + autoButtonsXOffset, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
-    autoButtons[1].setPosition( roiArea.x + roiArea.width - autoButtonsXOffset - autoButtonsWidth, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
 
-    for ( size_t i = 0; i < 2; i++ ) {
-        autoButtons[i].setSprite( autoSprites[i * 2], autoSprites[i * 2 + 1] );
-        // TODO: Add the shadow generation as a method of ButtonGroup class to have access to _getReleased().
-        addGradientShadow( autoSprites[i * 2], display, autoButtons[i].area().getPosition(), { -5, 5 } );
-        autoButtons[i].draw();
-    }
+    autoCombatButton.setPosition( roiArea.x + autoButtonsXOffset, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
+    quickCombatButton.setPosition( roiArea.x + roiArea.width - autoButtonsXOffset - autoButtonsWidth, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
+
+    autoButtons.draw();
+    autoButtons.drawShadows();
 
     title.draw( roiArea.x, roiArea.y + titleYOffset, backgroundWidth, display );
 
@@ -3300,32 +3297,32 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        autoButtons[0].drawOnState( le.isMouseLeftButtonPressedInArea( autoButtons[0].area() ) );
-        autoButtons[1].drawOnState( le.isMouseLeftButtonPressedInArea( autoButtons[1].area() ) );
+        autoCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombatButton.area() ) );
+        quickCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( quickCombatButton.area() ) );
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( autoButtons[0].area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
+        if ( ( le.MouseClickLeft( autoCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
              && EventStartAutoCombat( unit, actions ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( autoButtons[1].area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
+        if ( ( le.MouseClickLeft( quickCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
             return;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( autoButtons[0].area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( autoCombatButton.area() ) ) {
             std::string msg = _( "The computer continues the combat for you." );
             msg += "\n\n";
             msg += _(
                 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat hotkey or the default Cancel key, or by performing a left or right click anywhere on the game screen." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( autoButtons[1].area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( quickCombatButton.area() ) ) {
             std::string msg = _( "The combat is resolved from the current state." );
             msg += "\n\n";
             msg += _( "quickCombat|This cannot be undone." );
