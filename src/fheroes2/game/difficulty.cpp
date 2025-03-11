@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -240,6 +240,19 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     }
 
     return true;
+}
+
+bool Difficulty::allowAIToReuseTeleporters( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        break;
+    }
+    return false;
 }
 
 bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
