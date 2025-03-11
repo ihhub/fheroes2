@@ -126,24 +126,24 @@ namespace
             const int32_t rightSideWidth = buttonSize.width - middleWidth;
 
             fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, middleHeight );
-            fheroes2::Copy( original, rightSideWidth, 0, output, middleWidth, 0, rightSideWidth, middleHeight );
+            fheroes2::Copy( original, originalWidth - rightSideWidth, 0, output, middleWidth, 0, rightSideWidth, middleHeight );
 
             int32_t offsetY = middleHeight;
             for ( int32_t i = 0; i < middleHeightCount; ++i ) {
                 fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeight );
-                fheroes2::Copy( original, rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
+                fheroes2::Copy( original, originalWidth - rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
                 offsetY += middleHeight;
             }
 
             if ( middleHeightLeftOver > 0 ) {
                 fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeightLeftOver );
-                fheroes2::Copy( original, rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeightLeftOver );
+                fheroes2::Copy( original, originalWidth - rightSideWidth, middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeightLeftOver );
                 offsetY += middleHeightLeftOver;
             }
             assert( offsetY + originalHeight - middleHeight * 4 == buttonSize.height );
 
             fheroes2::Copy( original, 0, originalHeight - middleHeight, output, 0, offsetY, middleWidth, middleHeight );
-            fheroes2::Copy( original, rightSideWidth, originalHeight - middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
+            fheroes2::Copy( original, originalWidth - rightSideWidth, originalHeight - middleHeight, output, middleWidth, offsetY, rightSideWidth, middleHeight );
         }
         // Buttons that have increased width and height.
         else if ( buttonSize.height > originalHeight && buttonSize.width > originalWidth ) {
@@ -445,9 +445,13 @@ namespace fheroes2
 
         return true;
     }
-    void ButtonBase::drawShadow( Display & display )
+
+    void ButtonBase::drawShadow( Image & output )
     {
-        fheroes2::addGradientShadow( _getReleased(), display, area().getPosition(), { -5, 5 } );
+        const Point buttonPoint = area().getPosition();
+        // Did you forget to set the position of the button?
+        assert( buttonPoint.x != 0 && buttonPoint.y != 0 );
+        fheroes2::addGradientShadow( _getReleased(), output, buttonPoint, { -5, 5 } );
     }
 
     bool ButtonBase::drawOnPress( Display & output /* = Display::instance() */ )
@@ -633,10 +637,10 @@ namespace fheroes2
         }
     }
 
-    void ButtonGroup::drawShadows( Display & display )
+    void ButtonGroup::drawShadows( Image & output /* = Display::instance() */ )
     {
         for ( const auto & button : _button ) {
-            button->drawShadow( display );
+            button->drawShadow( output );
         }
     }
 
@@ -942,14 +946,13 @@ namespace fheroes2
             buttonTexts.emplace_back( text, buttonFontType );
         }
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width() < b.width(); } );
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( a.width() ) < b.width( b.width() ); } );
 
         const int32_t width = ( *maxIter ).width( ( *maxIter ).width() ) + 6;
-        const int32_t multiLinedWidth = ( *maxIter ).width( width ) + 6;
 
-        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.height() > b.height(); } );
+        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), [width]( Text & a, Text & b ) { return a.height( width ) < b.height( width ); } );
 
-        int32_t height = ( *maxIter ).height( multiLinedWidth );
+        int32_t height = ( *maxIter ).height( width );
         // The actual button background is 10 pixels taller than the text.
         height += 10;
 
@@ -961,8 +964,7 @@ namespace fheroes2
         for ( size_t i = 0; i < buttonTexts.size(); i++ ) {
             Sprite & released = backgroundSprites[i * 2];
             Sprite & pressed = backgroundSprites[i * 2 + 1];
-            makeButtonSprites( released, pressed, buttonTexts[i].text(), { multiLinedWidth, height }, isEvilInterface,
-                               isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            makeButtonSprites( released, pressed, buttonTexts[i].text(), { width, height }, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
         }
     }
 
