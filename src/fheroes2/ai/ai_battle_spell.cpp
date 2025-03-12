@@ -666,7 +666,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     double enemyArmyStrength = 0;
     double dragonsStrength = 0;
 
-    size_t numOfSlotsWithEnemyDragons = 0;
+    int32_t numOfSlotsWithEnemyDragons = 0;
 
     for ( const Battle::Unit * unit : enemies ) {
         assert( unit != nullptr );
