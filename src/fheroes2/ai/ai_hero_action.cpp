@@ -1566,6 +1566,8 @@ namespace
             Maps::restoreAbandonedMine( tile, Resource::GOLD );
             hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
             setColorOnTile( tile, hero.GetColor() );
+
+            AI::Planner::castAdventureSpellOnCapturedObject( hero );
         }
         else {
             AIBattleLose( hero, result, true );
