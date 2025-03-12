@@ -611,6 +611,15 @@ namespace fheroes2
         }
     }
 
+    ButtonGroup::ButtonGroup( const int icnID )
+    {
+        // Button ICN contain released and pressed states so we divide by two to find the number of buttons they correspond to.
+        const int32_t buttonCount = fheroes2::AGG::GetICNCount( icnID ) / 2;
+        for ( int i = 0; i < buttonCount; i++ ) {
+            createButton( 0, 0, icnID, i * 2, i * 2 + 1, i );
+        }
+    }
+
     void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
                                     const int returnValue )
     {

@@ -273,8 +273,10 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         explicit ButtonGroup( const Rect & area = Rect(), const int buttonTypes = 0 );
-        // Generates a group of buttons with the provided texts on them.
+        // Generates a group of buttons with the provided texts drawn on them.
         explicit ButtonGroup( const std::vector<const char *> & texts );
+        // Generates a group of buttons from an ICN containing button sprites.
+        explicit ButtonGroup( const int icnID );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup() = default;
@@ -304,7 +306,8 @@ namespace fheroes2
             return *_button[id];
         }
 
-        const size_t size() const {
+        const size_t size() const
+        {
             return _button.size();
         }
 
