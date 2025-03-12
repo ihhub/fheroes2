@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -286,12 +286,6 @@ void Kingdom::ActionNewWeek()
 
     // Settle a new set of recruits
     GetRecruits();
-}
-
-void Kingdom::ActionNewMonth()
-{
-    // Clear the visited objects with a lifetime of one month, even if this kingdom has already been vanquished
-    visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Kingdom::AddHero( Heroes * hero )
@@ -853,11 +847,6 @@ void Kingdoms::NewDay()
 void Kingdoms::NewWeek()
 {
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
-}
-
-void Kingdoms::NewMonth()
-{
-    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewMonth(); } );
 }
 
 int Kingdoms::GetNotLossColors() const

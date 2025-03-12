@@ -327,14 +327,9 @@ namespace
                     // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
                     const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
                     assert( bottomTileIndex < mapFormat.tiles.size() );
-                    auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
-                    const bool isRoadAtBottom
-                        = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
-                                        []( const Maps::Map_Format::TileObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
-                          != bottomTileObjects.end();
-                    if ( isRoadAtBottom ) {
-                        // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
-                        Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( bottomTileIndex ) ), false );
+
+                    if ( Maps::doesContainRoads( mapFormat.tiles[bottomTileIndex] ) ) {
+                        Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( bottomTileIndex ), false );
                     }
 
                     needRedraw = true;
@@ -343,9 +338,15 @@ namespace
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
 
-                    needRedraw |= Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( mapTileIndex ) ), false );
+                    if ( Maps::doesContainRoads( mapTile ) ) {
+                        needRedraw |= Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
 
-                    ++objectIter;
+                        // Current 'objectIter'is deleted. Update it to the begin.
+                        objectIter = mapTile.objects.begin();
+                    }
+                    else {
+                        ++objectIter;
+                    }
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     objectIter = mapTile.objects.erase( objectIter );
@@ -1621,7 +1622,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( Maps::updateRoadOnTile( tile, true ) ) {
+            if ( Maps::updateRoadOnTile( _mapFormat, tile.GetIndex(), true ) ) {
                 _redraw |= mapUpdateFlags;
 
                 action.commit();
@@ -1819,6 +1820,13 @@ namespace Interface
 
             if ( !_setObjectOnTile( tile, groupType, type ) ) {
                 return;
+            }
+
+            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
+                // Update road if there is one in front of the town/castle entrance.
+                Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
             }
 
             // By default use random (default) army for the neutral race town/castle.
@@ -2109,9 +2117,7 @@ namespace Interface
             }
 
             if ( removeRoad ) {
-                auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-
-                Maps::updateRoadOnTile( worldTile, false );
+                Maps::updateRoadOnTile( _mapFormat, static_cast<int32_t>( i ), false );
             }
         }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -292,31 +292,37 @@ int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
 
 Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile /* = 1 */ )
 {
-    Indexes results;
+    return getAroundIndexes( tileIndex, world.w(), world.h(), maxDistanceFromTile );
+}
 
-    if ( !isValidAbsIndex( tileIndex ) || maxDistanceFromTile <= 0 ) {
-        return results;
+Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t width, const int32_t height, const int32_t maxDistanceFromTile )
+{
+    assert( width > 0 && height > 0 );
+
+    if ( tileIndex < 0 || tileIndex > width * height ) {
+        return {};
     }
+
+    if ( maxDistanceFromTile < 1 ) {
+        return {};
+    }
+
+    Indexes results;
 
     const size_t areaSideSize = maxDistanceFromTile * 2 + 1;
     results.reserve( areaSideSize * areaSideSize - 1 );
 
-    const int32_t worldWidth = world.w();
-    const int32_t worldHeight = world.h();
-
-    assert( worldWidth > 0 && worldHeight > 0 );
-
-    const int32_t centerX = tileIndex % worldWidth;
-    const int32_t centerY = tileIndex / worldWidth;
+    const int32_t centerX = tileIndex % width;
+    const int32_t centerY = tileIndex / width;
 
     // We avoid getting out of map boundaries.
     const int32_t minTileX = std::max( centerX - maxDistanceFromTile, 0 );
     const int32_t minTileY = std::max( centerY - maxDistanceFromTile, 0 );
-    const int32_t maxTileX = std::min( centerX + maxDistanceFromTile + 1, worldWidth );
-    const int32_t maxTileY = std::min( centerY + maxDistanceFromTile + 1, worldHeight );
+    const int32_t maxTileX = std::min( centerX + maxDistanceFromTile + 1, width );
+    const int32_t maxTileY = std::min( centerY + maxDistanceFromTile + 1, height );
 
     for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-        const int32_t indexOffsetY = tileY * worldWidth;
+        const int32_t indexOffsetY = tileY * width;
         const bool isCenterY = ( tileY == centerY );
 
         for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {

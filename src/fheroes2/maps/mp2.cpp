@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -500,43 +500,40 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
 
 bool MP2::isDayLife( const MapObjectType objectType )
 {
-    // Only one object on Adventure Map restores every day and this is Magic Well.
+    // Only one object on the Adventure Map restores every day and this is Magic Well.
     return ( objectType == OBJ_MAGIC_WELL );
 }
 
 bool MP2::isWeekLife( const MapObjectType objectType )
 {
-    // TODO: list week object life
     switch ( objectType ) {
-    case OBJ_STABLES:
+    case OBJ_ARTESIAN_SPRING:
     case OBJ_MAGIC_GARDEN:
+    case OBJ_STABLES:
     case OBJ_WATER_WHEEL:
     case OBJ_WINDMILL:
-    case OBJ_ARTESIAN_SPRING:
-    // join army
-    case OBJ_WATCH_TOWER:
-    case OBJ_EXCAVATION:
-    case OBJ_CAVE:
-    case OBJ_TREE_HOUSE:
+    // Monster dwellings.
+    case OBJ_AIR_ALTAR:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_GOBLIN_HUT:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_GOBLIN_HUT:
     case OBJ_HALFLING_HOLE:
     case OBJ_PEASANT_HUT:
-    // recruit army
     case OBJ_RUINS:
     case OBJ_TREE_CITY:
-    case OBJ_WAGON_CAMP:
-    case OBJ_DESERT_TENT:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_BARROW_MOUNDS:
-    // battle and recruit army
-    case OBJ_DRAGON_CITY:
-    case OBJ_CITY_OF_DEAD:
+    case OBJ_TREE_HOUSE:
     case OBJ_TROLL_BRIDGE:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATCH_TOWER:
+    case OBJ_WATER_ALTAR:
     // for AI
     case OBJ_HERO:
         return true;
@@ -547,28 +544,23 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isMonthLife( const MapObjectType objectType )
-{
-    return objectType == MP2::OBJ_CASTLE;
-}
-
 bool MP2::isBattleLife( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    // luck modificators
-    case OBJ_IDOL:
-    case OBJ_FOUNTAIN:
+    // Luck modifiers.
     case OBJ_FAERIE_RING:
+    case OBJ_FOUNTAIN:
+    case OBJ_IDOL:
     case OBJ_PYRAMID:
-    // morale modificators
+    // Morale modifiers.
     case OBJ_BUOY:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_GRAVEYARD:
+    case OBJ_MERMAID:
     case OBJ_OASIS:
+    case OBJ_SHIPWRECK:
     case OBJ_TEMPLE:
     case OBJ_WATERING_HOLE:
-    case OBJ_GRAVEYARD:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_MERMAID:
         return true;
     default:
         break;

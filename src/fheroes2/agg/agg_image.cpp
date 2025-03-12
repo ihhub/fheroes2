@@ -2637,7 +2637,6 @@ namespace
                 }
             }
             if ( _icnVsSprite[id].size() > 62 ) {
-                const fheroes2::Point shadowOffset( -1, 2 );
                 for ( size_t i = 0; i < 62; ++i ) {
                     fheroes2::Sprite & modified = _icnVsSprite[id][i];
                     const fheroes2::Point originalOffset( modified.x(), modified.y() );
@@ -3974,10 +3973,17 @@ namespace
                 const fheroes2::Sprite & originalImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, 83 );
                 SubpixelResize( originalImage, _icnVsSprite[id][82] );
             }
+            if ( _icnVsSprite[id].size() > 63 ) {
+                // This fixes "Golden Bow" (#63) small artifact icon glowing yellow pixel
+                Copy( _icnVsSprite[id][63], 12, 17, _icnVsSprite[id][63], 16, 12, 1, 1 );
+            }
             return true;
         case ICN::ARTIFACT:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 99 ) {
+                // This fixes "Golden Bow" (#64) large artifact icon glowing yellow pixel
+                Copy( _icnVsSprite[id][64], 35, 24, _icnVsSprite[id][64], 56, 12, 1, 1 );
+
                 // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                 for ( const int32_t index : { 88, 99 } ) {
                     fheroes2::Sprite & originalImage = _icnVsSprite[id][index];

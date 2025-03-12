@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -174,25 +174,36 @@ uint32_t GameStatic::GetCastleGrownMonthOf()
     return 100;
 }
 
-int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
+int32_t GameStatic::getObjectLuckEffect( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_MERMAID:
+        return 1;
+    case MP2::OBJ_PYRAMID:
+        return -2;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+int32_t GameStatic::getObjectMoraleEffect( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
     case MP2::OBJ_OASIS:
     case MP2::OBJ_WATERING_HOLE:
-    case MP2::OBJ_MERMAID:
-    case MP2::OBJ_FAERIE_RING:
-    case MP2::OBJ_FOUNTAIN:
-    case MP2::OBJ_IDOL:
         return 1;
     case MP2::OBJ_TEMPLE:
         return 2;
-    case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SHIPWRECK:
         return -1;
-    case MP2::OBJ_PYRAMID:
-        return -2;
     default:
         break;
     }
