@@ -346,8 +346,6 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
 
             castle->MageGuildEducateHero( hero );
-            hero.SetVisited( dstIndex );
-
             return;
         }
 
@@ -443,7 +441,6 @@ namespace
         captureCastle();
 
         castle->MageGuildEducateHero( hero );
-        hero.SetVisited( dstIndex );
     }
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )
@@ -735,6 +732,8 @@ namespace
                 removeObjectProtection();
 
                 setColorOnTile( tile, hero.GetColor() );
+
+                AI::Planner::castAdventureSpellOnCapturedObject( hero );
             };
 
             if ( isCaptureObjectProtected( tile ) ) {
@@ -805,7 +804,7 @@ namespace
             resetObjectMetadata( tile );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToWagon( Heroes & hero, int32_t dst_index )
@@ -979,8 +978,6 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        const Maps::Tile & tile = world.getTile( dst_index );
-
         int skill = Skill::Primary::UNKNOWN;
 
         switch ( objectType ) {
@@ -1000,16 +997,15 @@ namespace
             skill = AISelectSkillFromArena( hero );
             break;
         default:
+            // Did you add a new primary skill object? Add the logic for it!
+            assert( 0 );
             break;
         }
 
-        if ( ( MP2::OBJ_ARENA == objectType && !hero.isObjectTypeVisited( objectType ) ) || !hero.isVisited( tile ) ) {
+        if ( ( MP2::OBJ_ARENA == objectType && !hero.isObjectTypeVisited( objectType ) ) || !hero.isVisited( world.getTile( dst_index ) ) ) {
             // increase skill
             hero.IncreasePrimarySkill( skill );
             hero.SetVisited( dst_index );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -1026,11 +1022,13 @@ namespace
             exp = 1000;
             break;
         default:
+            // Did you add a new experience object? Add the logic for it!
+            assert( 0 );
             break;
         }
 
         // check already visited
-        if ( !hero.isVisited( tile ) && exp ) {
+        if ( !hero.isVisited( tile ) ) {
             hero.SetVisited( dst_index );
             hero.IncreaseExperience( exp );
         }
@@ -1102,13 +1100,9 @@ namespace
 
         // check already visited
         if ( !hero.isObjectTypeVisited( objectType ) ) {
-            // modify morale
+            // Morale is modified while marking visited object.
             hero.SetVisited( dst_index );
-            if ( move )
-                hero.IncreaseMovePoints( move );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
+            hero.IncreaseMovePoints( move );
         }
     }
 
@@ -1135,7 +1129,7 @@ namespace
             hero.SetSpellPoints( max * 2 );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToXanadu( Heroes & hero, int32_t dst_index )
@@ -1297,8 +1291,9 @@ namespace
         else if ( 0 == gold && !hero.isObjectTypeVisited( objectType ) ) {
             // Modify morale
             hero.SetVisited( dst_index );
-            hero.SetVisited( dst_index, Visit::GLOBAL );
         }
+
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToPyramid( Heroes & hero, int32_t dst_index )
@@ -1341,8 +1336,9 @@ namespace
         }
         else {
             hero.SetVisited( dst_index, Visit::LOCAL );
-            hero.SetVisited( dst_index, Visit::GLOBAL );
         }
+
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToObelisk( Heroes & hero, const Maps::Tile & tile )
@@ -1393,6 +1389,7 @@ namespace
         }
 
         Maps::Tile & tile = world.getTile( dst_index );
+        Kingdom & kingdom = hero.GetKingdom();
 
         if ( doesTileContainValuableItems( tile ) ) {
             Army army( tile );
@@ -1409,6 +1406,10 @@ namespace
 
             resetObjectMetadata( tile );
         }
+
+        // Even if the hero has been defeated by a demon (and no longer belongs to any
+        // valid kingdom), this tile should be marked as visited for his former kingdom.
+        kingdom.SetVisited( dst_index, tile.getMainObjectType( false ) );
     }
 
     void AIToDwellingJoinMonster( Heroes & hero, int32_t dst_index )
@@ -1432,6 +1433,8 @@ namespace
         }
 
         setMonsterCountOnTile( tile, 0 );
+
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -1478,6 +1481,8 @@ namespace
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
+
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )
@@ -1561,6 +1566,8 @@ namespace
             Maps::restoreAbandonedMine( tile, Resource::GOLD );
             hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
             setColorOnTile( tile, hero.GetColor() );
+
+            AI::Planner::castAdventureSpellOnCapturedObject( hero );
         }
         else {
             AIBattleLose( hero, result, true );
@@ -1634,8 +1641,9 @@ namespace
             }
         }
         else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-            // TODO: do we need to check this condition?
-            result = true;
+            const Skill::Secondary & skill = getArtifactSecondarySkillRequirement( tile );
+
+            result = hero.HasSecondarySkill( skill.Skill() );
         }
         else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
             Army army( tile );
@@ -1790,9 +1798,9 @@ namespace
                     artifact = Artifact::UNKNOWN;
                 }
             }
-        }
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " removed " << cursed << " artifacts" )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " removed " << cursed << " artifacts" )
+        }
     }
 
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -2376,15 +2376,6 @@ void AllCastles::NewWeek() const
         assert( castle != nullptr );
 
         castle->ActionNewWeek();
-    } );
-}
-
-void AllCastles::NewMonth() const
-{
-    std::for_each( begin(), end(), []( const Castle * castle ) {
-        assert( castle != nullptr );
-
-        castle->ActionNewMonth();
     } );
 }
 
