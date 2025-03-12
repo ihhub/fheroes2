@@ -87,7 +87,7 @@ namespace fheroes2
         void render();
 
         void renderScrollbarBackground( const Rect & roi, const bool isEvilInterface );
-        
+
         void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
         void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel );
         // Renders a button background with shadow which adapts its dimensions according to the width and height of the provided text.
