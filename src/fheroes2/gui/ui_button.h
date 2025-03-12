@@ -375,7 +375,7 @@ namespace fheroes2
     // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
 
-    // Generates a multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
+    // Generates multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
     void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
