@@ -366,7 +366,7 @@ bool AI::tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain )
     return true;
 }
 
-void AI::shareObjectVisitInfoWithAllies( Kingdom & kingdom, const int32_t tileIndex )
+void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex )
 {
     if ( !Difficulty::isObjectVisitInfoSharingAllowedForAI( Game::getDifficulty() ) ) {
         return;

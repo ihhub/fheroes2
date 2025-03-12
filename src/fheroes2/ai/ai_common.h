@@ -65,5 +65,5 @@ namespace AI
     // Shares information about an object located at a given tile with AI allies.
     // It is assumed that allied AI players can talk like human players do in real life.
     // The information is shared only if all allies are AI. If any of them is a human player then no information will be shared.
-    void shareObjectVisitInfoWithAllies( Kingdom & kingdom, const int32_t tileIndex );
+    void shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex );
 }
