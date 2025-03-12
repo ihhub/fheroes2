@@ -96,7 +96,7 @@ namespace fheroes2
         void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
                                        const Padding padding );
         // Renders a button group of symmetric buttons in a grid of columns and rows.
-        void renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset );
+        void renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset ) const;
 
         void applyTextBackgroundShading( const Rect & roi );
         static void applyTextBackgroundShading( Image & output, const Rect & roi );
