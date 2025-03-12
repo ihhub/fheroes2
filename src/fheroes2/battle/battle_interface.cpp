@@ -3251,51 +3251,39 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 {
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-    const int cancelButtonICN = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
-
     const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-
     fheroes2::ButtonGroup autoButtons(
         { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ), fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
 
-    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
-    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
-
-    const int32_t autoButtonsXOffset = 20;
     const int32_t autoButtonsYOffset = 15;
-    const int32_t autoButtonsWidth = autoCombatButton.area().width;
-    const int32_t autoButtonsHeight = autoCombatButton.area().height;
-    const int32_t buttonSeparation = 37;
+    const int32_t cancelButtonHeight = 25;
     const int32_t titleYOffset = 16;
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
-    const int32_t backgroundWidth = autoButtonsXOffset * 2 + autoButtonsWidth * 2 + buttonSeparation;
-    const int32_t backgroundHeight = titleYOffset + title.height( backgroundWidth ) + autoButtonsHeight + cancelButtonReleased.height() + autoButtonsYOffset + 28;
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
+    fheroes2::StandardWindow background( { autoButtons.button( 0 ).area().width, autoButtons.button( 0 ).area().height }, 2, 1,
+                                         { 60, titleYOffset + title.height() + cancelButtonHeight + autoButtonsYOffset + 28 } );
 
     fheroes2::Button buttonCancel;
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
     background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+    background.renderSymmetricButtonGroup( autoButtons, 2, 1, { 30, titleYOffset + title.height() + autoButtonsYOffset } );
 
     const fheroes2::Rect roiArea = background.activeArea();
 
-    autoCombatButton.setPosition( roiArea.x + autoButtonsXOffset, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
-    quickCombatButton.setPosition( roiArea.x + roiArea.width - autoButtonsXOffset - autoButtonsWidth, roiArea.y + ( roiArea.height - autoButtonsHeight ) / 2 );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    autoButtons.draw();
-    autoButtons.drawShadows();
-
-    title.draw( roiArea.x, roiArea.y + titleYOffset, backgroundWidth, display );
+    title.draw( roiArea.x, roiArea.y + titleYOffset, roiArea.width, display );
 
     display.render( background.totalArea() );
-    LocalEvent & le = LocalEvent::Get();
 
+    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
+    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
+
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         autoCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombatButton.area() ) );
         quickCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( quickCombatButton.area() ) );
