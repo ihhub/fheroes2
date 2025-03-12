@@ -41,10 +41,17 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps_tiles.h"
 #include "payment.h"
+#include "players.h"
 #include "resource.h"
 #include "resource_trading.h"
 #include "world.h"
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
