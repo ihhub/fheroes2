@@ -446,7 +446,7 @@ namespace fheroes2
         return true;
     }
 
-    void ButtonBase::drawShadow( Image & output )
+    void ButtonBase::drawShadow( Image & output /* = Display::instance() */ )
     {
         const Point buttonPoint = area().getPosition();
         // Did you forget to set the position of the button?
