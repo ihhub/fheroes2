@@ -239,10 +239,6 @@ namespace
         case Spell::EARTHQUAKE:
         case Spell::HAUNT:
         case Spell::IDENTIFYHERO:
-        case Spell::SETAGUARDIAN:
-        case Spell::SETEGUARDIAN:
-        case Spell::SETFGUARDIAN:
-        case Spell::SETWGUARDIAN:
         case Spell::TELEPORT:
         case Spell::VIEWARTIFACTS:
         case Spell::VIEWHEROES:
@@ -2105,6 +2101,36 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, co
     }
 
     return 0;
+}
+
+void AI::Planner::castAdventureSpellOnCapturedObject( Heroes & hero )
+{
+    if ( !hero.HaveSpellBook() ) {
+        // The hero doesn't have a spell book.
+        return;
+    }
+
+    const MP2::MapObjectType objectType = hero.getObjectTypeUnderHero();
+    assert( world.getTile( hero.GetIndex() ).getMainObjectType( false ) == objectType );
+
+    if ( objectType == MP2::OBJ_MINE ) {
+        // For mines we can cast either a Guardian or Haunt spell.
+        // However, we have no idea where Haunt spell is going to be useful so we ignore it for now.
+        std::vector<Spell> spells = { Spell::SETAGUARDIAN, Spell::SETEGUARDIAN, Spell::SETFGUARDIAN, Spell::SETWGUARDIAN };
+        // Shuffle spells as all of them seem to be equal in power.
+        Rand::Shuffle( spells );
+
+        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+
+        for ( const Spell spell : spells ) {
+            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
+                // Looks like this hero knows the spell and casting it won't take too many spell points.
+                // So, let's do it!
+                hero.ActionSpellCast( spell );
+                return;
+            }
+        }
+    }
 }
 
 int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestPossibleValue )

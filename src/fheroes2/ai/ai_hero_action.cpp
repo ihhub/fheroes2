@@ -732,6 +732,8 @@ namespace
                 removeObjectProtection();
 
                 setColorOnTile( tile, hero.GetColor() );
+
+                AI::Planner::castAdventureSpellOnCapturedObject( hero );
             };
 
             if ( isCaptureObjectProtected( tile ) ) {
