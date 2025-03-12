@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +44,7 @@
 #include "payment.h"
 #include "resource.h"
 #include "resource_trading.h"
+#include "world.h"
 
 bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
@@ -356,4 +357,33 @@ bool AI::tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain )
     kingdom.OddFundsResource( *transaction );
 
     return true;
+}
+
+void AI::shareObjectVisitInfoWithAllies( Kingdom & kingdom, const int32_t tileIndex )
+{
+    if ( !Difficulty::isObjectVisitInfoSharingAllowedForAI( Game::getDifficulty() ) ) {
+        return;
+    }
+
+    if ( !kingdom.isControlAI() ) {
+        return;
+    }
+
+    const int friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    if ( friendColors == 0 ) {
+        // No allies.
+        return;
+    }
+
+    if ( ( friendColors & Players::HumanColors() ) != 0 ) {
+        // Some allies are human players.
+        return;
+    }
+
+    const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( false );
+
+    const Colors playerColors( friendColors );
+    for ( const int color : playerColors ) {
+        ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
+    }
 }
