@@ -3261,7 +3261,10 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
-    fheroes2::StandardWindow background( { autoButtons.button( 0 ).area().width, autoButtons.button( 0 ).area().height }, 2, 1,
+    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
+    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
+
+    fheroes2::StandardWindow background( { autoCombatButton.area().width, autoCombatButton.area().height }, 2, 1,
                                          { 60, titleYOffset + title.height() + cancelButtonHeight + autoButtonsYOffset + 28 } );
 
     fheroes2::Button buttonCancel;
@@ -3279,9 +3282,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     title.draw( roiArea.x, roiArea.y + titleYOffset, roiArea.width, display );
 
     display.render( background.totalArea() );
-
-    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
-    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
