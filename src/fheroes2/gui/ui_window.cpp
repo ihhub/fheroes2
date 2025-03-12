@@ -67,6 +67,19 @@ namespace fheroes2
         render();
     }
 
+    StandardWindow::StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output )
+        : _output( output )
+        , _activeArea( ( output.width() - ( buttonSize.width * columns + 37 * ( columns - 1 ) + windowPadding.width ) ) / 2,
+                       ( output.height() - ( buttonSize.height * rows + windowPadding.height ) ) / 2,
+                       buttonSize.width * columns + 37 * ( columns - 1 ) + windowPadding.width, buttonSize.height * rows + 20 * ( rows - 1 ) + windowPadding.height )
+        , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
+        , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+        , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+        , _hasBackground{ true }
+    {
+        render();
+    }
+
     void StandardWindow::render()
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -343,6 +356,32 @@ namespace fheroes2
         }
     }
 
+    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
+                                       const Padding padding )
+    {
+        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
+
+        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
+
+        button.setICNInfo( icnId, releasedIndex, pressedIndex );
+        button.setPosition( pos.x, pos.y );
+        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
+        button.draw();
+    }
+
+    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
+    {
+        const Point buttonOffset( 20, 7 );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
+
+        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
+    }
+
     void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
     {
         Sprite released;
@@ -378,30 +417,18 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
-                                       const Padding padding )
-    {
-        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
-
-        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
-
-        button.setICNInfo( icnId, releasedIndex, pressedIndex );
-        button.setPosition( pos.x, pos.y );
-        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
-        button.draw();
-    }
-
-    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
-    {
-        const Point buttonOffset( 20, 7 );
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
-
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
+    void StandardWindow::renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset ) {
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+        for ( int row = 0; row < rows; row++ ) {
+            for ( int column = 0; column < columns; column++ ) {
+                buttons.button( column + 2 * row )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * 37,
+                                  _activeArea.y + ( row * ( buttonsHeight + 20 ) ) + buttonsOffset.y );
+            }
+        }
+        buttons.drawShadows();
+        buttons.draw();
     }
 
     Point StandardWindow::_getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const

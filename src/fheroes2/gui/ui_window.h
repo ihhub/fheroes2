@@ -31,6 +31,7 @@ namespace fheroes2
 {
     class Button;
     class ButtonSprite;
+    class ButtonGroup;
 
     // Standard window with shadow.
     class StandardWindow
@@ -54,6 +55,8 @@ namespace fheroes2
         StandardWindow & operator=( const StandardWindow & ) = delete;
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
+        // Renders a dialog with its size adjusted to fit the provided button group within the specified rows and columns.
+        StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output = Display::instance() );
         ~StandardWindow()
         {
             Display & display = Display::instance();
@@ -84,13 +87,16 @@ namespace fheroes2
         void render();
 
         void renderScrollbarBackground( const Rect & roi, const bool isEvilInterface );
+        
+        void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
+        void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel );
         // Renders a button background with shadow which adapts its dimensions according to the width and height of the provided text.
         void renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding );
         // Renders a button background with shadow which has specified heights and widths.
         void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
                                        const Padding padding );
-        void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
-        void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel );
+        // Renders a button group of symmetric buttons in a grid of columns and rows.
+        void renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset );
 
         void applyTextBackgroundShading( const Rect & roi );
         static void applyTextBackgroundShading( Image & output, const Rect & roi );
