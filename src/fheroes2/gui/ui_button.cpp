@@ -600,6 +600,7 @@ namespace fheroes2
             break;
         }
     }
+
     ButtonGroup::ButtonGroup( const std::vector<const char *> & texts )
     {
         std::vector<Sprite> sprites;
