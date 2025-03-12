@@ -941,7 +941,7 @@ namespace fheroes2
 
     void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts )
     {
-        // There should be double as many texts as there are sprites since there are pressed and released states for every text.
+        // There should be double as many sprites as there are texts since there are pressed and released states for every text.
         assert( backgroundSprites.size() == texts.size() * 2 );
 
         // You are trying to make a group of buttons with 0 or only one text.
