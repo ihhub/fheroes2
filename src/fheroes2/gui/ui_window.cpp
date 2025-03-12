@@ -417,7 +417,8 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset ) {
+    void StandardWindow::renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset )
+    {
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
         const int32_t buttonsHeight = buttons.button( 0 ).area().height;
         for ( int row = 0; row < rows; row++ ) {

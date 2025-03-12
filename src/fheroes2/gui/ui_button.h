@@ -306,11 +306,6 @@ namespace fheroes2
             return *_button[id];
         }
 
-        const size_t size() const
-        {
-            return _button.size();
-        }
-
         int processEvents();
 
     private:
