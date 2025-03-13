@@ -958,12 +958,12 @@ namespace fheroes2
         // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
         const int32_t maxWidth = 200;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), [&maxWidth]( Text & a, Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
 
         // We add 6 to have some extra horizontal margin.
         const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
         // To avoid enlarging the small buttons like MAX and MIN we enforce a minimum width only for buttons that are wider than these small buttons. Note that 10 px are
-        // added in getCustomNormalButton.
+        // added in getCustomNormalButton().
         const int32_t finalWidth = std::clamp( width, ( width > 61 ) ? 86 : 61, maxWidth );
 
         maxIter
