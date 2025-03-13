@@ -958,7 +958,7 @@ namespace fheroes2
         // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
         const int32_t maxWidth = 200;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), [maxWidth]( Text & a, Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
 
         // We add 6 to have some extra horizontal margin.
         const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
