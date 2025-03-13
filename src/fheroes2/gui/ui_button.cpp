@@ -962,8 +962,6 @@ namespace fheroes2
 
         // We add 6 to have some extra horizontal margin.
         const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
-        // To avoid enlarging the small buttons like MAX and MIN we enforce a minimum width only for buttons that are wider than these small buttons. Note that 10 px are
-        // added in getCustomNormalButton().
         const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
         maxIter
