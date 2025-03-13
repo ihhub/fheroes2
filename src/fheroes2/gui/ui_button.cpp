@@ -971,8 +971,8 @@ namespace fheroes2
 
         int32_t height = ( *maxIter ).height( finalWidth );
 
-        // Add extra vertical margin depending on whether it's a single-lined or multi-lined text.
-        height += ( height > getFontHeight( buttonFontType.size ) ) ? 26 : 10;
+        // Add extra vertical margin only if the button text is on two lines.
+        height += ( height == ( getFontHeight( buttonFontType.size ) * 2 ) ) ? 26 : 10;
 
         const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
