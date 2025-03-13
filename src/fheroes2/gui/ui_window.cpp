@@ -73,6 +73,9 @@ namespace fheroes2
 
     StandardWindow::StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output )
         : _output( output )
+        // The activeArea width and height depend on how many buttons there are in the rows and columns and on the gaps between them. The number of gaps will always be 1
+        // less than the rows/columns. For the height, the gap must be doubled when we have more than one column, i.e. (columns > 1) becomes true which equates to 1. This
+        // mimics the gaps observed in the original main menu and the original file dialog.
         , _activeArea( ( output.width() - ( buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width ) ) / 2,
                        ( output.height() - ( buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height ) ) / 2,
                        buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width,
