@@ -72,6 +72,8 @@ namespace Difficulty
     // Returns a multiplier of a Guardian spell cost which serves as minimum spell points an AI hero should have to cast the spell.
     int32_t getGuardianSpellMultiplier( const int difficulty );
 
+    bool isObjectVisitInfoSharingAllowedForAI( const int difficulty );
+
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }

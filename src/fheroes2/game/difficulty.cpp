@@ -264,6 +264,25 @@ int32_t Difficulty::getGuardianSpellMultiplier( const int difficulty )
     return 20;
 }
 
+bool Difficulty::isObjectVisitInfoSharingAllowedForAI( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return false;
+}
+
 bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
 {
     switch ( difficulty ) {
