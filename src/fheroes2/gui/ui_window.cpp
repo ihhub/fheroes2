@@ -74,7 +74,7 @@ namespace fheroes2
     StandardWindow::StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output )
         : _output( output )
         , _activeArea( ( output.width() - ( buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width ) ) / 2,
-                       ( output.height() - (  buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height ) ) / 2,
+                       ( output.height() - ( buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height ) ) / 2,
                        buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width,
                        buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
