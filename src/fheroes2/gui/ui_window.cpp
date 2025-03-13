@@ -425,7 +425,7 @@ namespace fheroes2
     {
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
         const int32_t buttonsHeight = buttons.button( 0 ).area().height;
-        size_t buttonIter = 0;
+        int buttonIter = 0;
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
                 buttons.button( buttonIter )
