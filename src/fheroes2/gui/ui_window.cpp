@@ -425,11 +425,13 @@ namespace fheroes2
     {
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
         const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+        int buttonIter = 0;
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
-                buttons.button( column + 2 * row )
+                buttons.button( buttonIter )
                     .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
                                   _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
+                buttonIter++;
             }
         }
         buttons.drawShadows();
