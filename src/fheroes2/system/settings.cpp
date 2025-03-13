@@ -909,7 +909,7 @@ bool Settings::isEvilInterfaceEnabled() const
         return true;
     case InterfaceType::DYNAMIC: {
         const Player * player = GetPlayers().GetCurrent();
-        if ( !player ) {
+        if ( !player || !player->isPlay() ) {
             return false;
         }
 
