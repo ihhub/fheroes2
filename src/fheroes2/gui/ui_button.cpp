@@ -955,26 +955,31 @@ namespace fheroes2
         for ( const char * text : texts ) {
             buttonTexts.emplace_back( text, buttonFontType );
         }
+        // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
+        const int32_t maxWidth = 200;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( a.width() ) < b.width( b.width() ); } );
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), [maxWidth]( Text & a, Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
 
-        const int32_t width = ( *maxIter ).width( ( *maxIter ).width() ) + 6;
+        // We add 6 to have some extra horizontal margin.
+        const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
+        // To avoid enlarging the small buttons like MAX and MIN we enforce a minimum width only for buttons that are wider than these small buttons. Note that 10 px are
+        // added in getCustomNormalButton.
+        const int32_t finalWidth = std::clamp( width, ( width > 61 ) ? 86 : 61, maxWidth );
 
-        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), [width]( Text & a, Text & b ) { return a.height( width ) < b.height( width ); } );
+        maxIter
+            = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( Text & a, Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
 
-        int32_t height = ( *maxIter ).height( width );
-        // The actual button background is 10 pixels taller than the text.
-        height += 10;
+        int32_t height = ( *maxIter ).height( finalWidth );
 
-        // Add extra y-margin for multi-lined texts.
-        if ( height > 27 ) {
-            height += 16;
-        }
+        // Add extra vertical margin depending on whether it's a single-lined or multi-lined text.
+        height += ( height > getFontHeight( buttonFontType.size ) ) ? 26 : 10;
+
+        const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
         for ( size_t i = 0; i < buttonTexts.size(); i++ ) {
             Sprite & released = backgroundSprites[i * 2];
             Sprite & pressed = backgroundSprites[i * 2 + 1];
-            makeButtonSprites( released, pressed, buttonTexts[i].text(), { width, height }, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            makeButtonSprites( released, pressed, buttonTexts[i].text(), { finalWidth, height }, isEvilInterface, backgroundIcnID );
         }
     }
 

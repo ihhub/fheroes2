@@ -41,6 +41,10 @@ namespace
 
     // Offset from window edges to background copy area.
     const int32_t backgroundOffset{ 22 };
+
+    // Spaces between buttons in symmetric button groups.
+    const int32_t buttonsHorizontalGap = 37;
+    const int32_t buttonsVerticalGap = 10;
 }
 
 namespace fheroes2
@@ -69,9 +73,10 @@ namespace fheroes2
 
     StandardWindow::StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output )
         : _output( output )
-        , _activeArea( ( output.width() - ( buttonSize.width * columns + 37 * ( columns - 1 ) + windowPadding.width ) ) / 2,
-                       ( output.height() - ( buttonSize.height * rows + windowPadding.height ) ) / 2,
-                       buttonSize.width * columns + 37 * ( columns - 1 ) + windowPadding.width, buttonSize.height * rows + 20 * ( rows - 1 ) + windowPadding.height )
+        , _activeArea( ( output.width() - ( buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width ) ) / 2,
+                       ( output.height() - (  buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height ) ) / 2,
+                       buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width,
+                       buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
@@ -423,8 +428,8 @@ namespace fheroes2
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
                 buttons.button( column + 2 * row )
-                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * 37,
-                                  _activeArea.y + ( row * ( buttonsHeight + 20 ) ) + buttonsOffset.y );
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
             }
         }
         buttons.drawShadows();
