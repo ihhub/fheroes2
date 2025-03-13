@@ -1317,10 +1317,12 @@ namespace
             }
 
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], { fheroes2::getSupportedText( gettext_noop( "NEW\nGAME" ), buttonFontType ),
-                                                                          fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
-                                                                          fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
-                                                                          fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) } );
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
+                                                      { fheroes2::getSupportedText( gettext_noop( "NEW\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
+                                                      80 );
 
             break;
         }

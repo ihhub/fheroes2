@@ -606,7 +606,7 @@ namespace fheroes2
         std::vector<Sprite> sprites;
         const size_t textCount = texts.size();
         sprites.resize( ( textCount * 2 ) );
-        makeSymmetricBackgroundSprites( sprites, texts );
+        makeSymmetricBackgroundSprites( sprites, texts, 86 );
         for ( size_t i = 0; i < textCount; i++ ) {
             createButton( 0, 0, sprites[i * 2], sprites[i * 2 + 1], static_cast<int>( i ) );
         }
@@ -939,7 +939,7 @@ namespace fheroes2
         renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
     }
 
-    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts )
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts, const int32_t minWidth )
     {
         // There should be double as many sprites as there are texts since there are pressed and released states for every text.
         assert( backgroundSprites.size() == texts.size() * 2 );
@@ -964,7 +964,7 @@ namespace fheroes2
         const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
         // To avoid enlarging the small buttons like MAX and MIN we enforce a minimum width only for buttons that are wider than these small buttons. Note that 10 px are
         // added in getCustomNormalButton().
-        const int32_t finalWidth = std::clamp( width, ( width > 61 ) ? 86 : 61, maxWidth );
+        const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
         maxIter
             = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( Text & a, Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
