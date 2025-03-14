@@ -1489,8 +1489,9 @@ namespace
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
-
-        hero.SetVisited( dst_index, Visit::GLOBAL );
+        else {
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+        }
     }
 
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )
