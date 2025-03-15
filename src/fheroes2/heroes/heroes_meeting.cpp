@@ -102,9 +102,11 @@ namespace
             // If there is any artifact left that has not yet been moved, it is assumed that it goes first in the list of artifacts (in place of the missing Magic Book)
             assert( fromIter == std::prev( from.rend() ) );
 
-            if ( !fromIter->isValid() || *fromIter == Artifact::MAGIC_BOOK ) {
+            if ( !fromIter->isValid() ) {
                 return;
             }
+
+            assert( *fromIter != Artifact::MAGIC_BOOK );
 
             // Just try to put this artifact to the first empty slot (if any)
             if ( !to.PushArtifact( *fromIter ) ) {
