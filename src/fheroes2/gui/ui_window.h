@@ -55,8 +55,9 @@ namespace fheroes2
         StandardWindow & operator=( const StandardWindow & ) = delete;
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
-        // Renders a dialog with its size adjusted to fit a symmetric button group with the specified rows and columns.
-        StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output = Display::instance() );
+        // Renders a dialog with its size adjusted to fit a symmetric button group with the buttons aligned in either a single column or in multiple. Add extra height if
+        // the dialog has extra elements like a text header.
+        StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output = Display::instance() );
         ~StandardWindow()
         {
             Display & display = Display::instance();

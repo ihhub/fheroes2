@@ -45,6 +45,27 @@ namespace
     // Spaces between buttons in symmetric button groups.
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
+
+    constexpr const int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
+    {
+        const int32_t widthPadding = isSingleColumn ? 50 : 60;
+        return ( isSingleColumn         ? buttonWidth
+                 : ( buttonCount == 2 ) ? buttonWidth * 2 + buttonsHorizontalGap
+                                        : ( buttonCount / 2 ) * buttonWidth + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap ) )
+               + widthPadding;
+    }
+
+    constexpr const int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
+    {
+        const int32_t heightPadding = isSingleColumn ? 15 : 47; // Might need more for single column
+        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
+        const int32_t height = ( isSingleColumn         ? buttonHeight * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap )
+                                 : ( buttonCount == 2 ) ? buttonHeight
+                                                        : buttonHeight * 2 + ( buttonsVerticalGap + 10 ) )
+                               + cancelButtonAreaHeight + heightPadding + extraHeight;
+        return height;
+    }
+
 }
 
 namespace fheroes2
@@ -71,20 +92,41 @@ namespace fheroes2
         render();
     }
 
-    StandardWindow::StandardWindow( const Size & buttonSize, const int columns, const int rows, const Size & windowPadding, Image & output )
+    StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
         : _output( output )
-        // The activeArea width and height depend on how many buttons there are in the rows and columns and on the gaps between them. The number of gaps will always be 1
-        // less than the rows/columns. For the height, the gap must be doubled when we have more than one column, i.e. (columns > 1) becomes true which equates to 1. This
-        // mimics the gaps observed in the original main menu and the original file dialog.
-        , _activeArea( ( output.width() - ( buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width ) ) / 2,
-                       ( output.height() - ( buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height ) ) / 2,
-                       buttonSize.width * columns + buttonsHorizontalGap * ( columns - 1 ) + windowPadding.width,
-                       buttonSize.height * rows + ( buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) * ( rows - 1 ) + windowPadding.height )
+        , _activeArea( ( output.width() - getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ) ) / 2,
+                       ( output.height() - getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) ) / 2,
+                       getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ),
+                       getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
     {
+        const int32_t buttonCount = buttons.getButtonsCount();
+        // An odd number of buttons have to be on a single column. Could make a bool that checks this and forces singleColumn behavior.
+        // assert( !isSingleColumn && !(buttonCount % 2 == 0) );
         render();
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+        int buttonIter = 0;
+
+        const int32_t rows = isSingleColumn ? buttonCount : 2;
+        const int32_t columns = isSingleColumn ? 1 : ( buttonCount / 2 );
+        // Instead of this we could automatically center-align the buttons.
+        const Point buttonsOffset = { isSingleColumn ? 25 : 30, isSingleColumn ? 22 : 15 };
+        // TODO. Fix the case of horizontal 2 buttons as in auto battle dialog.
+        for ( int row = 0; row < rows; row++ ) {
+            for ( int column = 0; column < columns; column++ ) {
+                buttons.button( buttonIter )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
+                buttonIter++;
+            }
+        }
+        buttons.drawShadows();
+        buttons.draw();
+
+        // Render big cancel button if singleColumn, small cancel button if not.
     }
 
     void StandardWindow::render()
