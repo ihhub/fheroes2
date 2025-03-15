@@ -49,21 +49,37 @@ namespace
     constexpr int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
-        return ( isSingleColumn         ? buttonWidth
-                 : ( buttonCount == 2 ) ? buttonWidth * 2 + buttonsHorizontalGap
-                                        : ( buttonCount / 2 ) * buttonWidth + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap ) )
-               + widthPadding;
+        int32_t dialogWidth = widthPadding;
+        // We force an odd number of buttons to be as a single column.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            dialogWidth += buttonWidth;
+        }
+        else if ( buttonCount == 2 ) {
+            dialogWidth += buttonWidth * 2 + buttonsHorizontalGap;
+        }
+        else {
+            dialogWidth += ( buttonCount / 2 ) * buttonWidth + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
+        }
+        return dialogWidth;
     }
 
     constexpr int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
     {
-        const int32_t heightPadding = isSingleColumn ? 15 : 47; // Might need more for single column
+        const int32_t heightPadding = isSingleColumn ? 15 : 26; // Might need more for single column
+        // We assume that the cancel for multicolumn is 25 px because it should be a single-lined text.
         const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
-        const int32_t height = ( isSingleColumn         ? buttonHeight * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap )
-                                 : ( buttonCount == 2 ) ? buttonHeight
-                                                        : buttonHeight * 2 + ( buttonsVerticalGap + 10 ) )
-                               + cancelButtonAreaHeight + heightPadding + extraHeight;
-        return height;
+        int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
+        // We force an odd number of buttons to be as a single column.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            dialogHeight += buttonHeight * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap );
+        }
+        else if ( buttonCount == 2 ) {
+            dialogHeight += buttonHeight;
+        }
+        else {
+            dialogHeight += buttonHeight * 2 + ( buttonsVerticalGap + 10 );
+        }
+        return dialogHeight;
     }
 }
 
@@ -113,7 +129,7 @@ namespace fheroes2
         const int32_t columns = isSingleColumn ? 1 : ( buttonCount / 2 );
         // Instead of this we could automatically center-align the buttons.
         const Point buttonsOffset = { isSingleColumn ? 25 : 30, isSingleColumn ? 22 : 15 };
-        // TODO. Fix the case of horizontal 2 buttons as in auto battle dialog.
+        // TODO. Fix the case of 2 horizontal buttons as in auto battle dialog.
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
                 buttons.button( buttonIter )

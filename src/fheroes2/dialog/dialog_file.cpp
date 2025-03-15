@@ -47,7 +47,7 @@ namespace
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
-        fheroes2::StandardWindow background( optionButtons, true, 0, display );
+        fheroes2::StandardWindow background( optionButtons, false, 0, display );
 
         fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
         fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
