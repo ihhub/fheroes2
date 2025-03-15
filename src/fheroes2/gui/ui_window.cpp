@@ -41,6 +41,30 @@ namespace
 
     // Offset from window edges to background copy area.
     const int32_t backgroundOffset{ 22 };
+
+    // Spaces between buttons in symmetric button groups.
+    const int32_t buttonsHorizontalGap = 37;
+    const int32_t buttonsVerticalGap = 10;
+
+    constexpr int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
+    {
+        const int32_t widthPadding = isSingleColumn ? 50 : 60;
+        return ( isSingleColumn         ? buttonWidth
+                 : ( buttonCount == 2 ) ? buttonWidth * 2 + buttonsHorizontalGap
+                                        : ( buttonCount / 2 ) * buttonWidth + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap ) )
+               + widthPadding;
+    }
+
+    constexpr int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
+    {
+        const int32_t heightPadding = isSingleColumn ? 15 : 47; // Might need more for single column
+        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
+        const int32_t height = ( isSingleColumn         ? buttonHeight * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap )
+                                 : ( buttonCount == 2 ) ? buttonHeight
+                                                        : buttonHeight * 2 + ( buttonsVerticalGap + 10 ) )
+                               + cancelButtonAreaHeight + heightPadding + extraHeight;
+        return height;
+    }
 }
 
 namespace fheroes2
@@ -65,6 +89,43 @@ namespace fheroes2
         , _hasBackground{ renderBackground }
     {
         render();
+    }
+
+    StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
+        : _output( output )
+        , _activeArea( ( output.width() - getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ) ) / 2,
+                       ( output.height() - getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) ) / 2,
+                       getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ),
+                       getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) )
+        , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
+        , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+        , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+    {
+        const int32_t buttonCount = buttons.getButtonsCount();
+        // An odd number of buttons have to be on a single column. Could make a bool that checks this and forces singleColumn behavior.
+        // assert( !isSingleColumn && !(buttonCount % 2 == 0) );
+        render();
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+        int buttonIter = 0;
+
+        const int32_t rows = isSingleColumn ? buttonCount : 2;
+        const int32_t columns = isSingleColumn ? 1 : ( buttonCount / 2 );
+        // Instead of this we could automatically center-align the buttons.
+        const Point buttonsOffset = { isSingleColumn ? 25 : 30, isSingleColumn ? 22 : 15 };
+        // TODO. Fix the case of horizontal 2 buttons as in auto battle dialog.
+        for ( int row = 0; row < rows; row++ ) {
+            for ( int column = 0; column < columns; column++ ) {
+                buttons.button( buttonIter )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
+                buttonIter++;
+            }
+        }
+        buttons.drawShadows();
+        buttons.draw();
+
+        // Render big cancel button if singleColumn, small cancel button if not.
     }
 
     void StandardWindow::render()
@@ -343,6 +404,32 @@ namespace fheroes2
         }
     }
 
+    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
+                                       const Padding padding )
+    {
+        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
+
+        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
+
+        button.setICNInfo( icnId, releasedIndex, pressedIndex );
+        button.setPosition( pos.x, pos.y );
+        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
+        button.draw();
+    }
+
+    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
+    {
+        const Point buttonOffset( 20, 7 );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
+
+        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
+    }
+
     void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
     {
         Sprite released;
@@ -378,30 +465,21 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
-                                       const Padding padding )
+    void StandardWindow::renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset ) const
     {
-        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
-
-        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
-
-        button.setICNInfo( icnId, releasedIndex, pressedIndex );
-        button.setPosition( pos.x, pos.y );
-        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
-        button.draw();
-    }
-
-    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
-    {
-        const Point buttonOffset( 20, 7 );
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
-
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+        int buttonIter = 0;
+        for ( int row = 0; row < rows; row++ ) {
+            for ( int column = 0; column < columns; column++ ) {
+                buttons.button( buttonIter )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
+                buttonIter++;
+            }
+        }
+        buttons.drawShadows();
+        buttons.draw();
     }
 
     Point StandardWindow::_getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const
