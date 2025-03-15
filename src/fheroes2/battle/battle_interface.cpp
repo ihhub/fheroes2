@@ -3270,8 +3270,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
     fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
 
-    fheroes2::StandardWindow background( { autoCombatButton.area().width, autoCombatButton.area().height }, 2, 1,
-                                         { 60, titleYOffset + title.height() + cancelButtonHeight + autoButtonsYOffset + 28 } );
+    fheroes2::StandardWindow background( autoButtons, false, titleYOffset + title.height() + autoButtonsYOffset );
 
     fheroes2::Button buttonCancel;
 
@@ -3279,7 +3278,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-    background.renderSymmetricButtonGroup( autoButtons, 2, 1, { 30, titleYOffset + title.height() + autoButtonsYOffset } );
 
     const fheroes2::Rect roiArea = background.activeArea();
 
