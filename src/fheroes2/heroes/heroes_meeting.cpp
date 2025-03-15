@@ -93,7 +93,7 @@ namespace
 
     void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
     {
-        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator fromIter ) {
+        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator & fromIter ) {
             if ( fromIter == from.rend() ) {
                 return;
             }
