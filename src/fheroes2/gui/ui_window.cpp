@@ -46,7 +46,7 @@ namespace
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
 
-    constexpr const int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
+    constexpr int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
         return ( isSingleColumn         ? buttonWidth
@@ -55,7 +55,7 @@ namespace
                + widthPadding;
     }
 
-    constexpr const int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
+    constexpr int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
     {
         const int32_t heightPadding = isSingleColumn ? 15 : 47; // Might need more for single column
         const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
