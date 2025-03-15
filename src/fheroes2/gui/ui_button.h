@@ -296,7 +296,7 @@ namespace fheroes2
         int32_t getButtonsCount()
         {
             return static_cast<int32_t>( _button.size() );
-        };
+        }
 
         // Make sure that id is less than size!
         ButtonBase & button( const size_t id )

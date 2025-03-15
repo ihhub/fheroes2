@@ -3262,7 +3262,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ), fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
 
     const int32_t autoButtonsYOffset = 15;
-    const int32_t cancelButtonHeight = 25;
     const int32_t titleYOffset = 16;
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
