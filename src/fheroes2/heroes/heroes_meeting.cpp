@@ -90,6 +90,63 @@ namespace
             }
         }
     }
+
+    void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
+    {
+        auto firstBagIter = firstBag.rbegin();
+        auto secondBagIter = secondBag.rbegin();
+
+        for ( ; firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend(); ++firstBagIter, ++secondBagIter ) {
+            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
+                ++firstBagIter;
+
+                if ( firstBagIter == firstBag.rend() ) {
+                    break;
+                }
+            }
+
+            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
+                ++secondBagIter;
+
+                if ( secondBagIter == secondBag.rend() ) {
+                    break;
+                }
+            }
+
+            std::swap( *firstBagIter, *secondBagIter );
+        }
+
+        if ( firstBagIter != firstBag.rend() ) {
+            assert( secondBagIter == secondBag.rend() );
+
+            for ( ; firstBagIter != firstBag.rend(); ++firstBagIter ) {
+                if ( !firstBagIter->isValid() || *firstBagIter == Artifact::MAGIC_BOOK ) {
+                    continue;
+                }
+
+                if ( !secondBag.PushArtifact( *firstBagIter ) ) {
+                    break;
+                }
+
+                firstBagIter->Reset();
+            }
+        }
+        else if ( secondBagIter != secondBag.rend() ) {
+            assert( firstBagIter == firstBag.rend() );
+
+            for ( ; secondBagIter != secondBag.rend(); ++secondBagIter ) {
+                if ( !secondBagIter->isValid() || *secondBagIter == Artifact::MAGIC_BOOK ) {
+                    continue;
+                }
+
+                if ( !firstBag.PushArtifact( *secondBagIter ) ) {
+                    break;
+                }
+
+                secondBagIter->Reset();
+            }
+        }
+    }
 }
 
 class MeetingArmyBar : public ArmyBar
@@ -650,13 +707,17 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
@@ -667,24 +728,24 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
             display.render();
         }
         else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
-            BagArtifacts temp;
-
-            moveArtifacts( GetBagArtifacts(), temp );
-            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
-            moveArtifacts( temp, otherHero.GetBagArtifacts() );
+            ::swapArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
