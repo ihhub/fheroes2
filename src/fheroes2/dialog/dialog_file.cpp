@@ -47,19 +47,17 @@ namespace
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
+        fheroes2::StandardWindow background( optionButtons, true, 0, display );
 
         fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
         fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
         fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
         fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
 
-        fheroes2::StandardWindow background( { newGameButton.area().width, newGameButton.area().height }, 2, 2, { 60, 72 }, display );
-
         fheroes2::Button buttonCancel;
 
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-        background.renderSymmetricButtonGroup( optionButtons, 2, 2, { 30, 15 } );
 
         display.render( background.totalArea() );
 
