@@ -93,58 +93,51 @@ namespace
 
     void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
     {
-        auto firstBagIter = firstBag.rbegin();
-        auto secondBagIter = secondBag.rbegin();
-
-        for ( ; firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend(); ++firstBagIter, ++secondBagIter ) {
-            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
-                ++firstBagIter;
-
-                if ( firstBagIter == firstBag.rend() ) {
-                    break;
-                }
+        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator fromIter ) {
+            if ( fromIter == from.rend() ) {
+                return;
             }
 
-            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
-                ++secondBagIter;
+            // If there is any artifact left that has not yet been moved, it is assumed that it goes first in the list of artifacts (in place of the missing Magic Book)
+            assert( fromIter == std::prev( from.rend() ) );
 
-                if ( secondBagIter == secondBag.rend() ) {
-                    break;
-                }
+            if ( !fromIter->isValid() || *fromIter == Artifact::MAGIC_BOOK ) {
+                return;
+            }
+
+            if ( !to.PushArtifact( *fromIter ) ) {
+                return;
+            }
+
+            fromIter->Reset();
+        };
+
+        for ( auto firstBagIter = firstBag.rbegin(), secondBagIter = secondBag.rbegin(); firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend();
+              ++firstBagIter, ++secondBagIter ) {
+            // It is assumed that the only non-transferable artifact is a Magic Book, and that it always comes first in the list of artifacts
+            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
+                assert( firstBagIter == std::prev( firstBag.rend() ) );
+
+                ++firstBagIter;
+            }
+            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
+                assert( secondBagIter == std::prev( secondBag.rend() ) );
+
+                ++secondBagIter;
+            }
+
+            if ( firstBagIter == firstBag.rend() ) {
+                moveRemainingArtifact( secondBag, firstBag, secondBagIter );
+
+                break;
+            }
+            if ( secondBagIter == secondBag.rend() ) {
+                moveRemainingArtifact( firstBag, secondBag, firstBagIter );
+
+                break;
             }
 
             std::swap( *firstBagIter, *secondBagIter );
-        }
-
-        if ( firstBagIter != firstBag.rend() ) {
-            assert( secondBagIter == secondBag.rend() );
-
-            for ( ; firstBagIter != firstBag.rend(); ++firstBagIter ) {
-                if ( !firstBagIter->isValid() || *firstBagIter == Artifact::MAGIC_BOOK ) {
-                    continue;
-                }
-
-                if ( !secondBag.PushArtifact( *firstBagIter ) ) {
-                    break;
-                }
-
-                firstBagIter->Reset();
-            }
-        }
-        else if ( secondBagIter != secondBag.rend() ) {
-            assert( firstBagIter == firstBag.rend() );
-
-            for ( ; secondBagIter != secondBag.rend(); ++secondBagIter ) {
-                if ( !secondBagIter->isValid() || *secondBagIter == Artifact::MAGIC_BOOK ) {
-                    continue;
-                }
-
-                if ( !firstBag.PushArtifact( *secondBagIter ) ) {
-                    break;
-                }
-
-                secondBagIter->Reset();
-            }
         }
     }
 }
