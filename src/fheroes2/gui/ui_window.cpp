@@ -46,7 +46,7 @@ namespace
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
 
-    constexpr int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
+    int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
         int32_t dialogWidth = widthPadding;
@@ -63,7 +63,7 @@ namespace
         return dialogWidth;
     }
 
-    constexpr int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
+    int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
     {
         const int32_t heightPadding = isSingleColumn ? 15 : 26; // Might need more for single column
         // We assume that the cancel for multicolumn is 25 px because it should be a single-lined text.
