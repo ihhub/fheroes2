@@ -105,6 +105,7 @@ namespace
                 return;
             }
 
+            // Just try to put this artifact to the first empty slot (if any)
             if ( !to.PushArtifact( *fromIter ) ) {
                 return;
             }
