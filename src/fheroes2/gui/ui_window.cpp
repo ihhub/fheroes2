@@ -65,7 +65,6 @@ namespace
                                + cancelButtonAreaHeight + heightPadding + extraHeight;
         return height;
     }
-
 }
 
 namespace fheroes2
