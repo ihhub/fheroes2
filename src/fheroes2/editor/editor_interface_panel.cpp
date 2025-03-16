@@ -214,7 +214,7 @@ namespace Interface
         _selectedAdventureObjectType.fill( -1 );
         _selectedKingdomObjectType.fill( -1 );
 
-        _updateButtonStates(false, false);
+        _updateButtonStates( false, false );
     }
 
     fheroes2::Rect EditorPanel::getBrushArea() const
@@ -896,7 +896,7 @@ namespace Interface
         _interface.setCursorUpdater( {} );
     }
 
-    void EditorPanel::_updateButtonStates(const bool isUndoAvailable, const bool isRedoAvailable)
+    void EditorPanel::_updateButtonStates( const bool isUndoAvailable, const bool isRedoAvailable )
     {
         if ( isUndoAvailable ) {
             _buttonUndo.enable();
