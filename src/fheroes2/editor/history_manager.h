@@ -24,9 +24,9 @@
 #include <cassert>
 #include <cstddef>
 #include <deque>
+#include <functional>
 #include <memory>
 #include <utility>
-#include <functional>
 
 namespace Maps::Map_Format
 {
@@ -76,7 +76,7 @@ namespace fheroes2
     class HistoryManager
     {
     public:
-        void setChangedCallback(const std::function<void(const bool, const bool)>& callback)
+        void setChangedCallback( const std::function<void(const bool, const bool)>& callback )
         {
             _changesCallback = callback;
         }
@@ -102,7 +102,7 @@ namespace fheroes2
             }
 
             if ( _changesCallback ) {
-                _changesCallback(isUndoAvailable(), isRedoAvailable());
+                _changesCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             assert( _actions.size() <= maxActions );
@@ -129,7 +129,7 @@ namespace fheroes2
             const bool result = _actions[_lastActionId]->undo();
 
             if ( _changesCallback ) {
-                _changesCallback(isUndoAvailable(), isRedoAvailable());
+                _changesCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
@@ -146,7 +146,7 @@ namespace fheroes2
             ++_lastActionId;
 
             if (  _changesCallback ) {
-                _changesCallback(isUndoAvailable(), isRedoAvailable());
+                _changesCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
@@ -160,6 +160,6 @@ namespace fheroes2
 
         size_t _lastActionId{ 0 };
 
-        std::function<void(const bool, const bool)> _changesCallback = nullptr;
+        std::function<void( const bool, const bool )> _changesCallback = nullptr;
     };
 }

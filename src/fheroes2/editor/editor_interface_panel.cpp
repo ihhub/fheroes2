@@ -900,13 +900,15 @@ namespace Interface
     {
         if ( isUndoAvailable ) {
             _buttonUndo.enable();
-        } else {
+        }
+        else {
             _buttonUndo.disable();
         }
 
         if ( isRedoAvailable ) {
             _buttonRedo.enable();
-        } else {
+        }
+        else {
             _buttonRedo.disable();
         }
 
