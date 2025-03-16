@@ -50,7 +50,7 @@ namespace
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
         int32_t dialogWidth = widthPadding;
-        // We force an odd number of buttons to be as a single column.
+        // We force an odd number of buttons to be arranged on a single column.
         if ( isSingleColumn || buttonCount % 2 != 0 ) {
             dialogWidth += buttonWidth;
         }
@@ -66,7 +66,7 @@ namespace
     int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
     {
         const int32_t heightPadding = isSingleColumn ? 15 : 26; // Might need more for single column
-        // We assume that the cancel for multicolumn is 25 px because it should be a single-lined text.
+        // We assume that the cancel button height for multiple columns is 25 px because this button should contain a single-lined text.
         const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
         int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
         // We force an odd number of buttons to be as a single column.
@@ -117,19 +117,36 @@ namespace fheroes2
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
     {
-        const int32_t buttonCount = buttons.getButtonsCount();
-        // An odd number of buttons have to be on a single column. Could make a bool that checks this and forces singleColumn behavior.
-        // assert( !isSingleColumn && !(buttonCount % 2 == 0) );
         render();
+
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
         const int32_t buttonsHeight = buttons.button( 0 ).area().height;
-        int buttonIter = 0;
 
-        const int32_t rows = isSingleColumn ? buttonCount : 2;
-        const int32_t columns = isSingleColumn ? 1 : ( buttonCount / 2 );
-        // Instead of this we could automatically center-align the buttons.
-        const Point buttonsOffset = { isSingleColumn ? 25 : 30, isSingleColumn ? 22 : 15 };
-        // TODO. Fix the case of 2 horizontal buttons as in auto battle dialog.
+        int32_t rows = 0;
+        int32_t columns = 0;
+        Point buttonsOffset;
+
+        const int32_t buttonCount = buttons.getButtonsCount();
+        // An odd number of buttons will be arranged on a single column.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            rows = buttonCount;
+            columns = 1;
+            buttonsOffset = { 25, 22 };
+        }
+        else if ( buttonCount == 2 ) {
+            rows = 1;
+            columns = 2;
+            buttonsOffset = { 30, 15 };
+        }
+        else {
+            rows = 2;
+            columns = buttonCount / 2;
+            buttonsOffset = { 30, 15 };
+        }
+        // This assumes that the extra height always gets added above the buttons.
+        buttonsOffset.y += extraHeight;
+
+        int buttonIter = 0;
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
                 buttons.button( buttonIter )
@@ -140,8 +157,6 @@ namespace fheroes2
         }
         buttons.drawShadows();
         buttons.draw();
-
-        // Render big cancel button if singleColumn, small cancel button if not.
     }
 
     void StandardWindow::render()
