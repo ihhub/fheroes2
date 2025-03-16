@@ -1,4 +1,27 @@
 version 1.1.7 (23 March 2025)
+- fix an assertion crash for hacked mines on old saves
+- fix creature info dialog shadow draw on right click
+- implement Dragon Slayer spell selection for the AI
+- make the AI to share visit info about some objects on the Adventure Map
+- fix a delay during battle after showing a monster info dialog by right clicking
+- make the AI use Guardian spells on Mines and Abandoned Mines
+- fix Golden bow sprite glowing pixels
+- fix object visiting marking logic
+- fix visited status for certain Adventure Map objects for the AI
+- fix rendering of tall objects and extra objects (ghosts and flags) over the top map edge
+- update the Hungarian translation
+- add proper translation support for Sign objects
+- allow to activate Czech virtual keyboard
+- do not center on the defeated hero after an instant movement
+- update the Portuguese translation
+- fix the logic of transferring artifacts after a battle
+- check the contents of the resurrection.h2d file for correctness
+- add dynamic interface option
+- fix several button issues and do more button code cleanup
+- avoid stacking units when defending archers for the AI
+- update the Swedish translation
+- fix the operation of MIN/MAX buttons in various dialogs
+- clean up Russian empty guild/well button
 
 version 1.1.6 (16 February 2025)
 - fix Ultimate Artifact being erased for any action done on a map
