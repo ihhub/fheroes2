@@ -80,7 +80,7 @@ namespace fheroes2
         {
             _actions.clear();
             _lastActionId = 0;
-            _changesCallback = undoRedoCallback ;
+            _changesCallback = undoRedoCallback;
 
             if ( _changesCallback ) {
                 _changesCallback( false, false );

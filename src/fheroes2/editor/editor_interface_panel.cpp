@@ -896,7 +896,7 @@ namespace Interface
         _interface.setCursorUpdater( {} );
     }
 
-    void EditorPanel::updateUndoRedoButtonsStates(const bool isUndoAvailable, const bool isRedoAvailable )
+    void EditorPanel::updateUndoRedoButtonsStates( const bool isUndoAvailable, const bool isRedoAvailable )
     {
         auto updateButtonState = []( fheroes2::ButtonBase & button, const bool isAvailable ) {
             if ( isAvailable ) {

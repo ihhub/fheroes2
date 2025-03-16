@@ -810,8 +810,7 @@ namespace Interface
         reset();
 
         _historyManager.reset(
-                [this]( const bool isUndoAvailable, const bool isRedoAvailable ) {
-                    _editorPanel.updateUndoRedoButtonsStates(isUndoAvailable, isRedoAvailable); } );
+            [this]( const bool isUndoAvailable, const bool isRedoAvailable ) { _editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable ); } );
 
         if ( isNewMap ) {
             _mapFormat = {};
