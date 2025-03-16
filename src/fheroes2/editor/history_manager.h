@@ -76,7 +76,7 @@ namespace fheroes2
     class HistoryManager
     {
     public:
-        void setChangedCallback( const std::function<void( const bool, const bool )>& callback )
+        void setChangedCallback( const std::function<void( const bool, const bool )> & callback )
         {
             _changesCallback = callback;
         }
