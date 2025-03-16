@@ -3261,7 +3261,6 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     fheroes2::ButtonGroup autoButtons(
         { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ), fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
 
-    const int32_t autoButtonsYOffset = 15;
     const int32_t titleYOffset = 16;
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
@@ -3269,7 +3268,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
     fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
 
-    fheroes2::StandardWindow background( autoButtons, false, titleYOffset + title.height() + autoButtonsYOffset );
+    fheroes2::StandardWindow background( autoButtons, false, titleYOffset + title.height() );
 
     fheroes2::Button buttonCancel;
 
