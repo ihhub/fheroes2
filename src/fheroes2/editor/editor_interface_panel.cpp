@@ -213,6 +213,8 @@ namespace Interface
         _selectedLandscapeObjectType.fill( -1 );
         _selectedAdventureObjectType.fill( -1 );
         _selectedKingdomObjectType.fill( -1 );
+
+        _updateButtonStates(false, false);
     }
 
     fheroes2::Rect EditorPanel::getBrushArea() const
@@ -894,6 +896,24 @@ namespace Interface
         _interface.setCursorUpdater( {} );
     }
 
+    void EditorPanel::_updateButtonStates(const bool isUndoAvailable, const bool isRedoAvailable)
+    {
+        if ( isUndoAvailable ) {
+            _buttonUndo.enable();
+        } else {
+            _buttonUndo.disable();
+        }
+
+        if ( isRedoAvailable ) {
+            _buttonRedo.enable();
+        } else {
+            _buttonRedo.disable();
+        }
+
+        _buttonUndo.draw();
+        _buttonRedo.draw();
+    }
+
     fheroes2::GameMode EditorPanel::queueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
@@ -1197,11 +1217,9 @@ namespace Interface
         }
         else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
             _interface.undoAction();
-            // TODO: Disable Undo button when there are no actions left to undo.
         }
         else if ( _buttonRedo.isEnabled() && le.MouseClickLeft( _rectRedo ) ) {
             _interface.redoAction();
-            // TODO: Disable Redo button when there are no actions left to redo.
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             EditorInterface::Get().openMapSpecificationsDialog();

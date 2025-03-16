@@ -26,6 +26,7 @@
 #include <deque>
 #include <memory>
 #include <utility>
+#include <functional>
 
 namespace Maps::Map_Format
 {
@@ -75,10 +76,16 @@ namespace fheroes2
     class HistoryManager
     {
     public:
+        void setChangedCallback(const std::function<void(const bool, const bool)>& callback)
+        {
+            _changesCallback = callback;
+        }
+
         void reset()
         {
             _actions.clear();
             _lastActionId = 0;
+            _changesCallback = nullptr;
         }
 
         void add( std::unique_ptr<Action> action )
@@ -94,29 +101,53 @@ namespace fheroes2
                 _actions.pop_front();
             }
 
+            if ( _changesCallback ) {
+                _changesCallback(isUndoAvailable(), isRedoAvailable());
+            }
+
             assert( _actions.size() <= maxActions );
+        }
+
+        bool isUndoAvailable() const
+        {
+            return _lastActionId > 0;
+        }
+
+        bool isRedoAvailable() const
+        {
+            return _lastActionId < _actions.size();
         }
 
         bool undo()
         {
-            if ( _lastActionId == 0 ) {
+            if ( !isUndoAvailable() ) {
                 // Nothing to do.
                 return false;
             }
 
             --_lastActionId;
-            return _actions[_lastActionId]->undo();
+            const bool result = _actions[_lastActionId]->undo();
+
+            if ( _changesCallback ) {
+                _changesCallback(isUndoAvailable(), isRedoAvailable());
+            }
+
+            return result;
         }
 
         bool redo()
         {
-            if ( _lastActionId == _actions.size() ) {
+            if ( !isRedoAvailable() ) {
                 // Nothing to do.
                 return false;
             }
 
             const bool result = _actions[_lastActionId]->redo();
             ++_lastActionId;
+
+            if (  _changesCallback ) {
+                _changesCallback(isUndoAvailable(), isRedoAvailable());
+            }
 
             return result;
         }
@@ -128,5 +159,7 @@ namespace fheroes2
         std::deque<std::unique_ptr<Action>> _actions;
 
         size_t _lastActionId{ 0 };
+
+        std::function<void(const bool, const bool)> _changesCallback = nullptr;
     };
 }

@@ -120,6 +120,8 @@ namespace Interface
 
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
 
+        void _updateButtonStates(const bool isUndoAvailable, const bool isRedoAvailable);
+
     private:
         static int _getGroundId( const uint8_t brushId );
 
