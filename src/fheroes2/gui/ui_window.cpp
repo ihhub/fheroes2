@@ -65,7 +65,7 @@ namespace
 
     int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
     {
-        const int32_t heightPadding = isSingleColumn ? 15 : 26; // Might need more for single column
+        const int32_t heightPadding = isSingleColumn ? 39 : 26; // Might need more for single column
         // We assume that the cancel button height for multiple columns is 25 px because this button should contain a single-lined text.
         const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
         int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
