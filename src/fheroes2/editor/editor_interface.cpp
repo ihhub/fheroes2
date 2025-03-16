@@ -809,7 +809,9 @@ namespace Interface
 
         reset();
 
-        _historyManager.reset();
+        _historyManager.reset(
+                [this]( const bool isUndoAvailable, const bool isRedoAvailable ) {
+                    _editorPanel.updateUndoRedoButtonsStates(isUndoAvailable, isRedoAvailable); } );
 
         if ( isNewMap ) {
             _mapFormat = {};
@@ -830,9 +832,6 @@ namespace Interface
         // The cursor parameters may contain values from a previously edited map that are not suitable for this one. Reset them.
         _tileUnderCursor = -1;
         _areaSelectionStartTileId = -1;
-
-        _historyManager.setChangedCallback(
-            [this]( const bool isUndoAvailable, const bool isRedoAvailable ) { _editorPanel._updateButtonStates( isUndoAvailable, isRedoAvailable ); } );
 
         uint32_t redrawFlags = REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER;
         if ( conf.isEditorPassabilityEnabled() ) {

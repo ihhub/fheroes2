@@ -76,16 +76,15 @@ namespace fheroes2
     class HistoryManager
     {
     public:
-        void setChangedCallback( const std::function<void( const bool, const bool )> & callback )
-        {
-            _changesCallback = callback;
-        }
-
-        void reset()
+        void reset( const std::function<void( const bool, const bool )> & undoRedoCallback = nullptr )
         {
             _actions.clear();
             _lastActionId = 0;
-            _changesCallback = nullptr;
+            _changesCallback = undoRedoCallback ;
+
+            if ( _changesCallback ) {
+                _changesCallback( false, false );
+            }
         }
 
         void add( std::unique_ptr<Action> action )
