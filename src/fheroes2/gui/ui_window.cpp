@@ -455,10 +455,10 @@ namespace fheroes2
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
+        renderButton( buttonOk, buttonOkIcn, 0, 1, gapsFromEdges, Padding::BOTTOM_LEFT );
 
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
+        renderButton( buttonCancel, buttonCancelIcn, 0, 1, gapsFromEdges, Padding::BOTTOM_RIGHT );
     }
 
     void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
