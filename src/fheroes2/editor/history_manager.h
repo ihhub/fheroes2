@@ -76,7 +76,7 @@ namespace fheroes2
     class HistoryManager
     {
     public:
-        void setChangedCallback( const std::function<void(const bool, const bool)>& callback )
+        void setChangedCallback( const std::function<void( const bool, const bool )>& callback )
         {
             _changesCallback = callback;
         }
@@ -145,7 +145,7 @@ namespace fheroes2
             const bool result = _actions[_lastActionId]->redo();
             ++_lastActionId;
 
-            if (  _changesCallback ) {
+            if ( _changesCallback ) {
                 _changesCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
