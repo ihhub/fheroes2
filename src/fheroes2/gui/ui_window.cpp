@@ -450,7 +450,7 @@ namespace fheroes2
 
     void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
     {
-        const Point buttonOffset( 20, 7 );
+        const Point gapsFromEdges( 20, 7 );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
