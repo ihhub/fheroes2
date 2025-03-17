@@ -46,40 +46,32 @@ namespace
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
 
-    int32_t getSymmetricDialogWidth( const bool isSingleColumn, const int32_t buttonWidth, const int32_t buttonCount )
+    fheroes2::Rect getSymmetricDialogDimensions( const bool isSingleColumn, const fheroes2::Size & buttonSize, const int32_t extraHeight, const int32_t buttonCount,
+                                                 const fheroes2::Size & output )
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
         int32_t dialogWidth = widthPadding;
-        // We force an odd number of buttons to be arranged on a single column.
-        if ( isSingleColumn || buttonCount % 2 != 0 ) {
-            dialogWidth += buttonWidth;
-        }
-        else if ( buttonCount == 2 ) {
-            dialogWidth += buttonWidth * 2 + buttonsHorizontalGap;
-        }
-        else {
-            dialogWidth += ( buttonCount / 2 ) * buttonWidth + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
-        }
-        return dialogWidth;
-    }
 
-    int32_t getSymmetricDialogHeight( const bool isSingleColumn, const int32_t extraHeight, const int32_t buttonHeight, const int32_t buttonCount )
-    {
         const int32_t heightPadding = isSingleColumn ? 39 : 26;
-        // We assume that the cancel button height for multiple columns is 25 px because this button should contain a single-lined text.
-        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonHeight + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
+        // We assume that the cancel button height for multiple columns is 25 px because this button should contain only a single line of text.
+        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonSize.height + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
         int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
-        // We force an odd number of buttons to be as a single column.
+
+        // When there's an odd number of buttons we always make a dialog for a single column of buttons.
         if ( isSingleColumn || buttonCount % 2 != 0 ) {
-            dialogHeight += buttonHeight * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap );
+            dialogWidth += buttonSize.width;
+            dialogHeight += buttonSize.height * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap );
         }
         else if ( buttonCount == 2 ) {
-            dialogHeight += buttonHeight;
+            dialogWidth += buttonSize.width * 2 + buttonsHorizontalGap;
+            dialogHeight += buttonSize.height;
         }
         else {
-            dialogHeight += buttonHeight * 2 + ( buttonsVerticalGap + 10 );
+            dialogWidth += ( buttonCount / 2 ) * buttonSize.width + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
+            dialogHeight += buttonSize.height * 2 + ( buttonsVerticalGap + 10 );
         }
-        return dialogHeight;
+
+        return { ( output.width - dialogWidth ) / 2, ( output.height - dialogHeight ) / 2, dialogWidth, dialogHeight };
     }
 }
 
@@ -109,10 +101,8 @@ namespace fheroes2
 
     StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
         : _output( output )
-        , _activeArea( ( output.width() - getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ) ) / 2,
-                       ( output.height() - getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) ) / 2,
-                       getSymmetricDialogWidth( isSingleColumn, buttons.button( 0 ).area().width, buttons.getButtonsCount() ),
-                       getSymmetricDialogHeight( isSingleColumn, extraHeight, buttons.button( 0 ).area().height, buttons.getButtonsCount() ) )
+        , _activeArea( getSymmetricDialogDimensions( isSingleColumn, { buttons.button( 0 ).area().width, buttons.button( 0 ).area().height }, extraHeight,
+                                                     buttons.getButtonsCount(), { output.width(), output.height() } ) )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
