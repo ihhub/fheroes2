@@ -76,14 +76,22 @@ namespace fheroes2
     class HistoryManager
     {
     public:
-        void reset( const std::function<void( const bool, const bool )> & undoRedoCallback = nullptr )
+        void setStateCallback( std::function<void( const bool, const bool )> stateCallback )
+        {
+            _stateCallback = std::move( stateCallback );
+
+            if ( _stateCallback ) {
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
+            }
+        }
+
+        void reset()
         {
             _actions.clear();
             _lastActionId = 0;
-            _changesCallback = undoRedoCallback;
 
-            if ( _changesCallback ) {
-                _changesCallback( false, false );
+            if ( _stateCallback ) {
+                _stateCallback( false, false );
             }
         }
 
@@ -100,8 +108,8 @@ namespace fheroes2
                 _actions.pop_front();
             }
 
-            if ( _changesCallback ) {
-                _changesCallback( isUndoAvailable(), isRedoAvailable() );
+            if ( _stateCallback ) {
+                _stateCallback(isUndoAvailable(), isRedoAvailable() );
             }
 
             assert( _actions.size() <= maxActions );
@@ -127,8 +135,8 @@ namespace fheroes2
             --_lastActionId;
             const bool result = _actions[_lastActionId]->undo();
 
-            if ( _changesCallback ) {
-                _changesCallback( isUndoAvailable(), isRedoAvailable() );
+            if ( _stateCallback ) {
+                _stateCallback(isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
@@ -144,8 +152,8 @@ namespace fheroes2
             const bool result = _actions[_lastActionId]->redo();
             ++_lastActionId;
 
-            if ( _changesCallback ) {
-                _changesCallback( isUndoAvailable(), isRedoAvailable() );
+            if ( _stateCallback ) {
+                _stateCallback(isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
@@ -159,6 +167,6 @@ namespace fheroes2
 
         size_t _lastActionId{ 0 };
 
-        std::function<void( const bool, const bool )> _changesCallback = nullptr;
+        std::function<void( const bool, const bool )> _stateCallback;
     };
 }

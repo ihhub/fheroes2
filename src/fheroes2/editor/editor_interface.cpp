@@ -809,8 +809,7 @@ namespace Interface
 
         reset();
 
-        _historyManager.reset(
-            [this]( const bool isUndoAvailable, const bool isRedoAvailable ) { _editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable ); } );
+        _historyManager.reset();
 
         if ( isNewMap ) {
             _mapFormat = {};
