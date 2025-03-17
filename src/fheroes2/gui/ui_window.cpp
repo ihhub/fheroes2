@@ -46,7 +46,7 @@ namespace
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
 
-    fheroes2::Rect getSymmetricDialogDimensions( const bool isSingleColumn, const fheroes2::Size & buttonSize, const int32_t extraHeight, const int32_t buttonCount,
+    fheroes2::Rect getSymmetricDialogActiveArea( const bool isSingleColumn, const fheroes2::Size & buttonSize, const int32_t extraHeight, const int32_t buttonCount,
                                                  const fheroes2::Size & output )
     {
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
@@ -101,7 +101,7 @@ namespace fheroes2
 
     StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
         : _output( output )
-        , _activeArea( getSymmetricDialogDimensions( isSingleColumn, { buttons.button( 0 ).area().width, buttons.button( 0 ).area().height }, extraHeight,
+        , _activeArea( getSymmetricDialogActiveArea( isSingleColumn, { buttons.button( 0 ).area().width, buttons.button( 0 ).area().height }, extraHeight,
                                                      buttons.getButtonsCount(), { output.width(), output.height() } ) )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
