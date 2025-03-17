@@ -109,7 +109,7 @@ namespace fheroes2
             }
 
             if ( _stateCallback ) {
-                _stateCallback(isUndoAvailable(), isRedoAvailable() );
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             assert( _actions.size() <= maxActions );
@@ -136,7 +136,7 @@ namespace fheroes2
             const bool result = _actions[_lastActionId]->undo();
 
             if ( _stateCallback ) {
-                _stateCallback(isUndoAvailable(), isRedoAvailable() );
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
@@ -153,7 +153,7 @@ namespace fheroes2
             ++_lastActionId;
 
             if ( _stateCallback ) {
-                _stateCallback(isUndoAvailable(), isRedoAvailable() );
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
             }
 
             return result;
