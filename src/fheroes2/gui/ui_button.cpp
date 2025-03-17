@@ -961,13 +961,13 @@ namespace fheroes2
         auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( a.width() ) < b.width( b.width() ); } );
 
         // We add 6 to have some extra horizontal margin.
-        const int32_t width = ( *maxIter ).width( maxWidth ) + 6;
+        const int32_t width = maxIter->width( maxWidth ) + 6;
         const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
         maxIter
             = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( Text & a, Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
 
-        int32_t height = ( *maxIter ).height( finalWidth );
+        int32_t height = maxIter->height( finalWidth );
 
         // Add extra vertical margin only if the button text is on two lines.
         height += ( height == ( getFontHeight( buttonFontType.size ) * 2 ) ) ? 26 : 10;

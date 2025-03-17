@@ -293,7 +293,7 @@ namespace fheroes2
 
         void drawShadows( Image & output = Display::instance() );
 
-        int32_t getButtonsCount()
+        int32_t getButtonsCount() const
         {
             return static_cast<int32_t>( _button.size() );
         }
