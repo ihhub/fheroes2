@@ -6785,14 +6785,14 @@ void Battle::PopupDamageInfo::_makeDamageImage()
 
     const fheroes2::Rect & unitRect = _defender->GetRectPosition();
 
-    const int shadowOffsetX = std::abs( damageImageShadowOffset.x );
-    const int shadowOffsetY = std::abs( damageImageShadowOffset.y );
+    const int32_t shadowOffsetX = std::abs( damageImageShadowOffset.x );
+    const int32_t shadowOffsetY = std::abs( damageImageShadowOffset.y );
     // Get the border width and set the popup parameters.
-    const int borderWidth = BorderWidth();
-    const int x = _battleUIRect.x + unitRect.x + unitRect.width;
-    const int y = _battleUIRect.y + unitRect.y;
-    const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth + shadowOffsetX;
-    const int h = damageText.height() + killedText.height() + 2 * borderWidth + shadowOffsetY;
+    const int32_t borderWidth = BorderWidth();
+    const int32_t x = _battleUIRect.x + unitRect.x + unitRect.width;
+    const int32_t y = _battleUIRect.y + unitRect.y;
+    const int32_t w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth + shadowOffsetX;
+    const int32_t h = damageText.height() + killedText.height() + 2 * borderWidth + shadowOffsetY;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
@@ -6801,12 +6801,12 @@ void Battle::PopupDamageInfo::_makeDamageImage()
     _damageImage.reset();
 
     const fheroes2::Sprite & backgroundIcn = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    fheroes2::Sprite backgroundImage
+    fheroes2::Image backgroundImage
         = fheroes2::Stretch( backgroundIcn, 0, 0, backgroundIcn.width(), backgroundIcn.height(), borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
     damageText.draw( borderWidth, borderWidth + 2, backgroundImage );
     killedText.draw( borderWidth, ( borderRect.height - shadowOffsetY ) / 2 + 2, backgroundImage );
 
-    fheroes2::Blit( backgroundImage, 0, 0, _damageImage, shadowOffsetX, 0, borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
+    fheroes2::Copy( backgroundImage, 0, 0, _damageImage, shadowOffsetX, 0, borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
 
     _damageImage.setPosition( borderRect.x, borderRect.y );
 
