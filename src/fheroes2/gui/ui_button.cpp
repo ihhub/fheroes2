@@ -956,14 +956,15 @@ namespace fheroes2
             buttonTexts.emplace_back( text, buttonFontType );
         }
         // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
-        const int32_t maxButtonWidth = 200;
+        const int32_t maxWidth = 200;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
-                                         [maxButtonWidth]( const Text & a, const Text & b ) { return a.width( maxButtonWidth ) < b.width( maxButtonWidth ); } );
+        // We have to pass 200 to the width() calls because capturing maxWidth gives compiler warnings about the variable being unused.
+        // Meanwhile, implicit capture, i.e. not putting maxWidth in the capture clause, will make MSVC complain.
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( const Text & a, const Text & b ) { return a.width( 200 ) < b.width( 200 ); } );
 
         // We add 6 to have some extra horizontal margin.
-        const int32_t width = maxIter->width( maxButtonWidth ) + 6;
-        const int32_t finalWidth = std::clamp( width, minWidth, maxButtonWidth );
+        const int32_t width = maxIter->width( maxWidth ) + 6;
+        const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
         maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
                                     [finalWidth]( const Text & a, const Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
