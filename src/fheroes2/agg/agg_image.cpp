@@ -1310,7 +1310,7 @@ namespace
 
             if ( useOriginalResources() ) {
                 const int buttonIcnID = id == ICN::BUTTONS_FILE_DIALOG_EVIL ? ICN::CPANELE : ICN::CPANEL;
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); i++ ) {
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
                 }
                 break;

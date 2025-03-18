@@ -102,7 +102,7 @@ namespace fheroes2
     StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
         : _output( output )
         , _activeArea( getSymmetricDialogActiveArea( isSingleColumn, { buttons.button( 0 ).area().width, buttons.button( 0 ).area().height }, extraHeight,
-                                                     buttons.getButtonsCount(), { output.width(), output.height() } ) )
+                                                     static_cast<int32_t>( buttons.getButtonsCount() ), { output.width(), output.height() } ) )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
@@ -116,7 +116,7 @@ namespace fheroes2
         int32_t columns = 0;
         Point buttonsOffset;
 
-        const int32_t buttonCount = buttons.getButtonsCount();
+        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
         // An odd number of buttons will be arranged on a single column.
         if ( isSingleColumn || buttonCount % 2 != 0 ) {
             rows = buttonCount;
@@ -145,8 +145,8 @@ namespace fheroes2
                 buttonIter++;
             }
         }
-        buttons.drawShadows();
-        buttons.draw();
+        buttons.drawShadows( output );
+        buttons.draw( output );
     }
 
     void StandardWindow::render()
@@ -484,23 +484,6 @@ namespace fheroes2
         button.setPosition( pos.x, pos.y );
         addGradientShadow( released, _output, button.area().getPosition(), { -5, 5 } );
         button.draw();
-    }
-
-    void StandardWindow::renderSymmetricButtonGroup( ButtonGroup & buttons, const int columns, const int rows, const Point & buttonsOffset ) const
-    {
-        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
-        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
-        int buttonIter = 0;
-        for ( int row = 0; row < rows; row++ ) {
-            for ( int column = 0; column < columns; column++ ) {
-                buttons.button( buttonIter )
-                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
-                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
-                buttonIter++;
-            }
-        }
-        buttons.drawShadows();
-        buttons.draw();
     }
 
     Point StandardWindow::_getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const

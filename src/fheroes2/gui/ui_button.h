@@ -112,8 +112,8 @@ namespace fheroes2
         // Will draw on screen by default
         bool draw( Image & output = Display::instance() ) const;
 
-        // Will draw on screen by default. Draws a shadow 5 px to the left and below the button.
-        void drawShadow( Image & output = Display::instance() );
+        // Draws a shadow 5 px to the left and below the button.
+        void drawShadow( Image & output );
 
         // Will draw and render on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Display & output = Display::instance() );
@@ -285,17 +285,18 @@ namespace fheroes2
 
         void createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
                            const int returnValue );
-        void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
+        void createButton( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, const int returnValue );
         void addButton( ButtonSprite && button, const int returnValue );
 
         // Will draw on screen by default
         void draw( Image & output = Display::instance() ) const;
 
-        void drawShadows( Image & output = Display::instance() );
+        // Draws shadows for all the buttons in the group according to their coordinates.
+        void drawShadows( Image & output );
 
-        int32_t getButtonsCount() const
+        size_t getButtonsCount() const
         {
-            return static_cast<int32_t>( _button.size() );
+            return _button.size();
         }
 
         // Make sure that id is less than size!

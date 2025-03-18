@@ -446,11 +446,11 @@ namespace fheroes2
         return true;
     }
 
-    void ButtonBase::drawShadow( Image & output /* = Display::instance() */ )
+    void ButtonBase::drawShadow( Image & output )
     {
         const Point buttonPoint = area().getPosition();
         // Did you forget to set the position of the button?
-        assert( buttonPoint.x != 0 && buttonPoint.y != 0 );
+        assert( buttonPoint != Point( 0, 0 ) );
         fheroes2::addGradientShadow( _getReleased(), output, buttonPoint, { -5, 5 } );
     }
 
@@ -605,10 +605,10 @@ namespace fheroes2
     {
         std::vector<Sprite> sprites;
         const size_t textCount = texts.size();
-        sprites.resize( ( textCount * 2 ) );
+        sprites.resize( textCount * 2 );
         makeSymmetricBackgroundSprites( sprites, texts, 86 );
-        for ( size_t i = 0; i < textCount; i++ ) {
-            createButton( 0, 0, sprites[i * 2], sprites[i * 2 + 1], static_cast<int>( i ) );
+        for ( size_t i = 0; i < textCount; ++i ) {
+            createButton( 0, 0, std::move( sprites[i * 2] ), std::move( sprites[i * 2 + 1] ), static_cast<int>( i ) );
         }
     }
 
@@ -616,7 +616,7 @@ namespace fheroes2
     {
         // Button ICNs contain released and pressed states so we divide by two to find the number of buttons they correspond to.
         const int32_t buttonCount = static_cast<int32_t>( fheroes2::AGG::GetICNCount( icnID ) ) / 2;
-        for ( int i = 0; i < buttonCount; i++ ) {
+        for ( int32_t i = 0; i < buttonCount; ++i ) {
             createButton( 0, 0, icnID, i * 2, i * 2 + 1, i );
         }
     }
@@ -628,9 +628,9 @@ namespace fheroes2
         _value.emplace_back( returnValue );
     }
 
-    void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue )
+    void ButtonGroup::createButton( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, const int returnValue )
     {
-        _button.push_back( std::make_unique<ButtonSprite>( offsetX, offsetY, released, pressed ) );
+        _button.push_back( std::make_unique<ButtonSprite>( offsetX, offsetY, std::move( released ), std::move( pressed ) ) );
         _value.emplace_back( returnValue );
     }
 
@@ -647,7 +647,7 @@ namespace fheroes2
         }
     }
 
-    void ButtonGroup::drawShadows( Image & output /* = Display::instance() */ )
+    void ButtonGroup::drawShadows( Image & output )
     {
         for ( const auto & button : _button ) {
             button->drawShadow( output );
@@ -958,14 +958,15 @@ namespace fheroes2
         // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
         const int32_t maxWidth = 200;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(), []( Text & a, Text & b ) { return a.width( a.width() ) < b.width( b.width() ); } );
+        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
+                                         [maxWidth]( const Text & a, const Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
 
         // We add 6 to have some extra horizontal margin.
         const int32_t width = maxIter->width( maxWidth ) + 6;
         const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
         maxIter
-            = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( Text & a, Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
+            = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( const Text & a, const Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
 
         int32_t height = maxIter->height( finalWidth );
 
@@ -974,7 +975,7 @@ namespace fheroes2
 
         const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
-        for ( size_t i = 0; i < buttonTexts.size(); i++ ) {
+        for ( size_t i = 0; i < buttonTexts.size(); ++i ) {
             Sprite & released = backgroundSprites[i * 2];
             Sprite & pressed = backgroundSprites[i * 2 + 1];
             makeButtonSprites( released, pressed, buttonTexts[i].text(), { finalWidth, height }, isEvilInterface, backgroundIcnID );
