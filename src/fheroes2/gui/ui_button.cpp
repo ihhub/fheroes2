@@ -965,8 +965,8 @@ namespace fheroes2
         const int32_t width = maxIter->width( maxWidth ) + 6;
         const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
 
-        maxIter
-            = std::max_element( buttonTexts.begin(), buttonTexts.end(), [finalWidth]( const Text & a, const Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
+        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
+                                    [finalWidth]( const Text & a, const Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
 
         int32_t height = maxIter->height( finalWidth );
 
