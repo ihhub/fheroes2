@@ -1640,7 +1640,7 @@ uint32_t Heroes::getExperienceMaxValue()
 
 bool Heroes::BuySpellBook( const Castle * castle )
 {
-    if ( HaveSpellBook() || Color::NONE == GetColor() ) {
+    if ( HaveSpellBook() || Color::NONE == GetColor() || ( castle && castle->GetLevelMageGuild() < 1 ) ) {
         return false;
     }
 
