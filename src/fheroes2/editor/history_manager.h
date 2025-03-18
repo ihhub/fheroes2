@@ -79,10 +79,6 @@ namespace fheroes2
         void setStateCallback( std::function<void( const bool, const bool )> stateCallback )
         {
             _stateCallback = std::move( stateCallback );
-
-            if ( _stateCallback ) {
-                _stateCallback( isUndoAvailable(), isRedoAvailable() );
-            }
         }
 
         void reset()
