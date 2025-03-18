@@ -141,8 +141,9 @@ namespace Interface
             , _editorPanel( *this )
             , _warningMessage( *this )
         {
-            _historyManager.setStateCallback(
-                [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) { editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable ); } );
+            _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
+                editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
+            } );
         }
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
