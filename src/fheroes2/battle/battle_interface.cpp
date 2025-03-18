@@ -6797,12 +6797,12 @@ void Battle::PopupDamageInfo::_makeDamageImage()
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
-    _damageImage.resize(borderRect.width, borderRect.height);
+    _damageImage.resize( borderRect.width, borderRect.height );
     _damageImage.reset();
 
     const fheroes2::Sprite & backgroundIcn = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    fheroes2::Sprite backgroundImage = fheroes2::Stretch( backgroundIcn, 0, 0, backgroundIcn.width(), backgroundIcn.height(),
-                                                          borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
+    fheroes2::Sprite backgroundImage
+        = fheroes2::Stretch( backgroundIcn, 0, 0, backgroundIcn.width(), backgroundIcn.height(), borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
     damageText.draw( borderWidth, borderWidth + 2, backgroundImage );
     killedText.draw( borderWidth, ( borderRect.height - shadowOffsetY ) / 2 + 2, backgroundImage );
 
@@ -6810,7 +6810,7 @@ void Battle::PopupDamageInfo::_makeDamageImage()
 
     _damageImage.setPosition( borderRect.x, borderRect.y );
 
-    fheroes2::addGradientShadow( backgroundImage, _damageImage, {shadowOffsetX, 0 }, damageImageShadowOffset );
+    fheroes2::addGradientShadow( backgroundImage, _damageImage, { shadowOffsetX, 0 }, damageImageShadowOffset );
 }
 
 void Battle::PopupDamageInfo::redraw() const
