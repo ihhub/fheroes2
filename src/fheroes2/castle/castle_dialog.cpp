@@ -179,7 +179,7 @@ namespace
             return false;
         }
 
-        return hero->BuySpellBook( &castle );
+        return hero->BuySpellBook( castle );
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )

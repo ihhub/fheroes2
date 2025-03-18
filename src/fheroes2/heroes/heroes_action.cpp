@@ -510,7 +510,7 @@ namespace
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
 
-            castle->MageGuildEducateHero( hero );
+            castle->trainHeroInMageGuild( hero );
             Game::OpenCastleDialog( *castle );
 
             return;
@@ -595,7 +595,7 @@ namespace
 
         captureCastle();
 
-        castle->MageGuildEducateHero( hero );
+        castle->trainHeroInMageGuild( hero );
         Game::OpenCastleDialog( *castle );
     }
 

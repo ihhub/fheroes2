@@ -102,7 +102,7 @@ namespace
         hero.FadeIn();
         hero.ShowPath( true );
 
-        castle->MageGuildEducateHero( hero );
+        castle->trainHeroInMageGuild( hero );
     }
 
     bool ActionSpellViewMines()
