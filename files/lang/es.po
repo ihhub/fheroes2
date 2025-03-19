@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2025-03-16 22:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -162,6 +162,30 @@ msgstr ""
 "A\n"
 "R"
 
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NUEVA\n"
+"PARTIDA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"CARGAR\n"
+"PARTIDA"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"GUARDAR\n"
+"PARTIDA"
+
+msgid "QUIT"
+msgstr "SALIR"
+
 #, fuzzy
 msgid ""
 "LOAD\n"
@@ -187,30 +211,6 @@ msgstr ""
 "GUARD.\n"
 "PAR-\n"
 "TIDA"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NUEVA\n"
-"PARTIDA"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"CARGAR\n"
-"PARTIDA"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"GUARDAR\n"
-"PARTIDA"
-
-msgid "QUIT"
-msgstr "SALIR"
 
 msgid "INFO"
 msgstr "INFO"
@@ -297,22 +297,6 @@ msgstr "REINICIAR"
 
 msgid "START"
 msgstr "COMENZAR"
-
-msgid "TOWN"
-msgstr "CIUDAD"
-
-msgid "CASTLE"
-msgstr "CASTILLO"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -897,6 +881,16 @@ msgstr "¿Estás seguro de que quieres activar el combate automático?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "The computer continues the combat for you."
 msgstr ""
@@ -3565,6 +3559,12 @@ msgstr "Opciones del Castillo"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
+
+msgid "TOWN"
+msgstr "CIUDAD"
+
+msgid "CASTLE"
+msgstr "CASTILLO"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -159,30 +159,6 @@ msgstr ""
 "N\n"
 "G"
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"TẢI\n"
-"GAME"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"TẠO\n"
-"GAME"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LƯU\n"
-"GAME"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -206,6 +182,30 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "RỜI KHỎI"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LƯU\n"
+"GAME"
 
 msgid "INFO"
 msgstr "THÔNG TIN"
@@ -286,22 +286,6 @@ msgstr "CÀI LẠI"
 
 msgid "START"
 msgstr "LÀM LẠI"
-
-msgid "TOWN"
-msgstr "THỊ TRẤN"
-
-msgid "CASTLE"
-msgstr "LÂU ĐÀI"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -879,6 +863,16 @@ msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3603,6 +3597,12 @@ msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Trung lập"
+
+msgid "TOWN"
+msgstr "THỊ TRẤN"
+
+msgid "CASTLE"
+msgstr "LÂU ĐÀI"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"

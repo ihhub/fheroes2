@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -145,6 +145,30 @@ msgid ""
 "D"
 msgstr ""
 
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"LAST INN\n"
+"PARTI"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+msgid "QUIT"
+msgstr "AVSLUTT"
+
 #, fuzzy
 msgid ""
 "LOAD\n"
@@ -169,30 +193,6 @@ msgid ""
 msgstr ""
 "LAGRE\n"
 "PARTI"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"LAST INN\n"
-"PARTI"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
-msgid "QUIT"
-msgstr "AVSLUTT"
 
 msgid "INFO"
 msgstr "INFO"
@@ -272,25 +272,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "OMSTART"
-
-msgid "TOWN"
-msgstr ""
-
-#, fuzzy
-msgid "CASTLE"
-msgstr ""
-"BYER/\n"
-"BORGER"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -879,6 +860,16 @@ msgstr "Er du sikker på at du ønsker å skru på autokamp?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3662,6 +3653,15 @@ msgstr "Borgvalg"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Nøytral"
+
+msgid "TOWN"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"BYER/\n"
+"BORGER"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."

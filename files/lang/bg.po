@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -162,30 +162,6 @@ msgstr ""
 "Е\n"
 "Н"
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАПАЗИ\n"
-"ИГРА"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -209,6 +185,30 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ИЗХОД"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
 
 msgid "INFO"
 msgstr "ИНФО"
@@ -290,25 +290,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "РЕСТАРТ"
-
-msgid "TOWN"
-msgstr ""
-
-#, fuzzy
-msgid "CASTLE"
-msgstr ""
-"ГРАДОВЕ/\n"
-"ЗАМЪЦИ"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -886,6 +867,16 @@ msgstr "Сигурен ли си, че искаш да активираш авт
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3625,6 +3616,15 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 "Неутра-\n"
 "лен"
+
+msgid "TOWN"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."

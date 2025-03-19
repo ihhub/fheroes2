@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -160,31 +160,6 @@ msgstr ""
 "R\n"
 "D"
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"NA-\n"
-"HRAŤ\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ULOŽIŤ\n"
-"HRU"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -209,6 +184,31 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 "OPUSŤ\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NA-\n"
+"HRAŤ\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIŤ\n"
 "HRU"
 
 msgid "INFO"
@@ -291,25 +291,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "REŠTART"
-
-msgid "TOWN"
-msgstr ""
-
-#, fuzzy
-msgid "CASTLE"
-msgstr ""
-"MESTÁ/\n"
-"HRADY"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -879,6 +860,16 @@ msgstr "Určite chceš povoliť automatický boj?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3603,6 +3594,15 @@ msgstr "Možnosti hradu"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutrálna"
+
+msgid "TOWN"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MESTÁ/\n"
+"HRADY"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
