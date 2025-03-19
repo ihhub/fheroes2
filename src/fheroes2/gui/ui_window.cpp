@@ -147,7 +147,7 @@ namespace fheroes2
         // This assumes that the extra height always gets added above the buttons.
         buttonsOffset.y += extraHeight;
 
-        int buttonId = 0;
+        size_t buttonId = 0;
         for ( int row = 0; row < rows; ++row ) {
             for ( int column = 0; column < columns; ++column ) {
                 buttons.button( buttonId )
