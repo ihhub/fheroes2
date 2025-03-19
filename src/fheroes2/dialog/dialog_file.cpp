@@ -21,8 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdint>
-
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
@@ -46,27 +44,18 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 204, true, display );
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
+        fheroes2::ButtonGroup optionButtons( bigButtonsICN );
+        fheroes2::StandardWindow background( optionButtons, false, 0, display );
 
-        fheroes2::Button buttonNew;
-        fheroes2::Button buttonLoad;
-        fheroes2::Button buttonSave;
-        fheroes2::Button buttonQuit;
+        fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
+        fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
+        fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
+        fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
+
         fheroes2::Button buttonCancel;
 
-        const int32_t largeButtonsXOffset = 30;
-        const int32_t largeButtonsYOffset = 15;
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_GAME_EVIL : ICN::BUTTON_NEW_GAME_GOOD, 0, 1, { largeButtonsXOffset, largeButtonsYOffset },
-                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_GAME_EVIL : ICN::BUTTON_LOAD_GAME_GOOD, 0, 1,
-                                 { largeButtonsXOffset, largeButtonsYOffset }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
-        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_GAME_EVIL : ICN::BUTTON_SAVE_GAME_GOOD, 0, 1,
-                                 { largeButtonsXOffset, largeButtonsYOffset + 2 }, fheroes2::StandardWindow::Padding::CENTER_LEFT );
-        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { largeButtonsXOffset, largeButtonsYOffset + 2 },
-                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
@@ -78,32 +67,32 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
-            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
-            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
-            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
+            newGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( newGameButton.area() ) );
+            loadGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( loadGameButton.area() ) );
+            saveGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( saveGameButton.area() ) );
+            quitButton.drawOnState( le.isMouseLeftButtonPressedInArea( quitButton.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
+            if ( le.MouseClickLeft( newGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                     result = fheroes2::GameMode::NEW_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            else if ( le.MouseClickLeft( loadGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
 
-            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
+            if ( le.MouseClickLeft( quitButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
@@ -114,16 +103,16 @@ namespace
                 break;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( newGameButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( loadGameButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( saveGameButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Game" ), _( "Save the current game." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( quitButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
