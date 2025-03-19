@@ -1557,8 +1557,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
             if ( ( !campaignSaveData.isStarting() || allowToRestart ) && currentDifficulty != campaignSaveData.getDifficulty()
                  && fheroes2::showStandardTextMessage( _( "Difficulty" ),
-                                                       _( "You have changed the difficulty of the campaign. The high score will be calculated solely based on the "
-                                                          "lowest difficulty level of those selected for individual campaign missions. Do you want to proceed?" ),
+                                                       _( "You have changed the difficulty of the campaign scenario. The high score will be calculated solely based on "
+                                                          "the lowest difficulty level of those selected for individual campaign scenarios. Do you want to proceed?" ),
                                                        Dialog::YES | Dialog::NO )
                         == Dialog::NO ) {
                 continue;
