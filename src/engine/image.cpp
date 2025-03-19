@@ -788,7 +788,8 @@ namespace fheroes2
                 for ( int32_t x = 0; x < maxX; ++x ) {
                     shadowLine.emplace_back( x + shadowOffset.x, shadowOffset.y );
                 }
-            } else {
+            }
+            else {
                 const int32_t maxY = absOffsetY;
                 for ( int32_t y = 0; y < maxY; ++y ) {
                     shadowLine.emplace_back( shadowOffset.x, y + shadowOffset.y );
