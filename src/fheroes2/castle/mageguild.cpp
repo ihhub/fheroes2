@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -189,7 +189,7 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
     return result;
 }
 
-void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
+void MageGuild::trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
     if ( hero.HaveSpellBook() && guildLevel > 0 ) {
         // This method will test the hero for compliance with the wisdom requirements

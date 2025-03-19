@@ -222,9 +222,9 @@ public:
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
-    void MageGuildEducateHero( HeroBase & hero ) const
+    void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
     }
 
     bool isFortificationBuilt() const
@@ -385,7 +385,7 @@ private:
     bool _isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
     uint32_t * _getDwelling( const uint32_t buildingType );
-    void _educateHeroes();
+    void _trainGuestHeroAndCaptainInMageGuild();
 
     ConstructionDialogResult _openConstructionDialog( uint32_t & dwellingTobuild );
 

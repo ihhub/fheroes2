@@ -1181,11 +1181,12 @@ bool Heroes::Recruit( const Castle & castle )
         return false;
     }
 
-    if ( castle.GetLevelMageGuild() ) {
-        castle.MageGuildEducateHero( *this );
+    if ( castle.GetLevelMageGuild() > 0 ) {
+        castle.trainHeroInMageGuild( *this );
     }
 
     SetVisited( GetIndex() );
+
     return true;
 }
 
@@ -1231,15 +1232,14 @@ void Heroes::ReplenishSpellPoints()
     const uint32_t maxp = GetMaxSpellPoints();
     uint32_t curr = GetSpellPoints();
 
-    // spell points may be doubled in artesian spring, leave as is
+    // Spell points can be doubled in Artesian Spring, leave them as they are
     if ( curr >= maxp ) {
         return;
     }
 
     const Castle * castle = inCastle();
 
-    // in castle?
-    if ( castle && castle->GetLevelMageGuild() ) {
+    if ( castle && castle->GetLevelMageGuild() > 0 ) {
         SetSpellPoints( maxp );
     }
     else {
@@ -1638,9 +1638,9 @@ uint32_t Heroes::getExperienceMaxValue()
     return 2990600;
 }
 
-bool Heroes::BuySpellBook( const Castle * castle )
+bool Heroes::BuySpellBook( const Castle & castle )
 {
-    if ( HaveSpellBook() || Color::NONE == GetColor() ) {
+    if ( HaveSpellBook() || Color::NONE == GetColor() || castle.GetLevelMageGuild() < 1 ) {
         return false;
     }
 
@@ -1674,9 +1674,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
     if ( SpellBookActivate() ) {
         kingdom.OddFundsResource( payment );
 
-        if ( castle ) {
-            castle->MageGuildEducateHero( *this );
-        }
+        castle.trainHeroInMageGuild( *this );
 
         return true;
     }

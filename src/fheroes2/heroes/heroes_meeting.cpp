@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <set>
 #include <string>
 #include <utility>
@@ -88,6 +89,59 @@ namespace
 
                 std::swap( bagFrom[fromIdx], bagTo[toIdx] );
             }
+        }
+    }
+
+    void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
+    {
+        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator & fromIter ) {
+            if ( fromIter == from.rend() ) {
+                return;
+            }
+
+            // If there is any artifact left that has not yet been moved, it is assumed that it goes first in the list of artifacts (in place of the missing Magic Book)
+            assert( fromIter == std::prev( from.rend() ) );
+
+            if ( !fromIter->isValid() ) {
+                return;
+            }
+
+            assert( *fromIter != Artifact::MAGIC_BOOK );
+
+            // Just try to put this artifact to the first empty slot (if any)
+            if ( !to.PushArtifact( *fromIter ) ) {
+                return;
+            }
+
+            fromIter->Reset();
+        };
+
+        for ( auto firstBagIter = firstBag.rbegin(), secondBagIter = secondBag.rbegin(); firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend();
+              ++firstBagIter, ++secondBagIter ) {
+            // It is assumed that the only non-transferable artifact is a Magic Book, and that it always comes first in the list of artifacts
+            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
+                assert( firstBagIter == std::prev( firstBag.rend() ) );
+
+                ++firstBagIter;
+            }
+            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
+                assert( secondBagIter == std::prev( secondBag.rend() ) );
+
+                ++secondBagIter;
+            }
+
+            if ( firstBagIter == firstBag.rend() ) {
+                moveRemainingArtifact( secondBag, firstBag, secondBagIter );
+
+                break;
+            }
+            if ( secondBagIter == secondBag.rend() ) {
+                moveRemainingArtifact( firstBag, secondBag, firstBagIter );
+
+                break;
+            }
+
+            std::swap( *firstBagIter, *secondBagIter );
         }
     }
 }
@@ -650,13 +704,17 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
@@ -667,24 +725,24 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
             display.render();
         }
         else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
-            BagArtifacts temp;
-
-            moveArtifacts( GetBagArtifacts(), temp );
-            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
-            moveArtifacts( temp, otherHero.GetBagArtifacts() );
+            ::swapArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
