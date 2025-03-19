@@ -46,9 +46,15 @@ namespace
     const int32_t buttonsHorizontalGap = 37;
     const int32_t buttonsVerticalGap = 10;
 
-    fheroes2::Rect getSymmetricDialogActiveArea( const bool isSingleColumn, const fheroes2::Rect & buttonArea, const int32_t extraHeight, const int32_t buttonCount,
-                                                 const fheroes2::Size & output )
+    fheroes2::Rect getSymmetricDialogActiveArea( fheroes2::ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, const fheroes2::Image & output )
     {
+        if ( buttons.getButtonsCount() == 0 ) {
+            return {};
+        }
+
+        const fheroes2::Rect & buttonArea = buttons.button( 0 ).area();
+        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
+
         const int32_t widthPadding = isSingleColumn ? 50 : 60;
         int32_t dialogWidth = widthPadding;
 
@@ -71,7 +77,7 @@ namespace
             dialogHeight += buttonArea.height * 2 + ( buttonsVerticalGap + 10 );
         }
 
-        return { ( output.width - dialogWidth ) / 2, ( output.height - dialogHeight ) / 2, dialogWidth, dialogHeight };
+        return { ( output.width() - dialogWidth ) / 2, ( output.height() - dialogHeight ) / 2, dialogWidth, dialogHeight };
     }
 }
 
@@ -101,12 +107,17 @@ namespace fheroes2
 
     StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
         : _output( output )
-        , _activeArea( getSymmetricDialogActiveArea( isSingleColumn, buttons.button( 0 ).area(), extraHeight, static_cast<int32_t>( buttons.getButtonsCount() ),
-                                                     { output.width(), output.height() } ) )
+        , _activeArea( getSymmetricDialogActiveArea( buttons, isSingleColumn, extraHeight, output ) )
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
     {
+        if ( buttons.getButtonsCount() == 0 ) {
+            // What are you trying to achieve with no buttons?!
+            assert( 0 );
+            return;
+        }
+
         render();
 
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
