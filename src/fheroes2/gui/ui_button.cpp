@@ -948,7 +948,7 @@ namespace fheroes2
         assert( texts.size() > 1 );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const FontType buttonFontType = { FontSize::BUTTON_RELEASED, isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE };
+        const FontType buttonFontType = { FontSize::BUTTON_RELEASED, ( isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE ) };
 
         std::vector<Text> buttonTexts;
         buttonTexts.reserve( texts.size() );
