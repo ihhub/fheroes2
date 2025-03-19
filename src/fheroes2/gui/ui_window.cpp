@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+
 #include <stddef.h>
 
 #include "agg_image.h"
