@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -158,27 +158,6 @@ msgstr ""
 "T"
 
 msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"YÜKLE"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"YENİ\n"
-"HARİTA"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"KAYDET"
-
-msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
@@ -201,6 +180,27 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ÇIKIŞ"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"YENİ\n"
+"HARİTA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"KAYDET"
 
 msgid "INFO"
 msgstr "BİLGİ"
@@ -281,22 +281,6 @@ msgstr "SIFIRLA"
 
 msgid "START"
 msgstr "BAŞLA"
-
-msgid "TOWN"
-msgstr "KASABA"
-
-msgid "CASTLE"
-msgstr "KALE"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -873,6 +857,16 @@ msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3442,6 +3436,12 @@ msgstr ""
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
+
+msgid "TOWN"
+msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
 
 msgid "Click to start placing the selected castle/town."
 msgstr ""

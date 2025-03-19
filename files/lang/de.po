@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2025-03-12 23:44+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -152,30 +152,6 @@ msgid ""
 "D"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"SPIEL\n"
-"LADEN"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NEUES\n"
-"SPIEL"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"SPIEL\n"
-"SPEICH."
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -199,6 +175,30 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "BEENDEN"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"SPIEL\n"
+"LADEN"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NEUES\n"
+"SPIEL"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SPIEL\n"
+"SPEICH."
 
 msgid "INFO"
 msgstr "INFO"
@@ -281,22 +281,6 @@ msgstr ""
 
 msgid "START"
 msgstr "START"
-
-msgid "TOWN"
-msgstr "STÄDT"
-
-msgid "CASTLE"
-msgstr "BURG"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -881,6 +865,16 @@ msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Seid Ihr sicher, dass Ihr den Kampf im Automodus beenden möchtet?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3648,6 +3642,12 @@ msgstr "Burg Optionen"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
+
+msgid "TOWN"
+msgstr "STÄDT"
+
+msgid "CASTLE"
+msgstr "BURG"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."

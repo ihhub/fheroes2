@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-19 15:23+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -166,28 +166,6 @@ msgstr ""
 "Т"
 
 msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАВАН-\n"
-"ТАЖИТИ\n"
-"МАПУ"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"НОВА\n"
-"МАПА"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗБЕРЕГТИ\n"
-"МАПУ"
-
-msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
@@ -211,6 +189,28 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ВИЙТИ"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАВАН-\n"
+"ТАЖИТИ\n"
+"МАПУ"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"МАПА"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗБЕРЕГТИ\n"
+"МАПУ"
 
 msgid "INFO"
 msgstr "ІНФО"
@@ -290,22 +290,6 @@ msgstr "СКИНУТИ"
 
 msgid "START"
 msgstr "ПОЧАТИ"
-
-msgid "TOWN"
-msgstr "МІСТО"
-
-msgid "CASTLE"
-msgstr "ЗАМОК"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -888,6 +872,16 @@ msgstr "Ви впевнені, що хочете увімкнути автоби
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3555,6 +3549,12 @@ msgstr "Розміщення замку/міста"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральний"
+
+msgid "TOWN"
+msgstr "МІСТО"
+
+msgid "CASTLE"
+msgstr "ЗАМОК"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Тицьніть для розміщення вибраного замку/міста."
