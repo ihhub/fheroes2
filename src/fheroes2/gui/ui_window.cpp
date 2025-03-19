@@ -147,12 +147,14 @@ namespace fheroes2
         // This assumes that the extra height always gets added above the buttons.
         buttonsOffset.y += extraHeight;
 
+        const int32_t verticalGapOffset = ( columns > 1 ) ? buttonsVerticalGap : 2 * buttonsVerticalGap;
+
         size_t buttonId = 0;
-        for ( int row = 0; row < rows; ++row ) {
-            for ( int column = 0; column < columns; ++column ) {
+        for ( int32_t row = 0; row < rows; ++row ) {
+            for ( int32_t column = 0; column < columns; ++column ) {
                 buttons.button( buttonId )
                     .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
-                                  _activeArea.y + ( row * ( buttonsHeight + buttonsVerticalGap * ( 1 + ( columns > 1 ) ) ) ) + buttonsOffset.y );
+                                  _activeArea.y + ( row * ( buttonsHeight + verticalGapOffset ) ) + buttonsOffset.y );
                 ++buttonId;
             }
         }
