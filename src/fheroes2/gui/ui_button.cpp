@@ -956,29 +956,31 @@ namespace fheroes2
             buttonTexts.emplace_back( text, buttonFontType );
         }
         // This max value is needed to make the width and height calculations correctly take into account that texts with \n are multi-lined.
-        const int32_t maxWidth = 200;
+        const int32_t maxAllowedWidth = 200;
+        int32_t maxWidth = 0;
 
-        auto maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
-                                         [maxWidth]( const Text & a, const Text & b ) { return a.width( maxWidth ) < b.width( maxWidth ); } );
+        for ( const auto & text : buttonTexts ) {
+            maxWidth = std::max( maxWidth, text.width( maxAllowedWidth ) );
+        }
 
         // We add 6 to have some extra horizontal margin.
-        const int32_t width = maxIter->width( maxWidth ) + 6;
-        const int32_t finalWidth = std::clamp( width, minWidth, maxWidth );
+        const int32_t finalWidth = std::clamp( maxWidth + 6, minWidth, maxAllowedWidth );
 
-        maxIter = std::max_element( buttonTexts.begin(), buttonTexts.end(),
-                                    [finalWidth]( const Text & a, const Text & b ) { return a.height( finalWidth ) < b.height( finalWidth ); } );
-
-        int32_t height = maxIter->height( finalWidth );
+        int32_t maxHeight = 0;
+        for ( const auto & text : buttonTexts ) {
+            maxHeight = std::max( maxHeight, text.height( finalWidth ) );
+        }
 
         // Add extra vertical margin only if the button text is on two lines.
-        height += ( height == ( getFontHeight( buttonFontType.size ) * 2 ) ) ? 26 : 10;
+        const bool isTwoLinesText = ( maxHeight == ( getFontHeight( buttonFontType.size ) * 2 ) );
+        maxHeight += isTwoLinesText ? 26 : 10;
 
         const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
         for ( size_t i = 0; i < buttonTexts.size(); ++i ) {
             Sprite & released = backgroundSprites[i * 2];
             Sprite & pressed = backgroundSprites[i * 2 + 1];
-            makeButtonSprites( released, pressed, buttonTexts[i].text(), { finalWidth, height }, isEvilInterface, backgroundIcnID );
+            makeButtonSprites( released, pressed, buttonTexts[i].text(), { finalWidth, maxHeight }, isEvilInterface, backgroundIcnID );
         }
     }
 
