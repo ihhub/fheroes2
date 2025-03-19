@@ -736,7 +736,7 @@ namespace fheroes2
         }
     }
 
-    void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
+    void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset, const bool slopeEffect )
     {
         if ( in.empty() || out.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
             return;
@@ -766,7 +766,7 @@ namespace fheroes2
                 shadowLine.emplace_back( 0, y );
             }
         }
-        else {
+        else if ( slopeEffect ) {
             const double slopeFactor = static_cast<double>( shadowOffset.y ) / shadowOffset.x;
 
             if ( absOffsetX >= absOffsetY ) {
@@ -782,8 +782,21 @@ namespace fheroes2
                 }
             }
         }
+        else {
+            if ( absOffsetX >= absOffsetY ) {
+                const int32_t maxX = inWidth;
+                for ( int32_t x = 0; x < maxX; ++x ) {
+                    shadowLine.emplace_back( x + shadowOffset.x, shadowOffset.y );
+                }
+            } else {
+                const int32_t maxY = absOffsetY;
+                for ( int32_t y = 0; y < maxY; ++y ) {
+                    shadowLine.emplace_back( shadowOffset.x, y + shadowOffset.y );
+                }
+            }
+        }
 
-        const int32_t maxX = inWidth + absOffsetX;
+        const int32_t maxX = slopeEffect ? inWidth + absOffsetX : inWidth;
         const int32_t maxY = inHeight + absOffsetY;
 
         // If image is single-layer then pointer to its transform layer is 'nullptr'
