@@ -46,6 +46,7 @@
 #include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "mp2.h"
 #include "pairs.h"
+#include "profit.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
@@ -1912,17 +1913,68 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
         stream >> tile._mainObjectPart.layerType;
     }
 
-    // Some maps have "hacked" mines with no resources. We need to mark these tiles as empty tiles.
-    // The proper fix for new game was introduced in 1.1.4 version.
-    // However, save files that are created before 1.1.4 would contain this problem
-    // and also they can be converted throughout the time to higher save file versions.
-    // So, we don't have a proper version cut to tell that this fix is not needed.
-    // Let's assume that at the time of making 1.1.4 minimal acceptable version
-    // we can remove this fix and forget about older saves.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1104_RELEASE, "Remove the logic below." );
-    // If the mine has 0 resources then this is an invalid mine.
-    if ( tile._mainObjectType == MP2::OBJ_MINE && tile.metadata()[1] == 0 ) {
-        tile.setMainObjectType( MP2::OBJ_NONE );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1108_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE ) {
+        // Some maps have "hacked" mines with no resources. We need to try to fix these tiles first.
+        if ( tile._mainObjectType == MP2::OBJ_MINE ) {
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                for ( auto & part : tile.getGroundObjectParts() ) {
+                    if ( part.icnType == MP2::OBJ_ICN_TYPE_EXTRAOVR && part._uid == tile.getMainObjectPart()._uid ) {
+                        // We found the missing object part. Swap it.
+                        std::swap( tile.getMainObjectPart(), part );
+                        break;
+                    }
+                }
+            }
+
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                // This is an unknown mine type. Most likely it was added by some hex editing.
+                tile.setMainObjectType( MP2::OBJ_NONE );
+            }
+            else if ( tile.metadata()[1] == 0 ) {
+                switch ( tile.getMainObjectPart().icnIndex ) {
+                case 0: {
+                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
+                    assert( resourceCount.has_value() && resourceCount > 0U );
+
+                    setResourceOnTile( tile, Resource::ORE, resourceCount.value() );
+                    break;
+                }
+                case 1: {
+                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::SULFUR ).sulfur );
+                    assert( resourceCount.has_value() && resourceCount > 0U );
+
+                    setResourceOnTile( tile, Resource::SULFUR, resourceCount.value() );
+                    break;
+                }
+                case 2: {
+                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::CRYSTAL ).crystal );
+                    assert( resourceCount.has_value() && resourceCount > 0U );
+
+                    setResourceOnTile( tile, Resource::CRYSTAL, resourceCount.value() );
+                    break;
+                }
+                case 3: {
+                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GEMS ).gems );
+                    assert( resourceCount.has_value() && resourceCount > 0U );
+
+                    setResourceOnTile( tile, Resource::GEMS, resourceCount.value() );
+                    break;
+                }
+                case 4: {
+                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GOLD ).gold );
+                    assert( resourceCount.has_value() && resourceCount > 0U );
+
+                    setResourceOnTile( tile, Resource::GOLD, resourceCount.value() );
+                    break;
+                }
+                default:
+                    // This is an unknown mine type. Most likely it was added by some hex editing.
+                    tile.setMainObjectType( MP2::OBJ_NONE );
+                    break;
+                }
+            }
+        }
     }
 
     return stream >> tile._boatOwnerColor;
