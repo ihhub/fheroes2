@@ -569,6 +569,19 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
+bool MP2::isRevisitAllowedForObject( const MapObjectType objectType, const bool accessedFromWater )
+{
+    switch ( objectType ) {
+    case OBJ_STONE_LITHS:
+    case OBJ_WHIRLPOOL:
+        return false;
+    default:
+        break;
+    }
+
+    return isInGameActionObject( objectType, accessedFromWater );
+}
+
 bool MP2::isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
     if ( accessedFromWater ) {
