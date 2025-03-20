@@ -14,7 +14,7 @@ version 1.1.7 (23 March 2025)
 - allow to activate Czech virtual keyboard
 - do not center on the defeated hero after an instant movement
 - update the Portuguese translation
-- fix the logic of transferring artifacts after a battle
+- fix the logic of transferring artifacts after battle
 - check the contents of the resurrection.h2d file for correctness
 - add dynamic interface option
 - fix several button issues and do more button code cleanup
