@@ -1546,10 +1546,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             updateDisplay = true;
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonDifficulty.area() ) ) {
-            fheroes2::showStandardTextMessage(
-                _( "Campaign Difficulty" ),
-                _( "Select the campaign difficulty. This can be changed at any point during the campaign. However, the final score will be calculated based solely on the lowest difficulty of a completed scenario during the campaign." ),
-                Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Campaign Difficulty" ),
+                                               _( "Select the campaign difficulty. This can be changed at any point during the campaign. However, the final score "
+                                                  "will be calculated based solely on the lowest difficulty of a completed scenario during the campaign." ),
+                                               Dialog::ZERO );
             updateDisplay = true;
         }
         else if ( buttonRestart.isVisible() && le.isMouseRightButtonPressedInArea( buttonRestart.area() ) ) {
