@@ -2,7 +2,7 @@ version 1.1.7 (23 March 2025)
 - fix an assertion crash for hacked mines on old saves
 - fix creature info dialog shadow draw on right click
 - implement Dragon Slayer spell selection for the AI
-- make the AI to share visit info about some objects on the Adventure Map
+- make the AI share visit info about some objects on the Adventure Map
 - fix a delay during battle after showing a monster info dialog by right clicking
 - make the AI use Guardian spells on Mines and Abandoned Mines
 - fix Golden bow sprite glowing pixels
