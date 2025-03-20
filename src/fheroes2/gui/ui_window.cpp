@@ -67,7 +67,7 @@ namespace
         // When there's an odd number of buttons we always make a dialog for a single column of buttons.
         if ( isSingleColumn || buttonCount % 2 != 0 ) {
             dialogWidth += buttonArea.width;
-            dialogHeight += buttonArea.height * buttonCount + ( buttonCount - 1 ) * ( buttonsVerticalGap );
+            dialogHeight += buttonArea.height * buttonCount + ( buttonCount - 1 ) * buttonsVerticalGap;
         }
         else if ( buttonCount == 2 ) {
             dialogWidth += buttonArea.width * 2 + buttonsHorizontalGap;
