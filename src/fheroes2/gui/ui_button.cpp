@@ -446,7 +446,7 @@ namespace fheroes2
         return true;
     }
 
-    void ButtonBase::drawShadow( Image & output )
+    void ButtonBase::drawShadow( Image & output ) const
     {
         const Point buttonPoint = area().getPosition();
         // Did you forget to set the position of the button?
@@ -648,7 +648,7 @@ namespace fheroes2
         }
     }
 
-    void ButtonGroup::drawShadows( Image & output )
+    void ButtonGroup::drawShadows( Image & output ) const
     {
         for ( const auto & button : _button ) {
             button->drawShadow( output );

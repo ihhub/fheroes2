@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cstdint>
 #include <optional>
 #include <vector>
@@ -89,9 +90,15 @@ namespace Campaign
             return _difficulty;
         }
 
-        void setDifficulty( const int32_t difficulty )
+        int32_t getMinDifficulty() const
+        {
+            return _minDifficulty;
+        }
+
+        void setDifficulty( const int32_t difficulty, const bool resetMinDifficulty )
         {
             _difficulty = difficulty;
+            _minDifficulty = ( resetMinDifficulty ? difficulty : std::min( difficulty, _minDifficulty ) );
         }
 
         // Get the campaign difficulty in percents for rating calculations.
@@ -137,6 +144,7 @@ namespace Campaign
 
         uint32_t _daysPassed{ 0 };
         int32_t _difficulty{ CampaignDifficulty::Normal };
+        int32_t _minDifficulty{ CampaignDifficulty::Normal };
     };
 
     // Call this function only when playing campaign scenario.

@@ -113,7 +113,7 @@ namespace fheroes2
         bool draw( Image & output = Display::instance() ) const;
 
         // Draws a shadow 5 px to the left and below the button.
-        void drawShadow( Image & output );
+        void drawShadow( Image & output ) const;
 
         // Will draw and render on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Display & output = Display::instance() );
@@ -292,7 +292,7 @@ namespace fheroes2
         void draw( Image & output = Display::instance() ) const;
 
         // Draws shadows for all the buttons in the group according to their coordinates.
-        void drawShadows( Image & output );
+        void drawShadows( Image & output ) const;
 
         size_t getButtonsCount() const
         {
