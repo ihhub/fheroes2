@@ -53,6 +53,7 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "game_static.h"
 
 namespace
 {
@@ -311,6 +312,9 @@ std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t
             StringReplace( description, "%{count}", Castle::GetGrownWel2() );
             break;
         case BUILD_CASTLE:
+        case BUILD_MOAT:
+            StringReplace( description, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
+            break;
         case BUILD_STATUE:
         case BUILD_SPEC: {
             const Funds profit = ProfitConditions::FromBuilding( buildingId, race );

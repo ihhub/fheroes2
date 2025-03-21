@@ -931,7 +931,7 @@ namespace fheroes2
         case BUILD_MARKETPLACE:
             return _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." );
         case BUILD_MOAT:
-            return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
+            return _( "The Moat slows and weakens attacking units. Any unit taking a step in the moat must end its turn there and becomes more vulnerable to attack (defense skill reduced by 3)." );
         case BUILD_CASTLE:
             return _( "The Castle improves the town's defense and increases its income to %{count} gold per day." );
         case BUILD_TENT:
