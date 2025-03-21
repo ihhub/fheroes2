@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
-"PO-Revision-Date: 2023-09-03 18:42+0200\n"
+"POT-Creation-Date: 2025-03-20 14:06+0000\n"
+"PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -145,31 +145,6 @@ msgid ""
 "D"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"LAST\n"
-"INN\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -181,8 +156,7 @@ msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
-"LAST\n"
-"INN\n"
+"LAST INN\n"
 "PARTI"
 
 msgid ""
@@ -193,9 +167,32 @@ msgstr ""
 "PARTI"
 
 msgid "QUIT"
+msgstr "AVSLUTT"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
 msgstr ""
-"AV-\n"
-"SLUTT"
+"LAST\n"
+"INN\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LAGRE\n"
+"PARTI"
 
 msgid "INFO"
 msgstr "INFO"
@@ -275,25 +272,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "OMSTART"
-
-msgid "TOWN"
-msgstr ""
-
-#, fuzzy
-msgid "CASTLE"
-msgstr ""
-"BYER/\n"
-"BORGER"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -882,6 +860,16 @@ msgstr "Er du sikker på at du ønsker å skru på autokamp?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3666,6 +3654,15 @@ msgstr "Borgvalg"
 msgid "doubleLinedRace|Neutral"
 msgstr "Nøytral"
 
+msgid "TOWN"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"BYER/\n"
+"BORGER"
+
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
 msgstr "Trykk for å bruke den valgte oppløsningen."
@@ -5164,11 +5161,10 @@ msgid "View the intro video for the current state of the campaign."
 msgstr "Vis filmen for det inneværende punktet av felttoget."
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
-"Velg vanskelighetsgrad for felttoget. Dette kan nedjusteres når som helst "
-"senere i felttoget."
 
 msgid "Restart the current scenario."
 msgstr "Start det nåværende kartet på nytt."
@@ -5176,10 +5172,11 @@ msgstr "Start det nåværende kartet på nytt."
 msgid "Difficulty"
 msgstr "Vanskelighetsgrad"
 
+#, fuzzy
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 "Du har endret til en lavere vanskelighetsgrad for felttoget. Du vil ikke "
 "kunne omgjøre dette. Din endelige poengsum vil bli beregnet kun ut ifra den "
@@ -12636,6 +12633,13 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Select the campaign difficulty. This can be lowered at any point during "
+#~ "the campaign."
+#~ msgstr ""
+#~ "Velg vanskelighetsgrad for felttoget. Dette kan nedjusteres når som helst "
+#~ "senere i felttoget."
 
 #~ msgid "Select count %{resource}:"
 #~ msgstr "Velg mengde %{resource}:"

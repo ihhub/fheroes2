@@ -228,7 +228,7 @@ namespace Battle
         }
 
         void redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
+        bool queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t
@@ -425,7 +425,7 @@ namespace Battle
         void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
-        void MousePressRightBoardAction( const Cell & cell ) const;
+        bool MousePressRightBoardAction( const Cell & cell ) const;
 
         int GetBattleCursor( std::string & statusMsg ) const;
         int GetBattleSpellCursor( std::string & statusMsg ) const;

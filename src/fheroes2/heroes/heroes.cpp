@@ -54,6 +54,7 @@
 #include "m82.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -99,43 +100,73 @@ namespace
         return { Heroes::LORDKILBURN, Heroes::CELIA };
     }
 
-    int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
+    int getObjectMoraleModifiers( const std::set<MP2::MapObjectType> & objectTypes, std::string * output )
     {
         int result = 0;
 
         for ( const MP2::MapObjectType objectType : objectTypes ) {
-            if ( hero.isObjectTypeVisited( objectType ) ) {
-                result += GameStatic::ObjectVisitedModifiers( objectType );
-
-                if ( strs ) {
-                    switch ( objectType ) {
-                    case MP2::OBJ_GRAVEYARD:
-                    case MP2::OBJ_NON_ACTION_GRAVEYARD:
-                    case MP2::OBJ_SHIPWRECK:
-                    case MP2::OBJ_NON_ACTION_SHIPWRECK:
-                    case MP2::OBJ_DERELICT_SHIP:
-                    case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
-                        StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
-                        strs->append( modRobber );
-                        break;
-                    }
-                    case MP2::OBJ_PYRAMID:
-                    case MP2::OBJ_NON_ACTION_PYRAMID: {
-                        std::string modRaided = _( "pyramid|%{object} raided" );
-                        StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
-                        strs->append( modRaided );
-                        break;
-                    }
-                    default:
-                        strs->append( MP2::StringObject( objectType ) );
-                        break;
-                    }
-
-                    fheroes2::appendModifierToString( *strs, GameStatic::ObjectVisitedModifiers( objectType ) );
-                    strs->append( "\n" );
-                }
+            const int32_t modifier = GameStatic::getObjectMoraleEffect( objectType );
+            if ( modifier == 0 ) {
+                continue;
             }
+
+            result += modifier;
+
+            if ( output == nullptr ) {
+                continue;
+            }
+
+            switch ( objectType ) {
+            case MP2::OBJ_DERELICT_SHIP:
+            case MP2::OBJ_GRAVEYARD:
+            case MP2::OBJ_SHIPWRECK: {
+                std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
+                StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
+                output->append( modRobber );
+                break;
+            }
+            default:
+                output->append( MP2::StringObject( objectType ) );
+                break;
+            }
+
+            fheroes2::appendModifierToString( *output, modifier );
+            output->append( "\n" );
+        }
+
+        return result;
+    }
+
+    int getObjectLuckModifiers( const std::set<MP2::MapObjectType> & objectTypes, std::string * output )
+    {
+        int result = 0;
+
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            const int32_t modifier = GameStatic::getObjectLuckEffect( objectType );
+            if ( modifier == 0 ) {
+                continue;
+            }
+
+            result += modifier;
+
+            if ( output == nullptr ) {
+                continue;
+            }
+
+            switch ( objectType ) {
+            case MP2::OBJ_PYRAMID: {
+                std::string modRaided = _( "pyramid|%{object} raided" );
+                StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
+                output->append( modRaided );
+                break;
+            }
+            default:
+                output->append( MP2::StringObject( objectType ) );
+                break;
+            }
+
+            fheroes2::appendModifierToString( *output, modifier );
+            output->append( "\n" );
         }
 
         return result;
@@ -1042,10 +1073,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     // bonus leadership
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
-    // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,         MP2::OBJ_WATERING_HOLE, MP2::OBJ_TEMPLE,
-                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICT_SHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+    result += getObjectMoraleModifiers( getAllVisitedObjectTypes(), strs );
 
     // bonus artifact
     result += GetMoraleModificator( strs );
@@ -1080,8 +1108,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIE_RING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+    result += getObjectLuckModifiers( getAllVisitedObjectTypes(), strs );
 
     // bonus artifact
     result += GetLuckModificator( strs );
@@ -1154,11 +1181,12 @@ bool Heroes::Recruit( const Castle & castle )
         return false;
     }
 
-    if ( castle.GetLevelMageGuild() ) {
-        castle.MageGuildEducateHero( *this );
+    if ( castle.GetLevelMageGuild() > 0 ) {
+        castle.trainHeroInMageGuild( *this );
     }
 
     SetVisited( GetIndex() );
+
     return true;
 }
 
@@ -1178,11 +1206,6 @@ void Heroes::ActionNewDay()
 void Heroes::ActionNewWeek()
 {
     visit_object.remove_if( Visit::isWeekLife );
-}
-
-void Heroes::ActionNewMonth()
-{
-    visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Heroes::ActionAfterBattle()
@@ -1209,15 +1232,14 @@ void Heroes::ReplenishSpellPoints()
     const uint32_t maxp = GetMaxSpellPoints();
     uint32_t curr = GetSpellPoints();
 
-    // spell points may be doubled in artesian spring, leave as is
+    // Spell points can be doubled in Artesian Spring, leave them as they are
     if ( curr >= maxp ) {
         return;
     }
 
     const Castle * castle = inCastle();
 
-    // in castle?
-    if ( castle && castle->GetLevelMageGuild() ) {
+    if ( castle && castle->GetLevelMageGuild() > 0 ) {
         SetSpellPoints( maxp );
     }
     else {
@@ -1285,55 +1307,96 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::Ty
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-void Heroes::SetVisited( int32_t index, Visit::Type type )
+std::set<MP2::MapObjectType> Heroes::getAllVisitedObjectTypes() const
 {
-    const Maps::Tile & tile = world.getTile( index );
+    std::set<MP2::MapObjectType> objectTypes;
+
+    for ( const auto & object : visit_object ) {
+        objectTypes.emplace( object.second );
+    }
+
+    return objectTypes;
+}
+
+void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type /* = Visit::LOCAL */ )
+{
+    const Maps::Tile & tile = world.getTile( tileIndex );
+
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
+    if ( !MP2::isOffGameActionObject( objectType ) ) {
+        // Something is wrong as how are going to visit a non-action object?!
+        assert( 0 );
+        return;
+    }
+
+    const uint32_t objectUID = tile.getMainObjectPart()._uid;
 
     if ( Visit::GLOBAL == type ) {
-        GetKingdom().SetVisited( index, objectType );
+        GetKingdom().SetVisited( tileIndex, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.emplace_front( index, objectType );
+    else if ( !isVisited( tile ) ) {
+        visit_object.emplace_front( tileIndex, objectType );
+    }
+
+    // An object could be bigger than 1 tile so we need to check all its tiles.
+    constexpr int32_t searchDist = []() constexpr {
+        constexpr int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        static_assert( max > 0 );
+
+        return max - 1;
+    }();
+
+    for ( const int32_t index : Maps::getAroundIndexes( tileIndex, searchDist ) ) {
+        const Maps::Tile & currentTile = world.getTile( index );
+        if ( currentTile.getMainObjectType( false ) != objectType || currentTile.getMainObjectPart()._uid != objectUID ) {
+            continue;
+        }
+
+        if ( Visit::GLOBAL == type ) {
+            GetKingdom().SetVisited( index, objectType );
+        }
+        else if ( !isVisited( currentTile ) ) {
+            visit_object.emplace_front( index, objectType );
+        }
     }
 }
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tile & tile = world.getTile( tileIndex );
+
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
+    if ( !MP2::isOffGameActionObject( objectType ) ) {
+        // Something is wrong as how are going to visit a non-action object?!
+        assert( 0 );
+        return;
+    }
+
+    const uint32_t objectUID = tile.getMainObjectPart()._uid;
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
         world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
-}
 
-void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::Type type )
-{
-    const Maps::Tile & tile = world.getTile( index );
-    const uint32_t uid = tile.getMainObjectPart()._uid;
-    int wide = 0;
+    // An object could be bigger than 1 tile so we need to check all its tiles.
+    constexpr int32_t searchDist = []() constexpr {
+        constexpr int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        static_assert( max > 0 );
 
-    switch ( objectType ) {
-    case MP2::OBJ_SKELETON:
-    case MP2::OBJ_OASIS:
-    case MP2::OBJ_STANDING_STONES:
-    case MP2::OBJ_ARTESIAN_SPRING:
-        wide = 2;
-        break;
-    case MP2::OBJ_WATERING_HOLE:
-        wide = 4;
-        break;
-    default:
-        break;
-    }
+        return max - 1;
+    }();
 
-    if ( tile.getMainObjectType( false ) == objectType && wide ) {
-        for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.getTile( ii ).getMainObjectPart()._uid == uid )
-                SetVisited( ii, type );
+    for ( const int32_t index : Maps::getAroundIndexes( tileIndex, searchDist ) ) {
+        const Maps::Tile & currentTile = world.getTile( index );
+        if ( currentTile.getMainObjectType( false ) != objectType || currentTile.getMainObjectPart()._uid != objectUID ) {
+            continue;
+        }
+
+        for ( const int friendColor : friendColors ) {
+            world.GetKingdom( friendColor ).SetVisited( index, objectType );
+        }
     }
 }
 
@@ -1575,9 +1638,9 @@ uint32_t Heroes::getExperienceMaxValue()
     return 2990600;
 }
 
-bool Heroes::BuySpellBook( const Castle * castle )
+bool Heroes::BuySpellBook( const Castle & castle )
 {
-    if ( HaveSpellBook() || Color::NONE == GetColor() ) {
+    if ( HaveSpellBook() || Color::NONE == GetColor() || castle.GetLevelMageGuild() < 1 ) {
         return false;
     }
 
@@ -1611,9 +1674,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
     if ( SpellBookActivate() ) {
         kingdom.OddFundsResource( payment );
 
-        if ( castle ) {
-            castle->MageGuildEducateHero( *this );
-        }
+        castle.trainHeroInMageGuild( *this );
 
         return true;
     }
@@ -2437,15 +2498,6 @@ void AllHeroes::NewWeek() const
         assert( hero != nullptr );
 
         hero->ActionNewWeek();
-    } );
-}
-
-void AllHeroes::NewMonth() const
-{
-    std::for_each( begin(), end(), []( Heroes * hero ) {
-        assert( hero != nullptr );
-
-        hero->ActionNewMonth();
     } );
 }
 

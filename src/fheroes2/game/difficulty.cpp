@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -240,6 +240,47 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     }
 
     return true;
+}
+
+int32_t Difficulty::getGuardianSpellMultiplier( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return 20;
+    case Difficulty::NORMAL:
+        return 18;
+    case Difficulty::HARD:
+        return 14;
+    case Difficulty::EXPERT:
+        return 12;
+    case Difficulty::IMPOSSIBLE:
+        return 10;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return 20;
+}
+
+bool Difficulty::isObjectVisitInfoSharingAllowedForAI( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return false;
 }
 
 bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )

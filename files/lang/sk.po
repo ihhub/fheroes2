@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
-"PO-Revision-Date: 2023-09-11 20:22+0200\n"
+"POT-Creation-Date: 2025-03-20 14:06+0000\n"
+"PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid "SELECT"
 msgstr "ZVOĽ"
@@ -160,31 +160,6 @@ msgstr ""
 "R\n"
 "D"
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"NA-\n"
-"HRAŤ\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ULOŽIŤ\n"
-"HRU"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -196,8 +171,7 @@ msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
-"NA-\n"
-"HRAŤ\n"
+"NAHRAŤ\n"
 "HRU"
 
 msgid ""
@@ -210,6 +184,31 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 "OPUSŤ\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NA-\n"
+"HRAŤ\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIŤ\n"
 "HRU"
 
 msgid "INFO"
@@ -292,25 +291,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "REŠTART"
-
-msgid "TOWN"
-msgstr ""
-
-#, fuzzy
-msgid "CASTLE"
-msgstr ""
-"MESTÁ/\n"
-"HRADY"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -880,6 +860,16 @@ msgstr "Určite chceš povoliť automatický boj?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3605,6 +3595,15 @@ msgstr "Možnosti hradu"
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutrálna"
 
+msgid "TOWN"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MESTÁ/\n"
+"HRADY"
+
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
 msgstr "Klikni pre výber zvoleného rozlíšenia."
@@ -5085,9 +5084,10 @@ msgid "View the intro video for the current state of the campaign."
 msgstr "Ukáž intro video pre terajší stav kampane."
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
-msgstr "Zvoľ obtiažnosť kampane. Neskôr sa bude dať kedykoľvek znížiť."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
+msgstr ""
 
 msgid "Restart the current scenario."
 msgstr "Začni terajší scenár od začiatku."
@@ -5095,10 +5095,11 @@ msgstr "Začni terajší scenár od začiatku."
 msgid "Difficulty"
 msgstr "Obtiažnosť"
 
+#, fuzzy
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 "V kampani prechádzaš na nižšiu obtiažnosť. Po tomto bode to už nebudete môcť "
 "vrátiť späť. Najlepšie skóre sa vypočíta výlučne na základe novej "
@@ -12323,6 +12324,11 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Select the campaign difficulty. This can be lowered at any point during "
+#~ "the campaign."
+#~ msgstr "Zvoľ obtiažnosť kampane. Neskôr sa bude dať kedykoľvek znížiť."
 
 #~ msgid "Select count %{resource}:"
 #~ msgstr "Zvoľ počet - %{resource}:"

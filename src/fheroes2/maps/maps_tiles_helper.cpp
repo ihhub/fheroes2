@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -218,28 +218,6 @@ namespace
         }
 
         return groundDirection;
-    }
-
-    // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
-    int getRoadDirecton( const Maps::Tile & tile )
-    {
-        // Castle entrance (active tile) is considered as a road, but it is not a real road so it should not be taken into account here.
-        // TODO: Redo the roads placing and direction check to use Map_Format instead of 'world' tiles.
-        MP2::MapObjectType objectType = tile.getMainObjectType( true );
-        int roadDirection
-            = ( tile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) ? Direction::CENTER : 0;
-        const int32_t centerTileIndex = tile.GetIndex();
-        const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
-
-        for ( const int32_t tileIndex : around ) {
-            const Maps::Tile & currentTile = world.getTile( tileIndex );
-            objectType = currentTile.getMainObjectType( true );
-            if ( currentTile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) {
-                roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
-            }
-        }
-
-        return roadDirection;
     }
 
     bool hasBits( const int value, const int bits )
@@ -787,267 +765,6 @@ namespace
         }
     }
 
-    uint8_t getRoadImageForTile( const Maps::Tile & tile, const int roadDirection )
-    {
-        // To place some roads we need to check not only the road directions around this tile, but also the road ICN index at the nearby tile.
-        auto checkRoadIcnIndex = []( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
-            const Maps::Tile & currentTile = world.getTile( tileIndex );
-
-            if ( currentTile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(),
-                                    [&currentTile]( const uint8_t index ) { return currentTile.getMainObjectPart().icnIndex == index; } );
-            }
-
-            for ( const Maps::ObjectPart & part : currentTile.getGroundObjectParts() ) {
-                if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&part]( const uint8_t index ) { return part.icnIndex == index; } );
-                }
-            }
-
-            return false;
-        };
-
-        const int32_t tileIndex = tile.GetIndex();
-
-        if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
-            if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
-                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - world.w();
-                if ( checkRoadIcnIndex( upperTileIndex, { 7, 17, 20, 22, 24, 29 } ) ) {
-                    return 8U;
-                }
-            }
-
-            if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
-                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - world.w();
-                if ( checkRoadIcnIndex( upperTileIndex, { 16, 18, 19, 23, 25, 30 } ) ) {
-                    return 15U;
-                }
-            }
-            if ( hasBits( roadDirection, Direction::TOP )
-                 && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
-                      || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
-                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - world.w();
-                if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
-                    return Rand::Get( 1 ) ? 1U : 27U;
-                }
-            }
-            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
-                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + world.w();
-                if ( checkRoadIcnIndex( lowerTileIndex, { 8, 9, 18, 20, 30 } ) ) {
-                    return Rand::Get( 1 ) ? 22U : 24U;
-                }
-            }
-            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
-                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + world.w();
-                if ( checkRoadIcnIndex( lowerTileIndex, { 12, 15, 17, 19, 29 } ) ) {
-                    return Rand::Get( 1 ) ? 23U : 25U;
-                }
-            }
-
-            // The next 4 conditions are to end the horizontal roads.
-            if ( hasBits( roadDirection, Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex - 1, { 2, 21, 28 } ) ) {
-                return Rand::Get( 1 ) ? 23U : 25U;
-            }
-            if ( hasBits( roadDirection, Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex + 1, { 2, 21, 28 } ) ) {
-                return Rand::Get( 1 ) ? 22U : 24U;
-            }
-            if ( hasBits( roadDirection, Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex - 1, { 1, 4, 21, 27 } ) ) {
-                return 15U;
-            }
-            if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex + 1, { 1, 4, 21, 27 } ) ) {
-                return 8U;
-            }
-
-            // This tile should not have a road image.
-            return 255U;
-        }
-
-        // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
-
-        // There might be a castle entrance above. Check for it to properly connect the road to it.
-        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
-            const MP2::MapObjectType aboveObject = world.getTile( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) ).getMainObjectType( false );
-            if ( aboveObject == MP2::OBJ_CASTLE || aboveObject == MP2::OBJ_RANDOM_TOWN || aboveObject == MP2::OBJ_RANDOM_CASTLE ) {
-                return 31U;
-            }
-        }
-
-        if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
-             && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
-            // = - horizontal road in this and in the upper tile.
-            return 21U;
-        }
-        if ( ( ( ( hasBits( roadDirection, Direction::BOTTOM_RIGHT ) || hasBits( roadDirection, Direction::TOP_LEFT ) ) && hasNoBits( roadDirection, Direction::RIGHT ) )
-               || hasBits( roadDirection, Direction::RIGHT | Direction::TOP_LEFT ) )
-             && hasNoBits( roadDirection, Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) {
-            // \ - diagonal road from top-left to bottom-right.
-            return Rand::Get( 1 ) ? 17U : 29U;
-        }
-        if ( ( ( ( hasBits( roadDirection, Direction::BOTTOM_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) && hasNoBits( roadDirection, Direction::LEFT ) )
-               || hasBits( roadDirection, Direction::LEFT | Direction::TOP_RIGHT ) )
-             && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) {
-            // / - diagonal road from top-right to bottom-left.
-            return Rand::Get( 1 ) ? 18U : 30U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP )
-             && ( hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::RIGHT )
-                  || hasBits( roadDirection, Direction::LEFT | Direction::BOTTOM_RIGHT )
-                  || ( hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
-             && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
-            // _|_ - cross.
-            return 3U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP )
-             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - world.w(), { 2, 28 } ) ) )
-             && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
-            // T - cross. Also used for 90 degrees turn from the bottom to the left/right.
-            return 4U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT | Direction::LEFT ) ) {
-            // Vertical road and branch to the right in the upper tile.
-            return 5U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_RIGHT | Direction::LEFT ) ) {
-            // L - cross.
-            return 6U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_RIGHT ) )
-             && hasNoBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) ) {
-            // Road turn from the top tile to the right tile.
-            return 7U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP_RIGHT | Direction::BOTTOM )
-             && hasNoBits( roadDirection, Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::RIGHT ) ) {
-            // Road turn from the bottom tile to the right tile.
-            return 9U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::BOTTOM )
-             && hasNoBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT | Direction::LEFT ) ) {
-            // Road turn from the bottom tile to the left tile.
-            return 12U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP_RIGHT | Direction::RIGHT | Direction::LEFT ) ) {
-            // Vertical road and branch to the left in the upper tile.
-            return 13U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP | Direction::LEFT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT ) ) {
-            // _| - cross.
-            return 14U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT ) )
-             && hasNoBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
-            // Road turn from the top tile to the left tile.
-            return 16U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP_LEFT ) && ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT ) )
-             && hasNoBits( roadDirection, DIRECTION_RIGHT_COL ) && !checkRoadIcnIndex( tileIndex - 1, { 0, 3, 6, 7, 14, 16, 26 } ) ) {
-            // ) - road.
-            return 19U;
-        }
-        if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && ( hasBits( roadDirection, Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_RIGHT ) )
-             && hasNoBits( roadDirection, DIRECTION_LEFT_COL ) && !checkRoadIcnIndex( tileIndex + 1, { 0, 3, 6, 7, 14, 16, 26 } ) ) {
-            // ( - road.
-            return 20U;
-        }
-        if ( ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT )
-               || ( hasBits( roadDirection, Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
-             && hasNoBits( roadDirection, Direction::TOP ) ) {
-            // _ - horizontal road.
-            return Rand::Get( 1 ) ? 2U : 28U;
-        }
-        if ( hasNoBits( roadDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
-            // | - vertical road.
-            return Rand::Get( 1 ) ? 0U : 26U;
-        }
-
-        // We have not found the appropriate road image and return the value for the incorrect image index.
-        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "No proper road image found for tile " << tileIndex << " with road directions: " << Direction::String( roadDirection ) )
-
-        return 255U;
-    }
-
-    void updateRoadSpriteOnTile( Maps::Tile & tile, const bool forceRoadOnTile )
-    {
-        const uint8_t imageIndex = getRoadImageForTile( tile, getRoadDirecton( tile ) | ( forceRoadOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
-
-        if ( imageIndex == 255U ) {
-            // After the check this tile should not contain a road sprite.
-            if ( !forceRoadOnTile && !tile.isRoad() ) {
-                // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-            }
-
-            return;
-        }
-
-        const uint32_t roadUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
-
-        if ( roadUid == 0 ) {
-            tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex ) );
-        }
-        else {
-            Maps::Tile::updateTileObjectIcnIndex( tile, roadUid, imageIndex );
-        }
-    }
-
-    // Update tiles in a square starting from the tile near the center tile to edges or in reverse order.
-    // This function can be called to update only tiles not marked as road.
-    void updateRoadSpritesInArea( const Maps::Tile & centerTile, const int32_t centerToRectBorderDistance, const bool updateNonRoadTilesFromEdgesToCenter )
-    {
-        // We should update road sprites step by step starting from the tiles close connected to the center tile. 'getAroundIndexes()' cannot be used here.
-        const int32_t worldWidth = world.w();
-        const int32_t worldHeight = world.h();
-
-        assert( worldWidth > 0 && worldHeight > 0 );
-
-        const int32_t centerTileIndex = centerTile.GetIndex();
-        const int32_t centerX = centerTileIndex % worldWidth;
-        const int32_t centerY = centerTileIndex / worldWidth;
-
-        // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, worldWidth );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, worldHeight );
-
-        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
-
-        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
-            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
-
-            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-                const int32_t indexOffsetY = tileY * worldWidth;
-                const int32_t distanceY = std::abs( tileY - centerY );
-
-                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
-                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
-                        continue;
-                    }
-
-                    Maps::Tile & tile = world.getTile( indexOffsetY + tileX );
-                    if ( updateNonRoadTilesFromEdgesToCenter && tile.isRoad() ) {
-                        continue;
-                    }
-
-                    updateRoadSpriteOnTile( tile, false );
-                }
-            }
-        }
-    }
-
-    void updateRoadSpritesAround( const Maps::Tile & tile )
-    {
-        updateRoadSpritesInArea( tile, 2, false );
-        // To properly update the around sprites we call the update function the second time
-        // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
-        updateRoadSpritesInArea( tile, 3, true );
-    }
-
     bool placeObjectOnTile( const Maps::Tile & tile, const Maps::ObjectInfo & info )
     {
         // If this assertion blows up then what kind of object you are trying to place if it's empty?
@@ -1252,42 +969,6 @@ namespace Maps
 
         // Set ground transitions on the boundaries of filled terrain area.
         updateTerrainTransitionOnAreaBoundaries( groundId, startX, endX, startY, endY );
-    }
-
-    bool updateRoadOnTile( Tile & tile, const bool setRoad )
-    {
-        if ( setRoad == tile.isRoad() || ( tile.isWater() && setRoad ) ) {
-            // We cannot place roads on the water or above already placed roads.
-            return false;
-        }
-
-        if ( setRoad ) {
-            // Force set road on this tile and update its sprite.
-            updateRoadSpriteOnTile( tile, true );
-
-            if ( !tile.isRoad() ) {
-                // The road was not set because there is no corresponding sprite for this place.
-                return false;
-            }
-
-            updateRoadSpritesAround( tile );
-
-            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
-                // We need to set terrain image without extra objects under the road.
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
-            }
-        }
-        else {
-            // Remove all road object sprites from this tile.
-            tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-
-            updateRoadSpritesAround( tile );
-
-            // After removing the road from the tile it may have road sprites for the nearby tiles with road.
-            updateRoadSpriteOnTile( tile, false );
-        }
-
-        return true;
     }
 
     int32_t getMineSpellIdFromTile( const Tile & tile )
@@ -2502,6 +2183,24 @@ namespace Maps
         case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
+            // Mines must have an object part of OBJ_ICN_TYPE_EXTRAOVR type on top.
+            // However, some mines do not follow this rule so we need to fix it!
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                for ( auto & part : tile.getGroundObjectParts() ) {
+                    if ( part.icnType == MP2::OBJ_ICN_TYPE_EXTRAOVR && part._uid == tile.getMainObjectPart()._uid ) {
+                        // We found the missing object part. Swap it.
+                        std::swap( tile.getMainObjectPart(), part );
+                        break;
+                    }
+                }
+            }
+
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                // This is an unknown mine type. Most likely it was added by some hex editing.
+                tile.setMainObjectType( MP2::OBJ_NONE );
+                break;
+            }
+
             switch ( tile.getMainObjectPart().icnIndex ) {
             case 0: {
                 const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
@@ -3127,13 +2826,6 @@ namespace Maps
         case MP2::OBJ_RANDOM_TOWN:
             if ( !placeObjectOnTile( tile, info ) ) {
                 return false;
-            }
-
-            if ( hasBits( getRoadDirecton( tile ), Direction::BOTTOM ) ) {
-                // There is a road in front of the castle entrance, connect it with the castle.
-                Tile & bottomTile = world.getTile( GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM ) );
-
-                updateRoadSpriteOnTile( bottomTile, false );
             }
 
             if ( updateMapPassabilities ) {

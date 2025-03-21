@@ -520,16 +520,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + fheroes2::shadowWidthPx, sprite_dialog.width(), sprite_dialog.height() - 2 * fheroes2::shadowWidthPx );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
-    const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
-    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
-    const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
-    fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
-
     LocalEvent & le = LocalEvent::Get();
 
     if ( !( flags & BUTTONS ) ) {
-        // This is a case when this dialog was called by the right mouse button press.
+        // This is when this dialog is called by a right mouse button press.
 
         display.render( restorer.rect() );
 
@@ -544,6 +538,12 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     std::unique_ptr<fheroes2::Button> buttonUpgrade;
     std::unique_ptr<fheroes2::Button> buttonDismiss;
+
+    const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
+    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
+    const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
+    fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     if ( flags & UPGRADE ) {
         const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;

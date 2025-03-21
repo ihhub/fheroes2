@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-20 14:06+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -134,21 +134,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
@@ -164,6 +149,21 @@ msgid ""
 msgstr ""
 
 msgid "QUIT"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"MAP"
 msgstr ""
 
 msgid "INFO"
@@ -231,22 +231,6 @@ msgid "RESET"
 msgstr ""
 
 msgid "START"
-msgstr ""
-
-msgid "TOWN"
-msgstr ""
-
-msgid "CASTLE"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
 msgstr ""
 
 msgid ""
@@ -786,6 +770,16 @@ msgstr ""
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr ""
 "Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "The computer continues the combat for you."
 msgstr ""
@@ -3374,6 +3368,12 @@ msgstr ""
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
+msgid "TOWN"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
 msgid "Click to start placing the selected castle/town."
 msgstr ""
 
@@ -4755,8 +4755,9 @@ msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
 
 msgid "Restart the current scenario."
@@ -4769,9 +4770,9 @@ msgstr ""
 "Sudėtingumas"
 
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 
 #, fuzzy

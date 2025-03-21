@@ -1912,5 +1912,12 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
         stream >> tile._mainObjectPart.layerType;
     }
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1108_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE && tile._mainObjectType == MP2::OBJ_MINE
+         && tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+        // Some maps have "hacked" mines with no resources. We need to try to fix these tiles.
+        updateObjectInfoTile( tile, true );
+    }
+
     return stream >> tile._boatOwnerColor;
 }

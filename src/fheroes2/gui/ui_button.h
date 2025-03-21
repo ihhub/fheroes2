@@ -112,6 +112,9 @@ namespace fheroes2
         // Will draw on screen by default
         bool draw( Image & output = Display::instance() ) const;
 
+        // Draws a shadow 5 px to the left and below the button.
+        void drawShadow( Image & output ) const;
+
         // Will draw and render on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Display & output = Display::instance() );
 
@@ -270,6 +273,10 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         explicit ButtonGroup( const Rect & area = Rect(), const int buttonTypes = 0 );
+        // Generates a group of buttons with the provided texts drawn on them.
+        explicit ButtonGroup( const std::vector<const char *> & texts );
+        // Generates a group of buttons from an ICN containing button sprites.
+        explicit ButtonGroup( const int icnID );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup() = default;
@@ -278,11 +285,19 @@ namespace fheroes2
 
         void createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
                            const int returnValue );
-        void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
+        void createButton( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, const int returnValue );
         void addButton( ButtonSprite && button, const int returnValue );
 
         // Will draw on screen by default
         void draw( Image & output = Display::instance() ) const;
+
+        // Draws shadows for all the buttons in the group according to their coordinates.
+        void drawShadows( Image & output ) const;
+
+        size_t getButtonsCount() const
+        {
+            return _button.size();
+        }
 
         // Make sure that id is less than size!
         ButtonBase & button( const size_t id )
@@ -365,6 +380,10 @@ namespace fheroes2
 
     // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
+
+    // Generates multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
+    // backgroundSprites will be resized according to the number of button texts.
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const int32_t minWidth );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
                              const Size & buttonSize, const FontColor fontColor );

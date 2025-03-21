@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 
 #include "agg_image.h"
 #include "icn.h"
@@ -41,6 +42,44 @@ namespace
 
     // Offset from window edges to background copy area.
     const int32_t backgroundOffset{ 22 };
+
+    // Spaces between buttons in symmetric button groups.
+    const int32_t buttonsHorizontalGap = 37;
+    const int32_t buttonsVerticalGap = 10;
+
+    fheroes2::Rect getSymmetricDialogActiveArea( fheroes2::ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, const fheroes2::Image & output )
+    {
+        if ( buttons.getButtonsCount() == 0 ) {
+            return {};
+        }
+
+        const fheroes2::Rect & buttonArea = buttons.button( 0 ).area();
+        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
+
+        const int32_t widthPadding = isSingleColumn ? 50 : 60;
+        int32_t dialogWidth = widthPadding;
+
+        const int32_t heightPadding = isSingleColumn ? 39 : 26;
+        // We assume that the cancel button height for multiple columns is 25 px because this button should contain only a single line of text.
+        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonArea.height + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
+        int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
+
+        // When there's an odd number of buttons we always make a dialog for a single column of buttons.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            dialogWidth += buttonArea.width;
+            dialogHeight += buttonArea.height * buttonCount + ( buttonCount - 1 ) * buttonsVerticalGap;
+        }
+        else if ( buttonCount == 2 ) {
+            dialogWidth += buttonArea.width * 2 + buttonsHorizontalGap;
+            dialogHeight += buttonArea.height;
+        }
+        else {
+            dialogWidth += ( buttonCount / 2 ) * buttonArea.width + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
+            dialogHeight += buttonArea.height * 2 + ( buttonsVerticalGap + 10 );
+        }
+
+        return { ( output.width() - dialogWidth ) / 2, ( output.height() - dialogHeight ) / 2, dialogWidth, dialogHeight };
+    }
 }
 
 namespace fheroes2
@@ -65,6 +104,63 @@ namespace fheroes2
         , _hasBackground{ renderBackground }
     {
         render();
+    }
+
+    StandardWindow::StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output )
+        : _output( output )
+        , _activeArea( getSymmetricDialogActiveArea( buttons, isSingleColumn, extraHeight, output ) )
+        , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
+        , _totalArea( _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+        , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
+    {
+        if ( buttons.getButtonsCount() == 0 ) {
+            // What are you trying to achieve with no buttons?!
+            assert( 0 );
+            return;
+        }
+
+        render();
+
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
+
+        int32_t rows = 0;
+        int32_t columns = 0;
+        Point buttonsOffset;
+
+        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
+        // An odd number of buttons will be arranged on a single column.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            rows = buttonCount;
+            columns = 1;
+            buttonsOffset = { 25, 22 };
+        }
+        else if ( buttonCount == 2 ) {
+            rows = 1;
+            columns = 2;
+            buttonsOffset = { 30, 15 };
+        }
+        else {
+            rows = 2;
+            columns = buttonCount / 2;
+            buttonsOffset = { 30, 15 };
+        }
+        // This assumes that the extra height always gets added above the buttons.
+        buttonsOffset.y += extraHeight;
+
+        const int32_t verticalGapOffset = ( columns > 1 ) ? buttonsVerticalGap : 2 * buttonsVerticalGap;
+
+        size_t buttonId = 0;
+        for ( int32_t row = 0; row < rows; ++row ) {
+            for ( int32_t column = 0; column < columns; ++column ) {
+                buttons.button( buttonId )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                                  _activeArea.y + ( row * ( buttonsHeight + verticalGapOffset ) ) + buttonsOffset.y );
+                ++buttonId;
+            }
+        }
+        buttons.drawShadows( output );
+        buttons.draw( output );
     }
 
     void StandardWindow::render()
@@ -343,6 +439,32 @@ namespace fheroes2
         }
     }
 
+    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
+                                       const Padding padding )
+    {
+        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
+
+        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
+
+        button.setICNInfo( icnId, releasedIndex, pressedIndex );
+        button.setPosition( pos.x, pos.y );
+        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
+        button.draw();
+    }
+
+    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
+    {
+        const Point gapsFromEdges( 20, 7 );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        renderButton( buttonOk, buttonOkIcn, 0, 1, gapsFromEdges, Padding::BOTTOM_LEFT );
+
+        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+        renderButton( buttonCancel, buttonCancelIcn, 0, 1, gapsFromEdges, Padding::BOTTOM_RIGHT );
+    }
+
     void StandardWindow::renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding )
     {
         Sprite released;
@@ -376,32 +498,6 @@ namespace fheroes2
         button.setPosition( pos.x, pos.y );
         addGradientShadow( released, _output, button.area().getPosition(), { -5, 5 } );
         button.draw();
-    }
-
-    void StandardWindow::renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset,
-                                       const Padding padding )
-    {
-        const Sprite & buttonSprite = AGG::GetICN( icnId, 0 );
-
-        const Point pos = _getRenderPos( offset, { buttonSprite.width(), buttonSprite.height() }, padding );
-
-        button.setICNInfo( icnId, releasedIndex, pressedIndex );
-        button.setPosition( pos.x, pos.y );
-        addGradientShadow( buttonSprite, _output, button.area().getPosition(), { -5, 5 } );
-        button.draw();
-    }
-
-    void StandardWindow::renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel )
-    {
-        const Point buttonOffset( 20, 7 );
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, Padding::BOTTOM_LEFT );
-
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, Padding::BOTTOM_RIGHT );
     }
 
     Point StandardWindow::_getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,8 @@
 #include "army.h"
 #include "campaign_data.h"
 #include "difficulty.h"
+#include "game_io.h"
+#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -102,6 +104,7 @@ namespace Campaign
         _currentScenarioBonusId = -1;
         _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
+        _minDifficulty = CampaignDifficulty::Normal;
     }
 
     void CampaignSaveData::setCarryOverTroops( const Troops & troops )
@@ -121,7 +124,7 @@ namespace Campaign
 
     uint32_t CampaignSaveData::getCampaignDifficultyPercent() const
     {
-        switch ( _difficulty ) {
+        switch ( _minDifficulty ) {
         case CampaignDifficulty::Easy:
             return 125;
         case CampaignDifficulty::Normal:
@@ -161,7 +164,8 @@ namespace Campaign
     OStreamBase & operator<<( OStreamBase & stream, const CampaignSaveData & data )
     {
         return stream << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
-                      << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
+                      << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty
+                      << data._minDifficulty;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, CampaignSaveData & data )
@@ -172,7 +176,17 @@ namespace Campaign
         // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
         data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
 
-        return stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1108_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1108_RELEASE ) {
+            data._minDifficulty = data._difficulty;
+        }
+        else {
+            stream >> data._minDifficulty;
+        }
+
+        return stream;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
