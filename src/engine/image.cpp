@@ -784,6 +784,7 @@ namespace fheroes2
         }
 
         const int32_t maxX = inWidth + absOffsetX;
+        const int32_t maxY = inHeight + absOffsetY;
 
         // If image is single-layer then pointer to its transform layer is 'nullptr'
         const uint8_t * transformIn = in.singleLayer() ? nullptr : in.transform();
