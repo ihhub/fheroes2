@@ -790,7 +790,7 @@ namespace fheroes2
         }
     }
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value )
+    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, const bool replace, int32_t & value )
     {
         const LocalEvent & le = LocalEvent::Get();
 
@@ -821,8 +821,13 @@ namespace fheroes2
             return false;
         }
 
-        value *= 10;
-        value += ( value >= 0 ) ? newDigit : ( -newDigit );
+        if ( replace ) {
+            value = newDigit;
+        }
+        else {
+            value *= 10;
+            value += ( value >= 0 ) ? newDigit : ( -newDigit );
+        }
 
         value = std::clamp( value, minimum, maximum );
 

@@ -443,6 +443,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
     };
 
+    bool replaceOnKeypress = true;
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
@@ -503,6 +504,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                     }
                 }
                 updateMonsterInfo = true;
+                replaceOnKeypress = true;
             }
             else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.isKeyPressed( fheroes2::Key::KEY_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
@@ -517,6 +519,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                     }
                 }
                 updateMonsterInfo = true;
+                replaceOnKeypress = true;
             }
         }
 
@@ -553,14 +556,16 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
         if ( le.MouseClickLeft( monsterArea ) ) {
             ArmyInfo( Troop( monster, available ), BUTTONS );
+            replaceOnKeypress = true;
 
             // Perform a full rendering to properly restore the parts of the screen outside of this dialog
             display.render();
             continue;
         }
 
-        if ( int32_t temp = static_cast<int32_t>( result ); fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), temp ) ) {
+        if ( int32_t temp = static_cast<int32_t>( result ); fheroes2::processIntegerValueTyping( 0, static_cast<int32_t>( max ), replaceOnKeypress, temp ) ) {
             result = temp;
+            replaceOnKeypress = false;
 
             updateCurrentInfo();
 
@@ -577,6 +582,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             updateCurrentInfo();
 
+            replaceOnKeypress = true;
             redraw = true;
         }
         else if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP )
@@ -586,6 +592,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             updateCurrentInfo();
 
+            replaceOnKeypress = true;
             redraw = true;
         }
         else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
@@ -595,6 +602,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             updateCurrentInfo();
 
+            replaceOnKeypress = true;
             redraw = true;
         }
         else if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) && result != max ) {
@@ -602,6 +610,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             updateCurrentInfo();
 
+            replaceOnKeypress = true;
             redraw = true;
         }
         else if ( buttonMin.isEnabled() && le.MouseClickLeft( buttonMin.area() ) && result != 1 ) {
@@ -609,6 +618,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             updateCurrentInfo();
 
+            replaceOnKeypress = true;
             redraw = true;
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
