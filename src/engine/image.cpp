@@ -882,7 +882,7 @@ namespace fheroes2
         }
     }
 
-    void addShadowForRectangularDialog( Image & out, const Point & outPos,  const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize )
+    void addShadowForRectangularDialog( Image & out, const Point & outPos, const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize )
     {
         if ( out.empty() || shadowSize == 0 || outPos.x < 0 || outPos.y < 0 ) {
             return;
