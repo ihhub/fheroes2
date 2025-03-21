@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -222,9 +222,9 @@ public:
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
-    void MageGuildEducateHero( HeroBase & hero ) const
+    void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
     }
 
     bool isFortificationBuilt() const
@@ -276,10 +276,6 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth() const
-    {
-        // Do nothing.
-    }
 
     void ActionPreBattle();
     void ActionAfterBattle( const bool attackerWins );
@@ -389,7 +385,7 @@ private:
     bool _isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
     uint32_t * _getDwelling( const uint32_t buildingType );
-    void _educateHeroes();
+    void _trainGuestHeroAndCaptainInMageGuild();
 
     ConstructionDialogResult _openConstructionDialog( uint32_t & dwellingTobuild );
 
@@ -559,7 +555,6 @@ public:
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator

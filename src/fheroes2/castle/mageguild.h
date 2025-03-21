@@ -39,7 +39,7 @@ public:
     // https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html
     // except for the part related to the hidden AI-only bonuses.
     void initialize( const int race, const bool hasLibrary );
-    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
+    void trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
     SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 
 private:

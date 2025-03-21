@@ -68,7 +68,6 @@
 
 namespace
 {
-    const fheroes2::Size primarySkillIconSize{ 82, 93 };
     const int32_t spellPointsMaxValue{ 999 };
 }
 

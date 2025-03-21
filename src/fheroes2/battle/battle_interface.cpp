@@ -113,6 +113,8 @@ namespace
 
     const int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
+    const fheroes2::Point damageImageShadowOffset{ -5, 5 };
+
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
@@ -1061,7 +1063,7 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1076,11 +1078,15 @@ void Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2:
 
         if ( le.MouseClickLeft( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect() );
+            return true;
         }
         else if ( le.isMouseRightButtonPressedInArea( unitRoi ) ) {
             Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
+            return true;
         }
     }
+
+    return false;
 }
 
 void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
@@ -2885,7 +2891,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() );
+        if ( _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() ) ) {
+            humanturn_redraw = true;
+        }
     }
     else if ( le.isMouseCursorPosInArea( _buttonAuto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
@@ -3055,8 +3063,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                 MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
-            else if ( le.isMouseRightButtonPressed() ) {
-                MousePressRightBoardAction( *cell );
+            else if ( le.isMouseRightButtonPressed() && MousePressRightBoardAction( *cell ) ) {
+                humanturn_redraw = true;
             }
             else if ( le.isMouseLeftButtonPressedInArea( battleFieldRect ) ) {
                 if ( !le.isDragInProgress() && !_swipeAttack.isValid() ) {
@@ -3251,74 +3259,62 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 {
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+    fheroes2::ButtonGroup autoButtons(
+        { fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), buttonFontType ), fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), buttonFontType ) } );
 
-    const int autoCombatButtonICN = isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD;
-    const int quickCombatButtonICN = isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD;
-    const int cancelButtonICN = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-
-    const fheroes2::Sprite & quickCombatButtonReleased = fheroes2::AGG::GetICN( quickCombatButtonICN, 0 );
-    const fheroes2::Sprite & autoCombatButtonReleased = fheroes2::AGG::GetICN( autoCombatButtonICN, 0 );
-    const fheroes2::Sprite & cancelButtonReleased = fheroes2::AGG::GetICN( cancelButtonICN, 0 );
-
-    const int32_t autoButtonsXOffset = 20;
-    const int32_t autoButtonsYOffset = 15;
     const int32_t titleYOffset = 16;
-    const int32_t buttonSeparation = 37;
 
     const fheroes2::Text title( _( "Automatic Combat Modes" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
 
-    const int32_t backgroundWidth = autoButtonsXOffset * 2 + quickCombatButtonReleased.width() + buttonSeparation + autoCombatButtonReleased.width();
-    const int32_t backgroundHeight
-        = titleYOffset + title.height( backgroundWidth ) + quickCombatButtonReleased.height() + cancelButtonReleased.height() + autoButtonsYOffset + 28;
+    fheroes2::ButtonBase & autoCombatButton = autoButtons.button( 0 );
+    fheroes2::ButtonBase & quickCombatButton = autoButtons.button( 1 );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( backgroundWidth, backgroundHeight, true, display );
+    fheroes2::StandardWindow background( autoButtons, false, titleYOffset + title.height() );
 
-    fheroes2::Button buttonAutoCombat;
-    fheroes2::Button buttonQuickCombat;
     fheroes2::Button buttonCancel;
 
-    background.renderButton( buttonAutoCombat, isEvilInterface ? ICN::BUTTON_AUTO_COMBAT_EVIL : ICN::BUTTON_AUTO_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
-                             fheroes2::StandardWindow::Padding::CENTER_LEFT );
-    background.renderButton( buttonQuickCombat, isEvilInterface ? ICN::BUTTON_QUICK_COMBAT_EVIL : ICN::BUTTON_QUICK_COMBAT_GOOD, 0, 1, { autoButtonsXOffset, 0 },
-                             fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
     background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
     const fheroes2::Rect roiArea = background.activeArea();
-    title.draw( roiArea.x, roiArea.y + titleYOffset, backgroundWidth, display );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    title.draw( roiArea.x, roiArea.y + titleYOffset, roiArea.width, display );
 
     display.render( background.totalArea() );
-    LocalEvent & le = LocalEvent::Get();
 
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonAutoCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAutoCombat.area() ) );
-        buttonQuickCombat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuickCombat.area() ) );
+        autoCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombatButton.area() ) );
+        quickCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( quickCombatButton.area() ) );
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( buttonAutoCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
+        if ( ( le.MouseClickLeft( autoCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
              && EventStartAutoCombat( unit, actions ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( buttonQuickCombat.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
+        if ( ( le.MouseClickLeft( quickCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
             return;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonAutoCombat.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( autoCombatButton.area() ) ) {
             std::string msg = _( "The computer continues the combat for you." );
             msg += "\n\n";
             msg += _(
                 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat hotkey or the default Cancel key, or by performing a left or right click anywhere on the game screen." );
             fheroes2::showStandardTextMessage( _( "Auto Combat" ), msg, Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( buttonQuickCombat.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( quickCombatButton.area() ) ) {
             std::string msg = _( "The combat is resolved from the current state." );
             msg += "\n\n";
             msg += _( "quickCombat|This cannot be undone." );
@@ -3327,7 +3323,7 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
+bool Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
     const auto getUnit = [this, &cell]() -> const Unit * {
         if ( const Unit * unit = cell.GetUnit(); unit != nullptr ) {
@@ -3347,7 +3343,10 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 
     if ( const Unit * unit = getUnit(); unit != nullptr ) {
         Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
+        return true;
     }
+
+    return false;
 }
 
 void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions )
@@ -6774,24 +6773,32 @@ void Battle::PopupDamageInfo::_makeDamageImage()
 
     const fheroes2::Rect & unitRect = _defender->GetRectPosition();
 
+    const int32_t shadowOffsetX = std::abs( damageImageShadowOffset.x );
+    const int32_t shadowOffsetY = std::abs( damageImageShadowOffset.y );
     // Get the border width and set the popup parameters.
-    const int borderWidth = BorderWidth();
-    const int x = _battleUIRect.x + unitRect.x + unitRect.width;
-    const int y = _battleUIRect.y + unitRect.y;
-    const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
-    const int h = damageText.height() + killedText.height() + 2 * borderWidth;
+    const int32_t borderWidth = BorderWidth();
+    const int32_t x = _battleUIRect.x + unitRect.x + unitRect.width;
+    const int32_t y = _battleUIRect.y + unitRect.y;
+    const int32_t w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth + shadowOffsetX;
+    const int32_t h = damageText.height() + killedText.height() + 2 * borderWidth + shadowOffsetY;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
+    _damageImage.resize( borderRect.width, borderRect.height );
+    _damageImage.reset();
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    _damageImage = fheroes2::Stretch( backgroundImage, 0, 0, backgroundImage.width(), backgroundImage.height(), borderRect.width, borderRect.height );
+    const fheroes2::Sprite & backgroundIcn = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    fheroes2::Image backgroundImage
+        = fheroes2::Stretch( backgroundIcn, 0, 0, backgroundIcn.width(), backgroundIcn.height(), borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
+    damageText.draw( borderWidth, borderWidth + 2, backgroundImage );
+    killedText.draw( borderWidth, ( borderRect.height - shadowOffsetY ) / 2 + 2, backgroundImage );
+
+    fheroes2::Copy( backgroundImage, 0, 0, _damageImage, shadowOffsetX, 0, borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
+
     _damageImage.setPosition( borderRect.x, borderRect.y );
-    _damageImage._disableTransformLayer();
 
-    damageText.draw( borderWidth, borderWidth + 2, _damageImage );
-    killedText.draw( borderWidth, borderRect.height / 2 + 2, _damageImage );
+    fheroes2::addGradientShadow( backgroundImage, _damageImage, { shadowOffsetX, 0 }, damageImageShadowOffset );
 }
 
 void Battle::PopupDamageInfo::redraw() const
@@ -6802,5 +6809,5 @@ void Battle::PopupDamageInfo::redraw() const
 
     assert( !_damageImage.empty() );
 
-    fheroes2::Copy( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
+    fheroes2::Blit( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
 }

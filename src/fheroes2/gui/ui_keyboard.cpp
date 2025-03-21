@@ -72,11 +72,11 @@ namespace
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
-        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
             // English is a default language so it is not considered as an extra language.
             return false;
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:

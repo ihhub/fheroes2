@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,4 +61,9 @@ namespace AI
     // of at least 'fundsToObtain'. If the necessary funds cannot be obtained as a result of trading, then the current
     // funds of the kingdom remain unchanged. Returns true if the trade was successful, otherwise returns false.
     bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain );
+
+    // Shares information about an object located at a given tile with AI allies.
+    // It is assumed that allied AI players can talk like human players do in real life.
+    // The information is shared only if all allies are AI. If any of them is a human player then no information will be shared.
+    void shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex );
 }

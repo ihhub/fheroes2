@@ -652,60 +652,48 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerExtraObjects( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor )
     {
-        if ( isPuzzleDraw ) {
-            // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
-            return;
+        // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
+        // TODO: consider adding this sprite as a part of an object part.
+
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
+
+        // We should not render ghosts over the map top border if the tile near this border is not revealed.
+        if ( !isEditor && ( pos.y == 1 ) && ( image.y() < -32 ) && ( world.getTile( pos.x, pos.y - 1 ).getFogDirection() & Direction::TOP ) == Direction::TOP ) {
+            const int32_t cutY = 32 + image.y();
+            const fheroes2::Rect roi( 0, -cutY, image.width(), image.height() + cutY );
+
+            area.BlitOnTile( dst, image, roi, image.x(), -32, pos, false, 255 );
         }
-
-        // Ghost animation is unique and can be rendered in multiple cases.
-        bool renderFlyingGhosts = false;
-
-        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
-        if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-            renderFlyingGhosts = true;
-        }
-        else if ( objectType == MP2::OBJ_MINE ) {
-            const int32_t spellID = Maps::getMineSpellIdFromTile( tile );
-
-            switch ( spellID ) {
-            case Spell::NONE:
-                // No spell exists. Nothing we need to render.
-            case Spell::SETEGUARDIAN:
-            case Spell::SETAGUARDIAN:
-            case Spell::SETFGUARDIAN:
-            case Spell::SETWGUARDIAN:
-                // The logic for these spells is done while rendering the bottom layer. Nothing should be done here.
-                break;
-            case Spell::HAUNT:
-                renderFlyingGhosts = true;
-                break;
-            default:
-                // Did you add a new spell for mines? Add the rendering for it above!
-                assert( 0 );
-                break;
-            }
-        }
-
-        if ( renderFlyingGhosts ) {
-            // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
-            // TODO: consider adding this sprite as a part of an object part.
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
-
-            const uint8_t alphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
-
-            area.BlitOnTile( dst, image, image.x(), image.y(), Maps::GetPoint( tile.GetIndex() ), false, alphaValue );
+        else {
+            area.BlitOnTile( dst, image, image.x(), image.y(), pos, false, 255 );
         }
     }
 
-    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part )
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const fheroes2::Point & pos, const Interface::GameArea & area,
+                               const ObjectPart & part )
     {
         if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), part.icnType, part.icnIndex ) ) {
             return;
         }
 
-        renderObjectPart( dst, area, Maps::GetPoint( tile.GetIndex() ), part );
+        // We should not render flags over the map top border if the tile near this border is not revealed.
+        if ( ( pos.y == 0 ) && ( part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) && ( tile.getFogDirection() & Direction::TOP ) == Direction::TOP ) {
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( MP2::getIcnIdFromObjectIcnType( part.icnType ), part.icnIndex );
+
+            if ( image.y() < 0 ) {
+                const fheroes2::Rect roi( 0, -image.y(), image.width(), image.height() + image.y() );
+
+                area.BlitOnTile( dst, image, roi, image.x(), 0, pos, false, 255 );
+            }
+            else {
+                area.BlitOnTile( dst, image, image.x(), image.y(), pos, false, 255 );
+            }
+        }
+        else {
+            renderObjectPart( dst, area, pos, part );
+        }
     }
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area )

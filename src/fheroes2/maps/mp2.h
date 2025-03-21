@@ -530,7 +530,6 @@ namespace MP2
 
     bool isDayLife( const MapObjectType objectType );
     bool isWeekLife( const MapObjectType objectType );
-    bool isMonthLife( const MapObjectType objectType );
     bool isBattleLife( const MapObjectType objectType );
 
     // Make sure that you pass a valid action object.

@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "artifact.h"
+#include "game_string.h"
 #include "position.h"
 #include "resource.h"
 #include "skill.h"
@@ -148,7 +149,7 @@ struct MapSign final : public MapBaseObject
 
     void setDefaultMessage();
 
-    std::string message;
+    fheroes2::LocalizedString message;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );
