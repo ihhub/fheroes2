@@ -882,7 +882,7 @@ namespace fheroes2
         }
     }
 
-    void addShadowForRectangularDialog( Image &out, const Point &outPos,  const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize )
+    void addShadowForRectangularDialog( Image & out, const Point & outPos,  const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize )
     {
         if ( out.empty() || shadowSize == 0 || outPos.x < 0 || outPos.y < 0 ) {
             return;
@@ -891,18 +891,16 @@ namespace fheroes2
         const int32_t outWidth = out.width();
 
         // Ensure the shadow is within the bounds of the 'out' image
-        assert( outPos.x + shadowSize >= 0 &&
-                outPos.x + dialogWidth <= outWidth &&
-                outPos.y + dialogHeight + shadowSize <= out.height() );
+        assert( outPos.x + shadowSize >= 0 && outPos.x + dialogWidth <= outWidth && outPos.y + dialogHeight + shadowSize <= out.height() );
 
         // Render shadow at the left side of the window
         int32_t offsetY = outPos.y + shadowSize;
         ApplyTransform( out, outPos.x - shadowSize, offsetY, shadowSize, 1, 5 );
         ++offsetY;
         ApplyTransform( out, outPos.x - shadowSize, offsetY, 1, dialogHeight, 5 );
-        ApplyTransform( out, outPos.x - shadowSize+ 1, offsetY, shadowSize - 1, 1, 4 );
+        ApplyTransform( out, outPos.x - shadowSize + 1, offsetY, shadowSize - 1, 1, 4 );
         ++offsetY;
-        ApplyTransform( out, outPos.x - shadowSize+ 1, offsetY, 1, dialogHeight - 4, 4 );
+        ApplyTransform( out, outPos.x - shadowSize + 1, offsetY, 1, dialogHeight - 4, 4 );
         ApplyTransform( out, outPos.x - shadowSize + 2, offsetY, shadowSize - 2, 1, 3 );
         ++offsetY;
         ApplyTransform( out, outPos.x - shadowSize + 2, offsetY, 1, dialogHeight - 6, 3 );
