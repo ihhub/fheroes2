@@ -37,7 +37,9 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarcloud-github-c-cpp@v3
+    - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5
+      env:
+        SONAR_HOST_URL: https://sonarcloud.io
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v4
       with:
@@ -55,14 +57,15 @@ jobs:
     - name: Prepare compile_commands.json
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    - name: Analyze
-      run: |
-        sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
-                      -Dsonar.cfamily.analysisCache.mode=fs \
-                      -Dsonar.cfamily.analysisCache.path="$HOME/.sonar-cfamily-cache" \
-                      -Dsonar.java.binaries="android/*/build/**/classes" \
-                      -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar" \
-                      -Dsonar.host.url=https://sonarcloud.io
+    - uses: SonarSource/sonarqube-scan-action@v5
+      with:
+        args: >-
+          -Dsonar.cfamily.compile-commands=build/compile_commands.json
+          -Dsonar.cfamily.analysisCache.mode=fs
+          -Dsonar.cfamily.analysisCache.path="$HOME/.sonar-cfamily-cache"
+          -Dsonar.java.binaries="android/*/build/**/classes"
+          -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: https://sonarcloud.io

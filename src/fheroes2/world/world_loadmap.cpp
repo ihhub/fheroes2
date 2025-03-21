@@ -29,6 +29,7 @@
 #include <functional>
 #include <list>
 #include <map>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
@@ -950,10 +951,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message = std::move( signInfo.message );
+                    signObject->message.text = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
-                    if ( signObject->message.empty() ) {
+                    if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
+                    }
+                    else {
+                        signObject->message.language = map.mainLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );
@@ -1042,10 +1046,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message = std::move( signInfo.message );
+                    signObject->message.text = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
-                    if ( signObject->message.empty() ) {
+                    if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
+                    }
+                    else {
+                        signObject->message.language = map.mainLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );

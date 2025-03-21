@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -505,8 +505,7 @@ void Castle::_postLoad()
 
     // MageGuild
     _mageGuild.initialize( _race, HaveLibraryCapability() );
-    // educate heroes and captain
-    _educateHeroes();
+    _trainGuestHeroAndCaptainInMageGuild();
 
     // AI troops auto pack for gray towns
     if ( Color::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
@@ -598,19 +597,19 @@ bool Castle::isPosition( const fheroes2::Point & pt ) const
     return ( ( pt.x >= mp.x - 1 && pt.x <= mp.x + 1 && ( pt.y == mp.y - 1 || pt.y == mp.y ) ) || ( ( pt.x == mp.x - 2 || pt.x == mp.x + 2 ) && pt.y == mp.y ) );
 }
 
-void Castle::_educateHeroes()
+void Castle::_trainGuestHeroAndCaptainInMageGuild()
 {
-    if ( GetLevelMageGuild() == 0 ) {
+    if ( GetLevelMageGuild() < 1 ) {
         return;
     }
 
     Heroes * hero = world.GetHero( *this );
     if ( hero != nullptr ) {
-        MageGuildEducateHero( *hero );
+        trainHeroInMageGuild( *hero );
     }
 
     if ( _captain.isValid() ) {
-        MageGuildEducateHero( _captain );
+        trainHeroInMageGuild( _captain );
     }
 }
 
@@ -831,8 +830,6 @@ uint32_t * Castle::_getDwelling( const uint32_t buildingType )
 
 void Castle::ActionNewDay()
 {
-    _educateHeroes();
-
     SetModes( ALLOW_TO_BUILD_TODAY );
 }
 
@@ -1015,12 +1012,7 @@ Heroes * Castle::RecruitHero( Heroes * hero )
         return nullptr;
     }
 
-    Kingdom & currentKingdom = GetKingdom();
-    currentKingdom.OddFundsResource( PaymentConditions::RecruitHero() );
-
-    if ( GetLevelMageGuild() ) {
-        MageGuildEducateHero( *hero );
-    }
+    GetKingdom().OddFundsResource( PaymentConditions::RecruitHero() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, _name << ", recruit: " << hero->GetName() )
 
@@ -1264,12 +1256,12 @@ BuildingStatus Castle::GetAllBuildingStatus( const Castle & castle )
 
 bool Castle::BuyBuilding( const uint32_t buildingType )
 {
-    if ( !AllowBuyBuilding( buildingType ) )
+    if ( !AllowBuyBuilding( buildingType ) ) {
         return false;
+    }
 
     GetKingdom().OddFundsResource( PaymentConditions::BuyBuilding( _race, buildingType ) );
 
-    // add build
     _constructedBuildings |= buildingType;
 
     switch ( buildingType ) {
@@ -1284,20 +1276,22 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
     case BUILD_MAGEGUILD3:
     case BUILD_MAGEGUILD4:
     case BUILD_MAGEGUILD5:
-        _educateHeroes();
+        _trainGuestHeroAndCaptainInMageGuild();
         break;
 
     case BUILD_CAPTAIN:
         _captain.LoadDefaults( HeroBase::CAPTAIN, _race );
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
-        if ( GetLevelMageGuild() )
-            MageGuildEducateHero( _captain );
+
+        if ( GetLevelMageGuild() > 0 ) {
+            trainHeroInMageGuild( _captain );
+        }
         break;
 
     case BUILD_SPEC:
-        // build library
-        if ( HaveLibraryCapability() )
-            _educateHeroes();
+        if ( HaveLibraryCapability() ) {
+            _trainGuestHeroAndCaptainInMageGuild();
+        }
         break;
 
     case DWELLING_MONSTER1:
@@ -1322,7 +1316,6 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
         break;
     }
 
-    // disable day build
     ResetModes( ALLOW_TO_BUILD_TODAY );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, _name << " build " << GetStringBuilding( buildingType, _race ) )
@@ -2376,15 +2369,6 @@ void AllCastles::NewWeek() const
         assert( castle != nullptr );
 
         castle->ActionNewWeek();
-    } );
-}
-
-void AllCastles::NewMonth() const
-{
-    std::for_each( begin(), end(), []( const Castle * castle ) {
-        assert( castle != nullptr );
-
-        castle->ActionNewMonth();
     } );
 }
 

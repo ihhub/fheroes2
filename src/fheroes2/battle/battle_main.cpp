@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -61,65 +61,73 @@
 
 namespace
 {
-    std::vector<Artifact> planArtifactTransfer( const BagArtifacts & winnerBag, const BagArtifacts & loserBag )
+    bool isArtifactSuitableForTransfer( const Artifact & art )
     {
-        std::vector<Artifact> artifacts;
+        return art.isValid() && art.GetID() != Artifact::MAGIC_BOOK;
+    }
 
-        // Calculate how many free slots the winner has in his bag.
-        size_t availableArtifactSlots = 0;
-        for ( const Artifact & artifact : winnerBag ) {
-            if ( !artifact.isValid() ) {
-                ++availableArtifactSlots;
-            }
-        }
+    std::vector<Artifact *> planArtifactTransfer( const BagArtifacts & winnerBag, BagArtifacts & loserBag )
+    {
+        size_t availableArtifactSlots = std::count_if( winnerBag.begin(), winnerBag.end(), []( const Artifact & art ) { return !art.isValid(); } );
 
-        for ( const Artifact & artifact : loserBag ) {
+        std::vector<Artifact *> artifacts;
+        artifacts.reserve( availableArtifactSlots );
+
+        std::vector<Artifact *> ultimateArtifacts;
+        ultimateArtifacts.reserve( availableArtifactSlots );
+
+        for ( Artifact & art : loserBag ) {
             if ( availableArtifactSlots == 0 ) {
                 break;
             }
-            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK && !artifact.isUltimate() ) {
-                artifacts.push_back( artifact );
-                --availableArtifactSlots;
+
+            if ( !isArtifactSuitableForTransfer( art ) ) {
+                continue;
             }
+
+            if ( art.isUltimate() ) {
+                ultimateArtifacts.push_back( &art );
+            }
+            else {
+                artifacts.push_back( &art );
+            }
+
+            --availableArtifactSlots;
         }
 
-        // One more pass to put all the ultimate artifacts at the end.
-        for ( const Artifact & artifact : loserBag ) {
-            if ( artifact.isUltimate() ) {
-                artifacts.push_back( artifact );
-            }
+        // Put all the ultimate artifacts at the end.
+        artifacts.insert( artifacts.end(), ultimateArtifacts.begin(), ultimateArtifacts.end() );
+
+        return artifacts;
+    }
+
+    std::vector<Artifact> getArtifactsToTransfer( const BagArtifacts & winnerBag, BagArtifacts & loserBag )
+    {
+        std::vector<Artifact> artifacts;
+        artifacts.reserve( BagArtifacts::maxCapacity );
+
+        for ( const Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
+            assert( art != nullptr && isArtifactSuitableForTransfer( *art ) );
+
+            artifacts.push_back( *art );
         }
 
         return artifacts;
     }
 
-    void transferArtifacts( BagArtifacts & winnerBag, const std::vector<Artifact> & artifacts )
+    void transferArtifacts( BagArtifacts & winnerBag, BagArtifacts & loserBag )
     {
-        size_t artifactPos = 0;
+        for ( Artifact * art : planArtifactTransfer( winnerBag, loserBag ) ) {
+            assert( art != nullptr && isArtifactSuitableForTransfer( *art ) );
 
-        for ( Artifact & artifact : winnerBag ) {
-            if ( artifact.isValid() ) {
-                continue;
-            }
-            for ( ; artifactPos < artifacts.size(); ++artifactPos ) {
-                if ( !artifacts[artifactPos].isUltimate() ) {
-                    artifact = artifacts[artifactPos];
-                    ++artifactPos;
-                    break;
+            // Ultimate artifacts never go to the winner.
+            if ( !art->isUltimate() ) {
+                if ( !winnerBag.PushArtifact( *art ) ) {
+                    assert( 0 );
                 }
             }
-            if ( artifactPos >= artifacts.size() ) {
-                break;
-            }
-        }
-    }
 
-    void clearArtifacts( BagArtifacts & bag )
-    {
-        for ( Artifact & artifact : bag ) {
-            if ( artifact.isValid() && artifact.GetID() != Artifact::MAGIC_BOOK ) {
-                artifact = Artifact::UNKNOWN;
-            }
+            *art = Artifact::UNKNOWN;
         }
     }
 
@@ -385,19 +393,20 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
         HeroBase * const winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
         HeroBase * const loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
-        const uint32_t lossResult = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
-        const bool loserAbandoned = !( ( RESULT_RETREAT | RESULT_SURRENDER ) & lossResult );
 
-        const std::vector<Artifact> artifactsToTransfer = winnerHero && loserHero && loserAbandoned && winnerHero->isHeroes() && loserHero->isHeroes()
-                                                              ? planArtifactTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() )
-                                                              : std::vector<Artifact>();
+        const bool isLoserHeroAbandoned = !( ( result.army1 & RESULT_LOSS ? result.army1 : result.army2 ) & ( RESULT_RETREAT | RESULT_SURRENDER ) );
+        const bool shouldTransferArtifacts = ( winnerHero != nullptr && loserHero != nullptr && winnerHero->isHeroes() && loserHero->isHeroes() && isLoserHeroAbandoned );
 
         if ( showBattle ) {
             const bool clearMessageLog = ( result.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) );
             arena.FadeArena( clearMessageLog );
         }
 
-        if ( isHumanBattle && arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+        if ( isHumanBattle
+             && arena.DialogBattleSummary( result,
+                                           shouldTransferArtifacts ? getArtifactsToTransfer( winnerHero->GetBagArtifacts(), loserHero->GetBagArtifacts() )
+                                                                   : std::vector<Artifact>{},
+                                           !showBattle ) ) {
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
@@ -417,17 +426,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             continue;
         }
 
-        if ( loserHero != nullptr && loserAbandoned ) {
-            // If a hero lost the battle and didn't flee or surrender, they lose all artifacts
-            clearArtifacts( loserHero->GetBagArtifacts() );
+        if ( loserHero != nullptr && isLoserHeroAbandoned ) {
+            // If the losing hero did not escape or surrender, and the winning army also has a hero, then the winning hero can capture some artifacts
+            if ( winnerHero != nullptr && shouldTransferArtifacts ) {
+                BagArtifacts & winnerBag = winnerHero->GetBagArtifacts();
 
-            // If the other army also had a hero, some artifacts may be captured by them
-            if ( winnerHero != nullptr ) {
-                BagArtifacts & bag = winnerHero->GetBagArtifacts();
+                transferArtifacts( winnerBag, loserHero->GetBagArtifacts() );
 
-                transferArtifacts( bag, artifactsToTransfer );
-
-                const auto assembledArtifacts = bag.assembleArtifactSetIfPossible();
+                const auto assembledArtifacts = winnerBag.assembleArtifactSetIfPossible();
 
                 if ( winnerHero->isControlHuman() ) {
                     std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );

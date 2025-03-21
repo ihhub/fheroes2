@@ -49,6 +49,7 @@
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
+#include "game_string.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "icn.h"
 #include "image.h"
@@ -332,6 +333,19 @@ namespace
         }
     }
 
+    void showSignMessage( const int32_t tileIndex )
+    {
+        const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tileIndex ) );
+        if ( sign == nullptr ) {
+            assert( sign != nullptr );
+            return;
+        }
+
+        const fheroes2::Text title{ MP2::StringObject( MP2::OBJ_SIGN ), fheroes2::FontType::normalYellow() };
+        const fheroes2::Text body{ sign->message.text, fheroes2::FontType::normalWhite(), sign->message.language };
+        fheroes2::showMessage( title, body, Dialog::OK );
+    }
+
     void ActionToMonster( Heroes & hero, int32_t dst_index )
     {
         Maps::Tile & tile = world.getTile( dst_index );
@@ -496,7 +510,7 @@ namespace
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
 
-            castle->MageGuildEducateHero( hero );
+            castle->trainHeroInMageGuild( hero );
             Game::OpenCastleDialog( *castle );
 
             return;
@@ -581,7 +595,7 @@ namespace
 
         captureCastle();
 
-        castle->MageGuildEducateHero( hero );
+        castle->trainHeroInMageGuild( hero );
         Game::OpenCastleDialog( *castle );
     }
 
@@ -741,8 +755,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
 
         if ( objectType == MP2::OBJ_BOTTLE ) {
-            const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
-            fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), ( sign ? sign->message : "No message provided" ), Dialog::OK );
+            showSignMessage( dst_index );
         }
         else {
             const Funds funds = getFundsFromTile( tile );
@@ -884,7 +897,7 @@ namespace
             fheroes2::showStandardTextMessage( std::move( title ), std::move( message ), Dialog::OK );
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void ActionToWagon( Heroes & hero, int32_t dst_index )
@@ -1219,15 +1232,14 @@ namespace
         }
     }
 
-    void ActionToSign( const Heroes & hero, int32_t dst_index )
+    void ActionToSign( const Heroes & hero, const int32_t tileIndex )
     {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " approached sign at index " << tileIndex )
 #ifndef WITH_DEBUG
         (void)hero;
 #endif
 
-        const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
-        fheroes2::showStandardTextMessage( MP2::StringObject( MP2::OBJ_SIGN ), ( sign ? sign->message : "" ), Dialog::OK );
+        showSignMessage( tileIndex );
     }
 
     void ActionToMagicWell( Heroes & hero, int32_t dst_index )
@@ -1328,7 +1340,6 @@ namespace
             }
 
             hero.SetVisited( dst_index );
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -1496,9 +1507,6 @@ namespace
             fheroes2::showStandardTextMessage( std::move( title ), std::move( msg ), Dialog::OK, elementUI );
 
             hero.IncreaseMovePoints( move );
-
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, objectType );
         }
     }
 
@@ -2541,7 +2549,7 @@ namespace
             }
         }
 
-        hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
