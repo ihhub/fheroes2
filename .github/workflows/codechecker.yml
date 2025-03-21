@@ -31,4 +31,4 @@ jobs:
     - name: Display results
       run: |
         export PATH=$HOME/.python-venv/bin:$PATH
-        CodeChecker parse --print-steps codechecker-output
+        CodeChecker parse --print-steps --ignore .codechecker-ignore codechecker-output
