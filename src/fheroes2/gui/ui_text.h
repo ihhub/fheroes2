@@ -283,14 +283,14 @@ namespace fheroes2
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
-        size_t getOffset() const
+        size_t getOffsetX() const
         {
-            return _textOffset;
+            return _textOffsetX;
         }
 
     private:
         size_t _cursorPosition{ 0 };
-        size_t _textOffset{ 0 };
+        size_t _textOffsetX{ 0 };
     };
 
     class MultiFontText final : public TextBase

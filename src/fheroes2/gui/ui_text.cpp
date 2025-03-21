@@ -498,42 +498,42 @@ namespace fheroes2
         constexpr size_t cursorToBorderDistance = 4;
 
         // If the cursor is to the left of the TextBox.
-        _textOffset = std::max( std::min( static_cast<int>( _textOffset ), static_cast<int>( _cursorPosition - cursorToBorderDistance ) ), 0 );
+        _textOffsetX = std::max( std::min( static_cast<int>( _textOffsetX ), static_cast<int>( _cursorPosition - cursorToBorderDistance ) ), 0 );
 
         // If some characters were deleted and we have space for new characters.
         int32_t currentWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ), charHandler, true );
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ), static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, true );
         const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
 
-        while ( _textOffset > 0 ) {
-            const uint8_t prevChar = textData[_textOffset - 1];
+        while ( _textOffsetX > 0 ) {
+            const uint8_t prevChar = textData[_textOffsetX - 1];
             currentWidth += charHandler.getWidth( prevChar );
 
             if ( currentWidth > maxWidth ) {
                 break;
             }
 
-            --_textOffset;
+            --_textOffsetX;
         }
 
         // If the cursor is to the right of the Textbox.
-        int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ),
-                                                          static_cast<int32_t>( _text.size() - _textOffset ), charHandler, maxWidth );
-        while ( ( _textOffset + maxCharacterCount <= _cursorPosition + cursorToBorderDistance ) && ( _textOffset + maxCharacterCount < _text.size() ) ) {
-            ++_textOffset;
-            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffset ), static_cast<int32_t>( _text.size() - _textOffset ),
+        int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ),
+                                                          static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, maxWidth );
+        while ( ( _textOffsetX + maxCharacterCount <= _cursorPosition + cursorToBorderDistance ) && ( _textOffsetX + maxCharacterCount < _text.size() ) ) {
+            ++_textOffsetX;
+            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ), static_cast<int32_t>( _text.size() - _textOffsetX ),
                                                       charHandler, maxWidth );
         }
 
         const size_t originalTextSize = _text.size();
-        _text = _text.substr( _textOffset, maxCharacterCount );
+        _text = _text.substr( _textOffsetX, maxCharacterCount );
 
         const std::string truncatedEnding( "..." );
         const int32_t truncationSymbolWidth
             = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
 
         // Insert truncation symbol at the beginning if required.
-        if ( _textOffset != 0 ) {
+        if ( _textOffsetX != 0 ) {
             const int32_t charCountToReplace
                 = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, truncationSymbolWidth );
             _text.erase( 0, charCountToReplace );
@@ -541,7 +541,7 @@ namespace fheroes2
         }
 
         // Insert truncation symbol at the end if required.
-        if ( _text.size() + _textOffset < originalTextSize ) {
+        if ( _text.size() + _textOffsetX < originalTextSize ) {
             int totalWidth = 0;
             int charCount = 0;
             for ( auto iter = _text.rbegin(); iter < _text.rend(); ++iter ) {
