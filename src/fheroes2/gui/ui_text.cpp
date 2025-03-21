@@ -521,8 +521,8 @@ namespace fheroes2
                                                           static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, maxWidth );
         while ( ( _textOffsetX + maxCharacterCount <= _cursorPosition + cursorToBorderDistance ) && ( _textOffsetX + maxCharacterCount < _text.size() ) ) {
             ++_textOffsetX;
-            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ), static_cast<int32_t>( _text.size() - _textOffsetX ),
-                                                      charHandler, maxWidth );
+            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ),
+                                                      static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, maxWidth );
         }
 
         const size_t originalTextSize = _text.size();
