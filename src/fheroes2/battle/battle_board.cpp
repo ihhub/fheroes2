@@ -992,7 +992,7 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
 
 std::string Battle::Board::GetMoatInfo()
 {
-    std::string msg = _( "The Moat interrupts movement on foot and reduces the defense skill of troops standing in it by %{count}." );
+    std::string msg = _( "The Moat interrupts any movement through it and reduces the defense skill of troops present in it by %{count}." );
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
 
     return msg;
