@@ -31,6 +31,7 @@
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
+#include "image_tool.h"
 
 namespace
 {
@@ -2988,7 +2989,7 @@ namespace
             font[195 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[195 - 32] );
 
-            // A with 2 dots on top.
+            // A with diaeresis. Generate for later use.
             font[196 - 32].resize( font[33].width(), font[33].height() + 2 );
             font[196 - 32].reset();
             fheroes2::Copy( font[33], 0, 0, font[196 - 32], 0, 2, font[33].width(), font[33].height() );
@@ -3052,6 +3053,14 @@ namespace
             font[202 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[202 - 32] );
 
+            // E with diaeresis.
+            font[203 - 32].resize( font[69 - 32].width(), font[69 - 32].height() + 2 );
+            font[203 - 32].reset();
+            fheroes2::Copy( font[69 - 32], 0, 0, font[203 - 32], 0, 2, font[69 - 32].width(), font[69 - 32].height() );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[203 - 32], 3, 0, 3, 1 );
+            font[203 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 2 );
+            updateSmallFontLetterShadow( font[203 - 32] );
+
             // I with grave accent `.
             font[204 - 32].resize( font[41].width(), font[41].height() + 4 );
             font[204 - 32].reset();
@@ -3075,6 +3084,14 @@ namespace
             fheroes2::Copy( font[194 - 32], 4, 0, font[206 - 32], 2, 0, 3, 2 );
             font[206 - 32].setPosition( font[73 - 32].x(), font[73 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[206 - 32] );
+
+            // I with diaeresis
+            font[207 - 32].resize( font[73 - 32].width() + 1, font[73 - 32].height() + 2 );
+            font[207 - 32].reset();
+            fheroes2::Copy( font[73 - 32], 0, 0, font[207 - 32], 0, 2, font[73 - 32].width(), font[73 - 32].height() );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[207 - 32], 2, 0, 3, 1 );
+            font[207 - 32].setPosition( font[73 - 32].x(), font[73 - 32].y() - 2 );
+            updateSmallFontLetterShadow( font[207 - 32] );
 
             // N with tilde ~.
             font[209 - 32].resize( font[46].width(), font[46].height() + 3 );
@@ -3116,12 +3133,11 @@ namespace
             font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[213 - 32] );
 
-            // O with 2 dots on top.
+            // O with diaeresis.
             font[214 - 32].resize( font[47].width(), font[47].height() + 2 );
             font[214 - 32].reset();
             fheroes2::Copy( font[47], 0, 0, font[214 - 32], 0, 2, font[47].width(), font[47].height() );
-            fheroes2::Copy( font[214 - 32], 3, 0 + 2, font[214 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[214 - 32], 3, 0 + 2, font[214 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[214 - 32], 3, 0, 3, 1 );
             font[214 - 32].setPosition( font[47].x(), font[47].y() - 2 );
             updateSmallFontLetterShadow( font[214 - 32] );
 
@@ -3159,12 +3175,11 @@ namespace
             font[219 - 32].setPosition( font[85 - 32].x(), font[85 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[219 - 32] );
 
-            // U with 2 dots on top.
+            // U with diaeresis.
             font[220 - 32].resize( font[53].width(), font[53].height() + 2 );
             font[220 - 32].reset();
             fheroes2::Copy( font[53], 0, 0, font[220 - 32], 0, 2, font[53].width(), font[53].height() );
-            fheroes2::Copy( font[220 - 32], 3, 0 + 2, font[220 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[220 - 32], 3, 0 + 2, font[220 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[220 - 32], 4, 0, 3, 1 );
             font[220 - 32].setPosition( font[53].x(), font[53].y() - 2 );
             updateSmallFontLetterShadow( font[220 - 32] );
 
@@ -3213,7 +3228,7 @@ namespace
             font[227 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 4 );
             updateSmallFontLetterShadow( font[227 - 32] );
 
-            // a with 2 dots on top.
+            // a with diaeresis.
             font[228 - 32].resize( font[65].width(), font[65].height() + 2 );
             font[228 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[228 - 32], 0, 2, font[65].width(), font[65].height() );
@@ -3270,6 +3285,14 @@ namespace
             font[234 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[234 - 32] );
 
+            // e with diaeresis.
+            font[235 - 32].resize( font[101 - 32].width(), font[101 - 32].height() + 2 );
+            font[235 - 32].reset();
+            fheroes2::Copy( font[101 - 32], 0, 0, font[235 - 32], 0, 2, font[101 - 32].width(), font[101 - 32].height() );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[235 - 32], 2, 0, 3, 1 );
+            font[235 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 2 );
+            updateSmallFontLetterShadow( font[235 - 32] );
+
             // i with grave accent `.
             font[236 - 32].resize( font[73].width(), font[73].height() + 1 );
             font[236 - 32].reset();
@@ -3293,6 +3316,14 @@ namespace
             fheroes2::Copy( font[194 - 32], 4, 0, font[238 - 32], 1, 0, 3, 2 );
             font[238 - 32].setPosition( font[105 - 32].x(), font[105 - 32].y() - 1 );
             updateSmallFontLetterShadow( font[238 - 32] );
+
+            // i with diaeresis.
+            font[239 - 32].resize( font[105 - 32].width(), font[105 - 32].height() );
+            font[239 - 32].reset();
+            fheroes2::Copy( font[105 - 32], 0, 2, font[239 - 32], 0, 2, font[105 - 32].width(), font[105 - 32].height() );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[239 - 32], 1, 0, 3, 1 );
+            font[239 - 32].setPosition( font[105 - 32].x(), font[105 - 32].y() );
+            updateSmallFontLetterShadow( font[239 - 32] );
 
             // n with tilde ~.
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
@@ -3334,12 +3365,11 @@ namespace
             font[245 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 4 );
             updateSmallFontLetterShadow( font[245 - 32] );
 
-            // o with 2 dots on top.
+            // o with diaeresis.
             font[246 - 32].resize( font[79].width(), font[79].height() + 2 );
             font[246 - 32].reset();
             fheroes2::Copy( font[79], 0, 0, font[246 - 32], 0, 2, font[79].width(), font[79].height() );
-            fheroes2::Copy( font[246 - 32], 3, 0 + 2, font[246 - 32], 2, 0, 1, 1 );
-            fheroes2::Copy( font[246 - 32], 3, 0 + 2, font[246 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[196 - 32], 4, 0, font[246 - 32], 2, 0, 3, 1 );
             font[246 - 32].setPosition( font[79].x(), font[79].y() - 2 );
             updateSmallFontLetterShadow( font[246 - 32] );
 
@@ -3378,7 +3408,7 @@ namespace
             font[251 - 32].setPosition( font[117 - 32].x(), font[117 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[251 - 32] );
 
-            // u with 2 dots on top.
+            // u with diaeresis.
             font[252 - 32].resize( font[85].width(), font[85].height() + 2 );
             font[252 - 32].reset();
             fheroes2::Copy( font[85], 0, 0, font[252 - 32], 0, 2, font[85].width(), font[85].height() );
