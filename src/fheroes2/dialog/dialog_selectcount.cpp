@@ -129,6 +129,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     const fheroes2::Rect uiRect = uiElement ? fheroes2::Rect{ uiOffset, uiElement->area() } : fheroes2::Rect{};
 
     LocalEvent & le = LocalEvent::Get();
+    bool replaceOnKeypress = true;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool needRedraw = false;
 
@@ -140,21 +141,25 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
+        if ( fheroes2::processIntegerValueTyping( min, max, replaceOnKeypress, selectedValue ) ) {
             valueSelectionElement.setValue( selectedValue );
+            replaceOnKeypress = false;
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             selectedValue = max;
             valueSelectionElement.setValue( max );
+            replaceOnKeypress = true;
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             selectedValue = min;
             valueSelectionElement.setValue( min );
+            replaceOnKeypress = true;
             needRedraw = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
+            replaceOnKeypress = true;
             selectedValue = valueSelectionElement.getValue();
             needRedraw = true;
         }
@@ -485,6 +490,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
 
     // message loop
     int bres = Dialog::ZERO;
+    bool replaceOnKeypress = true;
     while ( bres == Dialog::ZERO && le.HandleEvents() ) {
         bool redraw_count = false;
 
@@ -496,22 +502,26 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
+        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, replaceOnKeypress, redistributeCount ) ) {
             valueSelectionElement.setValue( redistributeCount );
+            replaceOnKeypress = false;
             redraw_count = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             redistributeCount = redistributeMax;
             valueSelectionElement.setValue( redistributeMax );
+            replaceOnKeypress = true;
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             redistributeCount = redistributeMin;
             valueSelectionElement.setValue( redistributeMin );
+            replaceOnKeypress = true;
             redraw_count = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
             redistributeCount = valueSelectionElement.getValue();
+            replaceOnKeypress = true;
             redraw_count = true;
         }
 
