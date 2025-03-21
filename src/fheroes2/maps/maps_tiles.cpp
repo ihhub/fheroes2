@@ -1917,65 +1917,9 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1108_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE ) {
-        // Some maps have "hacked" mines with no resources. We need to try to fix these tiles first.
-        if ( tile._mainObjectType == MP2::OBJ_MINE ) {
-            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
-                for ( auto & part : tile.getGroundObjectParts() ) {
-                    if ( part.icnType == MP2::OBJ_ICN_TYPE_EXTRAOVR && part._uid == tile.getMainObjectPart()._uid ) {
-                        // We found the missing object part. Swap it.
-                        std::swap( tile.getMainObjectPart(), part );
-                        break;
-                    }
-                }
-            }
-
-            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
-                // This is an unknown mine type. Most likely it was added by some hex editing.
-                tile.setMainObjectType( MP2::OBJ_NONE );
-            }
-            else if ( tile.metadata()[1] == 0 ) {
-                switch ( tile.getMainObjectPart().icnIndex ) {
-                case 0: {
-                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
-                    assert( resourceCount.has_value() && resourceCount > 0U );
-
-                    setResourceOnTile( tile, Resource::ORE, resourceCount.value() );
-                    break;
-                }
-                case 1: {
-                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::SULFUR ).sulfur );
-                    assert( resourceCount.has_value() && resourceCount > 0U );
-
-                    setResourceOnTile( tile, Resource::SULFUR, resourceCount.value() );
-                    break;
-                }
-                case 2: {
-                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::CRYSTAL ).crystal );
-                    assert( resourceCount.has_value() && resourceCount > 0U );
-
-                    setResourceOnTile( tile, Resource::CRYSTAL, resourceCount.value() );
-                    break;
-                }
-                case 3: {
-                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GEMS ).gems );
-                    assert( resourceCount.has_value() && resourceCount > 0U );
-
-                    setResourceOnTile( tile, Resource::GEMS, resourceCount.value() );
-                    break;
-                }
-                case 4: {
-                    const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GOLD ).gold );
-                    assert( resourceCount.has_value() && resourceCount > 0U );
-
-                    setResourceOnTile( tile, Resource::GOLD, resourceCount.value() );
-                    break;
-                }
-                default:
-                    // This is an unknown mine type. Most likely it was added by some hex editing.
-                    tile.setMainObjectType( MP2::OBJ_NONE );
-                    break;
-                }
-            }
+        // Some maps have "hacked" mines with no resources. We need to try to fix these tiles.
+        if ( tile._mainObjectType == MP2::OBJ_MINE && tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+            updateObjectInfoTile( tile, true );
         }
     }
 
