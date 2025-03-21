@@ -1912,17 +1912,11 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
         stream >> tile._mainObjectPart.layerType;
     }
 
-    // Some maps have "hacked" mines with no resources. We need to mark these tiles as empty tiles.
-    // The proper fix for new game was introduced in 1.1.4 version.
-    // However, save files that are created before 1.1.4 would contain this problem
-    // and also they can be converted throughout the time to higher save file versions.
-    // So, we don't have a proper version cut to tell that this fix is not needed.
-    // Let's assume that at the time of making 1.1.4 minimal acceptable version
-    // we can remove this fix and forget about older saves.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1104_RELEASE, "Remove the logic below." );
-    // If the mine has 0 resources then this is an invalid mine.
-    if ( tile._mainObjectType == MP2::OBJ_MINE && tile.metadata()[1] == 0 ) {
-        tile.setMainObjectType( MP2::OBJ_NONE );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1108_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE && tile._mainObjectType == MP2::OBJ_MINE
+         && tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+        // Some maps have "hacked" mines with no resources. We need to try to fix these tiles.
+        updateObjectInfoTile( tile, true );
     }
 
     return stream >> tile._boatOwnerColor;
