@@ -34,6 +34,7 @@
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_static.h"
 #include "icn.h"
 #include "localevent.h"
 #include "m82.h"
@@ -53,7 +54,6 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
-#include "game_static.h"
 
 namespace
 {
