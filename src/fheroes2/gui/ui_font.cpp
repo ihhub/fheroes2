@@ -5669,7 +5669,7 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 207, 214, 220 } ) {
+        for ( const int & charCode : { 196, 197, 203, 207, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
@@ -5774,6 +5774,13 @@ namespace
         released[202 - 32].reset();
         fheroes2::Copy( released[69 - 32], 0, 0, released[202 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
         fheroes2::Copy( released[194 - 32], offset + 5, offset, released[202 - 32], offset + 3, offset, 3, 2 );
+
+        // E with diaeresis.
+        released[203 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 2 );
+        released[203 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[203 - 32], 0, 2, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::SetPixel( released[203 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[203 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
 
         // I with grave.
         released[204 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 3 );
