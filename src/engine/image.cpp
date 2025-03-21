@@ -882,6 +882,44 @@ namespace fheroes2
         }
     }
 
+    void addShadowForRectangularDialog( Image &out, const Point &outPos,  const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize )
+    {
+        if ( out.empty() || shadowSize == 0 || outPos.x < 0 || outPos.y < 0 ) {
+            return;
+        }
+
+        const int32_t outWidth = out.width();
+
+        // Ensure the shadow is within the bounds of the 'out' image
+        assert( outPos.x + shadowSize >= 0 &&
+                outPos.x + dialogWidth <= outWidth &&
+                outPos.y + dialogHeight + shadowSize <= out.height() );
+
+        // Render shadow at the left side of the window
+        int32_t offsetY = outPos.y + shadowSize;
+        ApplyTransform( out, outPos.x - shadowSize, offsetY, shadowSize, 1, 5 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowSize, offsetY, 1, dialogHeight, 5 );
+        ApplyTransform( out, outPos.x - shadowSize+ 1, offsetY, shadowSize - 1, 1, 4 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowSize+ 1, offsetY, 1, dialogHeight - 4, 4 );
+        ApplyTransform( out, outPos.x - shadowSize + 2, offsetY, shadowSize - 2, 1, 3 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowSize + 2, offsetY, 1, dialogHeight - 6, 3 );
+        ApplyTransform( out, outPos.x - shadowSize + 3, offsetY, shadowSize - 3, dialogHeight - shadowSize - 3, 2 );
+
+        // Render shadow at the bottom side of the window
+        offsetY = outPos.y + dialogHeight;
+        const int32_t shadowBottomEdge = outPos.y + dialogHeight + shadowSize;
+        ApplyTransform( out, outPos.x - shadowSize + 3, offsetY, dialogWidth - 6, shadowSize - 3, 2 );
+        ApplyTransform( out, outPos.x - shadowSize + 2, shadowBottomEdge - 3, dialogWidth - 4, 1, 3 );
+        ApplyTransform( out, outPos.x - shadowSize + dialogWidth - 3, offsetY, 1, shadowSize - 3, 3 );
+        ApplyTransform( out, outPos.x - shadowSize + 1, shadowBottomEdge - 2, dialogWidth - 2, 1, 4 );
+        ApplyTransform( out, outPos.x - shadowSize + dialogWidth - 2, offsetY, 1, shadowSize - 2, 4 );
+        ApplyTransform( out, outPos.x - shadowSize, shadowBottomEdge - 1, dialogWidth, 1, 5 );
+        ApplyTransform( out, outPos.x - shadowSize + dialogWidth - 1, offsetY, 1, shadowSize, 5 );
+    }
+
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {

@@ -204,6 +204,7 @@ namespace fheroes2
 
     // Apply shadow that gradually reduces strength using 'in' image shape. Shadow is applied to the 'out' image.
     void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset, const bool slopeEffect = true );
+    void addShadowForRectangularDialog( Image & out, const Point & outPos, const int32_t & dialogWidth, const int32_t & dialogHeight, const int32_t shadowSize );
 
     // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );

@@ -318,7 +318,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // shadow
     if ( !isDefaultScreenSize ) {
-        fheroes2::addGradientShadow( backSprite, display, { dst_pt.x, dst_pt.y }, { -15, 15 }, false );
+        fheroes2::addShadowForRectangularDialog( display, dst_pt, backSprite.width(), backSprite.height(), 16 );
     }
 
     // header

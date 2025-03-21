@@ -113,8 +113,6 @@ namespace
 
     const int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
-    const fheroes2::Point damageImageShadowOffset{ -5, 5 };
-
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
@@ -6773,32 +6771,24 @@ void Battle::PopupDamageInfo::_makeDamageImage()
 
     const fheroes2::Rect & unitRect = _defender->GetRectPosition();
 
-    const int32_t shadowOffsetX = std::abs( damageImageShadowOffset.x );
-    const int32_t shadowOffsetY = std::abs( damageImageShadowOffset.y );
     // Get the border width and set the popup parameters.
     const int32_t borderWidth = BorderWidth();
     const int32_t x = _battleUIRect.x + unitRect.x + unitRect.width;
     const int32_t y = _battleUIRect.y + unitRect.y;
-    const int32_t w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth + shadowOffsetX;
-    const int32_t h = damageText.height() + killedText.height() + 2 * borderWidth + shadowOffsetY;
+    const int32_t w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
+    const int32_t h = damageText.height() + killedText.height() + 2 * borderWidth;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
-    _damageImage.resize( borderRect.width, borderRect.height );
-    _damageImage.reset();
 
-    const fheroes2::Sprite & backgroundIcn = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    fheroes2::Image backgroundImage
-        = fheroes2::Stretch( backgroundIcn, 0, 0, backgroundIcn.width(), backgroundIcn.height(), borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
-    damageText.draw( borderWidth, borderWidth + 2, backgroundImage );
-    killedText.draw( borderWidth, ( borderRect.height - shadowOffsetY ) / 2 + 2, backgroundImage );
-
-    fheroes2::Copy( backgroundImage, 0, 0, _damageImage, shadowOffsetX, 0, borderRect.width - shadowOffsetX, borderRect.height - shadowOffsetY );
-
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    _damageImage = fheroes2::Stretch( backgroundImage, 0, 0, backgroundImage.width(), backgroundImage.height(), borderRect.width, borderRect.height );
     _damageImage.setPosition( borderRect.x, borderRect.y );
+    _damageImage._disableTransformLayer();
 
-    fheroes2::addGradientShadow( backgroundImage, _damageImage, { shadowOffsetX, 0 }, damageImageShadowOffset );
+    damageText.draw( borderWidth, borderWidth + 2, _damageImage );
+    killedText.draw( borderWidth, borderRect.height / 2 + 2, _damageImage );
 }
 
 void Battle::PopupDamageInfo::redraw() const
@@ -6809,5 +6799,6 @@ void Battle::PopupDamageInfo::redraw() const
 
     assert( !_damageImage.empty() );
 
-    fheroes2::Blit( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
+    fheroes2::Copy( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
+    fheroes2::addShadowForRectangularDialog( fheroes2::Display::instance(), { _damageImage.x(), _damageImage.y() }, _damageImage.width(), _damageImage.height(), 5 );
 }
