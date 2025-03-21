@@ -1321,7 +1321,11 @@ namespace
             updateSmallFontLetterShadow( font[253 - 32] );
         }
     }
-
+    // The original French version replaces several ASCII special characters with language-specific characters.
+    // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
+    // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
+    // but the original French Price of Loyalty maps use 0x09 for lowercase i with circumflex. This is currently
+    // not supported by the engine.
     void generateFrenchAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Normal font.
