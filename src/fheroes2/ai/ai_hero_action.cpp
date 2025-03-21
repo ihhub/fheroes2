@@ -344,7 +344,6 @@ namespace
             assert( hero.GetIndex() == dstIndex );
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
-
             return;
         }
 
