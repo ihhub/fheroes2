@@ -1325,7 +1325,7 @@ namespace
     // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
     // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
     // but the original French Price of Loyalty maps use 0x09 for lowercase i with circumflex. This is currently
-    // not supported by the engine.
+    // not supported by the engine. See original maps' descriptions for Utopie and Sables du Temps.
     void generateFrenchAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Normal font.
