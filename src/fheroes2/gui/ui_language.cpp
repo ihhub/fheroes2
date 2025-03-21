@@ -267,8 +267,9 @@ namespace fheroes2
     void updateAlphabet( const std::string & abbreviation )
     {
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
+        const SupportedLanguage resourceLanguage = getResourceLanguage();
         const bool isOriginalResourceLanguage
-            = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() && SupportedLanguage::French != getResourceLanguage() );
+            = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && SupportedLanguage::French != resourceLanguage );
 
         AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
     }
