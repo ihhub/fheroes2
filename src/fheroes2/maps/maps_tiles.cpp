@@ -30,7 +30,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <limits>
-#include <optional>
 #include <set>
 #include <sstream>
 #include <type_traits>
@@ -47,8 +46,6 @@
 #include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "mp2.h"
 #include "pairs.h"
-#include "profit.h"
-#include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
