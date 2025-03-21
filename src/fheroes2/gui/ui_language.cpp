@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -267,7 +267,9 @@ namespace fheroes2
     void updateAlphabet( const std::string & abbreviation )
     {
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
-        const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
+        const SupportedLanguage resourceLanguage = getResourceLanguage();
+        const bool isOriginalResourceLanguage
+            = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && SupportedLanguage::French != resourceLanguage );
 
         AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
     }

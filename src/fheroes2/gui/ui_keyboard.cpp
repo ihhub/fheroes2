@@ -78,6 +78,7 @@ namespace
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -322,6 +323,7 @@ namespace
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
@@ -351,6 +353,8 @@ namespace
             return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
+        case fheroes2::SupportedLanguage::French:
+            return { "\xC9\xC8\xC7\xC0\xC2\xCA\xCB\xCD\xCE\xCF\xDB\xDC", "AZERTYUIOP\xD4", "QSDFGHJKLM\xD9", "WXCVBN" };
         case fheroes2::SupportedLanguage::German:
             return { "QWERTZUIOP\xDC", "ASDFGHJKL\xD6\xC4", "YXCVBNM\xDF" };
         case fheroes2::SupportedLanguage::Polish:
@@ -379,6 +383,8 @@ namespace
             return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
         case fheroes2::SupportedLanguage::English:
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
+        case fheroes2::SupportedLanguage::French:
+            return { "\xE9\xE8\xE7\xE0\xE2\xEA\xEB\xED\xEE\xEF\xFB\xFC", "azertyuiop\xF4", "qsdfghjklm\xF9", "wxcvbn" };
         case fheroes2::SupportedLanguage::German:
             return { "qwertzuiop\xFC", "asdfghjkl\xF6\xE4", "yxcvbnm\xDF" };
         case fheroes2::SupportedLanguage::Polish:
@@ -438,6 +444,7 @@ namespace
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Russian:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { 24, defaultButtonHeight };
@@ -606,6 +613,7 @@ namespace
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
