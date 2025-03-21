@@ -5870,7 +5870,7 @@ namespace
         fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
 
         // Eszett.
-        released[223 - 32].resize( 15 + offset * 2, 10 + offset * 2 );
+        released[223 - 32].resize( 13 + offset * 2, 10 + offset * 2 );
         released[223 - 32].reset();
         fheroes2::DrawLine( released[223 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[223 - 32], { offset + 2, offset + 9 }, { offset + 2, offset + 2 }, buttonGoodReleasedColor );
