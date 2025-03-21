@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -102,7 +102,7 @@ namespace
         hero.FadeIn();
         hero.ShowPath( true );
 
-        castle->MageGuildEducateHero( hero );
+        castle->trainHeroInMageGuild( hero );
     }
 
     bool ActionSpellViewMines()

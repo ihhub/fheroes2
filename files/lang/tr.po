@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-20 14:06+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -158,27 +158,6 @@ msgstr ""
 "T"
 
 msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"YÜKLE"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"YENİ\n"
-"HARİTA"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"KAYDET"
-
-msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
@@ -201,6 +180,27 @@ msgstr ""
 
 msgid "QUIT"
 msgstr "ÇIKIŞ"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"YENİ\n"
+"HARİTA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"KAYDET"
 
 msgid "INFO"
 msgstr "BİLGİ"
@@ -281,22 +281,6 @@ msgstr "SIFIRLA"
 
 msgid "START"
 msgstr "BAŞLA"
-
-msgid "TOWN"
-msgstr "KASABA"
-
-msgid "CASTLE"
-msgstr "KALE"
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -873,6 +857,16 @@ msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -3443,6 +3437,12 @@ msgstr ""
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
+msgid "TOWN"
+msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
+
 msgid "Click to start placing the selected castle/town."
 msgstr ""
 
@@ -4766,8 +4766,9 @@ msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
 
 msgid "Restart the current scenario."
@@ -4777,9 +4778,9 @@ msgid "Difficulty"
 msgstr ""
 
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"

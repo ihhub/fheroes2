@@ -344,8 +344,6 @@ namespace
             assert( hero.GetIndex() == dstIndex );
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
-
-            castle->MageGuildEducateHero( hero );
             return;
         }
 
@@ -439,8 +437,6 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captures the enemy castle " << castle->GetName() )
 
         captureCastle();
-
-        castle->MageGuildEducateHero( hero );
     }
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )

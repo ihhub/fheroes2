@@ -335,7 +335,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
-        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
