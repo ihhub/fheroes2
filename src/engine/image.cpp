@@ -874,11 +874,6 @@ namespace fheroes2
             return;
         }
 
-        const int32_t outWidth = out.width();
-
-        // Ensure the shadow is within the bounds of the 'out' image
-        assert( outPos.x + shadowOffset >= 0 && outPos.x + dialogWidth <= outWidth && outPos.y + dialogHeight + shadowOffset <= out.height() );
-
         // Render shadow at the left side of the window
         int32_t offsetY = outPos.y + shadowOffset;
         ApplyTransform( out, outPos.x - shadowOffset, offsetY, shadowOffset, 1, 5 );
