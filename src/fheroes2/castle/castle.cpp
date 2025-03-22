@@ -2515,6 +2515,9 @@ std::string Castle::GetDescriptionBuilding( const uint32_t buildingType ) const
         }
         break;
     }
+    case BUILD_MOAT:
+        StringReplace( res, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
+        break;
 
     case BUILD_SPEC:
     case BUILD_STATUE: {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -992,7 +992,7 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
 
 std::string Battle::Board::GetMoatInfo()
 {
-    std::string msg = _( "The Moat reduces the defense skill of troops trapped in it by %{count} and restricts their movement range." );
+    std::string msg = _( "The Moat interrupts any movement through it and reduces the defense skill of troops present in it by %{count}." );
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
 
     return msg;

@@ -34,6 +34,7 @@
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_static.h"
 #include "icn.h"
 #include "localevent.h"
 #include "m82.h"
@@ -311,6 +312,9 @@ std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t
             StringReplace( description, "%{count}", Castle::GetGrownWel2() );
             break;
         case BUILD_CASTLE:
+        case BUILD_MOAT:
+            StringReplace( description, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
+            break;
         case BUILD_STATUE:
         case BUILD_SPEC: {
             const Funds profit = ProfitConditions::FromBuilding( buildingId, race );
