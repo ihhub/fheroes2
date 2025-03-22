@@ -224,7 +224,8 @@ namespace fheroes2
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value );
+    /// <param name="replace">Replace current value with the newly entered digit, instead of appending to it?</param>
+    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, const bool replace, int32_t & value );
 
     // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
