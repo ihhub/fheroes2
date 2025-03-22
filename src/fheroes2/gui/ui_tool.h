@@ -27,6 +27,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "image.h"
@@ -216,11 +217,13 @@ namespace fheroes2
                                   const int32_t frameCount );
 
     // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset );
 
     // Returns the character position number in the text.
     size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string & fullText, const size_t currentTextCursorPosition,
+                                       const Point & pointerCursorOffset, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
