@@ -534,9 +534,16 @@ namespace fheroes2
 
         // Insert truncation symbol at the beginning if required.
         if ( _textOffsetX != 0 ) {
-            const int32_t charCountToReplace
-                = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, truncationSymbolWidth );
-            _text.erase( 0, charCountToReplace );
+            int totalWidth = 0;
+            int charCount = 0;
+            for ( auto iter = _text.begin(); iter < _text.end(); ++iter ) {
+                if ( totalWidth < truncationSymbolWidth ) {
+                    const int32_t charWidth = charHandler.getWidth( *iter );
+                    totalWidth += charWidth;
+                    ++charCount;
+                }
+            }
+            _text.erase( 0, charCount );
             _text.insert( 0, truncatedEnding );
         }
 
