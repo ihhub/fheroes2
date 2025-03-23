@@ -208,6 +208,16 @@ public:
         return _interfaceType;
     }
 
+    void setNumericEstimates( const bool value )
+    {
+        _numericArmyEstimates = value;
+    }
+
+    bool isNumericEstimatesEnabled() const
+    {
+        return _numericArmyEstimates;
+    }
+
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -399,6 +409,7 @@ private:
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
+    bool _numericArmyEstimates{ false };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
