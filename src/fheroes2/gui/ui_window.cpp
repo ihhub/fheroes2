@@ -345,7 +345,7 @@ namespace fheroes2
         CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomCornerOffsetY,
                                    transitionSize, cornerSize, true, false );
 
-        fheroes2::addShadowForRectangularDialog( _output, { _windowArea.x, _windowArea.y }, _windowArea.width, _windowArea.height, borderSize );
+        fheroes2::addGradientShadowForArea( _output, { _windowArea.x, _windowArea.y }, _windowArea.width, _windowArea.height, borderSize );
     }
 
     void StandardWindow::applyTextBackgroundShading( const Rect & roi )
