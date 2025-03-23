@@ -47,17 +47,17 @@
           <li>update the Russian translation</li>
           <li>campaign: allow to raise the game difficulty during the campaign</li>
           <li>add shadow to Damage Popup Info dialog during battles</li>
-          <li>make an effort to retain the artifact position when swapping the artifacts between heroes</li>
+          <li>make an effort to retain the artifact position when swapping artifacts between heroes</li>
           <li>AI heroes should buy spellbook if there isn't one</li>
           <li>add disable/enable logic for Editor's undo/redo buttons</li>
-          <li>fix reseting heroes icons focus after oppening Castle</li>
+          <li>fix resetting heroes icons focus after opening Castle</li>
           <li>fix an assertion crash for hacked mines on old saves</li>
           <li>fix creature info dialog shadow draw on right click</li>
-          <li>implement Dragon Slayer spell selection for the AI</li>
+          <li>implement Dragon Slayer spell casting for the AI</li>
           <li>make the AI share visit info about some objects on the Adventure Map</li>
           <li>fix a delay during battle after having displayed the monster info dialog by right clicking</li>
           <li>make the AI use Guardian spells on Mines and Abandoned Mines</li>
-          <li>fix Golden bow sprite glowing pixels</li>
+          <li>fix Golden bow sprite's glowing pixels</li>
           <li>fix object visiting marking logic</li>
           <li>fix visited status for certain Adventure Map objects for the AI</li>
           <li>fix rendering of tall objects and extra objects (ghosts and flags) over the top map edge</li>
