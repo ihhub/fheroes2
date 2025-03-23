@@ -14,7 +14,7 @@ version 1.1.7 (23 March 2025)
 - make the AI share visit info about some objects on the Adventure Map
 - fix a delay during battle after having displayed the monster info dialog by right clicking
 - make the AI use Guardian spells on Mines and Abandoned Mines
-- fix Golden bow sprite glowing pixels
+- fix Golden bow sprite's glowing pixels
 - fix object visiting marking logic
 - fix visited status for certain Adventure Map objects for the AI
 - fix rendering of tall objects and extra objects (ghosts and flags) over the top map edge
