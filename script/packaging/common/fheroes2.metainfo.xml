@@ -37,6 +37,46 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-03-23" version="v1.1.7">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.7</url>
+      <description>
+        <p>Changes in v1.1.7 (23 March 2025):</p>
+        <ul>
+          <li>add French virtual keyboard</li>
+          <li>fix broken tiles with mines at the time of loading maps</li>
+          <li>update the Russian translation</li>
+          <li>campaign: allow to raise the game difficulty during the campaign</li>
+          <li>add shadow to Damage Popup Info dialog during battles</li>
+          <li>make an effort to retain the artifact position when swapping artifacts between heroes</li>
+          <li>AI heroes should buy spellbook if there isn't one</li>
+          <li>add disable/enable logic for Editor's undo/redo buttons</li>
+          <li>fix resetting heroes icons focus after opening Castle</li>
+          <li>fix an assertion crash for hacked mines on old saves</li>
+          <li>fix creature info dialog shadow draw on right click</li>
+          <li>implement Dragon Slayer spell casting for the AI</li>
+          <li>make the AI share visit info about some objects on the Adventure Map</li>
+          <li>fix a delay during battle after having displayed the monster info dialog by right clicking</li>
+          <li>make the AI use Guardian spells on Mines and Abandoned Mines</li>
+          <li>fix Golden bow sprite's glowing pixels</li>
+          <li>fix object visiting marking logic</li>
+          <li>fix visited status for certain Adventure Map objects for the AI</li>
+          <li>fix rendering of tall objects and extra objects (ghosts and flags) over the top map edge</li>
+          <li>update the Hungarian translation</li>
+          <li>add proper translation support for Sign objects</li>
+          <li>allow to activate Czech virtual keyboard</li>
+          <li>do not center on the defeated hero after an instant movement</li>
+          <li>update the Portuguese translation</li>
+          <li>fix the logic of transferring artifacts after battle</li>
+          <li>check the contents of the resurrection.h2d file for correctness</li>
+          <li>add dynamic interface option</li>
+          <li>fix several button issues and do more button code cleanup</li>
+          <li>avoid stacking units when defending archers for the AI</li>
+          <li>update the Swedish translation</li>
+          <li>fix the operation of MIN/MAX buttons in various dialogs</li>
+          <li>clean up Russian empty guild/well button</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-02-16" version="v1.1.6">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.6</url>
       <description>

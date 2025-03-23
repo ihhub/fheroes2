@@ -178,8 +178,8 @@ namespace Campaign
 
         stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1108_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1108_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1108_RELEASE ) {
             data._minDifficulty = data._difficulty;
         }
         else {
