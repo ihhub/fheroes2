@@ -180,8 +180,8 @@ namespace Editor
 
         const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-        fheroes2::Button buttonNewMap( buttonPos.x, buttonPos.y, ICN::BTNEMAIN, 0, 1 );
-        fheroes2::Button buttonLoadMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNEMAIN, 2, 3 );
+        fheroes2::Button buttonNewMap( buttonPos.x, buttonPos.y, ICN::BUTTON_NEW_MAP, 0, 1 );
+        fheroes2::Button buttonLoadMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_LOAD_MAP, 0, 1 );
         fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
         buttonNewMap.draw();
