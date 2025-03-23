@@ -4,7 +4,7 @@ version 1.1.7 (23 March 2025)
 - update the Russian translation
 - campaign: allow to raise the game difficulty during the campaign
 - add shadow to Damage Popup Info dialog during battles
-- make an effort to retain the artifact position when swapping the artifacts between heroes
+- make an effort to retain the artifact position when swapping artifacts between heroes
 - AI heroes should buy spellbook if there isn't one
 - add disable/enable logic for Editor's undo/redo buttons
 - fix resetting heroes icons focus after opening Castle
