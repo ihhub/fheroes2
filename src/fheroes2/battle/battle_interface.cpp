@@ -6799,6 +6799,8 @@ void Battle::PopupDamageInfo::redraw() const
 
     assert( !_damageImage.empty() );
 
-    fheroes2::Copy( _damageImage, 0, 0, fheroes2::Display::instance(), _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
-    fheroes2::addShadowForRectangularDialog( fheroes2::Display::instance(), { _damageImage.x(), _damageImage.y() }, _damageImage.width(), _damageImage.height(), 5 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    fheroes2::Copy( _damageImage, 0, 0, display, _damageImage.x(), _damageImage.y(), _damageImage.width(), _damageImage.height() );
+    fheroes2::addGradientShadowForArea( display, { _damageImage.x(), _damageImage.y() }, _damageImage.width(), _damageImage.height(), 5 );
 }
