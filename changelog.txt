@@ -7,7 +7,7 @@ version 1.1.7 (23 March 2025)
 - make an effort to retain the artifact position when swapping the artifacts between heroes
 - AI heroes should buy spellbook if there isn't one
 - add disable/enable logic for Editor's undo/redo buttons
-- fix reseting heroes icons focus after oppening Castle
+- fix resetting heroes icons focus after opening Castle
 - fix an assertion crash for hacked mines on old saves
 - fix creature info dialog shadow draw on right click
 - implement Dragon Slayer spell selection for the AI
