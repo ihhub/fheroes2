@@ -180,9 +180,7 @@ void Interface::AdventureMap::EventNextHero()
 
 fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 {
-    Heroes * hero = GetFocusHeroes();
-
-    if ( hero ) {
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
             _startHeroMove( *hero );
         }
@@ -490,9 +488,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
 fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 {
-    Heroes * hero = GetFocusHeroes();
-
-    if ( hero ) {
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
@@ -510,8 +506,8 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
             }
         }
     }
-    else if ( GetFocusCastle() ) {
-        Game::OpenCastleDialog( *GetFocusCastle() );
+    else if ( Castle * castle = GetFocusCastle(); castle ) {
+        Game::OpenCastleDialog( *castle );
     }
 
     return fheroes2::GameMode::CANCEL;
@@ -519,10 +515,12 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 
 void Interface::AdventureMap::EventOpenFocus() const
 {
-    if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
-    else if ( GetFocusCastle() )
-        Game::OpenCastleDialog( *GetFocusCastle() );
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
+        Game::OpenHeroesDialog( *hero, true, true );
+    }
+    else if ( Castle * castle = GetFocusCastle(); castle ) {
+        Game::OpenCastleDialog( *castle );
+    }
 }
 
 void Interface::AdventureMap::EventSwitchShowRadar() const
