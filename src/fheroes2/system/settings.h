@@ -196,6 +196,7 @@ public:
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
+    bool isNumericEstimatesEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -206,16 +207,6 @@ public:
     InterfaceType getInterfaceType() const
     {
         return _interfaceType;
-    }
-
-    void setNumericEstimates( const bool value )
-    {
-        _numericArmyEstimates = value;
-    }
-
-    bool isNumericEstimatesEnabled() const
-    {
-        return _numericArmyEstimates;
     }
 
     bool isEditorAnimationEnabled() const;
@@ -279,6 +270,7 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
+    void setNumericEstimates( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
