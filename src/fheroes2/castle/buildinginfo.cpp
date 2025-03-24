@@ -311,10 +311,10 @@ std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t
         case BUILD_WEL2:
             StringReplace( description, "%{count}", Castle::GetGrownWel2() );
             break;
-        case BUILD_CASTLE:
         case BUILD_MOAT:
             StringReplace( description, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
             break;
+        case BUILD_CASTLE:
         case BUILD_STATUE:
         case BUILD_SPEC: {
             const Funds profit = ProfitConditions::FromBuilding( buildingId, race );
