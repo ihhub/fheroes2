@@ -102,7 +102,8 @@ namespace
         text.draw( dstx + 105 - text.width() / 2, dsty, output );
     }
 
-    void redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool isEditing )
+    void redrawTextInputField( fheroes2::TextInput & textInput, const std::string & filename, const fheroes2::Rect & field, const size_t cursorLocation,
+                               const bool isEditing )
     {
         if ( filename.empty() ) {
             return;
@@ -110,12 +111,14 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
-        // Do not ignore spaces at the end.
-        currentFilename.keepLineTrailingSpaces();
-        currentFilename.fitToOneRow( maxFileNameWidth );
+        textInput.set( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
+        textInput.setCursorPosition( cursorLocation );
 
-        currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
+        // Do not ignore spaces at the end.
+        textInput.keepLineTrailingSpaces();
+        textInput.fitToOneRow( maxFileNameWidth );
+
+        textInput.draw( field.x + 4 + ( ( maxFileNameWidth - textInput.width() ) / 2 ), field.y + 4, display );
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -368,7 +371,8 @@ namespace
         };
 
         listbox.Redraw();
-        redrawTextInputField( filename, textInputRoi, isEditing );
+        fheroes2::TextInput textInput;
+        redrawTextInputField( textInput, filename, textInputRoi, 0, isEditing );
 
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
         title.draw( area.x + ( area.width - title.width() ) / 2, area.y + 16, display );
@@ -470,11 +474,7 @@ namespace
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
                 }
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
-                    const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
-                    const int32_t textStartOffsetX = std::max( 0, ( textInputRoi.width - text.width() ) / 2 );
-                    charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.getMouseCursorPos().x,
-                                                                          textInputRoi.x + textStartOffsetX );
-
+                    charInsertPos = fheroes2::getTextInputCursorPosition( textInput, filename, charInsertPos, le.getMouseCursorPos(), textInputRoi );
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;
@@ -535,13 +535,13 @@ namespace
 
                 textInputAndDateBackground.restore();
 
-                if ( isEditing ) {
-                    redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
-                    redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
-                }
-                else if ( isListboxSelected ) {
-                    redrawTextInputField( filename, textInputRoi, false );
+                if ( isListboxSelected ) {
+                    redrawTextInputField( textInput, filename, textInputRoi, 0, false );
                     redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+                }
+                else if ( isEditing ) {
+                    redrawTextInputField( textInput, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, charInsertPos, true );
+                    redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
             }
 
