@@ -536,13 +536,16 @@ namespace fheroes2
         if ( _textOffsetX != 0 ) {
             int totalWidth = 0;
             int charCount = 0;
-            for ( auto iter = _text.begin(); iter < _text.end(); ++iter ) {
-                if ( totalWidth < truncationSymbolWidth ) {
-                    const int32_t charWidth = charHandler.getWidth( *iter );
-                    totalWidth += charWidth;
-                    ++charCount;
+
+            for ( auto iter = _text.begin(); iter != _text.end(); ++iter ) {
+                if ( totalWidth >= truncationSymbolWidth ) {
+                    break;
                 }
+
+                totalWidth += charHandler.getWidth( *iter );
+                ++charCount;
             }
+
             _text.erase( 0, charCount );
             _text.insert( 0, truncatedEnding );
         }
@@ -551,12 +554,14 @@ namespace fheroes2
         if ( _text.size() + _textOffsetX < originalTextSize ) {
             int totalWidth = 0;
             int charCount = 0;
-            for ( auto iter = _text.rbegin(); iter < _text.rend(); ++iter ) {
-                if ( totalWidth < truncationSymbolWidth ) {
-                    const int32_t charWidth = charHandler.getWidth( *iter );
-                    totalWidth += charWidth;
-                    ++charCount;
+
+            for ( auto iter = _text.rbegin(); iter != _text.rend(); ++iter ) {
+                if ( totalWidth >= truncationSymbolWidth ) {
+                    break;
                 }
+
+                totalWidth += charHandler.getWidth( *iter );
+                ++charCount;
             }
 
             _text.erase( _text.size() - charCount, charCount );
