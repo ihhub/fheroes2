@@ -138,6 +138,8 @@ namespace
                                                 ICN::BUTTON_5_PLAYERS,
                                                 ICN::BUTTON_6_PLAYERS,
                                                 ICN::BUTTON_BATTLE_ONLY,
+                                                ICN::BUTTON_NEW_MAP,
+                                                ICN::BUTTON_LOAD_MAP,
                                                 ICN::BUTTON_GIFT_GOOD,
                                                 ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -1419,6 +1421,8 @@ namespace
         case ICN::BUTTON_5_PLAYERS:
         case ICN::BUTTON_6_PLAYERS:
         case ICN::BUTTON_BATTLE_ONLY:
+        case ICN::BUTTON_NEW_MAP:
+        case ICN::BUTTON_LOAD_MAP:
         case ICN::BUTTON_CAMPAIGN_GAME:
         case ICN::BUTTON_EXPANSION_CAMPAIGN:
         case ICN::BUTTON_HOT_SEAT:
@@ -1491,6 +1495,16 @@ namespace
                 case ICN::BUTTON_6_PLAYERS: {
                     buttonIcnID = ICN::BTNHOTST;
                     icnIndex = { 8, 9 };
+                    break;
+                }
+                case ICN::BUTTON_NEW_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 0, 1 };
+                    break;
+                }
+                case ICN::BUTTON_LOAD_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 2, 3 };
                     break;
                 }
                 default:
@@ -1567,6 +1581,14 @@ namespace
             }
             case ICN::BUTTON_6_PLAYERS: {
                 text = gettext_noop( "6 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_NEW_MAP: {
+                text = gettext_noop( "NEW\nMAP" );
+                break;
+            }
+            case ICN::BUTTON_LOAD_MAP: {
+                text = gettext_noop( "LOAD\nMAP" );
                 break;
             }
             default:
@@ -2226,50 +2248,6 @@ namespace
                 std::swap( imageArray[214], imageArray[221] );
                 std::swap( imageArray[220], imageArray[222] );
                 imageArray.erase( imageArray.begin() + 221, imageArray.end() );
-            }
-            // The French version replaces several ASCII special characters with language-specific characters.
-            // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
-            // of the original so that original French maps' texts are displayed correctly.
-            if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
-                // The engine expects that letter indexes correspond to charcode - 0x20, but the original French
-                // Price of Loyalty maps use 0x09 for lowercase i with circonflex. This is currently not supported
-                // by the engine.
-                const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 96, 128, firstSprite );
-                // Capital letters with accents aren't present in the original assets so we use unaccented letters.
-                imageArray[192 - 32] = imageArray[33];
-                imageArray[199 - 32] = imageArray[35];
-                imageArray[201 - 32] = imageArray[37];
-                imageArray[202 - 32] = imageArray[37];
-
-                imageArray[224 - 32] = imageArray[32];
-                imageArray[226 - 32] = imageArray[10];
-                imageArray[231 - 32] = imageArray[62];
-                imageArray[232 - 32] = imageArray[64];
-                imageArray[233 - 32] = imageArray[94];
-                imageArray[234 - 32] = imageArray[92];
-                imageArray[239 - 32] = imageArray[91];
-                imageArray[244 - 32] = imageArray[3];
-                imageArray[249 - 32] = imageArray[6];
-                imageArray[251 - 32] = imageArray[4];
-                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
-                // area that we need to remove. Plus we need to add a missing pixel.
-                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
-                    imageArray[238 - 32].resize( 4, 9 );
-                    imageArray[238 - 32].reset();
-                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
-                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
-                    imageArray[238 - 32].setPosition( 0, -1 );
-                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
-                    // Copy the fixed sprite back.
-                    for ( const int charCode : { 30, 93, 95 } ) {
-                        imageArray[charCode] = imageArray[238 - 32];
-                    }
-                }
-                else {
-                    imageArray[238 - 32] = imageArray[93];
-                }
-                imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
             if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
