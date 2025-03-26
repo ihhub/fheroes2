@@ -975,9 +975,9 @@ namespace fheroes2
         }
     }
 
-    void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue, const bool openWithEmptyValue /*= false */ )
+    void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue )
     {
-        std::string strValue = openWithEmptyValue ? "" : std::to_string( output );
+        std::string strValue = std::to_string( output );
         DialogAction action = DialogAction::DoNothing;
 
         // Lets limit to 11 digits: minus and 10 digits for INT32_MIN

@@ -33,5 +33,5 @@ namespace fheroes2
     // If length limit is set to 0 then no limit will be applied.
     void openVirtualKeyboard( std::string & output, size_t lengthLimit );
 
-    void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue, const bool openWithEmptyValue = false );
+    void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue );
 }
