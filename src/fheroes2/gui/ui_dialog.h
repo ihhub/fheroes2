@@ -385,6 +385,11 @@ namespace fheroes2
             _isIgnoreMouseWheelEventRoiCheck = true;
         }
 
+        void allowToOpenVirtualNumpadWithHotkey()
+        {
+            _isAllowToOpenVirtualNumpadWithHotkey = true;
+        }
+
         void setOffset( const fheroes2::Point & offset );
 
         static Size getArea();
@@ -405,6 +410,7 @@ namespace fheroes2
         Rect _area;
 
         bool _isIgnoreMouseWheelEventRoiCheck{ false };
+        bool _isAllowToOpenVirtualNumpadWithHotkey{ false };
 
         bool _isMouseWheelUpEvent( const LocalEvent & eventHandler ) const;
         bool _isMouseWheelDownEvent( const LocalEvent & eventHandler ) const;
