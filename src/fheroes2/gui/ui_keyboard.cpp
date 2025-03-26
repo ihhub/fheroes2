@@ -758,21 +758,14 @@ namespace
 
     DialogAction handleButtonEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
     {
-        for ( const auto & buttonRow : buttonLayout ) {
-            for ( const auto & buttonInfo : buttonRow ) {
-                if ( buttonInfo.button.isVisible() && le.MouseClickLeft( buttonInfo.button.area() ) ) {
-                    assert( buttonInfo.action );
-                    return buttonInfo.action( renderer );
-                }
+        const fheroes2::Key key = [&le]() {
+            if ( !le.isAnyKeyPressed() ) {
+                return fheroes2::Key::NONE;
             }
-        }
 
-        if ( !le.isAnyKeyPressed() ) {
-            return DialogAction::DoNothing;
-        }
+            const fheroes2::Key keyValue = le.getPressedKeyValue();
 
-        const auto convertKeypadKeys = []( const fheroes2::Key key ) {
-            switch ( key ) {
+            switch ( keyValue ) {
             case fheroes2::Key::KEY_KP_MINUS:
                 return fheroes2::Key::KEY_MINUS;
             case fheroes2::Key::KEY_KP_0:
@@ -799,15 +792,18 @@ namespace
                 break;
             }
 
-            return key;
-        };
-
-        const fheroes2::Key key = convertKeypadKeys( le.getPressedKeyValue() );
+            return keyValue;
+        }();
 
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
-                if ( buttonInfo.button.isVisible() && buttonInfo.key == key ) {
+                if ( !buttonInfo.button.isVisible() ) {
+                    continue;
+                }
+
+                if ( le.MouseClickLeft( buttonInfo.button.area() ) || ( key != fheroes2::Key::NONE && buttonInfo.key == key ) ) {
                     assert( buttonInfo.action );
+
                     return buttonInfo.action( renderer );
                 }
             }
