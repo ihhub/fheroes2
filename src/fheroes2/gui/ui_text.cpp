@@ -481,6 +481,94 @@ namespace fheroes2
         _text += truncatedEnding;
     }
 
+    void TextInput::fitToOneRow( const int32_t maxWidth )
+    {
+        assert( maxWidth > 0 );
+        if ( maxWidth <= 0 || _text.empty() ) {
+            return;
+        }
+
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const fheroes2::FontCharHandler charHandler( _fontType );
+        const int32_t fullLineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, true );
+        if ( fullLineWidth < maxWidth ) {
+            return;
+        }
+
+        constexpr size_t cursorToBorderDistance = 4;
+
+        // If the cursor is to the left of the TextBox.
+        _textOffsetX = std::max( std::min( static_cast<int>( _textOffsetX ), static_cast<int>( _cursorPosition - cursorToBorderDistance ) ), 0 );
+
+        // If some characters were deleted and we have space for new characters.
+        int32_t currentWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ), static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, true );
+        const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
+
+        while ( _textOffsetX > 0 ) {
+            const uint8_t prevChar = textData[_textOffsetX - 1];
+            currentWidth += charHandler.getWidth( prevChar );
+
+            if ( currentWidth > maxWidth ) {
+                break;
+            }
+
+            --_textOffsetX;
+        }
+
+        // If the cursor is to the right of the Textbox.
+        int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ),
+                                                          static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, maxWidth );
+        while ( ( _textOffsetX + maxCharacterCount <= _cursorPosition + cursorToBorderDistance ) && ( _textOffsetX + maxCharacterCount < _text.size() ) ) {
+            ++_textOffsetX;
+            maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() + _textOffsetX ),
+                                                      static_cast<int32_t>( _text.size() - _textOffsetX ), charHandler, maxWidth );
+        }
+
+        const size_t originalTextSize = _text.size();
+        _text = _text.substr( _textOffsetX, maxCharacterCount );
+
+        const std::string truncatedEnding( "..." );
+        const int32_t truncationSymbolWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
+
+        // Insert truncation symbol at the beginning if required.
+        if ( _textOffsetX != 0 ) {
+            int totalWidth = 0;
+            int charCount = 0;
+
+            for ( auto iter = _text.begin(); iter != _text.end(); ++iter ) {
+                if ( totalWidth >= truncationSymbolWidth ) {
+                    break;
+                }
+
+                totalWidth += charHandler.getWidth( *iter );
+                ++charCount;
+            }
+
+            _text.erase( 0, charCount );
+            _text.insert( 0, truncatedEnding );
+        }
+
+        // Insert truncation symbol at the end if required.
+        if ( _text.size() + _textOffsetX < originalTextSize ) {
+            int totalWidth = 0;
+            int charCount = 0;
+
+            for ( auto iter = _text.rbegin(); iter != _text.rend(); ++iter ) {
+                if ( totalWidth >= truncationSymbolWidth ) {
+                    break;
+                }
+
+                totalWidth += charHandler.getWidth( *iter );
+                ++charCount;
+            }
+
+            _text.erase( _text.size() - charCount, charCount );
+            _text.insert( _text.size(), truncatedEnding );
+        }
+    }
+
     void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );

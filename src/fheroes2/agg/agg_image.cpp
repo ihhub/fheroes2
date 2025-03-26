@@ -138,6 +138,8 @@ namespace
                                                 ICN::BUTTON_5_PLAYERS,
                                                 ICN::BUTTON_6_PLAYERS,
                                                 ICN::BUTTON_BATTLE_ONLY,
+                                                ICN::BUTTON_NEW_MAP,
+                                                ICN::BUTTON_LOAD_MAP,
                                                 ICN::BUTTON_GIFT_GOOD,
                                                 ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -1419,6 +1421,8 @@ namespace
         case ICN::BUTTON_5_PLAYERS:
         case ICN::BUTTON_6_PLAYERS:
         case ICN::BUTTON_BATTLE_ONLY:
+        case ICN::BUTTON_NEW_MAP:
+        case ICN::BUTTON_LOAD_MAP:
         case ICN::BUTTON_CAMPAIGN_GAME:
         case ICN::BUTTON_EXPANSION_CAMPAIGN:
         case ICN::BUTTON_HOT_SEAT:
@@ -1491,6 +1495,16 @@ namespace
                 case ICN::BUTTON_6_PLAYERS: {
                     buttonIcnID = ICN::BTNHOTST;
                     icnIndex = { 8, 9 };
+                    break;
+                }
+                case ICN::BUTTON_NEW_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 0, 1 };
+                    break;
+                }
+                case ICN::BUTTON_LOAD_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 2, 3 };
                     break;
                 }
                 default:
@@ -1567,6 +1581,14 @@ namespace
             }
             case ICN::BUTTON_6_PLAYERS: {
                 text = gettext_noop( "6 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_NEW_MAP: {
+                text = gettext_noop( "NEW\nMAP" );
+                break;
+            }
+            case ICN::BUTTON_LOAD_MAP: {
+                text = gettext_noop( "LOAD\nMAP" );
                 break;
             }
             default:
