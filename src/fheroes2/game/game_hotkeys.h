@@ -51,8 +51,6 @@ namespace Game
         GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
-        MISC_OPEN_VIRTUAL_NUMPAD,
-
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -180,7 +178,6 @@ namespace Game
     {
         DEFAULT,
         GLOBAL,
-        MISC,
         MAIN_MENU,
         CAMPAIGN,
         WORLD_MAP,

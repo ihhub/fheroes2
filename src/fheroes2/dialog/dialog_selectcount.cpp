@@ -108,7 +108,6 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
     valueSelectionElement.ignoreMouseWheelEventRoiCheck();
-    valueSelectionElement.allowToOpenVirtualNumpadWithHotkey();
     valueSelectionElement.draw( display );
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
@@ -434,7 +433,6 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( redistributeMin, redistributeMax, redistributeCount, 1, selectionBoxArea.getPosition() );
     valueSelectionElement.ignoreMouseWheelEventRoiCheck();
-    valueSelectionElement.allowToOpenVirtualNumpadWithHotkey();
     valueSelectionElement.draw( display );
 
     fheroes2::MovableSprite ssp;

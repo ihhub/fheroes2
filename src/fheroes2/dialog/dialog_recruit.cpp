@@ -567,7 +567,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             redraw = true;
         }
 
-        if ( le.MouseClickLeft( recruitCountInputArea ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MISC_OPEN_VIRTUAL_NUMPAD ) ) {
+        if ( le.MouseClickLeft( recruitCountInputArea ) ) {
             int32_t temp = static_cast<int32_t>( result );
 
             fheroes2::openVirtualNumpad( temp, 0, static_cast<int32_t>( max ) );

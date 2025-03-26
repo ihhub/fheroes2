@@ -113,9 +113,6 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
 
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MISC_OPEN_VIRTUAL_NUMPAD )]
-            = { Game::HotKeyCategory::MISC, gettext_noop( "hotkey|open virtual numpad" ), fheroes2::Key::KEY_SPACE };
-
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|new game" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )]
@@ -570,8 +567,6 @@ const char * Game::getHotKeyCategoryName( const HotKeyCategory category )
         return gettext_noop( "Default Actions" );
     case HotKeyCategory::GLOBAL:
         return gettext_noop( "Global Actions" );
-    case HotKeyCategory::MISC:
-        return gettext_noop( "Miscellaneous Actions" );
     case HotKeyCategory::MAIN_MENU:
         return gettext_noop( "Main Menu" );
     case HotKeyCategory::CAMPAIGN:

@@ -999,7 +999,7 @@ namespace fheroes2
             return true;
         }
 
-        if ( le.MouseClickLeft( _editBox ) || ( _isAllowToOpenVirtualNumpadWithHotkey && Game::HotKeyPressEvent( Game::HotKeyEvent::MISC_OPEN_VIRTUAL_NUMPAD ) ) ) {
+        if ( le.MouseClickLeft( _editBox ) ) {
             openVirtualNumpad( _value, _minimum, _maximum );
             assert( _value >= _minimum && _value <= _maximum );
 
