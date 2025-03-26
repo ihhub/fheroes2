@@ -765,6 +765,7 @@ namespace
 
             const fheroes2::Key keyValue = le.getPressedKeyValue();
 
+            // Convert the numpad keys to regular keys if needed
             switch ( keyValue ) {
             case fheroes2::Key::KEY_KP_MINUS:
                 return fheroes2::Key::KEY_MINUS;
