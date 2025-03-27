@@ -1181,9 +1181,7 @@ bool Heroes::Recruit( const Castle & castle )
         return false;
     }
 
-    if ( castle.GetLevelMageGuild() > 0 ) {
-        castle.trainHeroInMageGuild( *this );
-    }
+    castle.trainHeroInMageGuild( *this );
 
     SetVisited( GetIndex() );
 
