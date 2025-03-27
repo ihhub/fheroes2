@@ -232,13 +232,13 @@ namespace
         {
             _isCursorVisible = !_isCursorVisible;
 
-            renderInputArea();
+            _output.render( renderInputArea() );
         }
 
         void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, _cursorPosition, clickPosition, startPosRoi );
-            renderInputArea();
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, _cursorPosition, clickPosition, startPosRoi, false );
+            _output.render( renderInputArea() );
         }
 
     private:
