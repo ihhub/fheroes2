@@ -881,6 +881,8 @@ namespace
             okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
 
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+                // Reset all event states including the hotkey pressed state so the caller dialog will not process it right after closing this dialog.
+                le.reset();
                 break;
             }
 
