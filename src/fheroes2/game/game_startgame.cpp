@@ -335,6 +335,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
+        // A new hero could be hired in the castle
         adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
