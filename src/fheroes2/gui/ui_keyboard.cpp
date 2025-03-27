@@ -237,7 +237,7 @@ namespace
 
         void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, _cursorPosition, clickPosition, startPosRoi, false );
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, false, _cursorPosition, clickPosition, startPosRoi );
             _output.render( renderInputArea() );
         }
 
