@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -354,7 +354,7 @@ void World::ComputeStaticAnalysis()
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
-        for ( size_t regionID = REGION_NODE_FOUND; regionID < regionCenters.size(); ++regionID ) {
+        for ( size_t regionID = REGION_NODE_FOUND; regionID < _regions.size(); ++regionID ) {
             MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
             if ( region._lastProcessedNode != region._nodes.size() )
