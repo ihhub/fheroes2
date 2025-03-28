@@ -148,7 +148,7 @@ namespace fheroes2
         // This assumes that the extra height always gets added above the buttons.
         buttonsOffset.y += extraHeight;
 
-        const int32_t verticalGapOffset = ( columns > 1 ) ? buttonsVerticalGap : 2 * buttonsVerticalGap;
+        const int32_t verticalGapOffset = isSingleColumn ? buttonsVerticalGap : 2 * buttonsVerticalGap;
 
         size_t buttonId = 0;
         for ( int32_t row = 0; row < rows; ++row ) {
