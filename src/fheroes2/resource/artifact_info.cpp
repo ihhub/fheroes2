@@ -518,7 +518,7 @@ namespace
               {} },
             { gettext_noop( "Battle Garb of Anduran" ),
               gettext_noop(
-                  "The %{name} combines the powers of the three Anduran artifacts. It provides maximum luck and morale for the hero's troops and gives the hero the Town Portal spell." ),
+                  "The %{name} combines the powers of the three Anduran artifacts (+5 to attack, defense, and spell power). It also provides maximum luck and morale for the hero's troops and gives the hero the Town Portal spell." ),
               gettext_noop(
                   "Out of pity for a poor peasant, you purchase a chest of old junk they are hawking for too much gold. Later, as you search through it, you find it contains the 3 pieces of the legendary battle garb of Anduran!" ),
               {},
