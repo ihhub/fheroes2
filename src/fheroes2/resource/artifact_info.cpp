@@ -480,7 +480,7 @@ namespace
                 { gettext_noop( "Magic Book" ),
                   gettext_noop( "The %{name} enables the hero to cast spells." ),
                   gettext_noop(
-                      "A young man approaches you: \"My Lord, allow me to show you my latest invention for spreading knowledge!\" You follow the man into his workshop and immediately observe a large apparatus with levers and cranks. \"This here is it!\" he says eagerly, \"The Printing Press.\" And before you get to say a word, he hands you a Magic Book." ),
+                      R"(A young man approaches you: "My Lord, allow me to show you my latest invention for spreading knowledge!" You follow the man into his workshop and immediately observe a large apparatus with levers and cranks. "This here is it!" he says eagerly, "The Printing Press." And before you get to say a word, he hands you a Magic Book.)" ),
                   {},
                   {} },
 
@@ -541,7 +541,7 @@ namespace
                 { gettext_noop( "Legendary Scepter" ),
                   gettext_noop( "The %{name} adds %{count} points to all attributes." ),
                   gettext_noop(
-                      "Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and answers: \"You think this is funny? Fine. You can carry it. I much prefer flying anyway.\"" ),
+                      R"(Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, "Need help?" The Sprite glares at you and answers: "You think this is funny? Fine. You can carry it. I much prefer flying anyway.")" ),
                   {},
                   {} },
                 { gettext_noop( "Masthead" ),
