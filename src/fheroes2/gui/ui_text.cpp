@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <map>
 #include <memory>
 
 #include "agg_image.h"
@@ -34,6 +35,8 @@ namespace
     const uint8_t hyphenChar{ '-' };
 
     const uint8_t invalidChar{ '?' };
+
+    const std::string truncationSymbol( "..." );
 
     // Returns true if character is a line separator ('\n').
     bool isLineSeparator( const uint8_t character )
@@ -287,6 +290,22 @@ namespace
 
         return std::make_unique<fheroes2::LanguageSwitcher>( language.value() );
     }
+
+    int32_t getTruncationSymbolWidth( const fheroes2::FontType fontType )
+    {
+        // Symbol width depends on font size and not on its color.
+        static std::map<fheroes2::FontSize, int32_t> truncationSymbolWidth;
+
+        auto [iter, isEmplaced] = truncationSymbolWidth.try_emplace( fontType.size, 0 );
+
+        if ( isEmplaced ) {
+            // Set the correct width value for the just emplaced element.
+            iter->second = getLineWidth( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ),
+                                         fheroes2::FontCharHandler( fontType ), true );
+        }
+
+        return iter->second;
+    }
 }
 
 namespace fheroes2
@@ -470,15 +489,11 @@ namespace fheroes2
             return;
         }
 
-        const std::string truncatedEnding( "..." );
-        const int32_t truncationSymbolWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
-
         const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler,
-                                                                maxWidth - truncationSymbolWidth );
+                                                                maxWidth - getTruncationSymbolWidth( _fontType ) );
 
         _text.resize( maxCharacterCount );
-        _text += truncatedEnding;
+        _text += truncationSymbol;
     }
 
     void TextInput::fitToOneRow( const int32_t maxWidth )
@@ -528,9 +543,7 @@ namespace fheroes2
         const size_t originalTextSize = _text.size();
         _text = _text.substr( _textOffsetX, maxCharacterCount );
 
-        const std::string truncatedEnding( "..." );
-        const int32_t truncationSymbolWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), charHandler, true );
+        const int32_t truncationSymbolWidth = getTruncationSymbolWidth( _fontType );
 
         // Insert truncation symbol at the beginning if required.
         if ( _textOffsetX != 0 ) {
@@ -547,7 +560,7 @@ namespace fheroes2
             }
 
             _text.erase( 0, charCount );
-            _text.insert( 0, truncatedEnding );
+            _text.insert( 0, truncationSymbol );
         }
 
         // Insert truncation symbol at the end if required.
@@ -565,7 +578,7 @@ namespace fheroes2
             }
 
             _text.erase( _text.size() - charCount, charCount );
-            _text.insert( _text.size(), truncatedEnding );
+            _text.insert( _text.size(), truncationSymbol );
         }
     }
 

@@ -148,7 +148,7 @@ namespace fheroes2
         // This assumes that the extra height always gets added above the buttons.
         buttonsOffset.y += extraHeight;
 
-        const int32_t verticalGapOffset = ( columns > 1 ) ? buttonsVerticalGap : 2 * buttonsVerticalGap;
+        const int32_t verticalGapOffset = isSingleColumn ? buttonsVerticalGap : 2 * buttonsVerticalGap;
 
         size_t buttonId = 0;
         for ( int32_t row = 0; row < rows; ++row ) {
@@ -345,29 +345,7 @@ namespace fheroes2
         CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomCornerOffsetY,
                                    transitionSize, cornerSize, true, false );
 
-        // Render shadow at the left side of the window.
-        int32_t offsetY = _windowArea.y + borderSize;
-        ApplyTransform( _output, _totalArea.x, offsetY, borderSize, 1, 5 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x, offsetY, 1, _windowArea.height - 2, 5 );
-        ApplyTransform( _output, _totalArea.x + 1, offsetY, borderSize - 1, 1, 4 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x + 1, offsetY, 1, _windowArea.height - 4, 4 );
-        ApplyTransform( _output, _totalArea.x + 2, offsetY, borderSize - 2, 1, 3 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x + 2, offsetY, 1, _windowArea.height - 6, 3 );
-        ApplyTransform( _output, _totalArea.x + 3, offsetY, borderSize - 3, _windowArea.height - borderSize - 3, 2 );
-
-        // Render shadow at the bottom side of the window.
-        offsetY = _windowArea.y + _windowArea.height;
-        const int32_t shadowBottomEdge = _windowArea.y + _totalArea.height;
-        ApplyTransform( _output, _totalArea.x + 3, offsetY, _windowArea.width - 6, borderSize - 3, 2 );
-        ApplyTransform( _output, _totalArea.x + 2, shadowBottomEdge - 3, _windowArea.width - 4, 1, 3 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 3, offsetY, 1, borderSize - 3, 3 );
-        ApplyTransform( _output, _totalArea.x + 1, shadowBottomEdge - 2, _windowArea.width - 2, 1, 4 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 2, offsetY, 1, borderSize - 2, 4 );
-        ApplyTransform( _output, _totalArea.x, shadowBottomEdge - 1, _windowArea.width, 1, 5 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 1, offsetY, 1, borderSize - 1, 5 );
+        fheroes2::addGradientShadowForArea( _output, { _windowArea.x, _windowArea.y }, _windowArea.width, _windowArea.height, borderSize );
     }
 
     void StandardWindow::applyTextBackgroundShading( const Rect & roi )
