@@ -3245,7 +3245,7 @@ bool Battle::Interface::EventQuickCombat( Actions & actions )
 
 void Battle::Interface::startAutoCombat( const Unit & unit, Actions & actions )
 {
-    // TODO: remove these temporary assertion
+    // TODO: remove this temporary assertion
     assert( arena.CanToggleAutoCombat() && !arena.AutoCombatInProgress() );
 
     actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, unit.GetCurrentOrArmyColor() );
