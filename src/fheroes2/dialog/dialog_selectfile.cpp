@@ -474,7 +474,7 @@ namespace
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
                 }
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
-                    charInsertPos = fheroes2::getTextInputCursorPosition( textInput, filename, charInsertPos, le.getMouseCursorPos(), textInputRoi );
+                    charInsertPos = fheroes2::getTextInputCursorPosition( textInput, filename, true, charInsertPos, le.getMouseCursorPos(), textInputRoi );
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;

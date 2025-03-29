@@ -167,7 +167,7 @@ namespace
 
             _window->render();
 
-            renderInputArea();
+            _redrawInputArea();
 
             return true;
         }
@@ -183,7 +183,7 @@ namespace
 
             ++_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
         void removeCharacter()
@@ -201,7 +201,7 @@ namespace
 
             --_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
         void swapSign()
@@ -217,7 +217,7 @@ namespace
                     --_cursorPosition;
                 }
 
-                _output.render( renderInputArea() );
+                _renderInputArea();
 
                 return;
             }
@@ -225,20 +225,20 @@ namespace
             _info.insert( _info.begin(), '-' );
             ++_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
         void changeCursorState()
         {
             _isCursorVisible = !_isCursorVisible;
 
-            renderInputArea();
+            _renderInputArea();
         }
 
         void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, _cursorPosition, clickPosition, startPosRoi );
-            renderInputArea();
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, false, _cursorPosition, clickPosition, startPosRoi );
+            _renderInputArea();
         }
 
     private:
@@ -251,7 +251,7 @@ namespace
         size_t _cursorPosition{ 0 };
         fheroes2::TextInput _textUI;
 
-        fheroes2::Rect renderInputArea()
+        fheroes2::Rect _redrawInputArea()
         {
             const fheroes2::Rect & windowRoi = _window->activeArea();
             const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + inputAreaOffsetFromWindowTop, inputAreaSize.width,
@@ -273,6 +273,11 @@ namespace
                           windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - _textUI.height() ) / 2 + inputAreaBorders, _output );
 
             return outputRoi;
+        }
+
+        void _renderInputArea()
+        {
+            _output.render( _redrawInputArea() );
         }
     };
 
