@@ -3658,13 +3658,13 @@ namespace
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
-        fheroes2::showStandardTextMessage(
-            MP2::StringObject( objectType ),
-            _( "You enter the tent and see an old woman gazing into a magic gem. She looks up and says,\n\"In my travels, I have learned much in the way of arcane magic. A great oracle taught me his skill. I have the answer you seek.\"" ),
-            Dialog::OK );
-
         const Maps::Tile & tile = world.getTile( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
+
+        fheroes2::showStandardTextMessage(
+            std::string( MP2::StringObject( objectType ) ) + " (" + fheroes2::getTentColorName( getColorFromTile( tile ) ) + ")",
+            _( "You enter the tent and see an old woman gazing into a magic gem. She looks up and says,\n\"In my travels, I have learned much in the way of arcane magic. A great oracle taught me his skill. I have the answer you seek.\"" ),
+            Dialog::OK );
 
         kingdom.SetVisitTravelersTent( getColorFromTile( tile ) );
     }
