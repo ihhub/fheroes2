@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <string>
 #include <utility>
 
 #include "agg_image.h"
@@ -658,7 +659,21 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
+                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    {
+        if ( fullText.empty() || fullText.size() <= textInput.getOffsetX() ) {
+            return 0;
+        }
+
+        const std::string_view textToCheck = { fullText.data() + textInput.getOffsetX(), fullText.size() - textInput.getOffsetX() };
+        const int32_t textStartOffsetX = isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0;
+        return fheroes2::getTextInputCursorPosition( textToCheck, textInput.getFontType(), currentTextCursorPosition, pointerCursorOffset.x,
+                                                     textRoi.x + textStartOffsetX )
+               + textInput.getOffsetX();
+    }
+
+    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset )
     {
         if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {

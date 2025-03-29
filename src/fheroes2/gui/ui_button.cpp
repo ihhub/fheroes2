@@ -665,18 +665,33 @@ namespace fheroes2
             }
         }
 
-        for ( size_t i = 0; i < _button.size(); ++i ) {
+        const size_t buttonsCount = _button.size();
+
+        assert( buttonsCount == _value.size() );
+
+        for ( size_t i = 0; i < buttonsCount; ++i ) {
             if ( _button[i]->isEnabled() && le.MouseClickLeft( _button[i]->area() ) ) {
                 return _value[i];
             }
         }
 
-        for ( size_t i = 0; i < _button.size(); ++i ) {
+        if ( ( buttonsCount == 1 ) && ( _value[0] == Dialog::OK || _value[0] == Dialog::CANCEL ) && Game::HotKeyCloseWindow() ) {
+            // This dialog has only one OK or CANCEL button so allow to close it by any hotkey for these buttons.
+            // Reset the hotkey pressed state.
+            le.reset();
+            return _value[0];
+        }
+
+        for ( size_t i = 0; i < buttonsCount; ++i ) {
             if ( _button[i]->isEnabled() ) {
                 if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+                    // Reset the hotkey pressed state.
+                    le.reset();
                     return _value[i];
                 }
                 if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                    // Reset the hotkey pressed state.
+                    le.reset();
                     return _value[i];
                 }
             }

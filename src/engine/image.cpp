@@ -868,6 +868,37 @@ namespace fheroes2
         }
     }
 
+    void addGradientShadowForArea( Image & out, const Point & outPos, const int32_t areaWidth, const int32_t areaHeight, const int32_t shadowOffset )
+    {
+        if ( out.empty() || outPos.x < 0 || outPos.y < 0 || shadowOffset < 1 ) {
+            return;
+        }
+
+        // Render shadow at the left side of the area
+        int32_t offsetY = outPos.y + shadowOffset;
+        ApplyTransform( out, outPos.x - shadowOffset, offsetY, shadowOffset, 1, 5 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset, offsetY, 1, areaHeight, 5 );
+        ApplyTransform( out, outPos.x - shadowOffset + 1, offsetY, shadowOffset - 1, 1, 4 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset + 1, offsetY, 1, areaHeight - 4, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset + 2, offsetY, shadowOffset - 2, 1, 3 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset + 2, offsetY, 1, areaHeight - 6, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + 3, offsetY, shadowOffset - 3, areaHeight - shadowOffset - 3, 2 );
+
+        // Render shadow at the bottom side of the area
+        offsetY = outPos.y + areaHeight;
+        const int32_t shadowBottomEdge = outPos.y + areaHeight + shadowOffset;
+        ApplyTransform( out, outPos.x - shadowOffset + 3, offsetY, areaWidth - 6, shadowOffset - 3, 2 );
+        ApplyTransform( out, outPos.x - shadowOffset + 2, shadowBottomEdge - 3, areaWidth - 4, 1, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 3, offsetY, 1, shadowOffset - 3, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + 1, shadowBottomEdge - 2, areaWidth - 2, 1, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 2, offsetY, 1, shadowOffset - 2, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset, shadowBottomEdge - 1, areaWidth, 1, 5 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 1, offsetY, 1, shadowOffset, 5 );
+    }
+
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {

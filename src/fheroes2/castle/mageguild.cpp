@@ -191,10 +191,16 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
 
 void MageGuild::trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
-    if ( hero.HaveSpellBook() && guildLevel > 0 ) {
-        // This method will test the hero for compliance with the wisdom requirements
-        hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
+    if ( !hero.HaveSpellBook() ) {
+        return;
     }
+
+    if ( guildLevel < 1 ) {
+        return;
+    }
+
+    // This method will test the hero for compliance with the wisdom requirements
+    hero.AppendSpellsToBook( GetSpells( guildLevel, hasLibrary ) );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild )
