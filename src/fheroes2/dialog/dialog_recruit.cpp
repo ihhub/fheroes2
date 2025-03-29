@@ -490,7 +490,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 buttonReleaseRestore( monsterSwitchRight );
             }
 
-            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.isKeyPressed( fheroes2::Key::KEY_LEFT ) ) {
+            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i < upgrades.size() - 1 ) {
@@ -504,7 +504,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                 }
                 updateMonsterInfo = true;
             }
-            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.isKeyPressed( fheroes2::Key::KEY_RIGHT ) ) {
+            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i > 0 ) {
@@ -579,7 +579,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             redraw = true;
         }
-        else if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.isKeyPressed( fheroes2::Key::KEY_UP )
+        else if ( ( le.isMouseWheelUpInArea( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_UP )
                     || timedButtonUp.isDelayPassed() )
                   && result < max ) {
             ++result;
@@ -588,7 +588,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
             redraw = true;
         }
-        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.isKeyPressed( fheroes2::Key::KEY_DOWN )
+        else if ( ( le.isMouseWheelDownInArea( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DOWN )
                     || timedButtonDn.isDelayPassed() )
                   && result ) {
             --result;
@@ -610,6 +610,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             updateCurrentInfo();
 
             redraw = true;
+        }
+        else if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
+            break;
+        }
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            result = 0;
+            break;
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Recruit selected monsters." ), 0 );
@@ -649,15 +656,6 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             monsterSwitchRight.draw();
 
             display.render( windowActiveArea );
-        }
-
-        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) ) {
-            break;
-        }
-
-        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) ) {
-            result = 0;
-            break;
         }
     }
 
