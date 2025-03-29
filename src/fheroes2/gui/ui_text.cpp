@@ -296,16 +296,15 @@ namespace
         // Symbol width depends on font size and not on its color.
         static std::map<fheroes2::FontSize, int32_t> truncationSymbolWidth;
 
-        if ( auto iter = truncationSymbolWidth.find( fontType.size ); iter != truncationSymbolWidth.end() ) {
-            return iter->second;
+        auto [iter, isEmplaced] = truncationSymbolWidth.try_emplace( fontType.size, 0 );
+
+        if ( isEmplaced ) {
+            // Set the correct width value for the just emplaced element.
+            iter->second = getLineWidth( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ),
+                                         fheroes2::FontCharHandler( fontType ), true );
         }
 
-        auto [newIiter, isEmplaced] = truncationSymbolWidth.try_emplace( fontType.size, getLineWidth( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ),
-                                                                                                      static_cast<int32_t>( truncationSymbol.size() ),
-                                                                                                      fheroes2::FontCharHandler( fontType ), true ) );
-        assert( isEmplaced );
-
-        return newIiter->second;
+        return iter->second;
     }
 }
 
