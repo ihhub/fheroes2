@@ -316,6 +316,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
+    // shadow
+    if ( !isDefaultScreenSize ) {
+        fheroes2::addGradientShadowForArea( display, dst_pt, backSprite.width(), backSprite.height(), fheroes2::borderWidthPx );
+    }
+
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );

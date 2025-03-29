@@ -1283,9 +1283,7 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
         _captain.LoadDefaults( HeroBase::CAPTAIN, _race );
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
 
-        if ( GetLevelMageGuild() > 0 ) {
-            trainHeroInMageGuild( _captain );
-        }
+        trainHeroInMageGuild( _captain );
         break;
 
     case BUILD_SPEC:

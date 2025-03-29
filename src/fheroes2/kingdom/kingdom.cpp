@@ -605,8 +605,10 @@ void Kingdom::ApplyPlayWithStartingHero()
         // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {
             const bool patrol = hero->Modes( Heroes::PATROL );
+
             if ( hero->isValid() ) {
                 hero->Move2Dest( Maps::GetIndexFromAbsPoint( cp ) );
+                castle->trainHeroInMageGuild( *hero );
             }
             else {
                 hero->Dismiss( 0 );
@@ -623,13 +625,12 @@ void Kingdom::ApplyPlayWithStartingHero()
     }
 
     if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInFirstCastle ) {
-        // get first castle
         const Castle * first = castles.GetFirstCastle();
         if ( first == nullptr ) {
             first = castles.front();
         }
 
-        // If no heroes exist and at least one castle / town must be.
+        // If there are no heroes, then there must be at least one castle or town
         assert( first != nullptr );
 
         Heroes * hero = world.GetHeroForHire( first->GetRace() );

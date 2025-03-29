@@ -26,7 +26,6 @@
 #include <deque>
 #include <functional>
 #include <memory>
-#include <string>
 #include <string_view>
 #include <vector>
 
@@ -222,8 +221,8 @@ namespace fheroes2
 
     // Returns the character position number in the text.
     size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
-    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string & fullText, const size_t currentTextCursorPosition,
-                                       const Point & pointerCursorOffset, const Rect & textRoi );
+    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
+                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
