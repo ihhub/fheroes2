@@ -3222,18 +3222,11 @@ void Battle::Interface::EventShowOptions()
 
 bool Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actions )
 {
-    // TODO: remove these temporary assertions
-    assert( arena.CanToggleAutoCombat() );
-    assert( !arena.AutoCombatInProgress() );
-
     if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable the auto combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
         return false;
     }
 
-    actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, unit.GetCurrentOrArmyColor() );
-
-    humanturn_redraw = true;
-    humanturn_exit = true;
+    startAutoCombat( unit, actions );
 
     return true;
 }
@@ -3245,12 +3238,28 @@ bool Battle::Interface::EventQuickCombat( Actions & actions )
         return false;
     }
 
+    quickCombat( actions );
+
+    return true;
+}
+
+void Battle::Interface::startAutoCombat( const Unit & unit, Actions & actions )
+{
+    // TODO: remove these temporary assertion
+    assert( arena.CanToggleAutoCombat() && !arena.AutoCombatInProgress() );
+
+    actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, unit.GetCurrentOrArmyColor() );
+
+    humanturn_redraw = true;
+    humanturn_exit = true;
+}
+
+void Battle::Interface::quickCombat( Actions & actions )
+{
     actions.emplace_back( Command::QUICK_COMBAT );
 
     humanturn_redraw = true;
     humanturn_exit = true;
-
-    return true;
 }
 
 void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )
@@ -3294,11 +3303,12 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;
         }
-        if ( ( le.MouseClickLeft( autoCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) )
-             && EventStartAutoCombat( unit, actions ) ) {
+        if ( le.MouseClickLeft( autoCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
+            startAutoCombat( unit, actions );
             return;
         }
-        if ( ( le.MouseClickLeft( quickCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) && EventQuickCombat( actions ) ) {
+        if ( le.MouseClickLeft( quickCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
+            quickCombat( actions );
             return;
         }
 
