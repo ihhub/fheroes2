@@ -430,8 +430,8 @@ namespace Battle
         int GetBattleCursor( std::string & statusMsg ) const;
         int GetBattleSpellCursor( std::string & statusMsg ) const;
 
-        void startAutoCombat( const Unit & unit, Actions & actions );
-        void quickCombat( Actions & actions );
+        void _startAutoCombat( const Unit & unit, Actions & actions );
+        void _quickCombat( Actions & actions );
 
         Arena & arena;
         Dialog::FrameBorder border;

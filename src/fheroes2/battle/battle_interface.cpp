@@ -3226,7 +3226,7 @@ bool Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actio
         return false;
     }
 
-    startAutoCombat( unit, actions );
+    _startAutoCombat( unit, actions );
 
     return true;
 }
@@ -3238,12 +3238,12 @@ bool Battle::Interface::EventQuickCombat( Actions & actions )
         return false;
     }
 
-    quickCombat( actions );
+    _quickCombat( actions );
 
     return true;
 }
 
-void Battle::Interface::startAutoCombat( const Unit & unit, Actions & actions )
+void Battle::Interface::_startAutoCombat( const Unit & unit, Actions & actions )
 {
     // TODO: remove this temporary assertion
     assert( arena.CanToggleAutoCombat() && !arena.AutoCombatInProgress() );
@@ -3254,7 +3254,7 @@ void Battle::Interface::startAutoCombat( const Unit & unit, Actions & actions )
     humanturn_exit = true;
 }
 
-void Battle::Interface::quickCombat( Actions & actions )
+void Battle::Interface::_quickCombat( Actions & actions )
 {
     actions.emplace_back( Command::QUICK_COMBAT );
 
@@ -3304,11 +3304,11 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
             return;
         }
         if ( le.MouseClickLeft( autoCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
-            startAutoCombat( unit, actions );
+            _startAutoCombat( unit, actions );
             return;
         }
         if ( le.MouseClickLeft( quickCombatButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
-            quickCombat( actions );
+            _quickCombat( actions );
             return;
         }
 
