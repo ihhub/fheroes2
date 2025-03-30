@@ -237,7 +237,7 @@ namespace
 
         void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, false, _cursorPosition, clickPosition, startPosRoi );
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, false, clickPosition, startPosRoi );
             _renderInputArea();
         }
 
@@ -266,7 +266,7 @@ namespace
             }
 
             _textUI.set( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            _textUI.setCursorPosition( _cursorPosition );
+            _textUI.setCursorPosition( static_cast<uint32_t>( _cursorPosition ) );
             _textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
 
             _textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,

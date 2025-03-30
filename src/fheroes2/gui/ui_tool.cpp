@@ -659,47 +659,35 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
-                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const Point & pointerCursorOffset, const Rect & textRoi )
     {
-        if ( fullText.empty() || fullText.size() <= textInput.getOffsetX() ) {
+        if ( textInput.empty() ) {
             return 0;
         }
+        const int32_t textStartOffsetX = textRoi.x + ( isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0 )
+                                         + ( textInput.getTextBeginPos() == 0 ? 0 : textInput.getSingleTruncationSymbolWidth() );
 
-        const std::string_view textToCheck = { fullText.data() + textInput.getOffsetX(), fullText.size() - textInput.getOffsetX() };
-        const int32_t textStartOffsetX = isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0;
-        return fheroes2::getTextInputCursorPosition( textToCheck, textInput.getFontType(), currentTextCursorPosition, pointerCursorOffset.x,
-                                                     textRoi.x + textStartOffsetX )
-               + textInput.getOffsetX();
-    }
-
-    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset )
-    {
-        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
+        if ( pointerCursorOffset.x <= textStartOffsetX ) {
             // The text is empty or mouse cursor position is to the left of input field.
             return 0;
         }
 
-        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
+        const int32_t maxOffset = pointerCursorOffset.x - textStartOffsetX;
+        const std::string text = textInput.getVisibleText();
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
-        const FontCharHandler charHandler( fontType );
+        const FontCharHandler charHandler( textInput.getFontType() );
 
         for ( size_t i = 0; i < textSize; ++i ) {
-            positionOffset += charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
+            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
 
-            if ( positionOffset > maxOffset ) {
-                return i;
+            if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {
+                return i + textInput.getTextBeginPos();
             }
-
-            // If the mouse cursor is to the right of the current text cursor position we take its width into account.
-            if ( i == currentTextCursorPosition ) {
-                positionOffset += charHandler.getWidth( '_' );
-            }
+            positionOffset += currentCharWidth;
         }
 
-        return textSize;
+        return textSize + textInput.getTextBeginPos();
     }
 
     size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )

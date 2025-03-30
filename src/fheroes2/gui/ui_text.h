@@ -274,23 +274,98 @@ namespace fheroes2
     class TextInput final : public Text
     {
     public:
-        using Text::Text;
+        // TextInput() = delete;
+        TextInput() = default;
 
-        void setCursorPosition( const size_t position )
+        explicit TextInput( const FontType fontType )
+            : Text( {}, fontType )
         {
-            _cursorPosition = position;
+            _keepLineTrailingSpaces = true;
         }
+
+        TextInput( std::string text, const FontType fontType )
+            : Text( std::move( text ), fontType )
+            , _textLength( static_cast<int32_t>( _text.size() ) )
+        {
+            _keepLineTrailingSpaces = true;
+        }
+
+        TextInput( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
+            : Text( std::move( text ), fontType )
+            , _textLength( static_cast<int32_t>( _text.size() ) )
+        {
+            _language = language;
+            _keepLineTrailingSpaces = true;
+        }
+
+        // This class should not allow to set font type.
+        // void set( std::string, const FontType ) = delete;
+        // void set( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language ) = delete;
+
+        void set( std::string text, const FontType fontType )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+            _language = std::nullopt;
+        }
+
+        void set( std::string text, const int32_t cursorPosition )
+        {
+            _text = std::move( text );
+            _cursorPosition = cursorPosition;
+            _textLength = static_cast<int32_t>( _text.size() );
+
+            _updateCursorArea();
+        }
+
+        int32_t width() const override;
+
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+
+        void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
+        void drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const;
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
-        size_t getOffsetX() const
+        void setAutoFitToOneRow( const int32_t maxWidth )
         {
-            return _textOffsetX;
+            _autoFitToWidth = maxWidth;
         }
 
+        void setCursorPosition( const int32_t position )
+        {
+            if ( _cursorPosition != position ) {
+                _cursorPosition = position;
+
+                _updateCursorArea();
+            }
+        }
+
+        int32_t getTextBeginPos() const
+        {
+            return _textBeginPos;
+        }
+
+        const fheroes2::Rect & getCursorArea() const
+        {
+            return _cursorArea;
+        }
+
+        std::string getVisibleText() const
+        {
+            return { ( _text.data() ) + _textBeginPos, static_cast<size_t>( _textLength ) };
+        }
+
+        int32_t getSingleTruncationSymbolWidth() const;
+
     private:
-        size_t _cursorPosition{ 0 };
-        size_t _textOffsetX{ 0 };
+        void _updateCursorArea();
+
+        fheroes2::Rect _cursorArea;
+        int32_t _cursorPosition{ 0 };
+        int32_t _textBeginPos{ 0 };
+        int32_t _textLength{ 0 };
+        int32_t _autoFitToWidth{ -1 };
     };
 
     class MultiFontText final : public TextBase
