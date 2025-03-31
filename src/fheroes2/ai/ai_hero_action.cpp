@@ -663,7 +663,7 @@ namespace
         }
         else {
             const Artifact & art = getArtifactFromTile( tile );
-                
+
             if ( art.isValid() && !hero.PickupArtifact( art ) ) {
                 gold = GoldInsteadArtifact( objectType );
             }
