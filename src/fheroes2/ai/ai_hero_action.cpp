@@ -646,60 +646,67 @@ namespace
         Kingdom & kingdom = hero.GetKingdom();
 
         if ( tile.isWater() ) {
-            if ( gold ) {
-                const Artifact & art = getArtifactFromTile( tile );
-
-                if ( art.isValid() && !hero.PickupArtifact( art ) )
-                    gold = GoldInsteadArtifact( objectType );
-            }
-        }
-        else {
             const Artifact & art = getArtifactFromTile( tile );
 
-            if ( gold ) {
-                const uint32_t experience = gold > 500 ? gold - 500 : 500;
-                const Heroes::Role role = hero.getAIRole();
-                const int32_t kingdomGold = kingdom.GetFunds().gold;
-
-                uint32_t chance = 0;
-                if ( role == Heroes::Role::SCOUT || role == Heroes::Role::COURIER ) {
-                    // These roles usually don't choose experience. Make AI rich!
-                    if ( kingdomGold > 10000 && experience >= 1500 ) {
-                        chance = 10;
-                    }
-                }
-                else if ( role == Heroes::Role::CHAMPION ) {
-                    // If AI is extremely low on gold consider taking it
-                    if ( kingdomGold < 3000 ) {
-                        // Safeguard the calculation since we're working with unsigned values
-                        chance = ( std::max( experience, 500U ) - 500 ) / 15;
-                    }
-                    else {
-                        // Otherwise Champion always picks experience
-                        chance = 100;
-                    }
-                }
-                else if ( kingdomGold < 3000 ) {
-                    chance = ( role == Heroes::Role::FIGHTER && experience >= 1500 ) ? 10 : 0;
-                }
-                else {
-                    uint32_t value = ( experience > 500 ) ? experience - 500 : 0;
-                    if ( role == Heroes::Role::FIGHTER ) {
-                        value += 500;
-                    }
-                    chance = value / 15; // 33% for every 500 experience
-                }
-
-                if ( chance ) {
+            if ( art.isValid() && !hero.PickupArtifact( art ) ) {
+                gold = GoldInsteadArtifact( objectType );
+                if ( gold ) {
+                    const uint32_t chance = 50;
                     const uint32_t randomRoll = Rand::Get( 1, 100 );
+                    const uint32_t experience = gold > 500 ? gold - 500 : 500;
                     if ( randomRoll <= chance ) {
                         gold = 0;
                         hero.IncreaseExperience( experience );
                     }
                 }
             }
-            else if ( art.isValid() && !hero.PickupArtifact( art ) ) {
+        }
+        else {
+            const Artifact & art = getArtifactFromTile( tile );
+                
+            if ( art.isValid() && !hero.PickupArtifact( art ) ) {
                 gold = GoldInsteadArtifact( objectType );
+            }
+
+            uint32_t chance = 50;
+            const uint32_t experience = gold > 500 ? gold - 500 : 500;
+            const Heroes::Role role = hero.getAIRole();
+            const int32_t kingdomGold = kingdom.GetFunds().gold;
+
+            if ( role == Heroes::Role::SCOUT || role == Heroes::Role::COURIER ) {
+                // These roles usually don't choose experience. Make AI rich!
+                if ( kingdomGold > 10000 && experience >= 1500 ) {
+                    chance = 10;
+                }
+            }
+            else if ( role == Heroes::Role::CHAMPION ) {
+                // If AI is extremely low on gold consider taking it
+                if ( kingdomGold < 3000 ) {
+                    // Safeguard the calculation since we're working with unsigned values
+                    chance = ( std::max( experience, 500U ) - 500 ) / 15;
+                }
+                else {
+                    // Otherwise Champion always picks experience
+                    chance = 100;
+                }
+            }
+            else if ( kingdomGold < 3000 ) {
+                chance = ( role == Heroes::Role::FIGHTER && experience >= 1500 ) ? 10 : 0;
+            }
+            else {
+                uint32_t value = ( experience > 500 ) ? experience - 500 : 0;
+                if ( role == Heroes::Role::FIGHTER ) {
+                    value += 500;
+                }
+                chance = value / 15; // 33% for every 500 experience
+            }
+
+            if ( chance ) {
+                const uint32_t randomRoll = Rand::Get( 1, 100 );
+                if ( randomRoll <= chance ) {
+                    gold = 0;
+                    hero.IncreaseExperience( experience );
+                }
             }
         }
 
