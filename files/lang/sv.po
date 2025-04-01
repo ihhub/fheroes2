@@ -7245,7 +7245,7 @@ msgid ""
 "ore per day."
 msgstr ""
 "Du tar kontroll över en malmgruva. Den kommer att förse dig med %{count} "
-"enhet av malm per dag."
+"enheter av malm per dag."
 
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
