@@ -2672,7 +2672,7 @@ msgid ""
 msgstr ""
 "Vallgraven saktar ner och försvagar anfallande trupper. En varelse som "
 "kliver i vallgraven avslutar sin tur. En varelse som befinner sig i vallgraven får sitt Försvar sänkt med "
-"%{count} och kan endast förflytta sig en ruta inom vallgrave."
+"%{count} och kan endast förflytta sig en ruta inom vallgraven."
 
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
