@@ -30,6 +30,7 @@
 
     <application
         android:allowBackup="true"
+        android:appCategory="game"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/full_backup_content"
         android:hardwareAccelerated="true"
