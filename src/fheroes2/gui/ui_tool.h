@@ -226,7 +226,10 @@ namespace fheroes2
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value );
+    // Updates `valueBuf` based on keyboard input relevant to modifying an integer. Returns a non-empty `std::optional` instance containing the entered
+    // value if this value can be interpreted as modified, otherwise returns an empty instance. If a non-empty instance was returned, then its value is
+    // always valid (falls within the range [min, max]). See the implementation for details.
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf );
 
     // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
