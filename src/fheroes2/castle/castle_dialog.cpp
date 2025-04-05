@@ -316,7 +316,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y + 3, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y, bar.width() - 16 * 2, 0 } );
 
     // Next castle button.
     fheroes2::Button buttonNextCastle( statusBarPosition.x + bar.width(), statusBarPosition.y, ICN::SMALLBAR, 3, 4 );

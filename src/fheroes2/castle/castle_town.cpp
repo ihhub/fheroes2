@@ -463,7 +463,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, statusBarWidth - 16 * 2, 0 } );
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, statusBarWidth - 16 * 2, 0 } );
 
     // button next castle
     fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );

@@ -46,7 +46,10 @@ void StatusBar::ShowMessage( std::string msg )
 
     _prevMessage = msg;
 
+    // Create text with normal white font (with shadow)
     auto text = std::make_unique<fheroes2::Text>( std::move( msg ), fheroes2::FontType::normalWhite() );
+
+    // Calculate the inner area where text should be drawn
     text->fitToOneRow( _roi.width );
 
     const int32_t textWidth = text->width();
@@ -54,7 +57,8 @@ void StatusBar::ShowMessage( std::string msg )
 
     update( std::move( text ) );
 
-    draw( messageRoi.x, messageRoi.y );
+    // Draw text aligned and cutoff with the ROI, accounting for the +3 ROI offset
+    drawRoi( messageRoi.x, messageRoi.y + 3, messageRoi );
 
     fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
     _prevMessageRoi = messageRoi;
