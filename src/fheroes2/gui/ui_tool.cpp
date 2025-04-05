@@ -23,12 +23,13 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <charconv>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
