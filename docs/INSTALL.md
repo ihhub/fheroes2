@@ -177,7 +177,10 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 | All other cases | `script/homm2/extract_homm2_resources.sh` |
 
 > [!NOTE]
-> As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game) from the original game directory to `~/.fheroes2`.
+> As an alternative to the previous step, you can manually copy the subdirectories
+> `ANIM`, `DATA`, `MAPS` and `MUSIC`
+> (some of them may be missing depending on the version of the original game) from
+> the original game directory to `~/.fheroes2`.
 >
 > You'll also need to copy [ressurrection.2hd](https://github.com/ihhub/fheroes2/blob/master/files/data/resurrection.h2d) to `~/.fheroes2/data/files/`.
 
