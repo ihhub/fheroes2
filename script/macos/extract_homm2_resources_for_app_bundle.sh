@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -34,10 +34,6 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Define user data directory
 USER_DATA_DIR="${HOME}/.fheroes2"
-
-# Create necessary directories
-# echo "Creating directory structure..."
-# mkdir -p "${USER_DATA_DIR}/files/data"
 
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
