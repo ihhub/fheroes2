@@ -41,8 +41,8 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 ### Windows installer
 
-* Download one of the following Windows installer packages:  
-  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2_installer.exe) or  
+* Download one of the following Windows installer packages:
+  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2_installer.exe) or
   [**Windows x86 (32-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2_installer.exe)
 
 * After downloading the installer, launch it and follow the instructions.
@@ -64,8 +64,8 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 
 ### Windows ZIP archive
 
-* Download one of the following Windows ZIP archives:  
-  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2.zip) or  
+* Download one of the following Windows ZIP archives:
+  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2.zip) or
   [**Windows x86 (32-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2.zip)
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice.
@@ -83,7 +83,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 If you see complaints about missing DLLs when running fheroes2, then you may need to install the Microsoft Visual C++ redistributable
 package. You can download it using the following URLs:
 
-[**https://aka.ms/vs/17/release/vc_redist.x64.exe**](https://aka.ms/vs/17/release/vc_redist.x64.exe) - for 64-bit x64 fheroes2 builds;  
+[**https://aka.ms/vs/17/release/vc_redist.x64.exe**](https://aka.ms/vs/17/release/vc_redist.x64.exe) - for 64-bit x64 fheroes2 builds;
 [**https://aka.ms/vs/17/release/vc_redist.x86.exe**](https://aka.ms/vs/17/release/vc_redist.x86.exe) - for 32-bit x86 fheroes2 builds.
 
 <a name="macos"></a>
@@ -125,7 +125,7 @@ Follow the [**instructions below**](#gathering-game-resources) to gather resourc
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-on-macos)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl2.sh` from
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run `brew bundle` from
   the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 Follow the [**instructions below**](#gathering-game-resources) to gather resources necessary for fheroes2 to function as expected.
@@ -312,8 +312,8 @@ You can get more info about resource packaging by running `game-data-packager he
 
 ### Linux ZIP archive
 
-* Download one of the following Linux ZIP archives:  
-  [**Linux x86-64**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or  
+* Download one of the following Linux ZIP archives:
+  [**Linux x86-64**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or
   [**Linux ARM64**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL2.zip)
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
