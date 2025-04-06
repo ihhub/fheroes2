@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
@@ -28,10 +28,31 @@ if [[ "${PLATFORM_NAME}" != "Darwin" ]]; then
     exit 1
 fi
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Ensure the target directory exists
+TARGET_DIR="${HOME}/Library/Application Support/fheroes2"
+mkdir -p "${TARGET_DIR}"
+
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
 else
-    read "HOMM2_PATH?Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/homm2 or /tmp/installer.exe): "
+    # Use read with -e flag for built-in tab completion
+    read -e -p "Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/homm2 or /tmp/installer.exe): " HOMM2_PATH
 fi
 
-zsh "$(dirname "${(%):-%x}")/extract_homm2_resources.sh" "$HOMM2_PATH" "${HOME}/Library/Application Support/fheroes2"
+# Expand the path to handle ~ and relative paths
+if [[ "${HOMM2_PATH}" == ~* ]]; then
+    # Use bash's built-in tilde expansion
+    HOMM2_PATH="${HOMM2_PATH/#\~/$HOME}"
+fi
+
+# Verify the path exists
+if [[ ! -e "${HOMM2_PATH}" ]]; then
+    echo "Error: The specified path does not exist: ${HOMM2_PATH}"
+    exit 1
+fi
+
+# Call the resource extraction script with proper paths
+"${SCRIPT_DIR}/../homm2/extract_homm2_resources.sh" "${HOMM2_PATH}" "${TARGET_DIR}"
