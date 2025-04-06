@@ -177,6 +177,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 | All other cases | `script/homm2/extract_homm2_resources.sh` |
 
 #### Manual resource copying
+
 You can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game)
 from the original game directory to `~/.fheroes2`.
 
