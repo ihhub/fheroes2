@@ -835,7 +835,7 @@ namespace fheroes2
                 return {};
             }
 
-            valueBuf.insert( 0, 1, '-' );
+            valueBuf = "-";
 
             return zeroBufValue;
         }
