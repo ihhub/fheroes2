@@ -116,10 +116,11 @@ echo_stage "[3/3] copying game resources"
 
 cd "$DEST_PATH"
 
-[[ ! -d anim ]]  && mkdir anim
-[[ ! -d data ]]  && mkdir data
-[[ ! -d maps ]]  && mkdir maps
-[[ ! -d music ]] && mkdir music
+[[ ! -d anim ]]         && mkdir anim
+[[ ! -d data ]]         && mkdir data
+[[ ! -d maps ]]         && mkdir maps
+[[ ! -d music ]]        && mkdir music
+[[ ! -d files/data ]]   && mkdir -p files/data
 
 [[ -d "$HOMM2_PATH/HEROES2/ANIM" ]] && cp -r "$HOMM2_PATH/HEROES2/ANIM"/* anim
 [[ -d "$HOMM2_PATH/ANIM" ]]         && cp -r "$HOMM2_PATH/ANIM"/*         anim
