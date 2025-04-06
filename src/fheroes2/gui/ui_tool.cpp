@@ -812,37 +812,18 @@ namespace fheroes2
     {
         assert( min <= max );
 
-        const auto parseValue = [min, max, &valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
-            if ( valueBuf.empty() ) {
-                return {};
-            }
-
-            if ( valueBuf == "-" ) {
-                return {};
-            }
-
-            try {
-                if ( const int32_t value = std::stoi( valueBuf ); value == std::clamp( value, min, max ) ) {
-                    return value;
-                }
-            }
-            catch ( std::out_of_range & ) {
-                return {};
-            }
-
-            return {};
-        };
-
         const LocalEvent & le = LocalEvent::Get();
 
         if ( !le.isAnyKeyPressed() ) {
             return {};
         }
 
+        const int32_t zeroBufValue = std::clamp( 0, min, max );
+
         if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
             valueBuf.clear();
 
-            return std::clamp( 0, min, max );
+            return zeroBufValue;
         }
 
         if ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) {
@@ -850,13 +831,13 @@ namespace fheroes2
                 return {};
             }
 
-            if ( !valueBuf.empty() ) {
+            if ( !std::all_of( valueBuf.begin(), valueBuf.end(), []( const char ch ) { return ( ch == '0' ); } ) ) {
                 return {};
             }
 
-            valueBuf.push_back( '-' );
+            valueBuf.insert( 0, 1, '-' );
 
-            return parseValue();
+            return zeroBufValue;
         }
 
         if ( const std::optional<char> newDigit = [&le]() -> std::optional<char> {
@@ -877,7 +858,26 @@ namespace fheroes2
              newDigit ) {
             valueBuf.push_back( *newDigit );
 
-            return parseValue();
+            const std::optional<int32_t> value = [&valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
+                try {
+                    return std::stoi( valueBuf );
+                }
+                catch ( std::out_of_range & ) {
+                    return {};
+                }
+            }();
+
+            if ( !value || ( min <= 0 && value < min ) || ( max >= 0 && value > max ) ) {
+                valueBuf.pop_back();
+
+                return {};
+            }
+
+            if ( value == std::clamp( *value, min, max ) ) {
+                return value;
+            }
+
+            return {};
         }
 
         return {};
