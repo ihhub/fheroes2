@@ -163,14 +163,17 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 * If you have a legally purchased copy of the original game, run the extract resources script which will prompt you to enter
   the location of the original game, and will extract all the necessary resource files. The script can be run from the following paths depending on
   how you installed fheroes2:
-  * `fheroes2-extract-resources` if you used a package manager (MacPorts or Homebrew);
-  * `script/homm2/extract_homm2_resources_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `script/homm2/extract_homm2_resources.sh` for all other cases.
 
-* As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
-  be missing depending on the version of the original game) from the original game directory to
-  * `~/Library/Application Support/fheroes2` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `~/.fheroes2` for all other cases.
+| Installation Method | Script |
+|--------|--------|
+| If you used a package manager (MacPorts or Homebrew) | `fheroes2-extract-resources` |
+| If you built from source using the [**macOS native app**](#macos-native-app) method | `script/macos/extract_homm2_resources_for_app_bundle.sh` |
+| All other cases | `script/homm2/extract_homm2_resources.sh` |
+
+> [!NOTE]
+> As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game) from the original game directory to `~/.fheroes2`.
+>
+> You'll also need to copy [ressurrection.2hd](https://github.com/ihhub/fheroes2/blob/master/files/data/resurrection.h2d) to `~/.fheroes2/data/files/`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
