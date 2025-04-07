@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2025                                             #
+#   Copyright (C) 2021 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -116,11 +116,10 @@ echo_stage "[3/3] copying game resources"
 
 cd "$DEST_PATH"
 
-[[ ! -d anim ]]         && mkdir anim
-[[ ! -d data ]]         && mkdir data
-[[ ! -d maps ]]         && mkdir maps
-[[ ! -d music ]]        && mkdir music
-[[ ! -d files/data ]]   && mkdir -p files/data
+[[ ! -d anim ]]  && mkdir anim
+[[ ! -d data ]]  && mkdir data
+[[ ! -d maps ]]  && mkdir maps
+[[ ! -d music ]] && mkdir music
 
 [[ -d "$HOMM2_PATH/HEROES2/ANIM" ]] && cp -r "$HOMM2_PATH/HEROES2/ANIM"/* anim
 [[ -d "$HOMM2_PATH/ANIM" ]]         && cp -r "$HOMM2_PATH/ANIM"/*         anim

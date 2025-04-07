@@ -33,7 +33,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Define user data directory
-USER_DATA_DIR="${HOME}/.fheroes2"
+USER_DATA_DIR="${HOME}/Library/Application Support/fheroes2"
 
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
@@ -57,11 +57,5 @@ fi
 # Call the resource extraction script for user data directory
 echo "Extracting resources to user data directory..."
 "${SCRIPT_DIR}/../homm2/extract_homm2_resources.sh" "${HOMM2_PATH}" "${USER_DATA_DIR}"
-
-# Copy the h2d files
-echo "Copying h2d files..."
-if [[ -d "${REPO_ROOT}/files/data" ]]; then
-    cp "${REPO_ROOT}/files/data/"*.h2d "${USER_DATA_DIR}/files/data/"
-fi
 
 echo "Resource extraction complete. Files have been copied to: ${USER_DATA_DIR}"

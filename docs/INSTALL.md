@@ -178,10 +178,12 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 
 #### Manual resource copying
 
-You can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game)
-from the original game directory to `~/.fheroes2`.
+Alternatively, you may manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game)
 
-You'll also need to copy [ressurrection.2hd](https://github.com/ihhub/fheroes2/blob/master/files/data/resurrection.h2d) to `~/.fheroes2/data/files/`.
+| Installation Method | Destination |
+|--------|--------|
+| built from source using the [**macOS native app**](#macos-native-app) | `~/Library/Application Support/fheroes2` |
+| All other cases | `~/.fheroes2` |
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
