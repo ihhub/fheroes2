@@ -84,7 +84,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version.bat` script supplied in the ZIP archive.
 
-#### Troubleshooting missing Microsoft Visual C++
+#### Troubleshooting missing Microsoft Visual C++ DLLs
 
 If you see complaints about missing DLLs when running fheroes2, then you may need to install the Microsoft Visual C++ redistributable package.
 
