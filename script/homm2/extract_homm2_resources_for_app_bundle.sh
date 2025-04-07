@@ -30,7 +30,6 @@ fi
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Define user data directory
 USER_DATA_DIR="${HOME}/Library/Application Support/fheroes2"
@@ -56,6 +55,6 @@ fi
 
 # Call the resource extraction script for user data directory
 echo "Extracting resources to user data directory..."
-"${SCRIPT_DIR}/../homm2/extract_homm2_resources.sh" "${HOMM2_PATH}" "${USER_DATA_DIR}"
+"${SCRIPT_DIR}/extract_homm2_resources.sh" "${HOMM2_PATH}" "${USER_DATA_DIR}"
 
 echo "Resource extraction complete. Files have been copied to: ${USER_DATA_DIR}"
