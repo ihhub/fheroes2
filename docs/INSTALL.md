@@ -145,7 +145,7 @@ Follow the [**instructions below**](#gathering-game-resources) to gather resourc
 * Install the required dependencies using the provided Brewfile:
 
 ```sh
-brew bundle --file script/macos/Brewfile.native_app
+brew bundle --file script/macos/Brewfile.app_bundle
 ```
 
 * Download the source and compile with the `-DMACOS_APP_BUNDLE=ON` option (if using CMake) or using the following command (with make):

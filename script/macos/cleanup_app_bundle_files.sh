@@ -48,7 +48,4 @@ rm -rf "${HOME}/Library/Preferences/fheroes2"
 echo "Removing application support directory..."
 rm -rf "${HOME}/Library/Application Support/fheroes2"
 
-echo "Removing application bundle..."
-rm -rf "${REPO_ROOT}/fheroes2.app"
-
 echo "Cleanup complete"
