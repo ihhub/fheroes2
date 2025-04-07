@@ -33,13 +33,13 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 echo "The following directories will be removed:"
 echo "1. ${HOME}/Library/Preferences/fheroes2"
-[[ -d "${HOME}/Library/Preferences/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Preferences/fheroes2" | wc -l) files"
+[[ -d "${HOME}/Library/Preferences/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Preferences/fheroes2" ! -type d | wc -l) files"
 
 echo "2. ${HOME}/Library/Application Support/fheroes2"
-[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Application Support/fheroes2" | wc -l) files"
+[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Application Support/fheroes2" ! -type d | wc -l) files"
 
 echo "3. ${REPO_ROOT}/fheroes2.app"
-[[ -d "${REPO_ROOT}/fheroes2.app" ]] && echo "   - Contains $(ls -A "${REPO_ROOT}/fheroes2.app" | wc -l) files"
+[[ -d "${REPO_ROOT}/fheroes2.app" ]] && echo "   - Contains $(ls -A "${REPO_ROOT}/fheroes2.app" ! -type d | wc -l) files"
 echo
 
 echo "Removing preferences directory..."
