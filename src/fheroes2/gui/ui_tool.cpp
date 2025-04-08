@@ -202,7 +202,7 @@ namespace fheroes2
         _isHidden = false;
     }
 
-    void MovableText::drawRoi( const int32_t x, const int32_t y, const Rect & roi )
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
 

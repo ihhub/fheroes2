@@ -58,7 +58,7 @@ void StatusBar::ShowMessage( std::string msg )
     update( std::move( text ) );
 
     // Draw text aligned and cutoff with the ROI, accounting for the +3 ROI offset
-    drawRoi( messageRoi.x, messageRoi.y + 3, messageRoi );
+    drawInRoi( messageRoi.x, messageRoi.y + 3, messageRoi );
 
     fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
     _prevMessageRoi = messageRoi;
