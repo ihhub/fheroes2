@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# This script cleans up fheroes2 application bundle files from the user's home directory.
-# It removes:
-#   - Preferences directory: ~/Library/Preferences/fheroes2
-#   - Application Support directory: ~/Library/Application Support/fheroes2
-# The script will show what will be removed and ask for confirmation unless -y/--yes is provided.
-# It exits early if no target directories exist.
-
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2025                                                    #
@@ -26,6 +19,14 @@
 #   Free Software Foundation, Inc.,                                       #
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
+
+# This script cleans up fheroes2 application bundle files from the user's home directory.
+# It removes:
+#   - Preferences directory: ~/Library/Preferences/fheroes2
+#   - Application Support directory: ~/Library/Application Support/fheroes2
+# The script will show what will be removed and ask for confirmation unless -y/--yes is provided.
+# It exits early if no target directories exist.
+
 set -e
 
 PLATFORM_NAME="$(uname 2> /dev/null)"
