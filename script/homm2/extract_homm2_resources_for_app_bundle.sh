@@ -20,6 +20,18 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+# Purpose: This script extracts resources from a Heroes of Might and Magic II
+# directory or installer and copies them to the appropriate location for the fheroes2
+# macOS app bundle.
+#
+# Usage: ./extract_homm2_resources_for_app_bundle.sh [HOMM2_PATH]
+#   HOMM2_PATH: (Optional) Path to the HoMM2 installation directory or installer package.
+#               If not provided, the script will interactively prompt for the path.
+#
+# Example: ./extract_homm2_resources_for_app_bundle.sh /path/to/homm2
+#
+# Note: This script must be run on a macOS system as it is designed for macOS app bundle.
+
 set -e
 
 PLATFORM_NAME="$(uname 2> /dev/null)"
@@ -27,12 +39,6 @@ if [[ "${PLATFORM_NAME}" != "Darwin" ]]; then
     echo "This script must be run on a macOS host"
     exit 1
 fi
-
-# Get the directory where this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Define user data directory
-USER_DATA_DIR="${HOME}/Library/Application Support/fheroes2"
 
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
@@ -52,6 +58,12 @@ if [[ ! -e "${HOMM2_PATH}" ]]; then
     echo "Error: The specified path does not exist: ${HOMM2_PATH}"
     exit 1
 fi
+
+# Define user data directory
+USER_DATA_DIR="${HOME}/Library/Application Support/fheroes2"
+
+# Get the directory where this script is located
+SCRIPT_DIR=$(dirname "$0")
 
 # Call the resource extraction script for user data directory
 echo "Extracting resources to user data directory..."
