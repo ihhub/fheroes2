@@ -187,9 +187,13 @@ Alternatively, you may manually copy the subdirectories `ANIM`, `DATA`, `MAPS` a
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
-  * `fheroes2-install-demo` if you used a package manager (MacPorts or Homebrew);
-  * `script/demo/download_demo_version_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `script/demo/download_demo_version.sh` for all other cases.
+
+| Installation Method | Script |
+|--------|--------|
+| If you used a package manager (MacPorts or Homebrew) | `fheroes2-install-demo` |
+| If you built from source using the [**macOS native app**](#macos-native-app) method | `script/demo/download_demo_version_for_app_bundle.sh` |
+| All other cases | `script/demo/download_demo_version.sh` |
+
 
 <a name="linux"></a>
 
