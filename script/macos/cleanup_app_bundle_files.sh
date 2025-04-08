@@ -36,11 +36,7 @@ echo "1. ${HOME}/Library/Preferences/fheroes2"
 [[ -d "${HOME}/Library/Preferences/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Preferences/fheroes2" ! -type d | wc -l) files"
 
 echo "2. ${HOME}/Library/Application Support/fheroes2"
-[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Application Support/fheroes2" ! -type d | wc -l) files"
-
-echo "3. ${REPO_ROOT}/fheroes2.app"
-[[ -d "${REPO_ROOT}/fheroes2.app" ]] && echo "   - Contains $(ls -A "${REPO_ROOT}/fheroes2.app" ! -type d | wc -l) files"
-echo
+[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Application Support/fheroes2" | wc -l) files"
 
 echo "Removing preferences directory..."
 rm -rf "${HOME}/Library/Preferences/fheroes2"
