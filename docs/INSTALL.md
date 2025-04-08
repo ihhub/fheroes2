@@ -143,6 +143,12 @@ Follow the [**instructions below**](#gathering-game-resources) to gather resourc
 
 ### macOS native app
 
+* Install the required dependencies using the provided Brewfile:
+
+```sh
+brew bundle --file script/macos/Brewfile.app_bundle
+```
+
 * Download the source and compile with the `-DMACOS_APP_BUNDLE=ON` option (if using CMake) or using the following command (with make):
 
 ```sh
@@ -164,20 +170,30 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 * If you have a legally purchased copy of the original game, run the extract resources script which will prompt you to enter
   the location of the original game, and will extract all the necessary resource files. The script can be run from the following paths depending on
   how you installed fheroes2:
-  * `fheroes2-extract-resources` if you used a package manager (MacPorts or Homebrew);
-  * `script/homm2/extract_homm2_resources_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `script/homm2/extract_homm2_resources.sh` for all other cases.
 
-* As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
-  be missing depending on the version of the original game) from the original game directory to
-  * `~/Library/Application Support/fheroes2` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `~/.fheroes2` for all other cases.
+| Installation Method | Script |
+|--------|--------|
+| If you used a package manager (MacPorts or Homebrew) | `fheroes2-extract-resources` |
+| If you built from source using the [**macOS native app**](#macos-native-app) method | `script/homm2/extract_homm2_resources_for_app_bundle.sh` |
+| All other cases | `script/homm2/extract_homm2_resources.sh` |
+
+#### Manual resource copying
+
+Alternatively, you may manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game)
+
+| Installation Method | Destination |
+|--------|--------|
+| built from source using the [**macOS native app**](#macos-native-app) | `~/Library/Application Support/fheroes2` |
+| All other cases | `~/.fheroes2` |
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
-  * `fheroes2-install-demo` if you used a package manager (MacPorts or Homebrew);
-  * `script/demo/download_demo_version_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
-  * `script/demo/download_demo_version.sh` for all other cases.
+
+| Installation Method | Script |
+|--------|--------|
+| If you used a package manager (MacPorts or Homebrew) | `fheroes2-install-demo` |
+| If you built from source using the [**macOS native app**](#macos-native-app) method | `script/demo/download_demo_version_for_app_bundle.sh` |
+| All other cases | `script/demo/download_demo_version.sh` |
 
 <a name="linux"></a>
 
