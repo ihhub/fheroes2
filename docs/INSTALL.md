@@ -194,7 +194,6 @@ Alternatively, you may manually copy the subdirectories `ANIM`, `DATA`, `MAPS` a
 | If you built from source using the [**macOS native app**](#macos-native-app) method | `script/demo/download_demo_version_for_app_bundle.sh` |
 | All other cases | `script/demo/download_demo_version.sh` |
 
-
 <a name="linux"></a>
 
 ## Linux
