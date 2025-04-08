@@ -22,8 +22,8 @@
 
 # This script cleans up fheroes2 application bundle files from the user's home directory.
 # It removes:
-#   - Preferences directory: ~/Library/Preferences/fheroes2
-#   - Application Support directory: ~/Library/Application Support/fheroes2
+#   - Preferences: ~/Library/Preferences/fheroes2
+#   - Data files and save games: ~/Library/Application Support/fheroes2
 # The script will show what will be removed and ask for confirmation unless -y/--yes is provided.
 # It exits early if no target directories exist.
 
@@ -69,6 +69,7 @@ echo "2. ${HOME}/Library/Application Support/fheroes2"
 [[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(find "${HOME}/Library/Application Support/fheroes2" -type f | wc -l) files"
 
 echo ""
+echo -e "\033[1mThis will remove all your fheroes2 data files, settings and savegames.\033[0m"
 if [[ $AUTO_CONFIRM -eq 0 ]]; then
     read -p "Are you sure you want to remove these directories? (y/N): " -r
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
