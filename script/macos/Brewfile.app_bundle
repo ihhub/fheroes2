@@ -16,8 +16,6 @@
 # Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-Dir.glob(File.join(File.dirname(__FILE__), 'Brewfile')) do |brewfile|
-  instance_eval(File.read(brewfile))
-end
+instance_eval(File.read(File.join(File.dirname(__FILE__), 'Brewfile')))
 # Install app launcher dependencies
 brew "dylibbundler"  # Required for bundling dynamic libraries in macOS app bundles

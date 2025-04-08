@@ -51,10 +51,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Get the directory where this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-
 # Check if either target directory exists
 if [[ ! -d "${HOME}/Library/Preferences/fheroes2" ]] && [[ ! -d "${HOME}/Library/Application Support/fheroes2" ]]; then
     echo "No fheroes2 app bundle directories found to clean up"
