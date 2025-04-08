@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# This script cleans up fheroes2 application bundle files from the user's home directory.
+# It removes:
+#   - Preferences directory: ~/Library/Preferences/fheroes2
+#   - Application Support directory: ~/Library/Application Support/fheroes2
+# The script will show what will be removed and ask for confirmation unless -y/--yes is provided.
+# It exits early if no target directories exist.
+
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2025                                                    #
@@ -27,16 +34,47 @@ if [[ "${PLATFORM_NAME}" != "Darwin" ]]; then
     exit 1
 fi
 
+# Parse command line arguments
+AUTO_CONFIRM=0
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -y|--yes)
+            AUTO_CONFIRM=1
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [-y|--yes]"
+            exit 1
+            ;;
+    esac
+done
+
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
+# Check if either target directory exists
+if [[ ! -d "${HOME}/Library/Preferences/fheroes2" ]] && [[ ! -d "${HOME}/Library/Application Support/fheroes2" ]]; then
+    echo "No fheroes2 app bundle directories found to clean up"
+    exit 0
+fi
+
 echo "The following directories will be removed:"
 echo "1. ${HOME}/Library/Preferences/fheroes2"
-[[ -d "${HOME}/Library/Preferences/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Preferences/fheroes2" ! -type d | wc -l) files"
+[[ -d "${HOME}/Library/Preferences/fheroes2" ]] && echo "   - Contains $(find "${HOME}/Library/Preferences/fheroes2" -type f | wc -l) files"
 
 echo "2. ${HOME}/Library/Application Support/fheroes2"
-[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(ls -A "${HOME}/Library/Application Support/fheroes2" | wc -l) files"
+[[ -d "${HOME}/Library/Application Support/fheroes2" ]] && echo "   - Contains $(find "${HOME}/Library/Application Support/fheroes2" -type f | wc -l) files"
+
+echo ""
+if [[ $AUTO_CONFIRM -eq 0 ]]; then
+    read -p "Are you sure you want to remove these directories? (y/N): " -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Files will not be removed"
+        exit 0
+    fi
+fi
 
 echo "Removing preferences directory..."
 rm -rf "${HOME}/Library/Preferences/fheroes2"
