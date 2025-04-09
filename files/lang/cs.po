@@ -4913,7 +4913,7 @@ msgid ""
 msgstr ""
 "Zvolte obtížnost kampaně. Tuto volbu můžete kdykoli během kampaně změnit. "
 "Konečné skóre však bude vypočítáno pouze podle nejnižší obtížnosti, na "
-"kterou jste dokončil některý ze scénářů."
+"kterou jste dokončili některý ze scénářů."
 
 msgid "Restart the current scenario."
 msgstr "Restartuj aktuální scénář."
