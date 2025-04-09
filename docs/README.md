@@ -8,14 +8,15 @@ and user interface improvements), breathing new life into one of the most addict
 
 You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
-<p align="center">
-    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" alt="Screenshot of the world map">
-</p>
-
-<p align="center">
-    <img src="images/screenshots/screenshot_battle.png?raw=true" width="410" alt="Screenshot of the battle screen">
-    <img src="images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
-</p>
+<div class="image-showcase">
+    <div class="row">
+        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820px" class="full-image game-screenshot" alt="Screenshot of the world map">
+    </div>
+    <div class="row">
+        <img src="images/screenshots/screenshot_battle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
+        <img src="images/screenshots/screenshot_castle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the castle screen">
+    </div>
+</div>
 
 ## Download and install
 

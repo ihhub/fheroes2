@@ -1,0 +1,19 @@
+$dark: (
+    primary-color: #C0C0C0,  // Silver
+    header-color: #E4C814,  // Gold
+    secondary-color: #480a0a,  // Rich Dark Red
+    page-color: #989898,  // Very dark gray
+    text-color: #E0E0E0,  // Light gray
+    background-color: #383838,  // Very dark gray
+    border-color: #480a0a,  // Rich Dark Red
+    highlight-color: #800080,  // Purple
+    code-background-color: #2A2A2A,
+    inverse-text-color: #2C1810,  // Dark brown from light theme
+    inverse-background-color: #F5DEB3,  // Wheat from light theme
+    inverse-border-color: #8B4513,  // Saddle brown from light theme
+    inverse-primary-color: #8B4513,  // Saddle brown from light theme
+    border-radius: 5px,
+    body-text-shadow: 2px 2px 2px #383838,
+    header-text-shadow: -2px 3px 1px darken(#a42da4, 10%),
+    table-text-color: #e0e0e0
+);
