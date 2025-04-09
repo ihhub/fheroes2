@@ -313,11 +313,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.x = dialogRoi.x + 22;
     dst_pt.y = dialogRoi.y + 460;
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::HSBTNS, 8 );
-    fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y - 1, bar.width(), bar.height() );
+    fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, bar.width(), bar.height() );
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 1, bar.width() - 16 * 2, 0 } );
 
     // Artifacts bar.
     dst_pt.x = dialogRoi.x + 51;
