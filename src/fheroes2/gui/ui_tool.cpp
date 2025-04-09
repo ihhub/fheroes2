@@ -205,6 +205,16 @@ namespace fheroes2
         _isHidden = false;
     }
 
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
+    {
+        hide();
+
+        _restorer.update( x, y, _text->width(), _text->height() );
+        _text->drawInRoi( x, y, _output, roi );
+
+        _isHidden = false;
+    }
+
     void MovableText::hide()
     {
         if ( !_isHidden ) {

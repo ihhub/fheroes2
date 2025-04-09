@@ -104,6 +104,9 @@ namespace fheroes2
 
         void draw( const int32_t x, const int32_t y );
 
+        // Draw text within a specified ROI (Region of Interest) that acts as a bounding box
+        void drawInRoi( const int32_t x, const int32_t y, const Rect & roi );
+
         void hide();
 
     private:
