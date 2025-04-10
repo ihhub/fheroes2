@@ -30,7 +30,6 @@
 #include <stdexcept>
 #include <string>
 #include <type_traits>
-#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
