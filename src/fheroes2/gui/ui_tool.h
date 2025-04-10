@@ -92,7 +92,12 @@ namespace fheroes2
     class MovableText
     {
     public:
-        explicit MovableText( Image & output );
+        explicit MovableText( Image & output )
+            : _output( output )
+            , _restorer( output, 0, 0, 0, 0 )
+        {
+            // Do nothing.
+        }
 
         MovableText( const MovableText & ) = delete;
 
@@ -100,20 +105,32 @@ namespace fheroes2
 
         MovableText & operator=( const MovableText & ) = delete;
 
-        void update( std::unique_ptr<TextBase> text );
+        void update( std::unique_ptr<TextBase> text )
+        {
+            _text = std::move( text );
+        }
 
-        void draw( const int32_t x, const int32_t y );
+        void draw( const int32_t x, const int32_t y )
+        {
+            drawInRoi( x, y, { 0, 0, _output.width(), _output.height() } );
+        }
 
         // Draw text within a specified ROI (Region of Interest) that acts as a bounding box
         void drawInRoi( const int32_t x, const int32_t y, const Rect & roi );
 
-        void hide();
+        void hide()
+        {
+            if ( !_isHidden ) {
+                _restorer.restore();
+                _isHidden = true;
+            }
+        }
 
     private:
         Image & _output;
         ImageRestorer _restorer;
         std::unique_ptr<TextBase> _text;
-        bool _isHidden;
+        bool _isHidden{ true };
     };
 
     // Renderer of current time and FPS on screen

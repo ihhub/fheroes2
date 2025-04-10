@@ -191,6 +191,35 @@ namespace
         return width;
     }
 
+    fheroes2::Rect getTextLineArea( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler )
+    {
+        assert( data != nullptr && size > 0 );
+
+        const uint8_t * dataEnd = data + size;
+
+        const fheroes2::Sprite & firstCharSprite = charHandler.getSprite( *data );
+        fheroes2::Rect area( firstCharSprite.x(), firstCharSprite.y(), firstCharSprite.width(), firstCharSprite.height() );
+        ++data;
+
+        for ( ; data != dataEnd; ++data ) {
+            const fheroes2::Sprite & sprite = charHandler.getSprite( *data );
+
+            if ( const int32_t spriteY = sprite.y(); spriteY < area.y ) {
+                // This character sprite is drawn higher than all previous - update `height` and `y`.
+                area.height += area.y - spriteY;
+                area.y = spriteY;
+                area.height = std::max( area.height, sprite.height() );
+            }
+            else {
+                area.height = std::max( area.height, spriteY - area.y + sprite.height() );
+            }
+
+            area.width += sprite.x() + sprite.width();
+        }
+
+        return area;
+    }
+
     int32_t getMaxCharacterCount( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler, const int32_t maxWidth )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
@@ -419,6 +448,14 @@ namespace fheroes2
         getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         return static_cast<int32_t>( lineInfos.size() );
+    }
+
+    Rect Text::area() const
+    {
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const fheroes2::FontCharHandler charHandler( _fontType );
+
+        return getTextLineArea( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
     }
 
     void Text::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
@@ -789,6 +826,28 @@ namespace fheroes2
         }
 
         return static_cast<int32_t>( lineInfos.size() );
+    }
+
+    Rect MultiFontText::area() const
+    {
+        Rect area;
+        bool isFirsText = true;
+
+        for ( const Text & text : _texts ) {
+            if ( isFirsText ) {
+                isFirsText = false;
+                area = text.area();
+                continue;
+            }
+
+            const fheroes2::Rect & textArea = text.area();
+
+            area.height = std::max( area.height, textArea.y - area.y + textArea.height );
+            area.y = std::min( area.y, textArea.y );
+            area.width += textArea.x + textArea.width;
+        }
+
+        return area;
     }
 
     void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const

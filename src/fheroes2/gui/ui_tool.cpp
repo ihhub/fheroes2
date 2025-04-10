@@ -182,45 +182,19 @@ namespace fheroes2
         }
     }
 
-    MovableText::MovableText( Image & output )
-        : _output( output )
-        , _restorer( output, 0, 0, 0, 0 )
-        , _isHidden( false )
-    {
-        // Do nothing.
-    }
-
-    void MovableText::update( std::unique_ptr<TextBase> text )
-    {
-        _text = std::move( text );
-    }
-
-    void MovableText::draw( const int32_t x, const int32_t y )
-    {
-        hide();
-
-        _restorer.update( x, y, _text->width(), _text->height() );
-        _text->draw( x, y, _output );
-
-        _isHidden = false;
-    }
-
     void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
 
-        _restorer.update( x, y, _text->width(), _text->height() );
-        _text->drawInRoi( x, y, _output, roi );
+        // We should not try to draw the unset text.
+        assert( _text != nullptr );
+
+        const Rect overlappedRoi = ( _text->area() + Point( x, y ) ) ^ roi;
+
+        _restorer.update( overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
+        _text->drawInRoi( x, y, _output, overlappedRoi );
 
         _isHidden = false;
-    }
-
-    void MovableText::hide()
-    {
-        if ( !_isHidden ) {
-            _restorer.restore();
-            _isHidden = true;
-        }
     }
 
     SystemInfoRenderer::SystemInfoRenderer()
