@@ -4528,7 +4528,7 @@ namespace
             }
 
             _icnVsSprite[id].resize( 2 );
-            // move dark border to new released state from original pressed state button
+            // Move dark border to new released state from original pressed state button
             const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalID, 4 );
             const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalID, 5 );
             if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
@@ -4545,15 +4545,21 @@ namespace
             Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
             Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
 
-            // pressed state
+            // Pressed state
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            pressed.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
+            // Make sure the released and pressed states have the same size, because the original Czech's pressed state is 1 px less in height than the other versions'.
+            pressed.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
             pressed.reset();
             Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
 
-            // the empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp
+            // This fills the 1 px vertical gap in the Czech pressed state button.
+            if ( originalPressed.height() < 23 ) {
+                Copy( originalPressed, 0, originalPressed.height() - 10, pressed, 0, pressed.height() - 10, originalPressed.width(), 10 );
+            }
+
+            // The empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp.
             Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
-            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalPressed.height() );
+            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalReleased.height() );
 
             const int32_t pixelPosition = 4 * 94 + 6;
             Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
