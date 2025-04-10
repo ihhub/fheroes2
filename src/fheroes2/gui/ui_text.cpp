@@ -831,19 +831,27 @@ namespace fheroes2
     Rect MultiFontText::area() const
     {
         Rect area;
-        bool isFirsText = true;
+        bool isFirstText = true;
 
         for ( const Text & text : _texts ) {
-            if ( isFirsText ) {
-                isFirsText = false;
+            if ( isFirstText ) {
+                isFirstText = false;
                 area = text.area();
                 continue;
             }
 
             const fheroes2::Rect & textArea = text.area();
 
-            area.height = std::max( area.height, textArea.y - area.y + textArea.height );
-            area.y = std::min( area.y, textArea.y );
+            if ( textArea.y < area.y ) {
+                // This character sprite is drawn higher than all previous - update `height` and `y`.
+                area.height += area.y - textArea.y;
+                area.y = textArea.y;
+                area.height = std::max( area.height, textArea.height );
+            }
+            else {
+                area.height = std::max( area.height, textArea.y - area.y + textArea.height );
+            }
+
             area.width += textArea.x + textArea.width;
         }
 
