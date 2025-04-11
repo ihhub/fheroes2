@@ -80,7 +80,8 @@ namespace
         GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        GAME_NUMERIC_ESTIMATES = 0x40000000,
     };
 
     enum EditorOptions : uint32_t
@@ -253,6 +254,11 @@ bool Settings::Read( const std::string & filePath )
         else {
             setInterfaceType( InterfaceType::DYNAMIC );
         }
+    }
+
+    // Numeric/verbal army size estimate
+    if ( config.Exists( "numeric army size estimates" ) ) {
+        setNumericEstimates( config.StrParams( "numeric army size estimates" ) == "on" );
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -461,6 +467,9 @@ std::string Settings::String() const
         assert( 0 );
         break;
     }
+
+    os << std::endl << "# use numeric army size estimates (1-4, 5-9, 10-19, ...) instead of original (few, several, lots, ...) " << std::endl;
+    os << "numeric army size estimates = " << ( _numericArmyEstimates ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -843,6 +852,16 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
+void Settings::setNumericEstimates( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_NUMERIC_ESTIMATES );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_NUMERIC_ESTIMATES );
+    }
+}
+
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
@@ -898,6 +917,11 @@ bool Settings::isBattleShowDamageInfoEnabled() const
 bool Settings::isHideInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
+}
+
+bool Settings::isNumericEstimatesEnabled() const
+{
+    return _gameOptions.Modes( GAME_NUMERIC_ESTIMATES );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
