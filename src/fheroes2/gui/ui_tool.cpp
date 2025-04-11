@@ -188,10 +188,11 @@ namespace fheroes2
         // We should not try to draw the unset text.
         assert( _text != nullptr );
 
-        const Rect overlappedRoi = ( _text->area() + Point( x, y ) ) ^ roi;
+        const Rect textArea = _text->area() + Point( x, y );
+        const Rect overlappedRoi = textArea ^ roi;
 
         _restorer.update( overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
-        _text->drawInRoi( x, y, _output, overlappedRoi );
+        _text->drawInRoi( x, y - ( textArea.y < roi.y ? textArea.y - roi.y : 0 ), _output, overlappedRoi );
 
         _isHidden = false;
     }
