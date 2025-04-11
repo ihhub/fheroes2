@@ -366,7 +366,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
     int32_t Text::width() const
     {
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
@@ -375,7 +375,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
     int32_t Text::height() const
     {
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         return getFontHeight( _fontType.size );
     }
 
@@ -385,7 +385,7 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -428,7 +428,7 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -443,7 +443,7 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         std::vector<TextLineInfo> lineInfos;
         getTextLineInfos( lineInfos, maxWidth, height(), false );
 
@@ -452,7 +452,7 @@ namespace fheroes2
 
     Rect Text::area() const
     {
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         return getTextLineArea( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
@@ -465,7 +465,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, charHandler );
@@ -483,7 +483,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
 
         std::vector<TextLineInfo> lineInfos;
         getTextLineInfos( lineInfos, maxWidth, height(), false );
@@ -516,7 +516,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         const int32_t originalTextWidth
@@ -540,7 +540,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
         const int32_t fullLineWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, true );
         if ( fullLineWidth < maxWidth ) {
@@ -869,7 +869,7 @@ namespace fheroes2
 
         int32_t offsetX = x;
         for ( const Text & text : _texts ) {
-            const auto langugeSwitcher = getLanguageSwitcher( text );
+            const auto languageSwitcher = getLanguageSwitcher( text );
             const int32_t fontHeight = getFontHeight( text._fontType.size );
             const fheroes2::FontCharHandler charHandler( text._fontType );
 
@@ -914,7 +914,7 @@ namespace fheroes2
         auto infoIter = lineInfos.cbegin();
 
         for ( const Text & singleText : _texts ) {
-            const auto langugeSwitcher = getLanguageSwitcher( singleText );
+            const auto languageSwitcher = getLanguageSwitcher( singleText );
             const uint8_t * data = reinterpret_cast<const uint8_t *>( singleText._text.data() );
 
             const uint8_t * dataEnd = data + singleText._text.size();
@@ -953,7 +953,7 @@ namespace fheroes2
     {
         const size_t textsCount = _texts.size();
         for ( size_t i = 0; i < textsCount; ++i ) {
-            const auto langugeSwitcher = getLanguageSwitcher( _texts[i] );
+            const auto languageSwitcher = getLanguageSwitcher( _texts[i] );
 
             // To properly render a multi-font text we must not ignore spaces at the end of a text entry which is not the last one.
             const bool isNotLastTextEntry = ( i != textsCount - 1 );
