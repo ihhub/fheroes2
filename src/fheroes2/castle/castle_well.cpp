@@ -387,7 +387,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 
     const fheroes2::Rect textRoi{ 0, bottomBarOffsetY, backgroundWidth, bottomBar.height() - 1 };
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType::normalWhite() );
-    text.drawInRoi( 315 - text.width() / 2, bottomBarOffsetY + 2, background, textRoi );
+    text.drawInRoi( 315 - text.width() / 2, bottomBarOffsetY + 3, background, textRoi );
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
