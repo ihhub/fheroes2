@@ -452,6 +452,10 @@ namespace fheroes2
 
     Rect Text::area() const
     {
+        if ( _text.empty() ) {
+            return {};
+        }
+
         const auto languageSwitcher = getLanguageSwitcher( *this );
         const fheroes2::FontCharHandler charHandler( _fontType );
 
