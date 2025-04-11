@@ -111,6 +111,14 @@ namespace
         UnsignedNumeric
     };
 
+    enum class CursorPosition
+    {
+        PrevCharacter,
+        NextCharacter,
+        FirstCharacter,
+        LastCharacter
+    };
+
     class KeyboardRenderer
     {
     public:
@@ -238,6 +246,44 @@ namespace
         void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
         {
             _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, _info, false, _cursorPosition, clickPosition, startPosRoi );
+            _renderInputArea();
+        }
+
+        void setCursorPosition( const CursorPosition pos )
+        {
+            switch ( pos ) {
+            case CursorPosition::PrevCharacter:
+                if ( _cursorPosition == 0 ) {
+                    return;
+                }
+
+                --_cursorPosition;
+
+                break;
+            case CursorPosition::NextCharacter:
+                assert( _cursorPosition <= _info.size() );
+
+                if ( _cursorPosition == _info.size() ) {
+                    return;
+                }
+
+                ++_cursorPosition;
+
+                break;
+            case CursorPosition::FirstCharacter:
+                _cursorPosition = 0;
+
+                break;
+            case CursorPosition::LastCharacter:
+                _cursorPosition = _info.size();
+
+                break;
+            default:
+                assert( 0 );
+
+                return;
+            }
+
             _renderInputArea();
         }
 
@@ -761,7 +807,7 @@ namespace
         }
     }
 
-    DialogAction handleButtonEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
+    DialogAction handleButtonAndKeyboardEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
     {
         const fheroes2::Key key = [&le]() {
             if ( !le.isAnyKeyPressed() ) {
@@ -800,6 +846,28 @@ namespace
 
             return keyValue;
         }();
+
+        if ( const std::optional<CursorPosition> pos = [key]() -> std::optional<CursorPosition> {
+                 switch ( key ) {
+                 case fheroes2::Key::KEY_LEFT:
+                     return CursorPosition::PrevCharacter;
+                 case fheroes2::Key::KEY_RIGHT:
+                     return CursorPosition::NextCharacter;
+                 case fheroes2::Key::KEY_HOME:
+                     return CursorPosition::FirstCharacter;
+                 case fheroes2::Key::KEY_END:
+                     return CursorPosition::LastCharacter;
+                 default:
+                     break;
+                 }
+
+                 return {};
+             }();
+             pos ) {
+            renderer.setCursorPosition( *pos );
+
+            return DialogAction::DoNothing;
+        }
 
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
@@ -891,7 +959,7 @@ namespace
                 break;
             }
 
-            action = handleButtonEvents( buttons, le, renderer );
+            action = handleButtonAndKeyboardEvents( buttons, le, renderer );
             switch ( action ) {
             case DialogAction::DoNothing:
             case DialogAction::AddLetter:
