@@ -658,6 +658,12 @@ namespace fheroes2
         return textWidth;
     }
 
+    int32_t TextInput::width( const int32_t /*maxWidth*/ ) const
+    {
+        // TODO: implement a method for multi-line text.
+        return 0;
+    }
+
     void TextInput::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _text.empty() || _textLength == 0 ) {
@@ -684,6 +690,11 @@ namespace fheroes2
             renderSingleLine( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ), offsetX, y, output, imageRoi,
                               charHandler );
         }
+    }
+
+    void TextInput::drawInRoi( const int32_t /*x*/, const int32_t /*y*/, const int32_t /*maxWidth*/, Image & /*output*/, const Rect & /*imageRoi*/ ) const
+    {
+        // TODO: implement a method for multi-line text.
     }
 
     void TextInput::drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const

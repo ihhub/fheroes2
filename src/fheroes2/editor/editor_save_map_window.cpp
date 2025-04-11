@@ -48,7 +48,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"

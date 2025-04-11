@@ -319,8 +319,10 @@ namespace fheroes2
         }
 
         int32_t width() const override;
+        int32_t width( const int32_t maxWidth ) const override;
 
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
         void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
         void drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const;
