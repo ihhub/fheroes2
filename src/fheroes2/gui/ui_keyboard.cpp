@@ -116,8 +116,8 @@ namespace
     {
         PrevCharacter,
         NextCharacter,
-        FirstCharacter,
-        LastCharacter
+        BeginningOfText,
+        EndOfText
     };
 
     class KeyboardRenderer
@@ -271,11 +271,11 @@ namespace
                 ++_cursorPosition;
 
                 break;
-            case CursorPosition::FirstCharacter:
+            case CursorPosition::BeginningOfText:
                 _cursorPosition = 0;
 
                 break;
-            case CursorPosition::LastCharacter:
+            case CursorPosition::EndOfText:
                 _cursorPosition = _info.size();
 
                 break;
@@ -855,9 +855,9 @@ namespace
                  case fheroes2::Key::KEY_RIGHT:
                      return CursorPosition::NextCharacter;
                  case fheroes2::Key::KEY_HOME:
-                     return CursorPosition::FirstCharacter;
+                     return CursorPosition::BeginningOfText;
                  case fheroes2::Key::KEY_END:
-                     return CursorPosition::LastCharacter;
+                     return CursorPosition::EndOfText;
                  default:
                      break;
                  }
