@@ -704,7 +704,8 @@ namespace fheroes2
 
         const Rect overlappedRoi = imageRoi ^ charRoi;
 
-        const Sprite & charSprite = FontCharHandler( _fontType ).getSprite( cursorChar );
+        const FontCharHandler charHandler( _fontType );
+        const Sprite & charSprite = charHandler.getSprite( cursorChar );
         assert( !charSprite.empty() );
 
         Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
