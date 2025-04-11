@@ -187,7 +187,9 @@ namespace fheroes2
 
         assert( _text != nullptr );
 
-        Rect textArea = _text->area() + Point( x, y );
+        Rect textArea = _text->area();
+        textArea.x += x;
+        textArea.y += y;
 
         // Not to cut off the top of diacritic signs in capital letters we shift the text down.
         const int32_t extraShiftY = textArea.y < roi.y ? roi.y - textArea.y : 0;
