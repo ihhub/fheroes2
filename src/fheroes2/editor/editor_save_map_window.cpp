@@ -503,6 +503,7 @@ namespace Editor
                 fileNameBackground.restore();
 
                 redrawSaveFileName( textInput, fileName, textCursorRestorer, fileNameRoi, static_cast<int32_t>( charInsertPos ), display );
+                Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
             }
 
             if ( listbox.IsNeedRedraw() ) {
