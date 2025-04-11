@@ -48,7 +48,7 @@ namespace Game
 
 #if defined( WITH_DEBUG )
         // This hotkey is only for debug mode.
-        DEBUG_TOGGLE_DEVELOPER_MODE,
+        GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
         MAIN_MENU_NEW_GAME,

@@ -124,11 +124,12 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     display.render();
 
-    int result = Dialog::ZERO;
-
     const fheroes2::Rect uiRect = uiElement ? fheroes2::Rect{ uiOffset, uiElement->area() } : fheroes2::Rect{};
 
+    int result = Dialog::ZERO;
+    std::string typedValueBuf;
     LocalEvent & le = LocalEvent::Get();
+
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool needRedraw = false;
 
@@ -140,37 +141,43 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
-            valueSelectionElement.setValue( selectedValue );
+        if ( const auto value = fheroes2::processIntegerValueTyping( min, max, typedValueBuf ); value ) {
+            valueSelectionElement.setValue( *value );
+
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
-            selectedValue = max;
             valueSelectionElement.setValue( max );
+            typedValueBuf.clear();
+
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
-            selectedValue = min;
             valueSelectionElement.setValue( min );
+            typedValueBuf.clear();
+
             needRedraw = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
-            selectedValue = valueSelectionElement.getValue();
+            typedValueBuf.clear();
+
             needRedraw = true;
         }
-
-        if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
+        else if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
             uiElement->processEvents( uiOffset );
             display.render();
+        }
+        else {
+            result = btnGroups.processEvents();
         }
 
         if ( needRedraw ) {
             const bool redrawMinMax = SwitchMaxMinButtons( buttonMin, buttonMax, valueSelectionElement.getValue(), min );
+
             valueSelectionElement.draw( display );
+
             display.render( redrawMinMax ? interactionElementsRect : selectionBoxArea );
         }
-
-        result = btnGroups.processEvents();
     }
 
     selectedValue = ( result == Dialog::OK ) ? valueSelectionElement.getValue() : 0;
@@ -479,14 +486,14 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
 
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, redistributeMin );
 
-    LocalEvent & le = LocalEvent::Get();
-
     display.render();
 
-    // message loop
-    int bres = Dialog::ZERO;
-    while ( bres == Dialog::ZERO && le.HandleEvents() ) {
-        bool redraw_count = false;
+    int btnResult = Dialog::ZERO;
+    std::string typedValueBuf;
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( btnResult == Dialog::ZERO && le.HandleEvents() ) {
+        bool needRedraw = false;
 
         if ( buttonMax.isVisible() ) {
             buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
@@ -496,40 +503,50 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
-            valueSelectionElement.setValue( redistributeCount );
-            redraw_count = true;
+        if ( const auto value = fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, typedValueBuf ); value ) {
+            valueSelectionElement.setValue( *value );
+
+            needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
-            redistributeCount = redistributeMax;
             valueSelectionElement.setValue( redistributeMax );
-            redraw_count = true;
+            typedValueBuf.clear();
+
+            needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
-            redistributeCount = redistributeMin;
             valueSelectionElement.setValue( redistributeMin );
-            redraw_count = true;
+            typedValueBuf.clear();
+
+            needRedraw = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
-            redistributeCount = valueSelectionElement.getValue();
-            redraw_count = true;
+            typedValueBuf.clear();
+
+            needRedraw = true;
+        }
+        else {
+            btnResult = btnGroups.processEvents();
         }
 
         if ( !ssp.empty() ) {
-            for ( std::vector<fheroes2::Rect>::const_iterator it = vrts.begin(); it != vrts.end(); ++it ) {
-                if ( le.MouseClickLeft( *it ) ) {
-                    ssp.setPosition( it->x, it->y );
+            for ( const auto & rt : vrts ) {
+                if ( le.MouseClickLeft( rt ) ) {
+                    ssp.setPosition( rt.x, rt.y );
                     ssp.show();
+
                     display.render( pos );
                 }
             }
         }
 
-        if ( redraw_count ) {
+        if ( needRedraw ) {
             SwitchMaxMinButtons( buttonMin, buttonMax, valueSelectionElement.getValue(), redistributeMin );
+
             if ( !ssp.empty() ) {
                 ssp.hide();
             }
+
             valueSelectionElement.draw( display );
 
             if ( buttonMax.isVisible() ) {
@@ -542,13 +559,11 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
 
             display.render( pos );
         }
-
-        bres = btnGroups.processEvents();
     }
 
     int result = 0;
 
-    if ( bres == Dialog::OK ) {
+    if ( btnResult == Dialog::OK ) {
         redistributeCount = valueSelectionElement.getValue();
 
         if ( !ssp.isHidden() ) {
@@ -557,6 +572,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
                 if ( rt == vrts[i] ) {
                     result = i + 2;
+
                     break;
                 }
             }

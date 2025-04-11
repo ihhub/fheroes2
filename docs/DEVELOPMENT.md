@@ -20,7 +20,7 @@ Please follow the instructions below to be able to build the project from source
 ### macOS and Linux
 
 * Depending on your OS, run the following scripts to install the dependencies required for the build:
-  * macOS: go to the directory `script/macos` and run the file `install_sdl2.sh`.
+  * macOS: go to the directory `script/macos` and run `brew bundle` to install the required dependencies.
   * Linux: go to the directory `script/linux` and run the file `install_sdl2_dev.sh`.
 * If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) to the project root directory.
