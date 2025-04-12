@@ -109,20 +109,6 @@ std::vector<std::string> StringSplit( const std::string_view str, const char sep
     return result;
 }
 
-std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
-{
-    std::string outputString = inputString;
-
-    if ( position >= inputString.size() ) {
-        outputString.append( 1, character );
-    }
-    else {
-        outputString.insert( position, 1, character );
-    }
-
-    return outputString;
-}
-
 int Sign( const int i )
 {
     if ( i < 0 ) {
