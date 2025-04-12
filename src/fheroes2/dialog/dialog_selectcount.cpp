@@ -239,13 +239,28 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
 
     bool isCursorVisible = true;
-    const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
-    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
-    text.keepLineTrailingSpaces();
+    fheroes2::TextInput text( {}, fheroes2::FontType::normalWhite(), textLanguage );
+    fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
+
+    fheroes2::Point textPos( textInputArea.x, textInputArea.y + 2 );
+
     if ( !isMultiLine ) {
-        text.fitToOneRow( textInputArea.width );
+        text.setAutoFitToOneRow( textInputArea.width );
+        text.set( result, static_cast<int32_t>( charInsertPos ) );
+
+        textPos.x += ( textInputArea.width - text.width() ) / 2;
+        text.drawInRoi( textPos.x, textPos.y, display, textInputArea );
+
+        const fheroes2::Rect & cursorRoi = text.getCursorArea();
+        textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
+
+        text.drawCursor( textPos.x, textPos.y, display, textInputArea );
     }
-    text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
+    else {
+        text.set( result, static_cast<int32_t>( charInsertPos ) );
+        text.drawInRoi( textPos.x, textPos.y, textInputArea.width, display, textInputArea );
+        text.drawCursor( textPos.x, textPos.y, textInputArea.width, display, textInputArea );
+    }
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -339,12 +354,20 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             redraw = true;
         }
         else if ( le.MouseClickLeft( textEditClickArea ) ) {
+            const auto getCharInsertPos = [&text, &textInputArea]( const fheroes2::Point & mousePos, const bool isMultilineText ) {
+                if ( isMultilineText ) {
+                    return fheroes2::getTextInputCursorPosition( fheroes2::Text{}, 0, mousePos, textInputArea );
+                }
+
+                return fheroes2::getTextInputCursorPosition( text, true, mousePos, textInputArea );
+            };
+
             if ( textLanguage.has_value() ) {
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
-                charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
+                charInsertPos = getCharInsertPos( le.getMouseCursorPos(), isMultiLine );
             }
             else {
-                charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
+                charInsertPos = getCharInsertPos( le.getMouseCursorPos(), isMultiLine );
             }
 
             redraw = true;
@@ -359,10 +382,18 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
         }
 
-        // Text input cursor blink.
-        if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+        // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
+        if ( !redraw && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
             isCursorVisible = !isCursorVisible;
-            redraw = true;
+
+            if ( isCursorVisible ) {
+                text.drawCursor( textPos.x, textPos.y, display, textInputArea );
+            }
+            else {
+                textCursorRestorer.restore();
+            }
+
+            display.render( textCursorRestorer.rect() );
         }
 
         if ( redraw ) {
@@ -381,14 +412,27 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType, textLanguage );
-
-            if ( !isMultiLine ) {
-                text.fitToOneRow( textInputArea.width );
-            }
+            text.set( result, static_cast<int32_t>( charInsertPos ) );
 
             textBackground.restore();
-            text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
+            if ( isMultiLine ) {
+                text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
+                if ( isCursorVisible ) {
+                    text.drawCursor( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
+                }
+            }
+            else {
+                textPos.x = textInputArea.x + ( textInputArea.width - text.width() ) / 2;
+                text.drawInRoi( textPos.x, textPos.y, display, textInputArea );
+
+                const fheroes2::Rect & cursorRoi = text.getCursorArea();
+                textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
+
+                text.drawCursor( textPos.x, textPos.y, display, textInputArea );
+                Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+                isCursorVisible = true;
+            }
+
             display.render( textInputArea );
         }
     }

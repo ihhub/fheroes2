@@ -287,6 +287,8 @@ namespace fheroes2
             , _textLength( static_cast<int32_t>( _text.size() ) )
         {
             _keepLineTrailingSpaces = true;
+
+            _updateCursorArea();
         }
 
         TextInput( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
@@ -295,6 +297,8 @@ namespace fheroes2
         {
             _language = language;
             _keepLineTrailingSpaces = true;
+
+            _updateCursorArea();
         }
 
         // TextInput should update text and cursor position in that text at the same time.
@@ -310,10 +314,12 @@ namespace fheroes2
         }
 
         int32_t width() const override;
-        int32_t width( const int32_t maxWidth ) const override;
+        // Use `width( const int32_t maxWidth )` from the Text class.
+        using Text::width;
 
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
-        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
+        // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
+        using Text::drawInRoi;
 
         void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
         void drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const;
