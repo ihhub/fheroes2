@@ -114,9 +114,9 @@ namespace
 
     enum class CursorPosition
     {
-        PrevCharacter,
-        NextCharacter,
-        BeginningOfText,
+        PrevChar,
+        NextChar,
+        BegOfText,
         EndOfText
     };
 
@@ -253,7 +253,7 @@ namespace
         void setCursorPosition( const CursorPosition pos )
         {
             switch ( pos ) {
-            case CursorPosition::PrevCharacter:
+            case CursorPosition::PrevChar:
                 if ( _cursorPosition == 0 ) {
                     return;
                 }
@@ -261,7 +261,7 @@ namespace
                 --_cursorPosition;
 
                 break;
-            case CursorPosition::NextCharacter:
+            case CursorPosition::NextChar:
                 assert( _cursorPosition <= _info.size() );
 
                 if ( _cursorPosition == _info.size() ) {
@@ -271,7 +271,7 @@ namespace
                 ++_cursorPosition;
 
                 break;
-            case CursorPosition::BeginningOfText:
+            case CursorPosition::BegOfText:
                 _cursorPosition = 0;
 
                 break;
@@ -851,11 +851,11 @@ namespace
         if ( const std::optional<CursorPosition> pos = [key]() -> std::optional<CursorPosition> {
                  switch ( key ) {
                  case fheroes2::Key::KEY_LEFT:
-                     return CursorPosition::PrevCharacter;
+                     return CursorPosition::PrevChar;
                  case fheroes2::Key::KEY_RIGHT:
-                     return CursorPosition::NextCharacter;
+                     return CursorPosition::NextChar;
                  case fheroes2::Key::KEY_HOME:
-                     return CursorPosition::BeginningOfText;
+                     return CursorPosition::BegOfText;
                  case fheroes2::Key::KEY_END:
                      return CursorPosition::EndOfText;
                  default:
