@@ -170,10 +170,7 @@ namespace
 
         if ( keepTrailingSpaces ) {
             for ( ; data != dataEnd; ++data ) {
-                // Some lines may contain a new line character that is not printable so we should ignore it.
-                if ( !isLineSeparator( *data ) ) {
-                    width += charHandler.getWidth( *data );
-                }
+                width += charHandler.getWidth( *data );
             }
 
             return width;
@@ -759,63 +756,68 @@ namespace fheroes2
         int32_t currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
         const int32_t truncationSymbolWidth = getTruncationSymbolWidth( _fontType );
         const int32_t truncatedMaxWidth = maxWidth - truncationSymbolWidth;
+        const int32_t twiceTruncatedMaxWidth = truncatedMaxWidth - truncationSymbolWidth;
 
-        // If the cursor is to the right of the TextBox.
-        _textLength = getMaxCharacterCount( textData + _textBeginPos, _textLength, charHandler,
-                                            ( _textBeginPos != 0 && currentWidth > truncatedMaxWidth ) ? truncatedMaxWidth - truncationSymbolWidth : truncatedMaxWidth );
-        currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
+        // If the text should be truncated from the right side.
+        if ( currentWidth > truncatedMaxWidth ) {
+            _textLength = getMaxCharacterCount( textData + _textBeginPos, _textLength, charHandler, _textBeginPos != 0 ? twiceTruncatedMaxWidth : truncatedMaxWidth );
+            currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
+        }
 
         const int32_t originalTextSize = static_cast<int32_t>( _text.size() );
         int32_t textEndPos = _textBeginPos + _textLength;
-        while ( ( textEndPos < _cursorPosition + cursorToBorderDistance ) && ( textEndPos < originalTextSize ) ) {
-            if ( _textBeginPos == 0 ) {
-                // This is a case when the truncation symbol will be added at the beginning of he text line.
-                _textBeginPos = std::max( 1, getMaxCharacterCount( textData, originalTextSize, charHandler, truncationSymbolWidth ) );
 
-                const bool isTruncatedAtend = originalTextWidth - truncationSymbolWidth > truncatedMaxWidth;
-                const int32_t newTextLength = getMaxCharacterCount( textData + _textBeginPos, originalTextSize - _textBeginPos, charHandler,
-                                                                    isTruncatedAtend ? truncatedMaxWidth - truncationSymbolWidth : truncatedMaxWidth );
-                if ( _textLength != newTextLength ) {
-                    _textLength = newTextLength;
-                    currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
-                }
-                textEndPos = _textBeginPos + _textLength;
-                continue;
+        // If the cursor is to the right of the TextBox.
+        while ( ( textEndPos < _cursorPosition + cursorToBorderDistance ) && ( textEndPos < originalTextSize ) ) {
+            currentWidth += charHandler.getWidth( textData[textEndPos] );
+            ++textEndPos;
+            ++_textLength;
+
+            while ( currentWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
+                // Remove characters from the begin.
+                currentWidth -= charHandler.getWidth( textData[_textBeginPos] );
+                ++_textBeginPos;
+                --_textLength;
             }
 
-            currentWidth -= charHandler.getWidth( textData[_textBeginPos] );
-            currentWidth += charHandler.getWidth( textData[textEndPos] );
+            while ( textEndPos != originalTextSize ) {
+                // Some characters from the text end might also fit the width.
+                const int32_t charWidth = charHandler.getWidth( textData[textEndPos] );
+                if ( currentWidth + charWidth > twiceTruncatedMaxWidth ) {
+                    break;
+                }
 
-            ++_textBeginPos;
-            ++textEndPos;
+                currentWidth += charHandler.getWidth( textData[textEndPos] );
+                ++textEndPos;
+                ++_textLength;
+            }
         }
 
         assert( _cursorPosition >= _textBeginPos );
 
-        if ( textEndPos == originalTextSize ) {
-            // If we have space for new characters at the line beginning (e.g. some characters were deleted).
-            while ( _textBeginPos != 0 ) {
-                const int32_t prevCharWidth = charHandler.getWidth( textData[_textBeginPos - 1] );
-
-                if ( prevCharWidth > truncatedMaxWidth - currentWidth ) {
-                    break;
-                }
-
-                --_textBeginPos;
-                ++_textLength;
-                currentWidth += prevCharWidth;
+        while ( _textBeginPos != 0 ) {
+            // Some characters from the text begin might also fit the width.
+            const int32_t prevCharWidth = charHandler.getWidth( textData[_textBeginPos - 1] );
+            if ( currentWidth + prevCharWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
+                break;
             }
+
+            --_textBeginPos;
+            ++_textLength;
+            currentWidth += prevCharWidth;
         }
-        else if ( textEndPos + cursorToBorderDistance > originalTextSize
-                  && getLineWidth( textData + textEndPos, originalTextSize - textEndPos, charHandler, true ) <= truncationSymbolWidth ) {
+
+        if ( textEndPos != originalTextSize && textEndPos + cursorToBorderDistance > originalTextSize
+             && getLineWidth( textData + textEndPos, originalTextSize - textEndPos, charHandler, true ) <= truncatedMaxWidth - currentWidth ) {
             // The end of the text fits the given width. Update text length to remove truncation at the end.
             _textLength = originalTextSize - _textBeginPos;
         }
 
-        if ( _textBeginPos > 0 && _textBeginPos < cursorToBorderDistance && getLineWidth( textData, _textBeginPos, charHandler, true ) <= truncationSymbolWidth ) {
+        if ( _textBeginPos > 0 && _textBeginPos < cursorToBorderDistance
+             && getLineWidth( textData, _textBeginPos, charHandler, true ) <= truncatedMaxWidth - currentWidth ) {
             // The beginning of the text fits the given width. Update _textBeginPos to remove truncation at the beginning.
-            _textLength += _textBeginPos;
             _textBeginPos = 0;
+            _textLength = getMaxCharacterCount( textData, originalTextSize, charHandler, truncatedMaxWidth );
         }
     }
 
@@ -1046,6 +1048,10 @@ namespace fheroes2
     {
         if ( isSpaceChar( character ) ) {
             return _spaceCharWidth;
+        }
+
+        if ( isLineSeparator( character ) ) {
+            return 0;
         }
 
         const Sprite & image = getSprite( character );
