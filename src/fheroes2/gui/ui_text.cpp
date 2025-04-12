@@ -170,7 +170,10 @@ namespace
 
         if ( keepTrailingSpaces ) {
             for ( ; data != dataEnd; ++data ) {
-                width += charHandler.getWidth( *data );
+                // Some lines may contain a new line character that is not printable so we should ignore it.
+                if ( !isLineSeparator( *data ) ) {
+                    width += charHandler.getWidth( *data );
+                }
             }
 
             return width;
@@ -827,6 +830,7 @@ namespace fheroes2
             fitToOneRow( _autoFitToWidth );
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
         const int32_t cursorPos = _cursorPosition - _textBeginPos;

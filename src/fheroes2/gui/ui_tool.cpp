@@ -692,6 +692,11 @@ namespace fheroes2
         const FontCharHandler charHandler( textInput.getFontType() );
 
         for ( size_t i = 0; i < textSize; ++i ) {
+            if ( text[i] == '\n' ) {
+                // Some lines may contain a new line character that is not printable so we should ignore it.
+                continue;
+            }
+
             const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
 
             if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {

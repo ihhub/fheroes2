@@ -254,7 +254,7 @@ namespace
             _output.render( _textCursorRestorer.rect() );
         }
 
-        void setCursorPosition( const fheroes2::Point clickPosition )
+        void setCursorPosition( const fheroes2::Point & clickPosition )
         {
             const fheroes2::Rect startPosRoi( _textInputPos.x, _textInputArea.y, _textInputArea.width - ( _textInputArea.x - _textInputPos.x ) * 2,
                                               _textInputArea.height );
@@ -345,7 +345,7 @@ namespace
     {
         KeyboardButton() = default;
 
-        KeyboardButton( std::string input, const fheroes2::Key kbKey, const fheroes2::Size buttonSize, const bool isEvilInterface,
+        KeyboardButton( std::string input, const fheroes2::Key kbKey, const fheroes2::Size & buttonSize, const bool isEvilInterface,
                         std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
             , key( kbKey )
@@ -362,9 +362,11 @@ namespace
             fheroes2::addGradientShadow( released, buttonShadow, { -std::min( 0, buttonShadowOffset.x ), -std::min( 0, buttonShadowOffset.y ) }, buttonShadowOffset );
         }
 
-        KeyboardButton( std::string input, const fheroes2::Size buttonSize, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+        KeyboardButton( std::string input, const fheroes2::Size & buttonSize, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : KeyboardButton( std::move( input ), fheroes2::Key::NONE, buttonSize, isEvilInterface, std::move( actionEvent ) )
-        {}
+        {
+            // Do nothing.
+        }
 
         KeyboardButton( const KeyboardButton & ) = delete;
 
@@ -974,10 +976,8 @@ namespace
             }
 
             action = handleButtonAndKeyboardEvents( buttons, le, renderer );
-            switch ( action ) {
-            case DialogAction::DoNothing:
-                break;
-            default:
+
+            if ( action != DialogAction::DoNothing ) {
                 return action;
             }
 

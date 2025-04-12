@@ -297,17 +297,9 @@ namespace fheroes2
             _keepLineTrailingSpaces = true;
         }
 
-        // This class should not allow to set font type.
-        // void set( std::string, const FontType ) = delete;
-        // void set( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language ) = delete;
-
-        void set( std::string text, const FontType fontType )
-        {
-            _text = std::move( text );
-            _fontType = fontType;
-            _language = std::nullopt;
-        }
-
+        // TextInput should update text and cursor position in that text at the same time.
+        void set( std::string, const FontType ) = delete;
+        void set( std::string, const FontType, const std::optional<SupportedLanguage> ) = delete;
         void set( std::string text, const int32_t cursorPosition )
         {
             _text = std::move( text );
@@ -342,14 +334,14 @@ namespace fheroes2
             }
         }
 
-        int32_t getTextBeginPos() const
-        {
-            return _textBeginPos;
-        }
-
         const fheroes2::Rect & getCursorArea() const
         {
             return _cursorArea;
+        }
+
+        int32_t getTextBeginPos() const
+        {
+            return _textBeginPos;
         }
 
         std::string getVisibleText() const
@@ -360,6 +352,7 @@ namespace fheroes2
         int32_t getSingleTruncationSymbolWidth() const;
 
     private:
+        // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorArea();
 
         fheroes2::Rect _cursorArea;

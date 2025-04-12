@@ -314,7 +314,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textEditClickArea ) ) ) {
             if ( textLanguage.has_value() ) {
-                const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
+                const fheroes2::LanguageSwitcher switcher( *textLanguage );
                 fheroes2::openVirtualKeyboard( result, charLimit );
             }
             else {
@@ -340,7 +340,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         }
         else if ( le.MouseClickLeft( textEditClickArea ) ) {
             if ( textLanguage.has_value() ) {
-                const fheroes2::LanguageSwitcher switcher( textLanguage.value() );
+                const fheroes2::LanguageSwitcher switcher( *textLanguage );
                 charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.getMouseCursorPos(), textInputArea );
             }
             else {
