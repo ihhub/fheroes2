@@ -127,10 +127,11 @@ namespace
             : _output( output )
             , _info( info )
             , _lengthLimit( lengthLimit )
-            , _isEvilInterface( evilInterface )
             , _cursorPosition( info.size() )
+            , _textCursorRestorer( output, 0, 0, 0, 0 )
+            , _isEvilInterface( evilInterface )
         {
-            // Do nothing.
+            _textUI.setAutoFitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
         }
 
         fheroes2::Rect getWindowRoi() const
@@ -144,11 +145,9 @@ namespace
             return _window->activeArea();
         }
 
-        fheroes2::Rect getTextRoi() const
+        const fheroes2::Rect & getTextRoi() const
         {
-            const fheroes2::Rect windowRoi{ getWindowRoi() };
-            return { windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders, windowRoi.y + inputAreaOffsetFromWindowTop + inputAreaBorders,
-                     inputAreaSize.width - inputAreaBorders * 2, inputAreaSize.height - inputAreaBorders * 2 };
+            return _textInputArea;
         }
 
         bool isEvilInterface() const
@@ -175,6 +174,12 @@ namespace
             _window = std::make_unique<fheroes2::StandardWindow>( offset.x, offset.y, size.width, size.height, true, _output );
 
             _window->render();
+
+            const fheroes2::Rect & windowRoi = _window->activeArea();
+            _textInputArea.x = windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2;
+            _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
+
+            _textInputPos = { _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders + 3 };
 
             _redrawInputArea();
 
@@ -241,11 +246,20 @@ namespace
         {
             _isCursorVisible = !_isCursorVisible;
 
-            _renderInputArea();
+            if ( _isCursorVisible ) {
+                _textUI.drawCursor( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
+            }
+            else {
+                _textCursorRestorer.restore();
+            }
+
+            _output.render( _textCursorRestorer.rect() );
         }
 
-        void setCursorPosition( const fheroes2::Point clickPosition, const fheroes2::Rect & startPosRoi )
+        void setCursorPosition( const fheroes2::Point clickPosition )
         {
+            const fheroes2::Rect startPosRoi( _textInputPos.x, _textInputArea.y, _textInputArea.width - ( _textInputArea.x - _textInputPos.x ) * 2,
+                                              _textInputArea.height );
             _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, false, clickPosition, startPosRoi );
             _renderInputArea();
         }
@@ -293,38 +307,39 @@ namespace
         std::string & _info;
         size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
+        size_t _cursorPosition{ 0 };
+        fheroes2::TextInput _textUI{ fheroes2::FontType::normalWhite() };
+        fheroes2::ImageRestorer _textCursorRestorer;
+        fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
+        fheroes2::Point _textInputPos;
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
-        size_t _cursorPosition{ 0 };
-        fheroes2::TextInput _textUI;
 
-        fheroes2::Rect _redrawInputArea()
+        void _redrawInputArea()
         {
-            const fheroes2::Rect & windowRoi = _window->activeArea();
-            const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + inputAreaOffsetFromWindowTop, inputAreaSize.width,
-                                            inputAreaSize.height };
-
             const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Copy( initialWindow, 40, 286, _output, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height );
+            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
 
             if ( _isEvilInterface ) {
-                fheroes2::ApplyPalette( _output, outputRoi.x, outputRoi.y, _output, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height,
-                                        PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
+                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             }
 
-            _textUI.set( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            _textUI.setCursorPosition( static_cast<uint32_t>( _cursorPosition ) );
-            _textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
+            _textUI.set( _info, static_cast<int32_t>( _cursorPosition ) );
+            _textUI.drawInRoi( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
+            const fheroes2::Rect & cursorRoi = _textUI.getCursorArea();
+            _textCursorRestorer.update( cursorRoi.x + _textInputPos.x, cursorRoi.y + _textInputPos.y, cursorRoi.width, cursorRoi.height );
+            _textUI.drawCursor( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
 
-            _textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
-                          windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - _textUI.height() ) / 2 + inputAreaBorders, _output );
-
-            return outputRoi;
+            // Show cursor after text update.
+            Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+            _isCursorVisible = true;
         }
 
         void _renderInputArea()
         {
-            _output.render( _redrawInputArea() );
+            _redrawInputArea();
+            _output.render( _textInputArea );
         }
     };
 
@@ -922,7 +937,7 @@ namespace
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders, windowWidth );
-        const fheroes2::Rect textRoi{ renderer.getTextRoi() };
+        const fheroes2::Rect & textRoi = renderer.getTextRoi();
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
@@ -951,7 +966,7 @@ namespace
 
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
+        while ( le.HandleEvents() ) {
             okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
 
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
@@ -974,7 +989,7 @@ namespace
             updateButtonStates( buttons, le );
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.getMouseCursorPos(), textRoi );
+                renderer.setCursorPosition( le.getMouseCursorPos() );
             }
 
             // Text input cursor blink.

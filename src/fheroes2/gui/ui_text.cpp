@@ -713,6 +713,8 @@ namespace fheroes2
 
     void TextInput::drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
     {
+        // TODO: implement a method for multi-line text.
+
         const int32_t textWidth
             = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), FontCharHandler( _fontType ), true );
 

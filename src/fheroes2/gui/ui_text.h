@@ -274,8 +274,7 @@ namespace fheroes2
     class TextInput final : public Text
     {
     public:
-        // TextInput() = delete;
-        TextInput() = default;
+        TextInput() = delete;
 
         explicit TextInput( const FontType fontType )
             : Text( {}, fontType )
