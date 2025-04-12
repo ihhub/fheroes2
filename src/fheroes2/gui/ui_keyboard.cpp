@@ -976,7 +976,6 @@ namespace
             }
 
             action = handleButtonAndKeyboardEvents( buttons, le, renderer );
-
             if ( action != DialogAction::DoNothing ) {
                 return action;
             }
