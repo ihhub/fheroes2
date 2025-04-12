@@ -462,6 +462,8 @@ namespace Editor
                 fheroes2::showMessage( fheroes2::Text{ _( "Map Name" ), fheroes2::FontType::normalYellow() }, message, Dialog::ZERO );
             }
 
+            const bool needRedrawListbox = listbox.IsNeedRedraw();
+
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
             if ( !needFileNameRedraw && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
                 isCursorVisible = !isCursorVisible;
@@ -473,12 +475,12 @@ namespace Editor
                     textCursorRestorer.restore();
                 }
 
-                if ( !listbox.IsNeedRedraw() ) {
+                if ( !needRedrawListbox ) {
                     display.render( textCursorRestorer.rect() );
                 }
             }
 
-            if ( !needFileNameRedraw && !listbox.IsNeedRedraw() ) {
+            if ( !needFileNameRedraw && !needRedrawListbox ) {
                 continue;
             }
 
@@ -494,9 +496,8 @@ namespace Editor
                     }
                 }
                 else {
-                    // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
-                    // But when loading (i.e. isEditing == false), this doesn't matter since we cannot write to the input field
-                    lastSelectedSaveFileName = "";
+                    // Empty last selected map file name so that we can replace the input field's name if we select the same map file again.
+                    lastSelectedSaveFileName.clear();
                 }
 
                 fileNameBackground.restore();
@@ -505,7 +506,7 @@ namespace Editor
                 Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
             }
 
-            if ( listbox.IsNeedRedraw() ) {
+            if ( needRedrawListbox ) {
                 listbox.Redraw();
                 display.render( area );
             }
