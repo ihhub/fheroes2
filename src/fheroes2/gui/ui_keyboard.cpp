@@ -959,10 +959,7 @@ namespace
             }
 
             action = handleButtonAndKeyboardEvents( buttons, le, renderer );
-            switch ( action ) {
-            case DialogAction::DoNothing:
-                break;
-            default:
+            if ( action != DialogAction::DoNothing ) {
                 return action;
             }
 
