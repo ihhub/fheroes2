@@ -94,12 +94,10 @@ namespace
     enum class DialogAction : int
     {
         DoNothing,
-        AddLetter,
         UpperCase,
         LowerCase,
         AlphaNumeric,
         ChangeLanguage,
-        Backspace,
         Close
     };
 
@@ -567,7 +565,7 @@ namespace
                 buttons[i].emplace_back( std::string( 1, ch ), getKeyForCharacter( ch ), buttonSize, isEvilInterface,
                                          [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
                                              renderer.insertCharacter( letter );
-                                             return DialogAction::AddLetter;
+                                             return DialogAction::DoNothing;
                                          } );
             }
         }
@@ -589,7 +587,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -599,7 +597,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UpperCase:
@@ -611,7 +609,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -621,7 +619,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::AlphaNumeric:
@@ -633,7 +631,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
@@ -641,7 +639,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::SignedNumeric:
@@ -651,13 +649,13 @@ namespace
             lastButtonRow.emplace_back( "-", fheroes2::Key::KEY_MINUS, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.swapSign();
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.insertCharacter( '0' );
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
@@ -666,7 +664,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UnsignedNumeric:
@@ -680,7 +678,7 @@ namespace
             lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.insertCharacter( '0' );
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
@@ -689,7 +687,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         default:
@@ -963,9 +961,6 @@ namespace
             action = handleButtonAndKeyboardEvents( buttons, le, renderer );
             switch ( action ) {
             case DialogAction::DoNothing:
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
-                // Do nothing.
                 break;
             default:
                 return action;
@@ -1010,10 +1005,8 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
             case DialogAction::DoNothing:
-                // These actions must not be processed here!
+                // This action must not be processed here!
                 assert( 0 );
                 break;
             case DialogAction::LowerCase:
@@ -1062,9 +1055,7 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, SupportedLanguage::English, false, renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
             case DialogAction::AlphaNumeric:
-            case DialogAction::Backspace:
             case DialogAction::ChangeLanguage:
             case DialogAction::DoNothing:
             case DialogAction::LowerCase:
