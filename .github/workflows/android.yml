@@ -37,7 +37,7 @@ jobs:
         sudo apt-get -y install gettext
     - name: Generate translations
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j "$(nproc)"
     - name: Create keystore
       if: ${{ github.event_name == 'push' && env.KEYSTORE_BASE64 != '' }}
       run: |

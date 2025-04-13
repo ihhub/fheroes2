@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,13 +28,13 @@ class Army;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Map_Format
     {
         struct MapFormat;
         struct TileInfo;
-        struct ObjectInfo;
+        struct TileObjectInfo;
         struct CastleMetadata;
         struct HeroMetadata;
     }
@@ -46,12 +46,24 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
+    bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
+    void writeTile( const Tile & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
+
+    bool addStream( Map_Format::MapFormat & map, const int32_t tileId );
+
+    // Update the existing streams around the center tile to properly connect them to the center stream.
+    void updateStreamsAround( Map_Format::MapFormat & map, const int32_t centerTileId );
+
+    // Update the existing streams to connect them to the River Delta.
+    void updateStreamsToDeltaConnection( Map_Format::MapFormat & map, const int32_t tileId, const int deltaDirection );
+
+    // Returns 'Direction::UNKNOWN' if the index does not belong to River Delta object
+    int getRiverDeltaDirectionByIndex( const ObjectGroup group, const int32_t objectIndex );
+
+    bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
@@ -72,4 +84,10 @@ namespace Maps
     void saveCastleArmy( const Army & army, Map_Format::CastleMetadata & metadata );
     bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
     void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
+
+    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
+
+    void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
+
+    bool doesContainRoads( const Maps::Map_Format::TileInfo & tile );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_castle.h"
+
 #include <array>
 #include <cassert>
 #include <string>
@@ -33,7 +35,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "ui_castle.h"
 #include "ui_text.h"
 
 namespace
@@ -166,44 +167,73 @@ namespace
 
 namespace fheroes2
 {
-    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset )
+    uint32_t getCastleIcnIndex( const int race, const bool isCastle )
     {
-        uint32_t icnIndex = 1;
-
-        switch ( castle.GetRace() ) {
+        switch ( race ) {
         case Race::KNGT:
-            icnIndex = castle.isCastle() ? 9 : 15;
-            break;
+            return isCastle ? 9 : 15;
         case Race::BARB:
-            icnIndex = castle.isCastle() ? 10 : 16;
-            break;
+            return isCastle ? 10 : 16;
         case Race::SORC:
-            icnIndex = castle.isCastle() ? 11 : 17;
-            break;
+            return isCastle ? 11 : 17;
         case Race::WRLK:
-            icnIndex = castle.isCastle() ? 12 : 18;
-            break;
+            return isCastle ? 12 : 18;
         case Race::WZRD:
-            icnIndex = castle.isCastle() ? 13 : 19;
-            break;
+            return isCastle ? 13 : 19;
         case Race::NECR:
-            icnIndex = castle.isCastle() ? 14 : 20;
-            break;
+            return isCastle ? 14 : 20;
+        case Race::RAND:
+            // It is used in Editor to select random castle as a victory/loss special condition.
+            return isCastle ? 25 : 26;
         default:
             assert( 0 );
             DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
         }
 
-        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
-        fheroes2::Blit( castleImage, output, offset.x, offset.y );
+        return 1;
+    }
+
+    uint32_t getCastleLeftFlagIcnIndex( const int color )
+    {
+        switch ( color ) {
+        case Color::BLUE:
+            return 0;
+        case Color::GREEN:
+            return 2;
+        case Color::RED:
+            return 4;
+            break;
+        case Color::YELLOW:
+            return 6;
+        case Color::ORANGE:
+            return 8;
+        case Color::PURPLE:
+            return 10;
+        case Color::NONE:
+            return 12;
+        default:
+            // Have you added a new player color? Update the logic above.
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
+    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset )
+    {
+        const uint32_t icnIndex = getCastleIcnIndex( castle.GetRace(), castle.isCastle() );
+
+        const Sprite & castleImage = AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
+        Copy( castleImage, 0, 0, output, offset.x, offset.y, castleImage.width(), castleImage.height() );
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
-        case NOT_TODAY:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
+        case BuildingStatus::NOT_TODAY:
+            Blit( AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;
-        case REQUIRES_BUILD:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
+        case BuildingStatus::REQUIRES_BUILD:
+            Blit( AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
         default:
             break;

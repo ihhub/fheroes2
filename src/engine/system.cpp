@@ -25,38 +25,38 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <filesystem>
-#include <initializer_list>
+#include <functional>
+#include <map>
+#include <memory>
 #include <system_error>
 #include <utility>
 
 #if defined( _WIN32 )
-#include <clocale>
-#include <map>
+#include <tuple>
 
-#include <direct.h>
-#include <io.h>
+#include "tools.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#else
-#include <dirent.h>
-#include <unistd.h>
-
-#if defined( TARGET_PS_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <algorithm>
-
-#include <psp2/io/stat.h>
-#else
-#include <sys/stat.h>
-#endif
 #endif
 
-#if defined( _WIN32 ) || defined( ANDROID )
-#include "logging.h"
-#else
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
+#include <dirent.h>
 #include <strings.h>
 #endif
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
+#include <SDL_touch.h>
 #include <SDL_version.h>
 
 #if defined( ANDROID )
@@ -69,106 +69,58 @@
 #include <SDL_stdinc.h>
 #endif
 
-#if defined( _WIN32 )
-#define SEPARATOR '\\'
-#else
-#define SEPARATOR '/'
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
 namespace
 {
 #if !defined( __linux__ ) || defined( ANDROID )
-    std::string GetHomeDirectory( const std::string & prog )
+    std::string GetHomeDirectory( const std::string_view appName )
     {
 #if defined( TARGET_PS_VITA )
-        return System::concatPath( "ux0:data", prog );
+        return System::concatPath( "ux0:data", appName );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return System::concatPath( "/switch", prog );
+        return System::concatPath( "/switch", appName );
 #elif defined( ANDROID )
-        (void)prog;
+        (void)appName;
 
-        const char * storagePath = SDL_AndroidGetExternalStoragePath();
-        if ( storagePath == nullptr ) {
-            ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
-            return { "." };
+        if ( const char * storagePath = SDL_AndroidGetExternalStoragePath(); storagePath != nullptr ) {
+            return storagePath;
         }
 
-        VERBOSE_LOG( "Application storage path is " << storagePath )
-        return storagePath;
+        return {};
 #endif
-
-        const char * homeEnvPath = getenv( "HOME" );
+        {
+            const char * homeEnvPath = getenv( "HOME" );
 
 #if defined( MACOS_APP_BUNDLE )
-        if ( homeEnvPath != nullptr ) {
-            return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), prog );
-        }
+            if ( homeEnvPath != nullptr ) {
+                return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
+            }
 
-        return { "." };
+            return {};
 #endif
 
-        if ( homeEnvPath != nullptr ) {
-            return System::concatPath( homeEnvPath, std::string( "." ).append( prog ) );
+            if ( homeEnvPath != nullptr ) {
+                return System::concatPath( homeEnvPath, std::string( "." ).append( appName ) );
+            }
         }
 
-        const char * dataEnvPath = getenv( "APPDATA" );
-        if ( dataEnvPath != nullptr ) {
-            return System::concatPath( dataEnvPath, prog );
+        if ( const char * dataEnvPath = getenv( "APPDATA" ); dataEnvPath != nullptr ) {
+            return System::concatPath( dataEnvPath, appName );
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
-        char * path = SDL_GetPrefPath( "", prog.c_str() );
-        if ( path ) {
-            const std::string result{ path };
-
-            SDL_free( path );
-
-            return result;
+        if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToUTF8( std::string{ appName } ).c_str() ), SDL_free ); path ) {
+            return System::encUTF8ToLocal( path.get() );
         }
 #endif
 
-        return { "." };
+        return {};
     }
 #endif
-
-#if !defined( _WIN32 ) && !defined( ANDROID )
-    std::vector<std::string> splitUnixPath( const std::string & path, const std::string_view delimiter )
-    {
-        std::vector<std::string> result;
-
-        if ( path.empty() ) {
-            return result;
-        }
-
-        size_t pos = 0;
-
-        while ( pos < path.size() ) {
-            const size_t nextPos = path.find( delimiter, pos );
-
-            if ( nextPos == std::string::npos ) {
-                result.push_back( path.substr( pos ) );
-
-                break;
-            }
-            if ( pos < nextPos ) {
-                result.push_back( path.substr( pos, nextPos - pos ) );
-            }
-
-            pos = nextPos + delimiter.size();
-        }
-
-        return result;
-    }
-#endif
-
-    std::string_view trimTrailingSeparators( std::string_view path )
-    {
-        while ( path.size() > 1 && path.back() == SEPARATOR ) {
-            path.remove_suffix( 1 );
-        }
-
-        return path;
-    }
 
     bool globMatch( const std::string_view string, const std::string_view wildcard )
     {
@@ -213,6 +165,104 @@ namespace
 
         return wildcardIdx == wildcard.length();
     }
+
+#if defined( _WIN32 )
+    enum class EncodingConversionDirection
+    {
+        ACPToUTF8,
+        UTF8ToACP
+    };
+
+    std::string convertBetweenACPAndUTF8( const std::string_view str, const EncodingConversionDirection dir )
+    {
+        if ( str.empty() ) {
+            return {};
+        }
+
+        thread_local std::map<EncodingConversionDirection, std::map<std::string, std::string, std::less<>>> resultsCache;
+
+        if ( const auto dirIter = resultsCache.find( dir ); dirIter != resultsCache.end() ) {
+            const auto & strMap = dirIter->second;
+
+            if ( const auto strIter = strMap.find( str ); strIter != strMap.end() ) {
+                return strIter->second;
+            }
+        }
+
+        // In case of any issues, the original string will be returned, so let's put it to the cache right away
+        const auto [resultIter, inserted] = resultsCache[dir].try_emplace( std::string{ str }, str );
+        if ( !inserted ) {
+            assert( 0 );
+        }
+
+        const auto strLen = fheroes2::checkedCast<int>( str.size() );
+        if ( !strLen ) {
+            // The size of this string does not fit into an int, so this string cannot be safely converted
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+            return std::string{ str };
+        }
+
+        const auto [mbCodePage, mbFlags, wcCodePage, wcFlags] = [dir]() -> std::tuple<UINT, DWORD, UINT, DWORD> {
+            switch ( dir ) {
+            case EncodingConversionDirection::ACPToUTF8:
+                return { CP_ACP, MB_ERR_INVALID_CHARS, CP_UTF8, WC_ERR_INVALID_CHARS };
+            case EncodingConversionDirection::UTF8ToACP:
+                return { CP_UTF8, MB_ERR_INVALID_CHARS, CP_ACP, WC_NO_BEST_FIT_CHARS };
+            default:
+                assert( 0 );
+                break;
+            }
+
+            return { CP_ACP, MB_ERR_INVALID_CHARS, CP_ACP, WC_NO_BEST_FIT_CHARS };
+        }();
+
+        const int wcLen = MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, nullptr, 0 );
+        if ( wcLen <= 0 ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+            return std::string{ str };
+        }
+
+        // The contents of this buffer will not be zero-terminated
+        const std::unique_ptr<wchar_t[]> wcStr( new wchar_t[wcLen] );
+
+        if ( MultiByteToWideChar( mbCodePage, mbFlags, str.data(), *strLen, wcStr.get(), wcLen ) != wcLen ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+            return std::string{ str };
+        }
+
+        const int mbLen = WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, nullptr, 0, nullptr, nullptr );
+        if ( mbLen <= 0 ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+            return std::string{ str };
+        }
+
+        // The contents of this buffer will not be zero-terminated
+        const std::unique_ptr<char[]> mbStr( new char[mbLen] );
+
+        if ( WideCharToMultiByte( wcCodePage, wcFlags, wcStr.get(), wcLen, mbStr.get(), mbLen, nullptr, nullptr ) != mbLen ) {
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+            return std::string{ str };
+        }
+
+        // The contents of this buffer is not zero-terminated
+        std::string result( mbStr.get(), mbLen );
+
+        // Put the final result to the cache
+        resultIter->second = result;
+
+        return result;
+    }
+#endif
 }
 
 bool System::isHandheldDevice()
@@ -222,6 +272,11 @@ bool System::isHandheldDevice()
 #else
     return false;
 #endif
+}
+
+bool System::isTouchInputAvailable()
+{
+    return SDL_GetNumTouchDevices() > 0;
 }
 
 bool System::isVirtualKeyboardSupported()
@@ -242,28 +297,25 @@ bool System::isShellLevelGlobbingSupported()
 #endif
 }
 
-bool System::MakeDirectory( const std::string & path )
+bool System::MakeDirectory( const std::string_view path )
 {
-#if defined( _WIN32 )
-    return _mkdir( path.c_str() ) == 0;
-#elif defined( TARGET_PS_VITA )
-    return sceIoMkdir( path.c_str(), 0777 ) == 0;
-#else
-    return mkdir( path.c_str(), S_IRWXU ) == 0;
-#endif
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    return std::filesystem::create_directories( path, ec );
+}
+
+bool System::Unlink( const std::string_view path )
+{
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    return std::filesystem::remove( path, ec );
 }
 
 std::string System::concatPath( const std::string_view left, const std::string_view right )
 {
-    // Avoid memory allocation while concatenating string. Allocate needed size at once.
-    std::string temp;
-    temp.reserve( left.size() + 1 + right.size() );
-
-    temp += left;
-    temp += SEPARATOR;
-    temp += right;
-
-    return temp;
+    return fsPathToString( std::filesystem::path{ left }.append( right ) );
 }
 
 void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
@@ -278,227 +330,148 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 #endif
 }
 
-std::string System::GetConfigDirectory( const std::string & prog )
+std::string System::GetConfigDirectory( const std::string_view appName )
 {
+    // Location of the app config directory, in theory, should not change while the app is running and can be cached
+    thread_local std::map<std::string, std::string, std::less<>> resultsCache;
+
+    if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
+        return iter->second;
+    }
+
+    std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
-    const char * configEnv = getenv( "XDG_CONFIG_HOME" );
-    if ( configEnv ) {
-        return System::concatPath( configEnv, prog );
-    }
+        if ( const char * configEnv = getenv( "XDG_CONFIG_HOME" ); configEnv != nullptr ) {
+            return concatPath( configEnv, appName );
+        }
 
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, ".config" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return concatPath( concatPath( homeEnv, ".config" ), appName );
+        }
 
-    return { "." };
+        return {};
 #else
-    return GetHomeDirectory( prog );
+        return GetHomeDirectory( appName );
 #endif
+    }();
+
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
+        assert( 0 );
+    }
+
+    return result;
 }
 
-std::string System::GetDataDirectory( const std::string & prog )
+std::string System::GetDataDirectory( const std::string_view appName )
 {
+    // Location of the app data directory, in theory, should not change while the app is running and can be cached
+    thread_local std::map<std::string, std::string, std::less<>> resultsCache;
+
+    if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
+        return iter->second;
+    }
+
+    std::string result = [&appName]() -> std::string {
 #if defined( __linux__ ) && !defined( ANDROID )
-    const char * dataEnv = getenv( "XDG_DATA_HOME" );
-    if ( dataEnv ) {
-        return System::concatPath( dataEnv, prog );
-    }
+        if ( const char * dataEnv = getenv( "XDG_DATA_HOME" ); dataEnv != nullptr ) {
+            return concatPath( dataEnv, appName );
+        }
 
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, ".local/share" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return concatPath( concatPath( homeEnv, ".local/share" ), appName );
+        }
 
-    return { "." };
+        return {};
 #elif defined( MACOS_APP_BUNDLE )
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), prog );
-    }
+        if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
+            return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
+        }
 
-    return { "." };
+        return {};
 #else
-    return GetHomeDirectory( prog );
+        return GetHomeDirectory( appName );
 #endif
+    }();
+
+    if ( const auto [dummy, inserted] = resultsCache.try_emplace( std::string{ appName }, result ); !inserted ) {
+        assert( 0 );
+    }
+
+    return result;
 }
 
-std::string System::GetDirname( std::string_view path )
+std::string System::GetParentDirectory( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( SEPARATOR );
-
-    if ( pos == std::string::npos ) {
-        return { "." };
-    }
-    if ( pos == 0 ) {
-        return { std::initializer_list<char>{ SEPARATOR } };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
+    return fsPathToString( std::filesystem::path{ path }.parent_path() );
 }
 
-std::string System::GetBasename( std::string_view path )
+std::string System::GetFileName( std::string_view path )
 {
-    if ( path.empty() ) {
-        return { "." };
-    }
-
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( SEPARATOR );
-
-    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
-        return std::string{ path };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ path.substr( pos + 1 ) };
+    return fsPathToString( std::filesystem::path{ path }.filename() );
 }
 
-std::string System::truncateFileExtensionAndPath( std::string_view path )
+std::string System::GetStem( const std::string_view path )
 {
-    std::string res = GetBasename( path );
-
-    const size_t pos = res.rfind( '.' );
-
-    if ( pos != std::string::npos ) {
-        res.resize( pos );
-    }
-
-    return res;
+    return fsPathToString( std::filesystem::path{ path }.stem() );
 }
 
-bool System::IsFile( const std::string & path, bool writable )
+bool System::IsFile( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a file.
         return false;
     }
 
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
-        // This is a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 04 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a file.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) ) {
         return false;
+    }
 
-    struct stat fs;
+    std::error_code ec;
 
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISREG( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    // Using the non-throwing overload
+    return std::filesystem::is_regular_file( correctedPath, ec );
 }
 
-bool System::IsDirectory( const std::string & path, bool writable )
+bool System::IsDirectory( const std::string_view path )
 {
     if ( path.empty() ) {
         // An empty path cannot be a directory.
         return false;
     }
 
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
-        // Not a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 00 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a directory.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) ) {
         return false;
+    }
 
-    struct stat fs;
+    std::error_code ec;
 
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    // Using the non-throwing overload
+    return std::filesystem::is_directory( correctedPath, ec );
 }
 
-bool System::Unlink( const std::string & path )
+bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if defined( _WIN32 )
-    return _unlink( path.c_str() ) == 0;
-#else
-    return unlink( path.c_str() ) == 0;
-#endif
-}
-
-#if !defined( _WIN32 ) && !defined( ANDROID )
-// based on: https://github.com/OneSadCookie/fcaseopen
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
-{
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
+    // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 
     if ( path.empty() ) {
         return false;
     }
 
-    DIR * d;
-    bool last = false;
-    const char * curDir = ".";
-    const char * delimiter = "/";
+    constexpr char dirSep{ '/' };
 
-    if ( path[0] == delimiter[0] ) {
-        correctedPath.append( delimiter );
+    std::unique_ptr<DIR, int ( * )( DIR * )> dir( path.front() == dirSep ? opendir( "/" ) : opendir( "." ), closedir );
 
-        d = opendir( delimiter );
-    }
-    else {
-        d = opendir( curDir );
-    }
-
-    const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
-        if ( !d ) {
+    for ( const std::filesystem::path & pathItem : std::filesystem::path{ path } ) {
+        if ( !dir ) {
             return false;
         }
 
-        if ( last ) {
-            closedir( d );
-            return false;
-        }
-
-        if ( subPathIter != splittedPath.begin() ) {
-            correctedPath.append( delimiter );
+        if ( !correctedPath.empty() && correctedPath.back() != dirSep ) {
+            correctedPath += dirSep;
         }
 
         // Avoid directory traversal and try to probe directory name directly.
@@ -510,55 +483,43 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         // It's not uncommon for /nix/store to have tens of thousands files.
         // GetCaseInsensitivePath() calls become very expensive on such systems.
         //
-        // The idea is to try to open current subpath as a directory and avoid
-        // directory traversal altogether. Otherwise fall back to linear
+        // The idea is to try to open the current path item as a directory and
+        // avoid directory traversal altogether. Otherwise fall back to linear
         // case-insensitive search.
+        {
+            std::string tmpPath = correctedPath + pathItem.string();
 
-        std::string absSubpath = correctedPath + *subPathIter;
-        DIR * de = opendir( absSubpath.c_str() );
-        if ( de ) {
-            correctedPath = std::move( absSubpath );
+            if ( std::unique_ptr<DIR, int ( * )( DIR * )> tmpDir( opendir( tmpPath.c_str() ), closedir ); tmpDir ) {
+                correctedPath = std::move( tmpPath );
+                dir = std::move( tmpDir );
 
-            closedir( d );
-            d = opendir( correctedPath.c_str() );
-
-            closedir( de );
-            continue;
+                continue;
+            }
         }
 
-        const struct dirent * e = readdir( d );
-        while ( e ) {
-            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
-                correctedPath += e->d_name;
+        const struct dirent * entry = readdir( dir.get() );
+        while ( entry != nullptr ) {
+            if ( strcasecmp( pathItem.c_str(), entry->d_name ) == 0 ) {
+                correctedPath += entry->d_name;
 
-                closedir( d );
-                d = opendir( correctedPath.c_str() );
+                dir.reset( opendir( correctedPath.c_str() ) );
 
                 break;
             }
 
-            e = readdir( d );
+            entry = readdir( dir.get() );
         }
 
-        if ( !e ) {
-            correctedPath += *subPathIter;
-            last = true;
+        if ( entry == nullptr ) {
+            return false;
         }
     }
-
-    if ( d ) {
-        closedir( d );
-    }
-
-    return !last;
-}
 #else
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
-{
     correctedPath = path;
-    return true;
-}
 #endif
+
+    return !correctedPath.empty();
+}
 
 void System::globFiles( const std::string_view glob, std::vector<std::string> & fileNames )
 {
@@ -590,11 +551,13 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dirPath, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
-        if ( globMatch( entryPath.filename().string(), pattern ) ) {
-            fileNames.push_back( entryPath.string() );
-
-            isNoMatches = false;
+        if ( !globMatch( fsPathToString( entryPath.filename() ), pattern ) ) {
+            continue;
         }
+
+        fileNames.emplace_back( fsPathToString( entryPath ) );
+
+        isNoMatches = false;
     }
 
     if ( isNoMatches ) {
@@ -602,77 +565,34 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 }
 
-std::string System::FileNameToUTF8( const std::string & name )
+std::string System::encLocalToUTF8( const std::string_view str )
 {
 #if defined( _WIN32 )
-    if ( name.empty() ) {
-        return name;
-    }
-
-    thread_local std::map<std::string, std::string> acpToUtf8;
-
-    const auto iter = acpToUtf8.find( name );
-    if ( iter != acpToUtf8.end() ) {
-        return iter->second;
-    }
-
-    // In case of any issues, the original string will be returned, so let's put it to the cache right away
-    acpToUtf8[name] = name;
-
-    const auto getLastErrorStr = []() {
-        LPTSTR msgBuf;
-
-        if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,
-                            reinterpret_cast<LPTSTR>( &msgBuf ), 0, nullptr )
-             > 0 ) {
-            const std::string result( msgBuf );
-
-            LocalFree( msgBuf );
-
-            return result;
-        }
-
-        return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
-    };
-
-    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, nullptr, 0 );
-    if ( wLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
-
-    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, wStr.get(), wLen ) != wLen ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
-    if ( uLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::unique_ptr<char[]> uStr( new char[uLen] );
-
-    if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
-        ERROR_LOG( getLastErrorStr() )
-
-        return name;
-    }
-
-    const std::string result( uStr.get() );
-
-    // Put the final result to the cache
-    acpToUtf8[name] = result;
-
-    return result;
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::ACPToUTF8 );
 #else
-    return name;
+    return std::string{ str };
+#endif
+}
+
+std::string System::encUTF8ToLocal( const std::string_view str )
+{
+#if defined( _WIN32 )
+    return convertBetweenACPAndUTF8( str, EncodingConversionDirection::UTF8ToACP );
+#else
+    return std::string{ str };
+#endif
+}
+
+std::string System::fsPathToString( const std::filesystem::path & path )
+{
+#if defined( _WIN32 )
+    // On Windows, std::filesystem::path::string() can throw an exception if path contains UTF-16 characters that
+    // are non-representable in CP_ACP. However, converting a well-formed UTF-16 string to UTF-8 is always safe,
+    // so we perform this conversion first, and then convert the resulting UTF-8 to CP_ACP using our conversion
+    // function, which can never throw an exception.
+    return encUTF8ToLocal( path.u8string() );
+#else
+    return path.string();
 #endif
 }
 

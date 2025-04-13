@@ -121,19 +121,19 @@ void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrende
     recruit = Recruit( hero, heroSurrenderDay );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
+OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit )
 {
-    return msg << recruit._id << recruit._surrenderDay;
+    return stream << recruit._id << recruit._surrenderDay;
 }
 
-StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
+IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit )
 {
-    msg >> recruit._id >> recruit._surrenderDay;
+    stream >> recruit._id >> recruit._surrenderDay;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++recruit._id;
     }
 
-    return msg;
+    return stream;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,20 +31,25 @@ Funds PaymentConditions::BuyBuilding( int race, uint32_t build )
 
 Funds PaymentConditions::BuyBoat()
 {
-    return Funds( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
 Funds PaymentConditions::BuySpellBook()
 {
-    return Funds( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
 Funds PaymentConditions::RecruitHero()
 {
-    return Funds( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 2500, 0, 0, 0, 0, 0, 0 } );
 }
 
 Funds PaymentConditions::ForAlchemist()
 {
-    return Funds( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 750, 0, 0, 0, 0, 0, 0 } );
+}
+
+Funds PaymentConditions::getMagellansMapsPurchasePrice()
+{
+    return Funds( Cost{ 1000, 0, 0, 0, 0, 0, 0 } );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CURSOR_H
-#define H2CURSOR_H
+
+#pragma once
 
 #include <cassert>
 #include <cstdint>
@@ -193,7 +193,7 @@ public:
         return _theme;
     }
 
-    bool SetThemes( int name, bool force = false );
+    void SetThemes( const int theme, const bool force = false );
 
     void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
 
@@ -238,5 +238,3 @@ private:
     const int _theme{ Cursor::Get().Themes() };
     const bool _visible{ fheroes2::cursor().isVisible() };
 };
-
-#endif

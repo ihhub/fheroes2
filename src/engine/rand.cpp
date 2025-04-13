@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,9 +23,7 @@
 
 #include "rand.h"
 
-#include <cstdlib>
-
-#include "logging.h"
+#include <numeric>
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
@@ -35,10 +33,11 @@ std::mt19937 & Rand::CurrentThreadRandomDevice()
     return gen;
 }
 
-uint32_t Rand::Get( uint32_t from, uint32_t to )
+uint32_t Rand::Get( uint32_t from, uint32_t to /* = 0 */ )
 {
-    if ( to == 0 || from > to )
+    if ( from > to ) {
         std::swap( from, to );
+    }
 
     std::uniform_int_distribution<uint32_t> distrib( from, to );
 
@@ -47,8 +46,9 @@ uint32_t Rand::Get( uint32_t from, uint32_t to )
 
 uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
 {
-    if ( from > to )
+    if ( from > to ) {
         std::swap( from, to );
+    }
 
     std::uniform_int_distribution<uint32_t> distrib( from, to );
     std::mt19937 seededGen( seed );
@@ -58,75 +58,38 @@ uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
 
 uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
 {
-    if ( from > to )
+    if ( from > to ) {
         std::swap( from, to );
+    }
 
     std::uniform_int_distribution<uint32_t> distrib( from, to );
 
     return distrib( gen );
 }
 
-Rand::Queue::Queue( uint32_t size )
+int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const
 {
-    reserve( size );
-}
-
-void Rand::Queue::Push( int32_t value, uint32_t percent )
-{
-    if ( percent > 0 )
-        emplace_back( value, percent );
-}
-
-size_t Rand::Queue::Size() const
-{
-    return size();
-}
-
-int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc )
-{
-    std::vector<ValuePercent>::iterator it;
-
-    // get max
-    it = begin();
-    uint32_t max = 0;
-    for ( ; it != end(); ++it )
-        max += ( *it ).second;
-
-    // set weight (from 100)
-    if ( max > 0 ) {
-        it = begin();
-        for ( ; it != end(); ++it )
-            ( *it ).second = 100 * ( *it ).second / max;
+    if ( empty() ) {
+        return 0;
     }
 
-    // get max
-    max = 0;
-    it = begin();
-    for ( ; it != end(); ++it )
-        max += ( *it ).second;
+    const uint32_t sum = std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const ValueWeight & vw ) { return total + vw.second; } );
+    assert( sum > 0 );
 
-    uint32_t rand = randomFunc( max );
-    uint32_t amount = 0;
+    uint32_t rand = randomFunc( sum - 1 );
+    assert( rand < sum );
 
-    it = begin();
-    for ( ; it != end(); ++it ) {
-        amount += ( *it ).second;
-        if ( rand <= amount )
-            return ( *it ).first;
+    for ( const auto & [value, weight] : *this ) {
+        if ( rand < weight ) {
+            return value;
+        }
+
+        rand -= weight;
     }
 
-    ERROR_LOG( "weight not found, return 0" )
+    assert( 0 );
+
     return 0;
-}
-
-int32_t Rand::Queue::Get()
-{
-    return Rand::Queue::Get( []( uint32_t max ) { return Rand::Get( 0, max ); } );
-}
-
-int32_t Rand::Queue::GetWithSeed( uint32_t seed )
-{
-    return Rand::Queue::Get( [seed]( uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
 }
 
 Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )

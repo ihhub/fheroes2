@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,25 +20,24 @@
 
 #include "editor_event_details_window.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "artifact_info.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
+#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -48,6 +47,7 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -61,80 +61,35 @@ namespace
 {
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
-    const fheroes2::Size messageArea{ 300, 210 };
     const int32_t elementOffset{ 9 };
-    const int32_t playerAreaWidth{ fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2 - 3 * elementOffset - messageArea.width };
-
-    class Checkbox
-    {
-    public:
-        Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Display & output = fheroes2::Display::instance() )
-            : color( boxColor )
-        {
-            const int32_t icnIndex = Color::GetIndex( color ) + 43;
-            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
-
-            rect = { x, y, playerIcon.width(), playerIcon.height() };
-
-            fheroes2::Copy( playerIcon, 0, 0, output, rect.x, rect.y, rect.width, rect.height );
-
-            checkmark.setPosition( rect.x + 2, rect.y + 2 );
-
-            if ( checked ) {
-                checkmark.show();
-            }
-            else {
-                checkmark.hide();
-            }
-        }
-
-        Checkbox( Checkbox && other ) = delete;
-        ~Checkbox() = default;
-        Checkbox( Checkbox & ) = delete;
-        Checkbox & operator=( const Checkbox & ) = delete;
-
-        const fheroes2::Rect & getRect() const
-        {
-            return rect;
-        }
-
-        int getColor() const
-        {
-            return color;
-        }
-
-        bool toggle( fheroes2::Display & output = fheroes2::Display::instance() )
-        {
-            checkmark.isHidden() ? checkmark.show() : checkmark.hide();
-
-            output.render( rect );
-
-            return !checkmark.isHidden();
-        }
-
-    private:
-        int color = Color::NONE;
-        fheroes2::Rect rect;
-        fheroes2::MovableSprite checkmark{ fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) };
-    };
+    const int32_t sectionWidth{ ( fheroes2::Display::DEFAULT_WIDTH - elementOffset * 3 ) / 2 };
+    const fheroes2::Size messageArea{ sectionWidth, 207 };
 }
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+                             const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
         eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
 
-        // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
+
+        const bool isDefaultScreenSize = display.isDefaultSize();
+
+        fheroes2::StandardWindow background( sectionWidth * 2 + elementOffset * 3, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
+        const fheroes2::Rect dialogRoi = background.activeArea();
+
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - BORDERWIDTH * 2, messageArea.height + 140, true, display );
-        const fheroes2::Rect dialogRoi = background.activeArea();
+        if ( isDefaultScreenSize ) {
+            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+            fheroes2::Copy( backgroundImage, 0, 0, display, dialogRoi );
+        }
 
         int32_t offsetY = dialogRoi.y + elementOffset;
 
@@ -142,6 +97,7 @@ namespace Editor
         title.draw( dialogRoi.x + ( dialogRoi.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
+        const int32_t startOffsetY = offsetY;
 
         fheroes2::Text text{ _( "Message Text:" ), fheroes2::FontType::normalWhite() };
 
@@ -152,97 +108,19 @@ namespace Editor
 
         text.draw( messageRoi.x + ( messageRoi.width - text.width() ) / 2, offsetY, display );
 
-        text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
-        text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+        text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
+        text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
 
-        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, messageRoi.y + messageRoi.height + 2 * elementOffset };
+        offsetY = startOffsetY;
+        const int32_t secondColumnOffsetX = dialogRoi.x + sectionWidth + 2 * elementOffset;
 
-        fheroes2::MovableSprite recurringEventCheckbox;
-        const fheroes2::Rect recurringEventArea
-            = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x, recurringEventPos.y, isEvilInterface );
-        if ( eventMetadata.isRecurringEvent ) {
-            recurringEventCheckbox.hide();
-        }
-        else {
-            recurringEventCheckbox.show();
-        }
+        text.set( _( "Effects:" ), fheroes2::FontType::normalWhite() );
+        text.draw( secondColumnOffsetX + ( sectionWidth - text.width() ) / 2, offsetY, display );
 
-        auto createColorCheckboxes = [&display]( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors,
-                                                 const int32_t boxOffsetX, const int32_t boxOffsetY ) {
-            int32_t colorsAdded = 0;
-
-            for ( const int color : Colors( availableColors ) ) {
-                list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, display ) );
-                ++colorsAdded;
-            }
-        };
-
-        const int32_t playerAreaOffsetX = dialogRoi.x + elementOffset + messageRoi.width + elementOffset;
-
-        text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
-
-        int32_t textWidth = playerAreaWidth;
-        // If the text fits on one line, make it span two lines.
-        while ( text.rows( textWidth ) < 2 ) {
-            textWidth = textWidth * 2 / 3;
-        }
-
-        text.draw( playerAreaOffsetX + ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
-
-        const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
-        const int32_t checkOffX = ( playerAreaWidth - availablePlayersCount * 32 ) / 2;
-
-        offsetY += 3 + text.height( textWidth );
-        std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
-
-        assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
-
-        offsetY += 35;
-
-        text.set( _( "Computer colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
-
-        textWidth = playerAreaWidth;
-
-        // If the text fits on one line, make it span two lines.
-        while ( text.rows( textWidth ) < 2 ) {
-            textWidth = textWidth * 2 / 3;
-        }
-
-        text.draw( playerAreaOffsetX - ( playerAreaWidth - textWidth ) / 2, offsetY, textWidth, display );
-
-        offsetY += 3 + text.height( textWidth );
-        std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, playerAreaOffsetX + checkOffX, offsetY );
-
-        assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
-
-        offsetY += 35;
-
-        text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
-        text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, display );
-
-        const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        const fheroes2::Rect artifactRoi{ playerAreaOffsetX, offsetY + text.height() + 4, artifactFrame.width(), artifactFrame.height() };
-
-        fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
-
-        auto redrawArtifactImage = [&display, &artifactRoi]( const int32_t artifactId ) {
-            const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( artifactId ).IndexSprite64() );
-            fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
-        };
-
-        redrawArtifactImage( eventMetadata.artifact );
-
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 17 );
-        const int32_t buttonWidth = buttonImage.width();
-
-        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, ICN::CELLWIN, 17, 18 );
-        buttonDeleteArtifact.draw();
+        offsetY += text.height( sectionWidth );
 
         // Resources
-        const int32_t resourceOffsetX = artifactRoi.width + elementOffset;
-        const fheroes2::Rect resourceRoi{ playerAreaOffsetX + resourceOffsetX, artifactRoi.y, playerAreaWidth - resourceOffsetX, 99 };
+        const fheroes2::Rect resourceRoi{ secondColumnOffsetX, offsetY, sectionWidth, 99 };
         background.applyTextBackgroundShading( resourceRoi );
 
         fheroes2::ImageRestorer resourceRoiRestorer( display, resourceRoi.x, resourceRoi.y, resourceRoi.width, resourceRoi.height );
@@ -250,11 +128,118 @@ namespace Editor
         std::array<fheroes2::Rect, 7> individualResourceRoi;
         renderResources( eventMetadata.resources, resourceRoi, display, individualResourceRoi );
 
+        // Artifact
+        offsetY += resourceRoi.height + elementOffset;
+
+        auto artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( eventMetadata.artifact );
+        const fheroes2::Rect artifactRoi{ secondColumnOffsetX, offsetY, artifactUI->area().width, artifactUI->area().height };
+
+        artifactUI->draw( display, artifactRoi.getPosition() );
+
+        const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
+
+        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 17 );
+        const int32_t buttonWidth = buttonImage.width();
+
+        fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
+        buttonDeleteArtifact.draw();
+
+        // Experience
+        auto experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( 0 );
+        const fheroes2::Rect experienceRoi{ secondColumnOffsetX + sectionWidth - experienceUI->area().width,
+                                            offsetY + ( artifactRoi.height - experienceUI->area().height ) / 2, experienceUI->area().width, experienceUI->area().height };
+
+        const fheroes2::Rect experienceValueRoi{ experienceRoi.x, buttonDeleteArtifact.area().y, experienceRoi.width, buttonDeleteArtifact.area().height };
+        background.applyTextBackgroundShading( experienceValueRoi );
+
+        fheroes2::ImageRestorer experienceRoiRestorer( display, experienceRoi.x, experienceRoi.y, experienceRoi.width,
+                                                       experienceValueRoi.y + experienceValueRoi.height - experienceRoi.y );
+
+        experienceUI->draw( display, experienceRoi.getPosition() );
+        text.set( std::to_string( eventMetadata.experience ), fheroes2::FontType::smallWhite() );
+        text.draw( experienceValueRoi.x + ( experienceValueRoi.width - text.width() ) / 2, experienceValueRoi.y + 5, display );
+
+        // Secondary Skill
+        const Heroes fakeHero;
+        auto secondarySkillUI
+            = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{ eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel }, fakeHero );
+
+        const fheroes2::Rect secondarySkillRoi{ ( artifactRoi.x + artifactRoi.width + experienceRoi.x - secondarySkillUI->area().width ) / 2,
+                                                offsetY + ( artifactRoi.height - secondarySkillUI->area().height ) / 2, secondarySkillUI->area().width,
+                                                secondarySkillUI->area().height };
+
+        secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
+
+        fheroes2::Button buttonDeleteSecondarySkill( secondarySkillRoi.x + ( secondarySkillRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5,
+                                                     minibuttonIcnId, 17, 18 );
+        buttonDeleteSecondarySkill.draw();
+
+        // Conditions
+        offsetY = messageRoi.y + messageRoi.height + 2 * elementOffset;
+
+        text.set( _( "Conditions:" ), fheroes2::FontType::normalWhite() );
+        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
+
+        offsetY += text.height() + elementOffset;
+        const int32_t conditionSectionOffsetY = offsetY;
+
+        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY };
+
+        fheroes2::MovableSprite recurringEventCheckbox;
+        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
+                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
+        if ( eventMetadata.isRecurringEvent ) {
+            recurringEventCheckbox.hide();
+        }
+        else {
+            recurringEventCheckbox.show();
+        }
+
+        offsetY = conditionSectionOffsetY;
+
+        text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
+
+        int32_t textWidth = sectionWidth;
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
+
+        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+
+        const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
+        const int32_t checkOffX = ( sectionWidth - availablePlayersCount * 32 ) / 2;
+
+        offsetY += 3 + text.height( textWidth );
+        std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+
+        assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
+
+        offsetY += 35;
+
+        text.set( _( "Computer colors allowed to get the event:" ), fheroes2::FontType::normalWhite() );
+
+        textWidth = sectionWidth;
+
+        // If the text fits on one line, make it span two lines.
+        while ( text.rows( textWidth ) < 2 ) {
+            textWidth = textWidth * 2 / 3;
+        }
+
+        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+
+        offsetY += 3 + text.height( textWidth );
+        std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+
+        assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
+
         // Window buttons
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
@@ -262,9 +247,10 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.MousePressLeft( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-            buttonDeleteArtifact.drawOnState( le.MousePressLeft( buttonDeleteArtifact.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
+            buttonDeleteSecondarySkill.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteSecondarySkill.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -279,7 +265,7 @@ namespace Editor
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
                     const int color = humanCheckbox->getColor();
-                    if ( humanCheckbox->toggle( display ) ) {
+                    if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
                     else {
@@ -289,7 +275,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( checkboxRect ) ) {
+                if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} human player to get event" );
                     std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a human." );
 
@@ -308,7 +294,7 @@ namespace Editor
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
                     const int color = computerCheckbox->getColor();
-                    if ( computerCheckbox->toggle( display ) ) {
+                    if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }
                     else {
@@ -318,7 +304,7 @@ namespace Editor
                     break;
                 }
 
-                if ( le.MousePressRight( checkboxRect ) ) {
+                if ( le.isMouseRightButtonPressedInArea( checkboxRect ) ) {
                     std::string header = _( "Allow %{color} computer player to get event" );
                     std::string messageText = _( "If this checkbox is checked, this event will trigger for the %{color} player if they are controlled by a computer." );
 
@@ -338,10 +324,15 @@ namespace Editor
                     int32_t * resourcePtr = eventMetadata.resources.GetPtr( resourceType );
                     assert( resourcePtr != nullptr );
 
-                    uint32_t temp = *resourcePtr;
+                    int32_t temp = *resourcePtr;
 
-                    if ( Dialog::SelectCount( Resource::String( resourceType ), 0, 1000000, temp, 1 ) ) {
-                        *resourcePtr = static_cast<int32_t>( temp );
+                    const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
+
+                    std::string message = _( "Set %{resource-type} Count" );
+                    StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
+
+                    if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {
+                        *resourcePtr = temp;
                     }
 
                     resourceRoiRestorer.restore();
@@ -355,12 +346,13 @@ namespace Editor
             if ( le.MouseClickLeft( messageRoi ) ) {
                 std::string temp = eventMetadata.message;
 
-                if ( Dialog::inputString( _( "Message:" ), temp, {}, 200, true, true ) ) {
+                const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();
-                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite() );
-                    text.draw( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display );
+                    text.set( eventMetadata.message, fheroes2::FontType::normalWhite(), language );
+                    text.drawInRoi( messageRoi.x + 5, messageRoi.y + 5, messageRoi.width - 10, display, messageRoi );
                     isRedrawNeeded = true;
                 }
             }
@@ -370,7 +362,7 @@ namespace Editor
                 display.render( recurringEventCheckbox.getArea() );
             }
             else if ( le.MouseClickLeft( artifactRoi ) ) {
-                const Artifact artifact = Dialog::selectArtifact( eventMetadata.artifact );
+                const Artifact artifact = Dialog::selectArtifact( eventMetadata.artifact, false );
                 if ( artifact.isValid() ) {
                     int32_t artifactMetadata = eventMetadata.artifactMetadata;
 
@@ -389,13 +381,12 @@ namespace Editor
                     eventMetadata.artifact = artifact.GetID();
                     eventMetadata.artifactMetadata = artifactMetadata;
 
-                    redrawArtifactImage( eventMetadata.artifact );
+                    artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( eventMetadata.artifact );
+                    artifactUI->draw( display, artifactRoi.getPosition() );
                 }
 
                 // The opened selectArtifact() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
-
-                isRedrawNeeded = false;
             }
             else if ( le.MouseClickLeft( buttonDeleteArtifact.area() ) ) {
                 eventMetadata.artifact = 0;
@@ -406,49 +397,99 @@ namespace Editor
 
                 display.render( artifactRoi );
             }
-            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            else if ( le.MouseClickLeft( secondarySkillRoi ) ) {
+                const Skill::Secondary skill = Dialog::selectSecondarySkill( fakeHero, eventMetadata.secondarySkill * 3 + eventMetadata.secondarySkillLevel );
+                if ( skill.isValid() ) {
+                    eventMetadata.secondarySkill = static_cast<uint8_t>( skill.Skill() );
+                    eventMetadata.secondarySkillLevel = static_cast<uint8_t>( skill.Level() );
+
+                    secondarySkillUI = std::make_unique<fheroes2::SecondarySkillDialogElement>( skill, fakeHero );
+
+                    secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
+                }
+
+                // The opened selectSecondarySkill() dialog might be bigger than this dialog so we render the whole screen.
+                display.render();
+            }
+            else if ( le.MouseClickLeft( buttonDeleteSecondarySkill.area() ) ) {
+                eventMetadata.secondarySkill = 0;
+                eventMetadata.secondarySkillLevel = 0;
+
+                secondarySkillUI = std::make_unique<fheroes2::SecondarySkillDialogElement>( Skill::Secondary{}, fakeHero );
+                secondarySkillUI->draw( display, secondarySkillRoi.getPosition() );
+
+                display.render( secondarySkillRoi );
+            }
+            else if ( le.MouseClickLeft( experienceRoiRestorer.rect() ) ) {
+                const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
+                int32_t tempValue{ eventMetadata.experience };
+
+                if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), tempValue, 1, &tempExperienceUI ) ) {
+                    eventMetadata.experience = tempValue;
+
+                    experienceRoiRestorer.restore();
+                    experienceUI->draw( display, experienceRoi.getPosition() );
+                    text.set( std::to_string( eventMetadata.experience ), fheroes2::FontType::smallWhite() );
+                    text.draw( experienceValueRoi.x + ( experienceValueRoi.width - text.width() ) / 2, experienceValueRoi.y + 5, display );
+                }
+
+                // The opened SelectCount() dialog might be bigger than this dialog so we render the whole screen.
+                display.render();
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to save the Event properties." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( artifactRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( artifactRoi ) ) {
                 // Since Artifact class does not allow to set a random spell (for obvious reasons),
                 // we have to use special UI code to render the popup window with all needed information.
                 const Artifact artifact( eventMetadata.artifact );
 
                 if ( artifact.isValid() ) {
-                    const fheroes2::Text header( artifact.GetName(), fheroes2::FontType::normalYellow() );
-                    const fheroes2::Text description( fheroes2::getArtifactData( eventMetadata.artifact ).getDescription( eventMetadata.artifactMetadata ),
-                                                      fheroes2::FontType::normalWhite() );
-
-                    fheroes2::ArtifactDialogElement artifactUI( artifact );
-                    fheroes2::showMessage( header, description, Dialog::ZERO, { &artifactUI } );
+                    artifactUI->showPopup( Dialog::ZERO );
                 }
                 else {
-                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Artifact" ), _( "No artifact will be given by the event." ), Dialog::ZERO );
                 }
             }
-            else if ( le.MousePressRight( buttonDeleteArtifact.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the reward." ), Dialog::ZERO );
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteArtifact.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Delete Artifact" ), _( "Delete an artifact from the event." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( resourceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( secondarySkillRoi ) ) {
+                const Skill::Secondary skill( eventMetadata.secondarySkill, eventMetadata.secondarySkillLevel );
+
+                if ( skill.isValid() ) {
+                    secondarySkillUI->showPopup( Dialog::ZERO );
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Secondary Skill" ), _( "No Secondary Skill will be given by the event." ), Dialog::ZERO );
+                }
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.rect() ) ) {
+                experienceUI->showPopup( Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( resourceRoi ) ) {
                 if ( eventMetadata.resources.GetValidItemsCount() == 0 ) {
-                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be given as a reward." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Resources" ), _( "No resources will be part of this event." ), Dialog::ZERO );
                 }
                 else {
                     fheroes2::showResourceMessage( fheroes2::Text( _( "Resources" ), fheroes2::FontType::normalYellow() ),
-                                                   fheroes2::Text{ _( "Resources will be given as a reward." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                                   fheroes2::Text{ _( "These resources will be a part of the event." ), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                    eventMetadata.resources );
                 }
             }
-            else if ( le.MousePressRight( recurringEventArea ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( recurringEventArea ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Cancel event after first visit" ),
                     _( "If this checkbox is checked, the event will trigger only once. If not checked, the event will trigger every time one of the specified players crosses the event tile." ),
                     Dialog::ZERO );
             }
-            else if ( le.MousePressRight( messageRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( messageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );
             }
 

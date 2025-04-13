@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,12 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MAGEGUILD_H
-#define H2MAGEGUILD_H
+#pragma once
 
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class HeroBase;
 
@@ -39,18 +39,13 @@ public:
     // https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html
     // except for the part related to the hidden AI-only bonuses.
     void initialize( const int race, const bool hasLibrary );
-    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
+    void trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
     SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const MageGuild & );
-    friend StreamBase & operator>>( StreamBase &, MageGuild & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild );
+    friend IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild );
 
     SpellStorage general;
     SpellStorage library;
 };
-
-StreamBase & operator<<( StreamBase &, const MageGuild & );
-StreamBase & operator>>( StreamBase &, MageGuild & );
-
-#endif

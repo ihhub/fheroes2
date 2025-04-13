@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -86,11 +86,6 @@ namespace Interface
                    || _selectedInstrument == Instrument::KINGDOM_OBJECTS || _selectedInstrument == Instrument::MONSTERS;
         }
 
-        uint32_t getEraseTypes() const
-        {
-            return _eraseTypes;
-        }
-
         std::set<Maps::ObjectGroup> getEraseObjectGroups() const;
 
         bool showAreaSelectRect() const
@@ -124,6 +119,8 @@ namespace Interface
         void getMineObjectProperties( int32_t & type, int32_t & color ) const;
 
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
+
+        void updateUndoRedoButtonsStates( const bool isUndoAvailable, const bool isRedoAvailable );
 
     private:
         static int _getGroundId( const uint8_t brushId );
@@ -250,14 +247,14 @@ namespace Interface
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;
-        fheroes2::Button _buttonNew;
+        fheroes2::Button _buttonRedo;
         fheroes2::Button _buttonSpecs;
         fheroes2::Button _buttonFile;
         fheroes2::Button _buttonSystem;
 
         fheroes2::Rect _rectMagnify;
         fheroes2::Rect _rectUndo;
-        fheroes2::Rect _rectNew;
+        fheroes2::Rect _rectRedo;
         fheroes2::Rect _rectSpecs;
         fheroes2::Rect _rectFile;
         fheroes2::Rect _rectSystem;

@@ -28,7 +28,7 @@
 
 namespace fheroes2
 {
-    class Scrollbar : public fheroes2::MovableSprite
+    class Scrollbar final : public fheroes2::MovableSprite
     {
     public:
         Scrollbar() = default;
@@ -42,9 +42,16 @@ namespace fheroes2
         }
 
         // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
-        void setImage( const Image & image );
+        void setImage( const Image & image )
+        {
+            Copy( image, *this );
+        }
 
-        void setArea( const Rect & area );
+        void setArea( const Rect & area )
+        {
+            _area = area;
+        }
+
         void setRange( const int minIndex, const int maxIndex );
 
         void forward();

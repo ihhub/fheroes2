@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SETTINGS_H
-#define H2SETTINGS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -36,7 +35,10 @@
 #include "players.h"
 #include "screen.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
+
+inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
 {
@@ -62,6 +64,13 @@ enum class ZoomLevel : uint8_t
     ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
 };
 
+enum class InterfaceType : uint8_t
+{
+    GOOD = 0,
+    EVIL = 1,
+    DYNAMIC = 2
+};
+
 class Settings
 {
 public:
@@ -79,16 +88,17 @@ public:
     bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
-    void SetCurrentFileInfo( const Maps::FileInfo & );
+
+    void setCurrentMapInfo( Maps::FileInfo fi );
 
     const Maps::FileInfo & getCurrentMapInfo() const
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     Maps::FileInfo & getCurrentMapInfo()
     {
-        return current_maps_file;
+        return _currentMapInfo;
     }
 
     int HeroesMoveSpeed() const
@@ -188,6 +198,16 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
+    void setInterfaceType( InterfaceType type )
+    {
+        _interfaceType = type;
+    }
+
+    InterfaceType getInterfaceType() const
+    {
+        return _interfaceType;
+    }
+
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -249,7 +269,6 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
-    void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -318,13 +337,6 @@ public:
         players.setCurrentColor( color );
     }
 
-    int PreferablyCountPlayers() const
-    {
-        return preferably_count_players;
-    }
-
-    void SetPreferablyCountPlayers( int );
-
     int controllerPointerSpeed() const
     {
         return _controllerPointerSpeed;
@@ -340,7 +352,7 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    void SetProgramPath( const char * );
+    void SetProgramPath( const char * path );
 
     static std::string GetVersion();
 
@@ -351,8 +363,8 @@ public:
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Settings & );
-    friend StreamBase & operator>>( StreamBase &, Settings & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+    friend IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
 
     Settings();
 
@@ -367,13 +379,13 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
 
-    std::string path_program;
+    std::string _programPath;
 
     std::string _gameLanguage;
     // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 
-    Maps::FileInfo current_maps_file;
+    Maps::FileInfo _currentMapInfo;
 
     int sound_volume;
     int music_volume;
@@ -385,8 +397,8 @@ private:
     int battle_speed;
 
     int game_type;
-    int preferably_count_players;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
+    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
@@ -396,7 +408,5 @@ private:
     Players players;
 };
 
-StreamBase & operator<<( StreamBase &, const Settings & );
-StreamBase & operator>>( StreamBase &, Settings & );
-
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf );

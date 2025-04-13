@@ -18,15 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_data.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <memory>
 #include <utility>
 
 #include "artifact.h"
-#include "campaign_data.h"
 #include "color.h"
 #include "game_video_type.h"
 #include "heroes.h"
@@ -609,11 +609,14 @@ namespace Campaign
         case DESCENDANTS_CAMPAIGN:
         case WIZARDS_ISLE_CAMPAIGN:
         case VOYAGE_HOME_CAMPAIGN:
+            break;
         default:
+            // Did you add a new campaign? Add the case handling code for it!
+            assert( 0 );
             break;
         }
 
-        return std::vector<Campaign::CampaignAwardData>();
+        return {};
     }
 
     const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo )

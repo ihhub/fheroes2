@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ICN_H
-#define H2ICN_H
+#pragma once
 
 #include <cstdint>
 
@@ -909,23 +908,20 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
-        BUYMAX,
-        BTNBATTLEONLY,
-        BTNGIFT_GOOD,
-        BTNGIFT_EVIL,
+        BUTTON_WELL_MAX,
+        BUTTON_BATTLE_ONLY,
+        BUTTON_GIFT_GOOD,
+        BUTTON_GIFT_EVIL,
         CSLMARKER,
 
         GRAY_FONT,
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
-        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
         NON_UNIFORM_GOOD_RESTART_BUTTON,
-        NON_UNIFORM_EVIL_RESTART_BUTTON,
 
         UNIFORM_GOOD_MAX_BUTTON,
         UNIFORM_GOOD_MIN_BUTTON,
@@ -938,15 +934,20 @@ namespace ICN
         UNIFORM_GOOD_EXIT_BUTTON,
         UNIFORM_EVIL_EXIT_BUTTON,
 
+        GOLDEN_GRADIENT_FONT,
+        SILVER_GRADIENT_FONT,
+
         WHITE_LARGE_FONT,
+        GOLDEN_GRADIENT_LARGE_FONT,
+        SILVER_GRADIENT_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
+        SWAP_ARROWS_CIRCULAR,
 
         COLOR_CURSOR_ADVENTURE_MAP,
         MONO_CURSOR_ADVENTURE_MAP,
 
         DISMISS_HERO_DISABLED_BUTTON,
-        NEW_CAMPAIGN_DISABLED_BUTTON,
 
         KNIGHT_CASTLE_RIGHT_FARM,
         KNIGHT_CASTLE_LEFT_FARM,
@@ -968,18 +969,20 @@ namespace ICN
         MONO_CURSOR_CMSSBW,
 
         ESPANBKG_EVIL,
-        RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
         UNIFORMBAK_GOOD,
         UNIFORMBAK_EVIL,
         REDBAK_SMALL_VERTICAL,
+        BLACKBAK,
+        BROWNBAK,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
-        RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
         EDITBTNS_EVIL,
+        DROPLISL_EVIL,
+        CELLWIN_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
@@ -995,12 +998,12 @@ namespace ICN
 
         EMPTY_GOOD_BUTTON,
         EMPTY_EVIL_BUTTON,
-        EMPTY_GOOD_MEDIUM_BUTTON,
-        EMPTY_EVIL_MEDIUM_BUTTON,
         EMPTY_POL_BUTTON,
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
         EMPTY_MAP_SELECT_BUTTON,
+        EMPTY_INTERFACE_BUTTON_GOOD,
+        EMPTY_INTERFACE_BUTTON_EVIL,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1016,12 +1019,11 @@ namespace ICN
         BUTTON_5_PLAYERS,
         BUTTON_6_PLAYERS,
 
-        BUTTON_NEW_GAME_GOOD,
-        BUTTON_NEW_GAME_EVIL,
-        BUTTON_SAVE_GAME_GOOD,
-        BUTTON_SAVE_GAME_EVIL,
-        BUTTON_LOAD_GAME_GOOD,
-        BUTTON_LOAD_GAME_EVIL,
+        BUTTON_NEW_MAP,
+        BUTTON_LOAD_MAP,
+
+        BUTTONS_FILE_DIALOG_GOOD,
+        BUTTONS_FILE_DIALOG_EVIL,
         BUTTON_INFO_GOOD,
         BUTTON_INFO_EVIL,
         BUTTON_QUIT_GOOD,
@@ -1031,8 +1033,6 @@ namespace ICN
         BUTTON_SMALL_CANCEL_EVIL,
         BUTTON_SMALL_OKAY_GOOD,
         BUTTON_SMALL_OKAY_EVIL,
-        BUTTON_SMALLER_OKAY_GOOD,
-        BUTTON_SMALLER_OKAY_EVIL,
         BUTTON_SMALL_ACCEPT_GOOD,
         BUTTON_SMALL_ACCEPT_EVIL,
         BUTTON_SMALL_DECLINE_GOOD,
@@ -1062,17 +1062,8 @@ namespace ICN
         BUTTON_SMALL_MAX_GOOD,
         BUTTON_SMALL_MAX_EVIL,
 
-        BUTTON_EXIT_GOOD,
         BUTTON_RESET_GOOD,
         BUTTON_START_GOOD,
-
-        BUTTON_CASTLE_GOOD,
-        BUTTON_CASTLE_EVIL,
-        BUTTON_TOWN_GOOD,
-        BUTTON_TOWN_EVIL,
-
-        BUTTON_RESTRICT_GOOD,
-        BUTTON_RESTRICT_EVIL,
 
         BUTTON_KINGDOM_EXIT,
         BUTTON_KINGDOM_HEROES,
@@ -1116,19 +1107,19 @@ namespace ICN
         BUTTON_LOAD_MAP_EVIL,
         BUTTON_LOAD_MAP_GOOD,
 
+        SCENIBKG_EVIL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
-    const char * GetString( int );
-    uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
-    int PORTxxxx( int heroId );
+    const char * getIcnFileName( const int icnId );
+    uint32_t getAnimatedIcnIndex( const int icnId, const uint32_t startIndex, const uint32_t currentFrameNumber, const bool quantity = false );
+    int getHeroPortraitIcnId( const int heroId );
 
-    int Get4Captain( int race );
-    int Get4Building( int race );
-    int Get4Castle( int race );
+    int getCaptainIcnId( const int race );
+    int getBuildingIcnId( const int race );
+    int getCastleIcnId( const int race );
 
-    int GetFlagIcnId( int color );
+    int getFlagIcnId( const int color );
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,7 +26,9 @@
 #include <deque>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "image.h"
@@ -34,6 +36,8 @@
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"
+
+enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {
@@ -99,6 +103,9 @@ namespace fheroes2
         void update( std::unique_ptr<TextBase> text );
 
         void draw( const int32_t x, const int32_t y );
+
+        // Draw text within a specified ROI (Region of Interest) that acts as a bounding box
+        void drawInRoi( const int32_t x, const int32_t y, const Rect & roi );
 
         void hide();
 
@@ -174,7 +181,7 @@ namespace fheroes2
     struct GameInterfaceTypeRestorer
     {
         GameInterfaceTypeRestorer() = delete;
-        explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
+        explicit GameInterfaceTypeRestorer( const InterfaceType interfaceType_ );
 
         GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
 
@@ -182,8 +189,8 @@ namespace fheroes2
 
         GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
 
-        const bool isEvilInterface;
-        const bool isOriginalEvilInterface;
+        const InterfaceType interfaceType;
+        const InterfaceType originalInterfaceType;
     };
 
     // Fade display image colors to grayscale part of default game palette.
@@ -214,8 +221,20 @@ namespace fheroes2
                                   const int32_t frameCount );
 
     // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset );
 
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
+                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
+
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
+
+    // Updates `valueBuf` based on keyboard input relevant to modifying an integer. Returns a non-empty `std::optional` instance containing the entered value
+    // if this value has been both changed and is within the range [`min`, `max`], otherwise returns an empty instance. See the implementation for details.
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf );
+
+    // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
+    void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
 }

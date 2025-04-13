@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,9 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -133,21 +135,24 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 
-    void redrawDialogInfo( const fheroes2::Rect & listRoi, const fheroes2::SupportedLanguage & language )
+    void redrawDialogInfo( const fheroes2::Rect & listRoi, const fheroes2::SupportedLanguage language, const bool isGameLanguage )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
-        const fheroes2::Text title( _( "Select Game Language:" ), fontType );
+        const fheroes2::Text title( isGameLanguage ? _( "Select Game Language:" ) : _( "Select Language:" ), fontType );
         title.draw( listRoi.x + ( listRoi.width - title.width() ) / 2, listRoi.y - ( verticalPaddingAreasHight + title.height() + 2 ) / 2, display );
 
+        const fheroes2::LanguageSwitcher languageSwitcher( language );
+
         const fheroes2::Text selectedLanguage( fheroes2::getLanguageName( language ), fontType );
+
         selectedLanguage.draw( listRoi.x + ( listRoi.width - selectedLanguage.width() ) / 2, listRoi.y + listRoi.height + 12 + ( 21 - selectedLanguage.height() ) / 2 + 2,
                                display );
     }
 
-    bool getLanguage( const std::vector<fheroes2::SupportedLanguage> & languages, fheroes2::SupportedLanguage chosenLanguage )
+    bool getLanguage( const std::vector<fheroes2::SupportedLanguage> & languages, fheroes2::SupportedLanguage & chosenLanguage, const bool isGameLanguage )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -156,7 +161,7 @@ namespace
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
 
-        // If we don't have many languagues, we reduce the maximum dialog height,
+        // If we don't have many languages, we reduce the maximum dialog height,
         // but not less than enough for 11 elements.
         // We also limit the maximum list height to 22 lines.
         const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( languages.size() ), 11, 22 )
@@ -185,14 +190,16 @@ namespace
 
         listBox.initListBackgroundRestorer( listRoi );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        Settings & conf = Settings::Get();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -219,16 +226,19 @@ namespace
 
         listBox.Redraw();
 
-        redrawDialogInfo( listRoi, chosenLanguage );
+        redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
 
         display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            if ( buttonOk.isEnabled() ) {
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            }
 
-            if ( le.MousePressRight( listRoi ) ) {
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+
+            if ( le.isMouseRightButtonPressedInArea( listRoi ) ) {
                 continue;
             }
 
@@ -245,15 +255,11 @@ namespace
                 return false;
             }
 
-            if ( le.MousePressRight( buttonCancel.area() ) ) {
-                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Click to choose the selected language." ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, 0 );
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to choose the selected language." ), Dialog::ZERO );
             }
 
             if ( !listBox.IsNeedRedraw() ) {
@@ -264,12 +270,16 @@ namespace
                 const fheroes2::SupportedLanguage newChosenLanguage = listBox.GetCurrent();
                 if ( newChosenLanguage != chosenLanguage ) {
                     chosenLanguage = newChosenLanguage;
-                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+
+                    if ( isGameLanguage ) {
+                        conf.setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                    }
+
                     titleBackground.restore();
                     selectedLangBackground.restore();
-                    redrawDialogInfo( listRoi, chosenLanguage );
+                    redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
                     buttonsBackground.restore();
-                    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+                    background.renderOkayCancelButtons( buttonOk, buttonCancel );
                 }
             }
 
@@ -283,18 +293,18 @@ namespace
 
 namespace fheroes2
 {
-    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
+    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage, const bool isGameLanguage )
     {
         if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
             assert( 0 );
             Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( SupportedLanguage::English ) );
-            return;
+            return SupportedLanguage::English;
         }
 
         if ( languages.size() == 1 ) {
             Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( languages.front() ) );
-            return;
+            return languages.front();
         }
 
         SupportedLanguage chosenLanguage = languages.front();
@@ -305,8 +315,14 @@ namespace fheroes2
             }
         }
 
-        if ( !getLanguage( languages, chosenLanguage ) ) {
-            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+        if ( !getLanguage( languages, chosenLanguage, isGameLanguage ) ) {
+            if ( isGameLanguage ) {
+                Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
+            }
+
+            return currentLanguage;
         }
+
+        return chosenLanguage;
     }
 }

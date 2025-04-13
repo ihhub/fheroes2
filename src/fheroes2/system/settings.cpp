@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,9 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
-#include <fstream>
-#include <memory>
+#include <sstream>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -34,9 +34,11 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
-#include "gamedefs.h"
+#include "game_io.h"
 #include "logging.h"
+#include "race.h"
 #include "render_processor.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -68,7 +70,7 @@ namespace
         GAME_3D_AUDIO = 0x00010000,
         GAME_SYSTEM_INFO = 0x00020000,
         GAME_CURSOR_SOFT_EMULATION = 0x00040000,
-        GAME_EVIL_INTERFACE = 0x00080000,
+        UNUSED_GAME_EVIL_INTERFACE = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
         GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
@@ -106,9 +108,8 @@ Settings::Settings()
     , heroes_speed( defaultSpeedDelay )
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
-    , battle_speed( DEFAULT_BATTLE_SPEED )
+    , battle_speed( defaultBattleSpeed )
     , game_type( 0 )
-    , preferably_count_players( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
     _gameOptions.SetModes( GAME_SHOW_INTRO );
@@ -235,8 +236,23 @@ bool Settings::Read( const std::string & filePath )
         setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
+    // This code handles a configuration file's parameter made by older versions of the engine.
+    // The original "use evil interface" parameter is no longer being set.
     if ( config.Exists( "use evil interface" ) ) {
-        setEvilInterface( config.StrParams( "use evil interface" ) == "on" );
+        const bool isEvil = config.StrParams( "use evil interface" ) == "on";
+        setInterfaceType( isEvil ? InterfaceType::EVIL : InterfaceType::GOOD );
+    }
+    else if ( config.Exists( "interface type" ) ) {
+        const std::string interfaceType = config.StrParams( "interface type" );
+        if ( interfaceType == "good" ) {
+            setInterfaceType( InterfaceType::GOOD );
+        }
+        else if ( interfaceType == "evil" ) {
+            setInterfaceType( InterfaceType::EVIL );
+        }
+        else {
+            setInterfaceType( InterfaceType::DYNAMIC );
+        }
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -348,16 +364,14 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
-
-    std::fstream file;
-    file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
-    if ( !file ) {
+    StreamFile fileStream;
+    if ( !fileStream.open( System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName ), "w" ) ) {
         return false;
     }
 
-    const std::string & data = String();
-    file.write( data.data(), data.size() );
+    const std::string data = String();
+
+    fileStream.putRaw( data.data(), data.size() );
 
     return true;
 }
@@ -432,8 +446,21 @@ std::string Settings::String() const
     os << std::endl << "# show turn order during battle: on/off" << std::endl;
     os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# use evil interface style: on/off" << std::endl;
-    os << "use evil interface = " << ( _gameOptions.Modes( GAME_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+    os << std::endl << "# interface type: good/evil/dynamic" << std::endl;
+    switch ( _interfaceType ) {
+    case InterfaceType::GOOD:
+        os << "interface type = good" << std::endl;
+        break;
+    case InterfaceType::EVIL:
+        os << "interface type = evil" << std::endl;
+        break;
+    case InterfaceType::DYNAMIC:
+        os << "interface type = dynamic" << std::endl;
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -480,7 +507,7 @@ std::string Settings::String() const
     os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << std::endl << "# enable cursor software rendering: on/off" << std::endl;
     os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
@@ -495,13 +522,11 @@ std::string Settings::String() const
     return os.str();
 }
 
-void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
+void Settings::setCurrentMapInfo( Maps::FileInfo fi )
 {
-    current_maps_file = fi;
+    _currentMapInfo = std::move( fi );
 
-    players.Init( current_maps_file );
-
-    preferably_count_players = 0;
+    players.Init( _currentMapInfo );
 }
 
 bool Settings::setGameLanguage( const std::string & language )
@@ -515,6 +540,11 @@ bool Settings::setGameLanguage( const std::string & language )
         return true;
     }
 
+    // First, let's see if the translation for the requested language is already cached
+    if ( const auto [isCached, isSet] = Translation::setLanguage( language ); isCached ) {
+        return isSet;
+    }
+
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
@@ -522,12 +552,12 @@ bool Settings::setGameLanguage( const std::string & language )
     const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
-    if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
+    if ( translations.empty() ) {
+        ERROR_LOG( "Translation file " << fileName << " was not found." )
     }
 
-    ERROR_LOG( "Translation file " << fileName << " was not found." )
-    return false;
+    // If the translation for this language could not be loaded, it will still remain in the cache as invalid
+    return Translation::setLanguage( language, translations.empty() ? std::string_view{} : translations.back() );
 }
 
 void Settings::setEditorAnimation( const bool enable )
@@ -550,70 +580,75 @@ void Settings::setEditorPassability( const bool enable )
     }
 }
 
-void Settings::SetProgramPath( const char * argv0 )
+void Settings::SetProgramPath( const char * path )
 {
-    if ( argv0 )
-        path_program = argv0;
+    if ( path == nullptr ) {
+        return;
+    }
+
+    _programPath = path;
 }
 
 const std::vector<std::string> & Settings::GetRootDirs()
 {
-    static std::vector<std::string> dirs;
-    if ( !dirs.empty() ) {
-        return dirs;
-    }
+    static const std::vector<std::string> rootDirs = []() {
+        std::vector<std::string> result;
 
 #ifdef FHEROES2_DATA
-    // Macro-defined path.
-    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
+        // Macro-defined path.
+        result.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
-    // Environment variable.
-    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
-    if ( dataEnvPath != nullptr && std::find( dirs.begin(), dirs.end(), dataEnvPath ) == dirs.end() ) {
-        dirs.emplace_back( dataEnvPath );
-    }
+        // Environment variable.
+        const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+        if ( dataEnvPath != nullptr && std::find( result.begin(), result.end(), dataEnvPath ) == result.end() ) {
+            result.emplace_back( dataEnvPath );
+        }
 
-    // The location of the application.
-    std::string appPath = System::GetDirname( Settings::Get().path_program );
-    if ( !appPath.empty() && std::find( dirs.begin(), dirs.end(), appPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( appPath ) );
-    }
+        // The location of the application.
+        std::string appPath = System::GetParentDirectory( Settings::Get()._programPath );
+        if ( std::find( result.begin(), result.end(), appPath ) == result.end() ) {
+            result.emplace_back( std::move( appPath ) );
+        }
 
-    // OS specific directories.
-    System::appendOSSpecificDirectories( dirs );
+        // OS specific directories.
+        System::appendOSSpecificDirectories( result );
 
 #if defined( MACOS_APP_BUNDLE )
-    // macOS app bundle Resources directory
-    char resourcePath[PATH_MAX];
+        // macOS app bundle Resources directory
+        char resourcePath[PATH_MAX];
 
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
-    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
-         && std::find( dirs.begin(), dirs.end(), resourcePath ) == dirs.end() ) {
-        dirs.emplace_back( resourcePath );
-    }
-    else {
-        ERROR_LOG( "Unable to get app bundle path" )
-    }
-    CFRelease( resourcesURL );
+        CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+        if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
+             && std::find( result.begin(), result.end(), resourcePath ) == result.end() ) {
+            result.emplace_back( resourcePath );
+        }
+        else {
+            ERROR_LOG( "Unable to get app bundle path" )
+        }
+        CFRelease( resourcesURL );
 #endif
 
-    // User config directory.
-    std::string configPath = System::GetConfigDirectory( "fheroes2" );
-    if ( !configPath.empty() && std::find( dirs.begin(), dirs.end(), configPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( configPath ) );
-    }
+        // User config directory.
+        std::string configPath = System::GetConfigDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), configPath ) == result.end() ) {
+            result.emplace_back( std::move( configPath ) );
+        }
 
-    // User data directory.
-    std::string dataPath = System::GetDataDirectory( "fheroes2" );
-    if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
-        dirs.emplace_back( std::move( dataPath ) );
-    }
+        // User data directory.
+        std::string dataPath = System::GetDataDirectory( "fheroes2" );
+        if ( std::find( result.begin(), result.end(), dataPath ) == result.end() ) {
+            result.emplace_back( std::move( dataPath ) );
+        }
 
-    // Remove all paths that are not directories.
-    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
+        // Remove all paths that are not directories. Empty path should not be removed because it in fact means the current directory.
+        result.erase( std::remove_if( result.begin(), result.end(), []( const std::string & path ) { return !path.empty() && !System::IsDirectory( path ); } ),
+                      result.end() );
 
-    return dirs;
+        return result;
+    }();
+
+    return rootDirs;
 }
 
 ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )
@@ -625,10 +660,10 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
-                res.FindFileInDir( path, fileNameFilter, false );
+                res.FindFileInDir( path, fileNameFilter );
             }
             else {
-                res.ReadDir( path, fileNameFilter, false );
+                res.ReadDir( path, fileNameFilter );
             }
         }
     }
@@ -808,16 +843,6 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
-void Settings::setEvilInterface( const bool enable )
-{
-    if ( enable ) {
-        _gameOptions.SetModes( GAME_EVIL_INTERFACE );
-    }
-    else {
-        _gameOptions.ResetModes( GAME_EVIL_INTERFACE );
-    }
-}
-
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
@@ -877,7 +902,35 @@ bool Settings::isHideInterfaceEnabled() const
 
 bool Settings::isEvilInterfaceEnabled() const
 {
-    return _gameOptions.Modes( GAME_EVIL_INTERFACE );
+    switch ( _interfaceType ) {
+    case InterfaceType::GOOD:
+        return false;
+    case InterfaceType::EVIL:
+        return true;
+    case InterfaceType::DYNAMIC: {
+        const Player * player = GetPlayers().GetCurrent();
+        if ( !player || !player->isPlay() ) {
+            return false;
+        }
+
+        if ( player->isControlHuman() ) {
+            return Race::isEvilRace( player->GetRace() );
+        }
+
+        // Keep the UI of the last player during the AI turn
+        for ( auto iter = GetPlayers().rbegin(); iter != GetPlayers().rend(); ++iter ) {
+            if ( *iter && ( *iter )->isControlHuman() ) {
+                return Race::isEvilRace( ( *iter )->GetRace() );
+            }
+        }
+        break;
+    }
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return false;
 }
 
 bool Settings::isEditorAnimationEnabled() const
@@ -1005,11 +1058,6 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-void Settings::SetPreferablyCountPlayers( int c )
-{
-    preferably_count_players = std::min( c, 6 );
-}
-
 bool Settings::isCampaignGameType() const
 {
     return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
@@ -1092,12 +1140,20 @@ void Settings::resetFirstGameRun()
     _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+OStreamBase & operator<<( OStreamBase & stream, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.preferably_count_players << conf.players;
+    return stream << conf._gameLanguage << conf._currentMapInfo << conf._gameDifficulty << conf.game_type << conf.players;
 }
 
-StreamBase & operator>>( StreamBase & msg, Settings & conf )
+IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 {
-    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
+    stream >> conf._loadedFileLanguage >> conf._currentMapInfo >> conf._gameDifficulty >> conf.game_type;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
+        int temp;
+        stream >> temp;
+    }
+
+    return stream >> conf.players;
 }

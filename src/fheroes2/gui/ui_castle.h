@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
@@ -29,6 +30,10 @@ struct Funds;
 namespace fheroes2
 {
     class Image;
+
+    uint32_t getCastleIcnIndex( const int race, const bool isCastle );
+
+    uint32_t getCastleLeftFlagIcnIndex( const int color );
 
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
 

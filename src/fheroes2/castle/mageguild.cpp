@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -113,8 +113,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         assert( freeSlots > 0 );
 
         // Check for possible duplicates
-        const auto [dummy, inserted] = spellsInUse.insert( spell );
-        if ( !inserted ) {
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spell ); !inserted ) {
             return;
         }
 
@@ -190,20 +189,26 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
     return result;
 }
 
-void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
+void MageGuild::trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
-    if ( hero.HaveSpellBook() && guildLevel > 0 ) {
-        // This method will test the hero for compliance with the wisdom requirements
-        hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
+    if ( !hero.HaveSpellBook() ) {
+        return;
     }
+
+    if ( guildLevel < 1 ) {
+        return;
+    }
+
+    // This method will test the hero for compliance with the wisdom requirements
+    hero.AppendSpellsToBook( GetSpells( guildLevel, hasLibrary ) );
 }
 
-StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )
+OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild )
 {
-    return msg << guild.general << guild.library;
+    return stream << guild.general << guild.library;
 }
 
-StreamBase & operator>>( StreamBase & msg, MageGuild & guild )
+IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild )
 {
-    return msg >> guild.general >> guild.library;
+    return stream >> guild.general >> guild.library;
 }

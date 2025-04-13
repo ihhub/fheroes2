@@ -1,0 +1,13 @@
+$version: 1
+
+rules:
+- filters:
+    report_hash: a95dbc87e7d4eb8c0bbf73c1ce08c6bb
+  actions:
+    review_status: false_positive
+    reason: "cetintrin.h:49:10: 1st function call argument is an uninitialized value"
+- filters:
+    report_hash: 076fdab99b1790475cd59e47054be43f
+  actions:
+    review_status: false_positive
+    reason: "cetintrin.h:62:10: 1st function call argument is an uninitialized value"

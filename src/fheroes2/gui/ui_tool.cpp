@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,16 +27,24 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
 #include <utility>
 
+#include "agg_image.h"
 #include "cursor.h"
 #include "game_delays.h"
+#include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
+#include "pal.h"
+#include "race.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 
 namespace
@@ -197,6 +205,16 @@ namespace fheroes2
         _isHidden = false;
     }
 
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
+    {
+        hide();
+
+        _restorer.update( x, y, _text->width(), _text->height() );
+        _text->drawInRoi( x, y, _output, roi );
+
+        _isHidden = false;
+    }
+
     void MovableText::hide()
     {
         if ( !_isHidden ) {
@@ -292,19 +310,19 @@ namespace fheroes2
         Display::instance().changePalette( palette );
     }
 
-    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
-        : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
+    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const InterfaceType interfaceType_ )
+        : interfaceType( interfaceType_ )
+        , originalInterfaceType( Settings::Get().getInterfaceType() )
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( interfaceType_ );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isOriginalEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( originalInterfaceType );
         }
     }
 
@@ -654,7 +672,21 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
+                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    {
+        if ( fullText.empty() || fullText.size() <= textInput.getOffsetX() ) {
+            return 0;
+        }
+
+        const std::string_view textToCheck = { fullText.data() + textInput.getOffsetX(), fullText.size() - textInput.getOffsetX() };
+        const int32_t textStartOffsetX = isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0;
+        return fheroes2::getTextInputCursorPosition( textToCheck, textInput.getFontType(), currentTextCursorPosition, pointerCursorOffset.x,
+                                                     textRoi.x + textStartOffsetX )
+               + textInput.getOffsetX();
+    }
+
+    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset )
     {
         if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
@@ -681,6 +713,69 @@ namespace fheroes2
         }
 
         return textSize;
+    }
+
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    {
+        if ( text.empty() ) {
+            // The text is empty.
+            return 0;
+        }
+
+        const FontType fontType = text.getFontType();
+        const int32_t fontHeight = getFontHeight( fontType.size );
+        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
+
+        if ( pointerLine < 0 ) {
+            // Pointer is upper than the first text line.
+            return 0;
+        }
+
+        std::vector<TextLineInfo> lineInfos;
+        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, true );
+
+        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
+            // Pointer is lower than the last text line.
+            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+            return text.text().size() - 1;
+        }
+
+        size_t cursorPosition = 0;
+        for ( int32_t i = 0; i < pointerLine; ++i ) {
+            cursorPosition += lineInfos[i].characterCount;
+        }
+
+        int32_t positionOffsetX = 0;
+        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].lineWidth ) / 2;
+
+        if ( maxOffsetX <= 0 ) {
+            // Pointer is to the left of the text line.
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+        }
+
+        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
+            // Pointer is to the right of the text line.
+            cursorPosition += lineInfos[pointerLine].characterCount;
+
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+        }
+
+        const FontCharHandler charHandler( fontType );
+        const std::string & textString = text.text();
+        const size_t textSize = textString.size();
+
+        for ( size_t i = cursorPosition; i < textSize; ++i ) {
+            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
+            positionOffsetX += charWidth;
+
+            if ( positionOffsetX > maxOffsetX ) {
+                // Take into account that the cursor character ('_') was added to the line.
+                return ( i > currentTextCursorPosition ) ? i - 1 : i;
+            }
+        }
+
+        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
+        return textSize - 1;
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
@@ -721,5 +816,129 @@ namespace fheroes2
             ApplyPalette( image, leftRoi.x, leftRoi.y, image, leftRoi.x, leftRoi.y, leftRoi.width, leftRoi.height, paletteId );
             ApplyPalette( image, rightRoi.x, rightRoi.y, image, rightRoi.x, rightRoi.y, rightRoi.width, rightRoi.height, paletteId );
         }
+    }
+
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf )
+    {
+        assert( min <= max );
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( !le.isAnyKeyPressed() ) {
+            return {};
+        }
+
+        const int32_t zeroBufValue = std::clamp( 0, min, max );
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+            valueBuf.clear();
+
+            return zeroBufValue;
+        }
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) {
+            if ( min >= 0 ) {
+                return {};
+            }
+
+            if ( !std::all_of( valueBuf.begin(), valueBuf.end(), []( const char ch ) { return ( ch == '0' ); } ) ) {
+                return {};
+            }
+
+            valueBuf = "-";
+
+            return zeroBufValue;
+        }
+
+        if ( const std::optional<char> newDigit = [&le]() -> std::optional<char> {
+                 using KeyUnderlyingType = std::underlying_type_t<fheroes2::Key>;
+
+                 const fheroes2::Key keyValue = le.getPressedKeyValue();
+
+                 if ( keyValue >= fheroes2::Key::KEY_0 && keyValue <= fheroes2::Key::KEY_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_0 ) + '0' );
+                 }
+
+                 if ( keyValue >= fheroes2::Key::KEY_KP_0 && keyValue <= fheroes2::Key::KEY_KP_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_KP_0 ) + '0' );
+                 }
+
+                 return {};
+             }();
+             newDigit ) {
+            valueBuf.push_back( *newDigit );
+
+            const std::optional<int32_t> value = [&valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
+                try {
+                    return std::stoi( valueBuf );
+                }
+                catch ( std::out_of_range & ) {
+                    return {};
+                }
+            }();
+
+            if ( !value || ( min <= 0 && value < min ) || ( max >= 0 && value > max ) ) {
+                valueBuf.pop_back();
+
+                return {};
+            }
+
+            if ( value == std::clamp( *value, min, max ) ) {
+                return value;
+            }
+
+            return {};
+        }
+
+        return {};
+    }
+
+    void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )
+    {
+        fheroes2::Image racePortrait( portPos.width, portPos.height );
+
+        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
+            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            if ( applyRandomPalette ) {
+                fheroes2::Sprite tmp = heroSprite;
+                fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                fheroes2::Blit( tmp, 0, std::max( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
+                                std::max( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
+            }
+            else {
+                fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
+                                std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+            }
+        };
+
+        switch ( race ) {
+        case Race::KNGT:
+            preparePortrait( ICN::CMBTHROK, 4, false );
+            break;
+        case Race::BARB:
+            preparePortrait( ICN::CMBTHROB, 5, false );
+            break;
+        case Race::SORC:
+            preparePortrait( ICN::CMBTHROS, 6, false );
+            break;
+        case Race::WRLK:
+            preparePortrait( ICN::CMBTHROW, 7, false );
+            break;
+        case Race::WZRD:
+            preparePortrait( ICN::CMBTHROZ, 8, false );
+            break;
+        case Race::NECR:
+            preparePortrait( ICN::CMBTHRON, 9, false );
+            break;
+        case Race::RAND:
+            preparePortrait( ICN::CMBTHROW, 10, true );
+            break;
+        default:
+            // Have you added a new race? Correct the logic above!
+            assert( 0 );
+            break;
+        }
+        fheroes2::Copy( racePortrait, 0, 0, output, portPos );
     }
 }

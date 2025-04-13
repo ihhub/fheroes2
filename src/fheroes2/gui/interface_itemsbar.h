@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_ITEMSBAR_H
-#define H2INTERFACE_ITEMSBAR_H
+#pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <utility>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "localevent.h"
 
@@ -156,7 +154,7 @@ namespace Interface
                 return false;
             }
 
-            const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
+            const fheroes2::Point & cursor = LocalEvent::Get().getMouseCursorPos();
             return ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
         }
 
@@ -180,10 +178,6 @@ namespace Interface
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
-        std::vector<Item *> items;
-
-        std::vector<int32_t> _customItemsCountInRow;
-
         virtual void SetContentItems()
         {
             // Do nothing.
@@ -195,16 +189,6 @@ namespace Interface
         }
 
         ItemsIterator GetEndItemIter()
-        {
-            return items.end();
-        }
-
-        virtual ItemsIterator GetTopItemIter()
-        {
-            return items.begin();
-        }
-
-        virtual ItemsIterator GetCurItemIter()
         {
             return items.end();
         }
@@ -229,7 +213,7 @@ namespace Interface
                 return ActionBarLeftMouseSingleClick( **iterPos.first );
             }
 
-            if ( le.MousePressRight( iterPos.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarRightMouseHold( **iterPos.first );
             }
 
@@ -275,6 +259,9 @@ namespace Interface
 
             return { items.end(), {} };
         }
+
+        std::vector<Item *> items;
+        std::vector<int32_t> _customItemsCountInRow;
 
     private:
         void calculateItemsPos()
@@ -443,13 +430,13 @@ namespace Interface
         bool QueueEventProcessing( ItemsActionBar<Item> & other )
         {
             const LocalEvent & le = LocalEvent::Get();
-            const fheroes2::Point & cursor = le.GetMouseCursor();
+            const fheroes2::Point & cursor = le.getMouseCursorPos();
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() ) {
                 return false;
             }
 
-            if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) ) {
+            if ( other.GetItem( le.getMouseLeftButtonPressedPos() ) && ActionCrossItemBarDrag( cursor, other ) ) {
                 return true;
             }
 
@@ -460,20 +447,12 @@ namespace Interface
         using ItemsIterator = typename ItemsBar<Item>::ItemsIterator;
         using ItemIterPos = typename ItemsBar<Item>::ItemIterPos;
 
-        ItemsIterator topItem;
-        ItemIterPos curItemPos;
-
-        ItemsIterator GetTopItemIter() override
-        {
-            return topItem;
-        }
-
-        ItemsIterator GetCurItemIter() override
+        ItemsIterator GetCurItemIter()
         {
             return curItemPos.first;
         }
 
-        void SetContentItems() override
+        void SetContentItems() final
         {
             ResetSelected();
         }
@@ -487,18 +466,18 @@ namespace Interface
         {
             const LocalEvent & le = LocalEvent::Get();
 
-            Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
+            Item * otherItemPress = other.GetItem( le.getMouseLeftButtonPressedPos() );
             assert( otherItemPress != nullptr );
 
             const ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
                 return false;
 
-            if ( le.MousePressLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos1.first, *otherItemPress );
             }
 
-            if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonReleasedInArea( iterPos1.second ) ) {
                 if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
                     other.ResetSelected();
                 }
@@ -535,11 +514,11 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressLeft( iterPos.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos.first, iterPos.second );
             }
 
-            if ( le.MouseReleaseLeft( iterPos.second ) ) {
+            if ( le.isMouseLeftButtonReleasedInArea( iterPos.second ) ) {
                 return ActionBarLeftMouseRelease( **iterPos.first );
             }
 
@@ -547,7 +526,7 @@ namespace Interface
                 return ActionBarRightMouseSingleClick( **iterPos.first );
             }
 
-            if ( le.MousePressRight( iterPos.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos.second ) ) {
                 return ActionBarRightMouseHold( **iterPos.first );
             }
 
@@ -577,11 +556,11 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressLeft( iterPos1.second ) ) {
+            if ( le.isMouseLeftButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
-            // Let the ActionCrossItemBarDrag() handle the case of MouseReleaseLeft()
+            // Let the ActionCrossItemBarDrag() handle the case of isMouseLeftButtonReleased()
 
             if ( le.MouseClickRight( iterPos1.second ) ) {
                 ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
@@ -591,13 +570,14 @@ namespace Interface
                 return true;
             }
 
-            if ( le.MousePressRight( iterPos1.second ) ) {
+            if ( le.isMouseRightButtonPressedInArea( iterPos1.second ) ) {
                 return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
             return false;
         }
+
+        ItemsIterator topItem;
+        ItemIterPos curItemPos;
     };
 }
-
-#endif

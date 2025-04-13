@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ARENA_H
-#define H2BATTLE_ARENA_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -37,7 +36,6 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "battle_tower.h"
 #include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
@@ -57,10 +55,19 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Units;
-    class Unit;
     class Interface;
     class Status;
+    class Tower;
+    class Unit;
+    class Units;
+
+    enum class TowerType : uint8_t;
+
+    enum class SiegeWeaponType
+    {
+        Catapult,
+        EarthquakeSpell
+    };
 
     class Actions : public std::list<Command>
     {};
@@ -97,9 +104,9 @@ namespace Battle
         void Turns();
         bool BattleValid() const;
 
-        bool AutoBattleInProgress() const;
-        bool EnemyOfAIHasAutoBattleInProgress() const;
-        bool CanToggleAutoBattle() const;
+        bool AutoCombatInProgress() const;
+        bool EnemyOfAIHasAutoCombatInProgress() const;
+        bool CanToggleAutoCombat() const;
 
         uint32_t GetTurnNumber() const
         {
@@ -108,10 +115,11 @@ namespace Battle
 
         Result & GetResult();
 
+        HeroBase * GetCommander1() const;
+        HeroBase * GetCommander2() const;
+
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1() const;
-        const HeroBase * GetCommander2() const;
         const HeroBase * GetCurrentCommander() const;
 
         Force & GetForce1() const;
@@ -133,10 +141,10 @@ namespace Battle
         Unit * GetTroopUID( uint32_t );
         const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells() const;
+        const SpellStorage & GetUsedSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const;
-        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
+        int DialogBattleHero( HeroBase & hero, const bool buttons, Status & status ) const;
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
@@ -194,10 +202,21 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
-        bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
-        const Unit * GraveyardLastTroop( const int32_t index ) const;
-        std::vector<const Unit *> GetGraveyardTroops( const int32_t index ) const;
-        Indexes GraveyardOccupiedCells() const;
+        bool isAbleToResurrectFromGraveyard( const int32_t index, const Spell & spell ) const;
+
+        Indexes getCellsOccupiedByGraveyard() const;
+        std::vector<const Unit *> getGraveyardUnits( const int32_t index ) const;
+
+        // Returns the unit that died last on the cell with the given index, or nullptr if there is no such unit.
+        const Unit * getLastUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be potentially affected by any resurrection
+        // spell during the current turn, or nullptr if there is no such unit.
+        const Unit * getLastResurrectableUnitFromGraveyard( const int32_t index ) const;
+
+        // Returns the last dead unit on the cell with the given index, which can be affected by the given resurrection spell
+        // during the current turn, or nullptr if there is no such unit.
+        Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -208,8 +227,6 @@ namespace Battle
         {
             return _covrIcnId;
         }
-
-        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
@@ -240,9 +257,14 @@ namespace Battle
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
-
-        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
+
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
+        // structure still has enough hitpoints.
+        void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
@@ -253,8 +275,6 @@ namespace Battle
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
 
-        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
-
         void ApplyActionRetreat( const Command & cmd );
         void ApplyActionSurrender( const Command & cmd );
         void ApplyActionAttack( Command & cmd );
@@ -264,13 +284,13 @@ namespace Battle
         void ApplyActionSpellCast( Command & cmd );
         void ApplyActionTower( Command & cmd );
         void ApplyActionCatapult( Command & cmd );
-        void ApplyActionAutoSwitch( Command & cmd );
-        void ApplyActionAutoFinish( const Command & cmd );
+        void ApplyActionToggleAutoCombat( Command & cmd );
+        void ApplyActionQuickCombat( const Command & cmd );
 
         void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
         void ApplyActionSpellMirrorImage( Command & cmd );
         void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellEarthquake( const Command & cmd );
         void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
@@ -315,16 +335,16 @@ namespace Battle
         std::unique_ptr<Interface> _interface;
         Result result_game;
 
-        Graveyard graveyard;
-        SpellStorage usage_spells;
+        Graveyard _graveyard;
+        SpellStorage _usedSpells;
 
         Board board;
         BattlePathfinder _battlePathfinder;
         int _covrIcnId{ ICN::UNKNOWN };
 
         uint32_t _turnNumber{ 0 };
-        // A set of colors of players for whom the auto-battle mode is enabled
-        int _autoBattleColors{ 0 };
+        // A set of colors of players for whom the auto combat mode is enabled
+        int _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
@@ -343,5 +363,3 @@ namespace Battle
 
     Arena * GetArena();
 }
-
-#endif

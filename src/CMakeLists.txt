@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -20,12 +20,13 @@
 
 set(
 	GNU_CC_WARN_OPTS
-	-pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal
-	-Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+	-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdouble-promotion -Wfloat-conversion -Wfloat-equal
+	-Wredundant-decls -Wshadow -Wswitch-default -Wundef -Wunused
 	)
 set(
 	GNU_CXX_WARN_OPTS
-	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Woverloaded-virtual
+	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast
+	-Woverloaded-virtual -Wsuggest-override
 	)
 set(
 	MSVC_CC_WARN_OPTS

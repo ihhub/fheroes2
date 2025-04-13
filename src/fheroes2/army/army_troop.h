@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMYTROOP_H
-#define H2ARMYTROOP_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -30,7 +29,8 @@
 #include "monster.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Army;
 
@@ -38,17 +38,17 @@ class Troop : public Monster
 {
 public:
     Troop();
-    Troop( const Monster &, uint32_t );
+    Troop( const Monster & mons, const uint32_t count );
 
-    bool operator==( const Monster & ) const;
+    bool operator==( const Monster & mons ) const;
 
-    void Set( const Troop & );
-    void Set( const Monster &, uint32_t );
-    void SetMonster( const Monster & );
-    void SetCount( uint32_t );
+    void Set( const Troop & troop );
+    void Set( const Monster & mons, const uint32_t count );
+    void SetMonster( const Monster & mons );
+    void SetCount( const uint32_t count );
     void Reset();
 
-    bool isMonster( int ) const;
+    bool isMonster( const int mons ) const;
     const char * GetName() const;
     uint32_t GetCount() const;
     uint32_t GetHitPoints() const;
@@ -77,42 +77,43 @@ public:
     virtual uint32_t GetAffectedDuration( uint32_t ) const;
 
     double GetStrength() const;
-    double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
+    double GetStrengthWithBonus( const int bonusAttack, const int bonusDefense ) const;
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const Troop & );
-    friend StreamBase & operator>>( StreamBase &, Troop & );
+    static std::string GetSpeedString( const uint32_t speed );
 
-    static std::string GetSpeedString( uint32_t speed );
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const Troop & troop );
+    friend IStreamBase & operator>>( IStreamBase & stream, Troop & troop );
 
-    uint32_t count;
+    uint32_t _count;
 };
-
-StreamBase & operator<<( StreamBase &, const Troop & );
-StreamBase & operator>>( StreamBase &, Troop & );
 
 class ArmyTroop : public Troop
 {
 public:
-    explicit ArmyTroop( const Army * );
-    ArmyTroop( const Army *, const Troop & );
+    explicit ArmyTroop( const Army * army );
+    ArmyTroop( const Army * army, const Troop & troop );
 
-    ArmyTroop & operator=( const Troop & ) = delete;
+    ArmyTroop( const ArmyTroop & ) = delete;
+
+    ~ArmyTroop() override = default;
+
+    ArmyTroop & operator=( const ArmyTroop & ) = delete;
 
     uint32_t GetAttack() const override;
     uint32_t GetDefense() const override;
-    int GetColor() const override;
     int GetMorale() const override;
     int GetLuck() const override;
 
-    void SetArmy( const Army & );
+    int GetColor() const;
+
+    void SetArmy( const Army & army );
     const Army * GetArmy() const;
 
     std::string GetAttackString() const override;
     std::string GetDefenseString() const override;
 
-protected:
-    const Army * army;
+private:
+    const Army * _army;
 };
-
-#endif

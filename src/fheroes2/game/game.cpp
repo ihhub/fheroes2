@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <map>
 #include <optional>
 #include <utility>
@@ -36,7 +37,6 @@
 #include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game_credits.h"
@@ -55,6 +55,7 @@
 #include "rand.h"
 #include "settings.h"
 #include "tools.h"
+#include "ui_constants.h"
 #include "world.h"
 
 namespace
@@ -122,7 +123,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 
         players.push_back( player );
 
-        Players::Set( Color::GetIndex( p.GetColor() ), player );
+        Players::Set( p.GetColor(), player );
     }
 }
 
@@ -210,7 +211,6 @@ void Game::updateAdventureMapAnimationIndex()
     ++maps_animation_frame;
 }
 
-// play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
     int availableChannels = Mixer::getChannelCount();
@@ -270,33 +270,33 @@ void Game::EnvironmentSoundMixer()
     std::stable_sort( positions.begin(), positions.end(),
                       []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
-    const double maxDistance = std::sqrt( ( maxOffset * maxOffset + maxOffset * maxOffset ) * TILEWIDTH * TILEWIDTH );
+    const double maxDistance = std::sqrt( ( maxOffset * maxOffset + maxOffset * maxOffset ) * fheroes2::tileWidthPx * fheroes2::tileWidthPx );
 
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.getTile( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
             continue;
         }
 
         fheroes2::Point actualPosition = pos;
-        actualPosition.x *= TILEWIDTH;
-        actualPosition.y *= TILEWIDTH;
+        actualPosition.x *= fheroes2::tileWidthPx;
+        actualPosition.y *= fheroes2::tileWidthPx;
 
         actualPosition -= tilePixelOffset;
 
-        const double distance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
-        if ( distance >= maxDistance ) {
+        const double dblDistance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
+        if ( dblDistance >= maxDistance ) {
             continue;
         }
 
-        const uint8_t volumePercentage = static_cast<uint8_t>( ( maxDistance - distance ) * 100 / maxDistance );
+        const uint8_t distance = [maxDistance, dblDistance]() {
+            const long dist = std::lround( dblDistance * 255 / maxDistance );
+            assert( dist >= 0 && dist <= 255 );
 
-        assert( volumePercentage <= 100 );
-        if ( volumePercentage == 0 ) {
-            continue;
-        }
+            return static_cast<uint8_t>( dist );
+        }();
 
         int16_t angle = 0;
 
@@ -316,20 +316,24 @@ void Game::EnvironmentSoundMixer()
         }
 
         std::vector<AudioManager::AudioLoopEffectInfo> & effects = soundEffects[soundType];
-        bool doesEffectExist = false;
-        for ( AudioManager::AudioLoopEffectInfo & info : effects ) {
-            if ( info.angle == angle ) {
-                info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
-                doesEffectExist = true;
-                break;
-            }
-        }
 
-        if ( doesEffectExist ) {
+        // If there is already a source of the same sound in this direction, then choose the one that is closer.
+        if ( std::find_if( effects.begin(), effects.end(),
+                           [distance, angle]( AudioManager::AudioLoopEffectInfo & info ) {
+                               if ( info.angle != angle ) {
+                                   return false;
+                               }
+
+                               info.distance = std::min( distance, info.distance );
+
+                               return true;
+                           } )
+             != effects.end() ) {
             continue;
         }
 
-        effects.emplace_back( angle, volumePercentage );
+        // Otherwise, use the current one for now.
+        effects.emplace_back( angle, distance );
 
         --availableChannels;
         if ( availableChannels == 0 ) {
@@ -352,7 +356,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         }
         break;
     }
@@ -362,7 +366,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( focusedCastle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         break;
     }
 

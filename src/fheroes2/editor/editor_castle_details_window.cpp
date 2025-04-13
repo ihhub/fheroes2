@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -41,6 +42,7 @@
 #include "dialog.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -64,7 +66,7 @@ namespace
     class BuildingData
     {
     public:
-        explicit BuildingData( building_t buildingType, const int race, const building_t builtBuildings, const building_t restrictedBuildings )
+        explicit BuildingData( BuildingType buildingType, const int race, const BuildingType builtBuildings, const BuildingType restrictedBuildings )
             : _mainBuildingType( buildingType )
             , _race( race )
         {
@@ -75,7 +77,7 @@ namespace
                 _restrictedId = 0;
             }
 
-            for ( building_t upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, _mainBuildingType ); upgradedBuildingType != buildingType;
+            for ( BuildingType upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, _mainBuildingType ); upgradedBuildingType != buildingType;
                   upgradedBuildingType = fheroes2::getUpgradeForBuilding( _race, upgradedBuildingType ) ) {
                 if ( builtBuildings & upgradedBuildingType ) {
                     _builtId = _buildingVariants;
@@ -110,14 +112,14 @@ namespace
             return _area;
         }
 
-        std::vector<building_t> getBuildLevel() const
+        std::vector<BuildingType> getBuildLevel() const
         {
             if ( _builtId < 0 ) {
                 return {};
             }
 
             const int8_t levelsBuilt = _builtId + 1;
-            std::vector<building_t> buildings;
+            std::vector<BuildingType> buildings;
             buildings.reserve( levelsBuilt );
             for ( int8_t i = 0; i < levelsBuilt; ++i ) {
                 buildings.push_back( _getBuildingType( i ) );
@@ -125,7 +127,7 @@ namespace
             return buildings;
         }
 
-        building_t getRestrictLevel() const
+        BuildingType getRestrictLevel() const
         {
             return _getBuildingType( _restrictedId );
         }
@@ -134,7 +136,7 @@ namespace
         {
             LocalEvent & le = LocalEvent::Get();
 
-            if ( le.MouseClickLeft() ) {
+            if ( le.MouseClickLeft( _area ) ) {
                 if ( restrictionMode ) {
                     if ( _restrictedId <= -1 ) {
                         _restrictedId = _buildingVariants;
@@ -160,8 +162,8 @@ namespace
                 return true;
             }
 
-            if ( le.MousePressRight() ) {
-                const building_t building = _getBuildindTypeForRender();
+            if ( le.isMouseRightButtonPressedInArea( _area ) ) {
+                const BuildingType building = _getBuildindTypeForRender();
                 std::string description = BuildingInfo::getBuildingDescription( _race, building );
                 const std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
 
@@ -188,7 +190,7 @@ namespace
             fheroes2::Display & display = fheroes2::Display::instance();
             const int index = fheroes2::getIndexBuildingSprite( _getBuildindTypeForRender() );
 
-            const int buildingIcnId = ICN::Get4Building( _race );
+            const int buildingIcnId = ICN::getBuildingIcnId( _race );
             const fheroes2::Sprite & buildingImage = ( buildingIcnId == ICN::UNKNOWN )
                                                          ? fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 )
                                                          : fheroes2::AGG::GetICN( buildingIcnId, index );
@@ -257,7 +259,7 @@ namespace
         }
 
     private:
-        building_t _getBuildindTypeForRender() const
+        BuildingType _getBuildindTypeForRender() const
         {
             if ( _builtId < 1 ) {
                 return _mainBuildingType;
@@ -266,13 +268,13 @@ namespace
             return _getBuildingType( _builtId );
         }
 
-        building_t _getBuildingType( const int8_t level ) const
+        BuildingType _getBuildingType( const int8_t level ) const
         {
             if ( level < 0 ) {
                 return BUILD_NOTHING;
             }
 
-            building_t building = _mainBuildingType;
+            BuildingType building = _mainBuildingType;
             for ( int8_t i = 0; i < level; ++i ) {
                 building = fheroes2::getUpgradeForBuilding( _race, building );
             }
@@ -280,7 +282,7 @@ namespace
             return building;
         }
 
-        building_t _mainBuildingType{ BUILD_NOTHING };
+        BuildingType _mainBuildingType{ BUILD_NOTHING };
         int _race{ Race::NONE };
         int8_t _builtId{ -1 };
         int8_t _restrictedId{ -1 };
@@ -293,14 +295,14 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color )
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color, const fheroes2::SupportedLanguage language )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         const fheroes2::Rect dialogRoi = background.activeArea();
         const fheroes2::Rect dialogWithShadowRoi = background.totalArea();
 
@@ -311,36 +313,41 @@ namespace Editor
 
         // Use the left part of town construction dialog.
         const int32_t rightPartOffsetX = 438;
-        const int32_t rightPartSizeX = dialogRoi.width - rightPartOffsetX;
+        const int32_t rightPartWidth = dialogRoi.width - rightPartOffsetX;
         fheroes2::Blit( constructionBackground, 0, 0, display, dialogRoi.x, dialogRoi.y, rightPartOffsetX, backgroundHeight );
         // Use the right part of standard background dialog.
         fheroes2::Copy( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), rightPartOffsetX, 0, display, dialogRoi.x + rightPartOffsetX,
-                        dialogRoi.y, rightPartSizeX, backgroundHeight );
+                        dialogRoi.y, rightPartWidth, backgroundHeight );
         // Add horizontal separators.
-        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 226, rightPartSizeX, 4 );
-        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 306, rightPartSizeX, 4 );
+        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 226, rightPartWidth, 4 );
+        fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 306, rightPartWidth, 4 );
 
         // Castle name background.
         const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
-        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartSizeX, statusBarSprite.height() - 2 );
+        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartWidth, statusBarSprite.height() - 2 );
         fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarSprite.height() );
 
+        const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
+
         // Castle name text.
-        auto drawCastleName = [&castleMetadata, &display, &nameArea]() {
-            fheroes2::Text text( castleMetadata.customName.empty() ? _( "Random Castle Name" ) : castleMetadata.customName, fheroes2::FontType::normalWhite() );
+        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
+            // TODO: use language for castle name. At the moment it is disabled.
+            fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
+            if ( castleMetadata.customName.empty() ) {
+                text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
+            }
+
             text.fitToOneRow( nameArea.width );
             text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, display, nameArea );
         };
         drawCastleName();
-
-        const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Allow castle building checkbox.
         fheroes2::Point dstPt( dialogRoi.x + rightPartOffsetX + 10, dialogRoi.y + 130 );
         fheroes2::MovableSprite allowCastleSign;
         fheroes2::Rect allowCastleArea;
         if ( isTown ) {
-            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface );
+            allowCastleArea = drawCheckboxWithText( allowCastleSign, _( "Allow Castle build" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
             if ( std::find( castleMetadata.bannedBuildings.begin(), castleMetadata.bannedBuildings.end(), BUILD_CASTLE ) == castleMetadata.bannedBuildings.end() ) {
                 allowCastleSign.show();
             }
@@ -352,18 +359,15 @@ namespace Editor
         // Default buildings checkbox indicator.
         dstPt.y += 30;
         fheroes2::MovableSprite defaultBuildingsSign;
-        const fheroes2::Rect defaultBuildingsArea = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface );
+        const fheroes2::Rect defaultBuildingsArea
+            = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
-#if defined( RESTRICT_FEATURE )
-        // TODO: remove this macro definition check once the logic for building restriction is implemented.
-        // Build restrict mode button.
-        fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
-        buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
-        const fheroes2::Rect buttonRestrictBuildingArea( buttonRestrictBuilding.area() );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
-        buttonRestrictBuilding.draw();
-#endif
+        // Build restrict mode button. We use center_center padding to make sure localized variable-width buttons are centered too.
+        fheroes2::ButtonSprite buttonRestrictBuilding;
+
+        const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RESTRICT" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
 
         const bool isNeutral = ( color == Color::NONE );
 
@@ -372,7 +376,7 @@ namespace Editor
         fheroes2::MovableSprite defaultArmySign;
         fheroes2::Rect defaultArmyArea;
         if ( isNeutral ) {
-            defaultArmyArea = drawCheckboxWithText( defaultArmySign, _( "Default Army" ), display, dstPt.x, dstPt.y, isEvilInterface );
+            defaultArmyArea = drawCheckboxWithText( defaultArmySign, _( "Default Army" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
 
             if ( Maps::isDefaultCastleDefenderArmy( castleMetadata ) ) {
                 defaultArmySign.show();
@@ -384,8 +388,8 @@ namespace Editor
         else {
             defaultArmySign.hide();
 
-            const fheroes2::Text armyText( _( "Castle Army" ), fheroes2::FontType::normalWhite() );
-            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
+            const fheroes2::Text armyText( isTown ? _( "Town Army" ) : _( "Castle Army" ), fheroes2::FontType::normalWhite() );
+            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartWidth - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
         }
 
         Army castleArmy;
@@ -398,8 +402,8 @@ namespace Editor
         armyBar.setRenderingOffset( { dialogRoi.x + rightPartOffsetX + 33, dialogRoi.y + 332 } );
         armyBar.Redraw( display );
 
-        const building_t metadataBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.builtBuildings ) );
-        const building_t metadataRestrictedBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.bannedBuildings ) );
+        const BuildingType metadataBuildings = static_cast<BuildingType>( Maps::getBuildingsFromVector( castleMetadata.builtBuildings ) );
+        const BuildingType metadataRestrictedBuildings = static_cast<BuildingType>( Maps::getBuildingsFromVector( castleMetadata.bannedBuildings ) );
 
         assert( ( metadataBuildings & metadataRestrictedBuildings ) == 0 );
 
@@ -445,11 +449,9 @@ namespace Editor
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
         // Exit button.
-        fheroes2::Button buttonExit( dialogRoi.x + rightPartOffsetX + 50, dialogRoi.y + 430, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD,
-                                     0, 1 );
-        const fheroes2::Rect buttonExitArea( buttonExit.area() );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExitArea.getPosition(), { -2, 2 } );
-        buttonExit.draw();
+        fheroes2::Button buttonExit;
+        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 24 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         // Status bar.
         const int32_t statusBarWidth = statusBarSprite.width();
@@ -457,7 +459,7 @@ namespace Editor
         dstPt.y = dialogRoi.y + dialogRoi.height - statusBarheight;
         fheroes2::Copy( statusBarSprite, 0, 0, display, dialogRoi.x, dstPt.y, statusBarWidth, statusBarheight );
         StatusBar statusBar;
-        statusBar.setRoi( { dialogRoi.x, dstPt.y + 3, statusBarWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x, dstPt.y, statusBarWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 
@@ -467,32 +469,35 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.MousePressLeft( buttonExitArea ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
 
-            if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
-#if defined( RESTRICT_FEATURE )
-            if ( le.MouseClickLeft( buttonRestrictBuildingArea ) ) {
+            if ( le.MouseClickLeft( buttonRestrictBuilding.area() ) ) {
                 buildingRestriction = !buildingRestriction;
             }
 
-            buttonRestrictBuilding.drawOnState( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) );
-#endif
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuilding.area() ) );
 
-            if ( le.MouseCursor( nameArea ) ) {
+            if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
 
                 bool redrawName = false;
-                if ( le.MouseClickLeft() ) {
+                if ( le.MouseClickLeft( nameArea ) ) {
                     std::string res = castleMetadata.customName;
-                    if ( Dialog::inputString( _( "Enter Castle name" ), res, {}, 30, false, true ) && !res.empty() ) {
+
+                    // TODO: use the provided language to set the castle's name.
+                    (void)language;
+
+                    const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, fheroes2::SupportedLanguage::English ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
                 }
-                else if ( le.MouseClickRight() ) {
+                else if ( le.MouseClickRight( nameArea ) ) {
                     castleMetadata.customName.clear();
                     redrawName = true;
                 }
@@ -504,21 +509,21 @@ namespace Editor
                     display.render( nameArea );
                 }
             }
-            else if ( isTown && le.MouseCursor( allowCastleArea ) ) {
+            else if ( isTown && le.isMouseCursorPosInArea( allowCastleArea ) ) {
                 message = _( "Allow to build a castle in this town." );
 
-                if ( le.MouseClickLeft() ) {
+                if ( le.MouseClickLeft( allowCastleArea ) ) {
                     allowCastleSign.isHidden() ? allowCastleSign.show() : allowCastleSign.hide();
                     display.render( allowCastleSign.getArea() );
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressedInArea( allowCastleArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Allow Castle build" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.MouseCursor( defaultBuildingsArea ) ) {
+            else if ( le.isMouseCursorPosInArea( defaultBuildingsArea ) ) {
                 message = _( "Toggle the use of default buildings. Custom buildings will be reset!" );
 
-                if ( le.MouseClickLeft() ) {
+                if ( le.MouseClickLeft( defaultBuildingsArea ) ) {
                     if ( defaultBuildingsSign.isHidden() ) {
                         // Reset all buildings to their build and restrict default states.
                         for ( BuildingData & building : buildings ) {
@@ -539,25 +544,23 @@ namespace Editor
                         display.render( dialogRoi );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressedInArea( defaultBuildingsArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Default Buildings" ), message, Dialog::ZERO );
                 }
             }
 
-#if defined( RESTRICT_FEATURE )
-            else if ( le.MouseCursor( buttonRestrictBuildingArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonRestrictBuilding.area() ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonRestrictBuilding.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
-#endif
 
-            else if ( isNeutral && le.MouseCursor( defaultArmyArea ) ) {
+            else if ( isNeutral && le.isMouseCursorPosInArea( defaultArmyArea ) ) {
                 message = _( "Use default defenders army." );
 
-                if ( le.MouseClickLeft() ) {
+                if ( le.MouseClickLeft( defaultArmyArea ) ) {
                     if ( defaultArmySign.isHidden() ) {
                         defaultArmySign.show();
                         castleArmy.Reset( false );
@@ -569,11 +572,11 @@ namespace Editor
                         display.render( defaultArmySign.getArea() );
                     }
                 }
-                else if ( le.MousePressRight() ) {
+                else if ( le.isMouseRightButtonPressedInArea( defaultArmyArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.MouseCursor( armyBar.GetArea() ) ) {
+            else if ( le.isMouseCursorPosInArea( armyBar.GetArea() ) ) {
                 if ( armyBar.QueueEventProcessing( &message ) ) {
                     armyBar.Redraw( display );
 
@@ -585,16 +588,16 @@ namespace Editor
                     message = _( "Set custom Castle Army. Right-click to reset unit." );
                 }
             }
-            else if ( le.MouseCursor( buttonExitArea ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
                 message = _( "Exit Castle Options" );
 
-                if ( le.MousePressRight() ) {
+                if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Exit" ), message, Dialog::ZERO );
                 }
             }
             else {
                 for ( size_t i = 0; i < buildingsSize; ++i ) {
-                    if ( le.MouseCursor( buildings[i].getArea() ) ) {
+                    if ( le.isMouseCursorPosInArea( buildings[i].getArea() ) ) {
                         message = buildings[i].getSetStatusMessage();
 
                         if ( buildings[i].queueEventProcessing( buildingRestriction ) ) {
@@ -651,10 +654,10 @@ namespace Editor
 
         if ( castleMetadata.customBuildings ) {
             for ( const BuildingData & building : buildings ) {
-                std::vector<building_t> buildingLevels = building.getBuildLevel();
+                std::vector<BuildingType> buildingLevels = building.getBuildLevel();
                 std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
 
-                if ( const building_t buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
+                if ( const BuildingType buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
                     castleMetadata.bannedBuildings.push_back( buildId );
                 }
             }
