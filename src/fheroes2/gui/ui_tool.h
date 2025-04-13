@@ -220,8 +220,8 @@ namespace fheroes2
                                   const int32_t frameCount );
 
     // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
-    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const Point & pointerCursorOffset, const Rect & textRoi );
+    size_t getTextInputCursorPosition( const TextInput & text, const Point & pointerCursorOffset, const Rect & textRoi );
+    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const int32_t pointerCursorOffsetX, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 

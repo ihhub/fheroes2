@@ -204,7 +204,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
+    const int32_t inputAreaWidth = isMultiLine ? 226 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
     const int32_t textboxHeight = body.height( fheroes2::boxAreaWidthPx );
@@ -237,29 +237,35 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
 
-    bool isCursorVisible = true;
-    fheroes2::TextInput text( {}, fheroes2::FontType::normalWhite(), textLanguage );
+    fheroes2::TextInput textInput( {}, fheroes2::FontType::normalWhite(), textLanguage );
     fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
 
     fheroes2::Point textPos( textInputArea.x, textInputArea.y + 2 );
 
-    if ( !isMultiLine ) {
-        text.setAutoFitToOneRow( textInputArea.width );
-        text.set( result, static_cast<int32_t>( charInsertPos ) );
-
-        textPos.x += ( textInputArea.width - text.width() ) / 2;
-        text.drawInRoi( textPos.x, textPos.y, display, textInputArea );
-
-        const fheroes2::Rect & cursorRoi = text.getCursorArea();
-        textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
-
-        text.drawCursor( textPos.x, textPos.y, display, textInputArea );
+    if ( isMultiLine ) {
+        // To fully render the cursor at the line begin/end we leave extra pixel from each side.
+        textInput.setMultilineMaxWidth( textInputArea.width - 2 );
     }
     else {
-        text.set( result, static_cast<int32_t>( charInsertPos ) );
-        text.drawInRoi( textPos.x, textPos.y, textInputArea.width, display, textInputArea );
-        text.drawCursor( textPos.x, textPos.y, textInputArea.width, display, textInputArea );
+        textInput.setAutoFitToOneRow( textInputArea.width );
     }
+
+    auto redrawTextInput = [&result, &textInput, &textPos, &textInputArea, &charInsertPos, &textCursorRestorer, &display]( const bool isMutlilineText ) {
+        textInput.set( result, static_cast<int32_t>( charInsertPos ) );
+
+        if ( !isMutlilineText ) {
+            textPos.x = textInputArea.x + ( textInputArea.width - textInput.width() ) / 2;
+        }
+
+        textInput.drawInRoi( textPos.x, textPos.y, display, textInputArea );
+
+        const fheroes2::Rect & cursorRoi = textInput.getCursorArea();
+        textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
+        textInput.drawCursor( textPos.x, textPos.y, display, textInputArea );
+    };
+
+    redrawTextInput( isMultiLine );
+    bool isCursorVisible = true;
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -353,20 +359,20 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             redraw = true;
         }
         else if ( le.MouseClickLeft( textEditClickArea ) ) {
-            const auto getCharInsertPos = [&text, &textInputArea]( const fheroes2::Point & mousePos, const bool isMultilineText ) {
+            const auto getCharInsertPos = [&textInput, &textInputArea]( const fheroes2::Point & mousePos, const bool isMultilineText ) {
                 if ( isMultilineText ) {
-                    return fheroes2::getTextInputCursorPosition( fheroes2::Text{}, 0, mousePos, textInputArea );
+                    return fheroes2::getTextInputCursorPosition( textInput, mousePos, textInputArea );
                 }
 
-                return fheroes2::getTextInputCursorPosition( text, true, mousePos, textInputArea );
+                return fheroes2::getTextInputCursorPosition( textInput, true, mousePos.x, textInputArea );
             };
 
             if ( textLanguage.has_value() ) {
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
-                charInsertPos = getCharInsertPos( le.getMouseCursorPos(), isMultiLine );
+                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos(), isMultiLine );
             }
             else {
-                charInsertPos = getCharInsertPos( le.getMouseCursorPos(), isMultiLine );
+                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos(), isMultiLine );
             }
 
             redraw = true;
@@ -386,7 +392,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             isCursorVisible = !isCursorVisible;
 
             if ( isCursorVisible ) {
-                text.drawCursor( textPos.x, textPos.y, display, textInputArea );
+                textInput.drawCursor( textPos.x, textPos.y, display, textInputArea );
             }
             else {
                 textCursorRestorer.restore();
@@ -411,26 +417,11 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            text.set( result, static_cast<int32_t>( charInsertPos ) );
-
             textBackground.restore();
-            if ( isMultiLine ) {
-                text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
-                if ( isCursorVisible ) {
-                    text.drawCursor( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
-                }
-            }
-            else {
-                textPos.x = textInputArea.x + ( textInputArea.width - text.width() ) / 2;
-                text.drawInRoi( textPos.x, textPos.y, display, textInputArea );
 
-                const fheroes2::Rect & cursorRoi = text.getCursorArea();
-                textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
-
-                text.drawCursor( textPos.x, textPos.y, display, textInputArea );
-                Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-                isCursorVisible = true;
-            }
+            redrawTextInput( isMultiLine );
+            Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+            isCursorVisible = true;
 
             display.render( textInputArea );
         }

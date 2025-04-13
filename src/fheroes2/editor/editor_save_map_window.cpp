@@ -376,7 +376,7 @@ namespace Editor
             }
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 // Do not allow to put cursor at the file extension part.
-                charInsertPos = std::min( fheroes2::getTextInputCursorPosition( textInput, false, le.getMouseCursorPos(), fileNameRoi ), fileName.size() );
+                charInsertPos = std::min( fheroes2::getTextInputCursorPosition( textInput, false, le.getMouseLeftButtonPressedPos().x, fileNameRoi ), fileName.size() );
 
                 listbox.Unselect();
                 isListboxSelected = false;

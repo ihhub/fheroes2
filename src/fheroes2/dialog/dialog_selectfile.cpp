@@ -503,7 +503,7 @@ namespace
                         textInput->set( filename, 0 );
                     }
 
-                    charInsertPos = fheroes2::getTextInputCursorPosition( *textInput, true, le.getMouseCursorPos(), textInputRoi );
+                    charInsertPos = fheroes2::getTextInputCursorPosition( *textInput, true, le.getMouseLeftButtonPressedPos().x, textInputRoi );
                     prepareRedraw = true;
                 }
                 else if ( !listboxEvent && le.isAnyKeyPressed() ) {

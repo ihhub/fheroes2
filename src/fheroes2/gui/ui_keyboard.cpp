@@ -258,7 +258,7 @@ namespace
         {
             const fheroes2::Rect startPosRoi( _textInputPos.x, _textInputArea.y, _textInputArea.width - ( _textInputArea.x - _textInputPos.x ) * 2,
                                               _textInputArea.height );
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, false, clickPosition, startPosRoi );
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, false, clickPosition.x, startPosRoi );
             _renderInputArea();
         }
 
@@ -983,7 +983,7 @@ namespace
             updateButtonStates( buttons, le );
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.getMouseCursorPos() );
+                renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
             }
 
             // Text input cursor blink.

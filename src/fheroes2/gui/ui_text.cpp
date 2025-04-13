@@ -640,6 +640,10 @@ namespace fheroes2
             return 0;
         }
 
+        if ( _multilineMaxWidth > 0 ) {
+            return Text::width( _multilineMaxWidth );
+        }
+
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
@@ -662,6 +666,11 @@ namespace fheroes2
     {
         if ( output.empty() || _text.empty() || _textLength == 0 ) {
             // No use to render something on an empty image or if something is empty.
+            return;
+        }
+
+        if ( _multilineMaxWidth > 0 ) {
+            Text::drawInRoi( x, y, _multilineMaxWidth, output, imageRoi );
             return;
         }
 
@@ -698,16 +707,6 @@ namespace fheroes2
         assert( !charSprite.empty() );
 
         Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
-    }
-
-    void TextInput::drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
-    {
-        // TODO: implement a method for multi-line text.
-
-        const int32_t textWidth
-            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), FontCharHandler( _fontType ), true );
-
-        drawCursor( x + ( maxWidth - textWidth ) / 2, y, output, imageRoi );
     }
 
     void TextInput::fitToOneRow( const int32_t maxWidth )
@@ -817,24 +816,64 @@ namespace fheroes2
 
     void TextInput::_updateCursorArea()
     {
-        if ( _autoFitToWidth > 0 ) {
+        if ( _autoFitToWidth > 0 && _multilineMaxWidth < 1 ) {
             fitToOneRow( _autoFitToWidth );
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
-
-        const int32_t cursorPos = _cursorPosition - _textBeginPos;
-        const int32_t textLineWidth
-            = ( cursorPos == 0 ) ? 0 : getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ) + _textBeginPos, cursorPos, charHandler, true );
 
         const Sprite & charSprite = charHandler.getSprite( cursorChar );
         assert( !charSprite.empty() );
 
-        const int32_t offsetX = textLineWidth - charSprite.width() / 2 + ( _textBeginPos == 0 ? 0 : getTruncationSymbolWidth( _fontType ) );
-
+        _cursorArea.width = charSprite.width();
+        _cursorArea.height = charSprite.height();
+        _cursorArea.x = charSprite.x() - _cursorArea.width / 2;
         // Move cursor symbol one pixel up by deducting 1 from y.
-        _cursorArea = { offsetX + charSprite.x(), charSprite.y() - 1, charSprite.width(), charSprite.height() };
+        _cursorArea.y = charSprite.y() - 1;
+
+        if ( _text.empty() ) {
+            if ( _multilineMaxWidth > 0 ) {
+                _cursorArea.x += _multilineMaxWidth / 2;
+            }
+            return;
+        }
+
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
+
+        int32_t textLineBegin = _textBeginPos;
+
+        if ( _multilineMaxWidth > 0 ) {
+            const int32_t textHeight = height();
+            std::vector<TextLineInfo> lineInfos;
+            getTextLineInfos( lineInfos, _multilineMaxWidth, textHeight, true );
+
+            if ( _cursorPosition == static_cast<int32_t>( _text.size() ) ) {
+                // The cursor is at the end of the text.
+                _cursorArea.y += static_cast<int32_t>( lineInfos.size() - 1 ) * textHeight;
+                _cursorArea.x += ( _multilineMaxWidth + lineInfos.back().lineWidth ) / 2;
+                return;
+            }
+
+            textLineBegin = 0;
+
+            for ( size_t i = 0; i < lineInfos.size(); ++i ) {
+                if ( _cursorPosition < textLineBegin + lineInfos[i].characterCount ) {
+                    _cursorArea.x += ( _multilineMaxWidth - lineInfos[i].lineWidth ) / 2;
+                    _cursorArea.y += static_cast<int32_t>( i ) * textHeight;
+                    break;
+                }
+
+                textLineBegin += lineInfos[i].characterCount;
+            }
+        }
+        else if ( _textBeginPos != 0 ) {
+            // The visible text is truncated at the begin.
+            _cursorArea.x += getTruncationSymbolWidth( _fontType );
+        }
+
+        if ( _cursorPosition > textLineBegin ) {
+            _cursorArea.x += getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ) + textLineBegin, _cursorPosition - textLineBegin, charHandler, true );
+        }
     }
 
     MultiFontText::~MultiFontText() = default;

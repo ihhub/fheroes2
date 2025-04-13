@@ -672,7 +672,7 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const Point & pointerCursorOffset, const Rect & textRoi )
+    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const int32_t pointerCursorOffsetX, const Rect & textRoi )
     {
         if ( textInput.empty() ) {
             return 0;
@@ -680,12 +680,12 @@ namespace fheroes2
         const int32_t textStartOffsetX = textRoi.x + ( isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0 )
                                          + ( textInput.getTextBeginPos() == 0 ? 0 : textInput.getSingleTruncationSymbolWidth() );
 
-        if ( pointerCursorOffset.x <= textStartOffsetX ) {
+        if ( pointerCursorOffsetX <= textStartOffsetX ) {
             // The text is empty or mouse cursor position is to the left of input field.
-            return 0;
+            return textInput.getTextBeginPos();
         }
 
-        const int32_t maxOffset = pointerCursorOffset.x - textStartOffsetX;
+        const int32_t maxOffset = pointerCursorOffsetX - textStartOffsetX;
         const std::string text = textInput.getVisibleText();
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
@@ -708,14 +708,14 @@ namespace fheroes2
         return textSize + textInput.getTextBeginPos();
     }
 
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    size_t getTextInputCursorPosition( const TextInput & textInput, const Point & pointerCursorOffset, const Rect & textRoi )
     {
-        if ( text.empty() ) {
+        if ( textInput.empty() || textRoi.width < 1 || textRoi.y < 1 ) {
             // The text is empty.
             return 0;
         }
 
-        const FontType fontType = text.getFontType();
+        const FontType fontType = textInput.getFontType();
         const int32_t fontHeight = getFontHeight( fontType.size );
         const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
 
@@ -724,13 +724,20 @@ namespace fheroes2
             return 0;
         }
 
+        int32_t textMaxWidth = textInput.getMultilineMaxWidth();
+
+        assert( textMaxWidth <= textRoi.width );
+
+        if ( textMaxWidth == 0 ) {
+            textMaxWidth = textRoi.width;
+        }
+
         std::vector<TextLineInfo> lineInfos;
-        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, true );
+        textInput.getTextLineInfos( lineInfos, textMaxWidth, fontHeight, true );
 
         if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
             // Pointer is lower than the last text line.
-            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-            return text.text().size() - 1;
+            return textInput.text().size() - 1;
         }
 
         size_t cursorPosition = 0;
@@ -739,35 +746,34 @@ namespace fheroes2
         }
 
         int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].lineWidth ) / 2;
+        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textMaxWidth - lineInfos[pointerLine].lineWidth ) / 2;
 
         if ( maxOffsetX <= 0 ) {
             // Pointer is to the left of the text line.
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+            return cursorPosition;
         }
 
         if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
             // Pointer is to the right of the text line.
             cursorPosition += lineInfos[pointerLine].characterCount;
 
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+            return cursorPosition;
         }
 
         const FontCharHandler charHandler( fontType );
-        const std::string & textString = text.text();
+        const std::string & textString = textInput.text();
         const size_t textSize = textString.size();
 
         for ( size_t i = cursorPosition; i < textSize; ++i ) {
             const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
-            positionOffsetX += charWidth;
 
-            if ( positionOffsetX > maxOffsetX ) {
-                // Take into account that the cursor character ('_') was added to the line.
-                return ( i > currentTextCursorPosition ) ? i - 1 : i;
+            if ( positionOffsetX + charWidth / 2 >= maxOffsetX ) {
+                return i;
             }
+
+            positionOffsetX += charWidth;
         }
 
-        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
         return textSize - 1;
     }
 

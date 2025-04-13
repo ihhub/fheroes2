@@ -280,6 +280,8 @@ namespace fheroes2
             : Text( {}, fontType )
         {
             _keepLineTrailingSpaces = true;
+
+            _updateCursorArea();
         }
 
         TextInput( std::string text, const FontType fontType )
@@ -322,13 +324,26 @@ namespace fheroes2
         using Text::drawInRoi;
 
         void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
-        void drawCursor( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const;
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
         void setAutoFitToOneRow( const int32_t maxWidth )
         {
             _autoFitToWidth = maxWidth;
+
+            _updateCursorArea();
+        }
+
+        void setMultilineMaxWidth( const int32_t maxWidth )
+        {
+            _multilineMaxWidth = maxWidth;
+
+            _updateCursorArea();
+        }
+
+        int32_t getMultilineMaxWidth() const
+        {
+            return _multilineMaxWidth;
         }
 
         void setCursorPosition( const int32_t position )
@@ -365,7 +380,8 @@ namespace fheroes2
         int32_t _cursorPosition{ 0 };
         int32_t _textBeginPos{ 0 };
         int32_t _textLength{ 0 };
-        int32_t _autoFitToWidth{ -1 };
+        int32_t _autoFitToWidth{ 0 };
+        int32_t _multilineMaxWidth{ 0 };
     };
 
     class MultiFontText final : public TextBase
