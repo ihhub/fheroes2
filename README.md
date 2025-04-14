@@ -69,6 +69,6 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2)
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 
-## FAQ
+## F.a.q
 
 You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
