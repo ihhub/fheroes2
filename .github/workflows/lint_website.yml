@@ -7,7 +7,7 @@ on:
         description: 'Paths to check for changes'
         required: false
         type: string
-        default: 'docs/**/*.{html,scss,js}'
+        default: 'docs/**/*.{html,scss}'
 
 jobs:
   prettier:
@@ -19,6 +19,8 @@ jobs:
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
       - name: Prettify code
         uses: creyD/prettier_action@v4.3
         with:
