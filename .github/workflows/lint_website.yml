@@ -3,7 +3,7 @@ name: Lint website
 on:
   pull_request:
     branches: [main]
-    paths: [ '*.html', '*.scss' ]
+    paths: [ '*.html', '*.scss', '*.js' ]
 
 permissions:
   pull-requests: write
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
@@ -27,3 +27,20 @@ jobs:
           # This part is also where you can pass other options, for example:
           prettier_options: --write **/*.{html,scss}
           only_changed: True
+
+  format-js:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup clang-format
+      run: |
+        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-17 100
+        sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-17 100
+    - name: Check code format
+      working-directory: docs
+      run: |
+        npm run format-js
