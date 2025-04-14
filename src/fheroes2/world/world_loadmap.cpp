@@ -1255,6 +1255,11 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     updateArtifactStats();
 
+    for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
+        assert( tileIndex < world.getSize() );
+        world.CaptureObject( tileIndex, color );
+    }
+
     if ( !ProcessNewMP2Map( filename, false ) ) {
         return false;
     }

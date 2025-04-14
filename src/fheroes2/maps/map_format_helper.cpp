@@ -127,6 +127,14 @@ namespace
         }
     }
 
+    void updateWorldOwnership( const Maps::Map_Format::MapFormat & map )
+    {
+        for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
+            assert( tileIndex < world.getSize() );
+            world.CaptureObject( tileIndex, color );
+        }
+    }
+
     // This function only checks for Streams and ignores River Deltas.
     bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
@@ -604,7 +612,7 @@ namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
     {
-        world.generateForEditor( map.size );
+        world.generateForEditor( map.size, false );
 
         if ( !readAllTiles( map ) ) {
             return false;
@@ -614,6 +622,8 @@ namespace Maps
 
         updateWorldCastlesHeroes( map );
 
+        updateWorldOwnership( map );
+
         return true;
     }
 
@@ -621,16 +631,11 @@ namespace Maps
     {
         assert( map.size == world.w() && map.size == world.h() );
 
-        // We must clear all tiles before writing something on them.
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            auto & tile = world.getTile( static_cast<int32_t>( i ) );
-            tile = {};
+        const size_t tilesConut = map.tiles.size();
 
-            tile.setIndex( static_cast<int32_t>( i ) );
-        }
-
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+        for ( size_t i = 0; i < tilesConut; ++i ) {
             auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
+            worldTile.setIndex( static_cast<int32_t>( i ) );
             worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlag );
         }
 
@@ -638,7 +643,7 @@ namespace Maps
         auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
         std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
 
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+        for ( size_t i = 0; i < tilesConut; ++i ) {
             for ( const auto & object : map.tiles[i].objects ) {
                 IndexedObjectInfo info;
                 info.tileIndex = static_cast<int32_t>( i );
@@ -1195,6 +1200,17 @@ namespace Maps
             break;
         default:
             break;
+        }
+
+        // Check and update owner metadata to avoid non-used player color ownership.
+        auto ownershipIter = map.ownershipMetadata.begin();
+        while ( ownershipIter != map.ownershipMetadata.end() ) {
+            if ( !( ownershipIter->second & map.availablePlayerColors ) ) {
+                ownershipIter = map.ownershipMetadata.erase( ownershipIter );
+            }
+            else {
+                ++ownershipIter;
+            }
         }
 
         return true;

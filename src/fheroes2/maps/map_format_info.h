@@ -330,6 +330,9 @@ namespace Maps::Map_Format
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
+
+        // This metadata contains the owner color in relation to tile ID.
+        std::map<int32_t, uint8_t> ownershipMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

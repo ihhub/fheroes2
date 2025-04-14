@@ -1574,6 +1574,33 @@ namespace Interface
 
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
+                else if ( ( object.group == Maps::ObjectGroup::ADVENTURE_MINES && objectType != MP2::OBJ_ABANDONED_MINE )
+                          || ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE ) ) {
+                    auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
+                    const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
+                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : Color::NONE;
+
+                    uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
+
+                    if ( newColor != ownerColor ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                        if ( newColor == Color::NONE ) {
+                            _mapFormat.ownershipMetadata.erase( tileIndex );
+                        }
+                        else if ( hasOwnershipMetadata ) {
+                            ownershipMetadata->second = newColor;
+                        }
+                        else {
+                            _mapFormat.ownershipMetadata[tileIndex] = newColor;
+                        }
+
+                        world.CaptureObject( tileIndex, newColor );
+                        setRedraw( mapUpdateFlags );
+
+                        action.commit();
+                    }
+                }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
                     StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );

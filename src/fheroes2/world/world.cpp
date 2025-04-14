@@ -392,7 +392,7 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateForEditor( const int32_t size )
+void World::generateForEditor( const int32_t size, const bool initTiles )
 {
     assert( size > 0 );
 
@@ -416,6 +416,10 @@ void World::generateForEditor( const int32_t size )
     Defaults();
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
+
+    if ( !initTiles ) {
+        return;
+    }
 
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
@@ -903,6 +907,12 @@ void World::CaptureObject( const int32_t index, const int color )
     assert( CountBits( color ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
+
+    if ( !MP2::isCaptureObject( objectType ) ) {
+        assert( 0 );
+        return;
+    }
+
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {

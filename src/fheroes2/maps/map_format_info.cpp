@@ -72,7 +72,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 8 };
+    constexpr uint16_t currentSupportedVersion{ 9 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -256,7 +256,7 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.ownershipMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -306,6 +306,11 @@ namespace
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
             >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
+
+        static_assert( minimumSupportedVersion <= 8, "Remove this check." );
+        if ( map.version > 8 ) {
+            decompressed >> map.ownershipMetadata;
+        }
 
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
