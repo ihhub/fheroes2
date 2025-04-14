@@ -8,6 +8,8 @@ document.addEventListener( "DOMContentLoaded", function() {
             try {
                 if ( navigator.clipboard && window.isSecureContext ) {
                     // For HTTPS or localhost
+
+
                     await navigator.clipboard.writeText( code );
                     button.textContent = "Copied!";
                 }
