@@ -2,7 +2,7 @@ name: Lint website
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
     paths: [ '*.html', '*.scss', '*.js' ]
 
 permissions:
