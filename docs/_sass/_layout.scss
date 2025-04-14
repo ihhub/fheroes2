@@ -28,7 +28,8 @@ $body-font: "Zain";
     td {
       text-align: right;
       padding: 0.6em 1em;
-      border-bottom: 0.0625em solid rgba(map-get($theme-map, primary-color), 0.1);
+      border-bottom: 0.0625em solid
+        rgba(map-get($theme-map, primary-color), 0.1);
 
       &:before {
         content: attr(data-label);
@@ -74,7 +75,7 @@ $body-font: "Zain";
       pre.highlight {
         margin: 0;
         -webkit-overflow-scrolling: touch;
-        padding: 0.5em .5em .5em 1em;
+        padding: 0.5em 0.5em 0.5em 1em;
         scrollbar-width: none;
         border-radius: map-get($theme-map, border-radius);
 
@@ -88,7 +89,6 @@ $body-font: "Zain";
         flex-grow: 1;
       }
     }
-
   }
   code.highlighter-rouge {
     font-size: 0.6em;
@@ -98,7 +98,6 @@ $body-font: "Zain";
 
 @mixin themable($theme-name, $theme-map) {
   [data-theme="#{$theme-name}"] {
-
     // Global styles
     body {
       background: map-get($theme-map, background-color);
@@ -153,7 +152,12 @@ $body-font: "Zain";
       }
     }
 
-    h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    h1 a,
+    h2 a,
+    h3 a,
+    h4 a,
+    h5 a,
+    h6 a {
       text-shadow: map-get($theme-map, header-text-shadow);
     }
 
@@ -400,7 +404,7 @@ $body-font: "Zain";
 
     .theme-toggle-container {
       display: flex;
-      font-size: .5em;
+      font-size: 0.5em;
       justify-content: end;
       margin: 1.25em 0em;
 
@@ -444,7 +448,7 @@ $body-font: "Zain";
       margin-bottom: 1.2em;
 
       .highlight {
-        padding: .7em;
+        padding: 0.7em;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
         background: none;
@@ -454,7 +458,6 @@ $body-font: "Zain";
         justify-content: space-between;
         gap: 1em;
         align-items: center;
-
 
         pre.highlight {
           background: rgba(map-get($theme-map, code-background-color), 0.5);
@@ -471,8 +474,8 @@ $body-font: "Zain";
     }
 
     code.highlighter-rouge {
-      padding: .5em;
-      font-size: .8em;
+      padding: 0.5em;
+      font-size: 0.8em;
       background: rgba(map-get($theme-map, code-background-color), 0.5);
     }
 
@@ -513,7 +516,8 @@ $body-font: "Zain";
       border: 0.1em solid rgba(map-get($theme-map, secondary-color), 0.6);
       border-radius: map-get($theme-map, border-radius);
       overflow: hidden;
-      box-shadow: 0 0.125em 0.25em rgba(map-get($theme-map, secondary-color), 0.1);
+      box-shadow: 0 0.125em 0.25em
+        rgba(map-get($theme-map, secondary-color), 0.1);
 
       th {
         background: rgba(map-get($theme-map, background-color), 0.6);
@@ -522,7 +526,8 @@ $body-font: "Zain";
         font-weight: 400;
         padding: 1em;
         text-align: left;
-        border-bottom: 0.125em solid rgba(map-get($theme-map, secondary-color), 0.3);
+        border-bottom: 0.125em solid
+          rgba(map-get($theme-map, secondary-color), 0.3);
         font-size: 1.1em;
         white-space: nowrap;
         position: sticky;
@@ -533,7 +538,8 @@ $body-font: "Zain";
 
       td {
         padding: 0.8em 1em;
-        border-bottom: 0.0625em solid rgba(map-get($theme-map, primary-color), 0.1);
+        border-bottom: 0.0625em solid
+          rgba(map-get($theme-map, primary-color), 0.1);
         vertical-align: middle;
         line-height: 1.4;
       }

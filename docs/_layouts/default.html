@@ -1,49 +1,72 @@
-<!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<!doctype html>
+<html lang="{{ site.lang | default: 'en-US' }}">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=640">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=640" />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jacquard+24&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}" media="screen">
+    <link
+      rel="stylesheet"
+      href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}"
+      media="screen"
+    />
 
     <!-- Scripts -->
     <script src="{{ '/assets/js/theme-toggle.js?v=' | append: site.github.build_revision | relative_url }}"></script>
     <script src="{{ '/assets/js/heading-copy.js?v=' | append: site.github.build_revision | relative_url }}"></script>
     <script src="{{ '/assets/js/code-copy.js?v=' | append: site.github.build_revision | relative_url }}"></script>
 
-    {% seo %}
-
-    {% include head-custom.html %}
+    {% seo %} {% include head-custom.html %}
   </head>
 
   <body>
     <div class="shell">
       <div class="theme-toggle-container">
-        <button id="theme-toggle" class="btn btn-primary" aria-label="Toggle dark mode">🌙 Dark Mode</button>
+        <button
+          id="theme-toggle"
+          class="btn btn-primary"
+          aria-label="Toggle dark mode"
+        >
+          🌙 Dark Mode
+        </button>
       </div>
       <header>
-        <h1><a href="{{ site.baseurl }}/" data-text="{{ site.title | default: site.github.repository_name }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        <h1>
+          <a
+            href="{{ site.baseurl }}/"
+            data-text="{{ site.title | default: site.github.repository_name }}"
+            >{{ site.title | default: site.github.repository_name }}</a
+          >
+        </h1>
         <h2>
-          A recreation of the <strong>Heroes of Might and Magic II</strong> game engine.
+          A recreation of the <strong>Heroes of Might and Magic II</strong> game
+          engine.
         </h2>
       </header>
 
-      <section id="main_content">
-        {{ content }}
-      </section>
+      <section id="main_content">{{ content }}</section>
 
       <footer>
         {% if site.github.is_project_page %}
-          <p>This project by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a> can be found on <a href="{{ site.github.repository_url }}">GitHub</a></p>
-        {% endif %}
-        {% if site.github.is_user_page %}
-          <p>Projects by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a> can be found on <a href="{{ site.github.repository_url }}">GitHub</a></p>
+        <p>
+          This project by
+          <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>
+          can be found on <a href="{{ site.github.repository_url }}">GitHub</a>
+        </p>
+        {% endif %} {% if site.github.is_user_page %}
+        <p>
+          Projects by
+          <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>
+          can be found on <a href="{{ site.github.repository_url }}">GitHub</a>
+        </p>
         {% endif %}
       </footer>
     </div>
