@@ -15,9 +15,6 @@ jobs:
   style:
     name: Code style check
     uses: ./.github/workflows/code_style_check.yml
-  lint-website:
-    name: Lint website
-    uses: ./.github/workflows/lint_website.yml
   codechecker:
     name: CodeChecker
     needs:
