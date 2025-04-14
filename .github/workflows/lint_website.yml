@@ -24,20 +24,3 @@ jobs:
         with:
           # This part is also where you can pass other options, for example:
           prettier_options: --write **/*.{html,scss}
-
-  format-js:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup clang-format
-      run: |
-        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-17 100
-        sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-17 100
-    - name: Check code format
-      working-directory: docs
-      run: |
-        npm run format-js
