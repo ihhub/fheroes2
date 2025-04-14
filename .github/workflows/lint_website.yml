@@ -1,9 +1,13 @@
 name: Lint website
 
 on:
-  pull_request:
-    branches: [master]
-    paths: [ '*.html', '*.scss', '*.js' ]
+  workflow_call:
+    inputs:
+      paths:
+        description: 'Paths to check for changes'
+        required: false
+        type: string
+        default: 'docs/**/*.{html,scss,js}'
 
 permissions:
   pull-requests: write
@@ -11,7 +15,7 @@ permissions:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
