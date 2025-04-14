@@ -26,4 +26,4 @@ jobs:
         with:
           dry: true
           # This part is also where you can pass other options, for example:
-          prettier_options: --write **/*.{html,scss}
+          prettier_options: --write docs/**/*.{html,scss}
