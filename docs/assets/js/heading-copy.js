@@ -1,91 +1,128 @@
-document.addEventListener( "DOMContentLoaded", function() {
-    const content = document.querySelector( "#main_content" ); // Updated selector
+document.addEventListener('DOMContentLoaded', () => {
+    const content = document.querySelector('#main_content');
+    if (!content) return;
 
-    if ( !content )
-        return;
+    // Constants
+    const LINK_ICON = '🔗';
+    const COPIED_ICON = '&nbsp;- Copied';
+    const ERROR_ICON = '❌';
+    const RESET_DELAY = 2000;
+    const HEADING_SELECTORS = 'h2, h3, h4, h5, h6';
 
-    // Define our themed icons
-    const LINK_ICON = "🔗"; // Link icon
-    const COPIED_ICON = "&nbsp;- Copied"; // message for confirmation
-    content.querySelectorAll( "h2, h3, h4, h5, h6" ).forEach( ( heading ) => {
-        // Create an ID if none exists
-        if ( !heading.id ) {
-            heading.id = heading.textContent.toLowerCase().replace( /[^a-z0-9]+/g, "-" );
-        }
+    // Create a persistent live region for announcements
+    const createLiveRegion = () => {
+        const liveRegion = document.createElement('div');
+        liveRegion.setAttribute('aria-live', 'assertive');
+        liveRegion.setAttribute('aria-atomic', 'true');
+        liveRegion.style.position = 'absolute';
+        liveRegion.style.width = '1px';
+        liveRegion.style.height = '1px';
+        liveRegion.style.padding = '0';
+        liveRegion.style.margin = '-1px';
+        liveRegion.style.overflow = 'hidden';
+        liveRegion.style.clip = 'rect(0, 0, 0, 0)';
+        liveRegion.style.whiteSpace = 'nowrap';
+        liveRegion.style.border = '0';
+        document.body.appendChild(liveRegion);
+        return liveRegion;
+    };
 
-        // Create wrapper for original heading content
-        const contentWrapper = document.createElement( "span" );
-        while ( heading.firstChild ) {
-            contentWrapper.appendChild( heading.firstChild );
-        }
+    // Create a single persistent live region for all announcements
+    const liveRegion = createLiveRegion();
 
-        // Create the anchor that wraps everything
-        const anchor = document.createElement( "a" );
-        anchor.href = `#${heading.id}`;
-        anchor.className = "heading-link";
-        anchor.style.textDecoration = "none";
-        anchor.style.color = "inherit";
+    /**
+     * Creates a unique ID for a heading based on its text content
+     * @param {string} text - The heading text
+     * @returns {string} - A unique ID
+     */
+    const generateHeadingId = (text) => {
+        return text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    };
 
-        // Add the content wrapper
-        anchor.appendChild( contentWrapper );
-
-        // Add the icon
-        const icon = document.createElement( "span" );
-        icon.className = "heading-anchor";
-        icon.setAttribute( "aria-label", "Copy link to heading" );
+    /**
+     * Creates a link icon element with proper accessibility attributes
+     * @returns {HTMLElement} - The icon element
+     */
+    const createIconElement = () => {
+        const icon = document.createElement('span');
+        icon.className = 'heading-anchor';
+        icon.setAttribute('aria-label', 'Copy link to heading');
+        icon.setAttribute('role', 'button');
+        icon.setAttribute('tabindex', '0');
         icon.innerHTML = LINK_ICON;
-        anchor.appendChild( icon );
+        return icon;
+    };
 
-        // Clear the heading and add our new structure
-        heading.appendChild( anchor );
+    /**
+     * Creates a heading link with proper accessibility attributes
+     * @param {HTMLElement} heading - The heading element
+     */
+    const createHeadingLink = (heading) => {
+        // Generate ID if needed
+        if (!heading.id) {
+            heading.id = generateHeadingId(heading.textContent);
+        }
 
-        // Handle click events for the anchor icon only
-        icon.addEventListener( "click", async ( e ) => {
+        // Create icon element
+        const icon = createIconElement();
+
+        // Add icon to the heading
+        heading.appendChild(icon);
+
+        // Handle click and keyboard events
+        const handleCopy = async (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Prevent the event from bubbling up to the anchor
-            const url = `${window.location.origin}${window.location.pathname}#${heading.id}`;
+            e.stopPropagation();
+
+            const url = new URL(window.location.href);
+            url.hash = heading.id;
 
             try {
-                if ( navigator.clipboard && window.isSecureContext ) {
-                    // For HTTPS or localhost
-                    await navigator.clipboard.writeText( url );
-                }
-                else {
-                    // Fallback for HTTP
-                    const textArea = document.createElement( "textarea" );
-                    textArea.value = url;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-999999px";
-                    textArea.style.top = "-999999px";
-                    document.body.appendChild( textArea );
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        document.execCommand( "copy" );
-                    }
-                    catch ( err ) {
-                        console.error( "Failed to copy:", err );
-                    }
-                    textArea.remove();
-                }
+                await navigator.clipboard.writeText(url.toString());
 
-                // Show copy confirmation with themed icon
+                // Show confirmation
                 icon.innerHTML = COPIED_ICON;
-                icon.style.transform = "scale(1.2)";
+                icon.style.transform = 'scale(1.2)';
 
-                setTimeout( () => {
-                    icon.innerHTML = LINK_ICON;
-                    icon.style.transform = "";
-                }, 2000 );
+                // Announce to screen readers using the persistent live region
+                liveRegion.textContent = `Link to ${heading.textContent} copied to clipboard`;
+
+                // Force a reflow to ensure the announcement is triggered
+                void liveRegion.offsetHeight;
 
                 // Update URL without scrolling
-                history.pushState( null, null, `#${heading.id}` );
+                history.pushState(null, null, `#${heading.id}`);
+
+                // Reset icon after delay
+                setTimeout(() => {
+                    icon.innerHTML = LINK_ICON;
+                    icon.style.transform = '';
+                }, RESET_DELAY);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                icon.innerHTML = ERROR_ICON;
+
+                // Announce error to screen readers using the persistent live region
+                liveRegion.textContent = `Failed to copy link to ${heading.textContent}`;
+
+                // Force a reflow to ensure the announcement is triggered
+                void liveRegion.offsetHeight;
+
+                setTimeout(() => {
+                    icon.innerHTML = LINK_ICON;
+                }, RESET_DELAY);
             }
-            catch ( err ) {
-                console.error( "Failed to copy:", err );
-                icon.innerHTML = "❌";
-                setTimeout( () => { icon.innerHTML = LINK_ICON; }, 2000 );
+        };
+
+        // Add event listeners for both click and keyboard
+        icon.addEventListener('click', handleCopy);
+        icon.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                handleCopy(e);
             }
-        } );
-    } );
-} );
+        });
+    };
+
+    // Apply to all headings
+    content.querySelectorAll(HEADING_SELECTORS).forEach(createHeadingLink);
+});
