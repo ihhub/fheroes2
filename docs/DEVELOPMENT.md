@@ -55,7 +55,7 @@ If you would like to build the project using CMake please follow the instruction
 
 We hose the website on Github pages, which is a highly customized version of the
 Jekyll static site engine. The instructions for developing the website can be
-found in the [**website locald dev**](WEBSITE_LOCAL_DEV.md) guide
+found in the [**website local dev**](WEBSITE_LOCAL_DEV.md) guide.
 
 ## Contribution
 
