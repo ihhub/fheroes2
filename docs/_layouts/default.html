@@ -26,7 +26,12 @@
     <script src="{{ '/assets/js/heading-copy.js?v=' | append: site.github.build_revision | relative_url }}"></script>
     <script src="{{ '/assets/js/code-copy.js?v=' | append: site.github.build_revision | relative_url }}"></script>
 
-    {% seo %} {% include head-custom.html %}
+    {% seo %}
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{{ '/images/favicon.ico' | relative_url }}"
+    />
   </head>
 
   <body>

@@ -41,7 +41,7 @@ source files.
 
    > **Note**
    > While the gem in this file may eventually be deprecated, it's currently the
-   > simplest way to enable local development of the GitHub Pages site. As such
+   > simplest way to enable local development of the GitHub Pages site. As such,
    > the Gemfile should not be committed into the repo.
 
 3. Install the required Ruby dependencies:
