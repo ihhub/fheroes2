@@ -1,126 +1,147 @@
-document.addEventListener( 'DOMContentLoaded', () => {
-    const content = document.querySelector( '#main_content' );
-    if ( !content )
-        return;
+/***************************************************************************
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2025                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
-    // Constants
-    const LINK_ICON = '🔗';
-    const COPIED_ICON = '&nbsp;- Copied';
-    const ERROR_ICON = '❌';
-    const RESET_DELAY = 2000;
-    const HEADING_SELECTORS = 'h2, h3, h4, h5, h6';
+// Constants
+const LINK_ICON = '🔗';
+const COPIED_ICON = ' - Copied';
+const ERROR_ICON = '❌';
+const RESET_DELAY = 2000;
+const HEADING_SELECTORS = 'h2, h3, h4, h5, h6';
 
-    // Create a persistent live region for announcements
-    const createLiveRegion = () => {
-        const liveRegion = document.createElement( 'div' );
-        liveRegion.setAttribute( 'aria-live', 'assertive' );
-        liveRegion.setAttribute( 'aria-atomic', 'true' );
-        liveRegion.style.position = 'absolute';
-        liveRegion.style.width = '1px';
-        liveRegion.style.height = '1px';
-        liveRegion.style.padding = '0';
-        liveRegion.style.margin = '-1px';
-        liveRegion.style.overflow = 'hidden';
-        liveRegion.style.clip = 'rect(0, 0, 0, 0)';
-        liveRegion.style.whiteSpace = 'nowrap';
-        liveRegion.style.border = '0';
-        document.body.appendChild( liveRegion );
-        return liveRegion;
-    };
+// Class to handle heading copy functionality
+class HeadingCopyManager {
+    constructor(contentElement) {
+        this.content = contentElement;
+        this.accessibility = new AccessibilityManager();
 
-    // Create a single persistent live region for all announcements
-    const liveRegion = createLiveRegion();
+        // Apply to all headings
+        this.content.querySelectorAll(HEADING_SELECTORS).forEach(heading =>
+            this.createHeadingLink(heading)
+        );
+    }
 
-    /**
-     * Creates a unique ID for a heading based on its text content
-     * @param {string} text - The heading text
-     * @returns {string} - A unique ID
-     */
-    const generateHeadingId = ( text ) => { return text.toLowerCase().replace( /[^a-z0-9]+/g, '-' ); };
+    // Creates a unique ID for a heading based on its text content
+    // Parameters:
+    //   text - The heading text
+    // Returns: A unique ID
+    generateHeadingId(text) {
+        return text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
 
-    /**
-     * Creates a link icon element with proper accessibility attributes
-     * @returns {HTMLElement} - The icon element
-     */
-    const createIconElement = () => {
-        const icon = document.createElement( 'span' );
-        icon.className = 'heading-anchor';
-        icon.setAttribute( 'aria-label', 'Copy link to heading' );
-        icon.setAttribute( 'role', 'button' );
-        icon.setAttribute( 'tabindex', '0' );
-        icon.innerHTML = LINK_ICON;
+    // Creates a link icon element with proper accessibility attributes
+    // Returns: The icon element
+    createIconElement() {
+        const icon = this.accessibility.createAccessibleSpan(
+            LINK_ICON,
+            'Copy link to heading',
+            'heading-anchor'
+        );
         return icon;
-    };
+    }
 
-    /**
-     * Creates a heading link with proper accessibility attributes
-     * @param {HTMLElement} heading - The heading element
-     */
-    const createHeadingLink = ( heading ) => {
+    // Updates the icon appearance based on the copy result
+    // Parameters:
+    //   icon - The icon element
+    //   success - Whether the copy was successful
+    //   headingText - The text of the heading
+    updateIconState(icon, success, headingText) {
+        this.accessibility.updateElementState(
+            icon,
+            success,
+            `Link to ${headingText} copied to clipboard`,
+            `Failed to copy link to ${headingText}`,
+            COPIED_ICON,
+            ERROR_ICON,
+            LINK_ICON,
+            RESET_DELAY,
+            true // Use innerHTML for the heading icon
+        );
+    }
+
+    // Handles the copy functionality for a heading
+    // Parameters:
+    //   e - The event object
+    //   heading - The heading element
+    //   icon - The icon element
+    handleCopy(e, heading, icon) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const url = new URL(window.location.href);
+        url.hash = heading.id;
+
+        try {
+            navigator.clipboard.writeText(url.toString())
+                .then(() => {
+                    this.updateIconState(icon, true, heading.textContent);
+
+                    // Update URL without scrolling
+                    history.pushState(null, null, `#${heading.id}`);
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    this.updateIconState(icon, false, heading.textContent);
+                });
+        } catch (err) {
+            console.error('Failed to copy:', err);
+            this.updateIconState(icon, false, heading.textContent);
+        }
+    }
+
+    // Sets up event listeners for a heading icon
+    // Parameters:
+    //   icon - The icon element
+    //   heading - The heading element
+    setupEventListeners(icon, heading) {
+        // Add click event handler
+        icon.addEventListener('click', (e) => this.handleCopy(e, heading, icon));
+
+        // Add keyboard event handler
+        this.accessibility.setupKeyboardEvents(icon, (e) => this.handleCopy(e, heading, icon));
+    }
+
+    // Creates a heading link with proper accessibility attributes
+    // Parameters:
+    //   heading - The heading element
+    createHeadingLink(heading) {
         // Generate ID if needed
-        if ( !heading.id ) {
-            heading.id = generateHeadingId( heading.textContent );
+        if (!heading.id) {
+            heading.id = this.generateHeadingId(heading.textContent);
         }
 
         // Create icon element
-        const icon = createIconElement();
+        const icon = this.createIconElement();
 
         // Add icon to the heading
-        heading.appendChild( icon );
+        heading.appendChild(icon);
 
-        // Handle click and keyboard events
-        const handleCopy = async ( e ) => {
-            e.preventDefault();
-            e.stopPropagation();
+        // Set up event listeners
+        this.setupEventListeners(icon, heading);
+    }
+}
 
-            const url = new URL( window.location.href );
-            url.hash = heading.id;
-
-            try {
-                await navigator.clipboard.writeText( url.toString() );
-
-                // Show confirmation
-                icon.innerHTML = COPIED_ICON;
-                icon.style.transform = 'scale(1.2)';
-
-                // Announce to screen readers using the persistent live region
-                liveRegion.textContent = `Link to ${heading.textContent} copied to clipboard`;
-
-                // Force a reflow to ensure the announcement is triggered
-                void liveRegion.offsetHeight;
-
-                // Update URL without scrolling
-                history.pushState( null, null, `#${heading.id}` );
-
-                // Reset icon after delay
-                setTimeout( () => {
-                    icon.innerHTML = LINK_ICON;
-                    icon.style.transform = '';
-                }, RESET_DELAY );
-            }
-            catch ( err ) {
-                console.error( 'Failed to copy:', err );
-                icon.innerHTML = ERROR_ICON;
-
-                // Announce error to screen readers using the persistent live region
-                liveRegion.textContent = `Failed to copy link to ${heading.textContent}`;
-
-                // Force a reflow to ensure the announcement is triggered
-                void liveRegion.offsetHeight;
-
-                setTimeout( () => { icon.innerHTML = LINK_ICON; }, RESET_DELAY );
-            }
-        };
-
-        // Add event listeners for both click and keyboard
-        icon.addEventListener( 'click', handleCopy );
-        icon.addEventListener( 'keydown', ( e ) => {
-            if ( e.key === 'Enter' || e.key === ' ' ) {
-                handleCopy( e );
-            }
-        } );
-    };
-
-    // Apply to all headings
-    content.querySelectorAll( HEADING_SELECTORS ).forEach( createHeadingLink );
-} );
+// Initialize when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const content = document.querySelector('#main_content');
+    if (content) {
+        // Initialize the heading copy manager
+        new HeadingCopyManager(content);
+    }
+});

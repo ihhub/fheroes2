@@ -1,99 +1,106 @@
-document.addEventListener( "DOMContentLoaded", () => {
-    // Create a dedicated live region for announcements
-    const liveRegion = document.createElement( "div" );
-    liveRegion.setAttribute( "aria-live", "assertive" );
-    liveRegion.setAttribute( "aria-atomic", "true" );
-    liveRegion.setAttribute( "role", "status" );
-    liveRegion.style.position = "absolute";
-    liveRegion.style.width = "1px";
-    liveRegion.style.height = "1px";
-    liveRegion.style.padding = "0";
-    liveRegion.style.margin = "-1px";
-    liveRegion.style.overflow = "hidden";
-    liveRegion.style.clip = "rect(0, 0, 0, 0)";
-    liveRegion.style.whiteSpace = "nowrap";
-    liveRegion.style.border = "0";
-    document.body.appendChild( liveRegion );
+/***************************************************************************
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2025                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
-    document.querySelectorAll( "div.highlight" ).forEach( ( block ) => {
-        // Create copy button
-        const button = document.createElement( "button" );
-        button.textContent = "Copy";
-        button.className = "btn btn-primary copy-btn";
+// Class to handle code copy functionality
+class CodeCopyManager {
+    constructor() {
+        this.accessibility = new AccessibilityManager();
 
-        // Enhanced accessibility attributes
-        button.setAttribute( "aria-label", "Copy code to clipboard" );
-        button.setAttribute( "title", "Copy code to clipboard" );
-        button.setAttribute( "role", "button" );
-        button.setAttribute( "tabindex", "0" );
+        // Apply to all code blocks
+        document.querySelectorAll("div.highlight").forEach(block =>
+            this.initializeCodeBlock(block)
+        );
+    }
 
-        // Add button to the code block
-        block.appendChild( button );
+    // Creates a copy button using the template
+    // Returns: The button element
+    createCopyButton() {
+        return this.accessibility.createAccessibleButton(
+            'Copy',
+            'Copy code to clipboard',
+            'btn btn-primary copy-btn'
+        );
+    }
 
-        // Handle copy functionality
-        const copyCode = async () => {
-            try {
-                const code = block.querySelector( "pre" ).innerText;
-                await navigator.clipboard.writeText( code );
+    // Updates the button appearance and announces success to screen readers
+    // Parameters:
+    //   button - The button element
+    //   success - Whether the copy was successful
+    updateButtonState(button, success) {
+        this.accessibility.updateElementState(
+            button,
+            success,
+            'Code copied to clipboard',
+            'Failed to copy code to clipboard',
+            'Copied!',
+            'Failed to copy',
+            'Copy',
+            2000
+        );
+    }
 
-                // Visual feedback
-                button.textContent = "Copied!";
-                button.classList.add( "success" );
+    // Handles the copy functionality for a code block
+    // Parameters:
+    //   block - The code block element
+    //   button - The copy button
+    handleCopyCode(block, button) {
+        try {
+            const code = block.querySelector("pre").innerText;
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    this.updateButtonState(button, true);
+                })
+                .catch(err => {
+                    console.error("Failed to copy code:", err);
+                    this.updateButtonState(button, false);
+                });
+        } catch (err) {
+            console.error("Failed to copy code:", err);
+            this.updateButtonState(button, false);
+        }
+    }
 
-                // Update the button's aria-label
-                button.setAttribute( "aria-label", "Code copied to clipboard" );
-
-                // Clear the live region first
-                liveRegion.textContent = "";
-
-                // Force a reflow
-                void liveRegion.offsetHeight;
-
-                // Set the new content after a tiny delay
-                setTimeout( () => { liveRegion.textContent = "Code copied to clipboard"; }, 10 );
-
-                // Reset button after delay
-                setTimeout( () => {
-                    button.textContent = "Copy";
-                    button.classList.remove( "success" );
-                    button.setAttribute( "aria-label", "Copy code to clipboard" );
-                }, 2000 );
-            }
-            catch ( err ) {
-                console.error( "Failed to copy code:", err );
-                button.textContent = "Failed to copy";
-                button.classList.add( "error" );
-
-                // Update the button's aria-label
-                button.setAttribute( "aria-label", "Failed to copy code to clipboard" );
-
-                // Clear the live region first
-                liveRegion.textContent = "";
-
-                // Force a reflow
-                void liveRegion.offsetHeight;
-
-                // Set the new content after a tiny delay
-                setTimeout( () => { liveRegion.textContent = "Failed to copy code to clipboard"; }, 10 );
-
-                // Reset button after delay
-                setTimeout( () => {
-                    button.textContent = "Copy";
-                    button.classList.remove( "error" );
-                    button.setAttribute( "aria-label", "Copy code to clipboard" );
-                }, 2000 );
-            }
-        };
-
+    // Sets up event listeners for a copy button
+    // Parameters:
+    //   button - The copy button
+    //   block - The code block element
+    setupEventListeners(button, block) {
         // Click event handler
-        button.addEventListener( "click", copyCode );
+        button.addEventListener("click", () => this.handleCopyCode(block, button));
 
-        // Keyboard event handler for accessibility
-        button.addEventListener( "keydown", ( event ) => {
-            if ( event.key === "Enter" || event.key === " " ) {
-                event.preventDefault();
-                copyCode();
-            }
-        } );
-    } );
-} );
+        // Keyboard event handler
+        this.accessibility.setupKeyboardEvents(button, () => this.handleCopyCode(block, button));
+    }
+
+    // Initializes a code block with a copy button
+    // Parameters:
+    //   block - The code block element
+    initializeCodeBlock(block) {
+        const button = this.createCopyButton();
+        block.appendChild(button);
+        this.setupEventListeners(button, block);
+    }
+}
+
+// Initialize when the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialize the code copy manager
+    new CodeCopyManager();
+});

@@ -489,6 +489,7 @@ $body-font: "Zain";
       transition: all 0.3s ease;
       color: lighten(map-get($theme-map, header-color), 10%);
       display: inline-block;
+      cursor: copy;
 
       &:hover {
         opacity: 1 !important;
