@@ -48,11 +48,11 @@ class HeadingCopyManager {
     // Creates a link icon element with proper accessibility attributes
     // Returns: The icon element
     createIconElement() {
-        const icon = this.accessibility.createAccessibleSpan(
-            LINK_ICON,
-            'Copy link to heading',
-            'heading-anchor'
-        );
+        const icon = this.accessibility.createAccessibleSpan({
+            text: LINK_ICON,
+            ariaLabel: 'Copy link to heading',
+            className: 'heading-anchor'
+        });
         return icon;
     }
 
@@ -62,17 +62,17 @@ class HeadingCopyManager {
     //   success - Whether the copy was successful
     //   headingText - The text of the heading
     updateIconState(icon, success, headingText) {
-        this.accessibility.updateElementState(
-            icon,
-            success,
-            `Link to ${headingText} copied to clipboard`,
-            `Failed to copy link to ${headingText}`,
-            COPIED_ICON,
-            ERROR_ICON,
-            LINK_ICON,
-            RESET_DELAY,
-            true // Use innerHTML for the heading icon
-        );
+        this.accessibility.updateElementState({
+            element: icon,
+            success: success,
+            successMessage: `Link to ${headingText} copied to clipboard`,
+            errorMessage: `Failed to copy link to ${headingText}`,
+            successText: COPIED_ICON,
+            errorText: ERROR_ICON,
+            defaultText: LINK_ICON,
+            resetDelay: RESET_DELAY,
+            isHtml: true // Use innerHTML for the heading icon
+        });
     }
 
     // Handles the copy functionality for a heading

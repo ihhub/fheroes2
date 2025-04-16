@@ -25,11 +25,14 @@ class AccessibilityManager {
     }
 
     // Creates a live region for screen reader announcements
+    // The live region is a div element that is used to announce messages to
+    // screen readers.
     // Returns: The live region element
     createLiveRegion() {
         const liveRegion = document.createElement('div');
         liveRegion.setAttribute('aria-live', 'assertive');
         liveRegion.setAttribute('aria-atomic', 'true');
+        // This doesn't work as a CSS property, so we need to set it manually
         liveRegion.style.cssText = 'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;';
         document.body.appendChild(liveRegion);
         return liveRegion;
@@ -42,7 +45,8 @@ class AccessibilityManager {
         // Clear the live region first
         this.liveRegion.textContent = '';
 
-        // Force a reflow
+        // Force a reflow to ensure the announcement is triggered if the user
+        // triggers multiple times in a row.
         void this.liveRegion.offsetHeight;
 
         // Set the new message
@@ -54,12 +58,20 @@ class AccessibilityManager {
 
     // Creates an accessible element (button or span)
     // Parameters:
-    //   text - The element text
-    //   ariaLabel - The ARIA label
-    //   className - Additional CSS classes
-    //   elementType - The element type ('button' or 'span')
+    //   options - An object containing the following properties:
+    //     text - The element text
+    //     ariaLabel - The ARIA label
+    //     className - Additional CSS classes
+    //     elementType - The element type ('button' or 'span')
     // Returns: The accessible element
-    createAccessibleElement(text, ariaLabel, className = '', elementType = 'button') {
+    createAccessibleElement(options) {
+        const {
+            text,
+            ariaLabel,
+            className = '',
+            elementType = 'button'
+        } = options;
+
         const element = document.createElement(elementType);
         element.textContent = text;
         element.setAttribute('aria-label', ariaLabel);
@@ -73,36 +85,57 @@ class AccessibilityManager {
 
     // Creates an accessible button element
     // Parameters:
-    //   text - The button text
-    //   ariaLabel - The ARIA label
-    //   className - Additional CSS classes
+    //   options - An object containing the following properties:
+    //     text - The button text
+    //     ariaLabel - The ARIA label
+    //     className - Additional CSS classes
     // Returns: The button element
-    createAccessibleButton(text, ariaLabel, className = '') {
-        return this.createAccessibleElement(text, ariaLabel, className, 'button');
+    createAccessibleButton(options) {
+        return this.createAccessibleElement({
+            ...options,
+            elementType: 'button'
+        });
     }
 
     // Creates an accessible span element
     // Parameters:
-    //   text - The span text
-    //   ariaLabel - The ARIA label
-    //   className - Additional CSS classes
+    //   options - An object containing the following properties:
+    //     text - The span text
+    //     ariaLabel - The ARIA label
+    //     className - Additional CSS classes
     // Returns: The span element
-    createAccessibleSpan(text, ariaLabel, className = '') {
-        return this.createAccessibleElement(text, ariaLabel, className, 'span');
+    createAccessibleSpan(options) {
+        return this.createAccessibleElement({
+            ...options,
+            elementType: 'span'
+        });
     }
 
     // Updates element state with visual and screen reader feedback
     // Parameters:
-    //   element - The element to update
-    //   success - Whether the action was successful
-    //   successMessage - Message for screen reader on success
-    //   errorMessage - Message for screen reader on error
-    //   successText - Text to show on element for success
-    //   errorText - Text to show on element for error
-    //   defaultText - Default element text
-    //   resetDelay - Delay before resetting element (ms)
-    //   isHtml - Whether the text contains HTML
-    updateElementState(element, success, successMessage, errorMessage, successText, errorText, defaultText, resetDelay = 2000, isHtml = false) {
+    //   options - An object containing the following properties:
+    //     element - The element to update
+    //     success - Whether the action was successful
+    //     successMessage - Message for screen reader on success
+    //     errorMessage - Message for screen reader on error
+    //     successText - Text to show on element for success
+    //     errorText - Text to show on element for error
+    //     defaultText - Default element text
+    //     resetDelay - Delay before resetting element (ms)
+    //     isHtml - Whether the text contains HTML
+    updateElementState(options) {
+        const {
+            element,
+            success,
+            successMessage,
+            errorMessage,
+            successText,
+            errorText,
+            defaultText,
+            resetDelay = 2000,
+            isHtml = false
+        } = options;
+
         // Update visual state first
         if (success) {
             if (isHtml) {

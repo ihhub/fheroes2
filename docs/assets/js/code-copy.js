@@ -32,28 +32,32 @@ class CodeCopyManager {
     // Creates a copy button using the template
     // Returns: The button element
     createCopyButton() {
-        return this.accessibility.createAccessibleButton(
-            'Copy',
-            'Copy code to clipboard',
-            'btn btn-primary copy-btn'
-        );
+        return this.accessibility.createAccessibleButton({
+            text: 'Copy',
+            ariaLabel: 'Copy code to clipboard',
+            className: 'btn btn-primary copy-btn'
+        });
     }
 
     // Updates the button appearance and announces success to screen readers
     // Parameters:
     //   button - The button element
     //   success - Whether the copy was successful
-    updateButtonState(button, success) {
-        this.accessibility.updateElementState(
-            button,
-            success,
-            'Code copied to clipboard',
-            'Failed to copy code to clipboard',
-            'Copied!',
-            'Failed to copy',
-            'Copy',
-            2000
-        );
+    //   code - The code content that was copied
+    updateButtonState(button, success, code) {
+        // Truncate the code if it's too long
+        const truncatedCode = code.length > 50 ? `${code.substring(0, 50)}...` : code;
+
+        this.accessibility.updateElementState({
+            element: button,
+            success: success,
+            successMessage: `Code copied to clipboard: ${truncatedCode}`,
+            errorMessage: 'Failed to copy code to clipboard',
+            successText: 'Copied!',
+            errorText: 'Failed to copy',
+            defaultText: 'Copy',
+            resetDelay: 2000
+        });
     }
 
     // Handles the copy functionality for a code block
@@ -65,15 +69,15 @@ class CodeCopyManager {
             const code = block.querySelector("pre").innerText;
             navigator.clipboard.writeText(code)
                 .then(() => {
-                    this.updateButtonState(button, true);
+                    this.updateButtonState(button, true, code);
                 })
                 .catch(err => {
                     console.error("Failed to copy code:", err);
-                    this.updateButtonState(button, false);
+                    this.updateButtonState(button, false, code);
                 });
         } catch (err) {
             console.error("Failed to copy code:", err);
-            this.updateButtonState(button, false);
+            this.updateButtonState(button, false, '');
         }
     }
 
