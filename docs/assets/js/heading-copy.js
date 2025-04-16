@@ -26,33 +26,31 @@ const RESET_DELAY = 2000;
 const HEADING_SELECTORS = 'h2, h3, h4, h5, h6';
 
 // Class to handle heading copy functionality
-class HeadingCopyManager {
-    constructor(contentElement) {
+class HeadingCopyManager
+{
+    constructor( contentElement )
+    {
         this.content = contentElement;
         this.accessibility = new AccessibilityManager();
 
         // Apply to all headings
-        this.content.querySelectorAll(HEADING_SELECTORS).forEach(heading =>
-            this.createHeadingLink(heading)
-        );
+        this.content.querySelectorAll( HEADING_SELECTORS ).forEach( heading => this.createHeadingLink( heading ) );
     }
 
     // Creates a unique ID for a heading based on its text content
     // Parameters:
     //   text - The heading text
     // Returns: A unique ID
-    generateHeadingId(text) {
-        return text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    generateHeadingId( text )
+    {
+        return text.toLowerCase().replace( /[^a-z0-9]+/g, '-' );
     }
 
     // Creates a link icon element with proper accessibility attributes
     // Returns: The icon element
-    createIconElement() {
-        const icon = this.accessibility.createAccessibleSpan({
-            text: LINK_ICON,
-            ariaLabel: 'Copy link to heading',
-            className: 'heading-anchor'
-        });
+    createIconElement()
+    {
+        const icon = this.accessibility.createAccessibleSpan( { text : LINK_ICON, ariaLabel : 'Copy link to heading', className : 'heading-anchor' } );
         return icon;
     }
 
@@ -61,18 +59,19 @@ class HeadingCopyManager {
     //   icon - The icon element
     //   success - Whether the copy was successful
     //   headingText - The text of the heading
-    updateIconState(icon, success, headingText) {
-        this.accessibility.updateElementState({
-            element: icon,
-            success: success,
-            successMessage: `Link to ${headingText} copied to clipboard`,
-            errorMessage: `Failed to copy link to ${headingText}`,
-            successText: COPIED_ICON,
-            errorText: ERROR_ICON,
-            defaultText: LINK_ICON,
-            resetDelay: RESET_DELAY,
-            isHtml: true // Use innerHTML for the heading icon
-        });
+    updateIconState( icon, success, headingText )
+    {
+        this.accessibility.updateElementState( {
+            element : icon,
+            success : success,
+            successMessage : `Link to ${headingText} copied to clipboard`,
+            errorMessage : `Failed to copy link to ${headingText}`,
+            successText : COPIED_ICON,
+            errorText : ERROR_ICON,
+            defaultText : LINK_ICON,
+            resetDelay : RESET_DELAY,
+            isHtml : true // Use innerHTML for the heading icon
+        } );
     }
 
     // Handles the copy functionality for a heading
@@ -80,28 +79,30 @@ class HeadingCopyManager {
     //   e - The event object
     //   heading - The heading element
     //   icon - The icon element
-    handleCopy(e, heading, icon) {
+    handleCopy( e, heading, icon )
+    {
         e.preventDefault();
         e.stopPropagation();
 
-        const url = new URL(window.location.href);
+        const url = new URL( window.location.href );
         url.hash = heading.id;
 
         try {
-            navigator.clipboard.writeText(url.toString())
-                .then(() => {
-                    this.updateIconState(icon, true, heading.textContent);
+            navigator.clipboard.writeText( url.toString() )
+                .then( () => {
+                    this.updateIconState( icon, true, heading.textContent );
 
                     // Update URL without scrolling
-                    history.pushState(null, null, `#${heading.id}`);
-                })
-                .catch(err => {
-                    console.error('Failed to copy:', err);
-                    this.updateIconState(icon, false, heading.textContent);
-                });
-        } catch (err) {
-            console.error('Failed to copy:', err);
-            this.updateIconState(icon, false, heading.textContent);
+                    history.pushState( null, null, `#${heading.id}` );
+                } )
+                .catch( err => {
+                    console.error( 'Failed to copy:', err );
+                    this.updateIconState( icon, false, heading.textContent );
+                } );
+        }
+        catch ( err ) {
+            console.error( 'Failed to copy:', err );
+            this.updateIconState( icon, false, heading.textContent );
         }
     }
 
@@ -109,39 +110,41 @@ class HeadingCopyManager {
     // Parameters:
     //   icon - The icon element
     //   heading - The heading element
-    setupEventListeners(icon, heading) {
+    setupEventListeners( icon, heading )
+    {
         // Add click event handler
-        icon.addEventListener('click', (e) => this.handleCopy(e, heading, icon));
+        icon.addEventListener( 'click', ( e ) => this.handleCopy( e, heading, icon ) );
 
         // Add keyboard event handler
-        this.accessibility.setupKeyboardEvents(icon, (e) => this.handleCopy(e, heading, icon));
+        this.accessibility.setupKeyboardEvents( icon, ( e ) => this.handleCopy( e, heading, icon ) );
     }
 
     // Creates a heading link with proper accessibility attributes
     // Parameters:
     //   heading - The heading element
-    createHeadingLink(heading) {
+    createHeadingLink( heading )
+    {
         // Generate ID if needed
-        if (!heading.id) {
-            heading.id = this.generateHeadingId(heading.textContent);
+        if ( !heading.id ) {
+            heading.id = this.generateHeadingId( heading.textContent );
         }
 
         // Create icon element
         const icon = this.createIconElement();
 
         // Add icon to the heading
-        heading.appendChild(icon);
+        heading.appendChild( icon );
 
         // Set up event listeners
-        this.setupEventListeners(icon, heading);
+        this.setupEventListeners( icon, heading );
     }
 }
 
 // Initialize when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const content = document.querySelector('#main_content');
-    if (content) {
+document.addEventListener( 'DOMContentLoaded', () => {
+    const content = document.querySelector( '#main_content' );
+    if ( content ) {
         // Initialize the heading copy manager
-        new HeadingCopyManager(content);
+        new HeadingCopyManager( content );
     }
-});
+} );

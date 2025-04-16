@@ -19,24 +19,21 @@
  ***************************************************************************/
 
 // Class to handle code copy functionality
-class CodeCopyManager {
-    constructor() {
+class CodeCopyManager
+{
+    constructor()
+    {
         this.accessibility = new AccessibilityManager();
 
         // Apply to all code blocks
-        document.querySelectorAll("div.highlight").forEach(block =>
-            this.initializeCodeBlock(block)
-        );
+        document.querySelectorAll( "div.highlight" ).forEach( block => this.initializeCodeBlock( block ) );
     }
 
     // Creates a copy button using the template
     // Returns: The button element
-    createCopyButton() {
-        return this.accessibility.createAccessibleButton({
-            text: 'Copy',
-            ariaLabel: 'Copy code to clipboard',
-            className: 'btn btn-primary copy-btn'
-        });
+    createCopyButton()
+    {
+        return this.accessibility.createAccessibleButton( { text : 'Copy', ariaLabel : 'Copy code to clipboard', className : 'btn btn-primary copy-btn' } );
     }
 
     // Updates the button appearance and announces success to screen readers
@@ -44,40 +41,39 @@ class CodeCopyManager {
     //   button - The button element
     //   success - Whether the copy was successful
     //   code - The code content that was copied
-    updateButtonState(button, success, code) {
+    updateButtonState( button, success, code )
+    {
         // Truncate the code if it's too long
-        const truncatedCode = code.length > 50 ? `${code.substring(0, 50)}...` : code;
+        const truncatedCode = code.length > 50 ? `${code.substring( 0, 50 )}...` : code;
 
-        this.accessibility.updateElementState({
-            element: button,
-            success: success,
-            successMessage: `Code copied to clipboard: ${truncatedCode}`,
-            errorMessage: 'Failed to copy code to clipboard',
-            successText: 'Copied!',
-            errorText: 'Failed to copy',
-            defaultText: 'Copy',
-            resetDelay: 2000
-        });
+        this.accessibility.updateElementState( {
+            element : button,
+            success : success,
+            successMessage : `Code copied to clipboard: ${truncatedCode}`,
+            errorMessage : 'Failed to copy code to clipboard',
+            successText : 'Copied!',
+            errorText : 'Failed to copy',
+            defaultText : 'Copy',
+            resetDelay : 2000
+        } );
     }
 
     // Handles the copy functionality for a code block
     // Parameters:
     //   block - The code block element
     //   button - The copy button
-    handleCopyCode(block, button) {
+    handleCopyCode( block, button )
+    {
         try {
-            const code = block.querySelector("pre").innerText;
-            navigator.clipboard.writeText(code)
-                .then(() => {
-                    this.updateButtonState(button, true, code);
-                })
-                .catch(err => {
-                    console.error("Failed to copy code:", err);
-                    this.updateButtonState(button, false, code);
-                });
-        } catch (err) {
-            console.error("Failed to copy code:", err);
-            this.updateButtonState(button, false, '');
+            const code = block.querySelector( "pre" ).innerText;
+            navigator.clipboard.writeText( code ).then( () => { this.updateButtonState( button, true, code ); } ).catch( err => {
+                console.error( "Failed to copy code:", err );
+                this.updateButtonState( button, false, code );
+            } );
+        }
+        catch ( err ) {
+            console.error( "Failed to copy code:", err );
+            this.updateButtonState( button, false, '' );
         }
     }
 
@@ -85,26 +81,28 @@ class CodeCopyManager {
     // Parameters:
     //   button - The copy button
     //   block - The code block element
-    setupEventListeners(button, block) {
+    setupEventListeners( button, block )
+    {
         // Click event handler
-        button.addEventListener("click", () => this.handleCopyCode(block, button));
+        button.addEventListener( "click", () => this.handleCopyCode( block, button ) );
 
         // Keyboard event handler
-        this.accessibility.setupKeyboardEvents(button, () => this.handleCopyCode(block, button));
+        this.accessibility.setupKeyboardEvents( button, () => this.handleCopyCode( block, button ) );
     }
 
     // Initializes a code block with a copy button
     // Parameters:
     //   block - The code block element
-    initializeCodeBlock(block) {
+    initializeCodeBlock( block )
+    {
         const button = this.createCopyButton();
-        block.appendChild(button);
-        this.setupEventListeners(button, block);
+        block.appendChild( button );
+        this.setupEventListeners( button, block );
     }
 }
 
 // Initialize when the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener( "DOMContentLoaded", () => {
     // Initialize the code copy manager
     new CodeCopyManager();
-});
+} );

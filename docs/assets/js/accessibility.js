@@ -19,8 +19,10 @@
  ***************************************************************************/
 
 // Utility class for handling common accessibility features
-class AccessibilityManager {
-    constructor() {
+class AccessibilityManager
+{
+    constructor()
+    {
         this.liveRegion = this.createLiveRegion();
     }
 
@@ -28,20 +30,23 @@ class AccessibilityManager {
     // The live region is a div element that is used to announce messages to
     // screen readers.
     // Returns: The live region element
-    createLiveRegion() {
-        const liveRegion = document.createElement('div');
-        liveRegion.setAttribute('aria-live', 'assertive');
-        liveRegion.setAttribute('aria-atomic', 'true');
+    createLiveRegion()
+    {
+        const liveRegion = document.createElement( 'div' );
+        liveRegion.setAttribute( 'aria-live', 'assertive' );
+        liveRegion.setAttribute( 'aria-atomic', 'true' );
         // This doesn't work as a CSS property, so we need to set it manually
-        liveRegion.style.cssText = 'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;';
-        document.body.appendChild(liveRegion);
+        liveRegion.style.cssText
+            = 'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;';
+        document.body.appendChild( liveRegion );
         return liveRegion;
     }
 
     // Announces a message to screen readers
     // Parameters:
     //   message - The message to announce
-    announce(message) {
+    announce( message )
+    {
         // Clear the live region first
         this.liveRegion.textContent = '';
 
@@ -64,20 +69,16 @@ class AccessibilityManager {
     //     className - Additional CSS classes
     //     elementType - The element type ('button' or 'span')
     // Returns: The accessible element
-    createAccessibleElement(options) {
-        const {
-            text,
-            ariaLabel,
-            className = '',
-            elementType = 'button'
-        } = options;
+    createAccessibleElement( options )
+    {
+        const { text, ariaLabel, className = '', elementType = 'button' } = options;
 
-        const element = document.createElement(elementType);
+        const element = document.createElement( elementType );
         element.textContent = text;
-        element.setAttribute('aria-label', ariaLabel);
-        element.setAttribute('role', 'button');
-        element.setAttribute('tabindex', '0');
-        if (className) {
+        element.setAttribute( 'aria-label', ariaLabel );
+        element.setAttribute( 'role', 'button' );
+        element.setAttribute( 'tabindex', '0' );
+        if ( className ) {
             element.className = className;
         }
         return element;
@@ -90,11 +91,9 @@ class AccessibilityManager {
     //     ariaLabel - The ARIA label
     //     className - Additional CSS classes
     // Returns: The button element
-    createAccessibleButton(options) {
-        return this.createAccessibleElement({
-            ...options,
-            elementType: 'button'
-        });
+    createAccessibleButton( options )
+    {
+        return this.createAccessibleElement( {...options, elementType : 'button' } );
     }
 
     // Creates an accessible span element
@@ -104,11 +103,9 @@ class AccessibilityManager {
     //     ariaLabel - The ARIA label
     //     className - Additional CSS classes
     // Returns: The span element
-    createAccessibleSpan(options) {
-        return this.createAccessibleElement({
-            ...options,
-            elementType: 'span'
-        });
+    createAccessibleSpan( options )
+    {
+        return this.createAccessibleElement( {...options, elementType : 'span' } );
     }
 
     // Updates element state with visual and screen reader feedback
@@ -123,63 +120,57 @@ class AccessibilityManager {
     //     defaultText - Default element text
     //     resetDelay - Delay before resetting element (ms)
     //     isHtml - Whether the text contains HTML
-    updateElementState(options) {
-        const {
-            element,
-            success,
-            successMessage,
-            errorMessage,
-            successText,
-            errorText,
-            defaultText,
-            resetDelay = 2000,
-            isHtml = false
-        } = options;
+    updateElementState( options )
+    {
+        const { element, success, successMessage, errorMessage, successText, errorText, defaultText, resetDelay = 2000, isHtml = false } = options;
 
         // Update visual state first
-        if (success) {
-            if (isHtml) {
+        if ( success ) {
+            if ( isHtml ) {
                 element.innerHTML = successText;
-            } else {
+            }
+            else {
                 element.textContent = successText;
             }
-            element.classList.add('success');
-        } else {
-            if (isHtml) {
+            element.classList.add( 'success' );
+        }
+        else {
+            if ( isHtml ) {
                 element.innerHTML = errorText;
-            } else {
+            }
+            else {
                 element.textContent = errorText;
             }
-            element.classList.add('error');
+            element.classList.add( 'error' );
         }
 
         // Announce to screen reader after a short delay to ensure visual update is complete
-        setTimeout(() => {
-            this.announce(success ? successMessage : errorMessage);
-        }, 50);
+        setTimeout( () => { this.announce( success ? successMessage : errorMessage ); }, 50 );
 
         // Reset element after delay
-        setTimeout(() => {
-            if (isHtml) {
+        setTimeout( () => {
+            if ( isHtml ) {
                 element.innerHTML = defaultText;
-            } else {
+            }
+            else {
                 element.textContent = defaultText;
             }
-            element.classList.remove('success', 'error');
-        }, resetDelay);
+            element.classList.remove( 'success', 'error' );
+        }, resetDelay );
     }
 
     // Sets up keyboard event handling for an element
     // Parameters:
     //   element - The element to add keyboard events to
     //   handler - The click handler function
-    setupKeyboardEvents(element, handler) {
-        element.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
+    setupKeyboardEvents( element, handler )
+    {
+        element.addEventListener( 'keydown', ( event ) => {
+            if ( event.key === 'Enter' || event.key === ' ' ) {
                 event.preventDefault();
-                handler(event);
+                handler( event );
             }
-        });
+        } );
     }
 }
 
