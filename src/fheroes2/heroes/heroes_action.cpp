@@ -333,6 +333,18 @@ namespace
         }
     }
 
+    void selectGoldOrExp( const std::string & hdr, uint32_t & gold, Heroes & hero )
+    {
+        const uint32_t expr = gold > 500 ? gold - 500 : 500;
+        const std::string msg = _(
+            "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
+
+        if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
+            gold = 0;
+            hero.IncreaseExperience( expr );
+        }
+    }
+
     void showSignMessage( const int32_t tileIndex )
     {
         const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tileIndex ) );
@@ -1843,24 +1855,12 @@ namespace
             const Artifact & art = getArtifactFromTile( tile );
 
             if ( gold ) {
-                const uint32_t expr = gold > 500 ? gold - 500 : 500;
-                msg = _(
-                    "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
-
-                if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
-                    gold = 0;
-                    hero.IncreaseExperience( expr );
-                }
+                selectGoldOrExp( hdr, gold, hero );
             }
             else if ( art.isValid() ) {
                 if ( hero.IsFullBagArtifacts() ) {
                     gold = GoldInsteadArtifact( objectType );
-                    msg = _( "After scouring the area, you fall upon a hidden chest, containing the %{gold} gold pieces." );
-                    StringReplace( msg, "%{gold}", gold );
-
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-
-                    fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &goldUI } );
+                    selectGoldOrExp( hdr, gold, hero );
                 }
                 else {
                     msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
