@@ -30,7 +30,6 @@
 #include <stdexcept>
 #include <string>
 #include <type_traits>
-#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -182,45 +181,26 @@ namespace fheroes2
         }
     }
 
-    MovableText::MovableText( Image & output )
-        : _output( output )
-        , _restorer( output, 0, 0, 0, 0 )
-        , _isHidden( false )
-    {
-        // Do nothing.
-    }
-
-    void MovableText::update( std::unique_ptr<TextBase> text )
-    {
-        _text = std::move( text );
-    }
-
-    void MovableText::draw( const int32_t x, const int32_t y )
-    {
-        hide();
-
-        _restorer.update( x, y, _text->width(), _text->height() );
-        _text->draw( x, y, _output );
-
-        _isHidden = false;
-    }
-
     void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
 
-        _restorer.update( x, y, _text->width(), _text->height() );
-        _text->drawInRoi( x, y, _output, roi );
+        assert( _text != nullptr );
+
+        Rect textArea = _text->area();
+        textArea.x += x;
+        textArea.y += y;
+
+        // Not to cut off the top of diacritic signs in capital letters we shift the text down.
+        const int32_t extraShiftY = textArea.y < roi.y ? roi.y - textArea.y : 0;
+        textArea.height += extraShiftY;
+
+        const Rect overlappedRoi = textArea ^ roi;
+
+        _restorer.update( overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
+        _text->drawInRoi( x, y + extraShiftY, _output, overlappedRoi );
 
         _isHidden = false;
-    }
-
-    void MovableText::hide()
-    {
-        if ( !_isHidden ) {
-            _restorer.restore();
-            _isHidden = true;
-        }
     }
 
     SystemInfoRenderer::SystemInfoRenderer()
