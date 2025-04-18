@@ -6,6 +6,7 @@ development purposes.
 ## Prerequisites
 
 * Ruby (version 2.7.0 or higher)
+
 * Bundler
 * Git
 * Node/npm
@@ -89,8 +90,11 @@ source files.
    > across all markdown files.
 
    ```bash
+   cd docs
    # Run the linter on all Markdown files in the docs directory
-   markdownlint "docs/**/*.md"
+   npm run lint-md "*.md"
+   # Or have the linter attempt to format automatically
+   npm run format-md "*.md"
    ```
 
    This will check your Markdown files against our style rules and highlight any
