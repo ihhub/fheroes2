@@ -317,7 +317,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 1, bar.width() - 16 * 2, 0 } );
 
     // Artifacts bar.
     dst_pt.x = dialogRoi.x + 51;

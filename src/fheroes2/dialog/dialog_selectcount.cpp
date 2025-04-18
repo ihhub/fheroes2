@@ -127,6 +127,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     const fheroes2::Rect uiRect = uiElement ? fheroes2::Rect{ uiOffset, uiElement->area() } : fheroes2::Rect{};
 
     int result = Dialog::ZERO;
+    std::string typedValueBuf;
     LocalEvent & le = LocalEvent::Get();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
@@ -140,22 +141,26 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( min, max, selectedValue ) ) {
-            valueSelectionElement.setValue( selectedValue );
+        if ( const auto value = fheroes2::processIntegerValueTyping( min, max, typedValueBuf ); value ) {
+            valueSelectionElement.setValue( *value );
 
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             valueSelectionElement.setValue( max );
+            typedValueBuf.clear();
 
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             valueSelectionElement.setValue( min );
+            typedValueBuf.clear();
 
             needRedraw = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
+            typedValueBuf.clear();
+
             needRedraw = true;
         }
         else if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
@@ -484,6 +489,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     display.render();
 
     int btnResult = Dialog::ZERO;
+    std::string typedValueBuf;
     LocalEvent & le = LocalEvent::Get();
 
     while ( btnResult == Dialog::ZERO && le.HandleEvents() ) {
@@ -497,22 +503,26 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
             buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
         }
 
-        if ( fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, redistributeCount ) ) {
-            valueSelectionElement.setValue( redistributeCount );
+        if ( const auto value = fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, typedValueBuf ); value ) {
+            valueSelectionElement.setValue( *value );
 
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             valueSelectionElement.setValue( redistributeMax );
+            typedValueBuf.clear();
 
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             valueSelectionElement.setValue( redistributeMin );
+            typedValueBuf.clear();
 
             needRedraw = true;
         }
         else if ( valueSelectionElement.processEvents() ) {
+            typedValueBuf.clear();
+
             needRedraw = true;
         }
         else {

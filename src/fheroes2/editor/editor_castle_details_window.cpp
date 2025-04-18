@@ -459,7 +459,7 @@ namespace Editor
         dstPt.y = dialogRoi.y + dialogRoi.height - statusBarheight;
         fheroes2::Copy( statusBarSprite, 0, 0, display, dialogRoi.x, dstPt.y, statusBarWidth, statusBarheight );
         StatusBar statusBar;
-        statusBar.setRoi( { dialogRoi.x, dstPt.y + 3, statusBarWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x, dstPt.y, statusBarWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 

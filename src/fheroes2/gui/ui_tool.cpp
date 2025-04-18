@@ -27,7 +27,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
@@ -42,6 +44,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 
 namespace
@@ -198,6 +201,16 @@ namespace fheroes2
 
         _restorer.update( x, y, _text->width(), _text->height() );
         _text->draw( x, y, _output );
+
+        _isHidden = false;
+    }
+
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
+    {
+        hide();
+
+        _restorer.update( x, y, _text->width(), _text->height() );
+        _text->drawInRoi( x, y, _output, roi );
 
         _isHidden = false;
     }
@@ -805,43 +818,79 @@ namespace fheroes2
         }
     }
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value )
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf )
     {
+        assert( min <= max );
+
         const LocalEvent & le = LocalEvent::Get();
 
         if ( !le.isAnyKeyPressed() ) {
-            // No key is pressed.
-            return false;
+            return {};
         }
 
-        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
-            value = value / 10;
-            return true;
+        const int32_t zeroBufValue = std::clamp( 0, min, max );
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+            valueBuf.clear();
+
+            return zeroBufValue;
         }
 
-        if ( minimum < 0 && value != 0 && ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) ) {
-            value = std::clamp( -value, minimum, maximum );
+        if ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) {
+            if ( min >= 0 ) {
+                return {};
+            }
 
-            return true;
+            if ( !std::all_of( valueBuf.begin(), valueBuf.end(), []( const char ch ) { return ( ch == '0' ); } ) ) {
+                return {};
+            }
+
+            valueBuf = "-";
+
+            return zeroBufValue;
         }
 
-        int32_t newDigit = 0;
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
-            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 );
-        }
-        else if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 );
-        }
-        else {
-            return false;
+        if ( const std::optional<char> newDigit = [&le]() -> std::optional<char> {
+                 using KeyUnderlyingType = std::underlying_type_t<fheroes2::Key>;
+
+                 const fheroes2::Key keyValue = le.getPressedKeyValue();
+
+                 if ( keyValue >= fheroes2::Key::KEY_0 && keyValue <= fheroes2::Key::KEY_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_0 ) + '0' );
+                 }
+
+                 if ( keyValue >= fheroes2::Key::KEY_KP_0 && keyValue <= fheroes2::Key::KEY_KP_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_KP_0 ) + '0' );
+                 }
+
+                 return {};
+             }();
+             newDigit ) {
+            valueBuf.push_back( *newDigit );
+
+            const std::optional<int32_t> value = [&valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
+                try {
+                    return std::stoi( valueBuf );
+                }
+                catch ( std::out_of_range & ) {
+                    return {};
+                }
+            }();
+
+            if ( !value || ( min <= 0 && value < min ) || ( max >= 0 && value > max ) ) {
+                valueBuf.pop_back();
+
+                return {};
+            }
+
+            if ( value == std::clamp( *value, min, max ) ) {
+                return value;
+            }
+
+            return {};
         }
 
-        value *= 10;
-        value += ( value >= 0 ) ? newDigit : ( -newDigit );
-
-        value = std::clamp( value, minimum, maximum );
-
-        return true;
+        return {};
     }
 
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )

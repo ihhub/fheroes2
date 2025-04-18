@@ -26,6 +26,7 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -75,6 +76,7 @@ namespace
         case fheroes2::SupportedLanguage::English:
             // English is a default language so it is not considered as an extra language.
             return false;
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::French:
@@ -93,12 +95,10 @@ namespace
     enum class DialogAction : int
     {
         DoNothing,
-        AddLetter,
         UpperCase,
         LowerCase,
         AlphaNumeric,
         ChangeLanguage,
-        Backspace,
         Close
     };
 
@@ -109,6 +109,14 @@ namespace
         AlphaNumeric,
         SignedNumeric,
         UnsignedNumeric
+    };
+
+    enum class CursorPosition
+    {
+        PrevChar,
+        NextChar,
+        BegOfText,
+        EndOfText
     };
 
     class KeyboardRenderer
@@ -241,6 +249,44 @@ namespace
             _renderInputArea();
         }
 
+        void setCursorPosition( const CursorPosition pos )
+        {
+            switch ( pos ) {
+            case CursorPosition::PrevChar:
+                if ( _cursorPosition == 0 ) {
+                    return;
+                }
+
+                --_cursorPosition;
+
+                break;
+            case CursorPosition::NextChar:
+                assert( _cursorPosition <= _info.size() );
+
+                if ( _cursorPosition == _info.size() ) {
+                    return;
+                }
+
+                ++_cursorPosition;
+
+                break;
+            case CursorPosition::BegOfText:
+                _cursorPosition = 0;
+
+                break;
+            case CursorPosition::EndOfText:
+                _cursorPosition = _info.size();
+
+                break;
+            default:
+                assert( 0 );
+
+                return;
+            }
+
+            _renderInputArea();
+        }
+
     private:
         fheroes2::Display & _output;
         std::string & _info;
@@ -337,6 +383,7 @@ namespace
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -367,6 +414,8 @@ namespace
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::French:
             return { "\xC9\xC8\xC7\xC0\xC2\xCA\xCB\xCD\xCE\xCF\xDB\xDC", "AZERTYUIOP\xD4", "QSDFGHJKLM\xD9", "WXCVBN" };
+        case fheroes2::SupportedLanguage::German:
+            return { "QWERTZUIOP\xDC", "ASDFGHJKL\xD6\xC4", "YXCVBNM\xDF" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x8C\x8F\xA3\xA5\xAF\xC6\xCA\xD1\xD3", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Russian:
@@ -395,6 +444,8 @@ namespace
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::French:
             return { "\xE9\xE8\xE7\xE0\xE2\xEA\xEB\xED\xEE\xEF\xFB\xFC", "azertyuiop\xF4", "qsdfghjklm\xF9", "wxcvbn" };
+        case fheroes2::SupportedLanguage::German:
+            return { "qwertzuiop\xFC", "asdfghjkl\xF6\xE4", "yxcvbnm\xDF" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x9C\x9F\xB3\xB9\xBF\xE6\xEA\xF1\xF3", "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Russian:
@@ -450,6 +501,7 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
             return { 30, defaultButtonHeight };
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
@@ -520,7 +572,7 @@ namespace
                 buttons[i].emplace_back( std::string( 1, ch ), getKeyForCharacter( ch ), buttonSize, isEvilInterface,
                                          [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
                                              renderer.insertCharacter( letter );
-                                             return DialogAction::AddLetter;
+                                             return DialogAction::DoNothing;
                                          } );
             }
         }
@@ -542,7 +594,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -552,7 +604,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UpperCase:
@@ -564,7 +616,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -574,7 +626,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::AlphaNumeric:
@@ -586,7 +638,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
@@ -594,7 +646,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::SignedNumeric:
@@ -604,13 +656,13 @@ namespace
             lastButtonRow.emplace_back( "-", fheroes2::Key::KEY_MINUS, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.swapSign();
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.insertCharacter( '0' );
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
@@ -619,7 +671,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UnsignedNumeric:
@@ -633,7 +685,7 @@ namespace
             lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
                                             renderer.insertCharacter( '0' );
-                                            return DialogAction::AddLetter;
+                                            return DialogAction::DoNothing;
                                         } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
@@ -642,7 +694,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         default:
@@ -660,6 +712,7 @@ namespace
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -761,7 +814,7 @@ namespace
         }
     }
 
-    DialogAction handleButtonEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
+    DialogAction handleButtonAndKeyboardEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
     {
         const fheroes2::Key key = [&le]() {
             if ( !le.isAnyKeyPressed() ) {
@@ -800,6 +853,28 @@ namespace
 
             return keyValue;
         }();
+
+        if ( const std::optional<CursorPosition> pos = [key]() -> std::optional<CursorPosition> {
+                 switch ( key ) {
+                 case fheroes2::Key::KEY_LEFT:
+                     return CursorPosition::PrevChar;
+                 case fheroes2::Key::KEY_RIGHT:
+                     return CursorPosition::NextChar;
+                 case fheroes2::Key::KEY_HOME:
+                     return CursorPosition::BegOfText;
+                 case fheroes2::Key::KEY_END:
+                     return CursorPosition::EndOfText;
+                 default:
+                     break;
+                 }
+
+                 return {};
+             }();
+             pos ) {
+            renderer.setCursorPosition( *pos );
+
+            return DialogAction::DoNothing;
+        }
 
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
@@ -891,14 +966,8 @@ namespace
                 break;
             }
 
-            action = handleButtonEvents( buttons, le, renderer );
-            switch ( action ) {
-            case DialogAction::DoNothing:
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
-                // Do nothing.
-                break;
-            default:
+            action = handleButtonAndKeyboardEvents( buttons, le, renderer );
+            if ( action != DialogAction::DoNothing ) {
                 return action;
             }
 
@@ -941,10 +1010,8 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
             case DialogAction::DoNothing:
-                // These actions must not be processed here!
+                // This action must not be processed here!
                 assert( 0 );
                 break;
             case DialogAction::LowerCase:
@@ -993,9 +1060,7 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, SupportedLanguage::English, false, renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
             case DialogAction::AlphaNumeric:
-            case DialogAction::Backspace:
             case DialogAction::ChangeLanguage:
             case DialogAction::DoNothing:
             case DialogAction::LowerCase:

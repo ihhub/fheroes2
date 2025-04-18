@@ -2,12 +2,17 @@ name: IWYU
 
 on:
   workflow_call:
+    inputs:
+      run:
+        required: true
+        type: boolean
 
 permissions: {}
 
 jobs:
   iwyu:
     name: IWYU
+    if: ${{ inputs.run }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     defaults:

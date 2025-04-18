@@ -2,12 +2,17 @@ name: CodeChecker
 
 on:
   workflow_call:
+    inputs:
+      run:
+        required: true
+        type: boolean
 
 permissions: {}
 
 jobs:
   codechecker:
     name: CodeChecker
+    if: ${{ inputs.run }}
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     defaults:

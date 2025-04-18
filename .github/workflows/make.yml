@@ -117,7 +117,7 @@ jobs:
             files/lang/*.mo
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
-            script/macos/install_sdl2.sh
+            script/macos/Brewfile
           tools_package_name: fheroes2_tools_macos_x86-64_SDL2.zip
           tools_package_files: >-
             LICENSE

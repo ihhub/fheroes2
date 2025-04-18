@@ -26,6 +26,8 @@
 #include <deque>
 #include <functional>
 #include <memory>
+#include <optional>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -101,6 +103,9 @@ namespace fheroes2
         void update( std::unique_ptr<TextBase> text );
 
         void draw( const int32_t x, const int32_t y );
+
+        // Draw text within a specified ROI (Region of Interest) that acts as a bounding box
+        void drawInRoi( const int32_t x, const int32_t y, const Rect & roi );
 
         void hide();
 
@@ -226,7 +231,9 @@ namespace fheroes2
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value );
+    // Updates `valueBuf` based on keyboard input relevant to modifying an integer. Returns a non-empty `std::optional` instance containing the entered value
+    // if this value has been both changed and is within the range [`min`, `max`], otherwise returns an empty instance. See the implementation for details.
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf );
 
     // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
