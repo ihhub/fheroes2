@@ -91,3 +91,5 @@ UseTab: Never
 Language: Cpp
 ---
 Language: Java
+---
+Language: JavaScript
