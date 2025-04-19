@@ -38,7 +38,6 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "dir.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "icn.h"

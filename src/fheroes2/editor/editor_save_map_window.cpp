@@ -35,7 +35,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "icn.h"
