@@ -20,7 +20,7 @@
 
 TARGET := fheroes2.js
 
-SDL2_MIXER_FORMATS := mid,mp3
+SDL2_MIXER_FORMATS := mid,mp3,ogg
 
 CCFLAGS := $(CCFLAGS) \
 	--use-port=sdl2 \

@@ -1,0 +1,20 @@
+{
+    "name": "fheroes2-launcher",
+    "version": "1.0.0",
+    "bin": "launcher.js",
+    "scripts": {},
+    "dependencies": {
+      "open": "^8.4.0"
+    },
+    "pkg": {
+      "assets": [
+        "dist/**/*",
+        "index.html",
+        "fheroes2.js",
+        "fheroes2.wasm",
+        "fheroes2.data",
+        "fheroes2.jpeg"
+      ],
+      "outputPath": "."
+    }
+}
