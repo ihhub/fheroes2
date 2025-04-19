@@ -68,7 +68,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+        const fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
 
         fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
         Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
@@ -118,20 +118,25 @@ namespace fheroes2
 {
     MovableSprite::MovableSprite()
         : _restorer( Display::instance(), 0, 0, 0, 0 )
-        , _isHidden( true )
-    {}
+    {
+        // Do nothing.
+    }
 
-    MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
-        : Sprite( width_, height_, x_, y_ )
-        , _restorer( Display::instance(), x_, y_, width_, height_ )
-        , _isHidden( height_ == 0 && width_ == 0 )
-    {}
+    MovableSprite::MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y )
+        : Sprite( width, height, x, y )
+        , _restorer( Display::instance(), x, y, width, height )
+        , _isHidden( height == 0 && width == 0 )
+    {
+        // Do nothing.
+    }
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
         , _restorer( Display::instance(), 0, 0, 0, 0 )
         , _isHidden( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     MovableSprite::~MovableSprite()
     {
@@ -153,15 +158,15 @@ namespace fheroes2
         return *this;
     }
 
-    void MovableSprite::setPosition( int32_t x_, int32_t y_ )
+    void MovableSprite::setPosition( const int32_t x, const int32_t y )
     {
         if ( _isHidden ) {
-            Sprite::setPosition( x_, y_ );
+            Sprite::setPosition( x, y );
             return;
         }
 
         hide();
-        Sprite::setPosition( x_, y_ );
+        Sprite::setPosition( x, y );
         show();
     }
 
@@ -169,7 +174,7 @@ namespace fheroes2
     {
         if ( _isHidden ) {
             _restorer.update( x(), y(), width(), height() );
-            fheroes2::Blit( *this, Display::instance(), x(), y() );
+            Blit( *this, Display::instance(), x(), y() );
             _isHidden = false;
         }
     }
@@ -221,6 +226,137 @@ namespace fheroes2
             _restorer.restore();
             _isHidden = true;
         }
+    }
+
+    bool TextInputField::cursorBlinkProcessing()
+    {
+        if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            return false;
+        }
+
+        _isCursorVisible = !_isCursorVisible;
+
+        if ( _isCursorVisible ) {
+            _textCursor.show();
+        }
+        else {
+            _textCursor.hide();
+        }
+
+        return true;
+    }
+
+    // size_t TextInputField::getCursorInTextPosition( const Point & mousePos ) const
+
+    void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
+    {
+        _textCursor.hide();
+        _background.restore();
+
+        set( newText, cursorPositionInText );
+
+        // Multi-line text is currently always automatically center-aligned.
+        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - width() ) / 2 : _textInputArea.x;
+        const int32_t offsetY = _textInputArea.y + 2;
+
+        drawInRoi( offsetX, offsetY, _output, _background.rect() );
+
+        _textCursor.setPosition( _cursorArea.x + offsetX, _cursorArea.y + offsetY );
+        _textCursor.show();
+
+        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+        _isCursorVisible = true;
+    }
+
+    size_t TextInputField::_getTextInputCursorPosition( const Point & pointerCursorOffset ) const
+    {
+        if ( _text.empty() || _textInputArea.width < 1 || _textInputArea.y < 1 ) {
+            // The text is empty.
+            return 0;
+        }
+
+        const int32_t fontHeight = getFontHeight( _fontType.size );
+        const int32_t pointerLine = ( pointerCursorOffset.y - _textInputArea.y ) / fontHeight;
+
+        if ( pointerLine < 0 ) {
+            // Pointer is upper than the first text line.
+            return 0;
+        }
+
+        std::vector<TextLineInfo> lineInfos;
+        _getTextLineInfos( lineInfos, _maxTextWidth, fontHeight, true );
+
+        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
+            // Pointer is lower than the last text line.
+            return _text.size() - 1;
+        }
+
+        size_t cursorPosition = 0;
+        for ( int32_t i = 0; i < pointerLine; ++i ) {
+            cursorPosition += lineInfos[i].characterCount;
+        }
+
+        int32_t positionOffsetX = 0;
+        const int32_t maxOffsetX = pointerCursorOffset.x - _textInputArea.x - ( _maxTextWidth - lineInfos[pointerLine].lineWidth ) / 2;
+
+        if ( maxOffsetX <= 0 ) {
+            // Pointer is to the left of the text line.
+            return cursorPosition;
+        }
+
+        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
+            // Pointer is to the right of the text line.
+            cursorPosition += lineInfos[pointerLine].characterCount;
+
+            return cursorPosition;
+        }
+
+        const FontCharHandler charHandler( _fontType );
+        const size_t textSize = _text.size();
+
+        for ( size_t i = cursorPosition; i < textSize; ++i ) {
+            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( _text[i] ) );
+
+            if ( positionOffsetX + charWidth / 2 >= maxOffsetX ) {
+                return i;
+            }
+
+            positionOffsetX += charWidth;
+        }
+
+        return textSize - 1;
+    }
+
+    size_t TextInputField::_getTextInputCursorPosition( const int32_t pointerCursorOffsetX ) const
+    {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
+        const int32_t textStartOffsetX = _textInputArea.x + ( _isCenterAligned ? ( _textInputArea.width - width() ) / 2 : 0 )
+                                         + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( _fontType ) );
+
+        if ( pointerCursorOffsetX <= textStartOffsetX ) {
+            // The text is empty or mouse cursor position is to the left of input field.
+            return _visibleTextBeginPos;
+        }
+
+        const int32_t maxOffset = pointerCursorOffsetX - textStartOffsetX;
+        const std::string visibleText = { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
+        const size_t textSize = visibleText.size();
+        int32_t positionOffset = 0;
+        const FontCharHandler charHandler( _fontType );
+
+        for ( size_t i = 0; i < textSize; ++i ) {
+            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( visibleText[i] ) );
+
+            if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {
+                return i + _visibleTextBeginPos;
+            }
+            positionOffset += currentCharWidth;
+        }
+
+        return textSize + _visibleTextBeginPos;
     }
 
     SystemInfoRenderer::SystemInfoRenderer()
@@ -670,112 +806,6 @@ namespace fheroes2
                 ++frameNumber;
             }
         }
-    }
-
-    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
-                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
-    {
-        if ( fullText.empty() || fullText.size() <= textInput.getOffsetX() ) {
-            return 0;
-        }
-
-        const std::string_view textToCheck = { fullText.data() + textInput.getOffsetX(), fullText.size() - textInput.getOffsetX() };
-        const int32_t textStartOffsetX = isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0;
-        return fheroes2::getTextInputCursorPosition( textToCheck, textInput.getFontType(), currentTextCursorPosition, pointerCursorOffset.x,
-                                                     textRoi.x + textStartOffsetX )
-               + textInput.getOffsetX();
-    }
-
-    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset )
-    {
-        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
-            // The text is empty or mouse cursor position is to the left of input field.
-            return 0;
-        }
-
-        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
-        const size_t textSize = text.size();
-        int32_t positionOffset = 0;
-        const FontCharHandler charHandler( fontType );
-
-        for ( size_t i = 0; i < textSize; ++i ) {
-            positionOffset += charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
-
-            if ( positionOffset > maxOffset ) {
-                return i;
-            }
-
-            // If the mouse cursor is to the right of the current text cursor position we take its width into account.
-            if ( i == currentTextCursorPosition ) {
-                positionOffset += charHandler.getWidth( '_' );
-            }
-        }
-
-        return textSize;
-    }
-
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
-    {
-        if ( text.empty() ) {
-            // The text is empty.
-            return 0;
-        }
-
-        const FontType fontType = text.getFontType();
-        const int32_t fontHeight = getFontHeight( fontType.size );
-        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
-
-        if ( pointerLine < 0 ) {
-            // Pointer is upper than the first text line.
-            return 0;
-        }
-
-        std::vector<TextLineInfo> lineInfos;
-        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, true );
-
-        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
-            // Pointer is lower than the last text line.
-            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-            return text.text().size() - 1;
-        }
-
-        size_t cursorPosition = 0;
-        for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += lineInfos[i].characterCount;
-        }
-
-        int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].lineWidth ) / 2;
-
-        if ( maxOffsetX <= 0 ) {
-            // Pointer is to the left of the text line.
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
-            // Pointer is to the right of the text line.
-            cursorPosition += lineInfos[pointerLine].characterCount;
-
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        const FontCharHandler charHandler( fontType );
-        const std::string & textString = text.text();
-        const size_t textSize = textString.size();
-
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
-            positionOffsetX += charWidth;
-
-            if ( positionOffsetX > maxOffsetX ) {
-                // Take into account that the cursor character ('_') was added to the line.
-                return ( i > currentTextCursorPosition ) ? i - 1 : i;
-            }
-        }
-
-        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-        return textSize - 1;
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
