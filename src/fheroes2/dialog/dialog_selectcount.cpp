@@ -237,23 +237,16 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
 
-    fheroes2::TextInput textInput( {}, fheroes2::FontType::normalWhite(), textLanguage );
+    // To fully render the cursor at the line begin/end we leave extra pixel from each side.
+    fheroes2::TextInput textInput( fheroes2::FontType::normalWhite(), textInputArea.width - 2, isMultiLine, textLanguage );
     fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
 
     fheroes2::Point textPos( textInputArea.x, textInputArea.y + 2 );
 
-    if ( isMultiLine ) {
-        // To fully render the cursor at the line begin/end we leave extra pixel from each side.
-        textInput.setMultilineMaxWidth( textInputArea.width - 2 );
-    }
-    else {
-        textInput.setAutoFitToOneRow( textInputArea.width );
-    }
-
-    auto redrawTextInput = [&result, &textInput, &textPos, &textInputArea, &charInsertPos, &textCursorRestorer, &display]( const bool isMutlilineText ) {
+    auto redrawTextInput = [&result, &textInput, &textPos, &textInputArea, &charInsertPos, isMultiLine, &textCursorRestorer, &display]() {
         textInput.set( result, static_cast<int32_t>( charInsertPos ) );
 
-        if ( !isMutlilineText ) {
+        if ( !isMultiLine ) {
             textPos.x = textInputArea.x + ( textInputArea.width - textInput.width() ) / 2;
         }
 
@@ -264,7 +257,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         textInput.drawCursor( textPos.x, textPos.y, display, textInputArea );
     };
 
-    redrawTextInput( isMultiLine );
+    redrawTextInput();
     bool isCursorVisible = true;
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
@@ -334,6 +327,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textEditClickArea ) ) ) {
             if ( textLanguage.has_value() ) {
+                // `textLanguage` certainly contains a value so we can simply access it without calling the `.value()` method.
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
                 fheroes2::openVirtualKeyboard( result, charLimit );
             }
@@ -359,8 +353,8 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             redraw = true;
         }
         else if ( le.MouseClickLeft( textEditClickArea ) ) {
-            const auto getCharInsertPos = [&textInput, &textInputArea]( const fheroes2::Point & mousePos, const bool isMultilineText ) {
-                if ( isMultilineText ) {
+            const auto getCharInsertPos = [&textInput, &textInputArea, isMultiLine]( const fheroes2::Point & mousePos ) {
+                if ( isMultiLine ) {
                     return fheroes2::getTextInputCursorPosition( textInput, mousePos, textInputArea );
                 }
 
@@ -368,11 +362,12 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             };
 
             if ( textLanguage.has_value() ) {
+                // `textLanguage` certainly contains a value so we can simply access it without calling the `.value()` method.
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
-                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos(), isMultiLine );
+                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos() );
             }
             else {
-                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos(), isMultiLine );
+                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos() );
             }
 
             redraw = true;
@@ -419,7 +414,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
             textBackground.restore();
 
-            redrawTextInput( isMultiLine );
+            redrawTextInput();
             Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
             isCursorVisible = true;
 

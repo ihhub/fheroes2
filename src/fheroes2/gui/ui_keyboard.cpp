@@ -129,7 +129,7 @@ namespace
             , _textCursorRestorer( output, 0, 0, 0, 0 )
             , _isEvilInterface( evilInterface )
         {
-            _textUI.setAutoFitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
+            // Do nothing.
         }
 
         fheroes2::Rect getWindowRoi() const
@@ -306,7 +306,7 @@ namespace
         size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
         size_t _cursorPosition{ 0 };
-        fheroes2::TextInput _textUI{ fheroes2::FontType::normalWhite() };
+        fheroes2::TextInput _textUI{ fheroes2::FontType::normalWhite(), inputAreaSize.width - inputAreaBorders * 2, false };
         fheroes2::ImageRestorer _textCursorRestorer;
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
         fheroes2::Point _textInputPos;

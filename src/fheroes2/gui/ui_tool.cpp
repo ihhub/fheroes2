@@ -677,8 +677,11 @@ namespace fheroes2
         if ( textInput.empty() ) {
             return 0;
         }
+
+        const FontType fontType = textInput.getFontType();
+
         const int32_t textStartOffsetX = textRoi.x + ( isCenterAlignedText ? ( textRoi.width - textInput.width() ) / 2 : 0 )
-                                         + ( textInput.getTextBeginPos() == 0 ? 0 : textInput.getSingleTruncationSymbolWidth() );
+                                         + ( textInput.getTextBeginPos() == 0 ? 0 : getTruncationSymbolWidth( fontType ) );
 
         if ( pointerCursorOffsetX <= textStartOffsetX ) {
             // The text is empty or mouse cursor position is to the left of input field.
@@ -689,7 +692,7 @@ namespace fheroes2
         const std::string text = textInput.getVisibleText();
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
-        const FontCharHandler charHandler( textInput.getFontType() );
+        const FontCharHandler charHandler( fontType );
 
         for ( size_t i = 0; i < textSize; ++i ) {
             if ( text[i] == '\n' ) {
@@ -724,7 +727,7 @@ namespace fheroes2
             return 0;
         }
 
-        int32_t textMaxWidth = textInput.getMultilineMaxWidth();
+        int32_t textMaxWidth = textInput.getMaxTextWidth();
 
         assert( textMaxWidth <= textRoi.width );
 

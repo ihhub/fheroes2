@@ -292,22 +292,6 @@ namespace
 
         return std::make_unique<fheroes2::LanguageSwitcher>( language.value() );
     }
-
-    int32_t getTruncationSymbolWidth( const fheroes2::FontType fontType )
-    {
-        // Symbol width depends on font size and not on its color.
-        static std::map<fheroes2::FontSize, int32_t> truncationSymbolWidth;
-
-        auto [iter, isEmplaced] = truncationSymbolWidth.try_emplace( fontType.size, 0 );
-
-        if ( isEmplaced ) {
-            // Set the correct width value for the just emplaced element.
-            iter->second = getLineWidth( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ),
-                                         fheroes2::FontCharHandler( fontType ), true );
-        }
-
-        return iter->second;
-    }
 }
 
 namespace fheroes2
@@ -640,17 +624,19 @@ namespace fheroes2
             return 0;
         }
 
-        if ( _multilineMaxWidth > 0 ) {
-            return Text::width( _multilineMaxWidth );
+        if ( _isMultiLine && _maxTextWidth > 0 ) {
+            // This is a multi-line text.
+            return Text::width( _maxTextWidth );
         }
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
-        const int32_t textWidth = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _textBeginPos ), _textLength, charHandler, _keepLineTrailingSpaces );
+        const int32_t textWidth
+            = getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() + _visibleTextBeginPos ), _visibleTextLength, charHandler, _keepLineTrailingSpaces );
 
-        const bool isTextTruncatedAtBegin = ( _textBeginPos != 0 );
-        const bool isTextTruncatedAtEnd = ( _textLength + _textBeginPos < static_cast<int32_t>( _text.size() ) );
+        const bool isTextTruncatedAtBegin = ( _visibleTextBeginPos != 0 );
+        const bool isTextTruncatedAtEnd = ( _visibleTextLength + _visibleTextBeginPos < static_cast<int32_t>( _text.size() ) );
 
         if ( isTextTruncatedAtBegin && isTextTruncatedAtEnd ) {
             return textWidth + 2 * getTruncationSymbolWidth( _fontType );
@@ -664,13 +650,13 @@ namespace fheroes2
 
     void TextInput::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
     {
-        if ( output.empty() || _text.empty() || _textLength == 0 ) {
+        if ( output.empty() || _text.empty() || _visibleTextLength == 0 ) {
             // No use to render something on an empty image or if something is empty.
             return;
         }
 
-        if ( _multilineMaxWidth > 0 ) {
-            Text::drawInRoi( x, y, _multilineMaxWidth, output, imageRoi );
+        if ( _isMultiLine && _maxTextWidth > 0 ) {
+            Text::drawInRoi( x, y, _maxTextWidth, output, imageRoi );
             return;
         }
 
@@ -679,17 +665,18 @@ namespace fheroes2
 
         int32_t offsetX = x;
 
-        if ( _textBeginPos != 0 ) {
+        if ( _visibleTextBeginPos != 0 ) {
             // Insert truncation symbol at the beginning.
             offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ), x, y, output,
                                         imageRoi, charHandler );
         }
 
-        offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ) + _textBeginPos,
-                                    _textLength == 0 ? static_cast<int32_t>( _text.size() ) - _textBeginPos : _textLength, offsetX, y, output, imageRoi, charHandler );
+        offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ) + _visibleTextBeginPos,
+                                    _visibleTextLength == 0 ? static_cast<int32_t>( _text.size() ) - _visibleTextBeginPos : _visibleTextLength, offsetX, y, output,
+                                    imageRoi, charHandler );
 
         // Insert truncation symbol at the end if required.
-        if ( _textLength + _textBeginPos < static_cast<int32_t>( _text.size() ) ) {
+        if ( _visibleTextLength + _visibleTextBeginPos < static_cast<int32_t>( _text.size() ) ) {
             renderSingleLine( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ), offsetX, y, output, imageRoi,
                               charHandler );
         }
@@ -713,8 +700,8 @@ namespace fheroes2
     {
         assert( maxWidth > 0 );
         if ( maxWidth <= 0 || _text.empty() ) {
-            _textBeginPos = 0;
-            _textLength = 0;
+            _visibleTextBeginPos = 0;
+            _visibleTextLength = 0;
 
             return;
         }
@@ -722,50 +709,55 @@ namespace fheroes2
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
         const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
-        _textLength = static_cast<int32_t>( _text.size() );
+        _visibleTextLength = static_cast<int32_t>( _text.size() );
 
-        const int32_t originalTextWidth = getLineWidth( textData, _textLength, charHandler, true );
+        const int32_t originalTextWidth = getLineWidth( textData, _visibleTextLength, charHandler, true );
         if ( originalTextWidth < maxWidth ) {
             // There is no need to fit the text. Reset text fitting values.
-            _textBeginPos = 0;
+            _visibleTextBeginPos = 0;
 
             return;
         }
 
-        constexpr int32_t cursorToBorderDistance = 4;
+        // We want to keep cursor not close to the truncated text edges.
+        constexpr int32_t cursorToTruncationDistance = 4;
 
-        // If the cursor is to the left of the TextBox.
-        _textBeginPos = ( _cursorPosition > cursorToBorderDistance ) ? std::min( _textBeginPos, _cursorPosition - cursorToBorderDistance ) : 0;
+        // First we update the left text truncation position by updating the visible text beginning position.
+        // If the cursor is to the left of or close to the visible text begin position, we update this position.
+        // And we don't allow the begin position to be negative.
+        _visibleTextBeginPos
+            = ( _cursorPositionInText > cursorToTruncationDistance ) ? std::min( _visibleTextBeginPos, _cursorPositionInText - cursorToTruncationDistance ) : 0;
 
-        assert( _textBeginPos <= _textLength );
+        assert( _visibleTextBeginPos <= _visibleTextLength );
 
-        _textLength -= _textBeginPos;
+        _visibleTextLength -= _visibleTextBeginPos;
 
-        int32_t currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
+        int32_t currentWidth = getLineWidth( textData + _visibleTextBeginPos, _visibleTextLength, charHandler, true );
         const int32_t truncationSymbolWidth = getTruncationSymbolWidth( _fontType );
         const int32_t truncatedMaxWidth = maxWidth - truncationSymbolWidth;
         const int32_t twiceTruncatedMaxWidth = truncatedMaxWidth - truncationSymbolWidth;
 
         // If the text should be truncated from the right side.
         if ( currentWidth > truncatedMaxWidth ) {
-            _textLength = getMaxCharacterCount( textData + _textBeginPos, _textLength, charHandler, _textBeginPos != 0 ? twiceTruncatedMaxWidth : truncatedMaxWidth );
-            currentWidth = getLineWidth( textData + _textBeginPos, _textLength, charHandler, true );
+            _visibleTextLength = getMaxCharacterCount( textData + _visibleTextBeginPos, _visibleTextLength, charHandler,
+                                                       _visibleTextBeginPos != 0 ? twiceTruncatedMaxWidth : truncatedMaxWidth );
+            currentWidth = getLineWidth( textData + _visibleTextBeginPos, _visibleTextLength, charHandler, true );
         }
 
         const int32_t originalTextSize = static_cast<int32_t>( _text.size() );
-        int32_t textEndPos = _textBeginPos + _textLength;
+        int32_t textEndPos = _visibleTextBeginPos + _visibleTextLength;
 
-        // If the cursor is to the right of the TextBox.
-        while ( ( textEndPos < _cursorPosition + cursorToBorderDistance ) && ( textEndPos < originalTextSize ) ) {
+        // If the cursor is to the right of or close to the visible text end position, we update this position to show the cursor and text around it.
+        while ( ( textEndPos < _cursorPositionInText + cursorToTruncationDistance ) && ( textEndPos < originalTextSize ) ) {
             currentWidth += charHandler.getWidth( textData[textEndPos] );
             ++textEndPos;
-            ++_textLength;
+            ++_visibleTextLength;
 
             while ( currentWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
                 // Remove characters from the begin.
-                currentWidth -= charHandler.getWidth( textData[_textBeginPos] );
-                ++_textBeginPos;
-                --_textLength;
+                currentWidth -= charHandler.getWidth( textData[_visibleTextBeginPos] );
+                ++_visibleTextBeginPos;
+                --_visibleTextLength;
             }
 
             while ( textEndPos != originalTextSize ) {
@@ -777,47 +769,42 @@ namespace fheroes2
 
                 currentWidth += charHandler.getWidth( textData[textEndPos] );
                 ++textEndPos;
-                ++_textLength;
+                ++_visibleTextLength;
             }
         }
 
-        assert( _cursorPosition >= _textBeginPos );
+        assert( _cursorPositionInText >= _visibleTextBeginPos );
 
-        while ( _textBeginPos != 0 ) {
+        while ( _visibleTextBeginPos != 0 ) {
             // Some characters from the text begin might also fit the width.
-            const int32_t prevCharWidth = charHandler.getWidth( textData[_textBeginPos - 1] );
+            const int32_t prevCharWidth = charHandler.getWidth( textData[_visibleTextBeginPos - 1] );
             if ( currentWidth + prevCharWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
                 break;
             }
 
-            --_textBeginPos;
-            ++_textLength;
+            --_visibleTextBeginPos;
+            ++_visibleTextLength;
             currentWidth += prevCharWidth;
         }
 
-        if ( textEndPos != originalTextSize && textEndPos + cursorToBorderDistance > originalTextSize
+        if ( textEndPos != originalTextSize && textEndPos + cursorToTruncationDistance > originalTextSize
              && getLineWidth( textData + textEndPos, originalTextSize - textEndPos, charHandler, true ) <= truncatedMaxWidth - currentWidth ) {
             // The end of the text fits the given width. Update text length to remove truncation at the end.
-            _textLength = originalTextSize - _textBeginPos;
+            _visibleTextLength = originalTextSize - _visibleTextBeginPos;
         }
 
-        if ( _textBeginPos > 0 && _textBeginPos < cursorToBorderDistance
-             && getLineWidth( textData, _textBeginPos, charHandler, true ) <= truncatedMaxWidth - currentWidth ) {
+        if ( _visibleTextBeginPos > 0 && _visibleTextBeginPos < cursorToTruncationDistance
+             && getLineWidth( textData, _visibleTextBeginPos, charHandler, true ) <= truncatedMaxWidth - currentWidth ) {
             // The beginning of the text fits the given width. Update _textBeginPos to remove truncation at the beginning.
-            _textBeginPos = 0;
-            _textLength = getMaxCharacterCount( textData, originalTextSize, charHandler, truncatedMaxWidth );
+            _visibleTextBeginPos = 0;
+            _visibleTextLength = getMaxCharacterCount( textData, originalTextSize, charHandler, truncatedMaxWidth );
         }
-    }
-
-    int32_t TextInput::getSingleTruncationSymbolWidth() const
-    {
-        return getTruncationSymbolWidth( _fontType );
     }
 
     void TextInput::_updateCursorArea()
     {
-        if ( _autoFitToWidth > 0 && _multilineMaxWidth < 1 ) {
-            fitToOneRow( _autoFitToWidth );
+        if ( !_isMultiLine && _maxTextWidth > 0 ) {
+            fitToOneRow( _maxTextWidth );
         }
 
         const FontCharHandler charHandler( _fontType );
@@ -832,33 +819,35 @@ namespace fheroes2
         _cursorArea.y = charSprite.y() - 1;
 
         if ( _text.empty() ) {
-            if ( _multilineMaxWidth > 0 ) {
-                _cursorArea.x += _multilineMaxWidth / 2;
+            if ( _isMultiLine && _maxTextWidth > 0 ) {
+                _cursorArea.x += _maxTextWidth / 2;
             }
             return;
         }
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
 
-        int32_t textLineBegin = _textBeginPos;
+        int32_t textLineBegin = _visibleTextBeginPos;
 
-        if ( _multilineMaxWidth > 0 ) {
+        if ( _isMultiLine && _maxTextWidth > 0 ) {
+            // This is a multi-line text.
+
             const int32_t textHeight = height();
             std::vector<TextLineInfo> lineInfos;
-            getTextLineInfos( lineInfos, _multilineMaxWidth, textHeight, true );
+            getTextLineInfos( lineInfos, _maxTextWidth, textHeight, true );
 
-            if ( _cursorPosition == static_cast<int32_t>( _text.size() ) ) {
+            if ( _cursorPositionInText == static_cast<int32_t>( _text.size() ) ) {
                 // The cursor is at the end of the text.
                 _cursorArea.y += static_cast<int32_t>( lineInfos.size() - 1 ) * textHeight;
-                _cursorArea.x += ( _multilineMaxWidth + lineInfos.back().lineWidth ) / 2;
+                _cursorArea.x += ( _maxTextWidth + lineInfos.back().lineWidth ) / 2;
                 return;
             }
 
             textLineBegin = 0;
 
             for ( size_t i = 0; i < lineInfos.size(); ++i ) {
-                if ( _cursorPosition < textLineBegin + lineInfos[i].characterCount ) {
-                    _cursorArea.x += ( _multilineMaxWidth - lineInfos[i].lineWidth ) / 2;
+                if ( _cursorPositionInText < textLineBegin + lineInfos[i].characterCount ) {
+                    _cursorArea.x += ( _maxTextWidth - lineInfos[i].lineWidth ) / 2;
                     _cursorArea.y += static_cast<int32_t>( i ) * textHeight;
                     break;
                 }
@@ -866,13 +855,13 @@ namespace fheroes2
                 textLineBegin += lineInfos[i].characterCount;
             }
         }
-        else if ( _textBeginPos != 0 ) {
+        else if ( _visibleTextBeginPos != 0 ) {
             // The visible text is truncated at the begin.
             _cursorArea.x += getTruncationSymbolWidth( _fontType );
         }
 
-        if ( _cursorPosition > textLineBegin ) {
-            _cursorArea.x += getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ) + textLineBegin, _cursorPosition - textLineBegin, charHandler, true );
+        if ( _cursorPositionInText > textLineBegin ) {
+            _cursorArea.x += getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ) + textLineBegin, _cursorPositionInText - textLineBegin, charHandler, true );
         }
     }
 
@@ -1123,5 +1112,21 @@ namespace fheroes2
         const FontCharHandler charHandler( fontType );
 
         return std::all_of( text.begin(), text.end(), [&charHandler]( const int8_t character ) { return charHandler.isAvailable( character ); } );
+    }
+
+    int32_t getTruncationSymbolWidth( const FontType fontType )
+    {
+        // Symbol width depends on font size and not on its color.
+        static std::map<FontSize, int32_t> truncationSymbolWidth;
+
+        auto [iter, isEmplaced] = truncationSymbolWidth.try_emplace( fontType.size, 0 );
+
+        if ( isEmplaced ) {
+            // Set the correct width value for the just emplaced element.
+            iter->second = getLineWidth( reinterpret_cast<const uint8_t *>( truncationSymbol.data() ), static_cast<int32_t>( truncationSymbol.size() ),
+                                         FontCharHandler( fontType ), true );
+        }
+
+        return iter->second;
     }
 }

@@ -393,8 +393,7 @@ namespace
             background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             // Prepare the text input and set it to always fit the file name input field width.
-            textInput = std::make_unique<fheroes2::TextInput>( fheroes2::FontType::normalWhite() );
-            textInput->setAutoFitToOneRow( maxFileNameWidth );
+            textInput = std::make_unique<fheroes2::TextInput>( fheroes2::FontType::normalWhite(), maxFileNameWidth, false );
 
             // Initialize empty restorer for the cursor.
             textCursorRestorer = std::make_unique<fheroes2::ImageRestorer>( display, 0, 0, 0, 0 );

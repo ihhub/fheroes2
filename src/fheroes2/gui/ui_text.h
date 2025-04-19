@@ -276,26 +276,21 @@ namespace fheroes2
     public:
         TextInput() = delete;
 
-        explicit TextInput( const FontType fontType )
+        // Every text input field has limited width and the only font type.
+        explicit TextInput( const FontType fontType, const int32_t maxTextWidth, const bool isMultiLine )
             : Text( {}, fontType )
+            , _maxTextWidth( maxTextWidth )
+            , _isMultiLine( isMultiLine )
         {
             _keepLineTrailingSpaces = true;
 
             _updateCursorArea();
         }
 
-        TextInput( std::string text, const FontType fontType )
-            : Text( std::move( text ), fontType )
-            , _textLength( static_cast<int32_t>( _text.size() ) )
-        {
-            _keepLineTrailingSpaces = true;
-
-            _updateCursorArea();
-        }
-
-        TextInput( std::string text, const FontType fontType, const std::optional<SupportedLanguage> language )
-            : Text( std::move( text ), fontType )
-            , _textLength( static_cast<int32_t>( _text.size() ) )
+        explicit TextInput( const FontType fontType, const int32_t maxTextWidth, const bool isMultiLine, const std::optional<SupportedLanguage> language )
+            : Text( {}, fontType )
+            , _maxTextWidth( maxTextWidth )
+            , _isMultiLine( isMultiLine )
         {
             _language = language;
             _keepLineTrailingSpaces = true;
@@ -309,8 +304,8 @@ namespace fheroes2
         void set( std::string text, const int32_t cursorPosition )
         {
             _text = std::move( text );
-            _cursorPosition = cursorPosition;
-            _textLength = static_cast<int32_t>( _text.size() );
+            _cursorPositionInText = cursorPosition;
+            _visibleTextLength = static_cast<int32_t>( _text.size() );
 
             _updateCursorArea();
         }
@@ -327,29 +322,15 @@ namespace fheroes2
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
-        void setAutoFitToOneRow( const int32_t maxWidth )
+        int32_t getMaxTextWidth() const
         {
-            _autoFitToWidth = maxWidth;
-
-            _updateCursorArea();
-        }
-
-        void setMultilineMaxWidth( const int32_t maxWidth )
-        {
-            _multilineMaxWidth = maxWidth;
-
-            _updateCursorArea();
-        }
-
-        int32_t getMultilineMaxWidth() const
-        {
-            return _multilineMaxWidth;
+            return _maxTextWidth;
         }
 
         void setCursorPosition( const int32_t position )
         {
-            if ( _cursorPosition != position ) {
-                _cursorPosition = position;
+            if ( _cursorPositionInText != position ) {
+                _cursorPositionInText = position;
 
                 _updateCursorArea();
             }
@@ -362,26 +343,27 @@ namespace fheroes2
 
         int32_t getTextBeginPos() const
         {
-            return _textBeginPos;
+            return _visibleTextBeginPos;
         }
 
         std::string getVisibleText() const
         {
-            return { ( _text.data() ) + _textBeginPos, static_cast<size_t>( _textLength ) };
+            return { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
         }
-
-        int32_t getSingleTruncationSymbolWidth() const;
 
     private:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorArea();
 
         fheroes2::Rect _cursorArea;
-        int32_t _cursorPosition{ 0 };
-        int32_t _textBeginPos{ 0 };
-        int32_t _textLength{ 0 };
-        int32_t _autoFitToWidth{ 0 };
-        int32_t _multilineMaxWidth{ 0 };
+        int32_t _cursorPositionInText{ 0 };
+        int32_t _visibleTextBeginPos{ 0 };
+        int32_t _visibleTextLength{ 0 };
+
+        // The (<1) value of `_maxTextWidth` will make the code to render text in one line without limiting its width.
+        int32_t _maxTextWidth{ 0 };
+        // When `false` the text that exceeds the `_maxTextWidth` will be moved to the next line, otherwise it will be truncated.
+        bool _isMultiLine{ false };
     };
 
     class MultiFontText final : public TextBase
@@ -446,4 +428,7 @@ namespace fheroes2
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );
+
+    // This function will return the width in pixels of the truncation symbol for the given font type.
+    int32_t getTruncationSymbolWidth( const fheroes2::FontType fontType );
 }

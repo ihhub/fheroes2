@@ -69,7 +69,6 @@ namespace
                              const fheroes2::Rect & textInputRoi, const int32_t cursorPosition, fheroes2::Image & output )
     {
         textInput.set( filename + mapFileExtension, cursorPosition );
-        // const int32_t posX = textInputRoi.x + 4; // + ( maxFileNameWidth - textInput.width() ) / 2;
         textInput.drawInRoi( textInputRoi.x, textInputRoi.y + 4, output, textInputRoi );
 
         // Always draw cursor on text change.
@@ -309,8 +308,7 @@ namespace Editor
         listbox.Redraw();
 
         fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
-        fheroes2::TextInput textInput( fheroes2::FontType::normalWhite() );
-        textInput.setAutoFitToOneRow( maxFileNameWidth );
+        fheroes2::TextInput textInput( fheroes2::FontType::normalWhite(), maxFileNameWidth, false );
 
         // Add extra offsets from input field borders.
         fileNameRoi.x += ( fileNameRoi.width - maxFileNameWidth ) / 2;
