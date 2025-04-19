@@ -258,12 +258,12 @@ namespace fheroes2
             _keepLineTrailingSpaces = true;
         }
 
+    protected:
         // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
         // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
         // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
+        void _getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
 
-    protected:
         std::string _text;
 
         FontType _fontType;
@@ -324,11 +324,6 @@ namespace fheroes2
 
         void fitToOneRow( const int32_t maxWidth ) final;
 
-        int32_t getMaxTextWidth() const
-        {
-            return _maxTextWidth;
-        }
-
         void setCursorPosition( const int32_t position )
         {
             if ( _cursorPositionInText != position ) {
@@ -336,17 +331,6 @@ namespace fheroes2
 
                 _updateCursorArea();
             }
-        }
-
-        // Returns cursor position relative to the text draw position and its size.
-        const fheroes2::Rect & getCursorArea() const
-        {
-            return _cursorArea;
-        }
-
-        int32_t getTextBeginPos() const
-        {
-            return _visibleTextBeginPos;
         }
 
         std::string getVisibleText() const
@@ -358,6 +342,7 @@ namespace fheroes2
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorArea();
 
+        // Cursor position relative to the text draw position and cursor's size.
         fheroes2::Rect _cursorArea;
         int32_t _cursorPositionInText{ 0 };
         int32_t _visibleTextBeginPos{ 0 };

@@ -146,7 +146,14 @@ namespace fheroes2
         // Allow only to call `TextInput::set( std::string text, const int32_t cursorPosition )`.
         using TextInput::set;
 
-        size_t getCursorInTextPosition( const Point & mousePos ) const;
+        size_t getCursorInTextPosition( const Point & mousePos ) const
+        {
+            if ( _isMultiLine ) {
+                return _getTextInputCursorPosition( mousePos );
+            }
+
+            return _getTextInputCursorPosition( mousePos.x );
+        }
 
         // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
@@ -163,6 +170,9 @@ namespace fheroes2
         void redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText );
 
     private:
+        size_t _getTextInputCursorPosition( const Point & pointerCursorOffset ) const;
+        size_t _getTextInputCursorPosition( const int32_t pointerCursorOffsetX ) const;
+
         Image & _output;
         MovableSprite _textCursor;
         ImageRestorer _background;
@@ -274,10 +284,6 @@ namespace fheroes2
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );
-
-    // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const TextInput & text, const Point & pointerCursorOffset, const Rect & textRoi );
-    size_t getTextInputCursorPosition( const TextInput & textInput, const bool isCenterAlignedText, const int32_t pointerCursorOffsetX, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 

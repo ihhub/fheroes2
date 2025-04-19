@@ -346,7 +346,7 @@ namespace fheroes2
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
+        _getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
 
         if ( lineInfos.size() == 1 ) {
             // This is a single-line message.
@@ -366,7 +366,7 @@ namespace fheroes2
         while ( startWidth + 1 < endWidth ) {
             const int32_t currentWidth = ( endWidth + startWidth ) / 2;
             std::vector<TextLineInfo> tempLineInfos;
-            getTextLineInfos( tempLineInfos, currentWidth, fontHeight, false );
+            _getTextLineInfos( tempLineInfos, currentWidth, fontHeight, false );
 
             if ( tempLineInfos.size() > lineInfos.size() ) {
                 startWidth = currentWidth;
@@ -389,7 +389,7 @@ namespace fheroes2
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
+        _getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
 
         return lineInfos.back().offsetY + fontHeight;
     }
@@ -402,7 +402,7 @@ namespace fheroes2
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, height(), false );
+        _getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         return static_cast<int32_t>( lineInfos.size() );
     }
@@ -435,7 +435,7 @@ namespace fheroes2
         const auto langugeSwitcher = getLanguageSwitcher( *this );
 
         std::vector<TextLineInfo> lineInfos;
-        getTextLineInfos( lineInfos, maxWidth, height(), false );
+        _getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
         const FontCharHandler charHandler( _fontType );
@@ -482,7 +482,7 @@ namespace fheroes2
         _text += truncationSymbol;
     }
 
-    void Text::getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
+    void Text::_getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );
 
@@ -840,7 +840,7 @@ namespace fheroes2
 
             const int32_t textHeight = height();
             std::vector<TextLineInfo> lineInfos;
-            getTextLineInfos( lineInfos, _maxTextWidth, textHeight, true );
+            _getTextLineInfos( lineInfos, _maxTextWidth, textHeight, true );
 
             if ( _cursorPositionInText == static_cast<int32_t>( _text.size() ) ) {
                 // The cursor is at the end of the text.
@@ -1044,7 +1044,7 @@ namespace fheroes2
             // To properly render a multi-font text we must not ignore spaces at the end of a text entry which is not the last one.
             const bool isNotLastTextEntry = ( i != textsCount - 1 );
 
-            _texts[i].getTextLineInfos( textLineInfos, maxWidth, rowHeight, isNotLastTextEntry );
+            _texts[i]._getTextLineInfos( textLineInfos, maxWidth, rowHeight, isNotLastTextEntry );
         }
     }
 
