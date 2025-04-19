@@ -44,7 +44,7 @@ namespace fheroes2
     {
     public:
         MovableSprite();
-        MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
+        MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y );
         explicit MovableSprite( const Sprite & sprite );
 
         MovableSprite( const MovableSprite & ) = delete;
@@ -75,7 +75,7 @@ namespace fheroes2
             return { x(), y(), width(), height() };
         }
 
-        void setPosition( int32_t x_, int32_t y_ ) override;
+        void setPosition( const int32_t x, const int32_t y ) override;
 
     protected:
         void _resetRestorer()
@@ -85,7 +85,7 @@ namespace fheroes2
 
     private:
         ImageRestorer _restorer;
-        bool _isHidden;
+        bool _isHidden{ true };
     };
 
     class MovableText
@@ -113,6 +113,54 @@ namespace fheroes2
         ImageRestorer _restorer;
         std::unique_ptr<TextBase> _text;
         bool _isHidden;
+    };
+
+    class TextInputField
+    {
+    public:
+        TextInputField() = delete;
+        TextInputField( Rect textArea, const bool isMultiLine, const bool isCenterAligned, const std::optional<SupportedLanguage> language, Image & output )
+            : _output( output )
+            , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
+            , _textCursor( _text.getCursorSprite() )
+            // We enlarge background to have space for cursor at text edges and space for diacritics.
+            , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
+            , _textInputArea( std::move( textArea ) )
+            , _isMultiLine( isMultiLine )
+            , _isCenterAligned( isMultiLine || isCenterAligned )
+        {
+            // Do nothing.
+        }
+
+        // Returns `true` when cursor redraw is needed.
+        bool cursorBlinkProcessing();
+
+        size_t getCursorInTextPosition( const Point & mousePos ) const;
+
+        // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if thhis class.
+
+        Rect getCursortRenderArea() const
+        {
+            return _textCursor.getArea();
+        }
+
+        Rect getTextRenderArea() const
+        {
+            return _background.rect();
+        }
+
+        void redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText );
+
+    private:
+        Image & _output;
+        TextInput _text;
+        MovableSprite _textCursor;
+        ImageRestorer _background;
+        Rect _textInputArea;
+        int32_t _cursorPosition{ 0 };
+        bool _isMultiLine{ false };
+        bool _isCenterAligned{ false };
+        bool _isCursorVisible{ false };
     };
 
     // Renderer of current time and FPS on screen

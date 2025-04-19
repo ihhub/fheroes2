@@ -320,6 +320,8 @@ namespace fheroes2
 
         void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
 
+        const Sprite & getCursorSprite() const;
+
         void fitToOneRow( const int32_t maxWidth ) override;
 
         int32_t getMaxTextWidth() const
@@ -336,6 +338,7 @@ namespace fheroes2
             }
         }
 
+        // Returns cursor position relative to the text draw position and its size.
         const fheroes2::Rect & getCursorArea() const
         {
             return _cursorArea;

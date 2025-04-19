@@ -118,20 +118,25 @@ namespace fheroes2
 {
     MovableSprite::MovableSprite()
         : _restorer( Display::instance(), 0, 0, 0, 0 )
-        , _isHidden( true )
-    {}
+    {
+        // Do nothing.
+    }
 
-    MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
-        : Sprite( width_, height_, x_, y_ )
-        , _restorer( Display::instance(), x_, y_, width_, height_ )
-        , _isHidden( height_ == 0 && width_ == 0 )
-    {}
+    MovableSprite::MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y )
+        : Sprite( width, height, x, y )
+        , _restorer( Display::instance(), x, y, width, height )
+        , _isHidden( height == 0 && width == 0 )
+    {
+        // Do nothing.
+    }
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
         , _restorer( Display::instance(), 0, 0, 0, 0 )
         , _isHidden( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     MovableSprite::~MovableSprite()
     {
@@ -153,15 +158,15 @@ namespace fheroes2
         return *this;
     }
 
-    void MovableSprite::setPosition( int32_t x_, int32_t y_ )
+    void MovableSprite::setPosition( const int32_t x, const int32_t y )
     {
         if ( _isHidden ) {
-            Sprite::setPosition( x_, y_ );
+            Sprite::setPosition( x, y );
             return;
         }
 
         hide();
-        Sprite::setPosition( x_, y_ );
+        Sprite::setPosition( x, y );
         show();
     }
 
@@ -169,7 +174,7 @@ namespace fheroes2
     {
         if ( _isHidden ) {
             _restorer.update( x(), y(), width(), height() );
-            fheroes2::Blit( *this, Display::instance(), x(), y() );
+            Blit( *this, Display::instance(), x(), y() );
             _isHidden = false;
         }
     }
@@ -221,6 +226,54 @@ namespace fheroes2
             _restorer.restore();
             _isHidden = true;
         }
+    }
+
+    bool TextInputField::cursorBlinkProcessing()
+    {
+        if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            return false;
+        }
+
+        _isCursorVisible = !_isCursorVisible;
+
+        if ( _isCursorVisible ) {
+            _textCursor.show();
+        }
+        else {
+            _textCursor.hide();
+        }
+
+        return true;
+    }
+
+    size_t TextInputField::getCursorInTextPosition( const Point & mousePos ) const
+    {
+        if ( _isMultiLine ) {
+            return getTextInputCursorPosition( _text, mousePos, _textInputArea );
+        }
+
+        return getTextInputCursorPosition( _text, true, mousePos.x, _textInputArea );
+    }
+
+    void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
+    {
+        _textCursor.hide();
+        _background.restore();
+
+        _text.set( newText, cursorPositionInText );
+
+        // Multi-line text is currently always automatically center-aligned.
+        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
+        const int32_t offsetY = _textInputArea.y + 2;
+
+        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+
+        const fheroes2::Rect & cursorRoi = _text.getCursorArea();
+        _textCursor.setPosition( cursorRoi.x + offsetX, cursorRoi.y + offsetY );
+        _textCursor.show();
+
+        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+        _isCursorVisible = true;
     }
 
     SystemInfoRenderer::SystemInfoRenderer()

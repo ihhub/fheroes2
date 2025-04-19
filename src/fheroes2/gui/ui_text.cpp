@@ -696,6 +696,12 @@ namespace fheroes2
         Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
     }
 
+    const Sprite & TextInput::getCursorSprite() const
+    {
+        const FontCharHandler charHandler( _fontType );
+        return charHandler.getSprite( cursorChar );
+    }
+
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
         assert( maxWidth > 0 );

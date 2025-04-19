@@ -232,33 +232,16 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         inputAreaOffset = { 13, 1, -26, -3 };
         fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     }
-    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaOffset.x, dst_pt.y + inputAreaOffset.y, inputAreaWidth + inputAreaOffset.width,
-                                        inputAreaHeight + inputAreaOffset.height );
 
-    fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
+    fheroes2::Rect textInputArea( dst_pt.x + inputAreaOffset.x, dst_pt.y + inputAreaOffset.y, inputAreaWidth + inputAreaOffset.width,
+                                  inputAreaHeight + inputAreaOffset.height );
 
-    // To fully render the cursor at the line begin/end we leave extra pixel from each side.
-    fheroes2::TextInput textInput( fheroes2::FontType::normalWhite(), textInputArea.width - 2, isMultiLine, textLanguage );
-    fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
+    // We add extra 4 pixels to the click area width to help setting the cursor at the end of the line if it is fully filled with text characters.
+    const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
 
-    fheroes2::Point textPos( textInputArea.x, textInputArea.y + 2 );
-
-    auto redrawTextInput = [&result, &textInput, &textPos, &textInputArea, &charInsertPos, isMultiLine, &textCursorRestorer, &display]() {
-        textInput.set( result, static_cast<int32_t>( charInsertPos ) );
-
-        if ( !isMultiLine ) {
-            textPos.x = textInputArea.x + ( textInputArea.width - textInput.width() ) / 2;
-        }
-
-        textInput.drawInRoi( textPos.x, textPos.y, display, textInputArea );
-
-        const fheroes2::Rect & cursorRoi = textInput.getCursorArea();
-        textCursorRestorer.update( cursorRoi.x + textPos.x, cursorRoi.y + textPos.y, cursorRoi.width, cursorRoi.height );
-        textInput.drawCursor( textPos.x, textPos.y, display, textInputArea );
-    };
-
-    redrawTextInput();
-    bool isCursorVisible = true;
+    fheroes2::TextInputField textInput( std::move( textInputArea ), isMultiLine, true, textLanguage, display );
+    const fheroes2::Rect textInputRenderArea( textInput.getTextRenderArea() );
+    textInput.redrawTextInputField( result, static_cast<int32_t>( charInsertPos ) );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -296,16 +279,13 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     display.render();
 
-    // We add extra 4 pixels to the click area width to help setting the cursor at the end of the line if it is fully filled with text characters.
-    const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
-
     LocalEvent & le = LocalEvent::Get();
 
     Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
+    while ( le.HandleEvents() ) {
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
@@ -353,24 +333,20 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             redraw = true;
         }
         else if ( le.MouseClickLeft( textEditClickArea ) ) {
-            const auto getCharInsertPos = [&textInput, &textInputArea, isMultiLine]( const fheroes2::Point & mousePos ) {
-                if ( isMultiLine ) {
-                    return fheroes2::getTextInputCursorPosition( textInput, mousePos, textInputArea );
-                }
-
-                return fheroes2::getTextInputCursorPosition( textInput, true, mousePos.x, textInputArea );
-            };
-
+            size_t newPos;
             if ( textLanguage.has_value() ) {
                 // `textLanguage` certainly contains a value so we can simply access it without calling the `.value()` method.
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
-                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos() );
+                newPos = textInput.getCursorInTextPosition( le.getMouseLeftButtonPressedPos() );
             }
             else {
-                charInsertPos = getCharInsertPos( le.getMouseLeftButtonPressedPos() );
+                newPos = textInput.getCursorInTextPosition( le.getMouseLeftButtonPressedPos() );
             }
 
-            redraw = true;
+            if ( newPos != charInsertPos ) {
+                charInsertPos = newPos;
+                redraw = true;
+            }
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
@@ -380,20 +356,6 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonVirtualKB.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
-        }
-
-        // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
-        if ( !redraw && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-            isCursorVisible = !isCursorVisible;
-
-            if ( isCursorVisible ) {
-                textInput.drawCursor( textPos.x, textPos.y, display, textInputArea );
-            }
-            else {
-                textCursorRestorer.restore();
-            }
-
-            display.render( textCursorRestorer.rect() );
         }
 
         if ( redraw ) {
@@ -412,13 +374,13 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            textBackground.restore();
+            textInput.redrawTextInputField( result, static_cast<int32_t>( charInsertPos ) );
 
-            redrawTextInput();
-            Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-            isCursorVisible = true;
-
-            display.render( textInputArea );
+            display.render( textInputRenderArea );
+        }
+        else if ( textInput.cursorBlinkProcessing() ) {
+            // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
+            display.render( textInput.getCursortRenderArea() );
         }
     }
 
