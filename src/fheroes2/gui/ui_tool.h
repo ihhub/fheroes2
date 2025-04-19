@@ -119,13 +119,13 @@ namespace fheroes2
     {
     public:
         TextInputField() = delete;
-        TextInputField( Rect textArea, const bool isMultiLine, const bool isCenterAligned, const std::optional<SupportedLanguage> language, Image & output )
+        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, const std::optional<SupportedLanguage> language, Image & output )
             : _output( output )
             , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
             , _textCursor( _text.getCursorSprite() )
             // We enlarge background to have space for cursor at text edges and space for diacritics.
             , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
-            , _textInputArea( std::move( textArea ) )
+            , _textInputArea( textArea )
             , _isMultiLine( isMultiLine )
             , _isCenterAligned( isMultiLine || isCenterAligned )
         {
@@ -137,7 +137,7 @@ namespace fheroes2
 
         size_t getCursorInTextPosition( const Point & mousePos ) const;
 
-        // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if thhis class.
+        // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
         Rect getCursortRenderArea() const
         {
@@ -157,7 +157,6 @@ namespace fheroes2
         MovableSprite _textCursor;
         ImageRestorer _background;
         Rect _textInputArea;
-        int32_t _cursorPosition{ 0 };
         bool _isMultiLine{ false };
         bool _isCenterAligned{ false };
         bool _isCursorVisible{ false };
