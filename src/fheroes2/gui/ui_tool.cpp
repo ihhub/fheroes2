@@ -342,18 +342,13 @@ namespace fheroes2
         }
 
         const int32_t maxOffset = pointerCursorOffsetX - textStartOffsetX;
-        const std::string text = getVisibleText();
-        const size_t textSize = text.size();
+        const std::string visibleText = { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
+        const size_t textSize = visibleText.size();
         int32_t positionOffset = 0;
         const FontCharHandler charHandler( _fontType );
 
         for ( size_t i = 0; i < textSize; ++i ) {
-            if ( text[i] == '\n' ) {
-                // Some lines may contain a new line character that is not printable so we should ignore it.
-                continue;
-            }
-
-            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
+            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( visibleText[i] ) );
 
             if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {
                 return i + _visibleTextBeginPos;

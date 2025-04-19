@@ -682,20 +682,6 @@ namespace fheroes2
         }
     }
 
-    void TextInput::drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
-    {
-        // Move cursor symbol one pixel up by deducting 1 from y.
-        const Rect charRoi{ x + _cursorArea.x, y + _cursorArea.y, _cursorArea.width, _cursorArea.height };
-
-        const Rect overlappedRoi = imageRoi ^ charRoi;
-
-        const FontCharHandler charHandler( _fontType );
-        const Sprite & charSprite = charHandler.getSprite( cursorChar );
-        assert( !charSprite.empty() );
-
-        Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
-    }
-
     const Sprite & TextInput::getCursorSprite() const
     {
         const FontCharHandler charHandler( _fontType );
@@ -807,7 +793,7 @@ namespace fheroes2
         }
     }
 
-    void TextInput::_updateCursorArea()
+    void TextInput::_updateCursorAreaInText()
     {
         if ( !_isMultiLine && _maxTextWidth > 0 ) {
             fitToOneRow( _maxTextWidth );

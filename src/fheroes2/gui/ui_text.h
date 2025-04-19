@@ -247,11 +247,6 @@ namespace fheroes2
             return _text;
         }
 
-        FontType getFontType() const
-        {
-            return _fontType;
-        }
-
         // Sets to keep trailing spaces at each text line end including the end of the text.
         void keepLineTrailingSpaces()
         {
@@ -284,7 +279,7 @@ namespace fheroes2
         {
             _keepLineTrailingSpaces = true;
 
-            _updateCursorArea();
+            _updateCursorAreaInText();
         }
 
         explicit TextInput( const FontType fontType, const int32_t maxTextWidth, const bool isMultiLine, const std::optional<SupportedLanguage> language )
@@ -295,7 +290,7 @@ namespace fheroes2
             _language = language;
             _keepLineTrailingSpaces = true;
 
-            _updateCursorArea();
+            _updateCursorAreaInText();
         }
 
         // TextInput should update text and cursor position in that text at the same time.
@@ -307,7 +302,7 @@ namespace fheroes2
             _cursorPositionInText = cursorPosition;
             _visibleTextLength = static_cast<int32_t>( _text.size() );
 
-            _updateCursorArea();
+            _updateCursorAreaInText();
         }
 
         int32_t width() const final;
@@ -318,29 +313,13 @@ namespace fheroes2
         // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
         using Text::drawInRoi;
 
-        void drawCursor( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const;
-
         const Sprite & getCursorSprite() const;
 
         void fitToOneRow( const int32_t maxWidth ) final;
 
-        void setCursorPosition( const int32_t position )
-        {
-            if ( _cursorPositionInText != position ) {
-                _cursorPositionInText = position;
-
-                _updateCursorArea();
-            }
-        }
-
-        std::string getVisibleText() const
-        {
-            return { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
-        }
-
     protected:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
-        void _updateCursorArea();
+        void _updateCursorAreaInText();
 
         // Cursor position relative to the text draw position and cursor's size.
         fheroes2::Rect _cursorArea;
