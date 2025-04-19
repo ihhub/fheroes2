@@ -1105,7 +1105,7 @@ bool Music::isPlaying()
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    return !musicTrackManager.getCurrentTrack().expired() && Mix_PlayingMusic();
+    return isInitialized && Mix_PlayingMusic();
 }
 
 void Music::SetMidiSoundFonts( const ListFiles & files )
