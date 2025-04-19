@@ -126,7 +126,6 @@ namespace
             , _info( info )
             , _lengthLimit( lengthLimit )
             , _cursorPosition( info.size() )
-            , _textCursorRestorer( output, 0, 0, 0, 0 )
             , _isEvilInterface( evilInterface )
         {
             // Do nothing.
@@ -167,6 +166,7 @@ namespace
             const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
 
             // It is important to destroy the previous window to avoid rendering issues.
+            _textUI.reset();
             _window.reset();
 
             _window = std::make_unique<fheroes2::StandardWindow>( offset.x, offset.y, size.width, size.height, true, _output );
@@ -177,9 +177,20 @@ namespace
             _textInputArea.x = windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2;
             _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
 
-            _textInputPos = { _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders + 3 };
+            // Draw the text input background.
+            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
 
-            _redrawInputArea();
+            if ( _isEvilInterface ) {
+                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
+                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            }
+
+            _textUI
+                = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
+                                                                              inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
+                                                              false, false, _output );
+            _textUI->redrawTextInputField( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -240,26 +251,22 @@ namespace
             _renderInputArea();
         }
 
-        void changeCursorState()
+        void cursorBlinkProcessing()
         {
-            _isCursorVisible = !_isCursorVisible;
-
-            if ( _isCursorVisible ) {
-                _textUI.drawCursor( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
+            if ( _textUI && _textUI->cursorBlinkProcessing() ) {
+                _output.render( _textUI->getCursorRenderArea() );
             }
-            else {
-                _textCursorRestorer.restore();
-            }
-
-            _output.render( _textCursorRestorer.rect() );
         }
 
         void setCursorPosition( const fheroes2::Point & clickPosition )
         {
-            const fheroes2::Rect startPosRoi( _textInputPos.x, _textInputArea.y, _textInputArea.width - ( _textInputArea.x - _textInputPos.x ) * 2,
-                                              _textInputArea.height );
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _textUI, false, clickPosition.x, startPosRoi );
-            _renderInputArea();
+            if ( _textUI ) {
+                const size_t newPos = _textUI->getCursorInTextPosition( clickPosition );
+                if ( _cursorPosition != newPos ) {
+                    _cursorPosition = newPos;
+                    _renderInputArea();
+                }
+            }
         }
 
         void setCursorPosition( const CursorPosition pos )
@@ -305,39 +312,17 @@ namespace
         std::string & _info;
         size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
+        std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
-        fheroes2::TextInput _textUI{ fheroes2::FontType::normalWhite(), inputAreaSize.width - inputAreaBorders * 2, false };
-        fheroes2::ImageRestorer _textCursorRestorer;
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
-        fheroes2::Point _textInputPos;
         const bool _isEvilInterface{ false };
-        bool _isCursorVisible{ true };
-
-        void _redrawInputArea()
-        {
-            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
-
-            if ( _isEvilInterface ) {
-                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
-                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-            }
-
-            _textUI.set( _info, static_cast<int32_t>( _cursorPosition ) );
-            _textUI.drawInRoi( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
-            const fheroes2::Rect & cursorRoi = _textUI.getCursorArea();
-            _textCursorRestorer.update( cursorRoi.x + _textInputPos.x, cursorRoi.y + _textInputPos.y, cursorRoi.width, cursorRoi.height );
-            _textUI.drawCursor( _textInputPos.x, _textInputPos.y, _output, _textInputArea );
-
-            // Show cursor after text update.
-            Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-            _isCursorVisible = true;
-        }
 
         void _renderInputArea()
         {
-            _redrawInputArea();
-            _output.render( _textInputArea );
+            if ( _textUI ) {
+                _textUI->redrawTextInputField( _info, static_cast<int32_t>( _cursorPosition ) );
+                _output.render( _textUI->getTextRenderArea() );
+            }
         }
     };
 
@@ -964,8 +949,6 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-
         while ( le.HandleEvents() ) {
             okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
 
@@ -987,9 +970,7 @@ namespace
             }
 
             // Text input cursor blink.
-            if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-                renderer.changeCursorState();
-            }
+            renderer.cursorBlinkProcessing();
         }
 
         return DialogAction::Close;

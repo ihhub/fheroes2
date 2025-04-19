@@ -40,6 +40,8 @@ enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     class MovableSprite : public Sprite
     {
     public:
@@ -115,18 +117,24 @@ namespace fheroes2
         bool _isHidden;
     };
 
-    class TextInputField
+    class TextInputField final : private TextInput
     {
     public:
         TextInputField() = delete;
+
+        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output )
+            : TextInputField( textArea, isMultiLine, isCenterAligned, {}, output )
+        {
+            // Do nothing.
+        }
+
         TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, const std::optional<SupportedLanguage> language, Image & output )
-            : _output( output )
-            , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
-            , _textCursor( _text.getCursorSprite() )
+            : TextInput( FontType::normalWhite(), textArea.width, isMultiLine, language )
+            , _output( output )
+            , _textCursor( getCursorSprite() )
             // We enlarge background to have space for cursor at text edges and space for diacritics.
             , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
             , _textInputArea( textArea )
-            , _isMultiLine( isMultiLine )
             , _isCenterAligned( isMultiLine || isCenterAligned )
         {
             // Do nothing.
@@ -135,11 +143,14 @@ namespace fheroes2
         // Returns `true` when cursor redraw is needed.
         bool cursorBlinkProcessing();
 
+        // Allow only to call `TextInput::set( std::string text, const int32_t cursorPosition )`.
+        using TextInput::set;
+
         size_t getCursorInTextPosition( const Point & mousePos ) const;
 
         // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
-        Rect getCursortRenderArea() const
+        Rect getCursorRenderArea() const
         {
             return _textCursor.getArea();
         }
@@ -153,11 +164,9 @@ namespace fheroes2
 
     private:
         Image & _output;
-        TextInput _text;
         MovableSprite _textCursor;
         ImageRestorer _background;
         Rect _textInputArea;
-        bool _isMultiLine{ false };
         bool _isCenterAligned{ false };
         bool _isCursorVisible{ false };
     };

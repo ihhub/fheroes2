@@ -68,7 +68,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+        const fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
 
         fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
         Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
@@ -249,10 +249,10 @@ namespace fheroes2
     size_t TextInputField::getCursorInTextPosition( const Point & mousePos ) const
     {
         if ( _isMultiLine ) {
-            return getTextInputCursorPosition( _text, mousePos, _textInputArea );
+            return getTextInputCursorPosition( *this, mousePos, _textInputArea );
         }
 
-        return getTextInputCursorPosition( _text, true, mousePos.x, _textInputArea );
+        return getTextInputCursorPosition( *this, _isCenterAligned, mousePos.x, _textInputArea );
     }
 
     void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
@@ -260,15 +260,15 @@ namespace fheroes2
         _textCursor.hide();
         _background.restore();
 
-        _text.set( newText, cursorPositionInText );
+        set( newText, cursorPositionInText );
 
         // Multi-line text is currently always automatically center-aligned.
-        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
+        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - width() ) / 2 : _textInputArea.x;
         const int32_t offsetY = _textInputArea.y + 2;
 
-        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+        drawInRoi( offsetX, offsetY, _output, _background.rect() );
 
-        const fheroes2::Rect & cursorRoi = _text.getCursorArea();
+        const fheroes2::Rect & cursorRoi = getCursorArea();
         _textCursor.setPosition( cursorRoi.x + offsetX, cursorRoi.y + offsetY );
         _textCursor.show();
 

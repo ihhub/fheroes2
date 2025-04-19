@@ -271,7 +271,7 @@ namespace fheroes2
         bool _keepLineTrailingSpaces{ false };
     };
 
-    class TextInput final : public Text
+    class TextInput : public Text
     {
     public:
         TextInput() = delete;
@@ -310,11 +310,11 @@ namespace fheroes2
             _updateCursorArea();
         }
 
-        int32_t width() const override;
+        int32_t width() const final;
         // Use `width( const int32_t maxWidth )` from the Text class.
         using Text::width;
 
-        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const final;
         // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
         using Text::drawInRoi;
 
@@ -322,7 +322,7 @@ namespace fheroes2
 
         const Sprite & getCursorSprite() const;
 
-        void fitToOneRow( const int32_t maxWidth ) override;
+        void fitToOneRow( const int32_t maxWidth ) final;
 
         int32_t getMaxTextWidth() const
         {
@@ -354,7 +354,7 @@ namespace fheroes2
             return { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
         }
 
-    private:
+    protected:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorArea();
 

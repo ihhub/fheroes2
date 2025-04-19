@@ -233,8 +233,8 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     }
 
-    fheroes2::Rect textInputArea( dst_pt.x + inputAreaOffset.x, dst_pt.y + inputAreaOffset.y, inputAreaWidth + inputAreaOffset.width,
-                                  inputAreaHeight + inputAreaOffset.height );
+    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaOffset.x, dst_pt.y + inputAreaOffset.y, inputAreaWidth + inputAreaOffset.width,
+                                        inputAreaHeight + inputAreaOffset.height );
 
     // We add extra 4 pixels to the click area width to help setting the cursor at the end of the line if it is fully filled with text characters.
     const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
@@ -380,7 +380,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         }
         else if ( textInput.cursorBlinkProcessing() ) {
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
-            display.render( textInput.getCursortRenderArea() );
+            display.render( textInput.getCursorRenderArea() );
         }
     }
 

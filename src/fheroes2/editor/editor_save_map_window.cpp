@@ -65,18 +65,6 @@ namespace
 
     const std::string mapFileExtension = ".fh2m";
 
-    void redrawSaveFileName( fheroes2::TextInput & textInput, const std::string & filename, fheroes2::ImageRestorer & textCursorRestorer,
-                             const fheroes2::Rect & textInputRoi, const int32_t cursorPosition, fheroes2::Image & output )
-    {
-        textInput.set( filename + mapFileExtension, cursorPosition );
-        textInput.drawInRoi( textInputRoi.x, textInputRoi.y + 4, output, textInputRoi );
-
-        // Always draw cursor on text change.
-        const fheroes2::Rect & cursorRoi = textInput.getCursorArea();
-        textCursorRestorer.update( cursorRoi.x + textInputRoi.x, cursorRoi.y + textInputRoi.y + 4, cursorRoi.width, cursorRoi.height );
-        textInput.drawCursor( textInputRoi.x, textInputRoi.y + 4, output, textInputRoi );
-    }
-
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
     {
     public:
@@ -218,7 +206,7 @@ namespace Editor
 
         const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37 + 17, listWidth, area.height - listHeightDeduction );
-        fheroes2::Rect fileNameRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
+        const fheroes2::Rect fileNameRoi( listRoi.x + 4, listRoi.y + listRoi.height + 14, maxFileNameWidth, 21 );
 
         const fheroes2::Text header( _( "Save Map:" ), fheroes2::FontType::normalYellow() );
         header.draw( area.x + ( area.width - header.width() ) / 2, area.y + 10, display );
@@ -241,10 +229,8 @@ namespace Editor
         mapNameText.fitToOneRow( maxMapNameTextWidth );
         mapNameText.drawInRoi( mapNameRoi.x, mapNameRoi.y + 4, mapNameRoi.width, display, mapNameRoi );
 
-        background.applyTextBackgroundShading( { listRoi.x, listRoi.y, fileNameRoi.width, listRoi.height } );
-        background.applyTextBackgroundShading( fileNameRoi );
-
-        fheroes2::ImageRestorer fileNameBackground( display, fileNameRoi.x, fileNameRoi.y, fileNameRoi.width, fileNameRoi.height );
+        background.applyTextBackgroundShading( { listRoi.x, listRoi.y, maxFileNameWidth + 8, listRoi.height } );
+        background.applyTextBackgroundShading( { listRoi.x, fileNameRoi.y - 2, maxFileNameWidth + 8, fileNameRoi.height } );
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
@@ -307,20 +293,14 @@ namespace Editor
 
         listbox.Redraw();
 
-        fheroes2::ImageRestorer textCursorRestorer( display, 0, 0, 0, 0 );
-        fheroes2::TextInput textInput( fheroes2::FontType::normalWhite(), maxFileNameWidth, false );
+        fheroes2::TextInputField textInput( fileNameRoi, false, false, display );
+        textInput.redrawTextInputField( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
 
-        // Add extra offsets from input field borders.
-        fileNameRoi.x += ( fileNameRoi.width - maxFileNameWidth ) / 2;
-        fileNameRoi.width = maxFileNameWidth;
-
-        redrawSaveFileName( textInput, fileName, textCursorRestorer, fileNameRoi, static_cast<int32_t>( charInsertPos ), display );
+        const fheroes2::Rect textInputRenderArea = textInput.getTextRenderArea();
 
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
         background.renderCustomButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
-
-        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
         display.render( background.totalArea() );
 
@@ -328,8 +308,6 @@ namespace Editor
         std::string lastSelectedSaveFileName;
 
         const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
-
-        bool isCursorVisible = true;
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -374,11 +352,15 @@ namespace Editor
             }
             else if ( !fileName.empty() && le.MouseClickLeft( fileNameRoi ) ) {
                 // Do not allow to put cursor at the file extension part.
-                charInsertPos = std::min( fheroes2::getTextInputCursorPosition( textInput, false, le.getMouseLeftButtonPressedPos().x, fileNameRoi ), fileName.size() );
+                const size_t newPos = std::min( textInput.getCursorInTextPosition( le.getMouseLeftButtonPressedPos() ), fileName.size() );
 
-                listbox.Unselect();
-                isListboxSelected = false;
-                needFileNameRedraw = true;
+                if ( charInsertPos != newPos || isListboxSelected ) {
+                    charInsertPos = newPos;
+
+                    listbox.Unselect();
+                    isListboxSelected = false;
+                    needFileNameRedraw = true;
+                }
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
@@ -463,19 +445,8 @@ namespace Editor
             const bool needRedrawListbox = listbox.IsNeedRedraw();
 
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
-            if ( !needFileNameRedraw && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-                isCursorVisible = !isCursorVisible;
-
-                if ( isCursorVisible ) {
-                    textInput.drawCursor( fileNameRoi.x, fileNameRoi.y + 4, display, fileNameRoi );
-                }
-                else {
-                    textCursorRestorer.restore();
-                }
-
-                if ( !needRedrawListbox ) {
-                    display.render( textCursorRestorer.rect() );
-                }
+            if ( !needFileNameRedraw && textInput.cursorBlinkProcessing() ) {
+                display.render( textInput.getCursorRenderArea() );
             }
 
             if ( !needFileNameRedraw && !needRedrawListbox ) {
@@ -498,10 +469,7 @@ namespace Editor
                     lastSelectedSaveFileName.clear();
                 }
 
-                fileNameBackground.restore();
-
-                redrawSaveFileName( textInput, fileName, textCursorRestorer, fileNameRoi, static_cast<int32_t>( charInsertPos ), display );
-                Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+                textInput.redrawTextInputField( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
             }
 
             if ( needRedrawListbox ) {
@@ -509,7 +477,7 @@ namespace Editor
                 display.render( area );
             }
             else {
-                display.render( fileNameRoi );
+                display.render( textInputRenderArea );
             }
         }
 
