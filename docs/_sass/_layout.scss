@@ -161,7 +161,6 @@ $body-font: "Asul";
       text-shadow: map-get($theme-map, header-text-shadow);
     }
 
-
     h1 {
       font-family: $hero-header-font, cursive;
       margin: 0.3em 0;
@@ -181,7 +180,11 @@ $body-font: "Asul";
       }
     }
 
-    h2, h3, h4, h5, h6 {
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       font-family: $header-font, serif;
     }
 
