@@ -1,6 +1,6 @@
-# [**fheroes2**](README.md) build and contribution guide
+# [fheroes2](README.md) build and contribution guide
 
-## Building the fheroes2 project
+## Building the fheroes2 Project
 
 Please follow the instructions below to be able to build the project from source:
 

@@ -1,4 +1,4 @@
-# Nintendo Switch port of [fheroes2](README.md) project
+# Nintendo Switch Port of [fheroes2](README.md) Project
 
 It's a homebrew app, so you need to be running custom firmware for it to work.
 
