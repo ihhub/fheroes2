@@ -789,6 +789,8 @@ namespace AudioManager
                 Music::setMidiSoundFonts( midiSoundFonts );
             }
 
+            // Some platforms (e.g. Linux) may have their own timidity.cfg file, the path to which is set when building the corresponding library, don't overwrite this
+            // path if we don't have our own file
             if ( !timidityCfgPath.empty() ) {
                 Music::setMidiTimidityCfg( timidityCfgPath );
             }
