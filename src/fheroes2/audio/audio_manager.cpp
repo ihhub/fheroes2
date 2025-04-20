@@ -786,11 +786,11 @@ namespace AudioManager
 
             // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
             if ( !midiSoundFonts.empty() ) {
-                Music::SetMidiSoundFonts( midiSoundFonts );
+                Music::setMidiSoundFonts( midiSoundFonts );
             }
 
             if ( !timidityCfgPath.empty() ) {
-                Music::SetMidiTimidityCfg( timidityCfgPath );
+                Music::setMidiTimidityCfg( timidityCfgPath );
             }
 
             Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );

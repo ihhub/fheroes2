@@ -1108,7 +1108,7 @@ bool Music::isPlaying()
     return isInitialized && Mix_PlayingMusic();
 }
 
-void Music::SetMidiSoundFonts( const ListFiles & files )
+void Music::setMidiSoundFonts( const ListFiles & files )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -1135,7 +1135,7 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     }
 }
 
-void Music::SetMidiTimidityCfg( const std::string & timidityCfgPath )
+void Music::setMidiTimidityCfg( const std::string & timidityCfgPath )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
