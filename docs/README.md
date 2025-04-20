@@ -20,7 +20,7 @@ You can find a complete list of all of our changes and enhancements in [**its ow
 </div>
 <!-- markdownlint-enable MD033 -->
 
-## Download and install
+## Download and Install
 
 Please follow the [**installation guide**](INSTALL.md) to download and install fheroes2.
 
