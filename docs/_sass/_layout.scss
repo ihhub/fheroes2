@@ -1,7 +1,8 @@
 $mobile-width: 768px;
 $tablet-width: 1024px;
 $container-width: 1200px;
-$header-font: "Jacquard 24";
+$hero-header-font: "Jacquard 24";
+$header-font: "Lancelot";
 $body-font: "Zain";
 
 // Mixin for responsive table styles
@@ -119,13 +120,20 @@ $body-font: "Zain";
       }
     }
 
+    h1 {
+      font-family: $hero-header-font, cursive;
+    }
+
+    h2, h3, h4, h5, h6 {
+      font-family: $header-font, serif;
+    }
+
     h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
-      font-family: $header-font, cursive;
       color: map-get($theme-map, header-color);
       font-weight: 400;
       font-style: normal;

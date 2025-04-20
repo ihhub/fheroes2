@@ -17,7 +17,7 @@ You can find a complete list of all of our changes and enhancements in [**its ow
     <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
 </p>
 
-## Download and install
+## Download and Install
 
 Please follow the [**installation guide**](docs/INSTALL.md) to download and install fheroes2.
 
