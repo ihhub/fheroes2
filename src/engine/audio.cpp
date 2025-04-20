@@ -1134,3 +1134,16 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
         ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }
+
+void Music::SetMidiTimidityCfg( const std::string & timidityCfgPath )
+{
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+    if ( Mix_SetTimidityCfg( System::encLocalToUTF8( timidityCfgPath ).c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << timidityCfgPath << ". The error: " << Mix_GetError() )
+    }
+}

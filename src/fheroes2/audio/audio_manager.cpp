@@ -778,7 +778,8 @@ namespace
 
 namespace AudioManager
 {
-    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts )
+    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts,
+                                        const std::string & timidityCfgPath )
     {
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
@@ -786,6 +787,10 @@ namespace AudioManager
             // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
             if ( !midiSoundFonts.empty() ) {
                 Music::SetMidiSoundFonts( midiSoundFonts );
+            }
+
+            if ( !timidityCfgPath.empty() ) {
+                Music::SetMidiTimidityCfg( timidityCfgPath );
             }
 
             Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );
