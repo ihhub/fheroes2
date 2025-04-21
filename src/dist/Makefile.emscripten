@@ -32,7 +32,7 @@ CCFLAGS := $(CCFLAGS) \
 LDFLAGS := $(LDFLAGS) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
 	--preload-file ../../../files/lang/@/files/lang/ \
-	--preload-file ../../../files/timidity/@/etc/ \
+	--preload-file ../../../files/timidity/@/files/timidity/ \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=64kb \

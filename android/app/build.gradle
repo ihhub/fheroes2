@@ -104,7 +104,7 @@ tasks.register('copyTimidity', Copy) {
         include 'instruments/*.pat'
         include 'timidity.cfg'
     }
-    into 'src/main/assets'
+    into 'src/main/assets/files/timidity'
 }
 
 tasks.register('copyTranslations', Copy) {
