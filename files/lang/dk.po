@@ -4770,7 +4770,7 @@ msgid "Map Name"
 msgstr "Kortnavn"
 
 msgid "Click to change the description of the current map."
-msgstr "Klik for at ændre beskrivelsen af ​​det aktuelle kort."
+msgstr "Klik for at ændre beskrivelsen af det aktuelle kort."
 
 msgid "Click to change the victory condition of the current map."
 msgstr "Klik for at ændre sejrstilstanden for det aktuelle kort."
