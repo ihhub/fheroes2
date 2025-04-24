@@ -1,4 +1,4 @@
-# PlayStation Vita port of [**fheroes2**](README.md) project
+# PlayStation Vita Port of [fheroes2](README.md) Project
 
 ## Install
 
@@ -54,7 +54,7 @@ Text input is done with D-Pad.
 * Up - Previous character
 * R1, L1 - Switch current character between uppercase/lowercase
 
-## Vita specific options
+## Vita Specific Options
 
 Pointer movement speed can be changed with 'gamepad_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
 

@@ -1,0 +1,8 @@
+_site
+
+node_modules
+
+# Gemfile
+Gemfile
+Gemfile.lock
+Gemfile.dev.lock
