@@ -1108,7 +1108,7 @@ bool Music::isPlaying()
     return isInitialized && Mix_PlayingMusic();
 }
 
-void Music::SetMidiSoundFonts( const ListFiles & files )
+void Music::setMidiSoundFonts( const ListFiles & files )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -1133,4 +1133,21 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     if ( Mix_SetSoundFonts( System::encLocalToUTF8( filePaths ).c_str() ) == 0 ) {
         ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
+}
+
+void Music::setMidiTimidityCfg( const std::string & path )
+{
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+#if SDL_MIXER_VERSION_ATLEAST( 2, 6, 0 )
+    if ( Mix_SetTimidityCfg( System::encLocalToUTF8( path ).c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: " << Mix_GetError() )
+    }
+#else
+    ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: operation not supported" )
+#endif
 }

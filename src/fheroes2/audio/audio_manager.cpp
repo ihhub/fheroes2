@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -778,14 +778,20 @@ namespace
 
 namespace AudioManager
 {
-    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts )
+    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts,
+                                        const std::string & timidityCfgPath )
     {
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
 
             // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
             if ( !midiSoundFonts.empty() ) {
-                Music::SetMidiSoundFonts( midiSoundFonts );
+                Music::setMidiSoundFonts( midiSoundFonts );
+            }
+
+            // Some platforms (e.g. Linux) may have their own timidity.cfg file, don't overwrite the path to this file if we don't have our own
+            if ( !timidityCfgPath.empty() ) {
+                Music::setMidiTimidityCfg( timidityCfgPath );
             }
 
             Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );
