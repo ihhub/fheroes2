@@ -1,9 +1,9 @@
-# [**fheroes2**](README.md) translation guide
+# [fheroes2](README.md) Translation Guide
 
 This project uses portable object (PO) files to handle localization in various languages. The PO files are located in the `files/lang`
 subdirectory of the project source tree. The current instruction is designed for Linux, MacOS and Windows users.
 
-## Current status
+## Current Status
 
 ![Belarusian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_be.json)
 ![Bulgarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_bg.json)
@@ -27,7 +27,7 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
 ![Vietnamese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_vi.json)
 
-## Adding new translations/localizations
+## Adding New Translations/Localizations
 
 If you want to add a new localization, you will first need to add it to the `SupportedLanguage` list/enumeration in the source code.
 Afterwards, a new PO file for it will need to be added. It will have to be named according to the ISO standard's two-character
@@ -35,30 +35,30 @@ language abbreviations. Then to have font support, you will have to specify what
 the language to the font generation code found in `src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
 been implemented, then code for that will need to be written.
 
-## Editing translations - Before you start
+## Editing Translations - Before You Start
 
 Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used
 for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating.
 After you finish your work, and you are ready to share it, you will have to prepare a pull request.
 
-### Forking the fheroes2 repository
+### Forking the fheroes2 Repository
 
 A fork is your copy of the fheroes2 repository. It gives you a safe environment to prepare and test your changes.
 You can read here how to [**create a fork**](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
-### Translation editing software
+### Translation Editing Software
 
 We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to
 edit translations. Currently all implemented languages adhere to a standardized font encoding/charset.
 
-## Editing translations - For the first time or again
+## Editing Translations - For the First Time or Again
 
-### Syncing your fork
+### Syncing Your Fork
 
 Before you start working on the first or next translation, make sure that your fork has all the recent changes from the fheroes2 repo.
 To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
-### Creating a branch
+### Creating a Branch
 
 Next you will set up an environment for working on your translation, in addition to testing and sharing your changes.
 Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
@@ -66,7 +66,7 @@ Read more [**about branches**](https://docs.github.com/en/pull-requests/collabor
 To create a branch, please follow GitHub's instructions on
 [**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
-### Submitting translations
+### Submitting Translations
 
 Finally you will use your translation software of choice to make changes to the translation. All original translatable strings are
 located in the source code of the project. If you need to clarify where this string is being used you can search for it.
@@ -76,7 +76,7 @@ The string below, for example, can be translated in PO files:
 _( "Are you sure you want to quit?" )
 ```
 
-### Testing your changes
+### Testing Your Changes
 
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
@@ -105,7 +105,7 @@ set to.
 For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1251. Later when submitting
 a pull request with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
 
-### Sharing your translation work
+### Sharing Your Translation Work
 
 When you are satisfied with your work, you can proceed with sharing it. The first step is to commit your work into the branch you made of
 your own fheroes2 fork. Then, create a pull request that proposes to introduce your changes into the fheroes2 repository.
@@ -136,7 +136,7 @@ example creature names or castle buildings.
 
 </details>
 
-## Updating PO templates and translatable strings in PO files
+## Updating PO Templates and Translatable Strings in PO Files
 
 Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text. If for whatever reason
 you still need to update strings locally, this can be achieved by running the command below in `src/dist/fheroes2` to generate a new portable object

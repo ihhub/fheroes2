@@ -140,6 +140,9 @@ namespace fheroes2
         // Returns number of multi-line text rows limited by width of a line. It can be 0 if the text is empty.
         virtual int32_t rows( const int32_t maxWidth ) const = 0;
 
+        // Returns the text line ROI relative to the text line begin. It analyzes offset and size of all characters in the text.
+        virtual Rect area() const = 0;
+
         // Draw text as a single line text.
         void draw( const int32_t x, const int32_t y, Image & output ) const
         {
@@ -215,6 +218,8 @@ namespace fheroes2
         int32_t height( const int32_t maxWidth ) const override;
 
         int32_t rows( const int32_t maxWidth ) const override;
+
+        Rect area() const override;
 
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
@@ -347,6 +352,8 @@ namespace fheroes2
         int32_t height( const int32_t maxWidth ) const override;
 
         int32_t rows( const int32_t maxWidth ) const override;
+
+        Rect area() const override;
 
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;

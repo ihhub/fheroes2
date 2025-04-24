@@ -337,6 +337,11 @@ namespace
             return _currentTrackPlaybackMode;
         }
 
+        bool isCurrentTrackBeingHalted() const
+        {
+            return _isCurrentTrackBeingHalted;
+        }
+
         // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         uint64_t getCurrentTrackChangeCounter() const
         {
@@ -354,6 +359,7 @@ namespace
 
             _currentTrackUID = musicUID;
             _currentTrackPlaybackMode = trackPlaybackMode;
+            _isCurrentTrackBeingHalted = false;
 
             ++_currentTrackChangeCounter;
         }
@@ -364,8 +370,14 @@ namespace
 
             _currentTrackUID = 0;
             _currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
+            _isCurrentTrackBeingHalted = false;
 
             ++_currentTrackChangeCounter;
+        }
+
+        void prepareToHaltCurrentTrack()
+        {
+            _isCurrentTrackBeingHalted = true;
         }
 
         void resetTimer()
@@ -401,6 +413,7 @@ namespace
 
         uint64_t _currentTrackUID{ 0 };
         Music::PlaybackMode _currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
+        bool _isCurrentTrackBeingHalted{ false };
 
         // This counter should be incremented every time the current track or its playback mode changes
         std::atomic<uint64_t> _currentTrackChangeCounter{ 0 };
@@ -448,6 +461,11 @@ namespace
 
             // The current track managed to change during the start of this task
             if ( _taskTrackChangeCounter != musicTrackManager.getCurrentTrackChangeCounter() ) {
+                return;
+            }
+
+            // The current track has been intentionally halted and should not be restarted
+            if ( musicTrackManager.isCurrentTrackBeingHalted() ) {
                 return;
             }
 
@@ -1057,6 +1075,12 @@ void Music::Stop()
         return;
     }
 
+    // Some platforms (such as WebAssembly) may not support background threads. In this case,
+    // the Mix_HookMusicFinished()'s callback can trigger an immediate restart of playback of
+    // the stopped track. This is not what we want, so we should notify that this track will
+    // be intentionally stopped and should not be restarted.
+    musicTrackManager.prepareToHaltCurrentTrack();
+
     // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
     // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
@@ -1081,10 +1105,10 @@ bool Music::isPlaying()
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    return !musicTrackManager.getCurrentTrack().expired() && Mix_PlayingMusic();
+    return isInitialized && Mix_PlayingMusic();
 }
 
-void Music::SetMidiSoundFonts( const ListFiles & files )
+void Music::setMidiSoundFonts( const ListFiles & files )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -1109,4 +1133,21 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     if ( Mix_SetSoundFonts( System::encLocalToUTF8( filePaths ).c_str() ) == 0 ) {
         ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
+}
+
+void Music::setMidiTimidityCfg( const std::string & path )
+{
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+#if SDL_MIXER_VERSION_ATLEAST( 2, 6, 0 )
+    if ( Mix_SetTimidityCfg( System::encLocalToUTF8( path ).c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: " << Mix_GetError() )
+    }
+#else
+    ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: operation not supported" )
+#endif
 }

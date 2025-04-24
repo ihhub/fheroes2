@@ -193,6 +193,35 @@ namespace
         return width;
     }
 
+    fheroes2::Rect getTextLineArea( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler )
+    {
+        assert( data != nullptr && size > 0 );
+
+        const uint8_t * dataEnd = data + size;
+
+        const fheroes2::Sprite & firstCharSprite = charHandler.getSprite( *data );
+        fheroes2::Rect area( firstCharSprite.x(), firstCharSprite.y(), firstCharSprite.width(), firstCharSprite.height() );
+        ++data;
+
+        for ( ; data != dataEnd; ++data ) {
+            const fheroes2::Sprite & sprite = charHandler.getSprite( *data );
+
+            if ( const int32_t spriteY = sprite.y(); spriteY < area.y ) {
+                // This character sprite is drawn higher than all previous - update `height` and `y`.
+                area.height += area.y - spriteY;
+                area.y = spriteY;
+                area.height = std::max( area.height, sprite.height() );
+            }
+            else {
+                area.height = std::max( area.height, spriteY - area.y + sprite.height() );
+            }
+
+            area.width += sprite.x() + sprite.width();
+        }
+
+        return area;
+    }
+
     int32_t getMaxCharacterCount( const uint8_t * data, const int32_t size, const fheroes2::FontCharHandler & charHandler, const int32_t maxWidth )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
@@ -323,7 +352,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
     int32_t Text::width() const
     {
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
@@ -332,7 +361,7 @@ namespace fheroes2
     // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
     int32_t Text::height() const
     {
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         return getFontHeight( _fontType.size );
     }
 
@@ -342,7 +371,7 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -385,7 +414,7 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
 
         std::vector<TextLineInfo> lineInfos;
@@ -400,11 +429,23 @@ namespace fheroes2
             return 0;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         std::vector<TextLineInfo> lineInfos;
         _getTextLineInfos( lineInfos, maxWidth, height(), false );
 
         return static_cast<int32_t>( lineInfos.size() );
+    }
+
+    Rect Text::area() const
+    {
+        if ( _text.empty() ) {
+            return {};
+        }
+
+        const auto languageSwitcher = getLanguageSwitcher( *this );
+        const fheroes2::FontCharHandler charHandler( _fontType );
+
+        return getTextLineArea( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
     }
 
     void Text::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
@@ -414,7 +455,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
         renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, charHandler );
@@ -432,7 +473,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
 
         std::vector<TextLineInfo> lineInfos;
         _getTextLineInfos( lineInfos, maxWidth, height(), false );
@@ -465,7 +506,7 @@ namespace fheroes2
             return;
         }
 
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
+        const auto languageSwitcher = getLanguageSwitcher( *this );
         const FontCharHandler charHandler( _fontType );
 
         const int32_t originalTextWidth
@@ -930,6 +971,36 @@ namespace fheroes2
         return static_cast<int32_t>( lineInfos.size() );
     }
 
+    Rect MultiFontText::area() const
+    {
+        Rect area;
+        bool isFirstText = true;
+
+        for ( const Text & text : _texts ) {
+            if ( isFirstText ) {
+                isFirstText = false;
+                area = text.area();
+                continue;
+            }
+
+            const fheroes2::Rect & textArea = text.area();
+
+            if ( textArea.y < area.y ) {
+                // This character sprite is drawn higher than all previous - update `height` and `y`.
+                area.height += area.y - textArea.y;
+                area.y = textArea.y;
+                area.height = std::max( area.height, textArea.height );
+            }
+            else {
+                area.height = std::max( area.height, textArea.y - area.y + textArea.height );
+            }
+
+            area.width += textArea.x + textArea.width;
+        }
+
+        return area;
+    }
+
     void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _texts.empty() ) {
@@ -941,7 +1012,7 @@ namespace fheroes2
 
         int32_t offsetX = x;
         for ( const Text & text : _texts ) {
-            const auto langugeSwitcher = getLanguageSwitcher( text );
+            const auto languageSwitcher = getLanguageSwitcher( text );
             const int32_t fontHeight = getFontHeight( text._fontType.size );
             const FontCharHandler charHandler( text._fontType );
 
@@ -986,7 +1057,7 @@ namespace fheroes2
         auto infoIter = lineInfos.cbegin();
 
         for ( const Text & singleText : _texts ) {
-            const auto langugeSwitcher = getLanguageSwitcher( singleText );
+            const auto languageSwitcher = getLanguageSwitcher( singleText );
             const uint8_t * data = reinterpret_cast<const uint8_t *>( singleText._text.data() );
 
             const uint8_t * dataEnd = data + singleText._text.size();
@@ -1025,7 +1096,7 @@ namespace fheroes2
     {
         const size_t textsCount = _texts.size();
         for ( size_t i = 0; i < textsCount; ++i ) {
-            const auto langugeSwitcher = getLanguageSwitcher( _texts[i] );
+            const auto languageSwitcher = getLanguageSwitcher( _texts[i] );
 
             // To properly render a multi-font text we must not ignore spaces at the end of a text entry which is not the last one.
             const bool isNotLastTextEntry = ( i != textsCount - 1 );
