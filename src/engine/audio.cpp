@@ -469,8 +469,7 @@ namespace
                 return;
             }
 
-            // REWIND_AND_PLAY_INFINITE should be handled by the SDL_Mixer itself
-            if ( musicTrackManager.getCurrentTrackPlaybackMode() != Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+            if ( musicTrackManager.getCurrentTrackPlaybackMode() == Music::PlaybackMode::PLAY_ONCE ) {
                 return;
             }
 
@@ -500,16 +499,7 @@ namespace
         musicRestartManager.restartCurrentMusicTrack();
     }
 
-    bool isMusicResumeSupported( const Mix_Music * mus )
-    {
-        assert( mus != nullptr );
-
-        const Mix_MusicType musicType = Mix_GetMusicType( mus );
-
-        return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
-    }
-
-    void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
+    void playMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode )
     {
         // This function should never be called if a music track is currently playing.
         // Thus we have a guarantee that the Mix_HookMusicFinished()'s callback will
@@ -528,34 +518,15 @@ namespace
             return;
         }
 
-        bool resumePlayback = false;
-        bool autoLoop = false;
-
-        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-            if ( isMusicResumeSupported( mus.get() ) ) {
-                resumePlayback = true;
-            }
-            else {
-                // It is impossible to resume this track, let's reflect it by changing the playback mode
-                playbackMode = Music::PlaybackMode::REWIND_AND_PLAY_INFINITE;
-                autoLoop = true;
-            }
-        }
-        else if ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE ) {
-            autoLoop = true;
-        }
-
         // Update the current track information while the music playback is not yet started, so the
         // Mix_HookMusicFinished()'s callback cannot be called
         musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
 
-        const int loopCount = autoLoop ? -1 : 0;
-
         int returnCode = -1;
 
         // Resume the music only if at least 1 second of the track has been played.
-        if ( resumePlayback && track->getPosition() > 1 ) {
-            returnCode = Mix_FadeInMusicPos( mus.get(), loopCount, musicFadeInMs, track->getPosition() );
+        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE && track->getPosition() > 1 ) {
+            returnCode = Mix_FadeInMusicPos( mus.get(), 0, musicFadeInMs, track->getPosition() );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to resume the music track. The error: " << Mix_GetError() )
@@ -567,7 +538,7 @@ namespace
         if ( returnCode != 0 ) {
             track->setPosition( 0 );
 
-            returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
+            returnCode = Mix_FadeInMusic( mus.get(), 0, musicFadeInMs );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to play the music track. The error: " << Mix_GetError() )
