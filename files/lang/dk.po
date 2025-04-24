@@ -4311,7 +4311,7 @@ msgid "Are you sure you want to overwrite the existing map?"
 msgstr "Er du sikker på, at du vil overskrive det eksisterende kort?"
 
 msgid "Map saved to: "
-msgstr "Kortet er gemt i:"
+msgstr "Kortet er gemt i: "
 
 msgid "Failed to save the map."
 msgstr "Kunne ikke gemme kortet."
