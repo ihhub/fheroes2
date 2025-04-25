@@ -98,7 +98,7 @@ jobs:
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \
                                files\\lang\\*.mo \
-                               files\\soundfonts\\* \
+                               files\\timidity\\* \
                                .\\script\\demo\\*.bat \
                                .\\script\\demo\\*.ps1 \
                                .\\script\\homm2\\*.bat \
