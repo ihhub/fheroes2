@@ -875,7 +875,7 @@ msgid ""
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
-"Dette kan afbrydes til enhver tid, ved enten at trykke på Auto Combat-"
+"Dette kan afbrydes til enhver tid, ved enten at trykke på autokamp-"
 "genvejstasten eller standardtasten Afbryd eller ved at udføre et venstre- "
 "eller højreklik, hvor som helst på spilskærmen."
 
