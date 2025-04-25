@@ -857,7 +857,7 @@ msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
-"AUTO\n"
+"AUTO-\n"
 "KAMP"
 
 msgid ""
