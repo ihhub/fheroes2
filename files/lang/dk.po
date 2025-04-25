@@ -4062,7 +4062,7 @@ msgid "Click to save the events."
 msgstr "Klik for at gemme begivenhederne."
 
 msgid "Add Event"
-msgstr "tilføj begivenhed"
+msgstr "Tilføj begivenhed"
 
 msgid "Add an additional event."
 msgstr "Tilføj endnu en begivenhed."
