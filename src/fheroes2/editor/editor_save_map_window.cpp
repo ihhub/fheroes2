@@ -295,8 +295,6 @@ namespace Editor
         fheroes2::TextInputField textInput( fileNameRoi, false, false, display );
         textInput.draw( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
 
-        const fheroes2::Rect textInputRenderArea = textInput.getOverallArea();
-
         // Render a button to open the Virtual Keyboard window.
         fheroes2::ButtonSprite buttonVirtualKB;
         background.renderCustomButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
@@ -476,7 +474,7 @@ namespace Editor
                 display.render( area );
             }
             else {
-                display.render( textInputRenderArea );
+                display.render( textInput.getOverallArea() );
             }
         }
 
