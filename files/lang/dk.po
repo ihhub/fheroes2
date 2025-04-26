@@ -4884,7 +4884,7 @@ msgid "Add Answer"
 msgstr "Tilføj svar"
 
 msgid "Add an additional answer for the question."
-msgstr "Tilføj endnu et svart på gåden."
+msgstr "Tilføj endnu et svar på gåden."
 
 msgid "Edit Answer"
 msgstr "Rediger svar"
