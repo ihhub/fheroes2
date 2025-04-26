@@ -150,7 +150,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        // Returns `true` when cursor redraw is needed.
+        // Returns `true` when rendering of this UI element is needed.
         bool eventProcessing();
 
         // Allow only to call `TextInput::set( std::string text, const int32_t cursorPosition )`.
