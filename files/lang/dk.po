@@ -4896,7 +4896,7 @@ msgid "Delete Answer"
 msgstr "Fjern svar"
 
 msgid "Delete an existing answer for the question."
-msgstr "Fjern en eksisterende svar på gåden."
+msgstr "Fjern et eksisterende svar på gåden."
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakter vil blive givet som belønning."
