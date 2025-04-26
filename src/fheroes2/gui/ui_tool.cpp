@@ -208,7 +208,7 @@ namespace fheroes2
         _isHidden = false;
     }
 
-    bool TextInputField::cursorBlinkProcessing()
+    bool TextInputField::eventProcessing()
     {
         if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
             return false;

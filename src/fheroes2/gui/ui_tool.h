@@ -151,7 +151,7 @@ namespace fheroes2
         }
 
         // Returns `true` when cursor redraw is needed.
-        bool cursorBlinkProcessing();
+        bool eventProcessing();
 
         // Allow only to call `TextInput::set( std::string text, const int32_t cursorPosition )`.
         using TextInput::set;

@@ -378,7 +378,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
             display.render( textInputRenderArea );
         }
-        else if ( textInput.cursorBlinkProcessing() ) {
+        else if ( textInput.eventProcessing() ) {
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
             display.render( textInput.getCursorRenderArea() );
         }

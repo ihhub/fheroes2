@@ -444,7 +444,7 @@ namespace Editor
             const bool needRedrawListbox = listbox.IsNeedRedraw();
 
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
-            if ( !needFileNameRedraw && textInput.cursorBlinkProcessing() ) {
+            if ( !needFileNameRedraw && textInput.eventProcessing() ) {
                 display.render( textInput.getCursorRenderArea() );
             }
 

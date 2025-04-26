@@ -250,9 +250,9 @@ namespace
             _renderInputArea();
         }
 
-        void cursorBlinkProcessing()
+        void eventProcessing()
         {
-            if ( _textUI && _textUI->cursorBlinkProcessing() ) {
+            if ( _textUI && _textUI->eventProcessing() ) {
                 _output.render( _textUI->getCursorRenderArea() );
             }
         }
@@ -976,7 +976,7 @@ namespace
             }
 
             // Text input cursor blink.
-            renderer.cursorBlinkProcessing();
+            renderer.eventProcessing();
         }
 
         return DialogAction::Close;
