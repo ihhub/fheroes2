@@ -308,8 +308,6 @@ namespace fheroes2
         // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
         using Text::drawInRoi;
 
-        const Sprite & getCursorSprite() const;
-
         void fitToOneRow( const int32_t maxWidth ) final;
 
     protected:
@@ -395,4 +393,6 @@ namespace fheroes2
 
     // This function will return the width in pixels of the truncation symbol for the given font type.
     int32_t getTruncationSymbolWidth( const fheroes2::FontType fontType );
+
+    const Sprite & getCursorSprite( const FontType type );
 }

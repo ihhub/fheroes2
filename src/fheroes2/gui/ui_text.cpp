@@ -723,12 +723,6 @@ namespace fheroes2
         }
     }
 
-    const Sprite & TextInput::getCursorSprite() const
-    {
-        const FontCharHandler charHandler( _fontType );
-        return charHandler.getSprite( cursorChar );
-    }
-
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
         assert( maxWidth > 0 );
@@ -1191,5 +1185,11 @@ namespace fheroes2
         }
 
         return iter->second;
+    }
+
+    const Sprite & getCursorSprite( const FontType type )
+    {
+        const FontCharHandler charHandler( type );
+        return charHandler.getSprite( cursorChar );
     }
 }
