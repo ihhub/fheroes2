@@ -248,7 +248,7 @@ namespace fheroes2
 
     size_t TextInputField::_getTextInputCursorPosition( const Point & pointerCursorOffset ) const
     {
-        if ( _text.empty() || _textInputArea.width < 1 || _textInputArea.y < 1 ) {
+        if ( _text.empty() || _textInputArea.width < 1 || _textInputArea.height < 1 ) {
             // The text is empty.
             return 0;
         }
