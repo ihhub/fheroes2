@@ -228,9 +228,7 @@ namespace fheroes2
             return false;
         }
 
-        _isCursorVisible = !_isCursorVisible;
-
-        if ( _isCursorVisible ) {
+        if ( _cursor.isHidden() ) {
             _cursor.show();
         }
         else {
@@ -257,7 +255,6 @@ namespace fheroes2
         _cursor.show();
 
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-        _isCursorVisible = true;
     }
 
     SystemInfoRenderer::SystemInfoRenderer()

@@ -174,7 +174,6 @@ namespace fheroes2
         ImageRestorer _background;
         Rect _textInputArea;
         bool _isCenterAligned{ false };
-        bool _isCursorVisible{ false };
         bool _isMultiLine{ false };
     };
 
