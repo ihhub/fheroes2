@@ -25,9 +25,10 @@ class CodeCopyManager
     static accessibility = null;
 
     // Static initialization method
-    static initialize() {
+    static initialize()
+    {
         // Initialize accessibility manager if not already initialized
-        if (!this.accessibility) {
+        if ( !this.accessibility ) {
             this.accessibility = new window.fheroes2.AccessibilityManager();
         }
 
@@ -108,6 +109,4 @@ class CodeCopyManager
 }
 
 // Initialize when the DOM is fully loaded
-document.addEventListener( "DOMContentLoaded", () => {
-    CodeCopyManager.initialize();
-} );
+document.addEventListener( "DOMContentLoaded", () => { CodeCopyManager.initialize(); } );
