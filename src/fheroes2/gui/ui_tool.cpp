@@ -226,8 +226,6 @@ namespace fheroes2
         return true;
     }
 
-    // size_t TextInputField::getCursorInTextPosition( const Point & mousePos ) const
-
     void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
     {
         _textCursor.hide();
