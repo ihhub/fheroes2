@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// Create the fheroes2 namespace if it doesn't exist
+window.fheroes2 = window.fheroes2 || {};
+
 // Utility class for handling common accessibility features
 class AccessibilityManager
 {
@@ -176,5 +179,5 @@ class AccessibilityManager
     }
 }
 
-// Export the accessibility manager
-window.AccessibilityManager = AccessibilityManager;
+// Export the accessibility manager to the fheroes2 namespace
+window.fheroes2.AccessibilityManager = AccessibilityManager;

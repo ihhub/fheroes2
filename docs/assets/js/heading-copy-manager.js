@@ -35,7 +35,7 @@ class HeadingCopyManager
     static initialize() {
         // Initialize accessibility manager if not already initialized
         if (!this.accessibility) {
-            this.accessibility = new AccessibilityManager();
+            this.accessibility = new window.fheroes2.AccessibilityManager();
         }
 
         // Apply to all headings

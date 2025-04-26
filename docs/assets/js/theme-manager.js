@@ -27,7 +27,7 @@ class ThemeManager
         this.themeKey = "theme";
         this.darkTheme = "dark";
         this.lightTheme = "light";
-        this.accessibility = window.AccessibilityManager ? new window.AccessibilityManager() : null;
+        this.accessibility = window.fheroes2.AccessibilityManager ? new window.fheroes2.AccessibilityManager() : null;
 
         this.init();
     }
