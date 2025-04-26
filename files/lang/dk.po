@@ -5233,7 +5233,7 @@ msgid "hotkey|toggle text support mode"
 msgstr "Tekstunderstøttelsestilstand"
 
 msgid "hotkey|toggle developer mode"
-msgstr "udviklertilstand (til/fra)"
+msgstr "Udviklertilstand (til/fra)"
 
 msgid "hotkey|new game"
 msgstr "Nyt spil"
