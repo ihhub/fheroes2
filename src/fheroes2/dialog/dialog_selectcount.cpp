@@ -240,7 +240,6 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
 
     fheroes2::TextInputField textInput( textInputArea, isMultiLine, true, display, textLanguage );
-    const fheroes2::Rect textInputRenderArea( textInput.getOverallArea() );
     textInput.draw( result, static_cast<int32_t>( charInsertPos ) );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
@@ -376,7 +375,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
             textInput.draw( result, static_cast<int32_t>( charInsertPos ) );
 
-            display.render( textInputRenderArea );
+            display.render( textInput.getOverallArea() );
         }
         else if ( textInput.eventProcessing() ) {
             // Text input blinking cursor render is done when the render of the filename (with cursor) is not planned.
