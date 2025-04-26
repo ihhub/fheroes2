@@ -68,8 +68,8 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
-                             const fheroes2::SupportedLanguage language )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const Color::PlayerColor humanPlayerColors,
+                             const Color::PlayerColor computerPlayerColors, const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
@@ -264,7 +264,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = humanCheckbox->getColor();
+                    const Color::PlayerColor color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
@@ -293,7 +293,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = computerCheckbox->getColor();
+                    const Color::PlayerColor color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }

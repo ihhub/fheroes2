@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,18 +77,18 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
     const Settings & conf = Settings::Get();
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
-    const int player1Color = player1.GetColor();
-    const int player2Color = player2.GetColor();
+    const Color::PlayerColor player1Color = player1.GetColor();
+    const Color::PlayerColor player2Color = player2.GetColor();
 
     bool swap = false;
 
     if ( player1.isControlAI() == player2.isControlAI() ) {
         swap = true;
     }
-    else if ( ( player1Color & mapInfo.AllowCompHumanColors() ) && ( player2Color & mapInfo.AllowCompHumanColors() ) ) {
-        const int humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    else if ( Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player1Color ) && Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player2Color ) ) {
+        const Color::PlayerColor humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
-        if ( humans & player1Color ) {
+        if ( Color::haveCommonColors( humans, player1Color ) ) {
             Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
             Players::SetPlayerControl( player2Color, CONTROL_HUMAN );
         }
@@ -115,24 +115,11 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
             player2.SetRace( player1Race );
         }
 
-        const std::string player1Name = player1.GetName();
-        const std::string player2Name = player2.GetName();
+        std::string player1NewName = player2.isDefaultName() ? player1.GetDefaultName() : player2.GetName();
+        std::string player2NewName = player1.isDefaultName() ? player2.GetDefaultName() : player1.GetName();
 
-        const std::string player1DefaultName = player1.GetDefaultName();
-        const std::string player2DefaultName = player2.GetDefaultName();
-
-        if ( player2Name == player2DefaultName ) {
-            player1.SetName( player1DefaultName );
-        }
-        else {
-            player1.SetName( player2Name );
-        }
-        if ( player1Name == player1DefaultName ) {
-            player2.SetName( player2DefaultName );
-        }
-        else {
-            player2.SetName( player1Name );
-        }
+        player1.SetName( std::move( player1NewName ) );
+        player2.SetName( std::move( player2NewName ) );
     }
 
     return swap;
@@ -189,18 +176,18 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
-    const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    const Color::PlayerColor humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
         const PlayerInfo & info = *iter;
 
         uint32_t playerTypeIcnIndex = 0;
-        if ( humanColors & info.player->GetColor() ) {
+        if ( Color::haveCommonColors( humanColors, info.player->GetColor() ) ) {
             // Current human.
             playerTypeIcnIndex = 9 + Color::GetIndex( info.player->GetColor() );
         }
-        else if ( mapInfo.ComputerOnlyColors() & info.player->GetColor() ) {
+        else if ( Color::haveCommonColors( mapInfo.ComputerOnlyColors(), info.player->GetColor() ) ) {
             // Computer only.
             playerTypeIcnIndex = 15 + Color::GetIndex( info.player->GetColor() );
         }
@@ -257,7 +244,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;
-        if ( humanColors & info.player->GetColor() ) {
+        if ( Color::haveCommonColors( humanColors, info.player->GetColor() ) ) {
             switch ( info.player->getHandicapStatus() ) {
             case Player::HandicapStatus::NONE:
                 handicapIcnIndex = 0;
@@ -361,10 +348,10 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             }
         }
         else {
-            const int playerColor = player->GetColor();
+            const Color::PlayerColor playerColor = player->GetColor();
 
-            if ( playerColor & fi.colorsAvailableForHumans ) {
-                const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+            if ( Color::haveCommonColors( fi.colorsAvailableForHumans, playerColor ) ) {
+                const Color::PlayerColor human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( playerColor != human ) {
                     Player * currentPlayer = Players::Get( human );
@@ -391,7 +378,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
         std::string res = player->GetName();
         if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ str, fheroes2::FontType::normalWhite() }, res, 0, false, {} ) && !res.empty() ) {
-            player->SetName( res );
+            player->SetName( std::move( res ) );
         }
 
         return true;

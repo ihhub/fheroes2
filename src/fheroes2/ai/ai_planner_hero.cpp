@@ -112,7 +112,7 @@ namespace
         assert( castle != nullptr );
 
         const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-        const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+        const bool isSinglePlayer = ( Color::Count( Players::HumanColors() ) == 1 );
 
         if ( isSinglePlayer && ( mapInfo.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == mapInfo.LossMapsPositionObject() ) {
             // It is a loss town condition for human.
@@ -358,10 +358,10 @@ namespace
             return false;
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
+            return kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
+            return !kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -548,7 +548,7 @@ namespace
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
-            if ( Color::NONE == getColorFromTile( tile ) ) {
+            if ( getColorFromTile( tile ) == Color::PlayerColor::NONE ) {
                 return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
@@ -1532,7 +1532,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_HUT_OF_MAGI: {
         const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
         int fogCountToUncover = 0;
-        const int heroColor = hero.GetColor();
+        const Color::PlayerColor heroColor = hero.GetColor();
         const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
         for ( const int32_t eyeIndex : eyeMagiIndexes ) {

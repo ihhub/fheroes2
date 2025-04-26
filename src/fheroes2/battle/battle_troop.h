@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,6 +39,11 @@
 
 class Spell;
 class HeroBase;
+
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
 
 namespace Rand
 {
@@ -147,17 +152,17 @@ namespace Battle
         uint32_t GetAttack() const override;
         uint32_t GetDefense() const override;
 
-        int GetArmyColor() const
+        Color::PlayerColor GetArmyColor() const
         {
             return GetColor();
         }
 
         // Returns the current color of the unit according to its current combat state (the unit
         // may be under a spell that changes its affiliation).
-        int GetCurrentColor() const;
+        Color::PlayerColor GetCurrentColor() const;
         // Returns the current unit color (if valid, the unit's color can be invalid if the unit
         // is under the Berserker spell), otherwise returns the color of the unit's army.
-        int GetCurrentOrArmyColor() const;
+        Color::PlayerColor GetCurrentOrArmyColor() const;
 
         int GetControl() const override;
         int GetCurrentControl() const;

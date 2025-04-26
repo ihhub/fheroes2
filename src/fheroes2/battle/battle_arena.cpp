@@ -49,7 +49,6 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
-#include "color.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -203,7 +202,7 @@ namespace
         return result;
     }
 
-    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const int preferredColor )
+    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const Color::PlayerColor preferredColor )
     {
         Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
         Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
@@ -221,7 +220,7 @@ namespace
         return result;
     }
 
-    void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, int preferredColor,
+    void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, Color::PlayerColor preferredColor,
                              const Battle::Units & orderHistory, Battle::Units & orderOfUnits )
     {
         orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
@@ -505,7 +504,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoCombatColors ) ) {
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || Color::haveCommonColors( _autoCombatColors, _currentUnit->GetCurrentColor() ) ) {
                 AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
@@ -798,28 +797,28 @@ HeroBase * Battle::Arena::GetCommander2() const
     return _army2->GetCommander();
 }
 
-int Battle::Arena::GetArmy1Color() const
+Color::PlayerColor Battle::Arena::GetArmy1Color() const
 {
     return _army1->GetColor();
 }
 
-int Battle::Arena::GetArmy2Color() const
+Color::PlayerColor Battle::Arena::GetArmy2Color() const
 {
     return _army2->GetColor();
 }
 
-int Battle::Arena::GetCurrentColor() const
+Color::PlayerColor Battle::Arena::GetCurrentColor() const
 {
     // This method should never be called in cases where there may not be an active unit
     if ( _currentUnit == nullptr ) {
         assert( 0 );
-        return Color::NONE;
+        return Color::PlayerColor::NONE;
     }
 
     return _currentUnit->GetCurrentOrArmyColor();
 }
 
-int Battle::Arena::GetOppositeColor( const int col ) const
+Color::PlayerColor Battle::Arena::GetOppositeColor( const Color::PlayerColor col ) const
 {
     return col == GetArmy1Color() ? GetArmy2Color() : GetArmy1Color();
 }
@@ -864,7 +863,7 @@ const SpellStorage & Battle::Arena::GetUsedSpells() const
     return _usedSpells;
 }
 
-int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
+int32_t Battle::Arena::GetFreePositionNearHero( const Color::PlayerColor heroColor ) const
 {
     std::vector<int> cellIds;
     if ( _army1->GetColor() == heroColor ) {
@@ -892,14 +891,14 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
     return -1;
 }
 
-bool Battle::Arena::CanSurrenderOpponent( int color ) const
+bool Battle::Arena::CanSurrenderOpponent( Color::PlayerColor color ) const
 {
     const HeroBase * hero = getCommander( color );
     const HeroBase * enemyHero = getEnemyCommander( color );
     return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() );
 }
 
-bool Battle::Arena::CanRetreatOpponent( int color ) const
+bool Battle::Arena::CanRetreatOpponent( const Color::PlayerColor color ) const
 {
     const HeroBase * hero = getCommander( color );
     return hero && hero->isHeroes() && ( color == _army1->GetColor() || hero->inCastle() == nullptr );
@@ -1288,12 +1287,12 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
     return 0;
 }
 
-const HeroBase * Battle::Arena::getCommander( const int color ) const
+const HeroBase * Battle::Arena::getCommander( const Color::PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? _army1->GetCommander() : _army2->GetCommander();
 }
 
-const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
+const HeroBase * Battle::Arena::getEnemyCommander( const Color::PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? _army2->GetCommander() : _army1->GetCommander();
 }
@@ -1401,22 +1400,12 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     return true;
 }
 
-Battle::Force & Battle::Arena::GetForce1() const
-{
-    return *_army1;
-}
-
-Battle::Force & Battle::Arena::GetForce2() const
-{
-    return *_army2;
-}
-
-Battle::Force & Battle::Arena::getForce( const int color ) const
+Battle::Force & Battle::Arena::getForce( const Color::PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? *_army1 : *_army2;
 }
 
-Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
+Battle::Force & Battle::Arena::getEnemyForce( const Color::PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? *_army2 : *_army1;
 }
@@ -1426,18 +1415,13 @@ Battle::Force & Battle::Arena::GetCurrentForce() const
     return getForce( GetCurrentColor() );
 }
 
-Battle::Result & Battle::Arena::GetResult()
-{
-    return result_game;
-}
-
 bool Battle::Arena::AutoCombatInProgress() const
 {
     if ( _currentUnit == nullptr ) {
         return false;
     }
 
-    if ( _autoCombatColors & GetCurrentColor() ) {
+    if ( Color::haveCommonColors( _autoCombatColors, GetCurrentColor() ) ) {
         // Auto combat mode cannot be enabled for a player controlled by the AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
@@ -1463,7 +1447,7 @@ bool Battle::Arena::EnemyOfAIHasAutoCombatInProgress() const
         return false;
     }
 
-    return ( _autoCombatColors & enemyForce.GetColor() );
+    return Color::haveCommonColors( _autoCombatColors, enemyForce.GetColor() );
 }
 
 bool Battle::Arena::CanToggleAutoCombat() const

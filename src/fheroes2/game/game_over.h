@@ -31,6 +31,11 @@
 class IStreamBase;
 class OStreamBase;
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace GameOver
 {
     enum : uint32_t
@@ -87,7 +92,7 @@ namespace GameOver
 
         Result();
 
-        int colors;
+        Color::PlayerColor _colors;
         uint32_t result;
     };
 

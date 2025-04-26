@@ -30,6 +30,11 @@
 #include "maps_fileinfo.h"
 #include "math_base.h"
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace fheroes2
 {
     class Display;
@@ -93,7 +98,7 @@ private:
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
     static void _renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY );
-    static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t colors );
+    static const fheroes2::Sprite & _getPlayersCountIcon( const Color::PlayerColor colors );
     static const fheroes2::Sprite & _getMapTypeIcon( const GameVersion version );
     static const fheroes2::Sprite & _getWinConditionsIcon( const uint8_t condition );
     static const fheroes2::Sprite & _getLossConditionsIcon( const uint8_t condition );

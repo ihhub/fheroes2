@@ -40,6 +40,11 @@
 class IStreamBase;
 class OStreamBase;
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace fheroes2
 {
     class Image;
@@ -82,7 +87,7 @@ public:
     };
 
     virtual const std::string & GetName() const = 0;
-    virtual int GetColor() const = 0;
+    virtual Color::PlayerColor GetColor() const = 0;
     int GetControl() const override = 0;
     virtual bool isValid() const = 0;
 

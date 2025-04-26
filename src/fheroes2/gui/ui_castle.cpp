@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,20 +58,20 @@ namespace
         return output;
     }
 
-    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const int playerColor )
+    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const Color::PlayerColor playerColor )
     {
         switch ( playerColor ) {
-        case Color::BLUE:
+        case Color::PlayerColor::BLUE:
             return getModifiedPalette( inputStartId, inputLength, 63, 16 + 6 );
-        case Color::GREEN:
+        case Color::PlayerColor::GREEN:
             return getModifiedPalette( inputStartId, inputLength, 85, 16 + 7 );
-        case Color::RED:
+        case Color::PlayerColor::RED:
             return getModifiedPalette( inputStartId, inputLength, 175, 16 + 7 );
-        case Color::YELLOW:
+        case Color::PlayerColor::YELLOW:
             return getModifiedPalette( inputStartId, inputLength, 108, 16 + 7 );
-        case Color::ORANGE:
+        case Color::PlayerColor::ORANGE:
             return getModifiedPalette( inputStartId, inputLength, 199, 16 );
-        case Color::PURPLE:
+        case Color::PlayerColor::PURPLE:
             return getModifiedPalette( inputStartId, inputLength, 132, 16 + 5 );
         default:
             // Did you add a new color? Please add the logic above.
@@ -133,7 +133,7 @@ namespace
         return {};
     }
 
-    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const int32_t colorId )
+    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const Color::PlayerColor colorId )
     {
         const std::vector<fheroes2::Rect> regions = getColorEffectiveAreas( icnId, icnIndex );
         const std::vector<uint8_t> palette = getModifiedPaletteByPlayerColor( originalCastleFlagStartColorId, originalCastleFlagColorLength, colorId );
@@ -193,23 +193,22 @@ namespace fheroes2
         return 1;
     }
 
-    uint32_t getCastleLeftFlagIcnIndex( const int color )
+    uint32_t getCastleLeftFlagIcnIndex( const Color::PlayerColor color )
     {
         switch ( color ) {
-        case Color::BLUE:
+        case Color::PlayerColor::BLUE:
             return 0;
-        case Color::GREEN:
+        case Color::PlayerColor::GREEN:
             return 2;
-        case Color::RED:
+        case Color::PlayerColor::RED:
             return 4;
-            break;
-        case Color::YELLOW:
+        case Color::PlayerColor::YELLOW:
             return 6;
-        case Color::ORANGE:
+        case Color::PlayerColor::ORANGE:
             return 8;
-        case Color::PURPLE:
+        case Color::PlayerColor::PURPLE:
             return 10;
-        case Color::NONE:
+        case Color::PlayerColor::NONE:
             return 12;
         default:
             // Have you added a new player color? Update the logic above.

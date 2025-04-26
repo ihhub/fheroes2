@@ -627,7 +627,7 @@ void AI::BattlePlanner::BattleTurn( Battle::Arena & arena, const Battle::Unit & 
 
 bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Battle::Actions & actions )
 {
-    const int currentColor = arena.GetCurrentColor();
+    const Color::PlayerColor currentColor = arena.GetCurrentColor();
 
     // Not the attacker's turn, no further checks
     if ( currentColor != arena.GetArmy1Color() ) {
@@ -663,7 +663,7 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
         if ( arena.AutoCombatInProgress() && Battle::Arena::GetInterface() != nullptr ) {
             assert( arena.CanToggleAutoCombat() );
 
-            actions.emplace_back( Battle::Command::TOGGLE_AUTO_COMBAT, currentColor );
+            actions.emplace_back( Battle::Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<Color::PlayerColor>>( currentColor ) );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto combat is turned off" )
         }

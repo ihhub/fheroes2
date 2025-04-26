@@ -1400,26 +1400,41 @@ namespace Maps
                                                                        : Troop( getMonsterFromTile( tile ), getMonsterCountFromTile( tile ) );
     }
 
-    int getColorFromTile( const Tile & tile )
+    Color::PlayerColor getColorFromTile( const Tile & tile )
+    {
+        return world.ColorCapturedObject( tile.GetIndex() );
+    }
+
+    int getBarrierColorFromTile( const Tile & tile )
     {
         switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT:
             return static_cast<int>( tile.metadata()[0] );
         default:
-            return world.ColorCapturedObject( tile.GetIndex() );
+            // Have you added a new Barrier or Traveller Tent object? Update the logic above!
+            assert( 0 );
+
+            return 0;
         }
     }
 
-    void setColorOnTile( Tile & tile, const int color )
+    void setColorOnTile( const Tile & tile, const Color::PlayerColor color )
+    {
+        world.CaptureObject( tile.GetIndex(), color );
+    }
+
+    void setBarrierColorOnTile( Tile & tile, const int barrierColor )
     {
         switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT:
-            tile.metadata()[0] = color;
+            tile.metadata()[0] = static_cast<uint32_t>( barrierColor );
             break;
         default:
-            world.CaptureObject( tile.GetIndex(), color );
+            // Have you added a new Barrier or Traveller Tent object? Update the logic above!
+            assert( 0 );
+
             break;
         }
     }
@@ -1603,7 +1618,7 @@ namespace Maps
             if ( isFirstLoad ) {
                 count = Rand::Get( 4, 6 );
             }
-            else if ( getColorFromTile( tile ) != Color::NONE ) {
+            else if ( getColorFromTile( tile ) != Color::PlayerColor::NONE ) {
                 // If the Troll Bridge or City of Dead has been captured, its population is increased by 1-3 creature per week.
                 count += Rand::Get( 1, 3 );
             }
@@ -1614,7 +1629,7 @@ namespace Maps
             if ( isFirstLoad ) {
                 count = 2;
             }
-            else if ( getColorFromTile( tile ) != Color::NONE ) {
+            else if ( getColorFromTile( tile ) != Color::PlayerColor::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
                 ++count;
             }
@@ -2151,13 +2166,13 @@ namespace Maps
         case MP2::OBJ_BARRIER:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
+            setBarrierColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_TRAVELLER_TENT:
             assert( isFirstLoad );
 
-            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
+            setBarrierColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB: {
@@ -2403,22 +2418,22 @@ namespace Maps
         }
     }
 
-    std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
+    std::pair<Color::PlayerColor, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
     {
-        std::pair<int, int> res;
+        std::pair<Color::PlayerColor, int> res;
 
         if ( 7 > heroSpriteIndex )
-            res.first = Color::BLUE;
+            res.first = Color::PlayerColor::BLUE;
         else if ( 14 > heroSpriteIndex )
-            res.first = Color::GREEN;
+            res.first = Color::PlayerColor::GREEN;
         else if ( 21 > heroSpriteIndex )
-            res.first = Color::RED;
+            res.first = Color::PlayerColor::RED;
         else if ( 28 > heroSpriteIndex )
-            res.first = Color::YELLOW;
+            res.first = Color::PlayerColor::YELLOW;
         else if ( 35 > heroSpriteIndex )
-            res.first = Color::ORANGE;
+            res.first = Color::PlayerColor::ORANGE;
         else
-            res.first = Color::PURPLE;
+            res.first = Color::PlayerColor::PURPLE;
 
         switch ( heroSpriteIndex % 7 ) {
         case 0:
@@ -2662,7 +2677,7 @@ namespace Maps
         return false;
     }
 
-    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const Color::PlayerColor color )
     {
         assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,15 +25,16 @@
 
 #include <cassert>
 
+#include "game_io.h"
 #include "players.h"
+#include "save_format_version.h"
 #include "serialize.h"
-#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
 namespace
 {
-    enum class BarrierColor : int
+    enum class BarrierColor : uint8_t
     {
         NONE = 0,
         AQUA = 1,
@@ -47,102 +48,124 @@ namespace
     };
 }
 
-std::string Color::String( const int color )
+namespace Color
 {
-    switch ( color ) {
-    case Color::BLUE:
-        return _( "Blue" );
-    case Color::GREEN:
-        return _( "Green" );
-    case Color::RED:
-        return _( "Red" );
-    case Color::YELLOW:
-        return _( "Yellow" );
-    case Color::ORANGE:
-        return _( "Orange" );
-    case Color::PURPLE:
-        return _( "Purple" );
-    case Color::UNUSED:
-        return "Unknown";
-    default:
-        break;
+    PlayerColors::PlayerColors( const Color::PlayerColor colors /* = Color::ALL */ )
+    {
+        reserve( 6 );
+
+        if ( haveCommonColors( colors, Color::PlayerColor::BLUE ) ) {
+            push_back( Color::PlayerColor::BLUE );
+        }
+        if ( haveCommonColors( colors, Color::PlayerColor::GREEN ) ) {
+            push_back( Color::PlayerColor::GREEN );
+        }
+        if ( haveCommonColors( colors, Color::PlayerColor::RED ) ) {
+            push_back( Color::PlayerColor::RED );
+        }
+        if ( haveCommonColors( colors, Color::PlayerColor::YELLOW ) ) {
+            push_back( Color::PlayerColor::YELLOW );
+        }
+        if ( haveCommonColors( colors, Color::PlayerColor::ORANGE ) ) {
+            push_back( Color::PlayerColor::ORANGE );
+        }
+        if ( haveCommonColors( colors, Color::PlayerColor::PURPLE ) ) {
+            push_back( Color::PlayerColor::PURPLE );
+        }
     }
 
-    return "None";
-}
+    std::string String( const PlayerColor color )
+    {
+        switch ( color ) {
+        case PlayerColor::BLUE:
+            return _( "Blue" );
+        case PlayerColor::GREEN:
+            return _( "Green" );
+        case PlayerColor::RED:
+            return _( "Red" );
+        case PlayerColor::YELLOW:
+            return _( "Yellow" );
+        case PlayerColor::ORANGE:
+            return _( "Orange" );
+        case PlayerColor::PURPLE:
+            return _( "Purple" );
+        case PlayerColor::UNUSED:
+            return "Unknown";
+        default:
+            break;
+        }
 
-int Color::GetIndex( const int color )
-{
-    switch ( color ) {
-    case BLUE:
-        return 0;
-    case GREEN:
-        return 1;
-    case RED:
-        return 2;
-    case YELLOW:
-        return 3;
-    case ORANGE:
-        return 4;
-    case PURPLE:
-        return 5;
-    default:
-        break;
-    }
-
-    // NONE
-    return 6;
-}
-
-int Color::Count( const int colors )
-{
-    return CountBits( colors & ALL );
-}
-
-int Color::GetFirst( const int colors )
-{
-    if ( colors & BLUE ) {
-        return BLUE;
-    }
-    if ( colors & GREEN ) {
-        return GREEN;
-    }
-    if ( colors & RED ) {
-        return RED;
-    }
-    if ( colors & YELLOW ) {
-        return YELLOW;
-    }
-    if ( colors & ORANGE ) {
-        return ORANGE;
-    }
-    if ( colors & PURPLE ) {
-        return PURPLE;
+        return "None";
     }
 
-    return NONE;
-}
+    int GetIndex( const PlayerColor color )
+    {
+        switch ( color ) {
+        case PlayerColor::BLUE:
+            return 0;
+        case PlayerColor::GREEN:
+            return 1;
+        case PlayerColor::RED:
+            return 2;
+        case PlayerColor::YELLOW:
+            return 3;
+        case PlayerColor::ORANGE:
+            return 4;
+        case PlayerColor::PURPLE:
+            return 5;
+        default:
+            break;
+        }
 
-uint8_t Color::IndexToColor( const int index )
-{
-    switch ( index ) {
-    case 0:
-        return BLUE;
-    case 1:
-        return GREEN;
-    case 2:
-        return RED;
-    case 3:
-        return YELLOW;
-    case 4:
-        return ORANGE;
-    case 5:
-        return PURPLE;
-    default:
-        break;
+        // NONE
+        return 6;
     }
 
-    return Color::NONE;
+    PlayerColor GetFirst( const PlayerColor colors )
+    {
+        if ( haveCommonColors( colors, PlayerColor::BLUE ) ) {
+            return PlayerColor::BLUE;
+        }
+        if ( haveCommonColors( colors, PlayerColor::GREEN ) ) {
+            return PlayerColor::GREEN;
+        }
+        if ( haveCommonColors( colors, PlayerColor::RED ) ) {
+            return PlayerColor::RED;
+        }
+        if ( haveCommonColors( colors, PlayerColor::YELLOW ) ) {
+            return PlayerColor::YELLOW;
+        }
+        if ( haveCommonColors( colors, PlayerColor::ORANGE ) ) {
+            return PlayerColor::ORANGE;
+        }
+        if ( haveCommonColors( colors, PlayerColor::PURPLE ) ) {
+            return PlayerColor::PURPLE;
+        }
+
+        return PlayerColor::NONE;
+    }
+
+    PlayerColor IndexToColor( const int index )
+    {
+        switch ( index ) {
+        case 0:
+            return PlayerColor::BLUE;
+        case 1:
+            return PlayerColor::GREEN;
+        case 2:
+            return PlayerColor::RED;
+        case 3:
+            return PlayerColor::YELLOW;
+        case 4:
+            return PlayerColor::ORANGE;
+        case 5:
+            return PlayerColor::PURPLE;
+        default:
+            break;
+        }
+
+        return PlayerColor::NONE;
+    }
 }
 
 const char * fheroes2::getBarrierColorName( const int color )
@@ -197,67 +220,53 @@ const char * fheroes2::getTentColorName( const int color )
     return "None";
 }
 
-Colors::Colors( const int colors /* = Color::ALL */ )
+bool ColorBase::isFriends( const Color::PlayerColor col ) const
 {
-    reserve( 6 );
-
-    if ( colors & Color::BLUE ) {
-        push_back( Color::BLUE );
-    }
-    if ( colors & Color::GREEN ) {
-        push_back( Color::GREEN );
-    }
-    if ( colors & Color::RED ) {
-        push_back( Color::RED );
-    }
-    if ( colors & Color::YELLOW ) {
-        push_back( Color::YELLOW );
-    }
-    if ( colors & Color::ORANGE ) {
-        push_back( Color::ORANGE );
-    }
-    if ( colors & Color::PURPLE ) {
-        push_back( Color::PURPLE );
-    }
+    return Color::haveCommonColors( Color::PlayerColor::ALL, col ) && ( _color == col || Players::isFriends( _color, col ) );
 }
 
-bool ColorBase::isFriends( const int col ) const
-{
-    return ( col & Color::ALL ) && ( color == col || Players::isFriends( color, col ) );
-}
-
-void ColorBase::SetColor( const int col )
+void ColorBase::SetColor( const Color::PlayerColor col )
 {
     switch ( col ) {
-    case Color::NONE:
-    case Color::BLUE:
-    case Color::GREEN:
-    case Color::RED:
-    case Color::YELLOW:
-    case Color::ORANGE:
-    case Color::PURPLE:
-        color = col;
+    case Color::PlayerColor::NONE:
+    case Color::PlayerColor::BLUE:
+    case Color::PlayerColor::GREEN:
+    case Color::PlayerColor::RED:
+    case Color::PlayerColor::YELLOW:
+    case Color::PlayerColor::ORANGE:
+    case Color::PlayerColor::PURPLE:
+        _color = col;
         break;
     default:
 #ifdef WITH_DEBUG
         assert( 0 );
 #endif
-        color = Color::NONE;
+        _color = Color::PlayerColor::NONE;
         break;
     }
 }
 
 Kingdom & ColorBase::GetKingdom() const
 {
-    return world.GetKingdom( color );
+    return world.GetKingdom( _color );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const ColorBase & col )
 {
-    return stream << col.color;
+    return stream << col._color;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, ColorBase & col )
 {
-    return stream >> col.color;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        col._color = static_cast<Color::PlayerColor>( temp );
+    }
+    else {
+        stream >> col._color;
+    }
+
+    return stream;
 }

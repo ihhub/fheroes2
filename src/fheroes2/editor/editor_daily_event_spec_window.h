@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,11 @@
 
 #include <cstdint>
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace Maps::Map_Format
 {
     struct DailyEvent;
@@ -34,6 +39,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const Color::PlayerColor humanPlayerColors, const Color::PlayerColor computerPlayerColors,
                          const fheroes2::SupportedLanguage language );
 }

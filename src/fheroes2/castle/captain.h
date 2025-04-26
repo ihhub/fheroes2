@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,6 +32,11 @@
 class Army;
 class Castle;
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 class Captain final : public HeroBase
 {
 public:
@@ -51,7 +56,7 @@ public:
     int GetMorale() const override;
     int GetLuck() const override;
     int GetRace() const override;
-    int GetColor() const override;
+    Color::PlayerColor GetColor() const override;
     int GetType() const override;
     int GetControl() const override;
 

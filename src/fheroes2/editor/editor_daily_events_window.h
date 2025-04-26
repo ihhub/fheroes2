@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,11 @@
 #include <cstdint>
 #include <vector>
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace Maps::Map_Format
 {
     struct DailyEvent;
@@ -35,6 +40,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
-                                const fheroes2::SupportedLanguage language );
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const Color::PlayerColor humanPlayerColors,
+                                const Color::PlayerColor computerPlayerColors, const fheroes2::SupportedLanguage language );
 }

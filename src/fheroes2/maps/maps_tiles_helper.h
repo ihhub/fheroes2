@@ -39,6 +39,11 @@ namespace MP2
     enum ObjectIcnType : uint8_t;
 }
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace Maps
 {
     class Tile;
@@ -132,8 +137,13 @@ namespace Maps
 
     Troop getTroopFromTile( const Tile & tile );
 
-    int getColorFromTile( const Tile & tile );
-    void setColorOnTile( Tile & tile, const int color );
+    Color::PlayerColor getColorFromTile( const Tile & tile );
+
+    int getBarrierColorFromTile( const Tile & tile );
+
+    void setColorOnTile( const Tile & tile, const Color::PlayerColor color );
+
+    void setBarrierColorOnTile( Tile & tile, const int barrierColor );
 
     bool doesTileContainValuableItems( const Tile & tile );
 
@@ -150,7 +160,7 @@ namespace Maps
 
     void setMonsterOnTile( Tile & tile, const Monster & mons, const uint32_t count );
 
-    std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
+    std::pair<Color::PlayerColor, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
 
     // Checks whether the object to be captured is guarded by its own forces
     // (castle has a hero or garrison, dwelling has creatures, etc)
@@ -169,7 +179,7 @@ namespace Maps
     bool isClearGround( const Tile & tile );
 
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
-    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const Color::PlayerColor color );
 
     // The functions below are used only in the map Editor.
 

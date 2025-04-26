@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -947,20 +947,20 @@ int ICN::getCastleIcnId( const int race )
     return UNKNOWN;
 }
 
-int ICN::getFlagIcnId( const int color )
+int ICN::getFlagIcnId( const Color::PlayerColor color )
 {
     switch ( color ) {
-    case Color::BLUE:
+    case Color::PlayerColor::BLUE:
         return ICN::HEROFL00;
-    case Color::GREEN:
+    case Color::PlayerColor::GREEN:
         return ICN::HEROFL01;
-    case Color::RED:
+    case Color::PlayerColor::RED:
         return ICN::HEROFL02;
-    case Color::YELLOW:
+    case Color::PlayerColor::YELLOW:
         return ICN::HEROFL03;
-    case Color::ORANGE:
+    case Color::PlayerColor::ORANGE:
         return ICN::HEROFL04;
-    case Color::PURPLE:
+    case Color::PlayerColor::PURPLE:
         return ICN::HEROFL05;
     default:
         return ICN::HEROFL06;

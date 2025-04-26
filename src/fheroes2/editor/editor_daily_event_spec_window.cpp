@@ -64,7 +64,7 @@ namespace
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const Color::PlayerColor humanPlayerColors, const Color::PlayerColor computerPlayerColors,
                          const fheroes2::SupportedLanguage language )
     {
         // An event can be outdated in terms of players since we don't update players while placing or removing heroes and castles.
@@ -250,7 +250,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = humanCheckbox->getColor();
+                    const Color::PlayerColor color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
@@ -279,7 +279,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = computerCheckbox->getColor();
+                    const Color::PlayerColor color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }

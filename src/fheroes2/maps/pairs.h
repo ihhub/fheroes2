@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,20 +53,20 @@ public:
     }
 };
 
-class ObjectColor : public std::pair<MP2::MapObjectType, int>
+class ObjectColor : public std::pair<MP2::MapObjectType, Color::PlayerColor>
 {
 public:
     ObjectColor()
-        : std::pair<MP2::MapObjectType, int>( MP2::OBJ_NONE, Color::NONE )
+        : std::pair<MP2::MapObjectType, Color::PlayerColor>( MP2::OBJ_NONE, Color::PlayerColor::NONE )
     {}
 
-    ObjectColor( MP2::MapObjectType object, int color )
-        : std::pair<MP2::MapObjectType, int>( object, color )
+    ObjectColor( MP2::MapObjectType object, Color::PlayerColor color )
+        : std::pair<MP2::MapObjectType, Color::PlayerColor>( object, color )
     {}
 
-    bool isColor( int colors ) const
+    bool isColor( Color::PlayerColor colors ) const
     {
-        return ( colors & second ) != 0;
+        return ( colors & second ) != Color::PlayerColor::NONE;
     }
 };
 
@@ -92,8 +92,7 @@ inline IStreamBase & operator>>( IStreamBase & stream, IndexObject & indexObject
 
 inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1103_RELEASE,
-                   "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1103_RELEASE, "Remove the logic below." );
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1103_RELEASE ) {
         int32_t temp = MP2::OBJ_NONE;
@@ -105,5 +104,18 @@ inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor
         stream >> objectColor.first;
     }
 
-    return stream >> objectColor.second;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE,
+                   "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
+
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+
+        objectColor.second = static_cast<Color::PlayerColor>( temp );
+    }
+    else {
+        stream >> objectColor.second;
+    }
+
+    return stream;
 }

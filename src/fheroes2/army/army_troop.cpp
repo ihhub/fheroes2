@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -215,9 +215,9 @@ uint32_t ArmyTroop::GetDefense() const
     return Troop::GetDefense() + ( _army && _army->GetCommander() ? _army->GetCommander()->GetDefense() : 0 );
 }
 
-int ArmyTroop::GetColor() const
+Color::PlayerColor ArmyTroop::GetColor() const
 {
-    return _army ? _army->GetColor() : Color::NONE;
+    return _army ? _army->GetColor() : Color::PlayerColor::NONE;
 }
 
 int ArmyTroop::GetMorale() const

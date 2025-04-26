@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -744,7 +744,7 @@ namespace Campaign
         }
 
         if ( allAIPlayersInAlliance ) {
-            const Colors humanColors( mapInfo.colorsAvailableForHumans );
+            const Color::PlayerColors humanColors( mapInfo.colorsAvailableForHumans );
             // Make sure that this is only one human player on the map.
             if ( humanColors.size() != 1 ) {
                 // Looks like somebody is modifying the original map.
@@ -752,21 +752,18 @@ namespace Campaign
                 return;
             }
 
-            const int aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
-            if ( aiColors == 0 ) {
+            const Color::PlayerColor aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
+            if ( aiColors == Color::PlayerColor::NONE ) {
                 // This is definitely not the map to modify.
                 assert( 0 );
                 return;
             }
 
-            // If this assertion blows up then the whole logic behind colors is going crazy.
-            assert( aiColors < 256 );
+            const Color::PlayerColor humanColor = humanColors.front();
 
-            const uint8_t humanColor = static_cast<uint8_t>( humanColors.front() );
-
-            for ( uint8_t & allianceColor : mapInfo.unions ) {
-                if ( allianceColor != humanColor && ( aiColors & allianceColor ) ) {
-                    allianceColor = static_cast<uint8_t>( aiColors );
+            for ( Color::PlayerColor & allianceColor : mapInfo.unions ) {
+                if ( allianceColor != humanColor && Color::haveCommonColors( aiColors, allianceColor ) ) {
+                    allianceColor = aiColors;
                 }
             }
         }

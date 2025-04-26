@@ -758,7 +758,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
 
     if ( drawPassabilities ) {
-        const int32_t friendColors = Players::FriendColors();
+        const Color::PlayerColor friendColors = Players::FriendColors();
 
         for ( int32_t y = minY; y < maxY; ++y ) {
             const int32_t offset = y * worldWidth;
@@ -824,7 +824,7 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
 
 void Interface::GameArea::updateMapFogDirections()
 {
-    const int32_t friendColors = Players::FriendColors();
+    const Color::PlayerColor friendColors = Players::FriendColors();
 
     Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }

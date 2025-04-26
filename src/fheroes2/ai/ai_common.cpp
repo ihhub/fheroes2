@@ -376,21 +376,21 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
         return;
     }
 
-    const int friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
-    if ( friendColors == 0 ) {
+    const Color::PlayerColor friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    if ( friendColors == Color::PlayerColor::NONE ) {
         // No allies.
         return;
     }
 
-    if ( ( friendColors & Players::HumanColors() ) != 0 ) {
+    if ( ( friendColors & Players::HumanColors() ) != Color::PlayerColor::NONE ) {
         // Some allies are human players.
         return;
     }
 
     const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( false );
 
-    const Colors playerColors( friendColors );
-    for ( const int color : playerColors ) {
+    const Color::PlayerColors playerColors( friendColors );
+    for ( const Color::PlayerColor color : playerColors ) {
         ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
     }
 }

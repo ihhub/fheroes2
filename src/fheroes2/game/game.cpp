@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -468,12 +468,12 @@ uint32_t Game::GetWhirlpoolPercent()
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-int Game::GetKingdomColors()
+Color::PlayerColor Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors()
+Color::PlayerColor Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }

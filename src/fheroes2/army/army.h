@@ -40,6 +40,11 @@ class HeroBase;
 class Heroes;
 class Troop;
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace Maps
 {
     class Tile;
@@ -187,7 +192,10 @@ public:
 
     Army & operator=( const Army & ) = delete;
 
-    const Troops & getTroops() const;
+    const Troops & getTroops() const
+    {
+        return *this;
+    }
 
     // Resets the army. If the army doesn't have a commanding hero, then it makes the army empty. Otherwise, if 'defaultArmy' is set to true, then it creates a default
     // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
@@ -195,7 +203,7 @@ public:
     void Reset( const bool defaultArmy = false );
     void setFromTile( const Maps::Tile & tile );
 
-    int GetColor() const;
+    Color::PlayerColor GetColor() const;
     int GetControl() const override;
     uint32_t getTotalCount() const;
 
@@ -203,9 +211,9 @@ public:
     bool isStrongerThan( const Army & target, const double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( int cl )
+    void SetColor( const Color::PlayerColor color )
     {
-        color = cl;
+        _color = color;
     }
 
     int GetMorale() const;
@@ -269,6 +277,6 @@ private:
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
 
     HeroBase * commander;
-    bool _isSpreadCombatFormation;
-    int color;
+    bool _isSpreadCombatFormation{ true };
+    Color::PlayerColor _color{ Color::PlayerColor::NONE };
 };

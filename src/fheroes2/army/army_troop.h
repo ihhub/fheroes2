@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,6 +33,11 @@ class IStreamBase;
 class OStreamBase;
 
 class Army;
+
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
 
 class Troop : public Monster
 {
@@ -106,7 +111,7 @@ public:
     int GetMorale() const override;
     int GetLuck() const override;
 
-    int GetColor() const;
+    Color::PlayerColor GetColor() const;
 
     void SetArmy( const Army & army );
     const Army * GetArmy() const;

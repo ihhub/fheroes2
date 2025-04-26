@@ -27,6 +27,11 @@
 
 class Heroes;
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace fheroes2
 {
     class Image;
@@ -56,7 +61,7 @@ namespace Maps
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor );
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const Color::PlayerColor friendColors, const Interface::GameArea & area, const bool isEditor );
 
     void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
 

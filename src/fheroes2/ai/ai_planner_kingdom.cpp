@@ -211,7 +211,7 @@ namespace
         }
     }
 
-    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tile & tile )
+    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const Color::PlayerColor kingdomColor, const Maps::Tile & tile )
     {
         const MP2::MapObjectType object = tile.getMainObjectType();
         const int32_t tileIndex = tile.GetIndex();
@@ -247,7 +247,7 @@ namespace
             }
 
             // Neutral castles don't pose a threat because they can't hire heroes
-            if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
+            if ( castle->GetColor() == Color::PlayerColor::NONE || castle->isFriends( kingdomColor ) ) {
                 return {};
             }
 
@@ -641,7 +641,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         AIAutoControlModeCommitter & operator=( const AIAutoControlModeCommitter & ) = delete;
 
     private:
-        const int _kingdomColor;
+        const Color::PlayerColor _kingdomColor;
     };
 
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
@@ -657,9 +657,9 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     _regions.clear();
     _regions.resize( world.getRegionCount() );
 
-    const int myColor = kingdom.GetColor();
+    const Color::PlayerColor myColor = kingdom.GetColor();
 
-    if ( kingdom.isLoss() || myColor == Color::NONE ) {
+    if ( kingdom.isLoss() || myColor == Color::PlayerColor::NONE ) {
         kingdom.LossPostActions();
         return;
     }
@@ -747,7 +747,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             if ( castle->isFriends( myColor ) ) {
                 ++stats.friendlyCastles;
             }
-            else if ( castle->GetColor() != Color::NONE ) {
+            else if ( castle->GetColor() != Color::PlayerColor::NONE ) {
                 ++stats.enemyCastles;
             }
         }

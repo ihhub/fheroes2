@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -106,20 +106,20 @@ namespace
         return COLOR_BLACK;
     }
 
-    uint8_t GetPaletteIndexFromColor( int color )
+    uint8_t GetPaletteIndexFromColor( Color::PlayerColor color )
     {
         switch ( color ) {
-        case Color::BLUE:
+        case Color::PlayerColor::BLUE:
             return COLOR_BLUE;
-        case Color::GREEN:
+        case Color::PlayerColor::GREEN:
             return COLOR_GREEN;
-        case Color::RED:
+        case Color::PlayerColor::RED:
             return COLOR_RED;
-        case Color::YELLOW:
+        case Color::PlayerColor::YELLOW:
             return COLOR_YELLOW;
-        case Color::ORANGE:
+        case Color::PlayerColor::ORANGE:
             return COLOR_ORANGE;
-        case Color::PURPLE:
+        case Color::PlayerColor::PURPLE:
             return COLOR_PURPLE;
         default:
             break;
@@ -272,7 +272,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     _cursorArea.hide();
 
     if ( renderMapObjects ) {
-        RedrawObjects( 0, ViewWorldMode::ViewAll );
+        RedrawObjects( Color::PlayerColor::NONE, ViewWorldMode::ViewAll );
         const fheroes2::Rect & rect = GetArea();
         fheroes2::Copy( _map, 0, 0, fheroes2::Display::instance(), rect.x, rect.y, _map.width(), _map.height() );
     }
@@ -281,7 +281,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     RedrawCursor();
 }
 
-void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorldMode flags )
+void Interface::Radar::RedrawObjects( const Color::PlayerColor playerColor, const ViewWorldMode flags )
 {
 #ifdef WITH_DEBUG
     const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();
