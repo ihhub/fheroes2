@@ -893,8 +893,8 @@ namespace fheroes2
             return 0;
         }
 
-        const int32_t textStartOffsetX = roi.x + ( isCenterAligned ? ( roi.width - width() ) / 2 : 0 )
-                                         + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( _fontType ) );
+        const int32_t textStartOffsetX
+            = roi.x + ( isCenterAligned ? ( roi.width - width() ) / 2 : 0 ) + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( _fontType ) );
 
         if ( cursorOffsetX <= textStartOffsetX ) {
             // The text is empty or mouse cursor position is to the left of input field.
