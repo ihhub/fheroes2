@@ -64,14 +64,14 @@ void StringReplace( std::string & dst, const char * pred, const T value )
 }
 
 // Returns the number of bits that are set in the number passed as an argument
-constexpr int CountBits( const uint32_t val )
+constexpr int CountBits( uint32_t val )
 {
     int res = 0;
 
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
-        if ( val & itr ) {
-            ++res;
-        }
+    // Using Brian Kernighan's algorithm: https://yuminlee2.medium.com/brian-kernighans-algorithm-count-set-bits-in-a-number-18ab05edca93
+    while ( val ) {
+        val &= ( val - 1 );
+        ++res;
     }
 
     return res;
