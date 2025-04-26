@@ -5,6 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=640" />
 
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="{{ site.title | default: site.github.repository_name }}"
+    />
+    <meta property="og:description" content="{{ site.description }}" />
+    <meta
+      property="og:image"
+      content="{{ '/images/screenshots/screenshot_castle.png' | absolute_url }}"
+    />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:type" content="website" />
+
     <link
       rel="stylesheet"
       href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}"
