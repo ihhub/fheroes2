@@ -4107,10 +4107,10 @@ msgid "Delete an artifact from the event."
 msgstr "Fjern et artefakt fra begivenheden."
 
 msgid "No Secondary Skill will be given by the event."
-msgstr "Der gives ingen sekundære færdigheder ved begivenhed."
+msgstr "Der gives ingen færdigheder ved begivenhed."
 
 msgid "Secondary Skill"
-msgstr "Sekundær evne"
+msgstr "Færdighed"
 
 msgid "Delete Secondary Skill"
 msgstr "Fjern færdighed"
@@ -8258,7 +8258,7 @@ msgid "Set hero's Artifacts. Right-click to reset Artifact."
 msgstr "Indstil heltens artefakter. Højreklik: Fjern artefakt."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
-msgstr "Indstil heltens sekundære evner. Højreklik: Fjern evne."
+msgstr "Indstil heltens færdigheder. Højreklik: Fjern evne."
 
 msgid "Set hero's Army. Right-click to reset unit."
 msgstr "Indstil heltenes hær. Højreklik: Fjern trop."
@@ -8761,7 +8761,7 @@ msgid ""
 "secondary skills."
 msgstr ""
 "Erfaringspoint giver dine helte mulighed for at stige i level, hvilket øger "
-"deres primære og sekundære evner."
+"deres primære og færdigheder."
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaber"
