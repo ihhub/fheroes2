@@ -21,9 +21,15 @@
 // Class to handle code copy functionality
 class CodeCopyManager
 {
-    constructor()
-    {
-        this.accessibility = new AccessibilityManager();
+    // Static instance of AccessibilityManager
+    static accessibility = null;
+
+    // Static initialization method
+    static initialize() {
+        // Initialize accessibility manager if not already initialized
+        if (!this.accessibility) {
+            this.accessibility = new AccessibilityManager();
+        }
 
         // Apply to all code blocks
         document.querySelectorAll( "div.highlight" ).forEach( block => this.initializeCodeBlock( block ) );
@@ -31,7 +37,7 @@ class CodeCopyManager
 
     // Creates a copy button using the template
     // Returns: The button element
-    createCopyButton()
+    static createCopyButton()
     {
         return this.accessibility.createAccessibleButton( { text : 'Copy', ariaLabel : 'Copy code to clipboard', className : 'btn btn-primary copy-btn' } );
     }
@@ -41,7 +47,7 @@ class CodeCopyManager
     //   button - The button element
     //   success - Whether the copy was successful
     //   code - The code content that was copied
-    updateButtonState( button, success, code )
+    static updateButtonState( button, success, code )
     {
         // Truncate the code if it's too long
         const truncatedCode = code.length > 50 ? `${code.substring( 0, 50 )}...` : code;
@@ -62,7 +68,7 @@ class CodeCopyManager
     // Parameters:
     //   block - The code block element
     //   button - The copy button
-    handleCopyCode( block, button )
+    static handleCopyCode( block, button )
     {
         try {
             const code = block.querySelector( "pre" ).innerText;
@@ -81,7 +87,7 @@ class CodeCopyManager
     // Parameters:
     //   button - The copy button
     //   block - The code block element
-    setupEventListeners( button, block )
+    static setupEventListeners( button, block )
     {
         // Click event handler
         button.addEventListener( "click", () => this.handleCopyCode( block, button ) );
@@ -93,7 +99,7 @@ class CodeCopyManager
     // Initializes a code block with a copy button
     // Parameters:
     //   block - The code block element
-    initializeCodeBlock( block )
+    static initializeCodeBlock( block )
     {
         const button = this.createCopyButton();
         block.appendChild( button );
@@ -103,9 +109,5 @@ class CodeCopyManager
 
 // Initialize when the DOM is fully loaded
 document.addEventListener( "DOMContentLoaded", () => {
-    if ( window.codeCopyManager ) {
-        return;
-    }
-
-    window.codeCopyManager = new CodeCopyManager();
+    CodeCopyManager.initialize();
 } );
