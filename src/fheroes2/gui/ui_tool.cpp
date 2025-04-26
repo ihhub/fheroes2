@@ -217,10 +217,10 @@ namespace fheroes2
         _isCursorVisible = !_isCursorVisible;
 
         if ( _isCursorVisible ) {
-            _textCursor.show();
+            _cursor.show();
         }
         else {
-            _textCursor.hide();
+            _cursor.hide();
         }
 
         return true;
@@ -228,7 +228,7 @@ namespace fheroes2
 
     void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
     {
-        _textCursor.hide();
+        _cursor.hide();
         _background.restore();
 
         set( newText, cursorPositionInText );
@@ -239,8 +239,8 @@ namespace fheroes2
 
         drawInRoi( offsetX, offsetY, _output, _background.rect() );
 
-        _textCursor.setPosition( _cursorArea.x + offsetX, _cursorArea.y + offsetY );
-        _textCursor.show();
+        _cursor.setPosition( _cursorArea.x + offsetX, _cursorArea.y + offsetY );
+        _cursor.show();
 
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         _isCursorVisible = true;

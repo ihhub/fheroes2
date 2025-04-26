@@ -527,7 +527,7 @@ namespace
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
                 // Text input blinking cursor render is done in Save Game dialog when no file is selected
                 // and when the render of the filename (with cursor) is not planned.
-                display.render( textInput->getCursorRenderArea() );
+                display.render( textInput->getCursorArea() );
             }
 
             if ( !needRedraw && !needRedrawListbox ) {

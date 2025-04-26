@@ -253,7 +253,7 @@ namespace
         void eventProcessing()
         {
             if ( _textUI && _textUI->eventProcessing() ) {
-                _output.render( _textUI->getCursorRenderArea() );
+                _output.render( _textUI->getCursorArea() );
             }
         }
 
@@ -320,7 +320,7 @@ namespace
         {
             if ( _textUI ) {
                 _textUI->redrawTextInputField( _info, static_cast<int32_t>( _cursorPosition ) );
-                _output.render( _textUI->getTextRenderArea() );
+                _output.render( _textUI->getOverallArea() );
             }
         }
     };

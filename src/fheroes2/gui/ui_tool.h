@@ -141,7 +141,7 @@ namespace fheroes2
         TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} )
             : TextInput( FontType::normalWhite(), textArea.width, isMultiLine, language )
             , _output( output )
-            , _textCursor( getCursorSprite( FontType::normalWhite() ) )
+            , _cursor( getCursorSprite( FontType::normalWhite() ) )
             // We enlarge background to have space for cursor at text edges and space for diacritics.
             , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
             , _textInputArea( textArea )
@@ -167,12 +167,12 @@ namespace fheroes2
 
         // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
-        Rect getCursorRenderArea() const
+        Rect getCursorArea() const
         {
-            return _textCursor.getArea();
+            return _cursor.getArea();
         }
 
-        Rect getTextRenderArea() const
+        Rect getOverallArea() const
         {
             return _background.rect();
         }
@@ -184,7 +184,7 @@ namespace fheroes2
         size_t _getTextInputCursorPosition( const int32_t pointerCursorOffsetX ) const;
 
         Image & _output;
-        MovableSprite _textCursor;
+        MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
         bool _isCenterAligned{ false };
