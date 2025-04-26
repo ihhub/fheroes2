@@ -4113,10 +4113,10 @@ msgid "Secondary Skill"
 msgstr "Sekundær evne"
 
 msgid "Delete Secondary Skill"
-msgstr "Fjern sekundær evne"
+msgstr "Fjern færdighed"
 
 msgid "Delete the Secondary Skill from the event."
-msgstr "Fjern sekundær evne fra begivenheden."
+msgstr "Fjern færdighed fra begivenheden."
 
 msgid "No resources will be part of this event."
 msgstr "Ingen ressourcer vil være en del af denne begivenhed."
