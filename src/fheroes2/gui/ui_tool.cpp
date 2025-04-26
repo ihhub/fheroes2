@@ -57,8 +57,6 @@ namespace
     const uint32_t screenFadeFrameCount = 6;
     const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
 
-    const fheroes2::FontType textInputFontType{ fheroes2::FontType::normalWhite() };
-
     void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
         if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
@@ -213,8 +211,8 @@ namespace fheroes2
     TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
                                     const std::optional<SupportedLanguage> language )
         : _output( output )
-        , _text( textInputFontType, textArea.width, isMultiLine, language )
-        , _cursor( getCursorSprite( textInputFontType ) )
+        , _text( fheroes2::FontType::normalWhite(), textArea.width, isMultiLine, language )
+        , _cursor( getCursorSprite( fheroes2::FontType::normalWhite() ) )
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )
