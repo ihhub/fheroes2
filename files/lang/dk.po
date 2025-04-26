@@ -4129,7 +4129,7 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
-"Hvis dette felt aktiveret, udløses begivenheden kun én gang; hvis ikke, "
+"Hvis dette felt aktiveres, udløses begivenheden kun én gang; hvis ikke, "
 "udløses begivenheden hver gang en af de angivne spillere krydser "
 "begivenhedsfirkanten."
 
