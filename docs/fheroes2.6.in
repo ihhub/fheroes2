@@ -61,7 +61,7 @@ Additional SoundFont files for MIDI synthesizer.
 Configuration file for the TiMidity MIDI synthesizer.
 .TP
 .B files/timidity/instruments/*.pat
-GUS patches (characteristics of musical instruments) for the TiMidity MIDI synthesizer.
+GUS patches (samples of musical instruments) for the TiMidity MIDI synthesizer.
 .TP
 .B maps/*.fh2m
 Map files in the fheroes2 format.
