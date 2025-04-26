@@ -1189,7 +1189,6 @@ namespace fheroes2
 
     const Sprite & getCursorSprite( const FontType type )
     {
-        const FontCharHandler charHandler( type );
-        return charHandler.getSprite( cursorChar );
+        return FontCharHandler{ type }.getSprite( cursorChar );
     }
 }
