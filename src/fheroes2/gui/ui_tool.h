@@ -138,15 +138,7 @@ namespace fheroes2
     class TextInputField final : private TextInput
     {
     public:
-        TextInputField() = delete;
-
-        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output )
-            : TextInputField( textArea, isMultiLine, isCenterAligned, {}, output )
-        {
-            // Do nothing.
-        }
-
-        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, const std::optional<SupportedLanguage> language, Image & output )
+        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} )
             : TextInput( FontType::normalWhite(), textArea.width, isMultiLine, language )
             , _output( output )
             , _textCursor( getCursorSprite() )

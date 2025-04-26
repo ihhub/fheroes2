@@ -239,7 +239,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     // We add extra 4 pixels to the click area width to help setting the cursor at the end of the line if it is fully filled with text characters.
     const fheroes2::Rect textEditClickArea{ textInputArea.x, textInputArea.y, textInputArea.width + 4, textInputArea.height };
 
-    fheroes2::TextInputField textInput( textInputArea, isMultiLine, true, textLanguage, display );
+    fheroes2::TextInputField textInput( textInputArea, isMultiLine, true, display, textLanguage );
     const fheroes2::Rect textInputRenderArea( textInput.getTextRenderArea() );
     textInput.redrawTextInputField( result, static_cast<int32_t>( charInsertPos ) );
 
