@@ -138,17 +138,7 @@ namespace fheroes2
     class TextInputField final : private TextInput
     {
     public:
-        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} )
-            : TextInput( FontType::normalWhite(), textArea.width, isMultiLine, language )
-            , _output( output )
-            , _cursor( getCursorSprite( FontType::normalWhite() ) )
-            // We enlarge background to have space for cursor at text edges and space for diacritics.
-            , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
-            , _textInputArea( textArea )
-            , _isCenterAligned( isMultiLine || isCenterAligned )
-        {
-            // Do nothing.
-        }
+        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} );
 
         // Returns `true` when rendering of this UI element is needed.
         bool eventProcessing();

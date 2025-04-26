@@ -57,6 +57,8 @@ namespace
     const uint32_t screenFadeFrameCount = 6;
     const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
 
+    const fheroes2::FontType textInputFontType{ fheroes2::FontType::normalWhite() };
+
     void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
         if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
@@ -208,6 +210,19 @@ namespace fheroes2
         _isHidden = false;
     }
 
+    TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
+                                    const std::optional<SupportedLanguage> language )
+        : TextInput( FontType::normalWhite(), textArea.width, isMultiLine, language )
+        , _output( output )
+        , _cursor( getCursorSprite( FontType::normalWhite() ) )
+        // We enlarge background to have space for cursor at text edges and space for diacritics.
+        , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
+        , _textInputArea( textArea )
+        , _isCenterAligned( isMultiLine || isCenterAligned )
+    {
+        // Do nothing.
+    }
+
     bool TextInputField::eventProcessing()
     {
         if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
@@ -253,7 +268,7 @@ namespace fheroes2
             return 0;
         }
 
-        const int32_t fontHeight = getFontHeight( _fontType.size );
+        const int32_t fontHeight = getFontHeight( textInputFontType.size );
         const int32_t pointerLine = ( pointerCursorOffset.y - _textInputArea.y ) / fontHeight;
 
         if ( pointerLine < 0 ) {
@@ -289,7 +304,7 @@ namespace fheroes2
             return cursorPosition;
         }
 
-        const FontCharHandler charHandler( _fontType );
+        const FontCharHandler charHandler( textInputFontType );
         const size_t textSize = _text.size();
 
         for ( size_t i = cursorPosition; i < textSize; ++i ) {
@@ -312,7 +327,7 @@ namespace fheroes2
         }
 
         const int32_t textStartOffsetX = _textInputArea.x + ( _isCenterAligned ? ( _textInputArea.width - width() ) / 2 : 0 )
-                                         + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( _fontType ) );
+                                         + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( textInputFontType ) );
 
         if ( pointerCursorOffsetX <= textStartOffsetX ) {
             // The text is empty or mouse cursor position is to the left of input field.
@@ -323,7 +338,7 @@ namespace fheroes2
         const std::string visibleText = { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
         const size_t textSize = visibleText.size();
         int32_t positionOffset = 0;
-        const FontCharHandler charHandler( _fontType );
+        const FontCharHandler charHandler( textInputFontType );
 
         for ( size_t i = 0; i < textSize; ++i ) {
             const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( visibleText[i] ) );
