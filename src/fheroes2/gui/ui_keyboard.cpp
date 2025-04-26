@@ -189,7 +189,7 @@ namespace
                 = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
                                                                               inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
                                                               false, false, _output );
-            _textUI->redrawTextInputField( _info, static_cast<int32_t>( _cursorPosition ) );
+            _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -319,7 +319,7 @@ namespace
         void _renderInputArea()
         {
             if ( _textUI ) {
-                _textUI->redrawTextInputField( _info, static_cast<int32_t>( _cursorPosition ) );
+                _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
                 _output.render( _textUI->getOverallArea() );
             }
         }

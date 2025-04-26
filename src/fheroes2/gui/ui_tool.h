@@ -135,25 +135,13 @@ namespace fheroes2
         bool _isHidden{ true };
     };
 
-    class TextInputField final : private TextInput
+    class TextInputField final
     {
     public:
         TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} );
 
         // Returns `true` when rendering of this UI element is needed.
         bool eventProcessing();
-
-        // Allow only to call `TextInput::set( std::string text, const int32_t cursorPosition )`.
-        using TextInput::set;
-
-        size_t getCursorInTextPosition( const Point & mousePos ) const
-        {
-            if ( _isMultiLine ) {
-                return _getTextInputCursorPosition( mousePos );
-            }
-
-            return _getTextInputCursorPosition( mousePos.x );
-        }
 
         // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
@@ -167,18 +155,27 @@ namespace fheroes2
             return _background.rect();
         }
 
-        void redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText );
+        void draw( const std::string & newText, const int32_t cursorPositionInText );
+
+        void set( std::string text, const int32_t cursorPosition )
+        {
+            _text.set( std::move( text ), cursorPosition );
+        }
+
+        size_t getCursorInTextPosition( const Point & pos ) const
+        {
+            return _text.getCursorPosition( pos, _textInputArea, _isCenterAligned );
+        }
 
     private:
-        size_t _getTextInputCursorPosition( const Point & pointerCursorOffset ) const;
-        size_t _getTextInputCursorPosition( const int32_t pointerCursorOffsetX ) const;
-
         Image & _output;
+        TextInput _text;
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
         bool _isCenterAligned{ false };
         bool _isCursorVisible{ false };
+        bool _isMultiLine{ false };
     };
 
     // Renderer of current time and FPS on screen

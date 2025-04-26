@@ -270,7 +270,7 @@ namespace fheroes2
         bool _keepLineTrailingSpaces{ false };
     };
 
-    class TextInput : public Text
+    class TextInput final : public Text
     {
     public:
         TextInput() = delete;
@@ -310,9 +310,26 @@ namespace fheroes2
 
         void fitToOneRow( const int32_t maxWidth ) final;
 
+        size_t getCursorPosition( const Point & pos, const Rect & roi, const bool isCenterAligned ) const
+        {
+            if ( _isMultiLine ) {
+                return _getMultiTextInputCursorPosition( pos, roi );
+            }
+
+            return _getTextInputCursorPosition( pos.x, roi, isCenterAligned );
+        }
+
+        Rect cursorArea() const
+        {
+            return _cursorArea;
+        }
+
     protected:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorAreaInText();
+
+        size_t _getMultiTextInputCursorPosition( const Point & cursorOffset, const Rect & roi ) const;
+        size_t _getTextInputCursorPosition( const int32_t cursorOffsetX, const Rect & roi, const bool isCenterAligned ) const;
 
         // Cursor position relative to the text draw position and cursor's size.
         fheroes2::Rect _cursorArea;

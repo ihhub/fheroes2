@@ -212,13 +212,14 @@ namespace fheroes2
 
     TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
                                     const std::optional<SupportedLanguage> language )
-        : TextInput( textInputFontType, textArea.width, isMultiLine, language )
-        , _output( output )
+        : _output( output )
+        , _text( textInputFontType, textArea.width, isMultiLine, language )
         , _cursor( getCursorSprite( textInputFontType ) )
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )
         , _isCenterAligned( isMultiLine || isCenterAligned )
+        , _isMultiLine( isMultiLine )
     {
         // Do nothing.
     }
@@ -241,115 +242,24 @@ namespace fheroes2
         return true;
     }
 
-    void TextInputField::redrawTextInputField( const std::string & newText, const int32_t cursorPositionInText )
+    void TextInputField::draw( const std::string & newText, const int32_t cursorPositionInText )
     {
         _cursor.hide();
         _background.restore();
 
-        set( newText, cursorPositionInText );
+        _text.set( newText, cursorPositionInText );
 
         // Multi-line text is currently always automatically center-aligned.
-        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - width() ) / 2 : _textInputArea.x;
+        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
         const int32_t offsetY = _textInputArea.y + 2;
 
-        drawInRoi( offsetX, offsetY, _output, _background.rect() );
+        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
 
-        _cursor.setPosition( _cursorArea.x + offsetX, _cursorArea.y + offsetY );
+        _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
         _cursor.show();
 
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         _isCursorVisible = true;
-    }
-
-    size_t TextInputField::_getTextInputCursorPosition( const Point & pointerCursorOffset ) const
-    {
-        if ( _text.empty() || _textInputArea.width < 1 || _textInputArea.height < 1 ) {
-            // The text is empty.
-            return 0;
-        }
-
-        const int32_t fontHeight = getFontHeight( textInputFontType.size );
-        const int32_t pointerLine = ( pointerCursorOffset.y - _textInputArea.y ) / fontHeight;
-
-        if ( pointerLine < 0 ) {
-            // Pointer is upper than the first text line.
-            return 0;
-        }
-
-        std::vector<TextLineInfo> lineInfos;
-        _getTextLineInfos( lineInfos, _maxTextWidth, fontHeight, true );
-
-        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
-            // Pointer is lower than the last text line.
-            return _text.size() - 1;
-        }
-
-        size_t cursorPosition = 0;
-        for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += lineInfos[i].characterCount;
-        }
-
-        int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - _textInputArea.x - ( _maxTextWidth - lineInfos[pointerLine].lineWidth ) / 2;
-
-        if ( maxOffsetX <= 0 ) {
-            // Pointer is to the left of the text line.
-            return cursorPosition;
-        }
-
-        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
-            // Pointer is to the right of the text line.
-            cursorPosition += lineInfos[pointerLine].characterCount;
-
-            return cursorPosition;
-        }
-
-        const FontCharHandler charHandler( textInputFontType );
-        const size_t textSize = _text.size();
-
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( _text[i] ) );
-
-            if ( positionOffsetX + charWidth / 2 >= maxOffsetX ) {
-                return i;
-            }
-
-            positionOffsetX += charWidth;
-        }
-
-        return textSize - 1;
-    }
-
-    size_t TextInputField::_getTextInputCursorPosition( const int32_t pointerCursorOffsetX ) const
-    {
-        if ( _text.empty() ) {
-            return 0;
-        }
-
-        const int32_t textStartOffsetX = _textInputArea.x + ( _isCenterAligned ? ( _textInputArea.width - width() ) / 2 : 0 )
-                                         + ( _visibleTextBeginPos == 0 ? 0 : getTruncationSymbolWidth( textInputFontType ) );
-
-        if ( pointerCursorOffsetX <= textStartOffsetX ) {
-            // The text is empty or mouse cursor position is to the left of input field.
-            return _visibleTextBeginPos;
-        }
-
-        const int32_t maxOffset = pointerCursorOffsetX - textStartOffsetX;
-        const std::string visibleText = { ( _text.data() ) + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) };
-        const size_t textSize = visibleText.size();
-        int32_t positionOffset = 0;
-        const FontCharHandler charHandler( textInputFontType );
-
-        for ( size_t i = 0; i < textSize; ++i ) {
-            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( visibleText[i] ) );
-
-            if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {
-                return i + _visibleTextBeginPos;
-            }
-            positionOffset += currentCharWidth;
-        }
-
-        return textSize + _visibleTextBeginPos;
     }
 
     SystemInfoRenderer::SystemInfoRenderer()

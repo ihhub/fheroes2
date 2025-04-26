@@ -382,7 +382,7 @@ namespace
                                                                     false, true, display );
 
             if ( !listbox.isSelected() ) {
-                textInput->redrawTextInputField( filename, static_cast<int32_t>( charInsertPos ) );
+                textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
                 redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
             }
         }
@@ -557,7 +557,7 @@ namespace
                     lastSelectedSaveFileName.clear();
 
                     dateBackground.restore();
-                    textInput->redrawTextInputField( filename, static_cast<int32_t>( charInsertPos ) );
+                    textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
                     redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
             }

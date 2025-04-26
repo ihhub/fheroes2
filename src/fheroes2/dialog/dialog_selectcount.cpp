@@ -241,7 +241,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     fheroes2::TextInputField textInput( textInputArea, isMultiLine, true, display, textLanguage );
     const fheroes2::Rect textInputRenderArea( textInput.getOverallArea() );
-    textInput.redrawTextInputField( result, static_cast<int32_t>( charInsertPos ) );
+    textInput.draw( result, static_cast<int32_t>( charInsertPos ) );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -374,7 +374,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            textInput.redrawTextInputField( result, static_cast<int32_t>( charInsertPos ) );
+            textInput.draw( result, static_cast<int32_t>( charInsertPos ) );
 
             display.render( textInputRenderArea );
         }

@@ -293,7 +293,7 @@ namespace Editor
         listbox.Redraw();
 
         fheroes2::TextInputField textInput( fileNameRoi, false, false, display );
-        textInput.redrawTextInputField( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
+        textInput.draw( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
 
         const fheroes2::Rect textInputRenderArea = textInput.getOverallArea();
 
@@ -468,7 +468,7 @@ namespace Editor
                     lastSelectedSaveFileName.clear();
                 }
 
-                textInput.redrawTextInputField( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
+                textInput.draw( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
             }
 
             if ( needRedrawListbox ) {
