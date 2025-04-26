@@ -443,7 +443,7 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
-        const fheroes2::FontCharHandler charHandler( _fontType );
+        const FontCharHandler charHandler( _fontType );
 
         return getTextLineArea( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
     }
@@ -1068,7 +1068,7 @@ namespace fheroes2
                 continue;
             }
 
-            const fheroes2::Rect & textArea = text.area();
+            const Rect & textArea = text.area();
 
             if ( textArea.y < area.y ) {
                 // This character sprite is drawn higher than all previous - update `height` and `y`.
