@@ -11,7 +11,7 @@ You can find a complete list of all of our changes and enhancements in [**its ow
 <!-- markdownlint-disable MD033 -->
 <div class="image-showcase">
     <div class="row">
-        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820px" class="full-image game-screenshot" alt="Screenshot of the world map">
+        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" class="full-image game-screenshot" alt="Screenshot of the world map">
     </div>
     <div class="row">
         <img src="images/screenshots/screenshot_battle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
