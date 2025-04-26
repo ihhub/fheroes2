@@ -142,9 +142,13 @@ class HeadingCopyManager
 
 // Initialize when the DOM is fully loaded
 document.addEventListener( 'DOMContentLoaded', () => {
+    if ( window.headingCopyManager ) {
+        return;
+    }
+
     const content = document.querySelector( '#main_content' );
     if ( content ) {
         // Initialize the heading copy manager
-        new HeadingCopyManager( content );
+        window.headingCopyManager = new HeadingCopyManager( content );
     }
 } );

@@ -103,6 +103,9 @@ class CodeCopyManager
 
 // Initialize when the DOM is fully loaded
 document.addEventListener( "DOMContentLoaded", () => {
-    // Initialize the code copy manager
-    new CodeCopyManager();
+    if ( window.codeCopyManager ) {
+        return;
+    }
+
+    window.codeCopyManager = new CodeCopyManager();
 } );

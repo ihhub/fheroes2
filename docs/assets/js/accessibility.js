@@ -52,13 +52,15 @@ class AccessibilityManager
 
         // Force a reflow to ensure the announcement is triggered if the user
         // triggers multiple times in a row.
-        void this.liveRegion.offsetHeight;
-
-        // Set the new message
-        this.liveRegion.textContent = message;
+        requestAnimationFrame( () => {
+            // Set the new message
+            this.liveRegion.textContent = message;
+        } );
 
         // Force another reflow to ensure the announcement is triggered
-        void this.liveRegion.offsetHeight;
+        requestAnimationFrame( () => {
+                                   // No additional content needed, just forcing a reflow
+                               } );
     }
 
     // Creates an accessible element (button or span)
