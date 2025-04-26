@@ -4,19 +4,19 @@
 .TH fheroes2 6 "April 2025"
 .\" Please adjust this date whenever revising the manpage.
 .SH NAME
-fheroes2 \- free remake of Heroes of Might and Magic II game engine
+fheroes2 \- free remake of the Heroes of Might and Magic II game engine
 .SH SYNOPSIS
 .B fheroes2
 .SH DESCRIPTION
-\fBfheroes2\fP is a free implementation of Heroes of Might and Magic II game engine,
-a classic turn-based strategy, with significant improvements in the gameplay, graphics
+\fBfheroes2\fP is a free implementation of the Heroes of Might and Magic II game engine,
+a classic turn-based strategy game, with significant improvements in gameplay, graphics
 and logic (including support for high-resolution graphics, improved AI,
 numerous fixes and UI improvements).
 .PP
 To play the game, the assets from the demo version or the full version of the original
 Heroes of Might and Magic II game are needed.
 .SH GAME DATA PATHS 
-.SS The engine assets are searched in the following directories:
+.SS The engine assets are searched for in the following directories:
 #_SG
 .TP
 .B @FHEROES2_DATA@
@@ -46,7 +46,7 @@ Video files of the original game.
 Assets of the original game (required).
 .TP
 .B files/data/*.h2d
-Additional non-original assets from fheroes2 project. These assets are inextricably linked
+Additional non-original assets from the fheroes2 project. These assets are inextricably linked
 to a specific version of the engine, and must be updated when the engine version changes.
 .TP
 .B files/lang/*.mo
@@ -55,7 +55,7 @@ Translations of the fheroes2 project into different languages.
 .B files/soundfonts/*.sf2
 .TQ
 .B files/soundfonts/*.sf3
-Additional SoundFont files for MIDI synthesizer.
+Additional SoundFont files for the MIDI synthesizer.
 .TP
 .B files/timidity/timidity.cfg
 Configuration file for the TiMidity MIDI synthesizer.
