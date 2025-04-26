@@ -332,7 +332,7 @@ namespace fheroes2
         size_t _getTextInputCursorPosition( const int32_t cursorOffsetX, const Rect & roi, const bool isCenterAligned ) const;
 
         // Cursor position relative to the text draw position and cursor's size.
-        fheroes2::Rect _cursorArea;
+        Rect _cursorArea;
         int32_t _cursorPositionInText{ 0 };
         int32_t _visibleTextBeginPos{ 0 };
         int32_t _visibleTextLength{ 0 };
@@ -409,7 +409,7 @@ namespace fheroes2
     bool isFontAvailable( const std::string_view text, const FontType fontType );
 
     // This function will return the width in pixels of the truncation symbol for the given font type.
-    int32_t getTruncationSymbolWidth( const fheroes2::FontType fontType );
+    int32_t getTruncationSymbolWidth( const FontType fontType );
 
     const Sprite & getCursorSprite( const FontType type );
 }
