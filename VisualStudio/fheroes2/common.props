@@ -27,7 +27,7 @@ if exist maps (
 
 xcopy /Y /S /Q files\data "$(OutDir)files\data\"
 xcopy /Y /Q files\lang\*.mo "$(OutDir)files\lang\"
-xcopy /Y /S /Q files\soundfonts "$(OutDir)files\soundfonts\"
+xcopy /Y /S /Q files\timidity "$(OutDir)files\timidity\"
 
 %(Command)</Command>
     </PostBuildEvent>
