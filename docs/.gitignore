@@ -6,3 +6,6 @@ node_modules
 Gemfile
 Gemfile.lock
 Gemfile.dev.lock
+
+# Pre-processed manual page
+fheroes2.6

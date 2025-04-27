@@ -1193,7 +1193,7 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
+bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing /* = true */, const bool allowExit /* = false */ )
 {
     // Event processing might be computationally heavy.
     // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
