@@ -1852,7 +1852,7 @@ namespace
                     return { gold, {}, {} };
                 }
 
-                return { {}, exp, {} };
+                return { std::optional<uint32_t>{}, exp, {} };
             }
 
             if ( !isArtValid ) {
@@ -1868,7 +1868,7 @@ namespace
 
             fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &artifactUI } );
 
-            return { {}, {}, art };
+            return { std::optional<uint32_t>{}, {}, art };
         }();
 
         if ( goldReward ) {

@@ -709,7 +709,7 @@ namespace
                 }();
 
                 if ( chanceToGetExp > 0 && Rand::Get( 1, 100 ) <= chanceToGetExp ) {
-                    return { {}, exp, {} };
+                    return { std::optional<uint32_t>{}, exp, {} };
                 }
 
                 return { gold, {}, {} };
@@ -719,7 +719,7 @@ namespace
                 return {};
             }
 
-            return { {}, {}, art };
+            return { std::optional<uint32_t>{}, {}, art };
         }();
 
         if ( goldReward ) {
