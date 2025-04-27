@@ -1791,7 +1791,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
 
         const auto [goldReward, experienceReward, artifactReward]
-            = [&hero = std::as_const( hero ), objectType, dst_index,
+            = [&hero = std::as_const( hero ), objectType,
                &tile = std::as_const( tile )]() -> std::tuple<std::optional<uint32_t>, std::optional<uint32_t>, std::optional<Artifact>> {
             const Artifact art = getArtifactFromTile( tile );
             const Funds funds = getFundsFromTile( tile );
