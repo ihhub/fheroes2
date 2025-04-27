@@ -295,8 +295,7 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color,
-                              const fheroes2::SupportedLanguage language )
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );

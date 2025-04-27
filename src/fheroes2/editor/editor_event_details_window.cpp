@@ -68,8 +68,8 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColor humanPlayerColors,
-                             const PlayerColor computerPlayerColors, const fheroes2::SupportedLanguage language )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+                             const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;

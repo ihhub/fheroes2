@@ -4764,8 +4764,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         // Set the rainbow animation direction to match the army side.
         // Also, if the creature is under effect of the Berserker spell (or similar), then check its original color.
-        bool isRainbowFromRight = ( unit.GetCurrentColor() == PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.GetArmy2Color() )
-                                                                                           : ( unit.GetCurrentColor() == arena.GetArmy2Color() );
+        bool isRainbowFromRight
+            = ( unit.GetCurrentColor() == PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.GetArmy2Color() ) : ( unit.GetCurrentColor() == arena.GetArmy2Color() );
 
         // The distance from the right or left battlefield border to the 'lucky' creature in the direction from the beginning of the animation to its end.
         const int32_t borderDistance = isRainbowFromRight ? battleArea.width - rainbowDescendPoint.x : rainbowDescendPoint.x;

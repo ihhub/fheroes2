@@ -1337,8 +1337,7 @@ namespace Interface
                 if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
-                    const PlayerColor color
-                        = ( objectType == MP2::OBJ_JAIL ) ? PlayerColor::NONE : static_cast<PlayerColor>( 1 << objectInfo.metadata[0] );
+                    const PlayerColor color = ( objectType == MP2::OBJ_JAIL ) ? PlayerColor::NONE : static_cast<PlayerColor>( 1 << objectInfo.metadata[0] );
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;

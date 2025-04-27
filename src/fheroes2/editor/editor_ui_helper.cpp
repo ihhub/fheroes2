@@ -71,8 +71,7 @@ namespace Editor
         int32_t colorsAdded = 0;
 
         for ( const PlayerColor color : PlayerColors( availableColors ) ) {
-            list.emplace_back(
-                std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != PlayerColor::NONE, output ) );
+            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != PlayerColor::NONE, output ) );
             ++colorsAdded;
         }
     }

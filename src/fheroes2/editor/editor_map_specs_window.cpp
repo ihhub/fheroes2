@@ -1665,8 +1665,7 @@ namespace
 
                 size_t selectedTownIndex = 0;
                 for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex
-                         && static_cast<PlayerColor>( _townToLose[1] ) == _mapTownInfos[i].color ) {
+                    if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex && static_cast<PlayerColor>( _townToLose[1] ) == _mapTownInfos[i].color ) {
                         selectedTownIndex = i;
                         break;
                     }
@@ -1715,8 +1714,7 @@ namespace
 
                 size_t selectedHeroIndex = 0;
                 for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex
-                         && static_cast<PlayerColor>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
+                    if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<PlayerColor>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
                         selectedHeroIndex = i;
                         break;
                     }

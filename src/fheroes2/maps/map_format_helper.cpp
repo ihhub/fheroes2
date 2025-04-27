@@ -897,18 +897,12 @@ namespace Maps
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
     {
-        static_assert( PlayerColor::BLUE == static_cast<PlayerColor>( 1 << 0 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( PlayerColor::GREEN == static_cast<PlayerColor>( 1 << 1 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( PlayerColor::RED == static_cast<PlayerColor>( 1 << 2 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( PlayerColor::YELLOW == static_cast<PlayerColor>( 1 << 3 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( PlayerColor::ORANGE == static_cast<PlayerColor>( 1 << 4 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( PlayerColor::PURPLE == static_cast<PlayerColor>( 1 << 5 ),
-                       "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::BLUE == static_cast<PlayerColor>( 1 << 0 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::GREEN == static_cast<PlayerColor>( 1 << 1 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::RED == static_cast<PlayerColor>( 1 << 2 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::YELLOW == static_cast<PlayerColor>( 1 << 3 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::ORANGE == static_cast<PlayerColor>( 1 << 4 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::PURPLE == static_cast<PlayerColor>( 1 << 5 ), "The kingdom color values have changed. You are going to break map format!" );
 
         static_assert( Race::NONE == 0, "The race values have changed. You are going to break map format!" );
         static_assert( Race::KNGT == 1 << 0, "The race values have changed. You are going to break map format!" );
