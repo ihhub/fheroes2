@@ -301,15 +301,15 @@ namespace fheroes2
             _updateCursorAreaInText();
         }
 
-        int32_t width() const final;
+        int32_t width() const override;
         // Use `width( const int32_t maxWidth )` from the Text class.
         using Text::width;
 
-        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const final;
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
         using Text::drawInRoi;
 
-        void fitToOneRow( const int32_t maxWidth ) final;
+        void fitToOneRow( const int32_t maxWidth ) override;
 
         size_t getCursorPosition( const Point & pos, const Rect & roi, const bool isCenterAligned ) const
         {
