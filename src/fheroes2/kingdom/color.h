@@ -101,23 +101,23 @@ public:
 
 namespace Color
 {
-    constexpr bool haveCommonColors( const ::PlayerColor firstColorSet, const ::PlayerColor secondColorSet )
+    constexpr bool haveCommonColors( const PlayerColor firstColorSet, const PlayerColor secondColorSet )
     {
-        return ( firstColorSet & secondColorSet ) != ::PlayerColor::NONE;
+        return ( firstColorSet & secondColorSet ) != PlayerColor::NONE;
     }
 
-    std::string String( const ::PlayerColor color );
+    std::string String( const PlayerColor color );
 
-    int GetIndex( const ::PlayerColor color );
+    int GetIndex( const PlayerColor color );
 
-    constexpr int Count( const ::PlayerColor colors )
+    constexpr int Count( const PlayerColor colors )
     {
-        return CountBits( static_cast<uint32_t>( colors & ::PlayerColor::ALL ) );
+        return CountBits( static_cast<uint32_t>( colors & PlayerColor::ALL ) );
     }
 
-    ::PlayerColor GetFirst( const ::PlayerColor colors );
+    PlayerColor GetFirst( const PlayerColor colors );
 
-    ::PlayerColor IndexToColor( const int index );
+    PlayerColor IndexToColor( const int index );
 }
 
 class ColorBase

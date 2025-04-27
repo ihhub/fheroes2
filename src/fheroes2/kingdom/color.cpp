@@ -75,22 +75,22 @@ PlayerColors::PlayerColors( const PlayerColor colors /* = PlayerColor::ALL */ )
 namespace Color
 {
 
-    std::string String( const ::PlayerColor color )
+    std::string String( const PlayerColor color )
     {
         switch ( color ) {
-        case ::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return _( "Blue" );
-        case ::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return _( "Green" );
-        case ::PlayerColor::RED:
+        case PlayerColor::RED:
             return _( "Red" );
-        case ::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return _( "Yellow" );
-        case ::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return _( "Orange" );
-        case ::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return _( "Purple" );
-        case ::PlayerColor::UNUSED:
+        case PlayerColor::UNUSED:
             return "Unknown";
         default:
             break;
@@ -99,20 +99,20 @@ namespace Color
         return "None";
     }
 
-    int GetIndex( const ::PlayerColor color )
+    int GetIndex( const PlayerColor color )
     {
         switch ( color ) {
-        case ::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return 0;
-        case ::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return 1;
-        case ::PlayerColor::RED:
+        case PlayerColor::RED:
             return 2;
-        case ::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return 3;
-        case ::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return 4;
-        case ::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return 5;
         default:
             break;
@@ -122,50 +122,50 @@ namespace Color
         return 6;
     }
 
-    ::PlayerColor GetFirst( const ::PlayerColor colors )
+    PlayerColor GetFirst( const PlayerColor colors )
     {
-        if ( haveCommonColors( colors, ::PlayerColor::BLUE ) ) {
-            return ::PlayerColor::BLUE;
+        if ( haveCommonColors( colors, PlayerColor::BLUE ) ) {
+            return PlayerColor::BLUE;
         }
-        if ( haveCommonColors( colors, ::PlayerColor::GREEN ) ) {
-            return ::PlayerColor::GREEN;
+        if ( haveCommonColors( colors, PlayerColor::GREEN ) ) {
+            return PlayerColor::GREEN;
         }
-        if ( haveCommonColors( colors, ::PlayerColor::RED ) ) {
-            return ::PlayerColor::RED;
+        if ( haveCommonColors( colors, PlayerColor::RED ) ) {
+            return PlayerColor::RED;
         }
-        if ( haveCommonColors( colors, ::PlayerColor::YELLOW ) ) {
-            return ::PlayerColor::YELLOW;
+        if ( haveCommonColors( colors, PlayerColor::YELLOW ) ) {
+            return PlayerColor::YELLOW;
         }
-        if ( haveCommonColors( colors, ::PlayerColor::ORANGE ) ) {
-            return ::PlayerColor::ORANGE;
+        if ( haveCommonColors( colors, PlayerColor::ORANGE ) ) {
+            return PlayerColor::ORANGE;
         }
-        if ( haveCommonColors( colors, ::PlayerColor::PURPLE ) ) {
-            return ::PlayerColor::PURPLE;
+        if ( haveCommonColors( colors, PlayerColor::PURPLE ) ) {
+            return PlayerColor::PURPLE;
         }
 
-        return ::PlayerColor::NONE;
+        return PlayerColor::NONE;
     }
 
-    ::PlayerColor IndexToColor( const int index )
+    PlayerColor IndexToColor( const int index )
     {
         switch ( index ) {
         case 0:
-            return ::PlayerColor::BLUE;
+            return PlayerColor::BLUE;
         case 1:
-            return ::PlayerColor::GREEN;
+            return PlayerColor::GREEN;
         case 2:
-            return ::PlayerColor::RED;
+            return PlayerColor::RED;
         case 3:
-            return ::PlayerColor::YELLOW;
+            return PlayerColor::YELLOW;
         case 4:
-            return ::PlayerColor::ORANGE;
+            return PlayerColor::ORANGE;
         case 5:
-            return ::PlayerColor::PURPLE;
+            return PlayerColor::PURPLE;
         default:
             break;
         }
 
-        return ::PlayerColor::NONE;
+        return PlayerColor::NONE;
     }
 }
 
