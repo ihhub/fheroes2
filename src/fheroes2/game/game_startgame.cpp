@@ -95,14 +95,14 @@ namespace
 
     // Get colors value of players to use in fog directions update.
     // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
-    Color::PlayerColor hotSeatAIFogColors( const Player * player )
+    PlayerColor hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
 
         // This function should be called when AI makes a move.
         assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
 
-        const Color::PlayerColor humanColors = Players::HumanColors();
+        const PlayerColor humanColors = Players::HumanColors();
         // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
@@ -119,9 +119,9 @@ namespace
         // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
         // discovered fog.
 
-        Color::PlayerColor friendColors = Color::PlayerColor::NONE;
+        PlayerColor friendColors = PlayerColor::NONE;
 
-        for ( const Color::PlayerColor color : Color::PlayerColors( humanColors ) ) {
+        for ( const PlayerColor color : PlayerColors( humanColors ) ) {
             const Player * humanPlayer = Players::Get( color );
             if ( humanPlayer ) {
                 friendColors |= humanPlayer->GetFriends();
@@ -228,7 +228,7 @@ fheroes2::GameMode Game::StartGame()
     return Interface::AdventureMap::Get().StartGame();
 }
 
-void Game::DialogPlayers( const Color::PlayerColor color, std::string title, std::string message )
+void Game::DialogPlayers( const PlayerColor color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
@@ -237,22 +237,22 @@ void Game::DialogPlayers( const Color::PlayerColor color, std::string title, std
     fheroes2::Sprite sign = border;
 
     switch ( color ) {
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
@@ -772,7 +772,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             // Player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
             skipTurns = false;
 
-            const Color::PlayerColor playerColor = player->GetColor();
+            const PlayerColor playerColor = player->GetColor();
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
@@ -798,7 +798,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::PlayerColor::NONE );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, PlayerColor::NONE );
 
                         redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -914,7 +914,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
 
         // Don't carry the current player color to the next turn.
-        conf.SetCurrentColor( Color::PlayerColor::NONE );
+        conf.SetCurrentColor( PlayerColor::NONE );
     }
 
     // If we are here, the res value should never be fheroes2::GameMode::END_TURN

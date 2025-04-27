@@ -1025,7 +1025,7 @@ void Army::setFromTile( const Maps::Tile & tile )
         _color = getColorFromTile( tile );
     }
     else {
-        _color = Color::PlayerColor::NONE;
+        _color = PlayerColor::NONE;
     }
 
     switch ( tile.getMainObjectType( false ) ) {
@@ -1168,7 +1168,7 @@ void Army::setFromTile( const Maps::Tile & tile )
     }
 }
 
-Color::PlayerColor Army::GetColor() const
+PlayerColor Army::GetColor() const
 {
     const HeroBase * currentCommander = GetCommander();
     return currentCommander != nullptr ? currentCommander->GetColor() : _color;
@@ -1363,7 +1363,7 @@ const HeroBase * Army::GetCommander() const
 
 int Army::GetControl() const
 {
-    return commander ? commander->GetControl() : ( _color == Color::PlayerColor::NONE ? CONTROL_AI : Players::GetPlayerControl( _color ) );
+    return commander ? commander->GetControl() : ( _color == PlayerColor::NONE ? CONTROL_AI : Players::GetPlayerControl( _color ) );
 }
 
 uint32_t Army::getTotalCount() const
@@ -1984,7 +1984,7 @@ IStreamBase & operator>>( IStreamBase & stream, Army & army )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        army._color = static_cast<Color::PlayerColor>( temp );
+        army._color = static_cast<PlayerColor>( temp );
     }
     else {
         stream >> army._color;

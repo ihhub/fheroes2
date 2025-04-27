@@ -433,24 +433,24 @@ namespace
     {
         icnId = ICN::UNKNOWN;
 
-        const Color::PlayerColor heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
         switch ( heroColor ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             icnId = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
             break;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             icnId = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
             break;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             icnId = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
             break;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             icnId = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
             break;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             icnId = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
             break;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             icnId = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
             break;
 
@@ -920,10 +920,10 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const Color::PlayerColor friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColor friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
-        if ( friendColors != Color::PlayerColor::NONE && tile.isFog( friendColors ) ) {
+        if ( friendColors != PlayerColor::NONE && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
 #else

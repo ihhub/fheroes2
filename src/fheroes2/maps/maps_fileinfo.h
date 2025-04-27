@@ -79,22 +79,22 @@ namespace Maps
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
-        Color::PlayerColor AllowCompHumanColors() const
+        PlayerColor AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
         }
 
-        Color::PlayerColor HumanOnlyColors() const
+        PlayerColor HumanOnlyColors() const
         {
             return colorsAvailableForHumans & ~colorsAvailableForComp;
         }
 
-        Color::PlayerColor ComputerOnlyColors() const
+        PlayerColor ComputerOnlyColors() const
         {
             return colorsAvailableForComp & ~colorsAvailableForHumans;
         }
 
-        int KingdomRace( const Color::PlayerColor color ) const;
+        int KingdomRace( const PlayerColor color ) const;
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
@@ -131,14 +131,14 @@ namespace Maps
             return lossConditionParams[0];
         }
 
-        void removeHumanColors( const Color::PlayerColor colors )
+        void removeHumanColors( const PlayerColor colors )
         {
             colorsAvailableForHumans &= ~colors;
         }
 
-        bool AllowChangeRace( const Color::PlayerColor color ) const
+        bool AllowChangeRace( const PlayerColor color ) const
         {
-            return ( colorsOfRandomRaces & color ) != Color::PlayerColor::NONE;
+            return ( colorsOfRandomRaces & color ) != PlayerColor::NONE;
         }
 
         void Reset();
@@ -187,12 +187,12 @@ namespace Maps
         uint8_t difficulty;
 
         std::array<uint8_t, maxNumOfPlayers> races;
-        std::array<Color::PlayerColor, maxNumOfPlayers> unions;
+        std::array<PlayerColor, maxNumOfPlayers> unions;
 
-        Color::PlayerColor kingdomColors;
-        Color::PlayerColor colorsAvailableForHumans;
-        Color::PlayerColor colorsAvailableForComp;
-        Color::PlayerColor colorsOfRandomRaces;
+        PlayerColor kingdomColors;
+        PlayerColor colorsAvailableForHumans;
+        PlayerColor colorsAvailableForComp;
+        PlayerColor colorsOfRandomRaces;
 
         // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
@@ -222,7 +222,7 @@ namespace Maps
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
     private:
-        void FillUnions( const Color::PlayerColor side1Colors, const Color::PlayerColor side2Colors );
+        void FillUnions( const PlayerColor side1Colors, const PlayerColor side2Colors );
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );

@@ -117,7 +117,7 @@ namespace Battle
         bool _isWide{ false };
         bool _isFlying{ false };
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
-        Color::PlayerColor _color{ Color::PlayerColor::NONE };
+        PlayerColor _color{ PlayerColor::NONE };
         // Board cells passability status at the time of current cache creation
         std::array<bool, Board::sizeInCells> _boardStatus{};
     };

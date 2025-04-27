@@ -78,8 +78,8 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
     const Settings & conf = Settings::Get();
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
-    const Color::PlayerColor player1Color = player1.GetColor();
-    const Color::PlayerColor player2Color = player2.GetColor();
+    const PlayerColor player1Color = player1.GetColor();
+    const PlayerColor player2Color = player2.GetColor();
 
     bool swap = false;
 
@@ -87,7 +87,7 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
         swap = true;
     }
     else if ( Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player1Color ) && Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player2Color ) ) {
-        const Color::PlayerColor humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+        const PlayerColor humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
         if ( Color::haveCommonColors( humans, player1Color ) ) {
             Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
@@ -177,7 +177,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
-    const Color::PlayerColor humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    const PlayerColor humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
@@ -349,10 +349,10 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             }
         }
         else {
-            const Color::PlayerColor playerColor = player->GetColor();
+            const PlayerColor playerColor = player->GetColor();
 
             if ( Color::haveCommonColors( fi.colorsAvailableForHumans, playerColor ) ) {
-                const Color::PlayerColor human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+                const PlayerColor human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( playerColor != human ) {
                     Player * currentPlayer = Players::Get( human );

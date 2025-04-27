@@ -791,7 +791,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
 void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
 {
-    const Color::PlayerColor currentColor = GetCurrentColor();
+    const PlayerColor currentColor = GetCurrentColor();
 
     if ( !CanRetreatOpponent( currentColor ) ) {
         ERROR_LOG( "Preconditions were not met" )
@@ -833,7 +833,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
         return true;
     };
 
-    const Color::PlayerColor currentColor = GetCurrentColor();
+    const PlayerColor currentColor = GetCurrentColor();
 
     if ( _army1->GetColor() == currentColor ) {
         Funds cost;
@@ -1327,7 +1327,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
 void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
 {
-    const auto checkParameters = []( const Color::PlayerColor color ) {
+    const auto checkParameters = []( const PlayerColor color ) {
         const Arena * arena = GetArena();
         assert( arena != nullptr );
 
@@ -1342,7 +1342,7 @@ void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
         return true;
     };
 
-    const Color::PlayerColor color = static_cast<Color::PlayerColor>( cmd.GetNextValue() );
+    const PlayerColor color = static_cast<PlayerColor>( cmd.GetNextValue() );
 
     if ( !checkParameters( color ) ) {
         ERROR_LOG( "Invalid parameters: "
@@ -1388,8 +1388,8 @@ void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
 
-    const Color::PlayerColor army1Color = GetArmy1Color();
-    const Color::PlayerColor army2Color = GetArmy2Color();
+    const PlayerColor army1Color = GetArmy1Color();
+    const PlayerColor army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_HUMAN ) {
         _autoCombatColors |= army1Color;

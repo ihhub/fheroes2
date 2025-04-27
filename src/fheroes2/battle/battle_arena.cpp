@@ -202,7 +202,7 @@ namespace
         return result;
     }
 
-    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const Color::PlayerColor preferredColor )
+    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const PlayerColor preferredColor )
     {
         Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
         Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
@@ -220,7 +220,7 @@ namespace
         return result;
     }
 
-    void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, Color::PlayerColor preferredColor,
+    void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, PlayerColor preferredColor,
                              const Battle::Units & orderHistory, Battle::Units & orderOfUnits )
     {
         orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
@@ -797,28 +797,28 @@ HeroBase * Battle::Arena::GetCommander2() const
     return _army2->GetCommander();
 }
 
-Color::PlayerColor Battle::Arena::GetArmy1Color() const
+PlayerColor Battle::Arena::GetArmy1Color() const
 {
     return _army1->GetColor();
 }
 
-Color::PlayerColor Battle::Arena::GetArmy2Color() const
+PlayerColor Battle::Arena::GetArmy2Color() const
 {
     return _army2->GetColor();
 }
 
-Color::PlayerColor Battle::Arena::GetCurrentColor() const
+PlayerColor Battle::Arena::GetCurrentColor() const
 {
     // This method should never be called in cases where there may not be an active unit
     if ( _currentUnit == nullptr ) {
         assert( 0 );
-        return Color::PlayerColor::NONE;
+        return PlayerColor::NONE;
     }
 
     return _currentUnit->GetCurrentOrArmyColor();
 }
 
-Color::PlayerColor Battle::Arena::GetOppositeColor( const Color::PlayerColor col ) const
+PlayerColor Battle::Arena::GetOppositeColor( const PlayerColor col ) const
 {
     return col == GetArmy1Color() ? GetArmy2Color() : GetArmy1Color();
 }
@@ -863,7 +863,7 @@ const SpellStorage & Battle::Arena::GetUsedSpells() const
     return _usedSpells;
 }
 
-int32_t Battle::Arena::GetFreePositionNearHero( const Color::PlayerColor heroColor ) const
+int32_t Battle::Arena::GetFreePositionNearHero( const PlayerColor heroColor ) const
 {
     std::vector<int> cellIds;
     if ( _army1->GetColor() == heroColor ) {
@@ -891,14 +891,14 @@ int32_t Battle::Arena::GetFreePositionNearHero( const Color::PlayerColor heroCol
     return -1;
 }
 
-bool Battle::Arena::CanSurrenderOpponent( Color::PlayerColor color ) const
+bool Battle::Arena::CanSurrenderOpponent( PlayerColor color ) const
 {
     const HeroBase * hero = getCommander( color );
     const HeroBase * enemyHero = getEnemyCommander( color );
     return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() );
 }
 
-bool Battle::Arena::CanRetreatOpponent( const Color::PlayerColor color ) const
+bool Battle::Arena::CanRetreatOpponent( const PlayerColor color ) const
 {
     const HeroBase * hero = getCommander( color );
     return hero && hero->isHeroes() && ( color == _army1->GetColor() || hero->inCastle() == nullptr );
@@ -1287,12 +1287,12 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
     return 0;
 }
 
-const HeroBase * Battle::Arena::getCommander( const Color::PlayerColor color ) const
+const HeroBase * Battle::Arena::getCommander( const PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? _army1->GetCommander() : _army2->GetCommander();
 }
 
-const HeroBase * Battle::Arena::getEnemyCommander( const Color::PlayerColor color ) const
+const HeroBase * Battle::Arena::getEnemyCommander( const PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? _army2->GetCommander() : _army1->GetCommander();
 }
@@ -1400,12 +1400,12 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     return true;
 }
 
-Battle::Force & Battle::Arena::getForce( const Color::PlayerColor color ) const
+Battle::Force & Battle::Arena::getForce( const PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? *_army1 : *_army2;
 }
 
-Battle::Force & Battle::Arena::getEnemyForce( const Color::PlayerColor color ) const
+Battle::Force & Battle::Arena::getEnemyForce( const PlayerColor color ) const
 {
     return ( _army1->GetColor() == color ) ? *_army2 : *_army1;
 }

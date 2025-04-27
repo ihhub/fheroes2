@@ -199,7 +199,7 @@ public:
     void Reset( const bool defaultArmy = false );
     void setFromTile( const Maps::Tile & tile );
 
-    Color::PlayerColor GetColor() const;
+    PlayerColor GetColor() const;
     int GetControl() const override;
     uint32_t getTotalCount() const;
 
@@ -207,7 +207,7 @@ public:
     bool isStrongerThan( const Army & target, const double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( const Color::PlayerColor color )
+    void SetColor( const PlayerColor color )
     {
         _color = color;
     }
@@ -274,5 +274,5 @@ private:
 
     HeroBase * commander;
     bool _isSpreadCombatFormation{ true };
-    Color::PlayerColor _color{ Color::PlayerColor::NONE };
+    PlayerColor _color{ PlayerColor::NONE };
 };

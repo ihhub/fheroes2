@@ -1258,7 +1258,7 @@ namespace Interface
                         continue;
                     }
                 }
-                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == Color::PlayerColor::NONE ) {
+                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == PlayerColor::NONE ) {
                     fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
                                                        _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
                 }
@@ -1306,7 +1306,7 @@ namespace Interface
     void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
-        ViewWorld::ViewWorldWindow( Color::PlayerColor::NONE, ViewWorldMode::ViewAll, *this );
+        ViewWorld::ViewWorldWindow( PlayerColor::NONE, ViewWorldMode::ViewAll, *this );
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
@@ -1337,8 +1337,8 @@ namespace Interface
                 if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
-                    const Color::PlayerColor color
-                        = ( objectType == MP2::OBJ_JAIL ) ? Color::PlayerColor::NONE : static_cast<Color::PlayerColor>( 1 << objectInfo.metadata[0] );
+                    const PlayerColor color
+                        = ( objectType == MP2::OBJ_JAIL ) ? PlayerColor::NONE : static_cast<PlayerColor>( 1 << objectInfo.metadata[0] );
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;
@@ -1357,7 +1357,7 @@ namespace Interface
                     assert( _mapFormat.castleMetadata.find( object.id ) != _mapFormat.castleMetadata.end() );
 
                     const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
-                    const Color::PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
 
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
@@ -1831,7 +1831,7 @@ namespace Interface
             }
 
             // By default use random (default) army for the neutral race town/castle.
-            if ( Color::IndexToColor( color ) == Color::PlayerColor::NONE ) {
+            if ( Color::IndexToColor( color ) == PlayerColor::NONE ) {
                 Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
             }
 

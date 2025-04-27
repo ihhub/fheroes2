@@ -1119,28 +1119,28 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
         uint8_t color = ARMY_COLOR_GRAY;
 
         switch ( unit.GetCurrentColor() ) {
-        case Color::PlayerColor::UNUSED: // Berserkers
+        case PlayerColor::UNUSED: // Berserkers
             color = ARMY_COLOR_BLACK;
             break;
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             color = ARMY_COLOR_BLUE;
             break;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             color = ARMY_COLOR_GREEN;
             break;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             color = ARMY_COLOR_RED;
             break;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             color = ARMY_COLOR_YELLOW;
             break;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             color = ARMY_COLOR_ORANGE;
             break;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             color = ARMY_COLOR_PURPLE;
             break;
-        case Color::PlayerColor::NONE:
+        case PlayerColor::NONE:
             break;
         default:
             assert( 0 ); // Did you add another player color?
@@ -1777,19 +1777,19 @@ void Battle::Interface::RedrawOpponents()
 
 void Battle::Interface::RedrawOpponentsFlags()
 {
-    auto getFlagIcn = []( const Color::PlayerColor color ) {
+    auto getFlagIcn = []( const PlayerColor color ) {
         switch ( color ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return ICN::HEROFL00;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return ICN::HEROFL01;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             return ICN::HEROFL02;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return ICN::HEROFL03;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return ICN::HEROFL04;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return ICN::HEROFL05;
         default:
             break;
@@ -2684,10 +2684,10 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
 void Battle::Interface::getPendingActions( Actions & actions )
 {
-    if ( _interruptAutoCombatForColor != Color::PlayerColor::NONE ) {
-        actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<Color::PlayerColor>>( _interruptAutoCombatForColor ) );
+    if ( _interruptAutoCombatForColor != PlayerColor::NONE ) {
+        actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<PlayerColor>>( _interruptAutoCombatForColor ) );
 
-        _interruptAutoCombatForColor = Color::PlayerColor::NONE;
+        _interruptAutoCombatForColor = PlayerColor::NONE;
     }
 }
 
@@ -3217,7 +3217,7 @@ void Battle::Interface::_startAutoCombat( const Unit & unit, Actions & actions )
     // TODO: remove this temporary assertion
     assert( arena.CanToggleAutoCombat() && !arena.AutoCombatInProgress() );
 
-    actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<Color::PlayerColor>>( unit.GetCurrentOrArmyColor() ) );
+    actions.emplace_back( Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<PlayerColor>>( unit.GetCurrentOrArmyColor() ) );
 
     humanturn_redraw = true;
     humanturn_exit = true;
@@ -3785,7 +3785,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // Number of targets to be animated with a wince or kill animation.
     ptrdiff_t animatingTargets = 0;
-    Color::PlayerColor deathColor = Color::PlayerColor::UNUSED;
+    PlayerColor deathColor = PlayerColor::UNUSED;
 
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
@@ -3955,9 +3955,9 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     }
 }
 
-void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const Color::PlayerColor deathColor ) const
+void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const PlayerColor deathColor ) const
 {
-    if ( deathColor == Color::PlayerColor::UNUSED ) {
+    if ( deathColor == PlayerColor::UNUSED ) {
         return;
     }
 
@@ -4764,7 +4764,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         // Set the rainbow animation direction to match the army side.
         // Also, if the creature is under effect of the Berserker spell (or similar), then check its original color.
-        bool isRainbowFromRight = ( unit.GetCurrentColor() == Color::PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.GetArmy2Color() )
+        bool isRainbowFromRight = ( unit.GetCurrentColor() == PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.GetArmy2Color() )
                                                                                            : ( unit.GetCurrentColor() == arena.GetArmy2Color() );
 
         // The distance from the right or left battlefield border to the 'lucky' creature in the direction from the beginning of the animation to its end.
@@ -6187,7 +6187,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     _currentUnit = nullptr;
 
     if ( wnce ) {
-        Color::PlayerColor deathColor = Color::PlayerColor::UNUSED;
+        PlayerColor deathColor = PlayerColor::UNUSED;
 
         std::set<int> unitSounds;
 
@@ -6516,7 +6516,7 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
     }
 
     // Identify which color requested the auto combat interruption.
-    Color::PlayerColor color = arena.GetCurrentColor();
+    PlayerColor color = arena.GetCurrentColor();
     if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
         color = arena.GetOppositeColor( color );
     }
@@ -6527,7 +6527,7 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
     }
 
     // Right now there should be no pending auto combat interruptions.
-    assert( _interruptAutoCombatForColor == Color::PlayerColor::NONE );
+    assert( _interruptAutoCombatForColor == PlayerColor::NONE );
 
     const int interrupt = fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to interrupt the auto combat mode?" ), Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {

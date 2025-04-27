@@ -947,20 +947,20 @@ int ICN::getCastleIcnId( const int race )
     return UNKNOWN;
 }
 
-int ICN::getFlagIcnId( const Color::PlayerColor color )
+int ICN::getFlagIcnId( const PlayerColor color )
 {
     switch ( color ) {
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         return ICN::HEROFL00;
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         return ICN::HEROFL01;
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         return ICN::HEROFL02;
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         return ICN::HEROFL03;
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         return ICN::HEROFL04;
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         return ICN::HEROFL05;
     default:
         return ICN::HEROFL06;

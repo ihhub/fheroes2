@@ -76,15 +76,15 @@
 
 namespace
 {
-    Color::PlayerColor AIGetAllianceColors()
+    PlayerColor AIGetAllianceColors()
     {
         // accumulate colors
-        Color::PlayerColor colors = Color::PlayerColor::NONE;
+        PlayerColor colors = PlayerColor::NONE;
 
         if ( Settings::Get().GameType() & Game::TYPE_HOTSEAT ) {
-            const Color::PlayerColors vcolors( Players::HumanColors() );
+            const PlayerColors vcolors( Players::HumanColors() );
 
-            for ( const Color::PlayerColor color : vcolors ) {
+            for ( const PlayerColor color : vcolors ) {
                 const Player * player = Players::Get( color );
                 if ( player )
                     colors |= player->GetFriends();
@@ -100,13 +100,13 @@ namespace
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIIsShowAnimationForHero( const Heroes & hero, const Color::PlayerColor colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColor colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
         }
 
-        if ( colors == Color::PlayerColor::NONE ) {
+        if ( colors == PlayerColor::NONE ) {
             return false;
         }
 
@@ -129,13 +129,13 @@ namespace
         return false;
     }
 
-    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const Color::PlayerColor colors )
+    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColor colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
         }
 
-        if ( colors == Color::PlayerColor::NONE ) {
+        if ( colors == PlayerColor::NONE ) {
             return false;
         }
 
@@ -1505,7 +1505,7 @@ namespace
         Maps::Tile & tile = world.getTile( tileIndex );
         bool recruitmentAllowed = true;
 
-        if ( getColorFromTile( tile ) == Color::PlayerColor::NONE ) {
+        if ( getColorFromTile( tile ) == PlayerColor::NONE ) {
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
@@ -1513,7 +1513,7 @@ namespace
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
-                setColorOnTile( tile, Color::PlayerColor::UNUSED );
+                setColorOnTile( tile, PlayerColor::UNUSED );
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -2130,7 +2130,7 @@ void AI::HeroesMove( Heroes & hero )
 
     const Settings & conf = Settings::Get();
 
-    const Color::PlayerColor colors = AIGetAllianceColors();
+    const PlayerColor colors = AIGetAllianceColors();
     bool recenterNeeded = true;
 
     int heroAnimationFrameCount = 0;
@@ -2296,7 +2296,7 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
 
     hero.SpellCasted( summonBoat );
 
-    const Color::PlayerColor heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
 
     Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
 

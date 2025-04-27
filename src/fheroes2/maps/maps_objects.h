@@ -73,15 +73,15 @@ struct MapEvent final : public MapBaseObject
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
-    bool isAllow( const Color::PlayerColor color ) const
+    bool isAllow( const PlayerColor color ) const
     {
-        return ( color & colors ) != Color::PlayerColor::NONE;
+        return ( color & colors ) != PlayerColor::NONE;
     }
 
     void SetVisited()
     {
         if ( isSingleTimeEvent ) {
-            colors = Color::PlayerColor::NONE;
+            colors = PlayerColor::NONE;
         }
     }
 
@@ -89,7 +89,7 @@ struct MapEvent final : public MapBaseObject
     Artifact artifact;
     bool isComputerPlayerAllowed{ false };
     bool isSingleTimeEvent{ true };
-    Color::PlayerColor colors{ Color::PlayerColor::NONE };
+    PlayerColor colors{ PlayerColor::NONE };
     std::string message;
 
     Skill::Secondary secondarySkill;

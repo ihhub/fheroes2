@@ -140,23 +140,23 @@ namespace
     }
 
     // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 'unknownIndex' for unknown color.
-    uint32_t colorToOffsetICN( const Color::PlayerColor color )
+    uint32_t colorToOffsetICN( const PlayerColor color )
     {
         switch ( color ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return 0;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return 1;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             return 2;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return 3;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return 4;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return 5;
-        case Color::PlayerColor::NONE:
-        case Color::PlayerColor::UNUSED:
+        case PlayerColor::NONE:
+        case PlayerColor::UNUSED:
             return 6;
         default:
             return unknownIndex;
@@ -314,7 +314,7 @@ namespace
         }
     }
 
-    void DrawObjectsIcons( const Color::PlayerColor color, const ViewWorldMode mode, CacheForMapWithResources & cache )
+    void DrawObjectsIcons( const PlayerColor color, const ViewWorldMode mode, CacheForMapWithResources & cache )
     {
         const bool revealAll = mode == ViewWorldMode::ViewAll;
         const bool revealMines = revealAll || ( mode == ViewWorldMode::ViewMines );
@@ -586,7 +586,7 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     return result;
 }
 
-void ViewWorld::ViewWorldWindow( const Color::PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface )
+void ViewWorld::ViewWorldWindow( const PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

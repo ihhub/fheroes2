@@ -37,10 +37,7 @@
 
 class HeroBase;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace Battle
 {
@@ -140,7 +137,7 @@ namespace Battle
         uint32_t GetDeadHitPoints() const;
         uint32_t GetDeadCounts() const;
 
-        Color::PlayerColor GetColor() const;
+        PlayerColor GetColor() const;
         int GetControl() const;
 
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield

@@ -215,25 +215,25 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {
     case 0:
-        SetColor( Color::PlayerColor::BLUE );
+        SetColor( PlayerColor::BLUE );
         break;
     case 1:
-        SetColor( Color::PlayerColor::GREEN );
+        SetColor( PlayerColor::GREEN );
         break;
     case 2:
-        SetColor( Color::PlayerColor::RED );
+        SetColor( PlayerColor::RED );
         break;
     case 3:
-        SetColor( Color::PlayerColor::YELLOW );
+        SetColor( PlayerColor::YELLOW );
         break;
     case 4:
-        SetColor( Color::PlayerColor::ORANGE );
+        SetColor( PlayerColor::ORANGE );
         break;
     case 5:
-        SetColor( Color::PlayerColor::PURPLE );
+        SetColor( PlayerColor::PURPLE );
         break;
     default:
-        SetColor( Color::PlayerColor::NONE );
+        SetColor( PlayerColor::NONE );
         break;
     }
 
@@ -366,7 +366,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         break;
     default: {
         const int kingdomRace = Players::GetPlayerRace( GetColor() );
-        _race = ( Color::PlayerColor::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
+        _race = ( PlayerColor::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
         break;
     }
     }
@@ -501,7 +501,7 @@ void Castle::_postLoad()
     _trainGuestHeroAndCaptainInMageGuild();
 
     // AI troops auto pack for gray towns
-    if ( Color::PlayerColor::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
+    if ( PlayerColor::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
         // towns get 4 reinforcements at the start of the game
         for ( int i = 0; i < 4; ++i )
             _joinRNDArmy();
@@ -837,7 +837,7 @@ void Castle::ActionNewWeek()
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6,
             DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
 
-    const bool isNeutral = ( GetColor() == Color::PlayerColor::NONE );
+    const bool isNeutral = ( GetColor() == PlayerColor::NONE );
     const bool isPlagueWeek = ( world.GetWeekType().GetType() == WeekName::PLAGUE );
     const bool isMonsterWeek = ( world.GetWeekType().GetType() == WeekName::MONSTERS );
 
@@ -936,7 +936,7 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ChangeColor( const Color::PlayerColor newColor )
+void Castle::ChangeColor( const PlayerColor newColor )
 {
     SetColor( newColor );
     _army.SetColor( newColor );
@@ -2178,7 +2178,7 @@ void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 int Castle::GetControl() const
 {
     // Neutral castles & towns are always controlled by AI
-    return Color::haveCommonColors( Color::PlayerColor::ALL, GetColor() ) ? GetKingdom().GetControl() : CONTROL_AI;
+    return Color::haveCommonColors( PlayerColor::ALL, GetColor() ) ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
 uint32_t Castle::GetGrownWell()
@@ -2332,7 +2332,7 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     return _castles[iter->second].get();
 }
 
-void AllCastles::Scout( const Color::PlayerColor colors ) const
+void AllCastles::Scout( const PlayerColor colors ) const
 {
     for ( const Castle * castle : *this ) {
         assert( castle != nullptr );

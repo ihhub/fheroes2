@@ -25,10 +25,7 @@
 
 #include <cstdint>
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace ICN
 {
@@ -1126,5 +1123,5 @@ namespace ICN
     int getBuildingIcnId( const int race );
     int getCastleIcnId( const int race );
 
-    int getFlagIcnId( const Color::PlayerColor color );
+    int getFlagIcnId( const PlayerColor color );
 }

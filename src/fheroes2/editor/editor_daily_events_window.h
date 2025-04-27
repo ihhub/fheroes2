@@ -23,10 +23,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace Maps::Map_Format
 {
@@ -40,6 +37,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const Color::PlayerColor humanPlayerColors,
-                                const Color::PlayerColor computerPlayerColors, const fheroes2::SupportedLanguage language );
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+                                const fheroes2::SupportedLanguage language );
 }

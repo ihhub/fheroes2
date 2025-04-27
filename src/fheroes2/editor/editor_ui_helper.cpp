@@ -35,11 +35,11 @@
 
 namespace Editor
 {
-    Checkbox::Checkbox( const int32_t x, const int32_t y, const Color::PlayerColor boxColor, const bool checked, fheroes2::Image & output )
+    Checkbox::Checkbox( const int32_t x, const int32_t y, const PlayerColor boxColor, const bool checked, fheroes2::Image & output )
         : _color( boxColor )
         , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
     {
-        const int32_t icnIndex = ( _color == Color::PlayerColor::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
+        const int32_t icnIndex = ( _color == PlayerColor::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
         const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
 
         _area = { x, y, playerIcon.width(), playerIcon.height() };
@@ -65,14 +65,14 @@ namespace Editor
         return !_checkmark.isHidden();
     }
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const Color::PlayerColor availableColors, const Color::PlayerColor selectedColors,
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColor availableColors, const PlayerColor selectedColors,
                                 const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output )
     {
         int32_t colorsAdded = 0;
 
-        for ( const Color::PlayerColor color : Color::PlayerColors( availableColors ) ) {
+        for ( const PlayerColor color : PlayerColors( availableColors ) ) {
             list.emplace_back(
-                std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != Color::PlayerColor::NONE, output ) );
+                std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != PlayerColor::NONE, output ) );
             ++colorsAdded;
         }
     }

@@ -448,7 +448,7 @@ namespace
 
     std::string getQuickInfoText( const Maps::Tile & tile )
     {
-        const Color::PlayerColor playerColor = Settings::Get().CurrentColor();
+        const PlayerColor playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
@@ -626,7 +626,7 @@ namespace
         const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
         fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
-        const Color::PlayerColor currentColor = conf.CurrentColor();
+        const PlayerColor currentColor = conf.CurrentColor();
         const Kingdom & kingdom = world.GetKingdom( currentColor );
 
         const bool isDetailedView = castle.isFriends( currentColor ) || kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
@@ -699,7 +699,7 @@ namespace
 
         const Settings & conf = Settings::Get();
 
-        const bool isNeutralHero = ( hero.GetColor() == Color::PlayerColor::NONE );
+        const bool isNeutralHero = ( hero.GetColor() == PlayerColor::NONE );
         const bool isFullInfo = [&hero, showFullInfo, &conf, isNeutralHero]() {
             if ( showFullInfo ) {
                 return *showFullInfo;
@@ -901,9 +901,9 @@ void Dialog::QuickInfo( const Maps::Tile & tile )
 {
     std::string infoString;
 
-    const Color::PlayerColor playerColor = Settings::Get().CurrentColor();
+    const PlayerColor playerColor = Settings::Get().CurrentColor();
 
-    if ( ( playerColor != Color::PlayerColor::NONE ) && tile.isFog( playerColor ) ) {
+    if ( ( playerColor != PlayerColor::NONE ) && tile.isFog( playerColor ) ) {
         infoString = _( "Uncharted Territory" );
     }
     else {

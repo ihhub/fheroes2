@@ -130,30 +130,30 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
 
     dataStream.skip( 10 );
 
-    colors = Color::PlayerColor::NONE;
+    colors = PlayerColor::NONE;
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::BLUE;
+        colors |= PlayerColor::BLUE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::GREEN;
+        colors |= PlayerColor::GREEN;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::RED;
+        colors |= PlayerColor::RED;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::YELLOW;
+        colors |= PlayerColor::YELLOW;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::ORANGE;
+        colors |= PlayerColor::ORANGE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PlayerColor::PURPLE;
+        colors |= PlayerColor::PURPLE;
     }
 
     message = dataStream.getString();
@@ -355,7 +355,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int colors;
         stream >> colors;
-        obj.colors = static_cast<Color::PlayerColor>( colors );
+        obj.colors = static_cast<PlayerColor>( colors );
     }
     else {
         stream >> obj.colors;

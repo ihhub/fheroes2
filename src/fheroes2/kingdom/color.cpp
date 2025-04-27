@@ -48,48 +48,49 @@ namespace
     };
 }
 
+PlayerColors::PlayerColors( const PlayerColor colors /* = PlayerColor::ALL */ )
+{
+    reserve( 6 );
+
+    if ( Color::haveCommonColors( colors, PlayerColor::BLUE ) ) {
+        push_back( PlayerColor::BLUE );
+    }
+    if ( Color::haveCommonColors( colors, PlayerColor::GREEN ) ) {
+        push_back( PlayerColor::GREEN );
+    }
+    if ( Color::haveCommonColors( colors, PlayerColor::RED ) ) {
+        push_back( PlayerColor::RED );
+    }
+    if ( Color::haveCommonColors( colors, PlayerColor::YELLOW ) ) {
+        push_back( PlayerColor::YELLOW );
+    }
+    if ( Color::haveCommonColors( colors, PlayerColor::ORANGE ) ) {
+        push_back( PlayerColor::ORANGE );
+    }
+    if ( Color::haveCommonColors( colors, PlayerColor::PURPLE ) ) {
+        push_back( PlayerColor::PURPLE );
+    }
+}
+
 namespace Color
 {
-    PlayerColors::PlayerColors( const Color::PlayerColor colors /* = Color::ALL */ )
-    {
-        reserve( 6 );
 
-        if ( haveCommonColors( colors, Color::PlayerColor::BLUE ) ) {
-            push_back( Color::PlayerColor::BLUE );
-        }
-        if ( haveCommonColors( colors, Color::PlayerColor::GREEN ) ) {
-            push_back( Color::PlayerColor::GREEN );
-        }
-        if ( haveCommonColors( colors, Color::PlayerColor::RED ) ) {
-            push_back( Color::PlayerColor::RED );
-        }
-        if ( haveCommonColors( colors, Color::PlayerColor::YELLOW ) ) {
-            push_back( Color::PlayerColor::YELLOW );
-        }
-        if ( haveCommonColors( colors, Color::PlayerColor::ORANGE ) ) {
-            push_back( Color::PlayerColor::ORANGE );
-        }
-        if ( haveCommonColors( colors, Color::PlayerColor::PURPLE ) ) {
-            push_back( Color::PlayerColor::PURPLE );
-        }
-    }
-
-    std::string String( const PlayerColor color )
+    std::string String( const ::PlayerColor color )
     {
         switch ( color ) {
-        case PlayerColor::BLUE:
+        case ::PlayerColor::BLUE:
             return _( "Blue" );
-        case PlayerColor::GREEN:
+        case ::PlayerColor::GREEN:
             return _( "Green" );
-        case PlayerColor::RED:
+        case ::PlayerColor::RED:
             return _( "Red" );
-        case PlayerColor::YELLOW:
+        case ::PlayerColor::YELLOW:
             return _( "Yellow" );
-        case PlayerColor::ORANGE:
+        case ::PlayerColor::ORANGE:
             return _( "Orange" );
-        case PlayerColor::PURPLE:
+        case ::PlayerColor::PURPLE:
             return _( "Purple" );
-        case PlayerColor::UNUSED:
+        case ::PlayerColor::UNUSED:
             return "Unknown";
         default:
             break;
@@ -98,20 +99,20 @@ namespace Color
         return "None";
     }
 
-    int GetIndex( const PlayerColor color )
+    int GetIndex( const ::PlayerColor color )
     {
         switch ( color ) {
-        case PlayerColor::BLUE:
+        case ::PlayerColor::BLUE:
             return 0;
-        case PlayerColor::GREEN:
+        case ::PlayerColor::GREEN:
             return 1;
-        case PlayerColor::RED:
+        case ::PlayerColor::RED:
             return 2;
-        case PlayerColor::YELLOW:
+        case ::PlayerColor::YELLOW:
             return 3;
-        case PlayerColor::ORANGE:
+        case ::PlayerColor::ORANGE:
             return 4;
-        case PlayerColor::PURPLE:
+        case ::PlayerColor::PURPLE:
             return 5;
         default:
             break;
@@ -121,50 +122,50 @@ namespace Color
         return 6;
     }
 
-    PlayerColor GetFirst( const PlayerColor colors )
+    ::PlayerColor GetFirst( const ::PlayerColor colors )
     {
-        if ( haveCommonColors( colors, PlayerColor::BLUE ) ) {
-            return PlayerColor::BLUE;
+        if ( haveCommonColors( colors, ::PlayerColor::BLUE ) ) {
+            return ::PlayerColor::BLUE;
         }
-        if ( haveCommonColors( colors, PlayerColor::GREEN ) ) {
-            return PlayerColor::GREEN;
+        if ( haveCommonColors( colors, ::PlayerColor::GREEN ) ) {
+            return ::PlayerColor::GREEN;
         }
-        if ( haveCommonColors( colors, PlayerColor::RED ) ) {
-            return PlayerColor::RED;
+        if ( haveCommonColors( colors, ::PlayerColor::RED ) ) {
+            return ::PlayerColor::RED;
         }
-        if ( haveCommonColors( colors, PlayerColor::YELLOW ) ) {
-            return PlayerColor::YELLOW;
+        if ( haveCommonColors( colors, ::PlayerColor::YELLOW ) ) {
+            return ::PlayerColor::YELLOW;
         }
-        if ( haveCommonColors( colors, PlayerColor::ORANGE ) ) {
-            return PlayerColor::ORANGE;
+        if ( haveCommonColors( colors, ::PlayerColor::ORANGE ) ) {
+            return ::PlayerColor::ORANGE;
         }
-        if ( haveCommonColors( colors, PlayerColor::PURPLE ) ) {
-            return PlayerColor::PURPLE;
+        if ( haveCommonColors( colors, ::PlayerColor::PURPLE ) ) {
+            return ::PlayerColor::PURPLE;
         }
 
-        return PlayerColor::NONE;
+        return ::PlayerColor::NONE;
     }
 
-    PlayerColor IndexToColor( const int index )
+    ::PlayerColor IndexToColor( const int index )
     {
         switch ( index ) {
         case 0:
-            return PlayerColor::BLUE;
+            return ::PlayerColor::BLUE;
         case 1:
-            return PlayerColor::GREEN;
+            return ::PlayerColor::GREEN;
         case 2:
-            return PlayerColor::RED;
+            return ::PlayerColor::RED;
         case 3:
-            return PlayerColor::YELLOW;
+            return ::PlayerColor::YELLOW;
         case 4:
-            return PlayerColor::ORANGE;
+            return ::PlayerColor::ORANGE;
         case 5:
-            return PlayerColor::PURPLE;
+            return ::PlayerColor::PURPLE;
         default:
             break;
         }
 
-        return PlayerColor::NONE;
+        return ::PlayerColor::NONE;
     }
 }
 
@@ -220,28 +221,28 @@ const char * fheroes2::getTentColorName( const int color )
     return "None";
 }
 
-bool ColorBase::isFriends( const Color::PlayerColor col ) const
+bool ColorBase::isFriends( const PlayerColor col ) const
 {
-    return Color::haveCommonColors( Color::PlayerColor::ALL, col ) && ( _color == col || Players::isFriends( _color, col ) );
+    return Color::haveCommonColors( PlayerColor::ALL, col ) && ( _color == col || Players::isFriends( _color, col ) );
 }
 
-void ColorBase::SetColor( const Color::PlayerColor col )
+void ColorBase::SetColor( const PlayerColor col )
 {
     switch ( col ) {
-    case Color::PlayerColor::NONE:
-    case Color::PlayerColor::BLUE:
-    case Color::PlayerColor::GREEN:
-    case Color::PlayerColor::RED:
-    case Color::PlayerColor::YELLOW:
-    case Color::PlayerColor::ORANGE:
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::NONE:
+    case PlayerColor::BLUE:
+    case PlayerColor::GREEN:
+    case PlayerColor::RED:
+    case PlayerColor::YELLOW:
+    case PlayerColor::ORANGE:
+    case PlayerColor::PURPLE:
         _color = col;
         break;
     default:
 #ifdef WITH_DEBUG
         assert( 0 );
 #endif
-        _color = Color::PlayerColor::NONE;
+        _color = PlayerColor::NONE;
         break;
     }
 }
@@ -262,7 +263,7 @@ IStreamBase & operator>>( IStreamBase & stream, ColorBase & col )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        col._color = static_cast<Color::PlayerColor>( temp );
+        col._color = static_cast<PlayerColor>( temp );
     }
     else {
         stream >> col._color;

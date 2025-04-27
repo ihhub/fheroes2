@@ -416,10 +416,10 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     _tilePassabilityDirections = DIRECTION_ALL;
 
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
-    _fogColors = Color::PlayerColor::ALL;
+    _fogColors = PlayerColor::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
-    _boatOwnerColor = Color::PlayerColor::NONE;
+    _boatOwnerColor = PlayerColor::NONE;
     _index = index;
 
     setMainObjectType( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
@@ -536,7 +536,7 @@ void Maps::Tile::setMainObjectType( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tile::setBoat( const int direction, const Color::PlayerColor color )
+void Maps::Tile::setBoat( const int direction, const PlayerColor color )
 {
     if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
@@ -593,7 +593,7 @@ void Maps::Tile::setBoat( const int direction, const Color::PlayerColor color )
 #endif // WITH_DEBUG
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
-    static_assert( std::is_same_v<BoatOwnerColorType, Color::PlayerColor> );
+    static_assert( std::is_same_v<BoatOwnerColorType, PlayerColor> );
 
     assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
 
@@ -1064,7 +1064,7 @@ std::string Maps::Tile::String() const
 
 bool Maps::Tile::GoodForUltimateArtifact() const
 {
-    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, Color::PlayerColor::NONE ) ) {
+    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, PlayerColor::NONE ) ) {
         return false;
     }
 
@@ -1094,7 +1094,7 @@ bool Maps::Tile::isPassabilityTransparent() const
     return _mainObjectPart.isPassabilityTransparent();
 }
 
-bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const Color::PlayerColor heroColor ) const
+bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const
 {
     if ( !ignoreFog && isFog( heroColor ) ) {
         return false;
@@ -1171,35 +1171,35 @@ Maps::ObjectPart * Maps::Tile::getObjectPartWithFlag( const uint32_t uid )
     return nullptr;
 }
 
-void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, Color::PlayerColor color )
+void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, PlayerColor color )
 {
     // All flags in FLAG32.ICN are actually the same except the fact of having different offset.
     // Set the default value for the UNUSED color.
     uint8_t objectSpriteIndex = 6;
 
     switch ( color ) {
-    case Color::PlayerColor::NONE:
+    case PlayerColor::NONE:
         // No flag. Just ignore it.
         break;
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         objectSpriteIndex = 0;
         break;
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         objectSpriteIndex = 1;
         break;
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         objectSpriteIndex = 2;
         break;
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         objectSpriteIndex = 3;
         break;
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         objectSpriteIndex = 4;
         break;
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         objectSpriteIndex = 5;
         break;
-    case Color::PlayerColor::UNUSED:
+    case PlayerColor::UNUSED:
         // Should never be called using this color as an argument.
         assert( 0 );
         break;
@@ -1246,8 +1246,8 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, Color::P
 
     case MP2::OBJ_CASTLE:
         // Neutral castles always have flags on both sides of the gate, they should not be completely removed.
-        if ( color == Color::PlayerColor::NONE ) {
-            color = Color::PlayerColor::UNUSED;
+        if ( color == PlayerColor::NONE ) {
+            color = PlayerColor::UNUSED;
         }
 
         objectSpriteIndex *= 2;
@@ -1268,10 +1268,10 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, Color::P
     }
 }
 
-void Maps::Tile::updateFlag( const Color::PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )
+void Maps::Tile::updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )
 {
     // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
-    if ( color == Color::PlayerColor::NONE ) {
+    if ( color == PlayerColor::NONE ) {
         const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part.icnType == MP2::OBJ_ICN_TYPE_FLAG32; };
         _groundObjectPart.remove_if( isFlag );
         _topObjectPart.remove_if( isFlag );
@@ -1545,7 +1545,7 @@ void Maps::Tile::updateObjectImageIndex( const uint32_t objectUid, const MP2::Ob
     }
 }
 
-void Maps::Tile::ClearFog( const Color::PlayerColor colors )
+void Maps::Tile::ClearFog( const PlayerColor colors )
 {
     _fogColors &= ~colors;
 

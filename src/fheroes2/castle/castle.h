@@ -277,7 +277,7 @@ public:
     double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
-    void ChangeColor( const Color::PlayerColor newColor );
+    void ChangeColor( const PlayerColor newColor );
 
     void ActionNewDay();
     void ActionNewWeek();
@@ -556,7 +556,7 @@ public:
 
     Castle * Get( const fheroes2::Point & position ) const;
 
-    void Scout( const Color::PlayerColor colors ) const;
+    void Scout( const PlayerColor colors ) const;
 
     void NewDay() const;
     void NewWeek() const;

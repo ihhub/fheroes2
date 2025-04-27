@@ -34,10 +34,7 @@
 #include "translations.h"
 #include "world.h"
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 std::string Difficulty::String( int difficulty )
 {

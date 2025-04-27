@@ -53,20 +53,20 @@ public:
     }
 };
 
-class ObjectColor : public std::pair<MP2::MapObjectType, Color::PlayerColor>
+class ObjectColor : public std::pair<MP2::MapObjectType, PlayerColor>
 {
 public:
     ObjectColor()
-        : std::pair<MP2::MapObjectType, Color::PlayerColor>( MP2::OBJ_NONE, Color::PlayerColor::NONE )
+        : std::pair<MP2::MapObjectType, PlayerColor>( MP2::OBJ_NONE, PlayerColor::NONE )
     {}
 
-    ObjectColor( MP2::MapObjectType object, Color::PlayerColor color )
-        : std::pair<MP2::MapObjectType, Color::PlayerColor>( object, color )
+    ObjectColor( MP2::MapObjectType object, PlayerColor color )
+        : std::pair<MP2::MapObjectType, PlayerColor>( object, color )
     {}
 
-    bool isColor( Color::PlayerColor colors ) const
+    bool isColor( PlayerColor colors ) const
     {
-        return ( colors & second ) != Color::PlayerColor::NONE;
+        return ( colors & second ) != PlayerColor::NONE;
     }
 };
 
@@ -111,7 +111,7 @@ inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor
         int temp;
         stream >> temp;
 
-        objectColor.second = static_cast<Color::PlayerColor>( temp );
+        objectColor.second = static_cast<PlayerColor>( temp );
     }
     else {
         stream >> objectColor.second;

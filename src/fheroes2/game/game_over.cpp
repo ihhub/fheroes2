@@ -276,13 +276,13 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         const Player * currentPlayer = Settings::Get().GetPlayers().GetCurrent();
         assert( currentPlayer != nullptr );
 
-        const Color::PlayerColor currentColor = currentPlayer->GetColor();
-        const Color::PlayerColor friendColors = currentPlayer->GetFriends();
+        const PlayerColor currentColor = currentPlayer->GetColor();
+        const PlayerColor friendColors = currentPlayer->GetFriends();
 
-        const auto makeListOfPlayers = []( const Color::PlayerColor colors ) {
+        const auto makeListOfPlayers = []( const PlayerColor colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
-            for ( const Color::PlayerColor col : Color::PlayerColors( colors ) ) {
+            for ( const PlayerColor col : PlayerColors( colors ) ) {
                 const Player * player = Players::Get( col );
                 assert( player != nullptr );
 
@@ -395,7 +395,7 @@ GameOver::Result & GameOver::Result::Get()
 }
 
 GameOver::Result::Result()
-    : _colors( Color::PlayerColor::NONE )
+    : _colors( PlayerColor::NONE )
     , result( 0 )
 {}
 
@@ -407,18 +407,18 @@ void GameOver::Result::Reset()
 
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
-    const Color::PlayerColor humanColors = Players::HumanColors();
+    const PlayerColor humanColors = Players::HumanColors();
     const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const Settings & conf = Settings::Get();
-    const Color::PlayerColor currentColor = conf.CurrentColor();
+    const PlayerColor currentColor = conf.CurrentColor();
 
     // Remembers whether the current player was considered active at the time of calling this function
     const bool isCurrentPlayerWasActive = Color::haveCommonColors( _colors, currentColor );
 
     int activeHumanColors = 0;
 
-    for ( const Color::PlayerColor color : Color::PlayerColors( _colors ) ) {
+    for ( const PlayerColor color : PlayerColors( _colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
             // This notification should always be displayed for the AI players. For human players, this should only be displayed in a multiplayer game for a
             // human player who is not currently active - in all other cases, the "you have been eliminated" dialog should be displayed.
@@ -498,7 +498,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }
 
             // Do not perform other checks if there is no active kingdom at the moment
-            if ( !Color::haveCommonColors( Color::PlayerColor::ALL, currentColor ) ) {
+            if ( !Color::haveCommonColors( PlayerColor::ALL, currentColor ) ) {
                 return GameOver::COND_NONE;
             }
 
@@ -542,7 +542,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         if ( result & GameOver::LOSS ) {
             const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
-                if ( !Color::haveCommonColors( Color::PlayerColor::ALL, currentColor ) ) {
+                if ( !Color::haveCommonColors( PlayerColor::ALL, currentColor ) ) {
                     return false;
                 }
 
@@ -615,7 +615,7 @@ IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        res._colors = static_cast<Color::PlayerColor>( temp );
+        res._colors = static_cast<PlayerColor>( temp );
     }
     else {
         stream >> res._colors;

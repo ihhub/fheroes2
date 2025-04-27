@@ -343,13 +343,13 @@ MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
     const uint32_t dist = hero.GetVisionsDistance();
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
-    const Color::PlayerColor heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.getTile( index ).isFog( heroColor ); } ),
                     monsters.end() );
     return monsters;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const Color::PlayerColor playerColor )
+void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const PlayerColor playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
@@ -363,7 +363,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
-    const Color::PlayerColor alliedColors = Players::GetPlayerFriends( playerColor );
+    const PlayerColor alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
@@ -412,7 +412,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const Color::PlayerColor playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const PlayerColor playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         return 0;

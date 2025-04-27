@@ -77,11 +77,11 @@ namespace
     struct SelectRecipientsColors
     {
         static constexpr int recipientSpacing = 22;
-        const Color::PlayerColors colors;
-        Color::PlayerColor recipients{ Color::PlayerColor::NONE };
+        const PlayerColors colors;
+        PlayerColor recipients{ PlayerColor::NONE };
         std::vector<fheroes2::Rect> positions;
 
-        SelectRecipientsColors( const fheroes2::Point & pos, Color::PlayerColor senderColor )
+        SelectRecipientsColors( const fheroes2::Point & pos, PlayerColor senderColor )
             : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
         {
             positions.reserve( colors.size() );
@@ -108,7 +108,7 @@ namespace
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            for ( Color::PlayerColors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
+            for ( PlayerColors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
                 const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
@@ -123,7 +123,7 @@ namespace
             const int32_t index = GetIndexClick();
 
             if ( index >= 0 ) {
-                const Color::PlayerColor cols = colors[index];
+                const PlayerColor cols = colors[index];
 
                 if ( Color::haveCommonColors( recipients, cols ) ) {
                     recipients &= ~cols;

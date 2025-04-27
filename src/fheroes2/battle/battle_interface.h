@@ -221,7 +221,7 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const Color::PlayerColor opponentColor )
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor )
         {
             _area = roi;
             _orderOfUnits = units;
@@ -250,7 +250,7 @@ namespace Battle
                           fheroes2::Image & output ) const;
 
         std::weak_ptr<const Units> _orderOfUnits;
-        Color::PlayerColor _opponentColor{ Color::PlayerColor::NONE };
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
     };
@@ -416,7 +416,7 @@ namespace Battle
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
         void InterruptAutoCombatIfRequested( LocalEvent & le );
-        void SetHeroAnimationReactionToTroopDeath( const Color::PlayerColor deathColor ) const;
+        void SetHeroAnimationReactionToTroopDeath( const PlayerColor deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
@@ -463,7 +463,7 @@ namespace Battle
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
 
-        Color::PlayerColor _interruptAutoCombatForColor{ Color::PlayerColor::NONE };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };

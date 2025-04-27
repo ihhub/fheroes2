@@ -38,10 +38,7 @@
 class IStreamBase;
 class OStreamBase;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 inline constexpr int defaultBattleSpeed{ 4 };
 
@@ -331,13 +328,13 @@ public:
         return players;
     }
 
-    Color::PlayerColor CurrentColor() const
+    PlayerColor CurrentColor() const
     {
         return players.getCurrentColor();
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( const Color::PlayerColor color )
+    void SetCurrentColor( const PlayerColor color )
     {
         players.setCurrentColor( color );
     }

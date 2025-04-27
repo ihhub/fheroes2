@@ -371,7 +371,7 @@ namespace fheroes2
     int32_t getSummonableBoat( const Heroes & hero )
     {
         const int32_t center = hero.GetIndex();
-        const Color::PlayerColor heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
 
         const bool isResurrectionMap = ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION );
 
@@ -382,7 +382,7 @@ namespace fheroes2
             // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
             // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
             if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
-                     const Color::PlayerColor boatColor = world.getTile( boatSource ).getBoatOwnerColor();
+                     const PlayerColor boatColor = world.getTile( boatSource ).getBoatOwnerColor();
 
                      // Boats belonging to the hero's kingdom can always be summoned
                      if ( boatColor == heroColor ) {
@@ -390,7 +390,7 @@ namespace fheroes2
                      }
 
                      // Non-neutral boats (belonging to any other kingdom) can never be summoned
-                     if ( boatColor != Color::PlayerColor::NONE ) {
+                     if ( boatColor != PlayerColor::NONE ) {
                          return true;
                      }
 

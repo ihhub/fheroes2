@@ -58,20 +58,20 @@ namespace
         return output;
     }
 
-    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const Color::PlayerColor playerColor )
+    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const PlayerColor playerColor )
     {
         switch ( playerColor ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return getModifiedPalette( inputStartId, inputLength, 63, 16 + 6 );
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return getModifiedPalette( inputStartId, inputLength, 85, 16 + 7 );
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             return getModifiedPalette( inputStartId, inputLength, 175, 16 + 7 );
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return getModifiedPalette( inputStartId, inputLength, 108, 16 + 7 );
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return getModifiedPalette( inputStartId, inputLength, 199, 16 );
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return getModifiedPalette( inputStartId, inputLength, 132, 16 + 5 );
         default:
             // Did you add a new color? Please add the logic above.
@@ -133,7 +133,7 @@ namespace
         return {};
     }
 
-    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const Color::PlayerColor colorId )
+    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const PlayerColor colorId )
     {
         const std::vector<fheroes2::Rect> regions = getColorEffectiveAreas( icnId, icnIndex );
         const std::vector<uint8_t> palette = getModifiedPaletteByPlayerColor( originalCastleFlagStartColorId, originalCastleFlagColorLength, colorId );
@@ -193,22 +193,22 @@ namespace fheroes2
         return 1;
     }
 
-    uint32_t getCastleLeftFlagIcnIndex( const Color::PlayerColor color )
+    uint32_t getCastleLeftFlagIcnIndex( const PlayerColor color )
     {
         switch ( color ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return 0;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return 2;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             return 4;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return 6;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return 8;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return 10;
-        case Color::PlayerColor::NONE:
+        case PlayerColor::NONE:
             return 12;
         default:
             // Have you added a new player color? Update the logic above.

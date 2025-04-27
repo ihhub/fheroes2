@@ -27,10 +27,7 @@
 class Castle;
 struct Funds;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace fheroes2
 {
@@ -38,7 +35,7 @@ namespace fheroes2
 
     uint32_t getCastleIcnIndex( const int race, const bool isCastle );
 
-    uint32_t getCastleLeftFlagIcnIndex( const Color::PlayerColor color );
+    uint32_t getCastleLeftFlagIcnIndex( const PlayerColor color );
 
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
 

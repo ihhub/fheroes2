@@ -2413,7 +2413,7 @@ namespace
         const Outcome outcome = [dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
             const Maps::Tile & tile = world.getTile( dst_index );
 
-            if ( getColorFromTile( tile ) != Color::PlayerColor::NONE ) {
+            if ( getColorFromTile( tile ) != PlayerColor::NONE ) {
                 const Troop troop = getTroopFromTile( tile );
 
                 if ( !troop.isValid() ) {
@@ -2473,7 +2473,7 @@ namespace
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
-                setColorOnTile( tile, Color::PlayerColor::UNUSED );
+                setColorOnTile( tile, PlayerColor::UNUSED );
 
                 if ( fheroes2::showStandardTextMessage( title, victoryMsg, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                     const Troop troop = getTroopFromTile( tile );
@@ -3677,7 +3677,7 @@ void Heroes::ScoutRadar() const
     Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
 #if defined( WITH_DEBUG )
-    if ( GetColor() != Color::PlayerColor::NONE ) {
+    if ( GetColor() != PlayerColor::NONE ) {
         const Player * player = Players::Get( GetColor() );
         assert( player != nullptr );
 

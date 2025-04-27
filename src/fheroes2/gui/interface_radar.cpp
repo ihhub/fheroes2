@@ -106,20 +106,20 @@ namespace
         return COLOR_BLACK;
     }
 
-    uint8_t GetPaletteIndexFromColor( Color::PlayerColor color )
+    uint8_t GetPaletteIndexFromColor( PlayerColor color )
     {
         switch ( color ) {
-        case Color::PlayerColor::BLUE:
+        case PlayerColor::BLUE:
             return COLOR_BLUE;
-        case Color::PlayerColor::GREEN:
+        case PlayerColor::GREEN:
             return COLOR_GREEN;
-        case Color::PlayerColor::RED:
+        case PlayerColor::RED:
             return COLOR_RED;
-        case Color::PlayerColor::YELLOW:
+        case PlayerColor::YELLOW:
             return COLOR_YELLOW;
-        case Color::PlayerColor::ORANGE:
+        case PlayerColor::ORANGE:
             return COLOR_ORANGE;
-        case Color::PlayerColor::PURPLE:
+        case PlayerColor::PURPLE:
             return COLOR_PURPLE;
         default:
             break;
@@ -272,7 +272,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     _cursorArea.hide();
 
     if ( renderMapObjects ) {
-        RedrawObjects( Color::PlayerColor::NONE, ViewWorldMode::ViewAll );
+        RedrawObjects( PlayerColor::NONE, ViewWorldMode::ViewAll );
         const fheroes2::Rect & rect = GetArea();
         fheroes2::Copy( _map, 0, 0, fheroes2::Display::instance(), rect.x, rect.y, _map.width(), _map.height() );
     }
@@ -281,7 +281,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     RedrawCursor();
 }
 
-void Interface::Radar::RedrawObjects( const Color::PlayerColor playerColor, const ViewWorldMode flags )
+void Interface::Radar::RedrawObjects( const PlayerColor playerColor, const ViewWorldMode flags )
 {
 #ifdef WITH_DEBUG
     const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();

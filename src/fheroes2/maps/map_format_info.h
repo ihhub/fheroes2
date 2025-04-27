@@ -204,9 +204,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        Color::PlayerColor humanPlayerColors{ Color::PlayerColor::NONE };
+        PlayerColor humanPlayerColors{ PlayerColor::NONE };
 
-        Color::PlayerColor computerPlayerColors{ Color::PlayerColor::NONE };
+        PlayerColor computerPlayerColors{ PlayerColor::NONE };
 
         // Does this event occur more than once?
         bool isRecurringEvent{ false };
@@ -258,9 +258,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        Color::PlayerColor humanPlayerColors{ Color::PlayerColor::NONE };
+        PlayerColor humanPlayerColors{ PlayerColor::NONE };
 
-        Color::PlayerColor computerPlayerColors{ Color::PlayerColor::NONE };
+        PlayerColor computerPlayerColors{ PlayerColor::NONE };
 
         uint32_t firstOccurrenceDay{ 1 };
 
@@ -280,10 +280,10 @@ namespace Maps::Map_Format
         // Normal difficulty.
         uint8_t difficulty{ 1 };
 
-        Color::PlayerColor availablePlayerColors{ Color::PlayerColor::NONE };
-        Color::PlayerColor humanPlayerColors{ Color::PlayerColor::NONE };
-        Color::PlayerColor computerPlayerColors{ Color::PlayerColor::NONE };
-        std::vector<Color::PlayerColor> alliances;
+        PlayerColor availablePlayerColors{ PlayerColor::NONE };
+        PlayerColor humanPlayerColors{ PlayerColor::NONE };
+        PlayerColor computerPlayerColors{ PlayerColor::NONE };
+        std::vector<PlayerColor> alliances;
 
         // Only 6 players are allowed per map.
         std::array<uint8_t, 6> playerRace{ 0 };

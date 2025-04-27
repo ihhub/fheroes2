@@ -127,7 +127,7 @@ const Battle::Units & Battle::Force::getUnits() const
     return *this;
 }
 
-Color::PlayerColor Battle::Force::GetColor() const
+PlayerColor Battle::Force::GetColor() const
 {
     return army.GetColor();
 }

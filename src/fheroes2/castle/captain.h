@@ -32,10 +32,7 @@
 class Army;
 class Castle;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 class Captain final : public HeroBase
 {
@@ -56,7 +53,7 @@ public:
     int GetMorale() const override;
     int GetLuck() const override;
     int GetRace() const override;
-    Color::PlayerColor GetColor() const override;
+    PlayerColor GetColor() const override;
     int GetType() const override;
     int GetControl() const override;
 

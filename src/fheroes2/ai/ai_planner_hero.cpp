@@ -548,7 +548,7 @@ namespace
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
-            if ( getColorFromTile( tile ) == Color::PlayerColor::NONE ) {
+            if ( getColorFromTile( tile ) == PlayerColor::NONE ) {
                 return isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
@@ -1532,7 +1532,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_HUT_OF_MAGI: {
         const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
         int fogCountToUncover = 0;
-        const Color::PlayerColor heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
         const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
         for ( const int32_t eyeIndex : eyeMagiIndexes ) {

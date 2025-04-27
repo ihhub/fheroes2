@@ -27,10 +27,7 @@
 #include "math_base.h"
 #include "settings.h"
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace Interface
 {
@@ -53,7 +50,7 @@ enum class ViewWorldMode : int32_t
 class ViewWorld
 {
 public:
-    static void ViewWorldWindow( const Color::PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface );
+    static void ViewWorldWindow( const PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface );
 
     class ZoomROIs
     {

@@ -123,18 +123,18 @@ public:
         SEVERE, // 30% fewer resources per turn
     };
 
-    explicit Player( const Color::PlayerColor color = Color::PlayerColor::NONE );
+    explicit Player( const PlayerColor color = PlayerColor::NONE );
 
     ~Player() override = default;
 
-    bool isColor( const Color::PlayerColor color ) const
+    bool isColor( const PlayerColor color ) const
     {
         return color == _color;
     }
 
     bool isPlay() const;
 
-    void SetColor( const Color::PlayerColor color )
+    void SetColor( const PlayerColor color )
     {
         _color = color;
     }
@@ -151,7 +151,7 @@ public:
 
     void SetPlay( const bool f );
 
-    void SetFriends( const Color::PlayerColor friendsColors )
+    void SetFriends( const PlayerColor friendsColors )
     {
         _friendsColors = friendsColors;
     }
@@ -160,7 +160,7 @@ public:
 
     int GetControl() const override;
 
-    Color::PlayerColor GetColor() const
+    PlayerColor GetColor() const
     {
         return _color;
     }
@@ -170,7 +170,7 @@ public:
         return _race;
     }
 
-    Color::PlayerColor GetFriends() const
+    PlayerColor GetFriends() const
     {
         return _friendsColors;
     }
@@ -224,8 +224,8 @@ protected:
     AI::Personality _aiPersonality{ AI::Personality::NONE };
     int _control{ CONTROL_NONE };
     int _race{ Race::NONE };
-    Color::PlayerColor _color;
-    Color::PlayerColor _friendsColors;
+    PlayerColor _color;
+    PlayerColor _friendsColors;
     HandicapStatus _handicapStatus{ HandicapStatus::NONE };
 
 #if defined( WITH_DEBUG )
@@ -255,13 +255,13 @@ public:
 
     Players & operator=( const Players & ) = delete;
 
-    void Init( const Color::PlayerColor colors );
+    void Init( const PlayerColor colors );
     void Init( const Maps::FileInfo & fi );
     void clear();
 
     void SetStartGame();
-    Color::PlayerColor GetColors( const int control = 0xFF, const bool strong = false ) const;
-    Color::PlayerColor GetActualColors() const;
+    PlayerColor GetColors( const int control = 0xFF, const bool strong = false ) const;
+    PlayerColor GetActualColors() const;
     std::string String() const;
 
     const std::vector<Player *> & getVector() const
@@ -272,31 +272,31 @@ public:
     Player * GetCurrent();
     const Player * GetCurrent() const;
 
-    static void Set( const Color::PlayerColor color, Player * player );
-    static Player * Get( const Color::PlayerColor color );
-    static int GetPlayerControl( const Color::PlayerColor color );
-    static int GetPlayerRace( const Color::PlayerColor color );
-    static Color::PlayerColor GetPlayerFriends( const Color::PlayerColor color );
-    static bool GetPlayerInGame( const Color::PlayerColor color );
-    static std::vector<Color::PlayerColor> getInPlayOpponents( const Color::PlayerColor color );
-    static bool isFriends( const Color::PlayerColor playerColor, const Color::PlayerColor colors );
-    static void SetPlayerRace( const Color::PlayerColor color, const int race );
-    static void SetPlayerControl( const Color::PlayerColor color, const int control );
-    static void SetPlayerInGame( const Color::PlayerColor color, const bool isPlay );
-    static Color::PlayerColor HumanColors();
+    static void Set( const PlayerColor color, Player * player );
+    static Player * Get( const PlayerColor color );
+    static int GetPlayerControl( const PlayerColor color );
+    static int GetPlayerRace( const PlayerColor color );
+    static PlayerColor GetPlayerFriends( const PlayerColor color );
+    static bool GetPlayerInGame( const PlayerColor color );
+    static std::vector<PlayerColor> getInPlayOpponents( const PlayerColor color );
+    static bool isFriends( const PlayerColor playerColor, const PlayerColor colors );
+    static void SetPlayerRace( const PlayerColor color, const int race );
+    static void SetPlayerControl( const PlayerColor color, const int control );
+    static void SetPlayerInGame( const PlayerColor color, const bool isPlay );
+    static PlayerColor HumanColors();
     // Return current player friends colors, if player does not exist he has no friends (returns 0).
-    static Color::PlayerColor FriendColors();
+    static PlayerColor FriendColors();
 
-    Color::PlayerColor getCurrentColor() const
+    PlayerColor getCurrentColor() const
     {
         return _currentColor;
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void setCurrentColor( const Color::PlayerColor color );
+    void setCurrentColor( const PlayerColor color );
 
 private:
-    Color::PlayerColor _currentColor{ Color::PlayerColor::NONE };
+    PlayerColor _currentColor{ PlayerColor::NONE };
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const Players & players );

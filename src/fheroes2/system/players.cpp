@@ -45,7 +45,7 @@
 namespace
 {
     std::array<Player *, maxNumOfPlayers + 1> playersArray{};
-    Color::PlayerColor humanColors{ Color::PlayerColor::NONE };
+    PlayerColor humanColors{ PlayerColor::NONE };
 
     enum
     {
@@ -106,7 +106,7 @@ namespace
     }
 }
 
-Player::Player( const Color::PlayerColor color /* = Color::PlayerColor::NONE */ )
+Player::Player( const PlayerColor color /* = PlayerColor::NONE */ )
     : _aiPersonality( AI::getRandomPersonality() )
     , _color( color )
     , _friendsColors( color )
@@ -273,8 +273,8 @@ IStreamBase & operator>>( IStreamBase & stream, Player & player )
 
         stream >> playerColor >> player._race >> friendsColors;
 
-        player._color = static_cast<Color::PlayerColor>( playerColor );
-        player._friendsColors = static_cast<Color::PlayerColor>( friendsColors );
+        player._color = static_cast<PlayerColor>( playerColor );
+        player._friendsColors = static_cast<PlayerColor>( friendsColors );
     }
     else {
         stream >> player._color >> player._race >> player._friendsColors;
@@ -289,19 +289,19 @@ void Players::clear()
 
     std::vector<Player *>::clear();
 
-    _currentColor = Color::PlayerColor::NONE;
+    _currentColor = PlayerColor::NONE;
 
     playersArray = {};
-    humanColors = Color::PlayerColor::NONE;
+    humanColors = PlayerColor::NONE;
 }
 
-void Players::Init( const Color::PlayerColor colors )
+void Players::Init( const PlayerColor colors )
 {
     clear();
 
-    const Color::PlayerColors vcolors( colors );
+    const PlayerColors vcolors( colors );
 
-    for ( const Color::PlayerColor color : vcolors ) {
+    for ( const PlayerColor color : vcolors ) {
         push_back( new Player( color ) );
         playersArray[Color::GetIndex( color )] = back();
     }
@@ -311,17 +311,17 @@ void Players::Init( const Color::PlayerColor colors )
 
 void Players::Init( const Maps::FileInfo & fi )
 {
-    if ( fi.kingdomColors == Color::PlayerColor::NONE ) {
+    if ( fi.kingdomColors == PlayerColor::NONE ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "No players are set." )
         return;
     }
 
     clear();
-    const Color::PlayerColors vcolors( fi.kingdomColors );
+    const PlayerColors vcolors( fi.kingdomColors );
 
     Player * first = nullptr;
 
-    for ( const Color::PlayerColor color : vcolors ) {
+    for ( const PlayerColor color : vcolors ) {
         Player * player = new Player( color );
         player->SetRace( fi.KingdomRace( color ) );
         player->SetControl( CONTROL_AI );
@@ -349,23 +349,23 @@ void Players::Init( const Maps::FileInfo & fi )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
 }
 
-void Players::Set( const Color::PlayerColor color, Player * player )
+void Players::Set( const PlayerColor color, Player * player )
 {
     playersArray[Color::GetIndex( color )] = player;
 }
 
-Player * Players::Get( const Color::PlayerColor color )
+Player * Players::Get( const PlayerColor color )
 {
     return playersArray[Color::GetIndex( color )];
 }
 
-bool Players::isFriends( const Color::PlayerColor playerColor, Color::PlayerColor colors )
+bool Players::isFriends( const PlayerColor playerColor, PlayerColor colors )
 {
     const Player * ptr = Get( playerColor );
-    return ptr ? ( ptr->GetFriends() & colors ) != Color::PlayerColor::NONE : false;
+    return ptr ? ( ptr->GetFriends() & colors ) != PlayerColor::NONE : false;
 }
 
-void Players::SetPlayerRace( const Color::PlayerColor color, const int race )
+void Players::SetPlayerRace( const PlayerColor color, const int race )
 {
     Player * player = Get( color );
 
@@ -374,7 +374,7 @@ void Players::SetPlayerRace( const Color::PlayerColor color, const int race )
     }
 }
 
-void Players::SetPlayerControl( const Color::PlayerColor color, const int control )
+void Players::SetPlayerControl( const PlayerColor color, const int control )
 {
     Player * player = Get( color );
 
@@ -383,9 +383,9 @@ void Players::SetPlayerControl( const Color::PlayerColor color, const int contro
     }
 }
 
-Color::PlayerColor Players::GetColors( const int control, const bool strong ) const
+PlayerColor Players::GetColors( const int control, const bool strong ) const
 {
-    Color::PlayerColor res = Color::PlayerColor::NONE;
+    PlayerColor res = PlayerColor::NONE;
 
     for ( const Player * player : *this ) {
         if ( control == 0xFF || ( strong && player->GetControl() == control ) || ( !strong && ( player->GetControl() & control ) ) ) {
@@ -406,9 +406,9 @@ const Player * Players::GetCurrent() const
     return Get( _currentColor );
 }
 
-Color::PlayerColor Players::GetActualColors() const
+PlayerColor Players::GetActualColors() const
 {
-    Color::PlayerColor res = Color::PlayerColor::NONE;
+    PlayerColor res = PlayerColor::NONE;
 
     for ( const Player * player : *this ) {
         if ( player->isPlay() ) {
@@ -419,45 +419,45 @@ Color::PlayerColor Players::GetActualColors() const
     return res;
 }
 
-Color::PlayerColor Players::GetPlayerFriends( const Color::PlayerColor color )
+PlayerColor Players::GetPlayerFriends( const PlayerColor color )
 {
     const Player * player = Get( color );
-    return player ? player->GetFriends() : Color::PlayerColor::NONE;
+    return player ? player->GetFriends() : PlayerColor::NONE;
 }
 
-int Players::GetPlayerControl( const Color::PlayerColor color )
+int Players::GetPlayerControl( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetControl() : CONTROL_NONE;
 }
 
-int Players::GetPlayerRace( const Color::PlayerColor color )
+int Players::GetPlayerRace( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetRace() : Race::NONE;
 }
 
-bool Players::GetPlayerInGame( const Color::PlayerColor color )
+bool Players::GetPlayerInGame( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player && player->isPlay();
 }
 
-std::vector<Color::PlayerColor> Players::getInPlayOpponents( const Color::PlayerColor color )
+std::vector<PlayerColor> Players::getInPlayOpponents( const PlayerColor color )
 {
-    std::vector<Color::PlayerColor> opponentColors;
+    std::vector<PlayerColor> opponentColors;
 
     const Player * playerOfColor = Players::Get( color );
     assert( playerOfColor != nullptr );
 
-    const Color::PlayerColor friends = playerOfColor->GetFriends();
+    const PlayerColor friends = playerOfColor->GetFriends();
 
     for ( const Player * player : Settings::Get().GetPlayers() ) {
         assert( player != nullptr );
 
-        const Color::PlayerColor currentColor = player->GetColor();
+        const PlayerColor currentColor = player->GetColor();
 
-        if ( player->isPlay() && ( ( currentColor & friends ) == Color::PlayerColor::NONE ) ) {
+        if ( player->isPlay() && ( ( currentColor & friends ) == PlayerColor::NONE ) ) {
             opponentColors.emplace_back( currentColor );
         }
     }
@@ -465,7 +465,7 @@ std::vector<Color::PlayerColor> Players::getInPlayOpponents( const Color::Player
     return opponentColors;
 }
 
-void Players::SetPlayerInGame( const Color::PlayerColor color, bool isPlay )
+void Players::SetPlayerInGame( const PlayerColor color, bool isPlay )
 {
     Player * player = Get( color );
     if ( player == nullptr ) {
@@ -485,35 +485,35 @@ void Players::SetStartGame()
     for_each( begin(), end(), [&races]( Player * player ) { fixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { fixMultiControl( player ); } );
 
-    _currentColor = Color::PlayerColor::NONE;
-    humanColors = Color::PlayerColor::NONE;
+    _currentColor = PlayerColor::NONE;
+    humanColors = PlayerColor::NONE;
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
-Color::PlayerColor Players::HumanColors()
+PlayerColor Players::HumanColors()
 {
-    if ( humanColors == Color::PlayerColor::NONE ) {
+    if ( humanColors == PlayerColor::NONE ) {
         humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
     }
 
     return humanColors;
 }
 
-Color::PlayerColor Players::FriendColors()
+PlayerColor Players::FriendColors()
 {
     const Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player ) {
         return player->GetFriends();
     }
 
-    return Color::PlayerColor::NONE;
+    return PlayerColor::NONE;
 }
 
-void Players::setCurrentColor( const Color::PlayerColor color )
+void Players::setCurrentColor( const PlayerColor color )
 {
     // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
-    assert( Color::Count( color ) == 1 || color == Color::PlayerColor::NONE );
+    assert( Color::Count( color ) == 1 || color == PlayerColor::NONE );
 
     _currentColor = color;
 }
@@ -566,8 +566,8 @@ OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 
 IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
-    Color::PlayerColor colors;
-    Color::PlayerColor current;
+    PlayerColor colors;
+    PlayerColor current;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
@@ -576,8 +576,8 @@ IStreamBase & operator>>( IStreamBase & stream, Players & players )
 
         stream >> colorsTemp >> currentTemp;
 
-        colors = static_cast<Color::PlayerColor>( colorsTemp );
-        current = static_cast<Color::PlayerColor>( currentTemp );
+        colors = static_cast<PlayerColor>( colorsTemp );
+        current = static_cast<PlayerColor>( currentTemp );
     }
     else {
         stream >> colors >> current;
@@ -586,8 +586,8 @@ IStreamBase & operator>>( IStreamBase & stream, Players & players )
     players.clear();
     players.setCurrentColor( current );
 
-    const Color::PlayerColors vcolors( colors );
-    std::for_each( vcolors.begin(), vcolors.end(), [&stream, &players]( const Color::PlayerColor /* color */ ) {
+    const PlayerColors vcolors( colors );
+    std::for_each( vcolors.begin(), vcolors.end(), [&stream, &players]( const PlayerColor /* color */ ) {
         Player * player = new Player();
         stream >> *player;
 

@@ -31,10 +31,7 @@
 #include "ui_tool.h"
 #include "view_world.h"
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace fheroes2
 {
@@ -93,7 +90,7 @@ namespace Interface
         void SavePosition() override;
         void SetZoom();
 
-        void RedrawObjects( const Color::PlayerColor playerColor, const ViewWorldMode flags );
+        void RedrawObjects( const PlayerColor playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType _radarType;

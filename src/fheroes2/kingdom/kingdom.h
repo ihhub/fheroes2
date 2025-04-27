@@ -45,10 +45,7 @@ class OStreamBase;
 
 struct EventDate;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace MP2
 {
@@ -91,7 +88,7 @@ public:
     Kingdom & operator=( const Kingdom & ) = delete;
     Kingdom & operator=( Kingdom && ) = default;
 
-    void Init( const Color::PlayerColor color );
+    void Init( const PlayerColor color );
     void clear();
 
     void openOverviewDialog();
@@ -128,7 +125,7 @@ public:
 
     int GetControl() const override;
 
-    Color::PlayerColor GetColor() const
+    PlayerColor GetColor() const
     {
         return _color;
     }
@@ -243,7 +240,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom );
     friend IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom );
 
-    Color::PlayerColor _color{ 0 };
+    PlayerColor _color{ 0 };
     Funds resource;
 
     uint32_t lost_town_days{ 0 };
@@ -276,11 +273,11 @@ public:
     void NewDay();
     void NewWeek();
 
-    Kingdom & GetKingdom( const Color::PlayerColor color );
-    const Kingdom & GetKingdom( const Color::PlayerColor color ) const;
+    Kingdom & GetKingdom( const PlayerColor color );
+    const Kingdom & GetKingdom( const PlayerColor color ) const;
 
-    Color::PlayerColor GetNotLossColors() const;
-    Color::PlayerColor FindWins( const int cond ) const;
+    PlayerColor GetNotLossColors() const;
+    PlayerColor FindWins( const int cond ) const;
 
     void AddHeroes( const AllHeroes & heroes );
     void AddCastles( const AllCastles & castles );

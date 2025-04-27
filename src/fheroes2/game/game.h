@@ -32,10 +32,7 @@ class Players;
 class Heroes;
 class Castle;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
+enum class PlayerColor : uint8_t;
 
 namespace Game
 {
@@ -98,9 +95,9 @@ namespace Game
     // If display fade-in state is set reset it to false and return true. Otherwise return false.
     bool validateDisplayFadeIn();
 
-    Color::PlayerColor GetKingdomColors();
-    Color::PlayerColor GetActualKingdomColors();
-    void DialogPlayers( const Color::PlayerColor color, std::string title, std::string message );
+    PlayerColor GetKingdomColors();
+    PlayerColor GetActualKingdomColors();
+    void DialogPlayers( const PlayerColor color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
     void updateAdventureMapAnimationIndex();

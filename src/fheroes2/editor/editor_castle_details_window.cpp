@@ -295,7 +295,7 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const Color::PlayerColor color,
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color,
                               const fheroes2::SupportedLanguage language )
     {
         // setup cursor
@@ -370,7 +370,7 @@ namespace Editor
         const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RESTRICT" ), fheroes2::FontType::buttonReleasedWhite() );
         background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
 
-        const bool isNeutral = ( color == Color::PlayerColor::NONE );
+        const bool isNeutral = ( color == PlayerColor::NONE );
 
         // Castle army.
         dstPt.y = dialogRoi.y + 311;

@@ -100,10 +100,10 @@ namespace
         return true;
     }
 
-    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const Color::PlayerColor color, const bool isArtifactsBagFull,
+    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const PlayerColor color, const bool isArtifactsBagFull,
                                                      const bool isEquippedWithSpellBook, const double armyStrength, const double minimalAdvantage )
     {
-        assert( Color::haveCommonColors( Color::PlayerColor::ALL, color ) );
+        assert( Color::haveCommonColors( PlayerColor::ALL, color ) );
 
         const Maps::Tile & tile = world.getTile( tileIndex );
         const bool toWater = tile.isWater();
@@ -114,7 +114,7 @@ namespace
             static Army tileArmy;
             tileArmy.setFromTile( tile );
 
-            const Color::PlayerColor tileArmyColor = tileArmy.GetColor();
+            const PlayerColor tileArmyColor = tileArmy.GetColor();
             // Tile can be guarded by our own or a friendly army (for example, our ally used a Set Elemental Guardian spell on his mine)
             if ( color == tileArmyColor || Players::isFriends( color, tileArmyColor ) ) {
                 return true;
@@ -250,7 +250,7 @@ namespace
         return true;
     }
 
-    bool isMovementAllowedForColor( const int from, const int direction, const Color::PlayerColor color, const bool ignoreFog, const bool isSummonBoatSpellAvailable )
+    bool isMovementAllowedForColor( const int from, const int direction, const PlayerColor color, const bool ignoreFog, const bool isSummonBoatSpellAvailable )
     {
         const Maps::Tile & fromTile = world.getTile( from );
         const bool fromWater = fromTile.isWater();
@@ -427,7 +427,7 @@ void WorldPathfinder::reset()
     }
 
     _pathStart = -1;
-    _color = Color::PlayerColor::NONE;
+    _color = PlayerColor::NONE;
     _remainingMovePoints = 0;
     _pathfindingSkill = Skill::Level::EXPERT;
 }
@@ -689,7 +689,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const Color::PlayerColor color, const double armyStrength, const uint8_t skill )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const PlayerColor color, const double armyStrength, const uint8_t skill )
 {
     auto currentSettings
         = std::tie( _pathStart, _color, _remainingMovePoints, _pathfindingSkill, _patrolCenter, _patrolDistance, _maxMovePointsOnLand, _maxMovePointsOnWater,
@@ -1044,7 +1044,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
     const int32_t heroIndex = hero.GetIndex();
-    const Color::PlayerColor heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
 
     const auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
         if ( !Maps::isValidDirection( heroIndex, direction ) ) {
@@ -1200,7 +1200,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex ) const
 {
-    assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && _color != Color::PlayerColor::NONE && Maps::isValidAbsIndex( targetIndex ) );
+    assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && _color != PlayerColor::NONE && Maps::isValidAbsIndex( targetIndex ) );
 
     std::vector<IndexObject> result;
 
@@ -1426,7 +1426,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) con
     return path;
 }
 
-uint32_t AIWorldPathfinder::getDistance( const int start, const int targetIndex, const Color::PlayerColor color, const double armyStrength,
+uint32_t AIWorldPathfinder::getDistance( const int start, const int targetIndex, const PlayerColor color, const double armyStrength,
                                          const uint8_t skill /* = Skill::Level::EXPERT */ )
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );

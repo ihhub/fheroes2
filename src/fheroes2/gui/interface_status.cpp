@@ -350,21 +350,21 @@ void Interface::StatusPanel::_drawAITurns() const
     uint32_t colorIndex = 0;
 
     switch ( Settings::Get().CurrentColor() ) {
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         break;
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         colorIndex = 1;
         break;
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         colorIndex = 2;
         break;
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         colorIndex = 3;
         break;
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         colorIndex = 4;
         break;
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         colorIndex = 5;
         break;
     default:

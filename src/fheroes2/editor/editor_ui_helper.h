@@ -42,7 +42,7 @@ namespace Editor
     class Checkbox
     {
     public:
-        Checkbox( const int32_t x, const int32_t y, const Color::PlayerColor boxColor, const bool checked, fheroes2::Image & output );
+        Checkbox( const int32_t x, const int32_t y, const PlayerColor boxColor, const bool checked, fheroes2::Image & output );
 
         Checkbox( Checkbox && other ) = delete;
         ~Checkbox() = default;
@@ -54,7 +54,7 @@ namespace Editor
             return _area;
         }
 
-        Color::PlayerColor getColor() const
+        PlayerColor getColor() const
         {
             return _color;
         }
@@ -62,12 +62,12 @@ namespace Editor
         bool toggle();
 
     private:
-        const Color::PlayerColor _color{ Color::PlayerColor::NONE };
+        const PlayerColor _color{ PlayerColor::NONE };
         fheroes2::Rect _area;
         fheroes2::MovableSprite _checkmark;
     };
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const Color::PlayerColor availableColors, const Color::PlayerColor selectedColors,
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColor availableColors, const PlayerColor selectedColors,
                                 const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output );
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,

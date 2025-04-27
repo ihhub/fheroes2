@@ -152,7 +152,7 @@ int Captain::GetRace() const
     return home.GetRace();
 }
 
-Color::PlayerColor Captain::GetColor() const
+PlayerColor Captain::GetColor() const
 {
     return home.GetColor();
 }

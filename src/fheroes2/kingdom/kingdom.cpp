@@ -103,13 +103,13 @@ namespace
     }
 }
 
-void Kingdom::Init( const Color::PlayerColor color )
+void Kingdom::Init( const PlayerColor color )
 {
     clear();
 
     _color = color;
 
-    if ( ( _color & Color::PlayerColor::ALL ) == Color::PlayerColor::NONE ) {
+    if ( ( _color & PlayerColor::ALL ) == PlayerColor::NONE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown player: " << Color::String( _color ) << "(" << static_cast<int>( _color ) << ")" )
 
         return;
@@ -128,7 +128,7 @@ void Kingdom::clear()
 {
     modes = 0;
 
-    _color = Color::PlayerColor::NONE;
+    _color = PlayerColor::NONE;
     _visitedTentsColors = 0;
     lost_town_days = Game::GetLostTownDays() + 1;
 
@@ -176,7 +176,7 @@ void Kingdom::LossPostActions()
     for ( Castle * castle : castles ) {
         assert( castle != nullptr && castle->GetColor() == GetColor() );
 
-        castle->ChangeColor( Color::PlayerColor::NONE );
+        castle->ChangeColor( PlayerColor::NONE );
     }
 
     castles.clear();
@@ -432,7 +432,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
-        const Color::PlayerColor tileColor = getColorFromTile( tile );
+        const PlayerColor tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
         return _color == tileColor || !Players::isFriends( _color, tileColor );
@@ -457,7 +457,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
 
 bool Kingdom::opponentsCanRecruitMoreHeroes() const
 {
-    for ( const Color::PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+    for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
         if ( world.GetKingdom( opponentColor ).canRecruitHeroes() )
             return true;
     }
@@ -466,7 +466,7 @@ bool Kingdom::opponentsCanRecruitMoreHeroes() const
 
 bool Kingdom::opponentsHaveHeroes() const
 {
-    for ( const Color::PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+    for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
         if ( world.GetKingdom( opponentColor ).hasHeroes() )
             return true;
     }
@@ -738,8 +738,8 @@ void Kingdoms::Init()
 {
     clear();
 
-    const Color::PlayerColors colors( Settings::Get().GetPlayers().GetColors() );
-    std::for_each( colors.begin(), colors.end(), [this]( const Color::PlayerColor color ) { GetKingdom( color ).Init( color ); } );
+    const PlayerColors colors( Settings::Get().GetPlayers().GetColors() );
+    std::for_each( colors.begin(), colors.end(), [this]( const PlayerColor color ) { GetKingdom( color ).Init( color ); } );
 }
 
 void Kingdoms::clear()
@@ -756,20 +756,20 @@ void Kingdoms::ApplyPlayWithStartingHero()
     } );
 }
 
-const Kingdom & Kingdoms::GetKingdom( const Color::PlayerColor color ) const
+const Kingdom & Kingdoms::GetKingdom( const PlayerColor color ) const
 {
     switch ( color ) {
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         return _kingdoms[0];
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         return _kingdoms[1];
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         return _kingdoms[2];
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         return _kingdoms[3];
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         return _kingdoms[4];
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         return _kingdoms[5];
     default:
         break;
@@ -778,20 +778,20 @@ const Kingdom & Kingdoms::GetKingdom( const Color::PlayerColor color ) const
     return _kingdoms[6];
 }
 
-Kingdom & Kingdoms::GetKingdom( const Color::PlayerColor color )
+Kingdom & Kingdoms::GetKingdom( const PlayerColor color )
 {
     switch ( color ) {
-    case Color::PlayerColor::BLUE:
+    case PlayerColor::BLUE:
         return _kingdoms[0];
-    case Color::PlayerColor::GREEN:
+    case PlayerColor::GREEN:
         return _kingdoms[1];
-    case Color::PlayerColor::RED:
+    case PlayerColor::RED:
         return _kingdoms[2];
-    case Color::PlayerColor::YELLOW:
+    case PlayerColor::YELLOW:
         return _kingdoms[3];
-    case Color::PlayerColor::ORANGE:
+    case PlayerColor::ORANGE:
         return _kingdoms[4];
-    case Color::PlayerColor::PURPLE:
+    case PlayerColor::PURPLE:
         return _kingdoms[5];
     default:
         break;
@@ -815,25 +815,25 @@ void Kingdoms::NewWeek()
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
 }
 
-Color::PlayerColor Kingdoms::GetNotLossColors() const
+PlayerColor Kingdoms::GetNotLossColors() const
 {
-    Color::PlayerColor result = Color::PlayerColor::NONE;
+    PlayerColor result = PlayerColor::NONE;
     for ( const Kingdom & kingdom : _kingdoms ) {
-        if ( kingdom.GetColor() != Color::PlayerColor::NONE && !kingdom.isLoss() ) {
+        if ( kingdom.GetColor() != PlayerColor::NONE && !kingdom.isLoss() ) {
             result |= kingdom.GetColor();
         }
     }
     return result;
 }
 
-Color::PlayerColor Kingdoms::FindWins( const int cond ) const
+PlayerColor Kingdoms::FindWins( const int cond ) const
 {
     for ( const Kingdom & kingdom : _kingdoms ) {
-        if ( kingdom.GetColor() != Color::PlayerColor::NONE && world.KingdomIsWins( kingdom, cond ) ) {
+        if ( kingdom.GetColor() != PlayerColor::NONE && world.KingdomIsWins( kingdom, cond ) ) {
             return kingdom.GetColor();
         }
     }
-    return Color::PlayerColor::NONE;
+    return PlayerColor::NONE;
 }
 
 void Kingdoms::AddHeroes( const AllHeroes & heroes )
@@ -842,7 +842,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
         assert( hero != nullptr );
 
         // Skip neutral heroes.
-        if ( hero->GetColor() != Color::PlayerColor::NONE ) {
+        if ( hero->GetColor() != PlayerColor::NONE ) {
             GetKingdom( hero->GetColor() ).AddHero( hero );
         }
     }
@@ -854,7 +854,7 @@ void Kingdoms::AddCastles( const AllCastles & castles )
         assert( castle != nullptr );
 
         // Skip neutral castles and towns.
-        if ( castle->GetColor() != Color::PlayerColor::NONE ) {
+        if ( castle->GetColor() != PlayerColor::NONE ) {
             GetKingdom( castle->GetColor() ).AddCastle( castle );
         }
     }
@@ -964,7 +964,7 @@ IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        kingdom._color = static_cast<Color::PlayerColor>( temp );
+        kingdom._color = static_cast<PlayerColor>( temp );
     }
     else {
         stream >> kingdom._color;
