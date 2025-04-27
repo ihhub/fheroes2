@@ -828,7 +828,7 @@ namespace fheroes2
         }
     }
 
-    size_t TextInput::_getMultiTextInputCursorPosition( const Point & cursorOffset, const Rect & roi ) const
+    size_t TextInput::_getMultiLineTextInputCursorPosition( const Point & cursorOffset, const Rect & roi ) const
     {
         if ( _text.empty() || roi.width < 1 || roi.height < 1 ) {
             // The text is empty.
