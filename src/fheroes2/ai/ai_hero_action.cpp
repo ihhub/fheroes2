@@ -27,8 +27,11 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
+#include <tuple>
+#include <utility>
 #include <vector>
 
 #include "ai_common.h"
