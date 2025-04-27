@@ -8,16 +8,19 @@ and user interface improvements), breathing new life into one of the most addict
 
 You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
-<p align="center">
-    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" alt="Screenshot of the world map">
-</p>
+<!-- markdownlint-disable MD033 -->
+<div class="image-showcase">
+    <div class="row">
+        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820px" class="full-image game-screenshot" alt="Screenshot of the world map">
+    </div>
+    <div class="row">
+        <img src="images/screenshots/screenshot_battle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
+        <img src="images/screenshots/screenshot_castle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the castle screen">
+    </div>
+</div>
+<!-- markdownlint-enable MD033 -->
 
-<p align="center">
-    <img src="images/screenshots/screenshot_battle.png?raw=true" width="410" alt="Screenshot of the battle screen">
-    <img src="images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
-</p>
-
-## Download and install
+## Download and Install
 
 Please follow the [**installation guide**](INSTALL.md) to download and install fheroes2.
 
@@ -69,6 +72,6 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2)
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 
-## FAQ
+## Frequently Asked Questions (FAQ)
 
 You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).

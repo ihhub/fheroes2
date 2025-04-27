@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-22 01:59+0000\n"
+"POT-Creation-Date: 2025-03-31 14:24+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -132,28 +132,6 @@ msgid ""
 "D"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr "НОВАЯ"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАХА-\n"
-"ВАЦЬ"
-
 msgid ""
 "NEW\n"
 "GAME"
@@ -177,6 +155,28 @@ msgid "QUIT"
 msgstr ""
 "ЗАВЯР-\n"
 "ШЫЦЬ"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr "НОВАЯ"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАХА-\n"
+"ВАЦЬ"
 
 msgid "INFO"
 msgstr "ДАВЕДКА"
@@ -254,22 +254,6 @@ msgstr ""
 #, fuzzy
 msgid "START"
 msgstr "НАНОВА"
-
-msgid "TOWN"
-msgstr ""
-
-msgid "CASTLE"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"COMBAT"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"COMBAT"
-msgstr ""
 
 msgid ""
 "P\n"
@@ -469,8 +453,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The Moat reduces the defense skill of troops trapped in it by %{count} and "
-"restricts their movement range."
+"The Moat interrupts any movement through it and reduces the defense skill of "
+"troops present in it by %{count}."
 msgstr ""
 
 msgid "Speed: %{speed}"
@@ -825,6 +809,16 @@ msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 #, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
+
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 msgid "The computer continues the combat for you."
 msgstr ""
@@ -2540,9 +2534,12 @@ msgstr ""
 "Рынак дазваляе мяняць адзін від рэсурсаў на іншы. Чым болей рынкаў вы маеце, "
 "тым лепей будуць умовы абмену."
 
+#, fuzzy
 msgid ""
-"The Moat slows attacking units. Any unit entering the moat must end its turn "
-"there and becomes more vulnerable to attack."
+"The Moat slows and weakens attacking units. Any walking unit entering the "
+"moat must end its turn there and can only move within the moat one hex at a "
+"time. Any creature present in the moat will have its defense skill reduced "
+"by %{count}."
 msgstr ""
 "Роў запавольвае атакуючыя войскі. Любое войска, якое ўвайшло ў роў не можа "
 "рухацца далей і павінна скончыць свой ход, а таксама горш абараняецца."
@@ -3371,6 +3368,12 @@ msgid "Castle/town placing"
 msgstr "Наладкі замка"
 
 msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "TOWN"
+msgstr ""
+
+msgid "CASTLE"
 msgstr ""
 
 #, fuzzy
@@ -4752,8 +4755,9 @@ msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
 
 msgid "Restart the current scenario."
@@ -4764,9 +4768,9 @@ msgid "Difficulty"
 msgstr "Складанасць"
 
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -10120,14 +10124,14 @@ msgstr ""
 msgid "Endless Pouch of Crystal"
 msgstr ""
 
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr ""
-
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid "Spiked Helm"
@@ -10214,12 +10218,6 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"The %{name} increases the hero's spell power by %{count} but adds the undead "
-"morale penalty."
-msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
-
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
 "ground. Despite its missing a body, it is still moving. Your troops find the "
@@ -10227,6 +10225,12 @@ msgid ""
 "seems to hold some sort of magical power that influences your decision "
 "making."
 msgstr ""
+
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Breastplate of Anduran"
 msgstr ""
@@ -10260,9 +10264,9 @@ msgid "Battle Garb of Anduran"
 msgstr ""
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for the hero's troops and gives the hero the Town "
-"Portal spell."
+"The %{name} combines the powers of the three Anduran artifacts (+5 to "
+"attack, defense, and spell power). It also provides maximum luck and morale "
+"for the hero's troops and gives the hero the Town Portal spell."
 msgstr ""
 
 msgid ""

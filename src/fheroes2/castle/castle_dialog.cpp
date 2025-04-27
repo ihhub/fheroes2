@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -179,7 +179,7 @@ namespace
             return false;
         }
 
-        return hero->BuySpellBook( &castle );
+        return hero->BuySpellBook( castle );
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -316,7 +316,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y + 3, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y, bar.width() - 16 * 2, 0 } );
 
     // Next castle button.
     fheroes2::Button buttonNextCastle( statusBarPosition.x + bar.width(), statusBarPosition.y, ICN::SMALLBAR, 3, 4 );

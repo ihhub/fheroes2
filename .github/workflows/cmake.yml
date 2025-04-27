@@ -57,6 +57,11 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v4
+    - name: Update vcpkg
+      run: |
+        cd "$VCPKG_INSTALLATION_ROOT"
+        git.exe pull origin master
+        bootstrap-vcpkg.bat
     - name: Prepare vcpkg cache
       uses: actions/cache@v4
       with:

@@ -490,7 +490,7 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    bool BuySpellBook( const Castle * castle );
+    bool BuySpellBook( const Castle & castle );
 
     const Route::Path & GetPath() const
     {

@@ -311,21 +311,23 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     if ( renderBackgroundDialog ) {
         Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
+        if ( heroCountBefore != myKingdom.GetHeroes().size() ) {
+            // A hero could be recruited in the castle or a hero could be dismissed by opening hero's dialog
+            // and switching to the other hero and dismissing this hero. We need to update the hero list scrollbar.
+            // NOTICE: we can update the scrollbar only here - after exiting the castle screen not to interfere with castle screen image.
+            adventureMapInterface.GetIconsPanel().resetIcons( ICON_HEROES );
+        }
+
         if ( updateFocus ) {
-            if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-                adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
-            }
-            else if ( it != myCastles.end() ) {
-                Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
-                if ( heroInCastle == nullptr ) {
-                    adventureMapInterface.SetFocus( *it );
-                }
-                else {
-                    adventureMapInterface.SetFocus( heroInCastle, false );
-                }
+            assert( it != myCastles.end() );
+
+            // When exiting the castle, we must focus on it or on the hero visiting this castle.
+            Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
+            if ( heroInCastle == nullptr ) {
+                adventureMapInterface.SetFocus( *it );
             }
             else {
-                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.SetFocus( heroInCastle, false );
             }
         }
         else {
@@ -335,7 +337,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
-        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {

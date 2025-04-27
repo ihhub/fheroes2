@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -324,7 +324,22 @@ int main( int argc, char ** argv )
         }
 #endif
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
+        const std::string timidityCfgPath = []() -> std::string {
+            if ( std::string path; Settings::findFile( System::concatPath( "files", "timidity" ), "timidity.cfg", path ) ) {
+                return path;
+            }
+
+            return {};
+        }();
+
+#ifdef WITH_DEBUG
+        if ( !timidityCfgPath.empty() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Path to the timidity.cfg file: " << timidityCfgPath )
+        }
+#endif
+
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts,
+                                                               timidityCfgPath );
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );

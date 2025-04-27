@@ -26,13 +26,13 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "dialog.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "icn.h"
@@ -47,7 +47,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
@@ -75,8 +74,10 @@ namespace
         case fheroes2::SupportedLanguage::English:
             // English is a default language so it is not considered as an extra language.
             return false;
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -92,12 +93,10 @@ namespace
     enum class DialogAction : int
     {
         DoNothing,
-        AddLetter,
         UpperCase,
         LowerCase,
         AlphaNumeric,
         ChangeLanguage,
-        Backspace,
         Close
     };
 
@@ -110,6 +109,14 @@ namespace
         UnsignedNumeric
     };
 
+    enum class CursorPosition
+    {
+        PrevChar,
+        NextChar,
+        BegOfText,
+        EndOfText
+    };
+
     class KeyboardRenderer
     {
     public:
@@ -117,8 +124,8 @@ namespace
             : _output( output )
             , _info( info )
             , _lengthLimit( lengthLimit )
-            , _isEvilInterface( evilInterface )
             , _cursorPosition( info.size() )
+            , _isEvilInterface( evilInterface )
         {
             // Do nothing.
         }
@@ -134,11 +141,9 @@ namespace
             return _window->activeArea();
         }
 
-        fheroes2::Rect getTextRoi() const
+        const fheroes2::Rect & getTextRoi() const
         {
-            const fheroes2::Rect windowRoi{ getWindowRoi() };
-            return { windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders, windowRoi.y + inputAreaOffsetFromWindowTop + inputAreaBorders,
-                     inputAreaSize.width - inputAreaBorders * 2, inputAreaSize.height - inputAreaBorders * 2 };
+            return _textInputArea;
         }
 
         bool isEvilInterface() const
@@ -160,13 +165,31 @@ namespace
             const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
 
             // It is important to destroy the previous window to avoid rendering issues.
+            _textUI.reset();
             _window.reset();
 
             _window = std::make_unique<fheroes2::StandardWindow>( offset.x, offset.y, size.width, size.height, true, _output );
 
             _window->render();
 
-            renderInputArea();
+            const fheroes2::Rect & windowRoi = _window->activeArea();
+            _textInputArea.x = windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2;
+            _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
+
+            // Draw the text input background.
+            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
+
+            if ( _isEvilInterface ) {
+                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
+                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            }
+
+            _textUI
+                = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
+                                                                              inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
+                                                              false, false, _output );
+            _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -182,7 +205,7 @@ namespace
 
             ++_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
         void removeCharacter()
@@ -200,7 +223,7 @@ namespace
 
             --_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
         void swapSign()
@@ -216,7 +239,7 @@ namespace
                     --_cursorPosition;
                 }
 
-                _output.render( renderInputArea() );
+                _renderInputArea();
 
                 return;
             }
@@ -224,21 +247,63 @@ namespace
             _info.insert( _info.begin(), '-' );
             ++_cursorPosition;
 
-            _output.render( renderInputArea() );
+            _renderInputArea();
         }
 
-        void changeCursorState()
+        void eventProcessing()
         {
-            _isCursorVisible = !_isCursorVisible;
-
-            renderInputArea();
+            if ( _textUI && _textUI->eventProcessing() ) {
+                _output.render( _textUI->getCursorArea() );
+            }
         }
 
-        void setCursorPosition( const int32_t clickXPosition, const int32_t startXPosition )
+        void setCursorPosition( const fheroes2::Point & clickPosition )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _info, fheroes2::FontType::normalWhite(), _cursorPosition, clickXPosition, startXPosition );
+            if ( _textUI ) {
+                const size_t newPos = _textUI->getCursorInTextPosition( clickPosition );
+                if ( _cursorPosition != newPos ) {
+                    _cursorPosition = newPos;
+                    _renderInputArea();
+                }
+            }
+        }
 
-            renderInputArea();
+        void setCursorPosition( const CursorPosition pos )
+        {
+            switch ( pos ) {
+            case CursorPosition::PrevChar:
+                if ( _cursorPosition == 0 ) {
+                    return;
+                }
+
+                --_cursorPosition;
+
+                break;
+            case CursorPosition::NextChar:
+                assert( _cursorPosition <= _info.size() );
+
+                if ( _cursorPosition == _info.size() ) {
+                    return;
+                }
+
+                ++_cursorPosition;
+
+                break;
+            case CursorPosition::BegOfText:
+                _cursorPosition = 0;
+
+                break;
+            case CursorPosition::EndOfText:
+                _cursorPosition = _info.size();
+
+                break;
+            default:
+                assert( 0 );
+
+                return;
+            }
+
+            _renderInputArea();
         }
 
     private:
@@ -246,31 +311,17 @@ namespace
         std::string & _info;
         size_t _lengthLimit{ 255 };
         std::unique_ptr<fheroes2::StandardWindow> _window;
-        const bool _isEvilInterface{ false };
-        bool _isCursorVisible{ true };
+        std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
+        fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
+        const bool _isEvilInterface{ false };
 
-        fheroes2::Rect renderInputArea()
+        void _renderInputArea()
         {
-            const fheroes2::Rect & windowRoi = _window->activeArea();
-            const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + inputAreaOffsetFromWindowTop, inputAreaSize.width,
-                                            inputAreaSize.height };
-
-            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Copy( initialWindow, 40, 286, _output, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height );
-
-            if ( _isEvilInterface ) {
-                fheroes2::ApplyPalette( _output, outputRoi.x, outputRoi.y, _output, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height,
-                                        PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            if ( _textUI ) {
+                _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
+                _output.render( _textUI->getOverallArea() );
             }
-
-            fheroes2::Text textUI( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
-
-            textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
-                         windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaBorders, _output );
-
-            return outputRoi;
         }
     };
 
@@ -278,8 +329,10 @@ namespace
     {
         KeyboardButton() = default;
 
-        KeyboardButton( std::string input, const fheroes2::Size buttonSize, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+        KeyboardButton( std::string input, const fheroes2::Key kbKey, const fheroes2::Size & buttonSize, const bool isEvilInterface,
+                        std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
+            , key( kbKey )
             , action( std::move( actionEvent ) )
         {
             fheroes2::Sprite released;
@@ -293,6 +346,12 @@ namespace
             fheroes2::addGradientShadow( released, buttonShadow, { -std::min( 0, buttonShadowOffset.x ), -std::min( 0, buttonShadowOffset.y ) }, buttonShadowOffset );
         }
 
+        KeyboardButton( std::string input, const fheroes2::Size & buttonSize, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+            : KeyboardButton( std::move( input ), fheroes2::Key::NONE, buttonSize, isEvilInterface, std::move( actionEvent ) )
+        {
+            // Do nothing.
+        }
+
         KeyboardButton( const KeyboardButton & ) = delete;
 
         KeyboardButton( KeyboardButton && ) noexcept = default;
@@ -304,6 +363,8 @@ namespace
         KeyboardButton & operator=( KeyboardButton && ) = default;
 
         std::string text;
+
+        fheroes2::Key key{ fheroes2::Key::NONE };
 
         std::function<DialogAction( KeyboardRenderer & )> action;
 
@@ -321,6 +382,8 @@ namespace
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -349,6 +412,10 @@ namespace
             return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
+        case fheroes2::SupportedLanguage::French:
+            return { "\xC9\xC8\xC7\xC0\xC2\xCA\xCB\xCD\xCE\xCF\xDB\xDC", "AZERTYUIOP\xD4", "QSDFGHJKLM\xD9", "WXCVBN" };
+        case fheroes2::SupportedLanguage::German:
+            return { "QWERTZUIOP\xDC", "ASDFGHJKL\xD6\xC4", "YXCVBNM\xDF" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x8C\x8F\xA3\xA5\xAF\xC6\xCA\xD1\xD3", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Russian:
@@ -375,6 +442,10 @@ namespace
             return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
         case fheroes2::SupportedLanguage::English:
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
+        case fheroes2::SupportedLanguage::French:
+            return { "\xE9\xE8\xE7\xE0\xE2\xEA\xEB\xED\xEE\xEF\xFB\xFC", "azertyuiop\xF4", "qsdfghjklm\xF9", "wxcvbn" };
+        case fheroes2::SupportedLanguage::German:
+            return { "qwertzuiop\xFC", "asdfghjkl\xF6\xE4", "yxcvbnm\xDF" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x9C\x9F\xB3\xB9\xBF\xE6\xEA\xF1\xF3", "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Russian:
@@ -430,7 +501,9 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
             return { 30, defaultButtonHeight };
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Russian:
+        case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { 24, defaultButtonHeight };
@@ -451,6 +524,40 @@ namespace
         // This is required in order to render proper text on buttons but do not change Okay button in the window.
         const fheroes2::LanguageSwitcher switcher( language );
 
+        const auto getKeyForCharacter = [layoutType]( const char ch ) {
+            // At the moment, only these layouts support input from the hardware keyboard
+            if ( layoutType != LayoutType::SignedNumeric && layoutType != LayoutType::UnsignedNumeric ) {
+                return fheroes2::Key::NONE;
+            }
+
+            switch ( ch ) {
+            case '0':
+                return fheroes2::Key::KEY_0;
+            case '1':
+                return fheroes2::Key::KEY_1;
+            case '2':
+                return fheroes2::Key::KEY_2;
+            case '3':
+                return fheroes2::Key::KEY_3;
+            case '4':
+                return fheroes2::Key::KEY_4;
+            case '5':
+                return fheroes2::Key::KEY_5;
+            case '6':
+                return fheroes2::Key::KEY_6;
+            case '7':
+                return fheroes2::Key::KEY_7;
+            case '8':
+                return fheroes2::Key::KEY_8;
+            case '9':
+                return fheroes2::Key::KEY_9;
+            default:
+                break;
+            }
+
+            return fheroes2::Key::NONE;
+        };
+
         std::vector<std::vector<KeyboardButton>> buttons;
         buttons.resize( buttonLetters.size() );
 
@@ -460,10 +567,12 @@ namespace
         for ( size_t i = 0; i < buttonLetters.size(); ++i ) {
             assert( buttonLetters[i].size() == returnLetters[i].size() );
             for ( size_t buttonId = 0; buttonId < buttonLetters[i].size(); ++buttonId ) {
-                buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), buttonSize, isEvilInterface,
+                const char ch = buttonLetters[i][buttonId];
+
+                buttons[i].emplace_back( std::string( 1, ch ), getKeyForCharacter( ch ), buttonSize, isEvilInterface,
                                          [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
                                              renderer.insertCharacter( letter );
-                                             return DialogAction::AddLetter;
+                                             return DialogAction::DoNothing;
                                          } );
             }
         }
@@ -485,7 +594,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -495,7 +604,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UpperCase:
@@ -507,7 +616,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
@@ -517,7 +626,7 @@ namespace
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::AlphaNumeric:
@@ -529,38 +638,40 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
-                return DialogAction::AddLetter;
+                return DialogAction::DoNothing;
             } );
 
-            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::SignedNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "-", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.swapSign();
-                return DialogAction::AddLetter;
-            } );
+            lastButtonRow.emplace_back( "-", fheroes2::Key::KEY_MINUS, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( KeyboardRenderer & renderer ) {
+                                            renderer.swapSign();
+                                            return DialogAction::DoNothing;
+                                        } );
 
-            lastButtonRow.emplace_back( "0", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.insertCharacter( '0' );
-                return DialogAction::AddLetter;
-            } );
+            lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( KeyboardRenderer & renderer ) {
+                                            renderer.insertCharacter( '0' );
+                                            return DialogAction::DoNothing;
+                                        } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         case LayoutType::UnsignedNumeric:
@@ -571,18 +682,19 @@ namespace
                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "0", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.insertCharacter( '0' );
-                return DialogAction::AddLetter;
-            } );
+            lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
+                                        []( KeyboardRenderer & renderer ) {
+                                            renderer.insertCharacter( '0' );
+                                            return DialogAction::DoNothing;
+                                        } );
 
             lastButtonRow.emplace_back( "\x7F", getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
-                return DialogAction::Backspace;
+                return DialogAction::DoNothing;
             } );
             break;
         default:
@@ -599,6 +711,8 @@ namespace
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -700,12 +814,77 @@ namespace
         }
     }
 
-    DialogAction handleButtonEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
+    DialogAction handleButtonAndKeyboardEvents( const std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
     {
+        const fheroes2::Key key = [&le]() {
+            if ( !le.isAnyKeyPressed() ) {
+                return fheroes2::Key::NONE;
+            }
+
+            const fheroes2::Key keyValue = le.getPressedKeyValue();
+
+            // Convert the numpad keys to regular keys if needed
+            switch ( keyValue ) {
+            case fheroes2::Key::KEY_KP_MINUS:
+                return fheroes2::Key::KEY_MINUS;
+            case fheroes2::Key::KEY_KP_0:
+                return fheroes2::Key::KEY_0;
+            case fheroes2::Key::KEY_KP_1:
+                return fheroes2::Key::KEY_1;
+            case fheroes2::Key::KEY_KP_2:
+                return fheroes2::Key::KEY_2;
+            case fheroes2::Key::KEY_KP_3:
+                return fheroes2::Key::KEY_3;
+            case fheroes2::Key::KEY_KP_4:
+                return fheroes2::Key::KEY_4;
+            case fheroes2::Key::KEY_KP_5:
+                return fheroes2::Key::KEY_5;
+            case fheroes2::Key::KEY_KP_6:
+                return fheroes2::Key::KEY_6;
+            case fheroes2::Key::KEY_KP_7:
+                return fheroes2::Key::KEY_7;
+            case fheroes2::Key::KEY_KP_8:
+                return fheroes2::Key::KEY_8;
+            case fheroes2::Key::KEY_KP_9:
+                return fheroes2::Key::KEY_9;
+            default:
+                break;
+            }
+
+            return keyValue;
+        }();
+
+        if ( const std::optional<CursorPosition> pos = [key]() -> std::optional<CursorPosition> {
+                 switch ( key ) {
+                 case fheroes2::Key::KEY_LEFT:
+                     return CursorPosition::PrevChar;
+                 case fheroes2::Key::KEY_RIGHT:
+                     return CursorPosition::NextChar;
+                 case fheroes2::Key::KEY_HOME:
+                     return CursorPosition::BegOfText;
+                 case fheroes2::Key::KEY_END:
+                     return CursorPosition::EndOfText;
+                 default:
+                     break;
+                 }
+
+                 return {};
+             }();
+             pos ) {
+            renderer.setCursorPosition( *pos );
+
+            return DialogAction::DoNothing;
+        }
+
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
-                if ( buttonInfo.button.isVisible() && le.MouseClickLeft( buttonInfo.button.area() ) ) {
+                if ( !buttonInfo.button.isVisible() ) {
+                    continue;
+                }
+
+                if ( le.MouseClickLeft( buttonInfo.button.area() ) || ( key != fheroes2::Key::NONE && buttonInfo.key == key ) ) {
                     assert( buttonInfo.action );
+
                     return buttonInfo.action( renderer );
                 }
             }
@@ -749,7 +928,7 @@ namespace
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders, windowWidth );
-        const fheroes2::Rect textRoi{ renderer.getTextRoi() };
+        const fheroes2::Rect & textRoi = renderer.getTextRoi();
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
@@ -776,36 +955,28 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
+        while ( le.HandleEvents() ) {
             okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
 
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+                // Reset all event states including the hotkey pressed state so the caller dialog will not process it right after closing this dialog.
+                le.reset();
                 break;
             }
 
-            action = handleButtonEvents( buttons, le, renderer );
-            switch ( action ) {
-            case DialogAction::DoNothing:
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
-                // Do nothing.
-                break;
-            default:
+            action = handleButtonAndKeyboardEvents( buttons, le, renderer );
+            if ( action != DialogAction::DoNothing ) {
                 return action;
             }
 
             updateButtonStates( buttons, le );
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.getMouseCursorPos().x, textRoi.x );
+                renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
             }
 
             // Text input cursor blink.
-            if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-                renderer.changeCursorState();
-            }
+            renderer.eventProcessing();
         }
 
         return DialogAction::Close;
@@ -835,10 +1006,8 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
-            case DialogAction::Backspace:
             case DialogAction::DoNothing:
-                // These actions must not be processed here!
+                // This action must not be processed here!
                 assert( 0 );
                 break;
             case DialogAction::LowerCase:
@@ -874,7 +1043,7 @@ namespace fheroes2
         }
     }
 
-    void openVirtualNumpad( int32_t & output, const int32_t minValue /* = INT32_MIN */, const int32_t maxValue /* = INT32_MAX */ )
+    void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue )
     {
         std::string strValue = std::to_string( output );
         DialogAction action = DialogAction::DoNothing;
@@ -887,9 +1056,7 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, SupportedLanguage::English, false, renderer );
             switch ( action ) {
-            case DialogAction::AddLetter:
             case DialogAction::AlphaNumeric:
-            case DialogAction::Backspace:
             case DialogAction::ChangeLanguage:
             case DialogAction::DoNothing:
             case DialogAction::LowerCase:

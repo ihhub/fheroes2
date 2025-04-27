@@ -27,7 +27,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <utility>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -41,6 +43,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 
 namespace
@@ -64,7 +67,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+        const fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
 
         fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
         Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
@@ -114,20 +117,25 @@ namespace fheroes2
 {
     MovableSprite::MovableSprite()
         : _restorer( Display::instance(), 0, 0, 0, 0 )
-        , _isHidden( true )
-    {}
+    {
+        // Do nothing.
+    }
 
-    MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
-        : Sprite( width_, height_, x_, y_ )
-        , _restorer( Display::instance(), x_, y_, width_, height_ )
-        , _isHidden( height_ == 0 && width_ == 0 )
-    {}
+    MovableSprite::MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y )
+        : Sprite( width, height, x, y )
+        , _restorer( Display::instance(), x, y, width, height )
+        , _isHidden( height == 0 && width == 0 )
+    {
+        // Do nothing.
+    }
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
         , _restorer( Display::instance(), 0, 0, 0, 0 )
         , _isHidden( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     MovableSprite::~MovableSprite()
     {
@@ -149,15 +157,15 @@ namespace fheroes2
         return *this;
     }
 
-    void MovableSprite::setPosition( int32_t x_, int32_t y_ )
+    void MovableSprite::setPosition( const int32_t x, const int32_t y )
     {
         if ( _isHidden ) {
-            Sprite::setPosition( x_, y_ );
+            Sprite::setPosition( x, y );
             return;
         }
 
         hide();
-        Sprite::setPosition( x_, y_ );
+        Sprite::setPosition( x, y );
         show();
     }
 
@@ -165,7 +173,7 @@ namespace fheroes2
     {
         if ( _isHidden ) {
             _restorer.update( x(), y(), width(), height() );
-            fheroes2::Blit( *this, Display::instance(), x(), y() );
+            Blit( *this, Display::instance(), x(), y() );
             _isHidden = false;
         }
     }
@@ -178,35 +186,74 @@ namespace fheroes2
         }
     }
 
-    MovableText::MovableText( Image & output )
-        : _output( output )
-        , _restorer( output, 0, 0, 0, 0 )
-        , _isHidden( false )
-    {
-        // Do nothing.
-    }
-
-    void MovableText::update( std::unique_ptr<TextBase> text )
-    {
-        _text = std::move( text );
-    }
-
-    void MovableText::draw( const int32_t x, const int32_t y )
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
 
-        _restorer.update( x, y, _text->width(), _text->height() );
-        _text->draw( x, y, _output );
+        assert( _text != nullptr );
+
+        Rect textArea = _text->area();
+        textArea.x += x;
+        textArea.y += y;
+
+        // Not to cut off the top of diacritic signs in capital letters we shift the text down.
+        const int32_t extraShiftY = textArea.y < roi.y ? roi.y - textArea.y : 0;
+        textArea.height += extraShiftY;
+
+        const Rect overlappedRoi = textArea ^ roi;
+
+        _restorer.update( overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
+        _text->drawInRoi( x, y + extraShiftY, _output, overlappedRoi );
 
         _isHidden = false;
     }
 
-    void MovableText::hide()
+    TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
+                                    const std::optional<SupportedLanguage> language )
+        : _output( output )
+        , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
+        , _cursor( getCursorSprite( FontType::normalWhite() ) )
+        // We enlarge background to have space for cursor at text edges and space for diacritics.
+        , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
+        , _textInputArea( textArea )
+        , _isSingleLineTextCenterAligned( !isMultiLine && isCenterAligned )
     {
-        if ( !_isHidden ) {
-            _restorer.restore();
-            _isHidden = true;
+        // Do nothing.
+    }
+
+    bool TextInputField::eventProcessing()
+    {
+        if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            return false;
         }
+
+        if ( _cursor.isHidden() ) {
+            _cursor.show();
+        }
+        else {
+            _cursor.hide();
+        }
+
+        return true;
+    }
+
+    void TextInputField::draw( const std::string & newText, const int32_t cursorPositionInText )
+    {
+        _cursor.hide();
+        _background.restore();
+
+        _text.set( newText, cursorPositionInText );
+
+        // Multi-line text is currently always automatically center-aligned.
+        const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
+        const int32_t offsetY = _textInputArea.y + 2;
+
+        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+
+        _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
+        _cursor.show();
+
+        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
     }
 
     SystemInfoRenderer::SystemInfoRenderer()
@@ -658,98 +705,6 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const std::string & text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset )
-    {
-        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
-            // The text is empty or mouse cursor position is to the left of input field.
-            return 0;
-        }
-
-        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
-        const size_t textSize = text.size();
-        int32_t positionOffset = 0;
-        const FontCharHandler charHandler( fontType );
-
-        for ( size_t i = 0; i < textSize; ++i ) {
-            positionOffset += charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
-
-            if ( positionOffset > maxOffset ) {
-                return i;
-            }
-
-            // If the mouse cursor is to the right of the current text cursor position we take its width into account.
-            if ( i == currentTextCursorPosition ) {
-                positionOffset += charHandler.getWidth( '_' );
-            }
-        }
-
-        return textSize;
-    }
-
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
-    {
-        if ( text.empty() ) {
-            // The text is empty.
-            return 0;
-        }
-
-        const FontType fontType = text.getFontType();
-        const int32_t fontHeight = getFontHeight( fontType.size );
-        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
-
-        if ( pointerLine < 0 ) {
-            // Pointer is upper than the first text line.
-            return 0;
-        }
-
-        std::vector<TextLineInfo> lineInfos;
-        text.getTextLineInfos( lineInfos, textRoi.width, fontHeight, true );
-
-        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
-            // Pointer is lower than the last text line.
-            // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-            return text.text().size() - 1;
-        }
-
-        size_t cursorPosition = 0;
-        for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += lineInfos[i].characterCount;
-        }
-
-        int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].lineWidth ) / 2;
-
-        if ( maxOffsetX <= 0 ) {
-            // Pointer is to the left of the text line.
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        if ( maxOffsetX > lineInfos[pointerLine].lineWidth ) {
-            // Pointer is to the right of the text line.
-            cursorPosition += lineInfos[pointerLine].characterCount;
-
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        const FontCharHandler charHandler( fontType );
-        const std::string & textString = text.text();
-        const size_t textSize = textString.size();
-
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( textString[i] ) );
-            positionOffsetX += charWidth;
-
-            if ( positionOffsetX > maxOffsetX ) {
-                // Take into account that the cursor character ('_') was added to the line.
-                return ( i > currentTextCursorPosition ) ? i - 1 : i;
-            }
-        }
-
-        // Reduce textSize by 1 because the cursor character ('_') was added to the line.
-        return textSize - 1;
-    }
-
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
     {
         Display & display = Display::instance();
@@ -790,43 +745,79 @@ namespace fheroes2
         }
     }
 
-    bool processIntegerValueTyping( const int32_t minimum, const int32_t maximum, int32_t & value )
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf )
     {
+        assert( min <= max );
+
         const LocalEvent & le = LocalEvent::Get();
 
         if ( !le.isAnyKeyPressed() ) {
-            // No key is pressed.
-            return false;
+            return {};
         }
 
-        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) ) {
-            value = value / 10;
-            return true;
+        const int32_t zeroBufValue = std::clamp( 0, min, max );
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+            valueBuf.clear();
+
+            return zeroBufValue;
         }
 
-        if ( minimum < 0 && value != 0 && ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) ) {
-            value = std::clamp( -value, minimum, maximum );
+        if ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) {
+            if ( min >= 0 ) {
+                return {};
+            }
 
-            return true;
+            if ( !std::all_of( valueBuf.begin(), valueBuf.end(), []( const char ch ) { return ( ch == '0' ); } ) ) {
+                return {};
+            }
+
+            valueBuf = "-";
+
+            return zeroBufValue;
         }
 
-        int32_t newDigit = 0;
-        if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_9 ) {
-            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 );
-        }
-        else if ( le.getPressedKeyValue() >= fheroes2::Key::KEY_KP_0 && le.getPressedKeyValue() <= fheroes2::Key::KEY_KP_9 ) {
-            newDigit = static_cast<int32_t>( le.getPressedKeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 );
-        }
-        else {
-            return false;
+        if ( const std::optional<char> newDigit = [&le]() -> std::optional<char> {
+                 using KeyUnderlyingType = std::underlying_type_t<fheroes2::Key>;
+
+                 const fheroes2::Key keyValue = le.getPressedKeyValue();
+
+                 if ( keyValue >= fheroes2::Key::KEY_0 && keyValue <= fheroes2::Key::KEY_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_0 ) + '0' );
+                 }
+
+                 if ( keyValue >= fheroes2::Key::KEY_KP_0 && keyValue <= fheroes2::Key::KEY_KP_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_KP_0 ) + '0' );
+                 }
+
+                 return {};
+             }();
+             newDigit ) {
+            valueBuf.push_back( *newDigit );
+
+            const std::optional<int32_t> value = [&valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
+                try {
+                    return std::stoi( valueBuf );
+                }
+                catch ( std::out_of_range & ) {
+                    return {};
+                }
+            }();
+
+            if ( !value || ( min <= 0 && value < min ) || ( max >= 0 && value > max ) ) {
+                valueBuf.pop_back();
+
+                return {};
+            }
+
+            if ( value == std::clamp( *value, min, max ) ) {
+                return value;
+            }
+
+            return {};
         }
 
-        value *= 10;
-        value += ( value >= 0 ) ? newDigit : ( -newDigit );
-
-        value = std::clamp( value, minimum, maximum );
-
-        return true;
+        return {};
     }
 
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )

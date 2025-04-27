@@ -77,9 +77,6 @@ constexpr int CountBits( const uint32_t val )
     return res;
 }
 
-// Returns a new text string with the inserted character in the input string at the specified position.
-std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
-
 namespace fheroes2
 {
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );

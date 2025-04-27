@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstddef>
 #include <deque>
+#include <functional>
 #include <memory>
 #include <utility>
 
@@ -75,10 +76,19 @@ namespace fheroes2
     class HistoryManager
     {
     public:
+        void setStateCallback( std::function<void( const bool, const bool )> stateCallback )
+        {
+            _stateCallback = std::move( stateCallback );
+        }
+
         void reset()
         {
             _actions.clear();
             _lastActionId = 0;
+
+            if ( _stateCallback ) {
+                _stateCallback( false, false );
+            }
         }
 
         void add( std::unique_ptr<Action> action )
@@ -94,29 +104,53 @@ namespace fheroes2
                 _actions.pop_front();
             }
 
+            if ( _stateCallback ) {
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
+            }
+
             assert( _actions.size() <= maxActions );
+        }
+
+        bool isUndoAvailable() const
+        {
+            return _lastActionId > 0;
+        }
+
+        bool isRedoAvailable() const
+        {
+            return _lastActionId < _actions.size();
         }
 
         bool undo()
         {
-            if ( _lastActionId == 0 ) {
+            if ( !isUndoAvailable() ) {
                 // Nothing to do.
                 return false;
             }
 
             --_lastActionId;
-            return _actions[_lastActionId]->undo();
+            const bool result = _actions[_lastActionId]->undo();
+
+            if ( _stateCallback ) {
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
+            }
+
+            return result;
         }
 
         bool redo()
         {
-            if ( _lastActionId == _actions.size() ) {
+            if ( !isRedoAvailable() ) {
                 // Nothing to do.
                 return false;
             }
 
             const bool result = _actions[_lastActionId]->redo();
             ++_lastActionId;
+
+            if ( _stateCallback ) {
+                _stateCallback( isUndoAvailable(), isRedoAvailable() );
+            }
 
             return result;
         }
@@ -128,5 +162,7 @@ namespace fheroes2
         std::deque<std::unique_ptr<Action>> _actions;
 
         size_t _lastActionId{ 0 };
+
+        std::function<void( const bool, const bool )> _stateCallback;
     };
 }

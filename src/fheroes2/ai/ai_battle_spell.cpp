@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,6 +46,8 @@
 namespace
 {
     const double antimagicLowLimit = 200.0;
+
+    const double bloodLustRatio = 0.1;
 
     double ReduceEffectivenessByDistance( const Battle::Unit & unit )
     {
@@ -183,6 +185,9 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
         }
         else if ( spell.isResurrect() ) {
             checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
+        }
+        else if ( spell == Spell::DRAGONSLAYER ) {
+            checkSelectBestSpell( spell, spellDragonSlayerValue( spell, friendly, enemies ) );
         }
         else if ( spell.isApplyToFriends() ) {
             checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly ) );
@@ -434,7 +439,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         ratio = getSpellHasteRatio( target );
         break;
     case Spell::BLOODLUST:
-        ratio = 0.1;
+        ratio = bloodLustRatio;
         break;
     case Spell::BLESS:
     case Spell::MASSBLESS: {
@@ -450,7 +455,6 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         ratio = 0.2;
         break;
     // Following spell usefulness is conditional; ratio will be determined later
-    case Spell::DRAGONSLAYER:
     case Spell::ANTIMAGIC:
     case Spell::MIRRORIMAGE:
     case Spell::SHIELD:
@@ -513,9 +517,6 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         if ( target.isArchers() ) {
             ratio *= 1.25;
         }
-    }
-    else if ( spellID == Spell::DRAGONSLAYER ) {
-        // TODO: add logic to check if the enemy army contains a dragon.
     }
 
     return target.GetStrength() * ratio * spellDurationMultiplier( target );
@@ -653,6 +654,61 @@ AI::SpellcastOutcome AI::BattlePlanner::spellSummonValue( const Spell & spell, c
     // Spell is less effective if we already winning this battle
     if ( _myArmyStrength > _enemyArmyStrength * 2 ) {
         bestOutcome.value /= 2;
+    }
+
+    return bestOutcome;
+}
+
+AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const
+{
+    assert( spell.GetID() == Spell::DRAGONSLAYER );
+
+    double enemyArmyStrength = 0;
+    double dragonsStrength = 0;
+
+    int32_t numOfSlotsWithEnemyDragons = 0;
+
+    for ( const Battle::Unit * unit : enemies ) {
+        assert( unit != nullptr && unit->isValid() );
+
+        const double strength = unit->GetStrength();
+
+        if ( unit->isDragons() ) {
+            ++numOfSlotsWithEnemyDragons;
+            dragonsStrength += strength;
+        }
+
+        enemyArmyStrength += strength;
+    }
+
+    if ( numOfSlotsWithEnemyDragons == 0 ) {
+        // This spell is useless as no Dragons exist in the enemy army.
+        return {};
+    }
+
+    const auto getSpellAttackBonus = []( const Spell & sp ) {
+        const uint32_t bonus = sp.ExtraValue();
+        assert( bonus > 0 );
+
+        return bonus;
+    };
+
+    // Make an estimation based on the value of Bloodlust since this spell also increases Attack but against every creature.
+    // If the enemy army consists of other monsters that are not Dragons then Dragon Slayer spell isn't that valuable anymore.
+    const double bloodlustAttackBonus = getSpellAttackBonus( Spell::BLOODLUST );
+    const double dragonSlayerAttackBonus = getSpellAttackBonus( spell );
+
+    const double dragonSlayerRatio = bloodLustRatio * dragonSlayerAttackBonus / bloodlustAttackBonus * dragonsStrength / enemyArmyStrength;
+
+    SpellcastOutcome bestOutcome;
+
+    for ( const Battle::Unit * unit : friendly ) {
+        if ( isSpellcastUselessForUnit( *unit, spell ) ) {
+            continue;
+        }
+
+        const double unitValue = unit->GetStrength() * dragonSlayerRatio * spellDurationMultiplier( *unit );
+        bestOutcome.updateOutcome( unitValue, unit->GetHeadIndex(), false );
     }
 
     return bestOutcome;

@@ -344,8 +344,6 @@ namespace
             assert( hero.GetIndex() == dstIndex );
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
-
-            castle->MageGuildEducateHero( hero );
             return;
         }
 
@@ -439,8 +437,6 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captures the enemy castle " << castle->GetName() )
 
         captureCastle();
-
-        castle->MageGuildEducateHero( hero );
     }
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )
@@ -1093,6 +1089,10 @@ namespace
 
         // It is important to mark it globally so other heroes will know about the object.
         hero.SetVisited( dst_index, Visit::GLOBAL );
+
+        // AI does not know about Witch's Hut skill before visiting it.
+        // Share this information with allies.
+        AI::shareObjectVisitInfoWithAllies( hero.GetKingdom(), dst_index );
     }
 
     void AIToShrine( Heroes & hero, int32_t dst_index )
@@ -1110,6 +1110,10 @@ namespace
 
         // All heroes will know which spell is here.
         hero.SetVisited( dst_index, Visit::GLOBAL );
+
+        // AI does not know about Shrine's spell before visiting it.
+        // Share this information with allies.
+        AI::shareObjectVisitInfoWithAllies( hero.GetKingdom(), dst_index );
     }
 
     void AIToGoodLuckObject( Heroes & hero, int32_t dst_index )
@@ -1519,8 +1523,9 @@ namespace
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
-
-        hero.SetVisited( dst_index, Visit::GLOBAL );
+        else {
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+        }
     }
 
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )

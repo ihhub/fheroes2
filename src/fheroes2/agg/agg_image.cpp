@@ -74,12 +74,8 @@ namespace
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
     const std::set<int> languageDependentIcnId{ ICN::BUTTON_WELL_MAX,
-                                                ICN::BUTTON_NEW_GAME_GOOD,
-                                                ICN::BUTTON_NEW_GAME_EVIL,
-                                                ICN::BUTTON_SAVE_GAME_GOOD,
-                                                ICN::BUTTON_SAVE_GAME_EVIL,
-                                                ICN::BUTTON_LOAD_GAME_GOOD,
-                                                ICN::BUTTON_LOAD_GAME_EVIL,
+                                                ICN::BUTTONS_FILE_DIALOG_GOOD,
+                                                ICN::BUTTONS_FILE_DIALOG_EVIL,
                                                 ICN::BUTTON_INFO_GOOD,
                                                 ICN::BUTTON_INFO_EVIL,
                                                 ICN::BUTTON_QUIT_GOOD,
@@ -142,6 +138,8 @@ namespace
                                                 ICN::BUTTON_5_PLAYERS,
                                                 ICN::BUTTON_6_PLAYERS,
                                                 ICN::BUTTON_BATTLE_ONLY,
+                                                ICN::BUTTON_NEW_MAP,
+                                                ICN::BUTTON_LOAD_MAP,
                                                 ICN::BUTTON_GIFT_GOOD,
                                                 ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -160,10 +158,6 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
                                                 ICN::BUTTON_START_GOOD,
-                                                ICN::BUTTON_CASTLE_GOOD,
-                                                ICN::BUTTON_CASTLE_EVIL,
-                                                ICN::BUTTON_TOWN_GOOD,
-                                                ICN::BUTTON_TOWN_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -176,11 +170,7 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
-                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::BUTTON_AUTO_COMBAT_GOOD,
-                                                ICN::BUTTON_AUTO_COMBAT_EVIL,
-                                                ICN::BUTTON_QUICK_COMBAT_GOOD,
-                                                ICN::BUTTON_QUICK_COMBAT_EVIL };
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1271,7 +1261,7 @@ namespace
         case ICN::BUTTON_SMALL_RESTART_EVIL:
         case ICN::UNIFORM_EVIL_MAX_BUTTON:
         case ICN::UNIFORM_EVIL_MIN_BUTTON: {
-            // We do palette swaps for these for one out of either two reasons: to generate completely new buttons, or to preserve
+            // We do palette swaps for these due to two reasons: to generate completely new buttons, or to preserve
             // language-specific generations from generateLanguageSpecificImages().
             _icnVsSprite[id].resize( 2 );
 
@@ -1316,23 +1306,38 @@ namespace
             convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID );
             break;
         }
+        case ICN::BUTTONS_FILE_DIALOG_EVIL:
+        case ICN::BUTTONS_FILE_DIALOG_GOOD: {
+            _icnVsSprite[id].resize( 8 );
+
+            if ( useOriginalResources() ) {
+                const int buttonIcnID = id == ICN::BUTTONS_FILE_DIALOG_EVIL ? ICN::CPANELE : ICN::CPANEL;
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
+                }
+                break;
+            }
+
+            const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
+                                                      { fheroes2::getSupportedText( gettext_noop( "NEW\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
+                                                      80 );
+
+            break;
+        }
         case ICN::BUTTON_INFO_EVIL:
         case ICN::BUTTON_INFO_GOOD:
-        case ICN::BUTTON_LOAD_GAME_EVIL:
-        case ICN::BUTTON_LOAD_GAME_GOOD:
         case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_NEW_GAME_EVIL:
-        case ICN::BUTTON_NEW_GAME_GOOD:
         case ICN::BUTTON_NEW_MAP_GOOD:
         case ICN::BUTTON_QUIT_EVIL:
         case ICN::BUTTON_QUIT_GOOD:
-        case ICN::BUTTON_SAVE_GAME_EVIL:
-        case ICN::BUTTON_SAVE_GAME_GOOD:
         case ICN::BUTTON_SAVE_MAP_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_NEW_GAME_EVIL || id == ICN::BUTTON_LOAD_GAME_EVIL || id == ICN::BUTTON_SAVE_GAME_EVIL
-                                           || id == ICN::BUTTON_QUIT_EVIL || id == ICN::BUTTON_INFO_EVIL );
+            const bool isEvilInterface = ( id == ICN::BUTTON_QUIT_EVIL || id == ICN::BUTTON_INFO_EVIL );
 
             if ( useOriginalResources() ) {
                 int buttonIcnID = ICN::UNKNOWN;
@@ -1350,24 +1355,6 @@ namespace
                 }
                 case ICN::BUTTON_SAVE_MAP_GOOD: {
                     buttonIcnID = ICN::ECPANEL;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_NEW_GAME_EVIL:
-                case ICN::BUTTON_NEW_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_LOAD_GAME_EVIL:
-                case ICN::BUTTON_LOAD_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                case ICN::BUTTON_SAVE_GAME_EVIL:
-                case ICN::BUTTON_SAVE_GAME_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                     icnIndex = { 4, 5 };
                     break;
                 }
@@ -1408,21 +1395,6 @@ namespace
                 text = gettext_noop( "SAVE\nMAP" );
                 break;
             }
-            case ICN::BUTTON_NEW_GAME_EVIL:
-            case ICN::BUTTON_NEW_GAME_GOOD: {
-                text = gettext_noop( "NEW\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_LOAD_GAME_EVIL:
-            case ICN::BUTTON_LOAD_GAME_GOOD: {
-                text = gettext_noop( "LOAD\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_SAVE_GAME_EVIL:
-            case ICN::BUTTON_SAVE_GAME_GOOD: {
-                text = gettext_noop( "SAVE\nGAME" );
-                break;
-            }
             case ICN::BUTTON_QUIT_EVIL:
             case ICN::BUTTON_QUIT_GOOD: {
                 text = gettext_noop( "QUIT" );
@@ -1449,6 +1421,8 @@ namespace
         case ICN::BUTTON_5_PLAYERS:
         case ICN::BUTTON_6_PLAYERS:
         case ICN::BUTTON_BATTLE_ONLY:
+        case ICN::BUTTON_NEW_MAP:
+        case ICN::BUTTON_LOAD_MAP:
         case ICN::BUTTON_CAMPAIGN_GAME:
         case ICN::BUTTON_EXPANSION_CAMPAIGN:
         case ICN::BUTTON_HOT_SEAT:
@@ -1521,6 +1495,16 @@ namespace
                 case ICN::BUTTON_6_PLAYERS: {
                     buttonIcnID = ICN::BTNHOTST;
                     icnIndex = { 8, 9 };
+                    break;
+                }
+                case ICN::BUTTON_NEW_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 0, 1 };
+                    break;
+                }
+                case ICN::BUTTON_LOAD_MAP: {
+                    buttonIcnID = ICN::BTNEMAIN;
+                    icnIndex = { 2, 3 };
                     break;
                 }
                 default:
@@ -1597,6 +1581,14 @@ namespace
             }
             case ICN::BUTTON_6_PLAYERS: {
                 text = gettext_noop( "6 PLAYERS" );
+                break;
+            }
+            case ICN::BUTTON_NEW_MAP: {
+                text = gettext_noop( "NEW\nMAP" );
+                break;
+            }
+            case ICN::BUTTON_LOAD_MAP: {
+                text = gettext_noop( "LOAD\nMAP" );
                 break;
             }
             default:
@@ -1759,70 +1751,6 @@ namespace
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "MAX" ), fheroes2::FontType::buttonReleasedWhite() );
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
-
-            break;
-        }
-        case ICN::BUTTON_CASTLE_GOOD:
-        case ICN::BUTTON_CASTLE_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            // Town and Castle buttons must have the same width.
-            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
-            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
-
-            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
-            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
-            const bool isEvilInterface = id == ICN::BUTTON_CASTLE_EVIL;
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_TOWN_GOOD:
-        case ICN::BUTTON_TOWN_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            // Town and Castle buttons must have the same width.
-            // This is why we need to calculate text width for both buttons and then create a button with a needed width.
-            const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-            const int32_t townTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "TOWN" ), releasedFont ), releasedFont }.width();
-            const int32_t castleTextWidth = fheroes2::Text{ fheroes2::getSupportedText( _( "CASTLE" ), releasedFont ), releasedFont }.width();
-
-            // Normal button width is 80 pixels so if the overall length is smaller than 80 then set the default value.
-            const int32_t width = std::max( 80, std::max( townTextWidth, castleTextWidth ) );
-            const bool isEvilInterface = id == ICN::BUTTON_TOWN_EVIL;
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { width, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_AUTO_COMBAT_GOOD:
-        case ICN::BUTTON_AUTO_COMBAT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_AUTO_COMBAT_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "AUTO\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_QUICK_COMBAT_GOOD:
-        case ICN::BUTTON_QUICK_COMBAT_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_QUICK_COMBAT_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "QUICK\nCOMBAT" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
-                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -2320,50 +2248,6 @@ namespace
                 std::swap( imageArray[214], imageArray[221] );
                 std::swap( imageArray[220], imageArray[222] );
                 imageArray.erase( imageArray.begin() + 221, imageArray.end() );
-            }
-            // The French version replaces several ASCII special characters with language-specific characters.
-            // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
-            // of the original so that original French maps' texts are displayed correctly.
-            if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
-                // The engine expects that letter indexes correspond to charcode - 0x20, but the original French
-                // Price of Loyalty maps use 0x09 for lowercase i with circonflex. This is currently not supported
-                // by the engine.
-                const fheroes2::Sprite firstSprite{ imageArray[0] };
-                imageArray.insert( imageArray.begin() + 96, 128, firstSprite );
-                // Capital letters with accents aren't present in the original assets so we use unaccented letters.
-                imageArray[192 - 32] = imageArray[33];
-                imageArray[199 - 32] = imageArray[35];
-                imageArray[201 - 32] = imageArray[37];
-                imageArray[202 - 32] = imageArray[37];
-
-                imageArray[224 - 32] = imageArray[32];
-                imageArray[226 - 32] = imageArray[10];
-                imageArray[231 - 32] = imageArray[62];
-                imageArray[232 - 32] = imageArray[64];
-                imageArray[233 - 32] = imageArray[94];
-                imageArray[234 - 32] = imageArray[92];
-                imageArray[239 - 32] = imageArray[91];
-                imageArray[244 - 32] = imageArray[3];
-                imageArray[249 - 32] = imageArray[6];
-                imageArray[251 - 32] = imageArray[4];
-                // The original small font has 1 letter at three indexes (30, 93, 95) that has an empty wide transparent
-                // area that we need to remove. Plus we need to add a missing pixel.
-                if ( id == ICN::SMALFONT && imageArray[93].width() > 19 ) {
-                    imageArray[238 - 32].resize( 4, 9 );
-                    imageArray[238 - 32].reset();
-                    Copy( imageArray[93], 0, 0, imageArray[238 - 32], 0, 1, 4, 8 );
-                    Copy( imageArray[93], 1, 0, imageArray[238 - 32], 2, 0, 1, 1 );
-                    imageArray[238 - 32].setPosition( 0, -1 );
-                    fheroes2::updateShadow( imageArray[238 - 32], { -1, 1 }, 2, true );
-                    // Copy the fixed sprite back.
-                    for ( const int charCode : { 30, 93, 95 } ) {
-                        imageArray[charCode] = imageArray[238 - 32];
-                    }
-                }
-                else {
-                    imageArray[238 - 32] = imageArray[93];
-                }
-                imageArray.erase( imageArray.begin() + 220, imageArray.end() );
             }
             // Italian version uses CP1252
             if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
@@ -4644,7 +4528,7 @@ namespace
             }
 
             _icnVsSprite[id].resize( 2 );
-            // move dark border to new released state from original pressed state button
+            // Move dark border to new released state from original pressed state button
             const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalID, 4 );
             const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalID, 5 );
             if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
@@ -4661,15 +4545,21 @@ namespace
             Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
             Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
 
-            // pressed state
+            // Pressed state
             fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            pressed.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
+            // Make sure the released and pressed states have the same size, because the original Czech's pressed state is 1 px less in height than the other versions'.
+            pressed.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
             pressed.reset();
             Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
 
-            // the empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp
+            // This fills the 1 px vertical gap in the Czech pressed state button.
+            if ( originalPressed.height() < 23 ) {
+                Copy( originalPressed, 0, originalPressed.height() - 10, pressed, 0, pressed.height() - 10, originalPressed.width(), 10 );
+            }
+
+            // The empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp.
             Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
-            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalPressed.height() );
+            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalReleased.height() );
 
             const int32_t pixelPosition = 4 * 94 + 6;
             Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );

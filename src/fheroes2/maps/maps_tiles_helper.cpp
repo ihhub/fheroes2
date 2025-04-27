@@ -2183,6 +2183,24 @@ namespace Maps
         case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
+            // Mines must have an object part of OBJ_ICN_TYPE_EXTRAOVR type on top.
+            // However, some mines do not follow this rule so we need to fix it!
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                for ( auto & part : tile.getGroundObjectParts() ) {
+                    if ( part.icnType == MP2::OBJ_ICN_TYPE_EXTRAOVR && part._uid == tile.getMainObjectPart()._uid ) {
+                        // We found the missing object part. Swap it.
+                        std::swap( tile.getMainObjectPart(), part );
+                        break;
+                    }
+                }
+            }
+
+            if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
+                // This is an unknown mine type. Most likely it was added by some hex editing.
+                tile.setMainObjectType( MP2::OBJ_NONE );
+                break;
+            }
+
             switch ( tile.getMainObjectPart().icnIndex ) {
             case 0: {
                 const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );

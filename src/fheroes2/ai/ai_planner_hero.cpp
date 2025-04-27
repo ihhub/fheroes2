@@ -2671,6 +2671,12 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
     // So it is to check if the hero is still present.
     if ( hero.isActive() ) {
         if ( Castle * castle = hero.inCastleMutable(); castle ) {
+            // Upon successful purchase of the spell book, the hero immediately learns all the spells available in the castle
+            if ( !hero.BuySpellBook( *castle ) ) {
+                // If the hero couldn't buy a spell book, then maybe he already has one, so we can try to teach him the spells available in the castle
+                castle->trainHeroInMageGuild( hero );
+            }
+
             reinforceCastle( *castle );
         }
         else {

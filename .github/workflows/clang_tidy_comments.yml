@@ -27,13 +27,13 @@ jobs:
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "clang-tidy-result"
-          })[0];
+          const clangTidyArtifact = artifacts.data.artifacts.find((artifact) =>
+              artifact.name === "clang-tidy-result"
+          );
           const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              artifact_id: matchArtifact.id,
+              artifact_id: clangTidyArtifact.id,
               archive_format: "zip",
           });
           const fs = require("fs");
@@ -50,7 +50,7 @@ jobs:
           const fs = require("fs");
           function exportVar(varName, fileName, regEx) {
               const val = fs.readFileSync("${{ github.workspace }}/clang-tidy-result/" + fileName, {
-                  encoding: "ascii"
+                  encoding: "ascii",
               }).trimEnd();
               assert.ok(regEx.test(val), "Invalid value format for " + varName);
               core.exportVariable(varName, val);
@@ -72,13 +72,13 @@ jobs:
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "clang-tidy-result"
-          })[0];
+          const clangTidyArtifact = artifacts.data.artifacts.find((artifact) =>
+              artifact.name === "clang-tidy-result"
+          );
           const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              artifact_id: matchArtifact.id,
+              artifact_id: clangTidyArtifact.id,
               archive_format: "zip",
           });
           const fs = require("fs");

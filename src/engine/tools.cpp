@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -107,20 +107,6 @@ std::vector<std::string> StringSplit( const std::string_view str, const char sep
     result.emplace_back( str.begin() + startPos, str.end() );
 
     return result;
-}
-
-std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
-{
-    std::string outputString = inputString;
-
-    if ( position >= inputString.size() ) {
-        outputString.append( 1, character );
-    }
-    else {
-        outputString.insert( position, 1, character );
-    }
-
-    return outputString;
 }
 
 int Sign( const int i )
