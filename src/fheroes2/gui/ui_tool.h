@@ -143,7 +143,7 @@ namespace fheroes2
         // Returns `true` when rendering of this UI element is needed.
         bool eventProcessing();
 
-        // TODO: Process text input from keyboard other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
+        // TODO: Process text input from keyboard and other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
 
         Rect getCursorArea() const
         {
@@ -164,7 +164,7 @@ namespace fheroes2
 
         size_t getCursorInTextPosition( const Point & pos ) const
         {
-            return _text.getCursorPosition( pos, _textInputArea, _isCenterAligned );
+            return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
     private:
@@ -173,8 +173,7 @@ namespace fheroes2
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
-        bool _isCenterAligned{ false };
-        bool _isMultiLine{ false };
+        bool _isSingleLineTextCenterAligned{ false };
     };
 
     // Renderer of current time and FPS on screen

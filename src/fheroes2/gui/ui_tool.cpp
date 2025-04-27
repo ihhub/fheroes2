@@ -216,8 +216,7 @@ namespace fheroes2
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )
-        , _isCenterAligned( isMultiLine || isCenterAligned )
-        , _isMultiLine( isMultiLine )
+        , _isSingleLineTextCenterAligned( !isMultiLine && isCenterAligned )
     {
         // Do nothing.
     }
@@ -246,7 +245,7 @@ namespace fheroes2
         _text.set( newText, cursorPositionInText );
 
         // Multi-line text is currently always automatically center-aligned.
-        const int32_t offsetX = ( _isCenterAligned && !_isMultiLine ) ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
+        const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
         const int32_t offsetY = _textInputArea.y + 2;
 
         _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
