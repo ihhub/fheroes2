@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "color.h"
 #include "monster.h"
 #include "players.h"
 
@@ -39,11 +40,6 @@ class Castle;
 class HeroBase;
 class Heroes;
 class Troop;
-
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
 
 namespace Maps
 {

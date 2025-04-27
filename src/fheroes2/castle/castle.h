@@ -53,11 +53,6 @@ class Troop;
 
 struct Funds;
 
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
-
 namespace fheroes2
 {
     class RandomMonsterAnimation;

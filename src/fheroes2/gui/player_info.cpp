@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "color.h"

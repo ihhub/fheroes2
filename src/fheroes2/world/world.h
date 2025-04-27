@@ -36,6 +36,7 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
+#include "color.h"
 #include "game_string.h"
 #include "heroes.h"
 #include "kingdom.h"
@@ -53,11 +54,6 @@ class IStreamBase;
 class OStreamBase;
 
 struct Week;
-
-namespace Color
-{
-    enum class PlayerColor : uint8_t;
-}
 
 namespace MP2
 {

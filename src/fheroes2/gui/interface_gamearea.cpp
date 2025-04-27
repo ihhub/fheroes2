@@ -60,6 +60,11 @@
 #include "ui_object_rendering.h"
 #include "world.h"
 
+namespace Color
+{
+    enum class PlayerColor : uint8_t;
+}
+
 namespace
 {
     const int32_t minimalRequiredDraggingMovement = 10;

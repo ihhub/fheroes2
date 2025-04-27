@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstring>
 #include <functional>
-#include <limits>
 #include <list>
 #include <locale>
 #include <map>
