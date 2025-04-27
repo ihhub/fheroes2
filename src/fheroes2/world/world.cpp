@@ -1262,7 +1262,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     for ( const auto & item : enemy_wins ) {
         if ( conf.getCurrentMapInfo().ConditionWins() & item.first ) {
-            const Color::PlayerColor color = vec_kingdoms.FindWins( item.first );
+            const Color::PlayerColor color = vec_kingdoms.FindWins( static_cast<int>( item.first ) );
 
             if ( color != Color::PlayerColor::NONE && color != kingdom.GetColor() ) {
                 return item.second;
@@ -1413,13 +1413,8 @@ uint32_t World::GetWeekSeed() const
 bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
 {
     const Color::PlayerColors colors( Game::GetKingdomColors() );
-    for ( const Color::PlayerColor color : colors ) {
-        const Kingdom & kingdom = GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, objectType ) ) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of( colors.cbegin(), colors.cend(),
+                        [this, objectType, dstIndex]( const Color::PlayerColor color ) { return GetKingdom( color ).isVisited( dstIndex, objectType ); } );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )

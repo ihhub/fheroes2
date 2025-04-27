@@ -365,7 +365,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         _race = Race::NECR;
         break;
     default: {
-        const uint32_t kingdomRace = Players::GetPlayerRace( GetColor() );
+        const int kingdomRace = Players::GetPlayerRace( GetColor() );
         _race = ( Color::PlayerColor::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
         break;
     }
