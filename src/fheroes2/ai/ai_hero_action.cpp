@@ -700,7 +700,7 @@ namespace
                         return ( role == Heroes::Role::FIGHTER && exp >= 1500 ) ? 10 : 0;
                     }
 
-                    uint32_t value = ( exp > 500 ) ? exp - 500 : 0;
+                    uint32_t value = std::max( exp, 500U ) - 500;
                     if ( role == Heroes::Role::FIGHTER ) {
                         value += 500;
                     }
