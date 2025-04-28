@@ -672,7 +672,7 @@ namespace
                 }
 
                 const uint32_t exp = gold > 500 ? gold - 500 : 500;
-                const uint32_t chanceToGetExp = [&hero, exp]() -> uint32_t {
+                const uint32_t chanceToChooseExp = [&hero, exp]() -> uint32_t {
                     const Heroes::Role role = hero.getAIRole();
                     const int32_t kingdomGold = hero.GetKingdom().GetFunds().gold;
 
@@ -682,7 +682,7 @@ namespace
                             return 10;
                         }
 
-                        return 50;
+                        return 0;
                     }
 
                     if ( role == Heroes::Role::CHAMPION ) {
@@ -708,7 +708,7 @@ namespace
                     return value / 15; // 33% for every 500 experience
                 }();
 
-                if ( chanceToGetExp > 0 && Rand::Get( 1, 100 ) <= chanceToGetExp ) {
+                if ( chanceToChooseExp > 0 && Rand::Get( 1, 100 ) <= chanceToChooseExp ) {
                     return { std::optional<uint32_t>{}, exp, {} };
                 }
 
