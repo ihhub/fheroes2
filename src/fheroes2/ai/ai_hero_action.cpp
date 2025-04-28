@@ -708,11 +708,11 @@ namespace
                     return value / 15; // 33% for every 500 experience
                 }();
 
-                if ( chanceToChooseExp > 0 && Rand::Get( 1, 100 ) <= chanceToChooseExp ) {
-                    return { std::optional<uint32_t>{}, exp, {} };
+                if ( chanceToChooseExp == 0 || Rand::Get( 1, 100 ) > chanceToChooseExp ) {
+                    return { gold, {}, {} };
                 }
 
-                return { gold, {}, {} };
+                return { std::optional<uint32_t>{}, exp, {} };
             }
 
             if ( !isArtValid ) {
