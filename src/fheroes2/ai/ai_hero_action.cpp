@@ -2106,8 +2106,6 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 {
     const Route::Path & path = hero.GetPath();
 
-    fheroes2::GameMode gameState = fheroes2::GameMode::END_TURN;
-
     if ( path.isValidForTeleportation() ) {
         const int32_t targetIndex = path.GetFrontIndex();
 
@@ -2119,11 +2117,11 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
         // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
         // The further path of this hero will be re-planned by AI.
-        return gameState;
+        return fheroes2::GameMode::END_TURN;
     }
 
     if ( !path.isValidForMovement() ) {
-        return gameState;
+        return fheroes2::GameMode::END_TURN;
     }
 
     hero.SetMove( true );
@@ -2238,7 +2236,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
                 if ( hero.isAction() ) {
                     hero.ResetAction();
 
-                    gameState = GameOver::Result::Get().checkGameOver();
+                    const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
                     if ( gameState != fheroes2::GameMode::CANCEL ) {
                         return gameState;
                     }
@@ -2263,7 +2261,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     hero.SetMove( false );
 
-    return gameState;
+    return fheroes2::GameMode::END_TURN;
 }
 
 void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )

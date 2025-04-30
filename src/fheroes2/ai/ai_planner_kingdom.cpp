@@ -806,9 +806,9 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         uint32_t const endProgressValue
             = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
 
-        fheroes2::GameMode gameState = fheroes2::GameMode::CANCEL;
-        bool moreTaskForHeroes = HeroesTurn( heroes, currentProgressValue, endProgressValue, gameState );
-        if ( gameState != fheroes2::GameMode::CANCEL ) {
+        bool moreTaskForHeroes = false;
+        const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );
+        if ( gameState != fheroes2::GameMode::END_TURN ) {
             return gameState;
         }
 

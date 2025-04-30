@@ -201,8 +201,8 @@ namespace AI
         // (if there is one) by giving him the best available troops.
         void reinforceCastle( Castle & castle );
 
-        // Returns true if heroes can still do tasks but they have no move points.
-        bool HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, fheroes2::GameMode & gameState );
+        // Returns the state of the game. By default it should be end of turn.
+        fheroes2::GameMode HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, bool & moreTasksAvailable );
 
         bool recruitHero( Castle & castle, bool buyArmy );
 

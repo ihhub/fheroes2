@@ -2751,11 +2751,14 @@ void AI::Planner::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     }
 }
 
-bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, fheroes2::GameMode & gameState )
+fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, bool & moreTasksAvailable )
 {
+    // By default there are always more tasks for heroes.
+    moreTasksAvailable = true;
+
     if ( heroes.empty() ) {
         // No heroes so we indicate that all heroes moved.
-        return true;
+        return fheroes2::GameMode::END_TURN;
     }
 
     std::vector<Heroes *> availableHeroes;
@@ -2896,18 +2899,20 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                     // The rest of the path the hero should do by foot.
                     bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
-                    gameState = HeroesMove( *bestHero );
+                    const fheroes2::GameMode gameState = HeroesMove( *bestHero );
                     if ( gameState != fheroes2::GameMode::END_TURN ) {
-                        return false;
+                        moreTasksAvailable = false;
+                        return gameState;
                     }
                 }
             }
             else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
-                gameState = HeroesMove( *bestHero );
+                const fheroes2::GameMode gameState = HeroesMove( *bestHero );
                 if ( gameState != fheroes2::GameMode::END_TURN ) {
-                    return false;
+                    moreTasksAvailable = false;
+                    return gameState;
                 }
             }
         }
@@ -2951,5 +2956,6 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
 
     status.drawAITurnProgress( endProgressValue );
 
-    return availableHeroes.empty();
+    moreTasksAvailable = availableHeroes.empty();
+    return fheroes2::GameMode::END_TURN;
 }
