@@ -78,7 +78,7 @@ msgid "NO"
 msgstr "НЕ"
 
 msgid "DISMISS"
-msgstr "ВЫЗВАЛІЦЬ"
+msgstr "ЗВОЛЬНІЦЬ"
 
 msgid "UPGRADE"
 msgstr "ПАЛЕПШЫЦЬ"
