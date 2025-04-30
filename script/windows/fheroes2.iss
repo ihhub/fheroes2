@@ -30,7 +30,7 @@ Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
 Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
-Source: "..\..\files\soundfonts\*.*"; DestDir: "{app}\files\soundfonts"
+Source: "..\..\files\timidity\*"; DestDir: "{app}\files\timidity"; Flags: recursesubdirs
 Source: "..\demo\*.bat"; DestDir: "{app}"
 Source: "..\demo\*.ps1"; DestDir: "{app}"
 Source: "..\homm2\*.bat"; DestDir: "{app}"

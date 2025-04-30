@@ -1,4 +1,4 @@
-# Android port of [**fheroes2**](README.md) project
+# Android Port of [fheroes2](README.md) Project
 
 ## Installation
 
@@ -40,7 +40,7 @@ To make it easier to select the angle of attack on touchscreens, you can "draw" 
 intend to attack from, to the cell occupied by the enemy unit. Next, you should remove your finger from the screen, double-check
 your planned attack, and then confirm the action by touching the target cell with your finger again.
 
-## Android specific notes
+## Android Specific Notes
 
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".

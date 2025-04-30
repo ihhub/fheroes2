@@ -20,7 +20,7 @@
 
 TARGET := fheroes2.js
 
-SDL2_MIXER_FORMATS := mid,mp3
+SDL2_MIXER_FORMATS := mid,mp3,ogg
 
 CCFLAGS := $(CCFLAGS) \
 	--use-port=sdl2 \
@@ -32,7 +32,7 @@ CCFLAGS := $(CCFLAGS) \
 LDFLAGS := $(LDFLAGS) \
 	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
 	--preload-file ../../../files/lang/@/files/lang/ \
-	--preload-file ../../../files/timidity/@/etc/ \
+	--preload-file ../../../files/timidity/@/files/timidity/ \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=64kb \

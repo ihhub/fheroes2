@@ -82,12 +82,12 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.5'
 
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
     implementation 'com.google.android.material:material:1.12.0'
 }
@@ -104,7 +104,7 @@ tasks.register('copyTimidity', Copy) {
         include 'instruments/*.pat'
         include 'timidity.cfg'
     }
-    into 'src/main/assets'
+    into 'src/main/assets/files/timidity'
 }
 
 tasks.register('copyTranslations', Copy) {

@@ -1,6 +1,6 @@
-# [**fheroes2**](README.md) build and contribution guide
+# [fheroes2](README.md) build and contribution guide
 
-## Build
+## Building the fheroes2 Project
 
 Please follow the instructions below to be able to build the project from source:
 
@@ -50,6 +50,12 @@ If you would like to run this project in a web browser please follow the instruc
 ### Build with CMake
 
 If you would like to build the project using CMake please follow the instructions on [**this page**](README_cmake.md).
+
+## Building the front end website
+
+We host the website on Github pages, which is a highly customized version of the
+Jekyll static site engine. The instructions for developing the website can be
+found in the [**website local dev**](WEBSITE_LOCAL_DEV.md) guide.
 
 ## Contribution
 
