@@ -274,8 +274,6 @@ namespace fheroes2
     class TextInput final : public Text
     {
     public:
-        TextInput() = delete;
-
         // Every text input field has limited width and the only font type.
         explicit TextInput( const FontType fontType, const int32_t maxTextWidth, const bool isMultiLine, const std::optional<SupportedLanguage> language )
             : Text( {}, fontType )
@@ -287,10 +285,6 @@ namespace fheroes2
 
             _updateCursorAreaInText();
         }
-
-        // TextInput should update text and cursor position in that text at the same time.
-        void set( std::string, const FontType ) = delete;
-        void set( std::string, const FontType, const std::optional<SupportedLanguage> ) = delete;
 
         void set( std::string text, const int32_t cursorPosition )
         {
@@ -325,7 +319,7 @@ namespace fheroes2
             return _cursorArea;
         }
 
-    protected:
+    private:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorAreaInText();
 
