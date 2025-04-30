@@ -2897,7 +2897,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                     bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                     gameState = HeroesMove( *bestHero );
-                    if ( gameState != fheroes2::GameMode::CANCEL ) {
+                    if ( gameState != fheroes2::GameMode::END_TURN ) {
                         return false;
                     }
                 }
@@ -2906,7 +2906,7 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                 gameState = HeroesMove( *bestHero );
-                if ( gameState != fheroes2::GameMode::CANCEL ) {
+                if ( gameState != fheroes2::GameMode::END_TURN ) {
                     return false;
                 }
             }
