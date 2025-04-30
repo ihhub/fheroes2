@@ -130,7 +130,7 @@ namespace
     void updateWorldOwnership( const Maps::Map_Format::MapFormat & map )
     {
         for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
-            assert( tileIndex < world.getSize() );
+            assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
             world.CaptureObject( tileIndex, color );
         }
     }

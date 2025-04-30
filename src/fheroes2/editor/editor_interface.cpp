@@ -1580,7 +1580,7 @@ namespace Interface
                     const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
                     const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : Color::NONE;
 
-                    uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
+                    const uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
                     if ( newColor != ownerColor ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );

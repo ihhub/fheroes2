@@ -1256,7 +1256,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     updateArtifactStats();
 
     for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
-        assert( tileIndex < world.getSize() );
+        assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
         world.CaptureObject( tileIndex, color );
     }
 
