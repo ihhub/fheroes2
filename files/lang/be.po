@@ -262,7 +262,7 @@ msgstr ""
 msgid "HOT SEAT"
 msgstr ""
 "ЗА АДНЫМ\n"
-"камп’юТАРАМ"
+"КАМП’ЮТАРАМ"
 
 msgid "2 PLAYERS"
 msgstr "2 ГУЛЬЦЫ"
