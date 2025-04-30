@@ -1578,7 +1578,7 @@ namespace Interface
                           || ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE ) ) {
                     auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
                     const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
-                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : Color::NONE;
+                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : uint8_t{ Color::NONE };
 
                     const uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
