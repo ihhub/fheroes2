@@ -51,9 +51,9 @@ tr.mo: tr.po
 lt.mo: lt.po
 	$(call MSGFMT,CP1257)
 	
-# Vietnamese uses CP1258
+# Vietnamese uses WINDOWS-1258
 vi.mo: vi.po
-	$(call MSGFMT,CP1258)
+	$(call MSGFMT,WINDOWS-1258)
 
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
