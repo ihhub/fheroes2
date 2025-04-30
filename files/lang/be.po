@@ -429,7 +429,7 @@ msgstr ""
 "атрад"
 
 msgid "View %{name}"
-msgstr "Прагледзець %{name}"
+msgstr "Праглядзець %{name}"
 
 msgid "Move the %{name} "
 msgstr "Перамясціць %{name} "
