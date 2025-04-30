@@ -425,7 +425,7 @@ msgid ""
 "Default\n"
 "troop"
 msgstr ""
-"Стандарты\n"
+"Стандартны\n"
 "атрад"
 
 msgid "View %{name}"
