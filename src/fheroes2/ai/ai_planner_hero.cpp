@@ -2905,10 +2905,10 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
             else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
-                 gameState = HeroesMove( *bestHero );
-                 if ( gameState != fheroes2::GameMode::CANCEL ) {
-                     return false;
-                 }
+                gameState = HeroesMove( *bestHero );
+                if ( gameState != fheroes2::GameMode::CANCEL ) {
+                    return false;
+                }
             }
         }
 
