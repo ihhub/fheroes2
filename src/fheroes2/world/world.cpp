@@ -261,7 +261,8 @@ void CapturedObjects::ClearFog( const int colors ) const
         case MP2::OBJ_MINE:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
-            scoutingDistance = 2;
+        case MP2::OBJ_LIGHTHOUSE:
+            scoutingDistance = 3;
             break;
 
         default:
