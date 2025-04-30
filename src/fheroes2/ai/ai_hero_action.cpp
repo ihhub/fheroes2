@@ -2163,6 +2163,12 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
             if ( hero.isAction() ) {
                 hero.ResetAction();
+
+                // Check if the game is over after the hero's action.
+                const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
+                if ( gameState != fheroes2::GameMode::CANCEL ) {
+                    return gameState;
+                }
             }
 
             // Render a frame only if there is a need to show one.
@@ -2236,6 +2242,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
                 if ( hero.isAction() ) {
                     hero.ResetAction();
 
+                    // Check if the game is over after the hero's action.
                     const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
                     if ( gameState != fheroes2::GameMode::CANCEL ) {
                         return gameState;
