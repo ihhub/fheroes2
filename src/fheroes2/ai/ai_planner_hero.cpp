@@ -2751,7 +2751,7 @@ void AI::Planner::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     }
 }
 
-bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue )
+bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, fheroes2::GameMode & gameState )
 {
     if ( heroes.empty() ) {
         // No heroes so we indicate that all heroes moved.
@@ -2896,13 +2896,19 @@ bool AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValu
                     // The rest of the path the hero should do by foot.
                     bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
-                    HeroesMove( *bestHero );
+                    gameState = HeroesMove( *bestHero );
+                    if ( gameState != fheroes2::GameMode::CANCEL ) {
+                        return false;
+                    }
                 }
             }
             else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
-                HeroesMove( *bestHero );
+                 gameState = HeroesMove( *bestHero );
+                 if ( gameState != fheroes2::GameMode::CANCEL ) {
+                     return false;
+                 }
             }
         }
 

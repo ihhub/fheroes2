@@ -44,6 +44,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "interface_base.h"
@@ -2101,9 +2102,11 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     }
 }
 
-void AI::HeroesMove( Heroes & hero )
+fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 {
     const Route::Path & path = hero.GetPath();
+
+    fheroes2::GameMode gameState = fheroes2::GameMode::END_TURN;
 
     if ( path.isValidForTeleportation() ) {
         const int32_t targetIndex = path.GetFrontIndex();
@@ -2116,11 +2119,11 @@ void AI::HeroesMove( Heroes & hero )
 
         // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
         // The further path of this hero will be re-planned by AI.
-        return;
+        return gameState;
     }
 
     if ( !path.isValidForMovement() ) {
-        return;
+        return gameState;
     }
 
     hero.SetMove( true );
@@ -2159,6 +2162,10 @@ void AI::HeroesMove( Heroes & hero )
 
             hero.Move( true );
             recenterNeeded = true;
+
+            if ( hero.isAction() ) {
+                hero.ResetAction();
+            }
 
             // Render a frame only if there is a need to show one.
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2227,6 +2234,15 @@ void AI::HeroesMove( Heroes & hero )
                         }
                     }
                 }
+
+                if ( hero.isAction() ) {
+                    hero.ResetAction();
+
+                    gameState = GameOver::Result::Get().checkGameOver();
+                    if ( gameState != fheroes2::GameMode::CANCEL ) {
+                        return gameState;
+                    }
+                }
             }
 
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2246,6 +2262,8 @@ void AI::HeroesMove( Heroes & hero )
     }
 
     hero.SetMove( false );
+
+    return gameState;
 }
 
 void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )

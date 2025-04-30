@@ -868,7 +868,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Planner::Get().KingdomTurn( kingdom );
+                    res = AI::Planner::Get().KingdomTurn( kingdom );
+                    // This function must return only game state related values.
+                    assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
                     if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
