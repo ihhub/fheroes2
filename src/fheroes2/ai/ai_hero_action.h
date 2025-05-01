@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,10 +25,17 @@
 class Heroes;
 class Spell;
 
+namespace fheroes2
+{
+    enum class GameMode : int;
+}
+
 namespace AI
 {
     void HeroesAction( Heroes & hero, const int32_t dst_index );
-    void HeroesMove( Heroes & hero );
+
+    // Returns the state of the game. By default it should be end of turn.
+    fheroes2::GameMode HeroesMove( Heroes & hero );
 
     // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
