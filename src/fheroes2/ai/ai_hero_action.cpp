@@ -44,6 +44,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
