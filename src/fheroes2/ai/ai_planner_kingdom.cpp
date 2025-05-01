@@ -43,6 +43,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mode.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
