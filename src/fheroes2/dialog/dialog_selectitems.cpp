@@ -1774,8 +1774,10 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
     const int32_t colorsCount = Color::Count( availableColors );
 
     const int32_t stepX = 70;
+    const int32_t minWidth = 250;
+    const int32_t colorsWidth = 30 + stepX * ( colorsCount + 1 );
 
-    fheroes2::StandardWindow background( 30 + stepX * ( colorsCount + 1 ), 160, true, display );
+    fheroes2::StandardWindow background( std::max( minWidth, colorsWidth ), 160, true, display );
 
     const fheroes2::Rect & area = background.activeArea();
 
@@ -1783,7 +1785,7 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color selection sprites.
-    fheroes2::Point pos( area.x + 20, area.y + 40 );
+    fheroes2::Point pos( area.x + 20 + ( area.width - colorsWidth ) / 2, area.y + 40 );
     const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
