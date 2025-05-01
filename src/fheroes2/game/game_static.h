@@ -51,7 +51,7 @@ namespace GameStatic
 
     uint32_t GetLostOnWhirlpoolPercent();
     uint32_t GetGameOverLostDays();
-    uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
+    int32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
     uint32_t GetKingdomMaxHeroes();
 
