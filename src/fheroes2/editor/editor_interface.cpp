@@ -222,6 +222,13 @@ namespace
         return true;
     }
 
+    // Returns true if object can be owned, excluding Towns and Castles.
+    bool isCapturableObject( const Maps::ObjectGroup objectGroup, const MP2::MapObjectType objectType )
+    {
+        return ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES && objectType != MP2::OBJ_ABANDONED_MINE )
+               || ( objectGroup == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE );
+    }
+
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
                            const std::function<bool( const Maps::Tile & tile )> & condition )
     {
@@ -284,6 +291,11 @@ namespace
 
                     ++objectIter;
                     continue;
+                }
+
+                // Remove ownership data for capturable objects.
+                if ( isCapturableObject( objectIter->group, Maps::getObjectsByGroup( objectIter->group )[objectIter->index].objectType ) ) {
+                    mapFormat.ownershipMetadata.erase( static_cast<int32_t>( mapTileIndex ) );
                 }
 
                 if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -1574,8 +1586,7 @@ namespace Interface
 
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
-                else if ( ( object.group == Maps::ObjectGroup::ADVENTURE_MINES && objectType != MP2::OBJ_ABANDONED_MINE )
-                          || ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE ) ) {
+                else if ( isCapturableObject( object.group, objectType ) ) {
                     auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
                     const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
                     const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : uint8_t{ Color::NONE };
