@@ -1587,6 +1587,11 @@ namespace Interface
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
                 else if ( isCapturableObject( object.group, objectType ) ) {
+                    if ( Color::Count( _mapFormat.availablePlayerColors ) == 0 ) {
+                        _warningMessage.reset( _( "There are no players on the map, so no one can own this object." ) );
+                        return;
+                    }
+
                     auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
                     const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
                     const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : uint8_t{ Color::NONE };

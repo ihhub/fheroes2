@@ -1769,13 +1769,11 @@ int Dialog::selectAdventureMiscellaneousObjectType( const int objectType )
 
 uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableColors )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const int32_t colorsCount = Color::Count( availableColors );
-
     const int32_t stepX = 70;
     const int32_t minWidth = 250;
-    const int32_t colorsWidth = 30 + stepX * ( colorsCount + 1 );
+    const int32_t colorsWidth = 30 + stepX * ( Color::Count( availableColors ) + 1 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::StandardWindow background( std::max( minWidth, colorsWidth ), 160, true, display );
 
