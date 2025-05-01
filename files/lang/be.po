@@ -742,10 +742,10 @@ msgid "Not enough gold (%{gold})"
 msgstr "Недастаткова золата (%{gold})"
 
 msgid "%{name} states:"
-msgstr "%{name} аб'яўляе:"
+msgstr "%{name} аб’яўляе:"
 
 msgid "Captain of %{name} states:"
-msgstr "Капітан замка %{name} аб'яўляе:"
+msgstr "Капітан замка %{name} аб’яўляе:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
