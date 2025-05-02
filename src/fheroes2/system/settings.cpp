@@ -81,7 +81,7 @@ namespace
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
         GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
-        GAME_NUMERIC_ESTIMATES = 0x40000000,
+        GAME_NUMERIC_ARMY_ESTIMATION_VIEW = 0x40000000,
     };
 
     enum EditorOptions : uint32_t
@@ -257,8 +257,8 @@ bool Settings::Read( const std::string & filePath )
     }
 
     // Numeric/verbal army size estimate
-    if ( config.Exists( "numeric army size estimates" ) ) {
-        setNumericEstimates( config.StrParams( "numeric army size estimates" ) == "on" );
+    if ( config.Exists( "army estimation view type" ) ) {
+        setNumericArmyEstimationView( config.StrParams( "army estimation view type" ) == "numeric" );
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -468,8 +468,8 @@ std::string Settings::String() const
         break;
     }
 
-    os << std::endl << "# use numeric army size estimates (1-4, 5-9, 10-19, ...) instead of original (few, several, lots, ...) " << std::endl;
-    os << "numeric army size estimates = " << ( _numericArmyEstimates ? "on" : "off" ) << std::endl;
+    os << std::endl << "# army size estimates: canonical (few, several, lots, ...) or numeric (1-4, 5-9, 10-19, ...)" << std::endl;
+    os << "army estimation view type = " << ( _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW ) ? "numeric" : "canonical" ) << std::endl;
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -852,13 +852,13 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
-void Settings::setNumericEstimates( const bool enable )
+void Settings::setNumericArmyEstimationView( const bool enable )
 {
     if ( enable ) {
-        _gameOptions.SetModes( GAME_NUMERIC_ESTIMATES );
+        _gameOptions.SetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
     }
     else {
-        _gameOptions.ResetModes( GAME_NUMERIC_ESTIMATES );
+        _gameOptions.ResetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
     }
 }
 
@@ -919,9 +919,9 @@ bool Settings::isHideInterfaceEnabled() const
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::isNumericEstimatesEnabled() const
+bool Settings::isArmyEstimationViewNumeric() const
 {
-    return _gameOptions.Modes( GAME_NUMERIC_ESTIMATES );
+    return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
 }
 
 bool Settings::isEvilInterfaceEnabled() const

@@ -196,7 +196,7 @@ public:
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
-    bool isNumericEstimatesEnabled() const;
+    bool isArmyEstimationViewNumeric() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -270,7 +270,7 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
-    void setNumericEstimates( const bool enable );
+    void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -401,7 +401,6 @@ private:
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
-    bool _numericArmyEstimates{ false };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
