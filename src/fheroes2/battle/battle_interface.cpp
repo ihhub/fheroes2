@@ -1025,7 +1025,7 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
     if ( top ) {
         _upperText.set( messageString, fheroes2::FontType::normalWhite() );
         // The text cannot go beyond the text area so it is important to truncate it when necessary.
-        _upperText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
+        _upperText.fitToOneRow( width - offsetForTextBar * 2 );
 
         if ( _battleStatusLog ) {
             _battleStatusLog->AddMessage( std::move( messageString ) );
@@ -1034,7 +1034,7 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
     else if ( messageString != _lastMessage ) {
         _lowerText.set( messageString, fheroes2::FontType::normalWhite() );
         // The text cannot go beyond the text area so it is important to truncate it when necessary.
-        _lowerText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
+        _lowerText.fitToOneRow( width - offsetForTextBar * 2 );
 
         _lastMessage = std::move( messageString );
     }
@@ -1042,15 +1042,15 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
 
 void Battle::Status::redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Copy( _upperBackground, 0, 0, output, x, y, _upperBackground.width(), _upperBackground.height() );
-    fheroes2::Copy( _lowerBackground, 0, 0, output, x, y + _upperBackground.height(), _lowerBackground.width(), _lowerBackground.height() );
+    fheroes2::Copy( _upperBackground, 0, 0, output, x, y, width, _upperBackground.height() );
+    fheroes2::Copy( _lowerBackground, 0, 0, output, x, y + _upperBackground.height(), width, _lowerBackground.height() );
 
     if ( !_upperText.empty() ) {
-        _upperText.draw( x + ( _upperBackground.width() - _upperText.width() ) / 2, y + 4, output );
+        _upperText.draw( x + ( width - _upperText.width() ) / 2, y + 4, output );
     }
 
     if ( !_lowerText.empty() ) {
-        _lowerText.draw( x + ( _lowerBackground.width() - _lowerText.width() ) / 2, y + _upperBackground.height(), output );
+        _lowerText.draw( x + ( width - _lowerText.width() ) / 2, y + _upperBackground.height(), output );
     }
 }
 
