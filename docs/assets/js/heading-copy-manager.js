@@ -28,27 +28,33 @@ const HEADING_SELECTORS = 'h2, h3, h4, h5, h6';
 // Class to handle heading copy functionality
 class HeadingCopyManager
 {
-    constructor( contentElement )
+    // Static instance of AccessibilityManager
+    static accessibility = null;
+
+    // Static initialization method
+    static initialize()
     {
-        this.content = contentElement;
-        this.accessibility = new AccessibilityManager();
+        // Initialize accessibility manager if not already initialized
+        if ( !this.accessibility ) {
+            this.accessibility = new window.fheroes2.AccessibilityManager();
+        }
 
         // Apply to all headings
-        this.content.querySelectorAll( HEADING_SELECTORS ).forEach( heading => this.createHeadingLink( heading ) );
+        document.querySelectorAll( HEADING_SELECTORS ).forEach( heading => this.createHeadingLink( heading ) );
     }
 
     // Creates a unique ID for a heading based on its text content
     // Parameters:
     //   text - The heading text
     // Returns: A unique ID
-    generateHeadingId( text )
+    static generateHeadingId( text )
     {
         return text.toLowerCase().replace( /[^a-z0-9]+/g, '-' );
     }
 
     // Creates a link icon element with proper accessibility attributes
     // Returns: The icon element
-    createIconElement()
+    static createIconElement()
     {
         const icon = this.accessibility.createAccessibleSpan( { text : LINK_ICON, ariaLabel : 'Copy link to heading', className : 'heading-anchor' } );
         return icon;
@@ -59,7 +65,7 @@ class HeadingCopyManager
     //   icon - The icon element
     //   success - Whether the copy was successful
     //   headingText - The text of the heading
-    updateIconState( icon, success, headingText )
+    static updateIconState( icon, success, headingText )
     {
         this.accessibility.updateElementState( {
             element : icon,
@@ -79,7 +85,7 @@ class HeadingCopyManager
     //   e - The event object
     //   heading - The heading element
     //   icon - The icon element
-    handleCopy( e, heading, icon )
+    static handleCopy( e, heading, icon )
     {
         e.preventDefault();
         e.stopPropagation();
@@ -110,7 +116,7 @@ class HeadingCopyManager
     // Parameters:
     //   icon - The icon element
     //   heading - The heading element
-    setupEventListeners( icon, heading )
+    static setupEventListeners( icon, heading )
     {
         // Add click event handler
         icon.addEventListener( 'click', ( e ) => this.handleCopy( e, heading, icon ) );
@@ -122,7 +128,7 @@ class HeadingCopyManager
     // Creates a heading link with proper accessibility attributes
     // Parameters:
     //   heading - The heading element
-    createHeadingLink( heading )
+    static createHeadingLink( heading )
     {
         // Generate ID if needed
         if ( !heading.id ) {
@@ -141,10 +147,4 @@ class HeadingCopyManager
 }
 
 // Initialize when the DOM is fully loaded
-document.addEventListener( 'DOMContentLoaded', () => {
-    const content = document.querySelector( '#main_content' );
-    if ( content ) {
-        // Initialize the heading copy manager
-        new HeadingCopyManager( content );
-    }
-} );
+document.addEventListener( 'DOMContentLoaded', () => { HeadingCopyManager.initialize(); } );

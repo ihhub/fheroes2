@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// Create the fheroes2 namespace if it doesn't exist
+window.fheroes2 = window.fheroes2 || {};
+
 // Utility class for handling common accessibility features
 class AccessibilityManager
 {
@@ -52,13 +55,15 @@ class AccessibilityManager
 
         // Force a reflow to ensure the announcement is triggered if the user
         // triggers multiple times in a row.
-        void this.liveRegion.offsetHeight;
-
-        // Set the new message
-        this.liveRegion.textContent = message;
+        requestAnimationFrame( () => {
+            // Set the new message
+            this.liveRegion.textContent = message;
+        } );
 
         // Force another reflow to ensure the announcement is triggered
-        void this.liveRegion.offsetHeight;
+        requestAnimationFrame( () => {
+                                   // No additional content needed, just forcing a reflow
+                               } );
     }
 
     // Creates an accessible element (button or span)
@@ -174,5 +179,5 @@ class AccessibilityManager
     }
 }
 
-// Export the accessibility manager
-window.AccessibilityManager = AccessibilityManager;
+// Export the accessibility manager to the fheroes2 namespace
+window.fheroes2.AccessibilityManager = AccessibilityManager;
