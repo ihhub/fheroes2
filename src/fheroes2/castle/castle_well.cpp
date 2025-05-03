@@ -506,7 +506,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += text.height( text.width() );
 
-        text.set( Speed::String( static_cast<int>( monster.GetSpeed() ) ), statsFontType );
+        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 
