@@ -77,7 +77,6 @@ namespace
 
         return Speed::STANDING;
     }
-
 }
 
 namespace Speed
