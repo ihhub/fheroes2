@@ -8,7 +8,7 @@ version 1.1.8 (04 May 2025)
 - fix cursor positioning for the Virtual Keyboard
 - add a shadow for the Heroes Meeting dialog
 - add color name to Traveler Tent's popup message
-- allow to use of hardware keyboard when Virtual Numpad is opened
+- allow the use of a hardware keyboard when Virtual Numpad is opened
 - fix the scroll bar behavior after visiting a castle
 - do not ask for additional confirmation if Auto Combat or Quick Combat have been started from the GUI dialog
 - add stat bonus values to Battle Garb of Anduran information
