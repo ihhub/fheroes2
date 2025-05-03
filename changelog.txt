@@ -28,7 +28,7 @@ version 1.1.8 (04 May 2025)
 - update the Danish translation
 - replace "gold only" chest dialog with "gold or exp" one in case when a hero has no space for an artifact
 - update the Belarusian translation
-- end game immediately during AI turn if there are changes in the game
+- end game immediately during AI turn if there are changes in the game results
 
 version 1.1.7 (23 March 2025)
 - add French virtual keyboard
