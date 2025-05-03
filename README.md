@@ -40,6 +40,8 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
+### Developing fheroes2 engine
+
 To build the project from source, please follow [**this guide**](docs/DEVELOPMENT.md).
 
 [![Build Status](https://github.com/ihhub/fheroes2/actions/workflows/push.yml/badge.svg)](https://github.com/ihhub/fheroes2/actions)
