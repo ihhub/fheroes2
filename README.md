@@ -40,10 +40,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
-### Developing fheroes2 engine
-
-To build the project from source, please follow
-[**this guide**](docs/DEVELOPMENT.md).
+To build the project from source, please follow [**this guide**](docs/DEVELOPMENT.md).
 
 [![Build Status](https://github.com/ihhub/fheroes2/actions/workflows/push.yml/badge.svg)](https://github.com/ihhub/fheroes2/actions)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
@@ -77,6 +74,6 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2)
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 
-## FAQ
+## Frequently Asked Questions (FAQ)
 
 You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).

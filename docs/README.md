@@ -54,6 +54,11 @@ To assist with the graphical asset efforts of the project, please look at our [*
 
 If you would like to help translating the project, please read the [**translation guide**](TRANSLATION.md).
 
+### Developing fheroes2 documentation site
+
+To build the [website](https://ihhub.github.io/fheroes2/) from source, please follow
+[**this guide**](WEBSITE_LOCAL_DEV.md).
+
 ## Donation
 
 We accept donations via [**Patreon**](https://www.patreon.com/fheroes2), [**PayPal**](https://www.paypal.com/paypalme/fheroes2) or [**Boosty**](https://boosty.to/fheroes2).
