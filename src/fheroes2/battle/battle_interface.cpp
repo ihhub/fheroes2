@@ -1545,9 +1545,11 @@ void Battle::Interface::RedrawArmies()
 
             std::vector<const Unit *> troopBeforeWall;
             std::vector<const Unit *> troopAfterWall;
+            std::vector<const Unit *> upwardMovingTroopBeforeWall;
 
             std::vector<const Unit *> movingTroopBeforeWall;
             std::vector<const Unit *> movingTroopAfterWall;
+            std::vector<const Unit *> upwardMovingTroopAfterWall;
 
             // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
@@ -1596,7 +1598,8 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+                const Cell * currentCell = Board::GetCell( cellId );
+                const Unit * unitOnCell = currentCell->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
                     continue;
                 }
@@ -1620,10 +1623,22 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     if ( isCellBefore ) {
-                        movingTroopBeforeWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                            // The troop is moving to the upper row. We should render it prior to this row units.
+                            upwardMovingTroopBeforeWall.emplace_back( unitOnCell );
+                        }
+                        else {
+                            movingTroopBeforeWall.emplace_back( unitOnCell );
+                        }
                     }
                     else {
-                        movingTroopAfterWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                            // The troop is moving to the upper row. We should render it prior to this row units.
+                            upwardMovingTroopAfterWall.emplace_back( unitOnCell );
+                        }
+                        else {
+                            movingTroopAfterWall.emplace_back( unitOnCell );
+                        }
                     }
                 }
 
@@ -1641,6 +1656,10 @@ void Battle::Interface::RedrawArmies()
             }
 
             for ( const Unit * unit : deadTroopBeforeWall ) {
+                RedrawTroopSprite( *unit );
+            }
+
+            for ( const Unit * unit : upwardMovingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1669,6 +1688,10 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
+            for ( const Unit * unit : upwardMovingTroopAfterWall ) {
+                RedrawTroopSprite( *unit );
+            }
+
             for ( const Unit * unit : troopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
@@ -1694,7 +1717,6 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> movingTroop;
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
-            // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
@@ -1707,7 +1729,8 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+                const Cell * currentCell = Board::GetCell( cellId );
+                const Unit * unitOnCell = currentCell->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
                     continue;
                 }
@@ -1721,6 +1744,10 @@ void Battle::Interface::RedrawArmies()
 
                     troop.emplace_back( unitOnCell );
                 }
+                else if ( _movingPos.y < currentCell->GetPos().y ) {
+                    // The troop is moving to the upper row. Render it prior to this row units.
+                    RedrawTroopSprite( *unitOnCell );
+                }
                 else {
                     movingTroop.emplace_back( unitOnCell );
                 }
@@ -1733,11 +1760,12 @@ void Battle::Interface::RedrawArmies()
                 }
             }
 
-            // Redraw monster counters.
+            // Redraw monsters.
             for ( const Unit * unit : troop ) {
                 RedrawTroopSprite( *unit );
             }
 
+            // Redraw monster counters.
             for ( const Unit * unit : troopCounter ) {
                 RedrawTroopCount( *unit );
             }
