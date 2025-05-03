@@ -46,12 +46,12 @@
           <li>add the translation of buttons in Editor's main menu</li>
           <li>implement scrollable text input</li>
           <li>allow to navigate item lists using keyboard keys</li>
-          <li>allow to close a dialog with a single OK or CANCEL button in a button group by OK and CANCEL hotkeys</li>
+          <li>allow to close a dialog with a single OK or CANCEL button in a button group using OK and CANCEL hotkeys</li>
           <li>if a hero was moved to a castle when loading the map, train him in the Mage Guild</li>
           <li>fix cursor positioning for the Virtual Keyboard</li>
           <li>add a shadow for the Heroes Meeting dialog</li>
           <li>add color name to Traveler Tent's popup message</li>
-          <li>allow to use of hardware keyboard when Virtual Numpad is opened</li>
+          <li>allow the use of a hardware keyboard when Virtual Numpad is opened</li>
           <li>fix the scroll bar behavior after visiting a castle</li>
           <li>do not ask for additional confirmation if Auto Combat or Quick Combat have been started from the GUI dialog</li>
           <li>add stat bonus values to Battle Garb of Anduran information</li>
@@ -71,7 +71,7 @@
           <li>update the Danish translation</li>
           <li>replace "gold only" chest dialog with "gold or exp" one in case when a hero has no space for an artifact</li>
           <li>update the Belarusian translation</li>
-          <li>end game immediately during AI turn if there are changes in the game</li>
+          <li>end game immediately during AI turn if there are changes in the game results</li>
         </ul>
       </description>
     </release>
