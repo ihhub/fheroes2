@@ -37,6 +37,44 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-05-04" version="v1.1.8">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.8</url>
+      <description>
+        <p>Changes in v1.1.8 (04 May 2025):</p>
+        <ul>
+          <li>add defense penalty to moat building info and adjust wording</li>
+          <li>add the translation of buttons in Editor's main menu</li>
+          <li>implement scrollable text input</li>
+          <li>allow to navigate item lists using keyboard keys</li>
+          <li>allow to close a dialog with a single OK or CANCEL button in a button group using OK and CANCEL hotkeys</li>
+          <li>if a hero was moved to a castle when loading the map, train him in the Mage Guild</li>
+          <li>fix cursor positioning for the Virtual Keyboard</li>
+          <li>add a shadow for the Heroes Meeting dialog</li>
+          <li>add color name to Traveler Tent's popup message</li>
+          <li>allow the use of a hardware keyboard when Virtual Numpad is opened</li>
+          <li>fix the scroll bar behavior after visiting a castle</li>
+          <li>do not ask for additional confirmation if Auto Combat or Quick Combat have been started from the GUI dialog</li>
+          <li>add stat bonus values to Battle Garb of Anduran information</li>
+          <li>update the Swedish translation</li>
+          <li>improve the input of numbers from the hardware keyboard</li>
+          <li>fix status bar offset to prevent text from overlapping the status bar bottom border</li>
+          <li>fix missing height values in Czech assets</li>
+          <li>allow to move the Virtual Keyboard cursor using the hardware keyboard buttons</li>
+          <li>add German language support for Virtual Keyboard</li>
+          <li>update the Czech translation</li>
+          <li>update the Russian translation</li>
+          <li>fix clearing diacritic signs in the status bar</li>
+          <li>update the Hungarian translation</li>
+          <li>update the German translations related to artifacts</li>
+          <li>fix multiple sound issues while playing MIDI on Windows OS</li>
+          <li>change text input cursor from '_' to '|'</li>
+          <li>update the Danish translation</li>
+          <li>replace "gold only" chest dialog with "gold or exp" one in case when a hero has no space for an artifact</li>
+          <li>update the Belarusian translation</li>
+          <li>end game immediately during AI turn if there are changes in the game results</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-03-23" version="v1.1.7">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.7</url>
       <description>

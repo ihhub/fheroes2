@@ -1,3 +1,35 @@
+version 1.1.8 (04 May 2025)
+- add defense penalty to moat building info and adjust wording
+- add the translation of buttons in Editor's main menu
+- implement scrollable text input
+- allow to navigate item lists using keyboard keys
+- allow to close a dialog with a single OK or CANCEL button in a button group using OK and CANCEL hotkeys
+- if a hero was moved to a castle when loading the map, train him in the Mage Guild
+- fix cursor positioning for the Virtual Keyboard
+- add a shadow for the Heroes Meeting dialog
+- add color name to Traveler Tent's popup message
+- allow the use of a hardware keyboard when Virtual Numpad is opened
+- fix the scroll bar behavior after visiting a castle
+- do not ask for additional confirmation if Auto Combat or Quick Combat have been started from the GUI dialog
+- add stat bonus values to Battle Garb of Anduran information
+- update the Swedish translation
+- improve the input of numbers from the hardware keyboard
+- fix status bar offset to prevent text from overlapping the status bar bottom border
+- fix missing height values in Czech assets
+- allow to move the Virtual Keyboard cursor using the hardware keyboard buttons
+- add German language support for Virtual Keyboard
+- update the Czech translation
+- update the Russian translation
+- fix clearing diacritic signs in the status bar
+- update the Hungarian translation
+- update the German translations related to artifacts
+- fix multiple sound issues while playing MIDI on Windows OS
+- change text input cursor from '_' to '|'
+- update the Danish translation
+- replace "gold only" chest dialog with "gold or exp" one in case when a hero has no space for an artifact
+- update the Belarusian translation
+- end game immediately during AI turn if there are changes in the game results
+
 version 1.1.7 (23 March 2025)
 - add French virtual keyboard
 - fix broken tiles with mines at the time of loading maps
