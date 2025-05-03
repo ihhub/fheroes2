@@ -3,7 +3,7 @@ version 1.1.8 (04 May 2025)
 - add the translation of buttons in Editor's main menu
 - implement scrollable text input
 - allow to navigate item lists using keyboard keys
-- allow to close a dialog with a single OK or CANCEL button in a button group by OK and CANCEL hotkeys
+- allow to close a dialog with a single OK or CANCEL button in a button group using OK and CANCEL hotkeys
 - if a hero was moved to a castle when loading the map, train him in the Mage Guild
 - fix cursor positioning for the Virtual Keyboard
 - add a shadow for the Heroes Meeting dialog
