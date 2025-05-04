@@ -101,7 +101,7 @@ tasks.register('copyH2D', Copy) {
 
 tasks.register('copyTimidity', Copy) {
     from('../../files/timidity') {
-        include 'instruments/*.pat'
+        include 'instruments/**/*.pat'
         include 'timidity.cfg'
     }
     into 'src/main/assets/files/timidity'
