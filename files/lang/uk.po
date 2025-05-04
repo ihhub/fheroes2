@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-30 13:25+0000\n"
-"PO-Revision-Date: 2024-08-23 09:35+0300\n"
+"PO-Revision-Date: 2025-05-04 16:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -460,11 +460,9 @@ msgstr[0] "%{name} знищує половину ворожого загону!"
 msgstr[1] "%{name} знищують половину ворожого загону!"
 msgstr[2] "%{name} знищують половину ворожого загону!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto combat"
 msgstr "%{name} вимкнув автобій"
 
-#, fuzzy
 msgid "%{name} has turned on the auto combat"
 msgstr "%{name} увімкнув автобій"
 
@@ -479,7 +477,7 @@ msgstr ""
 "заборонене."
 
 msgid "You cannot cast spells without a commanding hero."
-msgstr ""
+msgstr "Ви не можете використовувати заклинання без героя-командира."
 
 msgid "You have already cast a spell this round."
 msgstr "Ви вже використали чари у цьому раунді."
@@ -495,13 +493,12 @@ msgid ""
 "Elemental to."
 msgstr "Біля вашого герою нема вільного місця для виклику Елементалів."
 
-#, fuzzy
 msgid ""
 "The Moat interrupts any movement through it and reduces the defense skill of "
 "troops present in it by %{count}."
 msgstr ""
-"Рів зменшує захисну здатність будь-якого загону на -%{count} і обмежує їхню "
-"дальність руху."
+"Рів перериває будь-який рух через нього і зменшує навичку захисту військ, що "
+"знаходяться в ньому, на %{count}."
 
 msgid "Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
@@ -807,18 +804,16 @@ msgstr "Дані по Балісті"
 msgid "Ballista"
 msgstr "Баліста"
 
-#, fuzzy
 msgid "Automatic combat modes"
-msgstr "Автобій"
+msgstr "Режими автоматичного бою"
 
-#, fuzzy
 msgid "Automatic Combat Modes"
-msgstr "Автобій"
+msgstr "Режими автоматичного бою"
 
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
-msgstr ""
+msgstr "Вибирайте між режимом автобою або швидкого бою."
 
 msgid "Customize system options"
 msgstr "Налаштувати параметри системи"
@@ -866,46 +861,49 @@ msgstr "Табло повідомлень"
 msgid "Shows the results of individual monster's actions."
 msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
 
-#, fuzzy
 msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Ви впевнені, що хочете увімкнути автобитву?"
 
-#, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
+msgstr "Ви впевнені, що хочете завершити битву в режимі швидкого бою?"
 
 msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"АВТО\n"
+"БІЙ"
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"ШВИДКИЙ\n"
+"БІЙ"
 
-#, fuzzy
 msgid "The computer continues the combat for you."
-msgstr "Дозволяє комп'ютеру вести битву за вас."
+msgstr "Комп'ютер продовжує вести битву за вас."
 
 msgid ""
 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
+"Його можна перервати в будь-який момент, натиснувши гарячу клавішу Авто Бій "
+"або стандартну клавішу Скасувати або тицьнувши лівою чи правою кнопкою миші "
+"в будь-якому місці ігрового екрана."
 
 msgid "Auto Combat"
 msgstr "Автобій"
 
 msgid "The combat is resolved from the current state."
-msgstr ""
+msgstr "Бій вирішується з поточного стану."
 
 msgid "quickCombat|This cannot be undone."
-msgstr ""
+msgstr "Цього не можна скасувати."
 
-#, fuzzy
 msgid "Quick Combat"
-msgstr "Автобій"
+msgstr "Швидкий Бій"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -1036,7 +1034,6 @@ msgstr "Створено Дзеркального Фантома."
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
@@ -2691,15 +2688,16 @@ msgstr ""
 "Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
 "ринків ви контролюєте, тим краще курс обміну."
 
-#, fuzzy
 msgid ""
 "The Moat slows and weakens attacking units. Any walking unit entering the "
 "moat must end its turn there and can only move within the moat one hex at a "
 "time. Any creature present in the moat will have its defense skill reduced "
 "by %{count}."
 msgstr ""
-"Рів сповільнює ворожі загони. Кожний загін, що зайде у рів, завершить хід у "
-"ньому і стане вразливішим до нападу."
+"Рів уповільнює і послаблює атакуючі підрозділи. Будь-який піший юніт, що "
+"потрапляє в рів, повинен закінчити свій хід там і може рухатися в межах рову "
+"лише на одну клітинку за раз. Будь-яка істота, що перебуває в рові, зменшує "
+"свій захисний навик на %{count}."
 
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
@@ -3148,9 +3146,8 @@ msgstr "Спершу виберіть отримувачів!"
 msgid "You cannot select %{resource}!"
 msgstr "Неможливо вибрати %{resource}!"
 
-#, fuzzy
 msgid "Set %{resource-type} Count"
-msgstr "Задати кількість %{monster}"
+msgstr "Задати кількість %{resource-type}"
 
 msgid "Select Recipients"
 msgstr "Вибрати отримувачів"
@@ -3239,11 +3236,10 @@ msgid "Sets the speed at which you scroll the window."
 msgstr "Встановлює швидкість прокручування вікна."
 
 msgid "Select Game Language:"
-msgstr "Обрати мову гри:"
+msgstr "Вибрати мову гри:"
 
-#, fuzzy
 msgid "Select Language:"
-msgstr "Обрати мову гри:"
+msgstr "Вибрати мову:"
 
 msgid "Click to choose the selected language."
 msgstr "Тицніть, щоб вибрати мову."
@@ -3278,7 +3274,7 @@ msgstr ""
 "%{skill2}"
 
 msgid "Learn %{secondary-skill}"
-msgstr ""
+msgstr "Вивчити %{secondary-skill}"
 
 msgid "n/a"
 msgstr "н/д"
@@ -3418,14 +3414,13 @@ msgid "Recruit selected monsters."
 msgstr "Найняти обраних монстрів."
 
 msgid "Select maximum monsters to be recruited."
-msgstr "Обрати максимально доступну для найму кількість монстрів."
+msgstr "Вибрати максимально доступну для найму кількість монстрів."
 
 msgid "Select only 1 monster to be recruited."
-msgstr "Обрати лише одного монстра для найму."
+msgstr "Вибрати лише одного монстра для найму."
 
-#, fuzzy
 msgid "Select this game resolution."
-msgstr "Вибрати роздільну здатність"
+msgstr "Вибрати цю роздільність."
 
 msgid ""
 "Selecting this resolution will set a resolution that is scaled from the "
@@ -3436,9 +3431,15 @@ msgid ""
 "better because the pixels are upscaled evenly in both horizontal and "
 "vertical directions."
 msgstr ""
+"Вибір цієї роздільності встановить роздільність, яка буде масштабована від "
+"початкової (%{resolution}) шляхом множення її на число у дужках (%{scale}).\n"
+"\n"
+"Роздільність з чистим цілим числом (2.0x, 3.0x і т.д.) зазвичай виглядає "
+"краще, оскільки пікселі збільшуються рівномірно як по горизонталі, так і по "
+"вертикалі."
 
 msgid "Select Game Resolution:"
-msgstr "Обрати розділову здатність:"
+msgstr "Вибрати ігрову роздільність:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Натисніть, щоб встановити обрану розділову здатність."
@@ -3656,12 +3657,14 @@ msgstr "Ціна Вірності"
 msgid "Resurrection"
 msgstr "Воскресіння"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Language:\n"
-msgstr "Мова"
+msgstr ""
+"\n"
+"\n"
+"Мова:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Втратити всіх ваших героїв та міста."
@@ -3785,7 +3788,6 @@ msgstr "Автобитва, без заклять"
 msgid "Battles"
 msgstr "Битви"
 
-#, fuzzy
 msgid "combatMode|Manual"
 msgstr "Вручну"
 
@@ -4027,18 +4029,15 @@ msgstr "Видалити подію"
 msgid "Delete an existing event."
 msgstr "Видалити існуючу подію."
 
-#, fuzzy
 msgid "Effects:"
-msgstr "Ефекти"
+msgstr "Ефекти:"
 
-#, fuzzy
 msgid "Conditions:"
-msgstr "Умови поразки"
+msgstr "Умови:"
 
 msgid "Cancel event after first visit"
 msgstr "Скасувати подію після першого відвідування"
 
-#, fuzzy
 msgid "Computer colors allowed to get the event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
@@ -4048,37 +4047,32 @@ msgstr "Задати кількість досвіду"
 msgid "Artifact"
 msgstr "Артефакт"
 
-#, fuzzy
 msgid "No artifact will be given by the event."
-msgstr "Жоден артефакт не буде виданий у якості винагороди."
+msgstr "Жоден артефакт не буде виданий у події."
 
 msgid "Delete Artifact"
 msgstr "Видалити артефакт:"
 
-#, fuzzy
 msgid "Delete an artifact from the event."
-msgstr "Видалити артефакт з винагороди."
+msgstr "Видалити артефакт з події."
 
 msgid "No Secondary Skill will be given by the event."
-msgstr ""
+msgstr "Жодне Вторинне вміння не буде надано подією."
 
-#, fuzzy
 msgid "Secondary Skill"
-msgstr "Оберіть навичку:"
+msgstr "Вторинне вміння:"
 
 msgid "Delete Secondary Skill"
-msgstr ""
+msgstr "Видалити вторинне вміння"
 
 msgid "Delete the Secondary Skill from the event."
-msgstr ""
+msgstr "Видалити вторинне вміння з події."
 
-#, fuzzy
 msgid "No resources will be part of this event."
-msgstr "Жодних ресурсів не буде надано в якості винагороди."
+msgstr "Жодні ресурси не будуть частиною цієї події."
 
-#, fuzzy
 msgid "These resources will be a part of the event."
-msgstr "Жодних ресурсів не буде надано в якості винагороди."
+msgstr "Ці ресурси будуть частиною події."
 
 msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
@@ -4135,27 +4129,27 @@ msgstr ""
 msgid ""
 "MAIN\n"
 "MENU"
-msgstr ""
+msgstr "ГОЛОВНЕ МЕНЮ"
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "ПОЧАТИ"
+msgstr ""
+"ПОЧАТИ\n"
+"МАПУ"
 
 msgid "Main Menu"
 msgstr "Головне меню"
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Бажаєте повернутися у головне меню гри? Всі незбережені зміни у поточній "
-"мапі будуть втрачені."
+"Бажаєте повернутися у головне меню гри? Будь-які незбережені зміни у "
+"поточній мапі будуть втрачені."
 
 msgid "Unsaved Changes"
-msgstr ""
+msgstr "Незбережені зміни"
 
 msgid ""
 "This map has either terrain changes, undo history or has not yet been saved "
@@ -4163,26 +4157,30 @@ msgid ""
 "\n"
 "Do you wish to save the current map?"
 msgstr ""
+"Ця мапа має або зміни місцевості, або історії відкату, або ще не була "
+"збережена у файл.\n"
+"\n"
+"Ви бажаєте зберегти поточну мапу?"
 
 msgid "Unplayable Map"
-msgstr ""
+msgstr "Неграбельна мапа"
 
 msgid ""
 "This map is not playable. You need at least one human player for the map to "
 "be playable."
 msgstr ""
+"На цій мапі не можна грати. Вам потрібен принаймні один гравець-людина, щоб "
+"мапа стала грабельною."
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Почати"
+msgstr "Почати мапу"
 
-#, fuzzy
 msgid ""
 "Do you wish to leave the Editor and start the map? (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Ви певні, що хочете завантажити іншу мапу? (Всі незбережені зміни у поточній "
-"мапі будуть втрачені.)"
+"Ви бажаєте вийти з редактора і запустити мапу? (Будь-які незбережені зміни у "
+"поточній мапі будуть втрачені.)"
 
 msgid "Create a new map from scratch."
 msgstr "Створити нову мапу з чистого аркуша."
@@ -4205,12 +4203,11 @@ msgstr "Зберегти поточну мапу."
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
 
-#, fuzzy
 msgid "Return to the game's Main Menu."
-msgstr "Тицьніть для повернення до головного меню."
+msgstr "Повернутися до головного меню."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
-msgstr ""
+msgstr "Вийти з редактора і грати на мапі в режимі Стандартної Гри."
 
 msgid "Input %{object} text"
 msgstr "Ввести %{object} текст"
@@ -4225,7 +4222,7 @@ msgid "This artifact"
 msgstr "Цей артефакт"
 
 msgid "The total number of obelisks is %{count}."
-msgstr ""
+msgstr "Загальна кількість обелісків - %{count}."
 
 msgid "Roads"
 msgstr "Дороги"
@@ -4496,14 +4493,13 @@ msgid "Undo"
 msgstr "Скасувати"
 
 msgid "Undo your last action."
-msgstr "Скасуйте останню дію."
+msgstr "Скасувати вашу останню дію."
 
 msgid "Redo"
-msgstr ""
+msgstr "Повторити"
 
-#, fuzzy
 msgid "Redo the last undone action."
-msgstr "Скасуйте останню дію."
+msgstr "Повторити останню скасовану дію."
 
 msgid "Edit map title, description, and other general information."
 msgstr "Редагувати назву мапи, опис та іншу загальну інформацію."
@@ -4676,7 +4672,7 @@ msgid "EVENTS"
 msgstr "ПОДІЇ"
 
 msgid "LANGUAGE"
-msgstr ""
+msgstr "МОВА"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4690,6 +4686,8 @@ msgid ""
 "%{newLanguage}. Some texts might not be displayed properly after this. Do "
 "you want to proceed?"
 msgstr ""
+"Ви збираєтеся змінити мову мапи з %{oldLanguage} на %{newLanguage}. Після "
+"цього деякі тексти можуть відображатися неправильно. Ви бажаєте продовжити?"
 
 msgid "Change Map Name"
 msgstr "Змінити назву мапи"
@@ -4712,9 +4710,8 @@ msgstr "Тицьніть для редагування щоденних поді
 msgid "Events"
 msgstr "Події"
 
-#, fuzzy
 msgid "Click to change the language of the map."
-msgstr "Змінити мову гри."
+msgstr "Тицьніть щоб змінити мову мапи."
 
 msgid "Click to change your map name."
 msgstr "Тицьніть, щоб змінити назву вашої мапи."
@@ -4746,9 +4743,8 @@ msgstr ""
 "більше або сильніших ворогів, меншу кількість ресурсів або інші додаткові "
 "умови, роблячи гру складнішою для гравця-людини."
 
-#, fuzzy
 msgid "editor|%{count} %{resource}"
-msgstr "Виберіть кількість %{resource}:"
+msgstr "%{count} %{resource}"
 
 msgid "Animation"
 msgstr "Анімація"
@@ -4955,6 +4951,9 @@ msgid ""
 "campaign. However, the final score will be calculated based solely on the "
 "lowest difficulty of a completed scenario during the campaign."
 msgstr ""
+"Виберіть складність кампанії. Її можна змінити в будь-який момент протягом "
+"кампанії. Однак, остаточний результат буде підраховано виключно на основі "
+"найнижчої складності завершеного сценарію під час кампанії."
 
 msgid "Restart the current scenario."
 msgstr "Перезапустити поточний сценарій."
@@ -4962,15 +4961,14 @@ msgstr "Перезапустити поточний сценарій."
 msgid "Difficulty"
 msgstr "Складність"
 
-#, fuzzy
 msgid ""
 "You have changed the campaign difficulty. The final high score will be "
 "calculated based solely on the lowest difficulty level for a completed "
 "scenario during the campaign. Do you want to proceed?"
 msgstr ""
-"Ви перейшли на нижчу складність кампанії. Після цього ви не зможете "
-"повернути цю зміну. Рекорд буде розраховано виключно на основі нової "
-"складності. Бажаєте продовжити?"
+"Ви змінили складність кампанії. Рекорд буде розраховано виключно на основі "
+"найнижчого рівня складності для завершеного сценарію під час проходження "
+"кампанії. Бажаєте продовжити?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Ви впевнені, що хочете перезапустити цей сценарій?"
@@ -5185,9 +5183,8 @@ msgstr "повноекранний режим увімк/вимк"
 msgid "hotkey|toggle text support mode"
 msgstr "текстовий опис увімк/вимк"
 
-#, fuzzy
 msgid "hotkey|toggle developer mode"
-msgstr "текстовий опис увімк/вимк"
+msgstr "режим розробника увімк/вимк"
 
 msgid "hotkey|new game"
 msgstr "нова гра"
@@ -5423,13 +5420,11 @@ msgstr "відступити з бою"
 msgid "hotkey|surrender during battle"
 msgstr "капітулювати під час битви"
 
-#, fuzzy
 msgid "hotkey|toggle auto combat mode"
-msgstr "увімкнути автоматичний бій"
+msgstr "увімкнути режим автоматичного бою"
 
-#, fuzzy
 msgid "hotkey|quick combat"
-msgstr "вийти"
+msgstr "швидкий бій"
 
 msgid "hotkey|battle options"
 msgstr "параметри бою"
@@ -5497,9 +5492,8 @@ msgstr "поліпшити армію"
 msgid "hotkey|dismiss hero or troop"
 msgstr "звільнити героя або армію"
 
-#, fuzzy
 msgid "hotkey|exchange all troops"
-msgstr "поліпшити армію"
+msgstr "обміняти всі війська"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -5612,15 +5606,22 @@ msgid ""
 "anywhere else on the screen. While holding the second finger, you can remove "
 "the first one from the screen and keep viewing the information on the item."
 msgstr ""
+"\n"
+"\n"
+"Щоб імітувати клацання правою кнопкою миші з дотиком для отримання "
+"інформації про різні об'єкти, потрібно спочатку натиснути і утримувати "
+"палець на об'єкті, який вас цікавить, а потім доторкнутися до будь-якого "
+"іншого місця на екрані. Утримуючи другий палець, ви можете прибрати перший "
+"палець з екрана і продовжити перегляд інформації про об'єкт."
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Ласкаво просимо до Героїв Меча та Магії 2 на основі рушія fheroes2!\n"
-"Перед початком гри, будь ласка, виберіть роздільну здатність екрану."
+"\n"
+"\n"
+"Перед початком гри, будь ласка, виберіть роздільну здатність гри."
 
 msgid "Greetings!"
 msgstr "Вітання!"
@@ -6336,7 +6337,7 @@ msgstr ""
 "навичка"
 
 msgid "The available values range from %{min} to %{max}."
-msgstr ""
+msgstr "Доступні значення знаходяться в діапазоні від %{min} до %{max}."
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -6348,12 +6349,15 @@ msgid "Keyboard|ABC"
 msgstr "АБВ"
 
 msgid "The entered value is invalid."
-msgstr ""
+msgstr "Введене значення недійсне."
 
 msgid ""
 "The entered value is out of range.\n"
 "It should be not less than %{minValue} and not more than %{maxValue}."
 msgstr ""
+"Подвійна шкода від водних істот. Введене значення знаходиться поза "
+"діапазоном.\n"
+"Воно повинно бути не менше %{minValue} і не більше %{maxValue}."
 
 msgid "Kingdom Income"
 msgstr "Прибутки королівства"
@@ -6437,7 +6441,7 @@ msgid "Very Fast"
 msgstr "Дуже швидко"
 
 msgid "Dynamic"
-msgstr ""
+msgstr "Динамічний"
 
 msgid "Good"
 msgstr "Добро"
@@ -7903,7 +7907,6 @@ msgstr ""
 "\"Я маю для тебе загадку, - каже Сфінкс. \"Відповідай правильно і будеш "
 "винагороджений. Відповіси неправильно - будеш з'їдений. Ти приймаєш виклик?\""
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
@@ -7911,15 +7914,16 @@ msgid ""
 msgstr ""
 "Сфінкс задає вам наступну загадку:\n"
 "\n"
-"'%{riddle}'\n"
-"\n"
-"Ваша відповідь?"
+"'"
 
 msgid ""
 "sphinx|'\n"
 "\n"
 "Your answer?"
 msgstr ""
+"'\n"
+"\n"
+"Ваша відповідь?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -8239,7 +8243,7 @@ msgstr ""
 " Наступний рівень %{exp2}."
 
 msgid "million|M"
-msgstr ""
+msgstr "М"
 
 msgid "Level %{level}"
 msgstr "Рівень %{level}"
@@ -8877,10 +8881,10 @@ msgid "speed|Instant"
 msgstr "Миттєва"
 
 msgid "Click this button to adjust the level of zoom."
-msgstr ""
+msgstr "Натисніть цю кнопку, щоб відрегулювати рівень наближення."
 
 msgid "Zoom"
-msgstr ""
+msgstr "Наблизити"
 
 msgid "week|Squirrel"
 msgstr "Білки"
@@ -9944,45 +9948,35 @@ msgstr "Елементаль"
 msgid "No Morale"
 msgstr "Мораль відсутня"
 
-#, fuzzy
 msgid "Earth creature"
-msgstr "Найняти створінь"
+msgstr "Земляна істота"
 
-#, fuzzy
 msgid "Air creature"
-msgstr "Найняти створінь"
+msgstr "Повітряна істота"
 
-#, fuzzy
 msgid "Fire creature"
-msgstr "Найняти створінь"
+msgstr "Вогняна істота"
 
-#, fuzzy
 msgid "Water creature"
-msgstr "Озеро"
+msgstr "Водяна істота"
 
-#, fuzzy
 msgid "Double damage from Fire spells"
-msgstr "200% шкоди від Вогняних заклинань"
+msgstr "Подвійна шкода від Вогняних заклинань"
 
-#, fuzzy
 msgid "Double damage from Cold spells"
-msgstr "200% шкоди від Холодових заклинань"
+msgstr "Подвійна шкода від Холодових заклинань"
 
-#, fuzzy
 msgid "Double damage from Earth creatures"
-msgstr "Знімає всі закляття з усіх істот."
+msgstr "Подвійна шкода від Земляних істот"
 
-#, fuzzy
 msgid "Double damage from Air creatures"
-msgstr "Подвійна шкода немертвим"
+msgstr "Подвійна шкода від Повітряних істот"
 
-#, fuzzy
 msgid "Double damage from Fire creatures"
-msgstr "200% шкоди від Вогняних заклинань"
+msgstr "Подвійна шкода від Вогняних істот"
 
-#, fuzzy
 msgid "Double damage from Water creatures"
-msgstr "Знімає всі закляття з усіх істот."
+msgstr "Подвійна шкода від Водяних істот"
 
 msgid "Lightning"
 msgstr "Блискавка"
@@ -11240,14 +11234,14 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Бойове Вбрання Андурана"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts (+5 to "
 "attack, defense, and spell power). It also provides maximum luck and morale "
 "for the hero's troops and gives the hero the Town Portal spell."
 msgstr ""
-"%{name} поєднує у собі силу трьох артефактів Андурана. Воно надає військам "
-"героя максимальну удачу та мораль, а також заклинання Міського Порталу."
+"Артефакт %{ім'я} поєднує в собі силу трьох Андуранських артефактів (+5 до "
+"атаки, захисту та сили заклинань). Він також забезпечує максимальну удачу та "
+"бойовий дух військам героя і дає герою заклинання Міського Порталу."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -11614,11 +11608,12 @@ msgstr "Зменшує швидкість пересування всіх вор
 msgid "spell|Blind"
 msgstr "Сліпота"
 
-#, fuzzy
 msgid ""
 "Clouds the affected creatures' eyes, preventing them from moving and reduces "
 "the damage when retaliating by %{count} percent."
-msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
+msgstr ""
+"Затьмарює очі ураженим істотам, не даючи їм рухатися, і зменшує шкоду при "
+"атаці у відповідь на %{count} відсотків."
 
 msgid "Bless"
 msgstr "Благословення"
