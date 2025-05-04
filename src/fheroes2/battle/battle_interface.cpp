@@ -5198,7 +5198,11 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
         conf.SetBattleMovementShaded( false );
     }
 
-    AudioManager::PlaySound( M82::TELPTOUT );
+    const bool soundOn = conf.SoundVolume() > 0;
+
+    if ( soundOn ) {
+        AudioManager::PlaySound( M82::TELPTOUT );
+    }
 
     int32_t frame = 1;
     const int32_t frameLimit = 25;
@@ -5210,12 +5214,12 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
     Game::passAnimationDelay( Game::BATTLE_DISRUPTING_DELAY );
 
     // Animate first teleportation phase: disappearing.
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame <= frameLimit ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && ( frame <= frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            if ( frame == frameLimit ) {
-                // Render one frame without rendering this unit.
+            if ( frame >= frameLimit ) {
+                // Render battlefield without this unit.
                 rippleSprite.clear();
             }
             else {
@@ -5228,32 +5232,40 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
                 }
             }
 
-            Redraw();
-
             ++frame;
+
+            Redraw();
         }
     }
 
     target.SetPosition( dst );
-    AudioManager::PlaySound( M82::TELPTIN );
+    if ( soundOn ) {
+        AudioManager::PlaySound( M82::TELPTIN );
+    }
 
     frame = 1;
     // Animate second teleportation phase: appearing.
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame < frameLimit ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && ( frame < frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            const int32_t amplitude = std::min( ( frameLimit - frame ) / 2, maxAmlitude );
-            rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, phaseCoeff * ( frame + frameLimit ), wavePeriod );
+            if ( frame == frameLimit ) {
+                // Render battlefield with this unit.
+                _spriteInsteadCurrentUnit = &unitSprite;
+            }
+            else {
+                const int32_t amplitude = std::min( ( frameLimit - frame ) / 2, maxAmlitude );
+                rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, phaseCoeff * ( frame + frameLimit ), wavePeriod );
 
-            if ( frame < imageCutFrames ) {
-                // Animate appearing from bottom to top by making the top part transparent.
-                fheroes2::FillTransform( rippleSprite, 0, 0, rippleSprite.width(), spriteHeight * ( imageCutFrames - frame ) / imageCutFrames, 1 );
+                if ( frame < imageCutFrames ) {
+                    // Animate appearing from bottom to top by making the top part transparent.
+                    fheroes2::FillTransform( rippleSprite, 0, 0, rippleSprite.width(), spriteHeight * ( imageCutFrames - frame ) / imageCutFrames, 1 );
+                }
+
+                ++frame;
             }
 
             Redraw();
-
-            ++frame;
         }
     }
 
