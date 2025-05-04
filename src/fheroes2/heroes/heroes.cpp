@@ -1801,10 +1801,10 @@ void Heroes::Scout( const int tileIndex ) const
 #endif
 }
 
-int Heroes::GetScoutingDistance() const
+int32_t Heroes::GetScoutingDistance() const
 {
-    return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondarySkillValue( Skill::Secondary::SCOUTING ) );
+    return GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
+           + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + static_cast<int32_t>( GetSecondarySkillValue( Skill::Secondary::SCOUTING ) );
 }
 
 fheroes2::Rect Heroes::GetScoutRoi() const

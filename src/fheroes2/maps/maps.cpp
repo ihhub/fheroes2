@@ -67,6 +67,29 @@ namespace
         }
         return result;
     }
+
+    int32_t getSquaredScoutingRadiusLimit( const int32_t scoutingDistance )
+    {
+        // To match the original game's behavior we need to return hardcoded values for some distances.
+        if ( scoutingDistance == 7 ) {
+            // The returned value should be in [66, 72] interval.
+            return 66;
+        }
+        if ( scoutingDistance == 8 ) {
+            // The returned value should be in [90, 98] interval.
+            return 90;
+        }
+
+        const int32_t distanceLimit = scoutingDistance + 1;
+        const int32_t squaredDistanceLimit = distanceLimit * distanceLimit;
+
+        // To match the original game's behavior we need to modify the squared radius limit for small distances.
+        if ( scoutingDistance < 6 ) {
+            return squaredDistanceLimit - scoutingDistance;
+        }
+
+        return squaredDistanceLimit;
+    }
 }
 
 struct ComparisonDistance
@@ -349,7 +372,7 @@ MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
     return monsters;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
+void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
@@ -362,27 +385,30 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
     const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
-    const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
+    const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
     const int alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
     assert( minY < maxY );
 
+    const int32_t worldWidth = world.w();
     const int32_t minX = std::max( center.x - scoutingDistance, 0 );
-    const int32_t maxX = std::min( center.x + scoutingDistance, world.w() - 1 );
+    const int32_t maxX = std::min( center.x + scoutingDistance, worldWidth - 1 );
     assert( minX < maxX );
 
-    fheroes2::Point fogRevealMinPos( world.h(), world.w() );
+    fheroes2::Point fogRevealMinPos( world.h(), worldWidth );
     fheroes2::Point fogRevealMaxPos( 0, 0 );
 
     for ( int32_t y = minY; y <= maxY; ++y ) {
         const int32_t dy = y - center.y;
+        const int32_t dySquared = dy * dy;
+        const int32_t offset = y * worldWidth;
 
         for ( int32_t x = minX; x <= maxX; ++x ) {
             const int32_t dx = x - center.x;
-            if ( revealRadiusSquared >= dx * dx + dy * dy ) {
-                Maps::Tile & tile = world.getTile( x, y );
+            if ( dx * dx + dySquared < squaredScoutingRadiusLimit ) {
+                Maps::Tile & tile = world.getTile( x + offset );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
                     AI::Planner::Get().revealFog( tile, kingdom );
                 }
@@ -412,32 +438,35 @@ void Maps::ClearFog( const int32_t tileIndex, const int scoutingDistance, const 
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         return 0;
     }
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
-    const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
+    const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
     assert( minY < maxY );
 
+    const int32_t worldWidth = world.w();
     const int32_t minX = std::max( center.x - scoutingDistance, 0 );
-    const int32_t maxX = std::min( center.x + scoutingDistance, world.w() - 1 );
+    const int32_t maxX = std::min( center.x + scoutingDistance, worldWidth - 1 );
     assert( minX < maxX );
 
     int32_t tileCount = 0;
 
     for ( int32_t y = minY; y <= maxY; ++y ) {
         const int32_t dy = y - center.y;
+        const int32_t dySquared = dy * dy;
+        const int32_t offset = y * worldWidth;
 
         for ( int32_t x = minX; x <= maxX; ++x ) {
             const int32_t dx = x - center.x;
-            if ( revealRadiusSquared >= dx * dx + dy * dy ) {
-                const Maps::Tile & tile = world.getTile( x, y );
+            if ( dx * dx + dySquared < squaredScoutingRadiusLimit ) {
+                const Maps::Tile & tile = world.getTile( x + offset );
                 if ( tile.isFog( playerColor ) ) {
                     ++tileCount;
                 }

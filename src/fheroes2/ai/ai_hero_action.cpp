@@ -1816,7 +1816,7 @@ namespace
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
             const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
-            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
+            const int32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
             }
