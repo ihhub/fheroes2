@@ -346,9 +346,10 @@ namespace
 
         const uint32_t fadingInBuildingId = fadeBuilding.getBuilding();
 
-        // Bay animation. The Wizard's castle is "special": its "bay" is not actually a bay, but a river flowing through a gorge in the wastelands, which must be drawn
-        // and animated, even if the castle itself is not located on the seashore.
-        // We should also draw a bay for the Barbarian castle, even if the Shipyard is built.
+        // Bay animation. We have two special cases:
+        // 1. The Wizard's castle "bay" is not actually a bay, but a river flowing through a gorge in the wastelands,
+        // which must be drawn and animated, even if the castle itself is not located on the seashore.
+        // 2. The Barbarian's castle bay should always be drawn when the castle has sea access even if the Shipyard is built.
         if ( castleRace == Race::WZRD
              || ( castle.HasSeaAccess() && ( castleRace == Race::BARB || !castle.isBuild( BUILD_SHIPYARD ) || fadingInBuildingId == BUILD_SHIPYARD ) ) ) {
             int bayIcnId = 0;
