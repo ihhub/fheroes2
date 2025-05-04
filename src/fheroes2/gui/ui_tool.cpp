@@ -24,7 +24,6 @@
 #include <array>
 #include <cassert>
 #include <cmath>
-#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <stdexcept>
