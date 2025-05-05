@@ -31,6 +31,7 @@
 #include <optional>
 #include <ostream>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -536,7 +537,7 @@ namespace
 
             // If the enemy is not vanquished we update only the area around the castle on radar.
             if ( !enemyKingdom.isLoss() ) {
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE );
                 const fheroes2::Point castlePosition = Maps::GetPoint( dstIndex );
 
                 I.getRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
@@ -1789,95 +1790,105 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
         Maps::Tile & tile = world.getTile( dst_index );
-        std::string hdr = MP2::StringObject( objectType );
 
-        std::string msg;
-        const Funds funds = getFundsFromTile( tile );
-        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+        const auto [goldReward, experienceReward, artifactReward]
+            = [&hero = std::as_const( hero ), objectType,
+               &tile = std::as_const( tile )]() -> std::tuple<std::optional<uint32_t>, std::optional<uint32_t>, std::optional<Artifact>> {
+            const Artifact art = getArtifactFromTile( tile );
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
 
-        uint32_t gold = funds.gold;
+            uint32_t gold = funds.gold;
 
-        // dialog
-        if ( tile.isWater() ) {
-            if ( gold ) {
-                const Artifact & art = getArtifactFromTile( tile );
+            const bool isArtValid = art.isValid();
+            const bool isBagFull = hero.IsFullBagArtifacts();
 
-                if ( art.isValid() ) {
-                    if ( hero.IsFullBagArtifacts() ) {
-                        gold = GoldInsteadArtifact( objectType );
-                        msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
-                        StringReplace( msg, "%{gold}", gold );
+            std::string hdr = MP2::StringObject( objectType );
 
-                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-
-                        fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &goldUI } );
-                    }
-                    else {
-                        msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold and the %{art}." );
-                        StringReplace( msg, "%{gold}", gold );
-                        StringReplace( msg, "%{art}", art.GetName() );
-
-                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-                        const fheroes2::ArtifactDialogElement artifactUI( art );
-
-                        fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &artifactUI, &goldUI } );
-
-                        hero.PickupArtifact( art );
-                    }
+            if ( tile.isWater() ) {
+                if ( gold == 0 ) {
+                    return {};
                 }
-                else {
-                    msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
+
+                std::string msg;
+
+                if ( isArtValid && !isBagFull ) {
+                    msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold and the %{art}." );
                     StringReplace( msg, "%{gold}", gold );
-
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-
-                    fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &goldUI } );
-                }
-            }
-            else {
-                fheroes2::showStandardTextMessage( std::move( hdr ),
-                                                   _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ), Dialog::OK );
-            }
-        }
-        else {
-            const Artifact & art = getArtifactFromTile( tile );
-
-            if ( gold ) {
-                const uint32_t expr = gold > 500 ? gold - 500 : 500;
-                msg = _(
-                    "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
-
-                if ( !Dialog::SelectGoldOrExp( hdr, msg, gold, expr, hero ) ) {
-                    gold = 0;
-                    hero.IncreaseExperience( expr );
-                }
-            }
-            else if ( art.isValid() ) {
-                if ( hero.IsFullBagArtifacts() ) {
-                    gold = GoldInsteadArtifact( objectType );
-                    msg = _( "After scouring the area, you fall upon a hidden chest, containing the %{gold} gold pieces." );
-                    StringReplace( msg, "%{gold}", gold );
-
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-
-                    fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &goldUI } );
-                }
-                else {
-                    msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
-                    AudioManager::PlaySound( M82::TREASURE );
 
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
-                    fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &artifactUI } );
+                    fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &artifactUI, &goldUI } );
 
-                    hero.PickupArtifact( art );
+                    return { gold, {}, art };
                 }
+
+                if ( isArtValid && isBagFull ) {
+                    gold = GoldInsteadArtifact( objectType );
+                }
+
+                msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
+                StringReplace( msg, "%{gold}", gold );
+
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &goldUI } );
+
+                return { gold, {}, {} };
             }
+
+            if ( gold > 0 || ( isArtValid && isBagFull ) ) {
+                if ( isArtValid && isBagFull ) {
+                    gold = GoldInsteadArtifact( objectType );
+                }
+
+                const uint32_t exp = gold > 500 ? gold - 500 : 500;
+                const std::string msg = _(
+                    "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?" );
+
+                if ( Dialog::SelectGoldOrExp( hdr, msg, gold, exp, hero ) ) {
+                    return { gold, {}, {} };
+                }
+
+                return { std::optional<uint32_t>{}, exp, {} };
+            }
+
+            if ( !isArtValid ) {
+                return {};
+            }
+
+            std::string msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
+            StringReplace( msg, "%{art}", art.GetName() );
+
+            AudioManager::PlaySound( M82::TREASURE );
+
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+
+            fheroes2::showStandardTextMessage( std::move( hdr ), std::move( msg ), Dialog::OK, { &artifactUI } );
+
+            return { std::optional<uint32_t>{}, {}, art };
+        }();
+
+        if ( goldReward ) {
+            assert( goldReward > 0U );
+
+            hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, *goldReward ) );
         }
 
-        if ( gold ) {
-            hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+        if ( experienceReward ) {
+            assert( experienceReward > 0U );
+
+            hero.IncreaseExperience( *experienceReward );
+        }
+
+        if ( artifactReward ) {
+            assert( artifactReward->isValid() );
+
+            if ( !hero.PickupArtifact( *artifactReward ) ) {
+                assert( 0 );
+            }
         }
 
         Game::PlayPickupSound();
@@ -2506,7 +2517,7 @@ namespace
             fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Dialog::OK );
         }
 
-        const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
+        const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER );
         Maps::ClearFog( dst_index, scoutRange, hero.GetColor() );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -3428,7 +3439,7 @@ namespace
 
                 const size_t maxDelay = 7;
 
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
                 bool skipAnimation = false;
                 fheroes2::Rect radarRenderArea;
 

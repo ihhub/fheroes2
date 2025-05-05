@@ -27,8 +27,11 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
+#include <tuple>
+#include <utility>
 #include <vector>
 
 #include "ai_common.h"
@@ -44,6 +47,8 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_mode.h"
+#include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "interface_base.h"
@@ -634,73 +639,109 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
         Maps::Tile & tile = world.getTile( dst_index );
-        const Funds funds = getFundsFromTile( tile );
 
-        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
-        uint32_t gold = funds.gold;
+        const auto [goldReward, experienceReward, artifactReward]
+            = [&hero = std::as_const( hero ), objectType,
+               &tile = std::as_const( tile )]() -> std::tuple<std::optional<uint32_t>, std::optional<uint32_t>, std::optional<Artifact>> {
+            const Artifact art = getArtifactFromTile( tile );
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
 
-        Kingdom & kingdom = hero.GetKingdom();
+            uint32_t gold = funds.gold;
 
-        if ( tile.isWater() ) {
-            if ( gold ) {
-                const Artifact & art = getArtifactFromTile( tile );
+            const bool isArtValid = art.isValid();
+            const bool isBagFull = hero.IsFullBagArtifacts();
 
-                if ( art.isValid() && !hero.PickupArtifact( art ) )
+            if ( tile.isWater() ) {
+                if ( gold == 0 ) {
+                    return {};
+                }
+
+                if ( isArtValid && !isBagFull ) {
+                    return { gold, {}, art };
+                }
+
+                if ( isArtValid && isBagFull ) {
                     gold = GoldInsteadArtifact( objectType );
+                }
+
+                return { gold, {}, {} };
             }
-        }
-        else {
-            const Artifact & art = getArtifactFromTile( tile );
 
-            if ( gold ) {
-                const uint32_t experience = gold > 500 ? gold - 500 : 500;
-                const Heroes::Role role = hero.getAIRole();
-                const int32_t kingdomGold = kingdom.GetFunds().gold;
-
-                uint32_t chance = 0;
-                if ( role == Heroes::Role::SCOUT || role == Heroes::Role::COURIER ) {
-                    // These roles usually don't choose experience. Make AI rich!
-                    if ( kingdomGold > 10000 && experience >= 1500 ) {
-                        chance = 10;
-                    }
+            if ( gold > 0 || ( isArtValid && isBagFull ) ) {
+                if ( isArtValid && isBagFull ) {
+                    gold = GoldInsteadArtifact( objectType );
                 }
-                else if ( role == Heroes::Role::CHAMPION ) {
-                    // If AI is extremely low on gold consider taking it
-                    if ( kingdomGold < 3000 ) {
-                        // Safeguard the calculation since we're working with unsigned values
-                        chance = ( std::max( experience, 500U ) - 500 ) / 15;
+
+                const uint32_t exp = gold > 500 ? gold - 500 : 500;
+                const uint32_t chanceToChooseExp = [&hero, exp]() -> uint32_t {
+                    const Heroes::Role role = hero.getAIRole();
+                    const int32_t kingdomGold = hero.GetKingdom().GetFunds().gold;
+
+                    if ( role == Heroes::Role::SCOUT || role == Heroes::Role::COURIER ) {
+                        // These roles usually don't choose experience. Make AI rich!
+                        if ( kingdomGold > 10000 && exp >= 1500 ) {
+                            return 10;
+                        }
+
+                        return 0;
                     }
-                    else {
+
+                    if ( role == Heroes::Role::CHAMPION ) {
+                        // If AI is extremely low on gold consider taking it
+                        if ( kingdomGold < 3000 ) {
+                            // Safeguard the calculation since we're working with unsigned values
+                            return ( std::max( exp, 500U ) - 500 ) / 15;
+                        }
+
                         // Otherwise Champion always picks experience
-                        chance = 100;
+                        return 100;
                     }
-                }
-                else if ( kingdomGold < 3000 ) {
-                    chance = ( role == Heroes::Role::FIGHTER && experience >= 1500 ) ? 10 : 0;
-                }
-                else {
-                    uint32_t value = ( experience > 500 ) ? experience - 500 : 0;
+
+                    if ( kingdomGold < 3000 ) {
+                        return ( role == Heroes::Role::FIGHTER && exp >= 1500 ) ? 10 : 0;
+                    }
+
+                    uint32_t value = std::max( exp, 500U ) - 500;
                     if ( role == Heroes::Role::FIGHTER ) {
                         value += 500;
                     }
-                    chance = value / 15; // 33% for every 500 experience
+
+                    return value / 15; // 33% for every 500 experience
+                }();
+
+                if ( Rand::Get( 1, 100 ) > chanceToChooseExp ) {
+                    return { gold, {}, {} };
                 }
 
-                if ( chance ) {
-                    const uint32_t randomRoll = Rand::Get( 1, 100 );
-                    if ( randomRoll <= chance ) {
-                        gold = 0;
-                        hero.IncreaseExperience( experience );
-                    }
-                }
+                return { std::optional<uint32_t>{}, exp, {} };
             }
-            else if ( art.isValid() && !hero.PickupArtifact( art ) ) {
-                gold = GoldInsteadArtifact( objectType );
+
+            if ( !isArtValid ) {
+                return {};
             }
+
+            return { std::optional<uint32_t>{}, {}, art };
+        }();
+
+        if ( goldReward ) {
+            assert( goldReward > 0U );
+
+            hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, *goldReward ) );
         }
 
-        if ( gold ) {
-            kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
+        if ( experienceReward ) {
+            assert( experienceReward > 0U );
+
+            hero.IncreaseExperience( *experienceReward );
+        }
+
+        if ( artifactReward ) {
+            assert( artifactReward->isValid() );
+
+            if ( !hero.PickupArtifact( *artifactReward ) ) {
+                assert( 0 );
+            }
         }
 
         removeMainObjectFromTile( tile );
@@ -1775,7 +1816,7 @@ namespace
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
             const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
-            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
+            const int32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
             }
@@ -2101,7 +2142,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     }
 }
 
-void AI::HeroesMove( Heroes & hero )
+fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 {
     const Route::Path & path = hero.GetPath();
 
@@ -2116,11 +2157,11 @@ void AI::HeroesMove( Heroes & hero )
 
         // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
         // The further path of this hero will be re-planned by AI.
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     if ( !path.isValidForMovement() ) {
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     hero.SetMove( true );
@@ -2159,6 +2200,16 @@ void AI::HeroesMove( Heroes & hero )
 
             hero.Move( true );
             recenterNeeded = true;
+
+            if ( hero.isAction() ) {
+                hero.ResetAction();
+
+                // Check if the game is over after the hero's action.
+                const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
+                if ( gameState != fheroes2::GameMode::CANCEL ) {
+                    return gameState;
+                }
+            }
 
             // Render a frame only if there is a need to show one.
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2227,6 +2278,16 @@ void AI::HeroesMove( Heroes & hero )
                         }
                     }
                 }
+
+                if ( hero.isAction() ) {
+                    hero.ResetAction();
+
+                    // Check if the game is over after the hero's action.
+                    const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
+                    if ( gameState != fheroes2::GameMode::CANCEL ) {
+                        return gameState;
+                    }
+                }
             }
 
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2246,6 +2307,8 @@ void AI::HeroesMove( Heroes & hero )
     }
 
     hero.SetMove( false );
+
+    return fheroes2::GameMode::END_TURN;
 }
 
 void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )

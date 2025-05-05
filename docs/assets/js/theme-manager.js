@@ -21,25 +21,28 @@
 // Theme toggle functionality
 class ThemeManager
 {
-    constructor()
+    // Static properties
+    static themeToggle = null;
+    static themeKey = "theme";
+    static darkTheme = "dark";
+    static lightTheme = "light";
+    static accessibility = null;
+
+    // Static initialization method
+    static initialize()
     {
+        // Initialize accessibility manager if not already initialized
+        if ( !this.accessibility ) {
+            this.accessibility = window.fheroes2.AccessibilityManager ? new window.fheroes2.AccessibilityManager() : null;
+        }
+
         this.themeToggle = document.getElementById( "theme-toggle" );
-        this.themeKey = "theme";
-        this.darkTheme = "dark";
-        this.lightTheme = "light";
-        this.accessibility = window.AccessibilityManager ? new window.AccessibilityManager() : null;
-
-        this.init();
-    }
-
-    init()
-    {
         this.applySavedTheme();
         this.setupEventListeners();
         this.setupAccessibility();
     }
 
-    setTheme( theme, saveToStorage = true )
+    static setTheme( theme, saveToStorage = true )
     {
         document.documentElement.setAttribute( "data-theme", theme );
         document.body.setAttribute( "data-theme", theme );
@@ -64,7 +67,7 @@ class ThemeManager
         }
     }
 
-    applySavedTheme()
+    static applySavedTheme()
     {
         const savedTheme = localStorage.getItem( this.themeKey );
 
@@ -78,7 +81,7 @@ class ThemeManager
         }
     }
 
-    setupEventListeners()
+    static setupEventListeners()
     {
         // Add event listener to the toggle button
         if ( this.themeToggle ) {
@@ -97,7 +100,7 @@ class ThemeManager
         } );
     }
 
-    setupAccessibility()
+    static setupAccessibility()
     {
         if ( this.themeToggle ) {
             // Set initial ARIA attributes
@@ -118,4 +121,4 @@ class ThemeManager
 }
 
 // Initialize the theme manager when the DOM is loaded
-document.addEventListener( "DOMContentLoaded", () => { new ThemeManager(); } );
+document.addEventListener( "DOMContentLoaded", () => { ThemeManager.initialize(); } );

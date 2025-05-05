@@ -112,6 +112,7 @@ $body-font: "Asul";
     }
 
     a {
+      text-shadow: none;
       color: map-get($theme-map, highlight-color);
       text-decoration: none;
 
@@ -135,6 +136,10 @@ $body-font: "Asul";
       text-shadow: map-get($theme-map, header-text-shadow);
       &:hover {
         color: lighten(map-get($theme-map, header-color), 10%);
+      }
+
+      &:hover .heading-anchor {
+        opacity: 1;
       }
 
       .heading-link {
@@ -210,9 +215,6 @@ $body-font: "Asul";
     ul {
       text-shadow: map-get($theme-map, body-text-shadow);
     }
-    a {
-      text-shadow: none;
-    }
 
     code {
       font-family: monospace;
@@ -231,7 +233,6 @@ $body-font: "Asul";
       text-align: center;
       margin-bottom: 0;
       border-bottom: 0.125em solid map-get($theme-map, secondary-color);
-      // text-shadow: 0.125em 0.125em 0.25em $primary-color;
 
       h1 {
         font-size: 4em;
@@ -507,17 +508,6 @@ $body-font: "Asul";
       &:hover {
         opacity: 1 !important;
         transform: scale(1.1);
-      }
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      &:hover .heading-anchor {
-        opacity: 1;
       }
     }
 

@@ -39,6 +39,11 @@ class Kingdom;
 struct VecCastles;
 struct VecHeroes;
 
+namespace fheroes2
+{
+    enum class GameMode : int;
+}
+
 namespace MP2
 {
     enum MapObjectType : uint16_t;
@@ -157,7 +162,8 @@ namespace AI
     public:
         static Planner & Get();
 
-        void KingdomTurn( Kingdom & kingdom );
+        // Returns the state of the game. By default it should be end of turn.
+        fheroes2::GameMode KingdomTurn( Kingdom & kingdom );
 
         // Implements the logic of transparent casting of the Summon Boat spell at the beginning of the hero's movement
         void HeroesBeginMovement( Heroes & hero );
@@ -195,8 +201,8 @@ namespace AI
         // (if there is one) by giving him the best available troops.
         void reinforceCastle( Castle & castle );
 
-        // Returns true if heroes can still do tasks but they have no move points.
-        bool HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue );
+        // Returns the state of the game. By default it should be end of turn.
+        fheroes2::GameMode HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, bool & moreTasksAvailable );
 
         bool recruitHero( Castle & castle, bool buyArmy );
 

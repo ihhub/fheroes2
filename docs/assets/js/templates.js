@@ -22,6 +22,9 @@
  * HTML templates for the heading-copy and code-copy functionality
  */
 
+// Create the fheroes2 namespace if it doesn't exist
+window.fheroes2 = window.fheroes2 || {};
+
 // Template for the live region
 const liveRegionTemplate = `
 <div aria-live="assertive" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
@@ -34,16 +37,16 @@ const headingAnchorTemplate = `
 
 // Template for the code copy button
 const codeCopyButtonTemplate = `
-<button class="btn btn-primary copy-btn" aria-label="Copy code to clipboard" title="Copy code to clipboard" role="button" tabindex="0">Copy</button>
+<button class="btn btn-primary copy-btn" aria-label="Copy code to clipboard" title="Copy code to clipboard" tabindex="0">Copy</button>
 `;
 
-// Export the templates
-window.HeadingCopyTemplates = {
+// Export the templates to the fheroes2 namespace
+window.fheroes2.HeadingCopyTemplates = {
     liveRegionTemplate,
     headingAnchorTemplate
 };
 
-window.CodeCopyTemplates = {
+window.fheroes2.CodeCopyTemplates = {
     liveRegionTemplate,
     codeCopyButtonTemplate
 };
