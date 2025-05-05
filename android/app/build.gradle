@@ -136,7 +136,7 @@ tasks.register('generateAssetsDigest') {
 
             final byte[] itBuf = Files.readAllBytes(itPath)
 
-            sb.append(String.format('%032x % 16d %s\n',
+            sb.append(String.format('%032x % 12d %s\n',
                     new BigInteger(1, MessageDigest.getInstance('MD5').digest(itBuf)),
                     itBuf.length, assetsDirPath.relativize(itPath)))
         }
