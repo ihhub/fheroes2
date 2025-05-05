@@ -358,7 +358,7 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
         return 0.01;
     }
     const uint32_t currentSpeed = target.GetSpeed( false, true );
-    const uint32_t newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
+    const uint32_t newSpeed = Speed::getSlowSpeedFromSpell( currentSpeed );
     const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
@@ -377,7 +377,7 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) const
 {
     const uint32_t currentSpeed = target.GetSpeed( false, true );
-    const uint32_t newSpeed = Speed::GetHasteSpeedFromSpell( currentSpeed );
+    const uint32_t newSpeed = Speed::getHasteSpeedFromSpell( currentSpeed );
     const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 

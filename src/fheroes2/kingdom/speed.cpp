@@ -28,7 +28,7 @@
 
 namespace
 {
-    uint32_t GetOriginalSlow( const uint32_t speed )
+    uint32_t getSlowerSpeed( const uint32_t speed )
     {
         switch ( speed ) {
         case Speed::CRAWLING:
@@ -52,7 +52,7 @@ namespace
         return Speed::STANDING;
     }
 
-    uint32_t GetOriginalFast( const uint32_t speed )
+    uint32_t getFasterSpeed( const uint32_t speed )
     {
         switch ( speed ) {
         case Speed::CRAWLING:
@@ -111,15 +111,15 @@ namespace Speed
         return "Unknown";
     }
 
-    uint32_t GetSlowSpeedFromSpell( const uint32_t currentSpeed )
+    uint32_t getSlowSpeedFromSpell( const uint32_t currentSpeed )
     {
         const uint32_t spellExtraValue = Spell( Spell::SLOW ).ExtraValue();
-        return spellExtraValue ? currentSpeed - spellExtraValue : GetOriginalSlow( currentSpeed );
+        return spellExtraValue ? currentSpeed - spellExtraValue : getSlowerSpeed( currentSpeed );
     }
 
-    uint32_t GetHasteSpeedFromSpell( const uint32_t currentSpeed )
+    uint32_t getHasteSpeedFromSpell( const uint32_t currentSpeed )
     {
         const uint32_t spellExtraValue = Spell( Spell::HASTE ).ExtraValue();
-        return spellExtraValue ? currentSpeed + spellExtraValue : GetOriginalFast( currentSpeed );
+        return spellExtraValue ? currentSpeed + spellExtraValue : getFasterSpeed( currentSpeed );
     }
 }

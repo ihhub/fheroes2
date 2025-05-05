@@ -43,6 +43,6 @@ namespace Speed
 
     const char * String( const uint32_t speed );
 
-    uint32_t GetSlowSpeedFromSpell( const uint32_t currentSpeed );
-    uint32_t GetHasteSpeedFromSpell( const uint32_t currentSpeed );
+    uint32_t getSlowSpeedFromSpell( const uint32_t currentSpeed );
+    uint32_t getHasteSpeedFromSpell( const uint32_t currentSpeed );
 }

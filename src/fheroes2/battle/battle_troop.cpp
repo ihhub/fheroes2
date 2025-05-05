@@ -438,10 +438,10 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
-        return Speed::GetHasteSpeedFromSpell( speed );
+        return Speed::getHasteSpeedFromSpell( speed );
     }
     if ( Modes( SP_SLOW ) ) {
-        return Speed::GetSlowSpeedFromSpell( speed );
+        return Speed::getSlowSpeedFromSpell( speed );
     }
 
     return speed;
