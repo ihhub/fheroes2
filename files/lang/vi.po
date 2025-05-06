@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -684,9 +684,6 @@ msgstr "May mắn"
 msgid "Spell Points"
 msgstr "Điểm Phép thuật"
 
-msgid "Hero's Options"
-msgstr "Tùy chọn Tướng"
-
 msgid "Cast Spell"
 msgstr "Niệm Chú"
 
@@ -704,6 +701,9 @@ msgstr "Màn hình Tướng"
 
 msgid "Captain's Options"
 msgstr "Tùy chọn Đội trưởng"
+
+msgid "Hero's Options"
+msgstr "Tùy chọn Tướng"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

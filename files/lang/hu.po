@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2025-04-23 20:48+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -672,9 +672,6 @@ msgstr "Szerencse"
 msgid "Spell Points"
 msgstr "Varázspontok"
 
-msgid "Hero's Options"
-msgstr "Hős beállításai"
-
 msgid "Cast Spell"
 msgstr "Varázslás"
 
@@ -692,6 +689,9 @@ msgstr "Hős képernyő"
 
 msgid "Captain's Options"
 msgstr "Kapitány beállítások"
+
+msgid "Hero's Options"
+msgstr "Hős beállításai"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
