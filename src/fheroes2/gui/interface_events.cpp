@@ -597,7 +597,7 @@ void Interface::AdventureMap::EventSwitchShowControlPanel() const
     }
 }
 
-void Interface::AdventureMap::EventKeyArrowPress( int dir )
+void Interface::AdventureMap::EventKeyArrowPress( const int dir )
 {
     if ( Heroes * hero = GetFocusHeroes(); hero ) {
         MoveHeroFromArrowKeys( *hero, dir );

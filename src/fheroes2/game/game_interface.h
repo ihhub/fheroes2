@@ -141,7 +141,7 @@ namespace Interface
         fheroes2::GameMode EventFileDialog() const;
         fheroes2::GameMode EventEndTurn() const;
         fheroes2::GameMode EventDigArtifact();
-        void EventKeyArrowPress( int direct );
+        void EventKeyArrowPress( const int dir );
 
         fheroes2::GameMode StartGame();
 
