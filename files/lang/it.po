@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -617,9 +617,6 @@ msgstr "Fortuna"
 msgid "Spell Points"
 msgstr "Pt. Magia"
 
-msgid "Hero's Options"
-msgstr "Opzioni Eroe"
-
 msgid "Cast Spell"
 msgstr "Lancia magia"
 
@@ -638,6 +635,9 @@ msgstr "Schermata Eroe"
 #, fuzzy
 msgid "Captain's Options"
 msgstr "Opzioni Castello"
+
+msgid "Hero's Options"
+msgstr "Opzioni Eroe"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

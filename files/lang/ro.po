@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -688,9 +688,6 @@ msgstr "Noroc"
 msgid "Spell Points"
 msgstr "Puncte de vrajă"
 
-msgid "Hero's Options"
-msgstr "Opțiunile eroului"
-
 msgid "Cast Spell"
 msgstr "Aruncă vraja"
 
@@ -708,6 +705,9 @@ msgstr "Ecranul eroului"
 
 msgid "Captain's Options"
 msgstr "Opțiunile căpitanului"
+
+msgid "Hero's Options"
+msgstr "Opțiunile eroului"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -688,9 +688,6 @@ msgstr "Късмет"
 msgid "Spell Points"
 msgstr "Магия"
 
-msgid "Hero's Options"
-msgstr "Опции на героя"
-
 msgid "Cast Spell"
 msgstr "Направи заклинание"
 
@@ -707,6 +704,9 @@ msgid "Hero Screen"
 msgstr "Екран на героя"
 
 msgid "Captain's Options"
+msgstr "Опции на героя"
+
+msgid "Hero's Options"
 msgstr "Опции на героя"
 
 msgid ""

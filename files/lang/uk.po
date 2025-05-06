@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -691,9 +691,6 @@ msgstr "Удача"
 msgid "Spell Points"
 msgstr "Мана"
 
-msgid "Hero's Options"
-msgstr "Налаштування героя"
-
 msgid "Cast Spell"
 msgstr "Накласти чари"
 
@@ -711,6 +708,9 @@ msgstr "Вікно героя"
 
 msgid "Captain's Options"
 msgstr "Налаштування капітана"
+
+msgid "Hero's Options"
+msgstr "Налаштування героя"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
