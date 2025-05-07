@@ -924,9 +924,7 @@ int Interface::GameArea::GetScrollCursor() const
 
 void Interface::GameArea::SetScroll( const int direction )
 {
-    if ( isDragScroll() ) {
-        return;
-    }
+    assert( !isDragScroll() );
 
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {

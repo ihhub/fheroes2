@@ -605,6 +605,10 @@ void Interface::AdventureMap::EventKeyArrowPress( const int dir )
         return;
     }
 
+    if ( _gameArea.isDragScroll() ) {
+        return;
+    }
+
     switch ( dir ) {
     case Direction::TOP_LEFT:
         _gameArea.SetScroll( SCROLL_TOP );
