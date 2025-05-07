@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -683,9 +683,6 @@ msgstr "Sorte"
 msgid "Spell Points"
 msgstr "Mana"
 
-msgid "Hero's Options"
-msgstr "Opções do Herói"
-
 msgid "Cast Spell"
 msgstr "Lançar Feitiço"
 
@@ -703,6 +700,9 @@ msgstr "Tela do Herói"
 
 msgid "Captain's Options"
 msgstr "Opções do Capitão"
+
+msgid "Hero's Options"
+msgstr "Opções do Herói"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -599,9 +599,6 @@ msgstr ""
 msgid "Spell Points"
 msgstr ""
 
-msgid "Hero's Options"
-msgstr ""
-
 msgid "Cast Spell"
 msgstr ""
 
@@ -620,6 +617,9 @@ msgstr ""
 #, fuzzy
 msgid "Captain's Options"
 msgstr "Išeiti iš pilies"
+
+msgid "Hero's Options"
+msgstr ""
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

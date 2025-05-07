@@ -603,7 +603,7 @@ public:
     }
 
     void Scout( const int tileIndex ) const;
-    int GetScoutingDistance() const;
+    int32_t GetScoutingDistance() const;
 
     // Returns the area in map tiles around hero's position in his scout range.
     fheroes2::Rect GetScoutRoi() const;
