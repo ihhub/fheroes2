@@ -244,7 +244,14 @@ namespace
             }
         }
 
-        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        const SaveFileSortType sortType = Settings::Get().GetSaveFileSortType();
+        if ( sortType == SaveFileSortType::FILENAME ) {
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        }
+        else {
+            assert( sortType == SaveFileSortType::LATEST );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByTimestampDescending );
+        }
 
         return mapInfos;
     }
