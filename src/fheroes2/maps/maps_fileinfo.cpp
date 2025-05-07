@@ -579,6 +579,12 @@ bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
     return CaseInsensitiveCompare( lhs.name, rhs.name );
 }
 
+bool Maps::FileInfo::sortByTimestampDescending( const FileInfo & lhs, const FileInfo & rhs )
+{
+    // we want the latest timestamp first
+    return lhs.timestamp > rhs.timestamp;
+}
+
 int Maps::FileInfo::KingdomRace( int color ) const
 {
     switch ( color ) {
