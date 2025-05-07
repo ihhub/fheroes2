@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint>
 
 namespace Speed
 {
-    enum
+    enum : uint32_t
     {
         STANDING = 0,
         CRAWLING = 1,
@@ -41,10 +41,8 @@ namespace Speed
         INSTANT = 9
     };
 
-    std::string String( const int speed );
-    int GetOriginalSlow( const int speed );
-    int GetOriginalFast( const int speed );
+    const char * String( const uint32_t speed );
 
-    int GetSlowSpeedFromSpell( const int currentSpeed );
-    int GetHasteSpeedFromSpell( const int currentSpeed );
+    uint32_t getSlowSpeedFromSpell( const uint32_t currentSpeed );
+    uint32_t getHasteSpeedFromSpell( const uint32_t currentSpeed );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,29 +32,9 @@
 #include "serialize.h"
 #include "speed.h"
 
-Troop::Troop()
-    : Monster( Monster::UNKNOWN )
-    , _count( 0 )
-{}
-
-Troop::Troop( const Monster & mons, const uint32_t count )
-    : Monster( mons )
-    , _count( count )
-{}
-
-bool Troop::operator==( const Monster & mons ) const
-{
-    return Monster::operator==( mons );
-}
-
 bool Troop::isMonster( const int mons ) const
 {
     return GetID() == mons;
-}
-
-Monster Troop::GetMonster() const
-{
-    return Monster( id );
 }
 
 void Troop::Set( const Troop & troop )
@@ -73,25 +53,9 @@ void Troop::SetMonster( const Monster & mons )
     id = mons.GetID();
 }
 
-void Troop::SetCount( const uint32_t count )
-{
-    _count = count;
-}
-
-void Troop::Reset()
-{
-    id = Monster::UNKNOWN;
-    _count = 0;
-}
-
 const char * Troop::GetName() const
 {
     return Monster::GetPluralName( _count );
-}
-
-uint32_t Troop::GetCount() const
-{
-    return _count;
 }
 
 uint32_t Troop::GetHitPoints() const
@@ -118,17 +82,12 @@ double Troop::GetStrengthWithBonus( const int bonusAttack, const int bonusDefens
 {
     assert( bonusAttack >= 0 && bonusDefense >= 0 );
 
-    return Monster::GetMonsterStrength( Monster::GetAttack() + bonusAttack, Monster::GetDefense() + bonusDefense ) * _count;
+    return Monster::GetMonsterStrength( static_cast<int>( Monster::GetAttack() ) + bonusAttack, static_cast<int>( Monster::GetDefense() ) + bonusDefense ) * _count;
 }
 
 bool Troop::isValid() const
 {
     return Monster::isValid() && _count;
-}
-
-bool Troop::isEmpty() const
-{
-    return !isValid();
 }
 
 Funds Troop::GetTotalCost() const
@@ -146,7 +105,7 @@ bool Troop::isBattle() const
     return false;
 }
 
-bool Troop::isModes( uint32_t /* unused */ ) const
+bool Troop::isModes( const uint32_t /* unused */ ) const
 {
     return false;
 }
@@ -173,7 +132,7 @@ std::string Troop::GetSpeedString() const
 
 std::string Troop::GetSpeedString( const uint32_t speed )
 {
-    std::string output( Speed::String( static_cast<int>( speed ) ) );
+    std::string output( Speed::String( speed ) );
     output += " (";
     output += std::to_string( speed );
     output += ')';
@@ -195,15 +154,6 @@ uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
 {
     return 0;
 }
-
-ArmyTroop::ArmyTroop( const Army * army )
-    : _army( army )
-{}
-
-ArmyTroop::ArmyTroop( const Army * army, const Troop & troop )
-    : Troop( troop )
-    , _army( army )
-{}
 
 uint32_t ArmyTroop::GetAttack() const
 {
@@ -228,16 +178,6 @@ int ArmyTroop::GetMorale() const
 int ArmyTroop::GetLuck() const
 {
     return _army ? _army->GetLuck() : Troop::GetLuck();
-}
-
-void ArmyTroop::SetArmy( const Army & army )
-{
-    _army = &army;
-}
-
-const Army * ArmyTroop::GetArmy() const
-{
-    return _army;
 }
 
 std::string ArmyTroop::GetAttackString() const
