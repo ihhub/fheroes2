@@ -74,6 +74,7 @@
 #include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -1573,6 +1574,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             }
 
             Maps::FileInfo mapInfo = scenario.loadMap();
+
+            // Update French language-specific characters to match CP1252.
+            if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French || fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+                fheroes2::updateFrenchLanguageSpecificCharactersForMaps( mapInfo.name );
+                fheroes2::updateFrenchLanguageSpecificCharactersForMaps( mapInfo.description );
+            }
+
             Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
 
             conf.setCurrentMapInfo( mapInfo );

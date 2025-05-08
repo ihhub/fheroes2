@@ -74,6 +74,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "week.h"
 #include "world.h"
 
@@ -106,7 +107,7 @@ Castle::Castle( const int32_t posX, const int32_t posY, int race )
     // Do nothing.
 }
 
-void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharactersInName )
 {
     assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
@@ -345,6 +346,10 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
         _name = dataStream.getString( 13 );
+
+        if ( updateFrenchLanguageSpecificCharactersInName ) {
+            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( _name );
+        }
     }
     else {
         // Skip 13 bytes since the name is not set.

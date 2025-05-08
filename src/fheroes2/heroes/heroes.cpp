@@ -320,7 +320,8 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data,
+                          const bool updateFrenchLanguageSpecificCharactersInName )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -595,6 +596,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
+
+            if ( updateFrenchLanguageSpecificCharactersInName ) {
+                fheroes2::updateFrenchLanguageSpecificCharactersForMaps( name );
+            }
         }
     }
     else {

@@ -152,6 +152,76 @@ namespace fheroes2
         output.replace( output.size() - originalEndingSize, originalEndingSize, correctedEnding, correctedEndingSize );
     }
 
+    void updateFrenchLanguageSpecificCharactersForMaps( std::string & str )
+    {
+        for ( char & c : str ) {
+            switch ( c ) {
+            case 9:
+                // Lowercase i with circumflex
+                c = static_cast<char>( 238 );
+                break;
+            case 35:
+                //  Lowercase o with circumflex
+                c = static_cast<char>( 244 );
+                break;
+            case 36:
+                // Lowercase u with circumflex
+                c = static_cast<char>( 251 );
+                break;
+            case 38:
+                // Lowercase u with grave accent
+                c = static_cast<char>( 249 );
+                break;
+            case 42:
+                // Lowercase a with circumflex
+                c = static_cast<char>( 226 );
+                break;
+            case 60:
+                // Lowercase i with diaeresis
+                c = static_cast<char>( 239 );
+                break;
+            case 62:
+                // Lowercase i with circumflex <- Confirmed used in the OG Succession wars.
+                c = static_cast<char>( 238 );
+                break;
+            case 64:
+                // Lowercase a with grave accent
+                c = static_cast<char>( 224 );
+                break;
+            case 94:
+                // Lowercase c with cedilla
+                c = static_cast<char>( 231 );
+                break;
+            case 96:
+                // Lowercase e with grave accent
+                c = static_cast<char>( 232 );
+                break;
+            case 123:
+                // Lowercase i with diaeresis
+                c = static_cast<char>( 239 );
+                break;
+            case 124:
+                // Lowercase e with circumflex
+                c = static_cast<char>( 234 );
+                break;
+            case 125:
+                // Lowercase i with circumflex
+                c = static_cast<char>( 239 );
+                break;
+            case 126:
+                // Lowercase e with acute
+                c = static_cast<char>( 233 );
+                break;
+            case 127:
+                // Lowercase i with circumflex
+                c = static_cast<char>( 239 );
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     std::string abbreviateNumber( const int num )
     {
         if ( std::abs( num ) >= 1000000 ) {

@@ -1624,7 +1624,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     return stream;
 }
 
-void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
+void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
 {
     assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
@@ -1750,6 +1750,10 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     }
 
     message = dataStream.getString();
+
+    if ( updateFrenchLanguageSpecificCharacters ) {
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message );
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }

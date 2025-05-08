@@ -157,7 +157,7 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
 
 struct EventDate
 {
-    void LoadFromMP2( const std::vector<uint8_t> & data );
+    void LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters );
 
     bool isAllow( const int color, const uint32_t date ) const;
 
