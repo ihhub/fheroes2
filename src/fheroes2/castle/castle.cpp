@@ -74,7 +74,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_language.h"
 #include "week.h"
 #include "world.h"
 

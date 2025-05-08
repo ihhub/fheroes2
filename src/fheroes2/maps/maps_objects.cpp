@@ -272,7 +272,8 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
     }
-    else if ( updateFrenchLanguageSpecificCharacters ) {
+
+    if ( updateFrenchLanguageSpecificCharacters ) {
         fheroes2::updateFrenchLanguageSpecificCharactersForMaps( riddle );
     }
 

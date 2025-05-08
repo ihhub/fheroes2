@@ -47,6 +47,7 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_language.h"
 #include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
