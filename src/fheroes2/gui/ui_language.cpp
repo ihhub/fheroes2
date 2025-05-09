@@ -132,9 +132,9 @@ namespace fheroes2
         std::vector<fheroes2::SupportedLanguage> validSupportedLanguages{ fheroes2::SupportedLanguage::English };
 
         for ( const auto & [codePage, languages] : supportedLanguges ) {
-            // TODO: we shouldn't load all language resources just for the sake of verifying whether their translations exist.
-            //       Find another way to avoid this heavy operation.
             for ( const auto language : languages ) {
+                // TODO: we shouldn't load all language resources just for the sake of verifying whether their translations exist.
+                //       Find another way to avoid this heavy operation.
                 if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
                     validSupportedLanguages.emplace_back( language );
                 }
