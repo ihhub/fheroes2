@@ -108,7 +108,7 @@ namespace fheroes2
 
         const SupportedLanguage resourceLanguage = getResourceLanguage();
         if ( resourceLanguage != SupportedLanguage::English ) {
-            supportedLanguges[getCodePage(resourceLanguage)].emplace_back( resourceLanguage );
+            supportedLanguges[getCodePage( resourceLanguage )].emplace_back( resourceLanguage );
         }
 
         const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
@@ -121,7 +121,7 @@ namespace fheroes2
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
-                supportedLanguges[getCodePage(language)].emplace_back( language );
+                supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }
 
