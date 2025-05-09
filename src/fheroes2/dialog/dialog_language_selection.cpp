@@ -134,7 +134,7 @@ namespace
         void Redraw() override
         {
             // Do not call this method!
-            // Use overloaded one!
+            // Use the overloaded method below!
             assert( 0 );
         }
 
