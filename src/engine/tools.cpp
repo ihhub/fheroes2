@@ -157,63 +157,63 @@ namespace fheroes2
         for ( char & c : str ) {
             switch ( c ) {
             case 9:
-                // Lowercase i with circumflex
+                // Horizontal tab. Used for lowercase i with circumflex.
                 c = static_cast<char>( 238 );
                 break;
             case 35:
-                //  Lowercase o with circumflex
+                // Number sign (#). Used for lowercase o with circumflex.
                 c = static_cast<char>( 244 );
                 break;
             case 36:
-                // Lowercase u with circumflex
+                // Dollar ($). Used for lowercase u with circumflex.
                 c = static_cast<char>( 251 );
                 break;
             case 38:
-                // Lowercase u with grave accent
+                // Ampersand (&). Used forLowercase u with grave accent.
                 c = static_cast<char>( 249 );
                 break;
             case 42:
-                // Lowercase a with circumflex
+                // Asterisk (*). Used for lowercase a with circumflex.
                 c = static_cast<char>( 226 );
                 break;
             case 60:
-                // Lowercase i with diaeresis
+                // Less sign (<). Used for lowercase i with diaeresis.
                 c = static_cast<char>( 239 );
                 break;
             case 62:
-                // Lowercase i with circumflex <- Confirmed used in the OG Succession wars.
+                // Greater sign (>). Used for lowercase i with circumflex.
                 c = static_cast<char>( 238 );
                 break;
             case 64:
-                // Lowercase a with grave accent
+                // At sign (@). Used for lowercase a with grave accent.
                 c = static_cast<char>( 224 );
                 break;
             case 94:
-                // Lowercase c with cedilla
+                // Caret - circumflex (^). Used for lowercase c with cedilla.
                 c = static_cast<char>( 231 );
                 break;
             case 96:
-                // Lowercase e with grave accent
+                // Grave accent (`). Used for lowercase e with grave accent.
                 c = static_cast<char>( 232 );
                 break;
             case 123:
-                // Lowercase i with diaeresis
+                // Opening brace ({). Used for lowercase i with diaeresis.
                 c = static_cast<char>( 239 );
                 break;
             case 124:
-                // Lowercase e with circumflex
+                // Vertical bar (|). Used for lowercase e with circumflex.
                 c = static_cast<char>( 234 );
                 break;
             case 125:
-                // Lowercase i with circumflex
+                // Closing brace (}). Used for lowercase i with circumflex.
                 c = static_cast<char>( 239 );
                 break;
             case 126:
-                // Lowercase e with acute
+                // Tilde (~). Used for lowercase e with acute.
                 c = static_cast<char>( 233 );
                 break;
             case 127:
-                // Lowercase i with circumflex
+                // Delete (DEL). Used for lowercase i with circumflex.
                 c = static_cast<char>( 239 );
                 break;
             default:
