@@ -246,7 +246,7 @@ namespace
     }
 
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
-    class OriginalAlphabetPreserver
+    class OriginalAlphabetPreserver final
     {
     public:
         void preserve()
@@ -292,6 +292,10 @@ namespace
             _icnVsSprite[ICN::GRAY_FONT].clear();
             _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
             _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+            _icnVsSprite[ICN::GOLDEN_GRADIENT_FONT].clear();
+            _icnVsSprite[ICN::GOLDEN_GRADIENT_LARGE_FONT].clear();
+            _icnVsSprite[ICN::SILVER_GRADIENT_FONT].clear();
+            _icnVsSprite[ICN::SILVER_GRADIENT_LARGE_FONT].clear();
         }
 
         bool isPreserved() const
@@ -5149,26 +5153,47 @@ namespace fheroes2::AGG
 
     void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
     {
-        if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
-            if ( !alphabetPreserver.isPreserved() ) {
+        static bool areOriginalResourcesInUse = false;
+        static fheroes2::CodePage currentCodePage{ fheroes2::CodePage::NONE };
+
+        const bool loadOriginalResources = loadOriginalAlphabet || !isAlphabetSupported( language );
+
+        if ( loadOriginalResources ) {
+            if ( alphabetPreserver.isPreserved() ) {
+                if ( areOriginalResourcesInUse ) {
+                    // Since we are already using the original resources, we don't need to do anything else.
+                    // This saves us a lot of time by not having to rebuild many of the images we use for fonts and buttons.
+                    return;
+                }
+
+                alphabetPreserver.restore();
+            }
+            else {
                 // This can happen when we try to change a language without loading assets.
                 alphabetPreserver.preserve();
             }
-            else {
-                alphabetPreserver.restore();
-            }
         }
         else {
+            if ( !areOriginalResourcesInUse && currentCodePage == getCodePage( language ) ) {
+                // We are trying to load resources for the same code page. We don't need to redo the same work again.
+                return;
+            }
+
             alphabetPreserver.preserve();
             // Restore original letters when changing language to avoid changes to them being carried over.
             alphabetPreserver.restore();
+
             generateAlphabet( language, _icnVsSprite );
         }
+
         generateButtonAlphabet( language, _icnVsSprite );
 
         // Clear language dependent resources.
         for ( const int id : languageDependentIcnId ) {
             _icnVsSprite[id].clear();
         }
+
+        currentCodePage = getCodePage( language );
+        areOriginalResourcesInUse = loadOriginalResources;
     }
 }

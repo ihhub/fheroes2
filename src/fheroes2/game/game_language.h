@@ -50,4 +50,16 @@ namespace fheroes2
         Ukrainian,
         Vietnamese
     };
+
+    enum class CodePage : uint8_t
+    {
+        NONE,
+        ASCII,
+        CP1250,
+        CP1251,
+        CP1252,
+        CP1254,
+        CP1258,
+        ISO8859_16,
+    };
 }

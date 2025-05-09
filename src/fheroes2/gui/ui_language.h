@@ -58,4 +58,6 @@ namespace fheroes2
     void updateAlphabet( const std::string & abbreviation );
 
     SupportedLanguage getCurrentLanguage();
+
+    CodePage getCodePage( const SupportedLanguage language );
 }
