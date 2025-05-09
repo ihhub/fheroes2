@@ -268,10 +268,15 @@ namespace fheroes2
     {
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
         const SupportedLanguage resourceLanguage = getResourceLanguage();
-        const bool isOriginalResourceLanguage
-            = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && SupportedLanguage::French != resourceLanguage );
 
-        AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        // The original French assets replaces several ASCII special characters with language-specific characters.
+        // In the engine we use CP1252 for these characters so we need to generate CP1252 alphabet
+        // to properly draw these characters when English language is selected with French assets.
+        const bool loadFrenchAlphabet = ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French );
+        const bool isOriginalResourceLanguage
+            = !loadFrenchAlphabet && ( ( language == SupportedLanguage::English ) || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French ) );
+
+        AGG::updateLanguageDependentResources( loadFrenchAlphabet ? resourceLanguage : language, isOriginalResourceLanguage );
     }
 
     SupportedLanguage getCurrentLanguage()

@@ -2284,7 +2284,8 @@ namespace
         }
     }
 
-    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
+    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish, Danish and French
+    // (French localized maps has custom encoding that should be fixed by `fheroes2::updateFrenchLanguageSpecificCharactersForMaps()`)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
