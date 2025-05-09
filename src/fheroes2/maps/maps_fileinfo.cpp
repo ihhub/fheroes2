@@ -683,6 +683,14 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     // Only the filename part of the path to the map file is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.name );
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.description );
+    }
+
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 

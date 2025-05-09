@@ -2608,6 +2608,13 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     // Heroes
     stream >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( hero.name );
+    }
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
         // Before FORMAT_VERSION_PRE1_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.

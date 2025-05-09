@@ -2407,6 +2407,13 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
     ColorBase & color = castle;
     stream >> castle._captain >> color >> castle._name >> castle._mageGuild;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( castle._name );
+    }
+
     if ( const uint32_t size = stream.get32(); castle._dwelling.size() != size ) {
         // Most likely the save file is corrupted.
         stream.setFail();

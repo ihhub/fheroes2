@@ -366,6 +366,13 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
     stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message );
+    }
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
         obj.secondarySkill = {};
@@ -386,6 +393,17 @@ OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj )
 IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 {
     stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.riddle );
+
+        for ( std::string & str : obj.answers ) {
+            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( str );
+        }
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
@@ -414,6 +432,13 @@ IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
     }
     else {
         stream >> obj.message;
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message.text );
     }
 
     return stream;

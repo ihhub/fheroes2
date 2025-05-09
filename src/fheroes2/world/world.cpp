@@ -1579,6 +1579,15 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     stream >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        for ( std::string & str : w._customRumors ) {
+            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( str );
+        }
+    }
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++w.heroIdAsWinCondition;
@@ -1789,5 +1798,14 @@ OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 {
-    return stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
+    stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message );
+    }
+
+    return stream;
 }
