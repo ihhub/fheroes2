@@ -357,9 +357,9 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
         // Slow is useless against archers or troops defending castle
         return 0.01;
     }
-    const int currentSpeed = target.GetSpeed( false, true );
-    const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
-    const int lostSpeed = currentSpeed - newSpeed; // usually 2
+    const uint32_t currentSpeed = target.GetSpeed( false, true );
+    const uint32_t newSpeed = Speed::getSlowSpeedFromSpell( currentSpeed );
+    const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
     if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
@@ -376,9 +376,9 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 
 double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) const
 {
-    const int currentSpeed = target.GetSpeed( false, true );
-    const int newSpeed = Speed::GetHasteSpeedFromSpell( currentSpeed );
-    const int gainedSpeed = newSpeed - currentSpeed; // usually 2
+    const uint32_t currentSpeed = target.GetSpeed( false, true );
+    const uint32_t newSpeed = Speed::getHasteSpeedFromSpell( currentSpeed );
+    const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 
     if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -37,22 +37,53 @@ class Army;
 class Troop : public Monster
 {
 public:
-    Troop();
-    Troop( const Monster & mons, const uint32_t count );
+    Troop()
+        : Monster( Monster::UNKNOWN )
+    {
+        // Do nothing.
+    }
 
-    bool operator==( const Monster & mons ) const;
+    Troop( const Monster & mons, const uint32_t count )
+        : Monster( mons )
+        , _count( count )
+    {
+        // Do nothing.
+    }
+
+    bool operator==( const Monster & mons ) const
+    {
+        return Monster::operator==( mons );
+    }
 
     void Set( const Troop & troop );
     void Set( const Monster & mons, const uint32_t count );
     void SetMonster( const Monster & mons );
-    void SetCount( const uint32_t count );
-    void Reset();
+
+    void SetCount( const uint32_t count )
+    {
+        _count = count;
+    }
+
+    void Reset()
+    {
+        id = Monster::UNKNOWN;
+        _count = 0;
+    }
 
     bool isMonster( const int mons ) const;
     const char * GetName() const;
-    uint32_t GetCount() const;
+
+    uint32_t GetCount() const
+    {
+        return _count;
+    }
+
     uint32_t GetHitPoints() const;
-    Monster GetMonster() const;
+
+    Monster GetMonster() const
+    {
+        return { id };
+    }
 
     uint32_t GetDamageMin() const;
     uint32_t GetDamageMax() const;
@@ -63,11 +94,14 @@ public:
     // IMPORTANT!!! Make sure that you call this method after checking by isAllowUpgrade() method.
     Funds GetTotalUpgradeCost() const;
 
-    bool isEmpty() const;
+    bool isEmpty() const
+    {
+        return !isValid();
+    }
 
     virtual bool isValid() const;
     virtual bool isBattle() const;
-    virtual bool isModes( uint32_t ) const;
+    virtual bool isModes( const uint32_t ) const;
     virtual std::string GetAttackString() const;
     virtual std::string GetDefenseString() const;
     virtual std::string GetShotString() const;
@@ -86,14 +120,24 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Troop & troop );
     friend IStreamBase & operator>>( IStreamBase & stream, Troop & troop );
 
-    uint32_t _count;
+    uint32_t _count{ 0 };
 };
 
 class ArmyTroop : public Troop
 {
 public:
-    explicit ArmyTroop( const Army * army );
-    ArmyTroop( const Army * army, const Troop & troop );
+    explicit ArmyTroop( const Army * army )
+        : _army( army )
+    {
+        // Do nothing.
+    }
+
+    ArmyTroop( const Army * army, const Troop & troop )
+        : Troop( troop )
+        , _army( army )
+    {
+        // Do nothing.
+    }
 
     ArmyTroop( const ArmyTroop & ) = delete;
 
@@ -108,8 +152,15 @@ public:
 
     int GetColor() const;
 
-    void SetArmy( const Army & army );
-    const Army * GetArmy() const;
+    void SetArmy( const Army & army )
+    {
+        _army = &army;
+    }
+
+    const Army * GetArmy() const
+    {
+        return _army;
+    }
 
     std::string GetAttackString() const override;
     std::string GetDefenseString() const override;

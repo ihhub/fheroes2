@@ -597,45 +597,48 @@ void Interface::AdventureMap::EventSwitchShowControlPanel() const
     }
 }
 
-void Interface::AdventureMap::EventKeyArrowPress( int dir )
+void Interface::AdventureMap::EventKeyArrowPress( const int dir )
 {
-    Heroes * hero = GetFocusHeroes();
-
-    // move hero
-    if ( hero )
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         MoveHeroFromArrowKeys( *hero, dir );
-    else
-        // scroll map
-        switch ( dir ) {
-        case Direction::TOP_LEFT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::TOP:
-            _gameArea.SetScroll( SCROLL_TOP );
-            break;
-        case Direction::TOP_RIGHT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::RIGHT:
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM_RIGHT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            break;
-        case Direction::BOTTOM_LEFT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::LEFT:
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        default:
-            break;
-        }
+
+        return;
+    }
+
+    if ( _gameArea.isDragScroll() ) {
+        return;
+    }
+
+    switch ( dir ) {
+    case Direction::TOP_LEFT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::TOP:
+        _gameArea.SetScroll( SCROLL_TOP );
+        break;
+    case Direction::TOP_RIGHT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::RIGHT:
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM_RIGHT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        break;
+    case Direction::BOTTOM_LEFT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::LEFT:
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    default:
+        break;
+    }
 }
