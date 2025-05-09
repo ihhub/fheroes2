@@ -5164,7 +5164,7 @@ namespace fheroes2::AGG
     void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
     {
         static bool areOriginalResourcesInUse = false;
-        static fheroes2::CodePage currentCodePage{ fheroes2::CodePage::NONE };
+        static CodePage currentCodePage{ CodePage::NONE };
 
         const bool loadOriginalResources = loadOriginalAlphabet || !isAlphabetSupported( language );
 
