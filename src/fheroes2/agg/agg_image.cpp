@@ -3023,6 +3023,16 @@ namespace
                 Blit( fheroes2::AGG::GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
             }
             return true;
+        case ICN::TEXTBAR:
+            LoadOriginalICN( id );
+            if ( _icnVsSprite[id].size() > 9 ) {
+                // Remove the slightly corrupted rightmost column from the text bar background image.
+                for ( size_t i = 8; i < 10; ++i )
+                    if ( _icnVsSprite[id][i].width() == 543 ) {
+                        _icnVsSprite[id][i] = Crop( _icnVsSprite[id][i], 0, 0, _icnVsSprite[id][i].width() - 1, _icnVsSprite[id][i].height() );
+                    }
+            }
+            return true;
         case ICN::TWNWUP_5:
         case ICN::EDITOR:
             LoadOriginalICN( id );
