@@ -54,7 +54,7 @@ namespace
     const int32_t scrollBarAreaWidth = 48;
     const int32_t paddingLeftSide = 24;
 
-    class LanguageList : public Interface::ListBox<fheroes2::SupportedLanguage>
+    class LanguageList final : public Interface::ListBox<fheroes2::SupportedLanguage>
     {
     public:
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListSingleClick;
@@ -70,7 +70,8 @@ namespace
 
         void RedrawItem( const fheroes2::SupportedLanguage & language, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
-            fheroes2::LanguageSwitcher languageSwitcher( language );
+            Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
+
             const fheroes2::Text languageName( fheroes2::getLanguageName( language ),
                                                isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
             languageName.draw( ( textAreaWidth - languageName.width() ) / 2 + offsetX, offsetY, fheroes2::Display::instance() );
@@ -128,6 +129,23 @@ namespace
             setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
                                                                   { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
             _scrollbar.moveToIndex( _topId );
+        }
+
+        void Redraw() override
+        {
+            // Do not call this method!
+            // Use overloaded one!
+            assert( 0 );
+        }
+
+        void Redraw( const fheroes2::SupportedLanguage language )
+        {
+            // Since we are setting languages for each item to be rendered
+            // we cannot afford switch the language back to the current one using fheroes2::LanguageSwitcher.
+            // This is why we set language switcher here and then initiate real rendering.
+            const fheroes2::LanguageSwitcher languageSwitcher( language );
+
+            Interface::ListBox<fheroes2::SupportedLanguage>::Redraw();
         }
 
     private:
@@ -224,7 +242,7 @@ namespace
             }
         }
 
-        listBox.Redraw();
+        listBox.Redraw( chosenLanguage );
 
         redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
 
@@ -283,7 +301,7 @@ namespace
                 }
             }
 
-            listBox.Redraw();
+            listBox.Redraw( chosenLanguage );
             display.render( roi );
         }
 
