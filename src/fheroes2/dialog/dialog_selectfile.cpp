@@ -316,7 +316,8 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        Settings & settings = Settings::Get();
+        const bool isEvilInterface = settings.isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -482,7 +483,8 @@ namespace
                 }
             }
             else if ( le.MouseClickLeft( buttonSort.area() ) ) {
-                Settings::Get().CycleSaveFileSortType();
+                settings.CycleSaveFileSortType();
+                (void)settings.Save( Settings::configFileName );
                 sortMapInfos( lists );
                 listUpdated = true;
             }
