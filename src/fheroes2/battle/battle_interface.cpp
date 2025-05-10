@@ -1623,7 +1623,7 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     if ( isCellBefore ) {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
                             // The troop is moving to the upper row. We should render it prior to this row units.
                             upwardMovingTroopBeforeWall.emplace_back( unitOnCell );
                         }
@@ -1632,7 +1632,7 @@ void Battle::Interface::RedrawArmies()
                         }
                     }
                     else {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
                             // The troop is moving to the upper row. We should render it prior to this row units.
                             upwardMovingTroopAfterWall.emplace_back( unitOnCell );
                         }
@@ -1744,7 +1744,7 @@ void Battle::Interface::RedrawArmies()
 
                     troop.emplace_back( unitOnCell );
                 }
-                else if ( _movingPos.y < currentCell->GetPos().y ) {
+                else if ( _movingPos.y <= currentCell->GetPos().y ) {
                     // The troop is moving to the upper row. Render it prior to this row units.
                     RedrawTroopSprite( *unitOnCell );
                 }
