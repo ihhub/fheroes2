@@ -192,13 +192,13 @@ bool Game::validateDisplayFadeIn()
 void Game::Init()
 {
     // set global events
-    LocalEvent & le = LocalEvent::Get();
-    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
-    le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
+    LocalEvent & eventHandler = LocalEvent::Get();
+    eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
+    eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
 
-    Game::AnimateDelaysInitialize();
+    AnimateDelaysInitialize();
 
-    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
+    HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 uint32_t Game::getAdventureMapAnimationIndex()
