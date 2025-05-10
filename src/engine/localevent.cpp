@@ -62,7 +62,6 @@
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
-#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
 
@@ -1199,18 +1198,8 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing /* = true */
     // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
     const fheroes2::Time eventProcessingTimer;
 
-    // We can have more than one event which requires rendering. We must render only once and only when sleeping is excepted.
-    fheroes2::Rect renderRoi;
-
     // Mouse area must be updated only once so we will use only the latest area for rendering.
     _mouseCursorRenderArea = {};
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
-        // To maintain color cycling animation we need to render the whole frame with an updated palette.
-        renderRoi = { 0, 0, display.width(), display.height() };
-    }
 
     // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "ongoing" states
     resetStates( KEY_PRESSED );
@@ -1229,15 +1218,22 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing /* = true */
         return false;
     }
 
-    if ( isDisplayRefreshRequired ) {
-        renderRoi = { 0, 0, display.width(), display.height() };
-    }
-
     if ( _engine->isControllerValid() ) {
         ProcessControllerAxisMotion();
     }
 
-    renderRoi = fheroes2::getBoundaryRect( renderRoi, _mouseCursorRenderArea );
+    // We can have more than one event which requires rendering. We must render only once and only when sleeping is expected.
+    fheroes2::Rect renderRoi;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // To maintain color cycling animation we need to render the whole frame with an updated palette.
+    if ( isDisplayRefreshRequired || fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
+        renderRoi = { 0, 0, display.width(), display.height() };
+    }
+    else {
+        renderRoi = _mouseCursorRenderArea;
+    }
 
     static_assert( globalLoopSleepTime == 1, "Since you have changed the sleep time, make sure that the sleep does not last too long." );
 

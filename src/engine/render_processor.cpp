@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +41,11 @@ namespace fheroes2
 
     bool RenderProcessor::preRenderAction( std::vector<uint8_t> & palette )
     {
+        // We consider the start of rendering to be the moment when we reset the timer for the next frame.
+        // This is because we have no control over how long the entire rendering process will take,
+        // but the start of rendering is always a consistent point in time.
+        _lastRenderCall.reset();
+
         if ( !_enableCycling ) {
             return false;
         }
@@ -61,10 +66,8 @@ namespace fheroes2
         return true;
     }
 
-    void RenderProcessor::postRenderAction()
+    void RenderProcessor::postRenderAction() const
     {
-        _lastRenderCall.reset();
-
         if ( _enableCycling && _enableRenderers && _postRenderer ) {
             _postRenderer();
         }

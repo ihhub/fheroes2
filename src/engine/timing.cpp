@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,59 +24,6 @@
 
 namespace fheroes2
 {
-    Time::Time()
-        : _startTime( std::chrono::steady_clock::now() )
-    {}
-
-    void Time::reset()
-    {
-        _startTime = std::chrono::steady_clock::now();
-    }
-
-    double Time::getS() const
-    {
-        const std::chrono::duration<double> time = std::chrono::steady_clock::now() - _startTime;
-        return time.count();
-    }
-
-    uint64_t Time::getMs() const
-    {
-        const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _startTime );
-        return time.count();
-    }
-
-    TimeDelay::TimeDelay( const uint64_t delayMs )
-        : _prevTime( std::chrono::steady_clock::now() )
-        , _delayMs( delayMs )
-    {}
-
-    void TimeDelay::setDelay( const uint64_t delayMs )
-    {
-        _delayMs = delayMs;
-    }
-
-    bool TimeDelay::isPassed() const
-    {
-        return isPassed( _delayMs );
-    }
-
-    bool TimeDelay::isPassed( const uint64_t delayMs ) const
-    {
-        const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _prevTime );
-        const uint64_t passedMs = time.count();
-        return passedMs >= delayMs;
-    }
-
-    void TimeDelay::reset()
-    {
-        _prevTime = std::chrono::steady_clock::now();
-    }
-
-    void TimeDelay::pass()
-    {
-        _prevTime = std::chrono::steady_clock::now() - std::chrono::milliseconds( 2 * _delayMs );
-    }
-
     void delayforMs( const uint32_t delayMs )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( delayMs ) );

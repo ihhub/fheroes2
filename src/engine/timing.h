@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,15 +31,29 @@ namespace fheroes2
     class Time
     {
     public:
-        Time();
+        Time()
+        {
+            reset();
+        }
 
-        void reset();
+        void reset()
+        {
+            _startTime = std::chrono::steady_clock::now();
+        }
 
         // Returns time in seconds.
-        double getS() const;
+        double getS() const
+        {
+            const std::chrono::duration<double> time = std::chrono::steady_clock::now() - _startTime;
+            return time.count();
+        }
 
         // Returns rounded time in milliseconds.
-        uint64_t getMs() const;
+        uint64_t getMs() const
+        {
+            const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _startTime );
+            return time.count();
+        }
 
     private:
         std::chrono::time_point<std::chrono::steady_clock> _startTime;
@@ -50,23 +64,45 @@ namespace fheroes2
     public:
         TimeDelay() = delete;
 
-        explicit TimeDelay( const uint64_t delayMs );
+        explicit TimeDelay( const uint64_t delayMs )
+            : _delayMs( delayMs )
+        {
+            reset();
+        }
 
-        void setDelay( const uint64_t delayMs );
+        void setDelay( const uint64_t delayMs )
+        {
+            _delayMs = delayMs;
+        }
 
         uint64_t getDelay() const
         {
             return _delayMs;
         }
 
-        bool isPassed() const;
-        bool isPassed( const uint64_t delayMs ) const;
+        bool isPassed() const
+        {
+            return isPassed( _delayMs );
+        }
+
+        bool isPassed( const uint64_t delayMs ) const
+        {
+            const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _prevTime );
+            const uint64_t passedMs = time.count();
+            return passedMs >= delayMs;
+        }
 
         // Reset delay by starting the count from the current time.
-        void reset();
+        void reset()
+        {
+            _prevTime = std::chrono::steady_clock::now();
+        }
 
         // Explicitly set delay to passed state. Can be used in cases when first call of isPassed() must return true.
-        void pass();
+        void pass()
+        {
+            _prevTime = std::chrono::steady_clock::now() - std::chrono::milliseconds( 2 * _delayMs );
+        }
 
     private:
         std::chrono::time_point<std::chrono::steady_clock> _prevTime;
