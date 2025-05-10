@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,6 +52,7 @@
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
+#include "ui_language.h"
 
 namespace
 {
@@ -90,6 +91,11 @@ namespace
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
+        // For the original French version we update the language-specific characters to match CP1252.
+        const bool updateFrenchLangugeSpecificCharacters
+            = isOriginalMapFormat
+              && ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French || fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French );
+
         for ( const std::string & mapFile : mapFiles ) {
             Maps::FileInfo fi;
 
@@ -122,6 +128,12 @@ namespace
                 if ( humanOnlyColorsCount == humanPlayerCount ) {
                     // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
                     fi.removeHumanColors( fi.AllowCompHumanColors() );
+                }
+
+                // Update French language-specific characters to match CP1252.
+                if ( updateFrenchLangugeSpecificCharacters ) {
+                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.name );
+                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.description );
                 }
             }
 
@@ -670,6 +682,14 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 
     // Only the filename part of the path to the map file is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.name );
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.description );
+    }
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
