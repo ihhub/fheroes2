@@ -41,9 +41,9 @@ namespace fheroes2
 
     bool RenderProcessor::preRenderAction( std::vector<uint8_t> & palette )
     {
-        // We consider start of rendering is the time when we reset the timer for the next frame.
-        // This is because we have no control how long the whole rendering will need but
-        // a start of rendering is always a consistent time.
+        // We consider the start of rendering to be the moment when we reset the timer for the next frame.
+        // This is because we have no control over how long the entire rendering process will take,
+        // but the start of rendering is always a consistent point in time.
         _lastRenderCall.reset();
 
         if ( !_enableCycling ) {

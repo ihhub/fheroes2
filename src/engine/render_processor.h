@@ -69,7 +69,7 @@ namespace fheroes2
             if ( !_enableCycling ) {
                 _enableCycling = true;
 
-                // Since we are restarting cycling we have to reset cycling timer.
+                // Since we are restarting the cycling, we have to reset the timer.
                 _cyclingTimer.reset();
             }
         }
