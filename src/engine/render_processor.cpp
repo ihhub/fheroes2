@@ -66,7 +66,7 @@ namespace fheroes2
         return true;
     }
 
-    void RenderProcessor::postRenderAction()
+    void RenderProcessor::postRenderAction() const
     {
         if ( _enableCycling && _enableRenderers && _postRenderer ) {
             _postRenderer();

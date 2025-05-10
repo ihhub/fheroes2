@@ -62,7 +62,8 @@ namespace fheroes2
         }
 
         bool preRenderAction( std::vector<uint8_t> & palette );
-        void postRenderAction();
+
+        void postRenderAction() const;
 
         void startColorCycling()
         {
