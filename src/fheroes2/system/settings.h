@@ -71,6 +71,14 @@ enum class InterfaceType : uint8_t
     DYNAMIC = 2
 };
 
+enum class SaveFileSortType : uint8_t
+{
+    FILENAME = 0,
+    LATEST = 1,
+
+    VALUES_COUNT = 2,
+};
+
 class Settings
 {
 public:
@@ -354,6 +362,9 @@ public:
 
     void SetProgramPath( const char * path );
 
+    SaveFileSortType GetSaveFileSortType() const;
+    void CycleSaveFileSortType();
+
     static std::string GetVersion();
 
     static const std::vector<std::string> & GetRootDirs();
@@ -386,6 +397,8 @@ private:
     std::string _loadedFileLanguage;
 
     Maps::FileInfo _currentMapInfo;
+
+    SaveFileSortType _saveFileSortType;
 
     int sound_volume;
     int music_volume;

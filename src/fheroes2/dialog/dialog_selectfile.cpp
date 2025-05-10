@@ -228,6 +228,18 @@ namespace
         // Do nothing.
     }
 
+    void sortMapInfos( MapsFileInfoList & mapInfos )
+    {
+        const SaveFileSortType sortType = Settings::Get().GetSaveFileSortType();
+        if ( sortType == SaveFileSortType::FILENAME ) {
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        }
+        else {
+            assert( sortType == SaveFileSortType::LATEST );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByTimestampDescending );
+        }
+    }
+
     MapsFileInfoList getSortedMapsFileInfoList()
     {
         ListFiles files;
@@ -244,7 +256,7 @@ namespace
             }
         }
 
-        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        sortMapInfos( mapInfos );
 
         return mapInfos;
     }
@@ -304,7 +316,8 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        Settings & settings = Settings::Get();
+        const bool isEvilInterface = settings.isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -372,10 +385,16 @@ namespace
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
         title.drawInRoi( dialogArea.x + ( dialogArea.width - title.width() ) / 2, dialogArea.y + 16, display, dialogArea );
 
+        const int offsetFromCenter = dialogArea.width / 10;
+        fheroes2::ButtonSprite buttonSort;
+        // SORT should be in the middle if "..." isn't present, otherwise they should be side by side
+        const int sortOffsetX = isEditing ? -offsetFromCenter : 0;
+        background.renderCustomButtonSprite( buttonSort, "SORT", { 56, 25 }, { sortOffsetX, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { offsetFromCenter, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             // Prepare the text input and set it to always fit the file name input field width.
             textInput = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ textInputRoi.x + 4, textInputRoi.y + 2, maxFileNameWidth, textInputRoi.height - 2 },
@@ -403,12 +422,14 @@ namespace
         const size_t lengthLimit{ 255 };
 
         LocalEvent & le = LocalEvent::Get();
+        bool listUpdated = false;
 
         while ( le.HandleEvents() && result.empty() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonHeldInArea( buttonCancel.area() ) );
+            buttonSort.drawOnState( le.isMouseLeftButtonHeldInArea( buttonSort.area() ) );
             if ( isEditing ) {
-                buttonVirtualKB->drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB->area() ) );
+                buttonVirtualKB->drawOnState( le.isMouseLeftButtonHeldInArea( buttonVirtualKB->area() ) );
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -460,6 +481,12 @@ namespace
                 else if ( !filename.empty() ) {
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
+            }
+            else if ( le.MouseClickLeft( buttonSort.area() ) ) {
+                settings.CycleSaveFileSortType();
+                (void)settings.Save( Settings::configFileName );
+                sortMapInfos( lists );
+                listUpdated = true;
             }
             else if ( isEditing ) {
                 assert( textInput != nullptr );
@@ -521,8 +548,11 @@ namespace
             else if ( isEditing && le.isMouseRightButtonPressedInArea( buttonVirtualKB->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonSort.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date" ), Dialog::ZERO );
+            }
 
-            const bool needRedrawListbox = listbox.IsNeedRedraw();
+            const bool needRedrawListbox = listbox.IsNeedRedraw() || listUpdated;
 
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
                 // Text input blinking cursor render is done in Save Game dialog when no file is selected
