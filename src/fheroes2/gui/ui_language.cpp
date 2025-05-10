@@ -301,7 +301,6 @@ namespace fheroes2
             return CodePage::CP1251;
         case SupportedLanguage::Danish:
         case SupportedLanguage::Dutch:
-        case SupportedLanguage::French:
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
@@ -309,6 +308,8 @@ namespace fheroes2
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
             return CodePage::CP1252;
+        case SupportedLanguage::French:
+            return CodePage::CP1252_French;
         case SupportedLanguage::Turkish:
             return CodePage::CP1254;
         case SupportedLanguage::Vietnamese:

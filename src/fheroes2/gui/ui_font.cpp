@@ -1322,6 +1322,7 @@ namespace
             updateSmallFontLetterShadow( font[253 - 32] );
         }
     }
+
     // The original French version replaces several ASCII special characters with language-specific characters.
     // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
     // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
@@ -5961,12 +5962,12 @@ namespace fheroes2
             break;
         case CodePage::CP1252:
             generateCP1252Alphabet( icnVsSprite );
+            break;
+        case CodePage::CP1252_French:
+            generateCP1252Alphabet( icnVsSprite );
 
-            if ( language == SupportedLanguage::French ) {
-                // This serves to make the font compatible with the original French custom encoding.
-                generateFrenchAlphabet( icnVsSprite );
-            }
-
+            // This serves to make the font compatible with the original French custom encoding.
+            generateFrenchAlphabet( icnVsSprite );
             break;
         case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
@@ -6051,6 +6052,7 @@ namespace fheroes2
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1252:
+        case CodePage::CP1252_French:
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1254:
