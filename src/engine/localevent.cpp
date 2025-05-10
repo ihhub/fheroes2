@@ -62,7 +62,6 @@
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
-#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
 
