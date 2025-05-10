@@ -412,10 +412,10 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && result.empty() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonHeldInArea( buttonCancel.area() ) );
             if ( isEditing ) {
-                buttonVirtualKB->drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB->area() ) );
+                buttonVirtualKB->drawOnState( le.isMouseLeftButtonHeldInArea( buttonVirtualKB->area() ) );
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
