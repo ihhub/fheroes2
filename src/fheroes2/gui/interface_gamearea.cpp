@@ -34,6 +34,7 @@
 
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "direction.h"
 #include "game_delays.h"
@@ -59,8 +60,6 @@
 #include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
-
-enum class PlayerColor : uint8_t;
 
 namespace
 {

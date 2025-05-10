@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "color.h"
