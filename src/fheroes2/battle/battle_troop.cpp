@@ -96,41 +96,15 @@ namespace
     }
 }
 
-Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
-    : std::pair<uint32_t, uint32_t>( mode, duration )
-{}
-
-bool Battle::ModeDuration::isMode( uint32_t mode ) const
+uint32_t Battle::ModesAffected::GetMode( const uint32_t mode ) const
 {
-    return ( first & mode ) != 0;
-}
-
-bool Battle::ModeDuration::isZeroDuration() const
-{
-    return 0 == second;
-}
-
-void Battle::ModeDuration::DecreaseDuration()
-{
-    if ( second ) {
-        --second;
-    }
-}
-
-Battle::ModesAffected::ModesAffected()
-{
-    reserve( 3 );
-}
-
-uint32_t Battle::ModesAffected::GetMode( uint32_t mode ) const
-{
-    const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
+    const const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     return it == end() ? 0 : it->second;
 }
 
-void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
+void Battle::ModesAffected::AddMode( const uint32_t mode, const uint32_t duration )
 {
-    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
+    const iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it == end() ) {
         emplace_back( mode, duration );
     }
@@ -139,7 +113,7 @@ void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
     }
 }
 
-void Battle::ModesAffected::RemoveMode( uint32_t mode )
+void Battle::ModesAffected::RemoveMode( const uint32_t mode )
 {
     erase( std::remove_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } ), end() );
 }
@@ -151,44 +125,39 @@ void Battle::ModesAffected::DecreaseDuration()
 
 uint32_t Battle::ModesAffected::FindZeroDuration() const
 {
-    const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
+    const const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid )
+Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool isReflected, const uint32_t uid )
     : ArmyTroop( nullptr, troop )
     , animation( id )
     , _uid( uid )
-    , hp( troop.GetHitPoints() )
+    , _hitPoints( troop.GetHitPoints() )
     , _initialCount( troop.GetCount() )
-    , dead( 0 )
-    , shots( troop.GetShots() )
-    , _disruptingRaysNum( 0 )
-    , reflect( ref )
-    , mirror( nullptr )
-    , idleTimer( animation.getIdleDelay() )
-    , _blindRetaliation( false )
-    , customAlphaMask( 255 )
+    , _shotsLeft( troop.GetShots() )
+    , _idleTimer( animation.getIdleDelay() )
+    , _isReflected( isReflected )
 {
     SetPosition( pos );
 }
 
-void Battle::Unit::SetPosition( const int32_t idx )
+void Battle::Unit::SetPosition( const int32_t index )
 {
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( nullptr );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( nullptr );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( nullptr );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( nullptr );
     }
 
-    position.Set( idx, isWide(), reflect );
+    _position.Set( index, isWide(), _isReflected );
 
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( this );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( this );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( this );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( this );
     }
 }
 
@@ -197,33 +166,34 @@ void Battle::Unit::SetPosition( const Position & pos )
     // Position may be empty if this unit is a castle tower
     assert( pos.isValidForUnit( this ) || pos.isEmpty() );
 
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( nullptr );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( nullptr );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( nullptr );
-    }
-
-    position = pos;
-
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( this );
-    }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( this );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( nullptr );
     }
 
-    if ( isWide() && position.GetHead() && position.GetTail() ) {
-        reflect = GetHeadIndex() < GetTailIndex();
+    _position = pos;
+
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( this );
+    }
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( this );
+    }
+
+    if ( isWide() && _position.GetHead() && _position.GetTail() ) {
+        _isReflected = GetHeadIndex() < GetTailIndex();
     }
 }
 
-void Battle::Unit::SetReflection( bool r )
+void Battle::Unit::SetReflection( const bool isReflected )
 {
-    if ( reflect != r )
-        position.Swap();
+    if ( _isReflected != isReflected ) {
+        _position.Swap();
 
-    reflect = r;
+        _isReflected = isReflected;
+    }
 }
 
 void Battle::Unit::UpdateDirection()
@@ -236,12 +206,16 @@ void Battle::Unit::UpdateDirection()
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
 {
-    bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
+    if ( _position.GetRect().x == pos.x ) {
+        return false;
+    }
 
-    if ( need != reflect ) {
-        SetReflection( need );
+    const bool isReflected = _position.GetRect().x > pos.x;
+    if ( isReflected != _isReflected ) {
+        SetReflection( isReflected );
         return true;
     }
+
     return false;
 }
 
@@ -250,15 +224,16 @@ bool Battle::Unit::isBattle() const
     return true;
 }
 
-bool Battle::Unit::isModes( uint32_t v ) const
+bool Battle::Unit::isModes( const uint32_t modes_ ) const
 {
-    return Modes( v );
+    return Modes( modes_ );
 }
 
 std::string Battle::Unit::GetShotString() const
 {
-    if ( Troop::GetShots() == GetShots() )
+    if ( Troop::GetShots() == GetShots() ) {
         return std::to_string( Troop::GetShots() );
+    }
 
     std::string output( std::to_string( Troop::GetShots() ) );
     output += " (";
@@ -274,16 +249,6 @@ std::string Battle::Unit::GetSpeedString() const
     return Troop::GetSpeedString( speed );
 }
 
-uint32_t Battle::Unit::GetInitialCount() const
-{
-    return _initialCount;
-}
-
-uint32_t Battle::Unit::GetDead() const
-{
-    return dead;
-}
-
 uint32_t Battle::Unit::GetHitPointsLeft() const
 {
     return GetHitPoints() - ( GetCount() - 1 ) * Monster::GetHitPoints();
@@ -292,13 +257,13 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
     const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
-    assert( totalHitPoints > hp );
-    return totalHitPoints - hp;
+    assert( totalHitPoints > _hitPoints );
+    return totalHitPoints - _hitPoints;
 }
 
-uint32_t Battle::Unit::GetAffectedDuration( uint32_t mod ) const
+uint32_t Battle::Unit::GetAffectedDuration( const uint32_t mode ) const
 {
-    return affected.GetMode( mod );
+    return _affected.GetMode( mode );
 }
 
 uint32_t Battle::Unit::GetSpeed() const
@@ -323,22 +288,22 @@ int Battle::Unit::GetMorale() const
 
 int32_t Battle::Unit::GetHeadIndex() const
 {
-    return position.GetHead() ? position.GetHead()->GetIndex() : -1;
+    return _position.GetHead() ? _position.GetHead()->GetIndex() : -1;
 }
 
 int32_t Battle::Unit::GetTailIndex() const
 {
-    return position.GetTail() ? position.GetTail()->GetIndex() : -1;
+    return _position.GetTail() ? _position.GetTail()->GetIndex() : -1;
 }
 
 void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
@@ -423,7 +388,7 @@ bool Battle::Unit::isIdling() const
 void Battle::Unit::NewTurn()
 {
     if ( isRegenerating() ) {
-        hp = ArmyTroop::GetHitPoints();
+        _hitPoints = ArmyTroop::GetHitPoints();
     }
 
     ResetModes( TR_RESPONDED );
@@ -434,22 +399,22 @@ void Battle::Unit::NewTurn()
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
 
-    affected.DecreaseDuration();
+    _affected.DecreaseDuration();
 
-    for ( uint32_t mode = affected.FindZeroDuration(); mode != 0; mode = affected.FindZeroDuration() ) {
+    for ( uint32_t mode = _affected.FindZeroDuration(); mode != 0; mode = _affected.FindZeroDuration() ) {
         assert( Modes( mode ) );
 
         if ( mode == CAP_MIRROROWNER ) {
-            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+            assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
             if ( Arena::GetInterface() ) {
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { mirror } );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { _mirrorUnit } );
             }
 
-            mirror->hp = 0;
-            mirror->SetCount( 0 );
+            _mirrorUnit->_hitPoints = 0;
+            _mirrorUnit->SetCount( 0 );
             // Affection will be removed here
-            mirror->PostKilledAction();
+            _mirrorUnit->PostKilledAction();
         }
         else {
             removeAffection( mode );
@@ -473,10 +438,10 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
-        return Speed::GetHasteSpeedFromSpell( speed );
+        return Speed::getHasteSpeedFromSpell( speed );
     }
     if ( Modes( SP_SLOW ) ) {
-        return Speed::GetSlowSpeedFromSpell( speed );
+        return Speed::getSlowSpeedFromSpell( speed );
     }
 
     return speed;
@@ -485,7 +450,7 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
 uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
     // The entire unit is destroyed, no retaliation
-    if ( damageTaken >= hp ) {
+    if ( damageTaken >= _hitPoints ) {
         return 0;
     }
 
@@ -499,7 +464,7 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
         return 0;
     }
 
-    const uint32_t unitsLeft = GetCountFromHitPoints( *this, hp - damageTaken );
+    const uint32_t unitsLeft = GetCountFromHitPoints( *this, _hitPoints - damageTaken );
     assert( unitsLeft > 0 );
 
     const uint32_t damagePerUnit = [this]() {
@@ -614,17 +579,22 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomG
 {
     uint32_t res = 0;
 
-    if ( Modes( SP_BLESS ) )
+    if ( Modes( SP_BLESS ) ) {
         res = CalculateMaxDamage( enemy );
-    else if ( Modes( SP_CURSE ) )
+    }
+    else if ( Modes( SP_CURSE ) ) {
         res = CalculateMinDamage( enemy );
-    else
+    }
+    else {
         res = randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+    }
 
-    if ( Modes( LUCK_GOOD ) )
-        res = res * 2;
-    else if ( Modes( LUCK_BAD ) )
-        res = res / 2;
+    if ( Modes( LUCK_GOOD ) ) {
+        res *= 2;
+    }
+    else if ( Modes( LUCK_BAD ) ) {
+        res /= 2;
+    }
 
     return res;
 }
@@ -635,10 +605,10 @@ uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
         return GetCount();
     }
 
-    return dmg >= hp ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, hp - dmg );
+    return dmg >= _hitPoints ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, _hitPoints - dmg );
 }
 
-uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
+uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 {
     assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
 
@@ -668,27 +638,27 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
     }
 
     if ( killed >= GetCount() ) {
-        dead += GetCount();
+        _deadCount += GetCount();
 
         SetCount( 0 );
     }
     else {
-        dead += killed;
+        _deadCount += killed;
 
         SetCount( GetCount() - killed );
     }
 
     if ( Modes( CAP_MIRRORIMAGE ) ) {
-        hp = 0;
+        _hitPoints = 0;
     }
     else {
-        hp -= std::min( hp, dmg );
+        _hitPoints -= std::min( _hitPoints, dmg );
     }
 
     if ( Modes( CAP_MIRROROWNER ) && !isValid() ) {
-        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+        assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
-        mirror->ApplyDamage( mirror->hp );
+        _mirrorUnit->_applyDamage( _mirrorUnit->_hitPoints );
     }
 
     return killed;
@@ -699,9 +669,9 @@ void Battle::Unit::PostKilledAction()
     assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
 
     if ( Modes( CAP_MIRROROWNER ) ) {
-        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+        assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
-        mirror = nullptr;
+        _mirrorUnit = nullptr;
 
         removeAffection( CAP_MIRROROWNER );
     }
@@ -709,22 +679,22 @@ void Battle::Unit::PostKilledAction()
     if ( Modes( CAP_MIRRORIMAGE ) ) {
         // CAP_MIRROROWNER may have already been removed from the mirror owner,
         // since this method may already have been called for it
-        assert( mirror != nullptr );
+        assert( _mirrorUnit != nullptr );
 
         // But we still need to remove it if it is present
-        if ( mirror->Modes( CAP_MIRROROWNER ) ) {
-            assert( mirror->mirror == this );
+        if ( _mirrorUnit->Modes( CAP_MIRROROWNER ) ) {
+            assert( _mirrorUnit->_mirrorUnit == this );
 
-            mirror->mirror = nullptr;
-            mirror->removeAffection( CAP_MIRROROWNER );
+            _mirrorUnit->_mirrorUnit = nullptr;
+            _mirrorUnit->removeAffection( CAP_MIRROROWNER );
         }
 
-        mirror = nullptr;
+        _mirrorUnit = nullptr;
     }
 
     // Remove all spells
     removeAffection( IS_MAGIC );
-    assert( affected.empty() );
+    assert( _affected.empty() );
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
@@ -734,13 +704,13 @@ void Battle::Unit::PostKilledAction()
         graveyard->addUnit( this );
     }
 
-    Cell * head = position.GetHead();
+    Cell * head = _position.GetHead();
     assert( head != nullptr );
 
     head->SetUnit( nullptr );
 
     if ( isWide() ) {
-        Cell * tail = position.GetTail();
+        Cell * tail = _position.GetTail();
         assert( tail != nullptr );
 
         tail->SetUnit( nullptr );
@@ -749,26 +719,24 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
+uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
 {
-    uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
+    uint32_t resurrect = Monster::GetCountFromHitPoints( *this, _hitPoints + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
-    hp += points;
+    _hitPoints += points;
 
     if ( allowToExceedInitialCount ) {
-        if ( _initialCount < GetCount() ) {
-            _initialCount = GetCount();
-        }
+        _initialCount = std::max( _initialCount, GetCount() );
     }
     else if ( GetCount() > _initialCount ) {
         resurrect -= GetCount() - _initialCount;
         SetCount( _initialCount );
-        hp = ArmyTroop::GetHitPoints();
+        _hitPoints = ArmyTroop::GetHitPoints();
     }
 
     if ( !isTemporary ) {
-        dead -= ( resurrect < dead ? resurrect : dead );
+        _deadCount -= ( resurrect < _deadCount ? resurrect : _deadCount );
     }
 
     return resurrect;
@@ -781,7 +749,7 @@ bool Battle::Unit::isImmovable() const
 
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
-    killed = ApplyDamage( dmg );
+    killed = _applyDamage( dmg );
 
     if ( killed == 0 ) {
         if ( ptrResurrected != nullptr ) {
@@ -793,10 +761,10 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     uint32_t resurrected = 0;
 
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-        resurrected = enemy.Resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
+        resurrected = enemy._resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
     }
     else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-        resurrected = enemy.Resurrect( killed * Monster::GetHitPoints(), false, false );
+        resurrected = enemy._resurrect( killed * Monster::GetHitPoints(), false, false );
     }
 
     if ( resurrected > 0 ) {
@@ -844,13 +812,13 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
     const uint32_t spoint = applyingHero ? applyingHero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
 
     if ( spell.isDamage() ) {
-        SpellApplyDamage( spell, spoint, applyingHero, target );
+        _spellApplyDamage( spell, spoint, applyingHero, target );
     }
     else if ( spell.isRestore() || spell.isResurrect() ) {
-        SpellRestoreAction( spell, spoint, applyingHero );
+        _spellRestoreAction( spell, spoint, applyingHero );
     }
     else {
-        SpellModesAction( spell, spoint, applyingHero );
+        _spellModesAction( spell, spoint, applyingHero );
     }
 
     return true;
@@ -909,21 +877,22 @@ std::vector<Spell> Battle::Unit::getCurrentSpellEffects() const
     return spellList;
 }
 
-std::string Battle::Unit::String( bool more ) const
+std::string Battle::Unit::String( const bool more /* = false */ ) const
 {
     std::stringstream ss;
 
     ss << "Unit: "
        << "[ " <<
         // info
-        GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex() << ( reflect ? ", reflect" : "" );
+        GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex()
+       << ( _isReflected ? ", reflect" : "" );
 
     if ( more )
         ss << ", mode(" << GetHexString( modes ) << ")"
            << ", uid(" << GetHexString( _uid ) << ")"
-           << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
-           << ", hp(" << hp << ")"
-           << ", died(" << dead << ")";
+           << ", speed(" << Speed::String( GetSpeed() ) << ", " << GetSpeed() << ")"
+           << ", hp(" << _hitPoints << ")"
+           << ", died(" << _deadCount << ")";
 
     ss << " ]";
 
@@ -965,18 +934,13 @@ void Battle::Unit::PostAttackAction( const Unit & enemy )
         const HeroBase * hero = GetCommander();
 
         if ( hero == nullptr || !hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION ) ) {
-            assert( !Modes( CAP_TOWER ) && shots > 0 );
+            assert( !Modes( CAP_TOWER ) && _shotsLeft > 0 );
 
-            --shots;
+            --_shotsLeft;
         }
     }
 
     ResetModes( LUCK_GOOD | LUCK_BAD );
-}
-
-void Battle::Unit::SetBlindRetaliation( const bool value )
-{
-    _blindRetaliation = value;
 }
 
 uint32_t Battle::Unit::GetAttack() const
@@ -1145,7 +1109,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             case Spell::PETRIFY:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                if ( defender.AllowApplySpell( static_cast<int32_t>( abilityIter->value ), nullptr ) ) {
                     attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0;
                 }
                 break;
@@ -1155,7 +1119,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             case Spell::CURSE:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( abilityIter->value, nullptr ) ) {
+                if ( defender.AllowApplySpell( static_cast<int32_t>( abilityIter->value ), nullptr ) ) {
                     attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0 / 10.0;
                 }
                 break;
@@ -1195,11 +1159,6 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
     return static_cast<int32_t>( attackerThreat * 100 );
 }
 
-uint32_t Battle::Unit::GetHitPoints() const
-{
-    return hp;
-}
-
 Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
@@ -1211,7 +1170,7 @@ int Battle::Unit::GetControl() const
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero )
+void Battle::Unit::_spellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero )
 {
     if ( applyingHero ) {
         duration += applyingHero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
@@ -1220,21 +1179,21 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
-        replaceAffection( SP_CURSE, SP_BLESS, duration );
+        _replaceAffection( SP_CURSE, SP_BLESS, duration );
         break;
 
     case Spell::BLOODLUST:
-        addAffection( SP_BLOODLUST, 3 );
+        _addAffection( SP_BLOODLUST, 3 );
         break;
 
     case Spell::CURSE:
     case Spell::MASSCURSE:
-        replaceAffection( SP_BLESS, SP_CURSE, duration );
+        _replaceAffection( SP_BLESS, SP_CURSE, duration );
         break;
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        replaceAffection( SP_SLOW, SP_HASTE, duration );
+        _replaceAffection( SP_SLOW, SP_HASTE, duration );
         break;
 
     case Spell::DISPEL:
@@ -1244,55 +1203,55 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
-        addAffection( SP_SHIELD, duration );
+        _addAffection( SP_SHIELD, duration );
         break;
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        replaceAffection( SP_HASTE, SP_SLOW, duration );
+        _replaceAffection( SP_HASTE, SP_SLOW, duration );
         break;
 
     case Spell::STONESKIN:
-        replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
+        _replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
         break;
 
     case Spell::BLIND:
-        addAffection( SP_BLIND, duration );
+        _addAffection( SP_BLIND, duration );
         // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
         _blindRetaliation = false;
         break;
 
     case Spell::DRAGONSLAYER:
-        addAffection( SP_DRAGONSLAYER, duration );
+        _addAffection( SP_DRAGONSLAYER, duration );
         break;
 
     case Spell::STEELSKIN:
-        replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
+        _replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
         break;
 
     case Spell::ANTIMAGIC:
-        replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
+        _replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
         break;
 
     case Spell::PARALYZE:
-        addAffection( SP_PARALYZE, duration );
+        _addAffection( SP_PARALYZE, duration );
         break;
 
     case Spell::BERSERKER:
-        replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
+        _replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
         break;
 
     case Spell::HYPNOTIZE:
-        replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
+        _replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
         break;
 
     case Spell::PETRIFY:
-        addAffection( SP_STONE, duration );
+        _addAffection( SP_STONE, duration );
         break;
 
     case Spell::MIRRORIMAGE:
         // Special case, CAP_MIRROROWNER mode will be set when mirror image unit will be created
-        affected.AddMode( CAP_MIRROROWNER, duration );
+        _affected.AddMode( CAP_MIRROROWNER, duration );
         break;
 
     case Spell::DISRUPTINGRAY:
@@ -1305,7 +1264,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
+void Battle::Unit::_spellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
@@ -1314,7 +1273,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
     // apply damage
     if ( dmg ) {
         target.damage = dmg;
-        target.killed = ApplyDamage( dmg );
+        target.killed = _applyDamage( dmg );
     }
 }
 
@@ -1465,7 +1424,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     return dmg;
 }
 
-void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero )
+void Battle::Unit::_spellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero )
 {
     switch ( spell.GetID() ) {
     case Spell::CURE:
@@ -1474,10 +1433,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
         removeAffection( IS_BAD_MAGIC );
 
         // restore
-        hp += fheroes2::getHPRestorePoints( spell, spellPoints, applyingHero );
-        if ( hp > ArmyTroop::GetHitPoints() ) {
-            hp = ArmyTroop::GetHitPoints();
-        }
+        _hitPoints += fheroes2::getHPRestorePoints( spell, spellPoints, applyingHero );
+
+        _hitPoints = std::min( _hitPoints, ArmyTroop::GetHitPoints() );
         break;
 
     case Spell::RESURRECT:
@@ -1491,7 +1449,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
-        const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
+        const uint32_t resurrect = _resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Put the unit back on the board
         SetPosition( GetPosition() );
@@ -1557,7 +1515,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::HYPNOTIZE:
         assert( applyingHero != nullptr );
 
-        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, applyingHero->GetPower(), applyingHero ) < hp ) {
+        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, applyingHero->GetPower(), applyingHero ) < _hitPoints ) {
             return 100;
         }
         break;
@@ -1574,7 +1532,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
+Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
 
@@ -1589,28 +1547,26 @@ int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGene
         return Spell::NONE;
     }
 
-    return abilityIter->value;
+    return { static_cast<int32_t>( abilityIter->value ) };
 }
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return hp < _initialCount * Monster::GetHitPoints();
+    return _hitPoints < _initialCount * Monster::GetHitPoints();
 }
 
-bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
+bool Battle::Unit::SwitchAnimation( const int rule, const bool reverse /* = false */ )
 {
     if ( rule == Monster_Info::STATIC && GetAnimationState() != Monster_Info::IDLE ) {
         // Reset the delay before switching to the 'IDLE' animation from 'STATIC'.
         checkIdleDelay();
     }
 
-    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
-bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
+bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, const bool reverse /* = false */ )
 {
-    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
@@ -1660,21 +1616,21 @@ int Battle::Unit::M82Land() const
 
 fheroes2::Point Battle::Unit::GetBackPoint() const
 {
-    const fheroes2::Rect & rt = position.GetRect();
-    return reflect ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
+    const fheroes2::Rect & rt = _position.GetRect();
+    return _isReflected ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
 }
 
 fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite(), GetFrame() );
 
-    const fheroes2::Rect & pos = position.GetRect();
+    const fheroes2::Rect & pos = _position.GetRect();
     const int32_t centerY = pos.y + pos.height + sprite.y() / 2 - 10;
 
-    return fheroes2::Point( pos.x + pos.width / 2, centerY );
+    return { pos.x + pos.width / 2, centerY };
 }
 
-fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
+fheroes2::Point Battle::Unit::GetStartMissileOffset( const size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
 }
@@ -1737,24 +1693,24 @@ const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
     return arena->getCommander( GetCurrentOrArmyColor() );
 }
 
-void Battle::Unit::addAffection( const uint32_t mode, const uint32_t duration )
+void Battle::Unit::_addAffection( const uint32_t mode, const uint32_t duration )
 {
     assert( CountBits( mode ) == 1 );
 
     SetModes( mode );
 
-    affected.AddMode( mode, duration );
+    _affected.AddMode( mode, duration );
 }
 
 void Battle::Unit::removeAffection( const uint32_t mode )
 {
     ResetModes( mode );
 
-    affected.RemoveMode( mode );
+    _affected.RemoveMode( mode );
 }
 
-void Battle::Unit::replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
+void Battle::Unit::_replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
 {
     removeAffection( modeToReplace );
-    addAffection( replacementMode, duration );
+    _addAffection( replacementMode, duration );
 }

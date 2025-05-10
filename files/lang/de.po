@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -685,9 +685,6 @@ msgstr "Glück"
 msgid "Spell Points"
 msgstr "Zauberpunkte"
 
-msgid "Hero's Options"
-msgstr "Helden-Optionen"
-
 msgid "Cast Spell"
 msgstr "Zauber wirken"
 
@@ -705,6 +702,9 @@ msgstr "Heldenbildschirm"
 
 msgid "Captain's Options"
 msgstr "Möglichkeiten des Hauptmanns"
+
+msgid "Hero's Options"
+msgstr "Helden-Optionen"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

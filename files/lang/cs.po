@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -674,9 +674,6 @@ msgstr "Štěstí"
 msgid "Spell Points"
 msgstr "Mana"
 
-msgid "Hero's Options"
-msgstr "Možnosti hrdiny"
-
 msgid "Cast Spell"
 msgstr "Seslat kouzlo"
 
@@ -694,6 +691,9 @@ msgstr "Obrazovka hrdiny"
 
 msgid "Captain's Options"
 msgstr "Možnosti velení"
+
+msgid "Hero's Options"
+msgstr "Možnosti hrdiny"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

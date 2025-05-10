@@ -1018,7 +1018,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
     // The Hero Screen is available for a Hero only (not Captain) and only when the corresponding player has a turn.
     Heroes * heroForHeroScreen = ( currentColor == hero.GetColor() ) ? dynamic_cast<Heroes *>( &hero ) : nullptr;
 
-    std::string statusMessage = _( "Hero's Options" );
+    std::string statusMessage;
 
     while ( le.HandleEvents() && !result ) {
         if ( btnCast.isEnabled() ) {
@@ -1109,7 +1109,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
         }
 
         if ( statusMessage != status.getMessage() ) {
-            status.setMessage( statusMessage, false );
+            status.setMessage( std::move( statusMessage ), false );
             status.redraw( display );
             display.render( status );
         }
