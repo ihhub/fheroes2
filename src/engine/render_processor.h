@@ -67,12 +67,14 @@ namespace fheroes2
 
         void startColorCycling()
         {
-            if ( !_enableCycling ) {
-                _enableCycling = true;
-
-                // Since we are restarting the cycling, we have to reset the timer.
-                _cyclingTimer.reset();
+            if ( _enableCycling ) {
+                return;
             }
+
+            _enableCycling = true;
+
+            // Since we are restarting the cycling, we have to reset the timer.
+            _cyclingTimer.reset();
         }
 
         void stopColorCycling()
