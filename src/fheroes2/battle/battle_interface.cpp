@@ -5206,7 +5206,7 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
 
     int32_t frame = 1;
     const int32_t frameLimit = 25;
-    const int32_t maxAmlitude = 3;
+    const int32_t maxAmplitude = 3;
     const int32_t imageCutFrames = 7;
     const double phaseCoeff = 0.6;
     const int32_t wavePeriod = 60;
@@ -5223,7 +5223,7 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
                 rippleSprite.clear();
             }
             else {
-                const int32_t amplitude = std::min( frame / 2, maxAmlitude );
+                const int32_t amplitude = std::min( frame / 2, maxAmplitude );
                 rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, -phaseCoeff * frame, wavePeriod );
 
                 if ( frame > frameLimit - imageCutFrames ) {
@@ -5254,7 +5254,7 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
                 _spriteInsteadCurrentUnit = &unitSprite;
             }
             else {
-                const int32_t amplitude = std::min( ( frameLimit - frame ) / 2, maxAmlitude );
+                const int32_t amplitude = std::min( ( frameLimit - frame ) / 2, maxAmplitude );
                 rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, phaseCoeff * ( frame + frameLimit ), wavePeriod );
 
                 if ( frame < imageCutFrames ) {
@@ -5671,7 +5671,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
 
     int32_t frame = 1;
     const int32_t frameLimit = 60;
-    const int32_t maxAmlitude = 3;
+    const int32_t maxAmplitude = 3;
 
     Game::passAnimationDelay( Game::BATTLE_DISRUPTING_DELAY );
 
@@ -5679,7 +5679,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            const int32_t amplitude = std::min( std::min( frame, ( frameLimit - frame ) ) / 3, maxAmlitude );
+            const int32_t amplitude = std::min( std::min( frame, ( frameLimit - frame ) ) / 3, maxAmplitude );
             rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, -0.4 * frame, 60 );
 
             Redraw();
