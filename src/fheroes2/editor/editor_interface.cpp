@@ -222,6 +222,13 @@ namespace
         return true;
     }
 
+    // Returns true if object can be owned, excluding Towns and Castles.
+    bool isCapturableObject( const Maps::ObjectGroup objectGroup, const MP2::MapObjectType objectType )
+    {
+        return ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES && objectType != MP2::OBJ_ABANDONED_MINE )
+               || ( objectGroup == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE );
+    }
+
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
                            const std::function<bool( const Maps::Tile & tile )> & condition )
     {
@@ -284,6 +291,11 @@ namespace
 
                     ++objectIter;
                     continue;
+                }
+
+                // Remove ownership data for capturable objects.
+                if ( isCapturableObject( objectIter->group, Maps::getObjectsByGroup( objectIter->group )[objectIter->index].objectType ) ) {
+                    mapFormat.ownershipMetadata.erase( static_cast<int32_t>( mapTileIndex ) );
                 }
 
                 if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -1581,6 +1593,37 @@ namespace Interface
                     StringReplace( str, "%{count}", getObeliskCount( _mapFormat ) );
 
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
+                }
+                else if ( isCapturableObject( object.group, objectType ) ) {
+                    if ( Color::Count( _mapFormat.availablePlayerColors ) == 0 ) {
+                        _warningMessage.reset( _( "There are no players on the map, so no one can own this object." ) );
+                        return;
+                    }
+
+                    auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
+                    const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
+                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : uint8_t{ Color::NONE };
+
+                    const uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
+
+                    if ( newColor != ownerColor ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                        if ( newColor == Color::NONE ) {
+                            _mapFormat.ownershipMetadata.erase( tileIndex );
+                        }
+                        else if ( hasOwnershipMetadata ) {
+                            ownershipMetadata->second = newColor;
+                        }
+                        else {
+                            _mapFormat.ownershipMetadata[tileIndex] = newColor;
+                        }
+
+                        world.CaptureObject( tileIndex, newColor );
+                        setRedraw( mapUpdateFlags );
+
+                        action.commit();
+                    }
                 }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
