@@ -704,7 +704,7 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    if ( map.availablePlayerColors == PlayerColor::NONE ) {
+    if ( map.availablePlayerColors == 0 ) {
         // No players inside the map.
         return false;
     }
@@ -761,7 +761,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 if ( isRandom ) {
                     assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
 
-                    if ( ( color & PlayerColor::ALL ) == PlayerColor::NONE ) {
+                    if ( ( Color::allPlayerColors() & color ) == 0 ) {
                         // This is a neutral town.
                         race = Race::Rand();
                     }
@@ -872,10 +872,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
-                    const PlayerColor humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const PlayerColor computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+                    const PlayerColors humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const PlayerColors computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
-                    if ( humanColors == PlayerColor::NONE && computerColors == PlayerColor::NONE ) {
+                    if ( humanColors == 0 && computerColors == 0 ) {
                         // This event is not being executed for anyone. Skip it.
                         break;
                     }
@@ -887,7 +887,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                         eventObject->artifact.SetSpell( eventInfo.artifactMetadata );
                     }
 
-                    eventObject->isComputerPlayerAllowed = ( computerColors != PlayerColor::NONE );
+                    eventObject->isComputerPlayerAllowed = ( computerColors != 0 );
                     eventObject->colors = humanColors | computerColors;
                     eventObject->message = std::move( eventInfo.message );
                     eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
@@ -1191,10 +1191,10 @@ bool World::loadResurrectionMap( const std::string & filename )
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        const PlayerColor humanColors = Players::HumanColors() & event.humanPlayerColors;
-        const PlayerColor computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+        const PlayerColors humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const PlayerColors computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
 
-        if ( humanColors == PlayerColor::NONE && computerColors == PlayerColor::NONE ) {
+        if ( humanColors == 0 && computerColors == 0 ) {
             // This event is not being executed for anyone. Skip it.
             continue;
         }
@@ -1204,7 +1204,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
         newEvent.message = std::move( event.message );
         newEvent.colors = ( humanColors | computerColors );
-        newEvent.isApplicableForAIPlayers = ( computerColors != PlayerColor::NONE );
+        newEvent.isApplicableForAIPlayers = ( computerColors != 0 );
 
         newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
         newEvent.repeatPeriodInDays = event.repeatPeriodInDays;

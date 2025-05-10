@@ -1373,7 +1373,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     const uint32_t objectUID = tile.getMainObjectPart()._uid;
 
     // Set visited to all allies as well.
-    const PlayerColors friendColors( Players::GetPlayerFriends( GetColor() ) );
+    const PlayerColorsVector friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const PlayerColor friendColor : friendColors ) {
         world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
@@ -1992,7 +1992,7 @@ bool Heroes::isValid() const
 
 bool Heroes::isActive() const
 {
-    return isValid() && Color::haveCommonColors( PlayerColor::ALL, GetColor() ) && !Modes( JAIL );
+    return isValid() && ( Color::allPlayerColors() & GetColor() ) && !Modes( JAIL );
 }
 
 bool Heroes::isAvailableForHire() const
@@ -2463,12 +2463,12 @@ Heroes * AllHeroes::Get( const fheroes2::Point & center ) const
     return nullptr;
 }
 
-void AllHeroes::Scout( PlayerColor colors ) const
+void AllHeroes::Scout( PlayerColors colors ) const
 {
     for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );
 
-        if ( ( hero->GetColor() & colors ) == PlayerColor::NONE ) {
+        if ( ( colors & hero->GetColor() ) == 0 ) {
             continue;
         }
 

@@ -37,7 +37,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
-#include "color.h"
 #include "direction.h"
 #include "game_static.h"
 #include "ground.h"
@@ -2677,7 +2676,7 @@ namespace Maps
         return false;
     }
 
-    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColor color )
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColors colors )
     {
         assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 
@@ -2714,7 +2713,7 @@ namespace Maps
             const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
 
             for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
-                fogData[x + fogDataOffsetY] = world.getTile( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
+                fogData[x + fogDataOffsetY] = world.getTile( x + fogTileOffsetY ).isFog( colors ) ? 1 : 0;
             }
         }
 

@@ -1357,14 +1357,13 @@ void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
 
     _autoCombatColors ^= color;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( Color::haveCommonColors( _autoCombatColors, color ) ? "on" : "off" ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoCombatColors & color ) ? "on" : "off" ) )
 
     if ( _interface ) {
         const Player * player = Players::Get( color );
         assert( player );
 
-        std::string msg
-            = Color::haveCommonColors( _autoCombatColors, color ) ? _( "%{name} has turned on the auto combat" ) : _( "%{name} has turned off the auto combat" );
+        std::string msg = ( _autoCombatColors & color ) ? _( "%{name} has turned on the auto combat" ) : _( "%{name} has turned off the auto combat" );
         StringReplace( msg, "%{name}", player->GetName() );
 
         _interface->setStatus( msg, true );

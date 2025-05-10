@@ -95,14 +95,14 @@ namespace
 
     // Get colors value of players to use in fog directions update.
     // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
-    PlayerColor hotSeatAIFogColors( const Player * player )
+    PlayerColors hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
 
         // This function should be called when AI makes a move.
         assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
 
-        const PlayerColor humanColors = Players::HumanColors();
+        const PlayerColors humanColors = Players::HumanColors();
         // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
@@ -119,9 +119,9 @@ namespace
         // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
         // discovered fog.
 
-        PlayerColor friendColors = PlayerColor::NONE;
+        PlayerColors friendColors = 0;
 
-        for ( const PlayerColor color : PlayerColors( humanColors ) ) {
+        for ( const PlayerColor color : PlayerColorsVector( humanColors ) ) {
             const Player * humanPlayer = Players::Get( color );
             if ( humanPlayer ) {
                 friendColors |= humanPlayer->GetFriends();
@@ -703,7 +703,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
-        conf.SetCurrentColor( Players::HumanColors() );
+        conf.SetCurrentColor( static_cast<PlayerColor>( Players::HumanColors() ) );
     }
 
     reset();
@@ -798,7 +798,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, PlayerColor::NONE );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, 0 );
 
                         redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 

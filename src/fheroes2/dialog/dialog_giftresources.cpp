@@ -77,12 +77,12 @@ namespace
     struct SelectRecipientsColors
     {
         static constexpr int recipientSpacing = 22;
-        const PlayerColors colors;
-        PlayerColor recipients{ PlayerColor::NONE };
+        const PlayerColorsVector colors;
+        PlayerColors recipients{ 0 };
         std::vector<fheroes2::Rect> positions;
 
         SelectRecipientsColors( const fheroes2::Point & pos, PlayerColor senderColor )
-            : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
+            : colors( Settings::Get().GetPlayers().GetActualColors() & ( ~senderColor ) )
         {
             positions.reserve( colors.size() );
             const fheroes2::Display & display = fheroes2::Display::instance();
@@ -108,11 +108,11 @@ namespace
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            for ( PlayerColors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
+            for ( PlayerColorsVector::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
                 const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
-                if ( Color::haveCommonColors( recipients, *it ) ) {
+                if ( recipients & *it ) {
                     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
                 }
             }
@@ -123,13 +123,13 @@ namespace
             const int32_t index = GetIndexClick();
 
             if ( index >= 0 ) {
-                const PlayerColor cols = colors[index];
+                const PlayerColor color = colors[index];
 
-                if ( Color::haveCommonColors( recipients, cols ) ) {
-                    recipients &= ~cols;
+                if ( recipients & color ) {
+                    recipients &= ~color;
                 }
                 else {
-                    recipients |= cols;
+                    recipients |= color;
                 }
 
                 return true;

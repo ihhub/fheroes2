@@ -75,13 +75,13 @@ struct MapEvent final : public MapBaseObject
 
     bool isAllow( const PlayerColor color ) const
     {
-        return ( color & colors ) != PlayerColor::NONE;
+        return ( colors & color ) != 0;
     }
 
     void SetVisited()
     {
         if ( isSingleTimeEvent ) {
-            colors = PlayerColor::NONE;
+            colors = 0;
         }
     }
 
@@ -89,7 +89,7 @@ struct MapEvent final : public MapBaseObject
     Artifact artifact;
     bool isComputerPlayerAllowed{ false };
     bool isSingleTimeEvent{ true };
-    PlayerColor colors{ PlayerColor::NONE };
+    PlayerColors colors{ 0 };
     std::string message;
 
     Skill::Secondary secondarySkill;

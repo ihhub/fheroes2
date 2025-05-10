@@ -86,10 +86,10 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
     if ( player1.isControlAI() == player2.isControlAI() ) {
         swap = true;
     }
-    else if ( Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player1Color ) && Color::haveCommonColors( mapInfo.AllowCompHumanColors(), player2Color ) ) {
-        const PlayerColor humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    else if ( ( mapInfo.AllowCompHumanColors() & player1Color ) && ( mapInfo.AllowCompHumanColors() & player2Color ) ) {
+        const PlayerColors humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
-        if ( Color::haveCommonColors( humans, player1Color ) ) {
+        if ( humans & player1Color ) {
             Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
             Players::SetPlayerControl( player2Color, CONTROL_HUMAN );
         }
@@ -177,18 +177,18 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
-    const PlayerColor humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    const PlayerColors humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
         const PlayerInfo & info = *iter;
 
         uint32_t playerTypeIcnIndex = 0;
-        if ( Color::haveCommonColors( humanColors, info.player->GetColor() ) ) {
+        if ( humanColors & info.player->GetColor() ) {
             // Current human.
             playerTypeIcnIndex = 9 + Color::GetIndex( info.player->GetColor() );
         }
-        else if ( Color::haveCommonColors( mapInfo.ComputerOnlyColors(), info.player->GetColor() ) ) {
+        else if ( mapInfo.ComputerOnlyColors() & info.player->GetColor() ) {
             // Computer only.
             playerTypeIcnIndex = 15 + Color::GetIndex( info.player->GetColor() );
         }
@@ -245,7 +245,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;
-        if ( Color::haveCommonColors( humanColors, info.player->GetColor() ) ) {
+        if ( humanColors & info.player->GetColor() ) {
             switch ( info.player->getHandicapStatus() ) {
             case Player::HandicapStatus::NONE:
                 handicapIcnIndex = 0;
@@ -351,16 +351,16 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         else {
             const PlayerColor playerColor = player->GetColor();
 
-            if ( Color::haveCommonColors( fi.colorsAvailableForHumans, playerColor ) ) {
-                const PlayerColor human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+            if ( fi.colorsAvailableForHumans & playerColor ) {
+                const PlayerColors humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
-                if ( playerColor != human ) {
-                    Player * currentPlayer = Players::Get( human );
+                if ( ( Color::Count( humans ) != 1 ) && playerColor != static_cast<PlayerColor>( humans ) ) {
+                    Player * currentPlayer = Players::Get( static_cast<PlayerColor>( humans ) );
                     Player * nextPlayer = Players::Get( playerColor );
                     assert( currentPlayer != nullptr && nextPlayer != nullptr );
                     const Player::HandicapStatus currentHandicapStatus = currentPlayer->getHandicapStatus();
 
-                    Players::SetPlayerControl( human, CONTROL_AI | CONTROL_HUMAN );
+                    Players::SetPlayerControl( static_cast<PlayerColor>( humans ), CONTROL_AI | CONTROL_HUMAN );
                     Players::SetPlayerControl( playerColor, CONTROL_HUMAN );
 
                     nextPlayer->setHandicapStatus( currentHandicapStatus );

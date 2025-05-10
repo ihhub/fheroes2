@@ -22,7 +22,7 @@
 
 #include <cstdint>
 
-enum class PlayerColor : uint8_t;
+#include "color.h"
 
 namespace Maps::Map_Format
 {
@@ -36,6 +36,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                          const fheroes2::SupportedLanguage language );
 }

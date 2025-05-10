@@ -744,7 +744,7 @@ namespace Campaign
         }
 
         if ( allAIPlayersInAlliance ) {
-            const PlayerColors humanColors( mapInfo.colorsAvailableForHumans );
+            const PlayerColorsVector humanColors( mapInfo.colorsAvailableForHumans );
             // Make sure that this is only one human player on the map.
             if ( humanColors.size() != 1 ) {
                 // Looks like somebody is modifying the original map.
@@ -752,8 +752,8 @@ namespace Campaign
                 return;
             }
 
-            const PlayerColor aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
-            if ( aiColors == PlayerColor::NONE ) {
+            const PlayerColors aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
+            if ( aiColors == 0 ) {
                 // This is definitely not the map to modify.
                 assert( 0 );
                 return;
@@ -761,8 +761,8 @@ namespace Campaign
 
             const PlayerColor humanColor = humanColors.front();
 
-            for ( PlayerColor & allianceColor : mapInfo.unions ) {
-                if ( allianceColor != humanColor && Color::haveCommonColors( aiColors, allianceColor ) ) {
+            for ( PlayerColors & allianceColor : mapInfo.unions ) {
+                if ( allianceColor != static_cast<PlayerColors>( humanColor ) && ( allianceColor & aiColors ) ) {
                     allianceColor = aiColors;
                 }
             }

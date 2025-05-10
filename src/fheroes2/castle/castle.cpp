@@ -2178,7 +2178,7 @@ void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 int Castle::GetControl() const
 {
     // Neutral castles & towns are always controlled by AI
-    return Color::haveCommonColors( PlayerColor::ALL, GetColor() ) ? GetKingdom().GetControl() : CONTROL_AI;
+    return ( Color::allPlayerColors() & GetColor() ) ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
 uint32_t Castle::GetGrownWell()
@@ -2332,12 +2332,12 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     return _castles[iter->second].get();
 }
 
-void AllCastles::Scout( const PlayerColor colors ) const
+void AllCastles::Scout( const PlayerColors colors ) const
 {
     for ( const Castle * castle : *this ) {
         assert( castle != nullptr );
 
-        if ( !Color::haveCommonColors( colors, castle->GetColor() ) ) {
+        if ( !( colors & castle->GetColor() ) ) {
             continue;
         }
 

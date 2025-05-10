@@ -1266,7 +1266,7 @@ namespace Interface
                         continue;
                     }
                 }
-                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == PlayerColor::NONE ) {
+                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
                     fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
                                                        _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
                 }

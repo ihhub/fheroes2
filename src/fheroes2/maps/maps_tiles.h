@@ -275,13 +275,18 @@ namespace Maps
 
         std::string String() const;
 
-        bool isFog( const PlayerColor colors ) const
+        bool isFog( const PlayerColor color ) const
+        {
+            return ( _fogColors & color );
+        }
+
+        bool isFog( const PlayerColors colors ) const
         {
             // colors may be the union friends
             return ( _fogColors & colors ) == colors;
         }
 
-        void ClearFog( const PlayerColor colors );
+        void ClearFog( const PlayerColors colors );
 
         const std::array<uint32_t, 3> & metadata() const
         {
@@ -392,7 +397,7 @@ namespace Maps
 
         // The following members are only used in the game.
 
-        PlayerColor _fogColors{ PlayerColor::ALL };
+        PlayerColors _fogColors{ Color::allPlayerColors() };
 
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         PlayerColor _boatOwnerColor{ PlayerColor::NONE };

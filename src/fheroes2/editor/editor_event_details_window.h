@@ -21,7 +21,7 @@
 #pragma once
 #include <cstdint>
 
-enum class PlayerColor : uint8_t;
+#include "color.h"
 
 namespace Maps::Map_Format
 {
@@ -35,6 +35,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                              const fheroes2::SupportedLanguage language );
 }

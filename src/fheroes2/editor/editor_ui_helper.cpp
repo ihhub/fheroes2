@@ -65,13 +65,13 @@ namespace Editor
         return !_checkmark.isHidden();
     }
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColor availableColors, const PlayerColor selectedColors,
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColors availableColors, const PlayerColors selectedColors,
                                 const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output )
     {
         int32_t colorsAdded = 0;
 
-        for ( const PlayerColor color : PlayerColors( availableColors ) ) {
-            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != PlayerColor::NONE, output ) );
+        for ( const PlayerColor color : PlayerColorsVector( availableColors ) ) {
+            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( selectedColors & color ) != 0, output ) );
             ++colorsAdded;
         }
     }

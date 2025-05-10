@@ -130,7 +130,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
 
     dataStream.skip( 10 );
 
-    colors = PlayerColor::NONE;
+    colors = 0;
 
     if ( dataStream.get() ) {
         colors |= PlayerColor::BLUE;
@@ -355,7 +355,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int colors;
         stream >> colors;
-        obj.colors = static_cast<PlayerColor>( colors );
+        obj.colors = static_cast<PlayerColors>( colors );
     }
     else {
         stream >> obj.colors;

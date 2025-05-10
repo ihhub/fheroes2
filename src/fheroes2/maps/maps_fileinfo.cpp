@@ -168,17 +168,17 @@ void Maps::FileInfo::Reset()
     difficulty = Difficulty::NORMAL;
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, maxNumOfPlayers>> );
-    static_assert( std::is_same_v<decltype( unions ), std::array<PlayerColor, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( unions ), std::array<PlayerColors, maxNumOfPlayers>> );
 
     for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         races[i] = Race::NONE;
-        unions[i] = Color::IndexToColor( i );
+        unions[i] = static_cast<PlayerColors>( Color::IndexToColor( i ) );
     }
 
-    kingdomColors = PlayerColor::NONE;
-    colorsAvailableForHumans = PlayerColor::NONE;
-    colorsAvailableForComp = PlayerColor::NONE;
-    colorsOfRandomRaces = PlayerColor::NONE;
+    kingdomColors = 0;
+    colorsAvailableForHumans = 0;
+    colorsAvailableForComp = 0;
+    colorsOfRandomRaces = 0;
 
     victoryConditionType = VICTORY_DEFEAT_EVERYONE;
     compAlsoWins = false;
@@ -242,7 +242,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     width = fs.get();
     height = fs.get();
 
-    const PlayerColors colors( PlayerColor::ALL );
+    const PlayerColorsVector colors( Color::allPlayerColors() );
 
     // Colors used by kingdoms: blue, green, red, yellow, orange, purple
     for ( const PlayerColor color : colors ) {
@@ -265,7 +265,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         }
     }
 
-    if ( !isForEditor && colorsAvailableForHumans == PlayerColor::NONE ) {
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
         // This is not a valid map since no human players exist so it cannot be played.
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
         return false;
@@ -325,9 +325,9 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         tile.Init( 0, mp2tile );
 
         const std::pair<PlayerColor, int> colorRace = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
-        if ( ( colorRace.first & colorsAvailableForHumans ) == PlayerColor::NONE ) {
-            const PlayerColor side1 = colorRace.first | colorsAvailableForHumans;
-            const PlayerColor side2 = colorsAvailableForComp ^ colorRace.first;
+        if ( ( colorsAvailableForHumans & colorRace.first ) == 0 ) {
+            const PlayerColors side1 = colorsAvailableForHumans | colorRace.first;
+            const PlayerColors side2 = colorsAvailableForComp ^ colorRace.first;
 
             FillUnions( side1, side2 );
 
@@ -347,10 +347,10 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
-        PlayerColor side1 = PlayerColor::NONE;
-        PlayerColor side2 = PlayerColor::NONE;
+        PlayerColors side1 = 0;
+        PlayerColors side2 = 0;
 
-        const PlayerColors availableColors( kingdomColors );
+        const PlayerColorsVector availableColors( kingdomColors );
         if ( availableColors.empty() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid list of kingdom colors during map load" )
             return false;
@@ -401,7 +401,7 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
         return false;
     }
 
-    if ( !isForEditor && colorsAvailableForHumans == PlayerColor::NONE ) {
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
         // This is not a valid map since no human players exist so it cannot be played.
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
         return false;
@@ -504,7 +504,7 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         assert( map.alliances.size() == 2 );
 
         assert( std::all_of( map.alliances.begin(), map.alliances.end(),
-                             [&map = std::as_const( map )]( const PlayerColor color ) { return ( color & map.availablePlayerColors ) == color; } ) );
+                             [&map = std::as_const( map )]( const PlayerColors colors ) { return ( map.availablePlayerColors & colors ) == colors; } ) );
 
         FillUnions( map.alliances[0], map.alliances[1] );
         break;
@@ -527,21 +527,21 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     return true;
 }
 
-void Maps::FileInfo::FillUnions( const PlayerColor side1Colors, const PlayerColor side2Colors )
+void Maps::FileInfo::FillUnions( const PlayerColors side1Colors, const PlayerColors side2Colors )
 {
-    static_assert( std::is_same_v<decltype( unions ), std::array<PlayerColor, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( unions ), std::array<PlayerColors, maxNumOfPlayers>> );
 
     for ( int i = 0; i < maxNumOfPlayers; ++i ) {
         const PlayerColor color = Color::IndexToColor( i );
 
-        if ( Color::haveCommonColors( side1Colors, color ) ) {
+        if ( side1Colors & color ) {
             unions[i] = side1Colors;
         }
-        else if ( Color::haveCommonColors( side2Colors, color ) ) {
+        else if ( side2Colors & color ) {
             unions[i] = side2Colors;
         }
         else {
-            unions[i] = color;
+            unions[i] = static_cast<PlayerColors>( color );
         }
     }
 }
@@ -645,7 +645,7 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
     stream << System::GetFileName( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( maxNumOfPlayers );
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<PlayerColor, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<PlayerColors, maxNumOfPlayers>> );
 
     for ( size_t i = 0; i < maxNumOfPlayers; ++i ) {
         stream << fi.races[i] << fi.unions[i];
@@ -665,14 +665,14 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
-    static_assert( std::is_same_v<decltype( fi.unions ), std::array<PlayerColor, maxNumOfPlayers>> );
+    static_assert( std::is_same_v<decltype( fi.unions ), std::array<PlayerColors, maxNumOfPlayers>> );
 
     using RacesItemType = decltype( fi.races )::value_type;
     using UnionsItemType = decltype( fi.unions )::value_type;
 
     for ( size_t i = 0; i < kingdommax; ++i ) {
         RacesItemType racesItem = 0;
-        UnionsItemType unionsItem = PlayerColor::NONE;
+        UnionsItemType unionsItem = static_cast<PlayerColors>( PlayerColor::NONE );
 
         stream >> racesItem >> unionsItem;
 

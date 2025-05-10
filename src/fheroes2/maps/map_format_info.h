@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "color.h"
@@ -204,9 +205,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        PlayerColor humanPlayerColors{ PlayerColor::NONE };
-
-        PlayerColor computerPlayerColors{ PlayerColor::NONE };
+        static_assert( std::is_same_v<PlayerColors, uint8_t> );
+        PlayerColors humanPlayerColors{ 0 };
+        PlayerColors computerPlayerColors{ 0 };
 
         // Does this event occur more than once?
         bool isRecurringEvent{ false };
@@ -258,9 +259,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        PlayerColor humanPlayerColors{ PlayerColor::NONE };
-
-        PlayerColor computerPlayerColors{ PlayerColor::NONE };
+        static_assert( std::is_same_v<PlayerColors, uint8_t> );
+        PlayerColors humanPlayerColors{ 0 };
+        PlayerColors computerPlayerColors{ 0 };
 
         uint32_t firstOccurrenceDay{ 1 };
 
@@ -280,10 +281,11 @@ namespace Maps::Map_Format
         // Normal difficulty.
         uint8_t difficulty{ 1 };
 
-        PlayerColor availablePlayerColors{ PlayerColor::NONE };
-        PlayerColor humanPlayerColors{ PlayerColor::NONE };
-        PlayerColor computerPlayerColors{ PlayerColor::NONE };
-        std::vector<PlayerColor> alliances;
+        static_assert( std::is_same_v<PlayerColors, uint8_t> );
+        PlayerColors availablePlayerColors{ 0 };
+        PlayerColors humanPlayerColors{ 0 };
+        PlayerColors computerPlayerColors{ 0 };
+        std::vector<PlayerColors> alliances;
 
         // Only 6 players are allowed per map.
         std::array<uint8_t, 6> playerRace{ 0 };

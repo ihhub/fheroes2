@@ -35,7 +35,6 @@
 #include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
-#include "color.h"
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
@@ -109,7 +108,7 @@ void Kingdom::Init( const PlayerColor color )
 
     _color = color;
 
-    if ( ( _color & PlayerColor::ALL ) == PlayerColor::NONE ) {
+    if ( ( Color::allPlayerColors() & _color ) == 0 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown player: " << Color::String( _color ) << "(" << static_cast<int>( _color ) << ")" )
 
         return;
@@ -424,18 +423,20 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isInGameActionObject( objectType ) )
+    if ( !MP2::isInGameActionObject( objectType ) ) {
         return false;
+    }
 
-    if ( isVisited( tile.GetIndex(), objectType ) )
+    if ( isVisited( tile.GetIndex(), objectType ) ) {
         return false;
+    }
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
         const PlayerColor tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
-        return _color == tileColor || !Players::isFriends( _color, tileColor );
+        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColors>( tileColor ) );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
@@ -443,14 +444,16 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
         const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
-        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, hero->GetColor() ) );
+        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColors>( hero->GetColor() ) ) );
     }
 
-    if ( MP2::isCaptureObject( objectType ) )
-        return !Players::isFriends( _color, getColorFromTile( tile ) );
+    if ( MP2::isCaptureObject( objectType ) ) {
+        return !Players::isFriends( _color, static_cast<PlayerColors>( getColorFromTile( tile ) ) );
+    }
 
-    if ( MP2::isValuableResourceObject( objectType ) )
+    if ( MP2::isValuableResourceObject( objectType ) ) {
         return doesTileContainValuableItems( tile );
+    }
 
     return true;
 }
@@ -738,7 +741,7 @@ void Kingdoms::Init()
 {
     clear();
 
-    const PlayerColors colors( Settings::Get().GetPlayers().GetColors() );
+    const PlayerColorsVector colors( Settings::Get().GetPlayers().GetColors() );
     std::for_each( colors.begin(), colors.end(), [this]( const PlayerColor color ) { GetKingdom( color ).Init( color ); } );
 }
 
@@ -815,9 +818,9 @@ void Kingdoms::NewWeek()
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
 }
 
-PlayerColor Kingdoms::GetNotLossColors() const
+PlayerColors Kingdoms::GetNotLossColors() const
 {
-    PlayerColor result = PlayerColor::NONE;
+    PlayerColors result = 0;
     for ( const Kingdom & kingdom : _kingdoms ) {
         if ( kingdom.GetColor() != PlayerColor::NONE && !kingdom.isLoss() ) {
             result |= kingdom.GetColor();

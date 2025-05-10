@@ -556,7 +556,7 @@ public:
 
     Castle * Get( const fheroes2::Point & position ) const;
 
-    void Scout( const PlayerColor colors ) const;
+    void Scout( const PlayerColors colors ) const;
 
     void NewDay() const;
     void NewWeek() const;

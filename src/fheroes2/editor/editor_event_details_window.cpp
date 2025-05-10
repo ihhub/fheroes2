@@ -31,7 +31,6 @@
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
@@ -68,7 +67,7 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                              const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.

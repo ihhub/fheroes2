@@ -32,6 +32,7 @@
 
 #include "bitmodes.h"
 #include "castle.h"
+#include "color.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
@@ -44,8 +45,6 @@ class IStreamBase;
 class OStreamBase;
 
 struct EventDate;
-
-enum class PlayerColor : uint8_t;
 
 namespace MP2
 {
@@ -276,7 +275,7 @@ public:
     Kingdom & GetKingdom( const PlayerColor color );
     const Kingdom & GetKingdom( const PlayerColor color ) const;
 
-    PlayerColor GetNotLossColors() const;
+    PlayerColors GetNotLossColors() const;
     PlayerColor FindWins( const int cond ) const;
 
     void AddHeroes( const AllHeroes & heroes );

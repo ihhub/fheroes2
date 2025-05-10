@@ -172,7 +172,7 @@ namespace
 
 namespace Editor
 {
-    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+    bool openDailyEventsWindow( std::vector<Maps::Map_Format::DailyEvent> & dailyEvents, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                                 const fheroes2::SupportedLanguage language )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );

@@ -416,7 +416,7 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     _tilePassabilityDirections = DIRECTION_ALL;
 
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
-    _fogColors = PlayerColor::ALL;
+    _fogColors = Color::allPlayerColors();
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
     _boatOwnerColor = PlayerColor::NONE;
@@ -1545,7 +1545,7 @@ void Maps::Tile::updateObjectImageIndex( const uint32_t objectUid, const MP2::Ob
     }
 }
 
-void Maps::Tile::ClearFog( const PlayerColor colors )
+void Maps::Tile::ClearFog( const PlayerColors colors )
 {
     _fogColors &= ~colors;
 

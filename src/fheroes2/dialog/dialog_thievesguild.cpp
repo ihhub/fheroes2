@@ -61,10 +61,10 @@
 
 namespace
 {
-    struct ValueColors : std::pair<int, PlayerColor>
+    struct ValueColors : std::pair<int, PlayerColors>
     {
-        ValueColors( int value, PlayerColor color )
-            : std::pair<int, PlayerColor>( value, color )
+        ValueColors( int value, PlayerColors colors )
+            : std::pair<int, PlayerColors>( value, colors )
         {}
 
         static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
@@ -78,14 +78,14 @@ namespace
         const auto it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.first == value; } );
 
         if ( it == v.end() ) {
-            v.emplace_back( value, color );
+            v.emplace_back( value, static_cast<PlayerColors>( color ) );
         }
         else {
             ( *it ).second |= color;
         }
     }
 
-    void getInfo( std::vector<ValueColors> & v, const PlayerColors & colors, const std::function<int( const PlayerColor )> & getValue )
+    void getInfo( std::vector<ValueColors> & v, const PlayerColorsVector & colors, const std::function<int( const PlayerColor )> & getValue )
     {
         // 'getValue' should contain a callable function.
         assert( getValue );
@@ -123,7 +123,7 @@ namespace
         const int32_t offsetY = pos.y - 4;
 
         for ( size_t i = 0; i < flagGroups; ++i ) {
-            const PlayerColors colors( v[i].second );
+            const PlayerColorsVector colors( v[i].second );
 
             int32_t offsetX = pos.x + static_cast<int32_t>( i ) * step - ( static_cast<int32_t>( colors.size() ) * sptireWidth ) / 2 + 3;
 
@@ -161,7 +161,7 @@ namespace
         text.draw( offsetX + 50 - text.width(), offsetY, output );
     }
 
-    void drawHeroIcons( const PlayerColors & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID,
+    void drawHeroIcons( const PlayerColorsVector & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID,
                         fheroes2::Image & output )
     {
         int32_t offsetX = pos.x + 1;
@@ -187,7 +187,7 @@ namespace
         }
     }
 
-    void drawPersonality( const PlayerColors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    void drawPersonality( const PlayerColorsVector & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
     {
         int32_t offsetX = pos.x;
 
@@ -200,7 +200,7 @@ namespace
         }
     }
 
-    void drawBestMonsterIcons( const PlayerColors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    void drawBestMonsterIcons( const PlayerColorsVector & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
     {
         int32_t offsetX = pos.x;
 
@@ -279,7 +279,7 @@ void Dialog::ThievesGuild( const bool oracle )
     const uint32_t thievesGuildCount = oracle ? 0xFF : world.GetKingdom( Settings::Get().CurrentColor() ).GetCountBuilding( BUILD_THIEVESGUILD );
 
     std::vector<ValueColors> valuesForPlayerColors;
-    const PlayerColors colors( Game::GetActualKingdomColors() );
+    const PlayerColorsVector colors( Game::GetActualKingdomColors() );
     const size_t playersCount = colors.size();
     valuesForPlayerColors.reserve( playersCount );
     const int32_t textOffsetX = dialogRoi.x + 207;

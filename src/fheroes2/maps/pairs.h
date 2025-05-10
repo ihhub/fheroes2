@@ -58,15 +58,14 @@ class ObjectColor : public std::pair<MP2::MapObjectType, PlayerColor>
 public:
     ObjectColor()
         : std::pair<MP2::MapObjectType, PlayerColor>( MP2::OBJ_NONE, PlayerColor::NONE )
-    {}
+    {
+        // Do nothing.
+    }
 
     ObjectColor( MP2::MapObjectType object, PlayerColor color )
         : std::pair<MP2::MapObjectType, PlayerColor>( object, color )
-    {}
-
-    bool isColor( PlayerColor colors ) const
     {
-        return ( colors & second ) != PlayerColor::NONE;
+        // Do nothing.
     }
 };
 

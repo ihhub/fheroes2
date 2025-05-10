@@ -26,13 +26,12 @@
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
 class Players;
 class Heroes;
 class Castle;
-
-enum class PlayerColor : uint8_t;
 
 namespace Game
 {
@@ -95,8 +94,8 @@ namespace Game
     // If display fade-in state is set reset it to false and return true. Otherwise return false.
     bool validateDisplayFadeIn();
 
-    PlayerColor GetKingdomColors();
-    PlayerColor GetActualKingdomColors();
+    PlayerColors GetKingdomColors();
+    PlayerColors GetActualKingdomColors();
     void DialogPlayers( const PlayerColor color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();

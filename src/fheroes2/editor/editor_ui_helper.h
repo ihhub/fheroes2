@@ -67,7 +67,7 @@ namespace Editor
         fheroes2::MovableSprite _checkmark;
     };
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColor availableColors, const PlayerColor selectedColors,
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColors availableColors, const PlayerColors selectedColors,
                                 const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output );
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,

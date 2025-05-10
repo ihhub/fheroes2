@@ -34,8 +34,6 @@
 #include "translations.h"
 #include "world.h"
 
-enum class PlayerColor : uint8_t;
-
 std::string Difficulty::String( int difficulty )
 {
     switch ( difficulty ) {

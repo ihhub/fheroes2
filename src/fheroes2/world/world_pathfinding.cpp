@@ -103,7 +103,7 @@ namespace
     bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const PlayerColor color, const bool isArtifactsBagFull,
                                                      const bool isEquippedWithSpellBook, const double armyStrength, const double minimalAdvantage )
     {
-        assert( Color::haveCommonColors( PlayerColor::ALL, color ) );
+        assert( Color::allPlayerColors() & color );
 
         const Maps::Tile & tile = world.getTile( tileIndex );
         const bool toWater = tile.isWater();
@@ -116,7 +116,7 @@ namespace
 
             const PlayerColor tileArmyColor = tileArmy.GetColor();
             // Tile can be guarded by our own or a friendly army (for example, our ally used a Set Elemental Guardian spell on his mine)
-            if ( color == tileArmyColor || Players::isFriends( color, tileArmyColor ) ) {
+            if ( color == tileArmyColor || Players::isFriends( color, static_cast<PlayerColors>( tileArmyColor ) ) ) {
                 return true;
             }
 

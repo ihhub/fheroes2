@@ -172,20 +172,20 @@ std::list<MapBaseObject *> MapObjects::get( const fheroes2::Point & pos ) const
     return result;
 }
 
-void CapturedObjects::SetColor( const int32_t index, const PlayerColor col )
+void CapturedObjects::SetColor( const int32_t index, const PlayerColor color )
 {
-    Get( index ).SetColor( col );
+    Get( index ).SetColor( color );
 }
 
-void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor color )
 {
     CapturedObject & capturedObj = Get( index );
 
-    if ( capturedObj.GetColor() != col && capturedObj.guardians.isValid() ) {
+    if ( capturedObj.GetColor() != color && capturedObj.guardians.isValid() ) {
         capturedObj.guardians.Reset();
     }
 
-    capturedObj.Set( obj, col );
+    capturedObj.Set( obj, color );
 }
 
 uint32_t CapturedObjects::GetCount( const MP2::MapObjectType objectType, const PlayerColor ownerColor ) const
@@ -236,18 +236,18 @@ PlayerColor CapturedObjects::GetColor( const int32_t index ) const
     return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( const PlayerColor colors ) const
+void CapturedObjects::ClearFog( const PlayerColors colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
-        const ObjectColor & objCol = capturedObj.objCol;
+        const auto [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( colors ) ) {
+        if ( !( colors & objectColor ) ) {
             continue;
         }
 
         int scoutingDistance = 0;
 
-        switch ( objCol.first ) {
+        switch ( objectType ) {
         case MP2::OBJ_MINE:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
@@ -262,23 +262,21 @@ void CapturedObjects::ClearFog( const PlayerColor colors ) const
             continue;
         }
 
-        Maps::ClearFog( idx, scoutingDistance, colors );
+        Maps::ClearFog( idx, scoutingDistance, objectColor );
     }
 }
 
 void CapturedObjects::ResetColor( const PlayerColor color )
 {
-    for ( auto & [idx, capturedObj] : *this ) {
-        ObjectColor & objCol = capturedObj.objCol;
+    for ( auto & [tileIndex, capturedObj] : *this ) {
+        auto & [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( color ) ) {
+        if ( objectColor != color ) {
             continue;
         }
 
-        auto & [objectType, col] = objCol;
-
-        col = PlayerColor::NONE;
-        world.getTile( idx ).setOwnershipFlag( objectType, col );
+        objectColor = PlayerColor::NONE;
+        world.getTile( tileIndex ).setOwnershipFlag( objectType, objectColor );
     }
 }
 
@@ -890,12 +888,12 @@ uint32_t World::CountCapturedMines( const int type, const PlayerColor color ) co
 
 void World::CaptureObject( const int32_t index, const PlayerColor color )
 {
-    assert( Color::Count( color ) <= 1 );
+    assert( Color::Count( static_cast<PlayerColors>( color ) ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
     map_captureobj.Set( index, objectType, color );
 
-    if ( color != PlayerColor::NONE && !( Color::haveCommonColors( color, PlayerColor::ALL ) ) ) {
+    if ( color != PlayerColor::NONE && !( Color::allPlayerColors() & color ) ) {
         return;
     }
 
@@ -922,9 +920,9 @@ void World::ResetCapturedObjects( const PlayerColor color )
     map_captureobj.ResetColor( color );
 }
 
-void World::ClearFog( PlayerColor colors ) const
+void World::ClearFog( PlayerColor color ) const
 {
-    colors = Players::GetPlayerFriends( colors );
+    const PlayerColors colors = Players::GetPlayerFriends( color );
 
     // clear abroad castles
     vec_castles.Scout( colors );
@@ -1006,7 +1004,7 @@ void World::ActionForMagellanMaps( const PlayerColor color )
     const Kingdom & kingdom = world.GetKingdom( color );
     const bool isAIPlayer = kingdom.isControlAI();
 
-    const PlayerColor alliedColors = Players::GetPlayerFriends( color );
+    const PlayerColors alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
@@ -1071,7 +1069,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
+        return static_cast<PlayerColors>( kingdom.GetColor() ) == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
         const Castle * town = getCastleEntrance( mapInfo.WinsMapsPositionObject() );
@@ -1111,7 +1109,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        return ( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) ) == PlayerColor::NONE;
+        return ( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) ) == 0;
 
     case GameOver::WINS_GOLD:
         return ( ( kingdom.isControlHuman() || mapInfo.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
@@ -1176,7 +1174,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         // .. or be hired by an AI-controlled kingdom
         if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
-            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
+            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), static_cast<PlayerColors>( hero->GetColor() ) ) ) {
                 return false;
             }
 
@@ -1412,7 +1410,7 @@ uint32_t World::GetWeekSeed() const
 
 bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
 {
-    const PlayerColors colors( Game::GetKingdomColors() );
+    const PlayerColorsVector colors( Game::GetKingdomColors() );
     return std::any_of( colors.cbegin(), colors.cend(),
                         [this, objectType, dstIndex]( const PlayerColor color ) { return GetKingdom( color ).isVisited( dstIndex, objectType ); } );
 }
@@ -1706,7 +1704,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
 
     dataStream.skip( 6 );
 
-    colors = PlayerColor::NONE;
+    colors = 0;
 
     if ( dataStream.get() ) {
         colors |= PlayerColor::BLUE;
@@ -1737,9 +1735,9 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
 
-bool EventDate::isAllow( const PlayerColor col, const uint32_t date ) const
+bool EventDate::isAllow( const PlayerColor color, const uint32_t date ) const
 {
-    if ( ( col & colors ) == PlayerColor::NONE ) {
+    if ( ( colors & color ) == 0 ) {
         // This player color is not allowed for the event.
         return false;
     }
@@ -1774,7 +1772,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        obj.colors = static_cast<PlayerColor>( temp );
+        obj.colors = static_cast<PlayerColors>( temp );
     }
     else {
         stream >> obj.colors;

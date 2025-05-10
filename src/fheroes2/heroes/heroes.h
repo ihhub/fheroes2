@@ -810,7 +810,7 @@ public:
     Heroes * Get( const int hid ) const;
     Heroes * Get( const fheroes2::Point & center ) const;
 
-    void Scout( const PlayerColor colors ) const;
+    void Scout( const PlayerColors colors ) const;
 
     void ResetModes( const uint32_t modes ) const;
 

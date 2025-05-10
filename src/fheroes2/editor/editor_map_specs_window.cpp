@@ -335,9 +335,9 @@ namespace
         const std::vector<TownInfo> & _townInfos;
     };
 
-    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColor allowedColors )
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColors allowedColors )
     {
-        if ( allowedColors == PlayerColor::NONE ) {
+        if ( allowedColors == 0 ) {
             // Nothing to do.
             return {};
         }
@@ -361,7 +361,7 @@ namespace
                 const auto & metadata = heroObjects[object.index].metadata;
                 const PlayerColor color = static_cast<PlayerColor>( 1 << metadata[0] );
 
-                if ( !Color::haveCommonColors( allowedColors, color ) ) {
+                if ( !( allowedColors & color ) ) {
                     // Current hero color is not allowed.
                     continue;
                 }
@@ -382,9 +382,9 @@ namespace
         return heroInfos;
     }
 
-    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColor allowedColors, const bool excludeNeutralTowns )
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColors allowedColors, const bool excludeNeutralTowns )
     {
-        if ( excludeNeutralTowns && allowedColors == PlayerColor::NONE ) {
+        if ( excludeNeutralTowns && allowedColors == 0 ) {
             // Nothing to do.
             return {};
         }
@@ -405,7 +405,7 @@ namespace
                 }
 
                 const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
-                if ( !Color::haveCommonColors( allowedColors, color ) && ( excludeNeutralTowns || color != PlayerColor::NONE ) ) {
+                if ( !( allowedColors & color ) && ( excludeNeutralTowns || color != PlayerColor::NONE ) ) {
                     // Current town color is not allowed.
                     continue;
                 }
@@ -769,9 +769,9 @@ namespace
                 // TODO: Update this logic for more than 2 alliances.
 
                 // Use the alliances saved in the mapFormat only if they are correct.
-                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == PlayerColor::NONE
-                     && mapFormat.availablePlayerColors == ( mapFormat.alliances[0] | mapFormat.alliances[1] ) && mapFormat.alliances[0] != PlayerColor::NONE
-                     && mapFormat.alliances[1] != PlayerColor::NONE ) {
+                if ( mapFormat.alliances.size() == 2 && ( mapFormat.alliances[0] & mapFormat.alliances[1] ) == 0
+                     && mapFormat.availablePlayerColors == ( mapFormat.alliances[0] | mapFormat.alliances[1] ) && mapFormat.alliances[0] != 0
+                     && mapFormat.alliances[1] != 0 ) {
                     _alliances = mapFormat.alliances;
                 }
 
@@ -795,7 +795,7 @@ namespace
                 _alliances.clear();
 
                 const PlayerColor firstColor = Color::GetFirst( mapFormat.humanPlayerColors );
-                _alliances.push_back( firstColor );
+                _alliances.push_back( static_cast<PlayerColors>( firstColor ) );
                 _alliances.push_back( mapFormat.availablePlayerColors ^ firstColor );
             }
         }
@@ -1348,7 +1348,7 @@ namespace
                             const PlayerColor color = _alliancesCheckboxes[allianceNumber][playerNumber]->getColor();
 
                             // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
-                            if ( ( ( _alliances[allianceNumber] & color ) == PlayerColor::NONE )
+                            if ( ( ( _alliances[allianceNumber] & color ) == 0 )
                                  && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
                                 for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
                                     if ( _alliancesCheckboxes[i][playerNumber]->toggle() ) {
@@ -1417,7 +1417,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
-        const PlayerColor _availableColors{ PlayerColor::NONE };
+        const PlayerColors _availableColors{ 0 };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
@@ -1426,7 +1426,7 @@ namespace
         // Town or hero loss metadata include tile ID and color.
         std::pair<int32_t, PlayerColor> _heroToKill{ 0, PlayerColor::NONE };
         std::pair<int32_t, PlayerColor> _townToCapture{ 0, PlayerColor::NONE };
-        std::vector<PlayerColor> _alliances;
+        std::vector<PlayerColors> _alliances;
         std::vector<std::vector<std::unique_ptr<Editor::Checkbox>>> _alliancesCheckboxes;
         std::vector<TownInfo> _mapTownInfos;
         std::vector<HeroInfo> _mapHeroInfos;
@@ -1986,15 +1986,15 @@ namespace
 
     uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const PlayerColor currentColor )
     {
-        if ( !Color::haveCommonColors( mapFormat.availablePlayerColors, currentColor ) ) {
+        if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.
             assert( 0 );
 
             return 70;
         }
 
-        if ( Color::haveCommonColors( mapFormat.humanPlayerColors, currentColor ) ) {
-            if ( Color::haveCommonColors( mapFormat.computerPlayerColors, currentColor ) ) {
+        if ( mapFormat.humanPlayerColors & currentColor ) {
+            if ( mapFormat.computerPlayerColors & currentColor ) {
                 // Both AI and human can choose this player color.
                 return 82;
             }
@@ -2003,7 +2003,7 @@ namespace
             return 9;
         }
 
-        if ( Color::haveCommonColors( mapFormat.computerPlayerColors, currentColor ) ) {
+        if ( mapFormat.computerPlayerColors & currentColor ) {
             // AI only.
             return 3;
         }
@@ -2109,7 +2109,7 @@ namespace Editor
         int32_t offsetY = scenarioBoxRoi.y + scenarioBoxRoi.height + 10;
 
         std::vector<fheroes2::Rect> playerRects( availablePlayersCount );
-        const PlayerColors availableColors( mapFormat.availablePlayerColors );
+        const PlayerColorsVector availableColors( mapFormat.availablePlayerColors );
 
         const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
         for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
@@ -2447,12 +2447,12 @@ namespace Editor
 
             for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
                 if ( le.MouseClickLeft( playerRects[i] ) ) {
-                    if ( !Color::haveCommonColors( mapFormat.availablePlayerColors, availableColors[i] ) ) {
+                    if ( !( mapFormat.availablePlayerColors & availableColors[i] ) ) {
                         break;
                     }
 
-                    const bool allowAi = Color::haveCommonColors( mapFormat.computerPlayerColors, availableColors[i] );
-                    const bool allowHuman = Color::haveCommonColors( mapFormat.humanPlayerColors, availableColors[i] );
+                    const bool allowAi = mapFormat.computerPlayerColors & availableColors[i];
+                    const bool allowHuman = mapFormat.humanPlayerColors & availableColors[i];
 
                     if ( allowHuman ) {
                         if ( allowAi ) {

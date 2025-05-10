@@ -48,26 +48,26 @@ namespace
     };
 }
 
-PlayerColors::PlayerColors( const PlayerColor colors /* = PlayerColor::ALL */ )
+PlayerColorsVector::PlayerColorsVector( const PlayerColors colors )
 {
     reserve( 6 );
 
-    if ( Color::haveCommonColors( colors, PlayerColor::BLUE ) ) {
+    if ( colors & PlayerColor::BLUE ) {
         push_back( PlayerColor::BLUE );
     }
-    if ( Color::haveCommonColors( colors, PlayerColor::GREEN ) ) {
+    if ( colors & PlayerColor::GREEN ) {
         push_back( PlayerColor::GREEN );
     }
-    if ( Color::haveCommonColors( colors, PlayerColor::RED ) ) {
+    if ( colors & PlayerColor::RED ) {
         push_back( PlayerColor::RED );
     }
-    if ( Color::haveCommonColors( colors, PlayerColor::YELLOW ) ) {
+    if ( colors & PlayerColor::YELLOW ) {
         push_back( PlayerColor::YELLOW );
     }
-    if ( Color::haveCommonColors( colors, PlayerColor::ORANGE ) ) {
+    if ( colors & PlayerColor::ORANGE ) {
         push_back( PlayerColor::ORANGE );
     }
-    if ( Color::haveCommonColors( colors, PlayerColor::PURPLE ) ) {
+    if ( colors & PlayerColor::PURPLE ) {
         push_back( PlayerColor::PURPLE );
     }
 }
@@ -122,24 +122,24 @@ namespace Color
         return 6;
     }
 
-    PlayerColor GetFirst( const PlayerColor colors )
+    PlayerColor GetFirst( const PlayerColors colors )
     {
-        if ( haveCommonColors( colors, PlayerColor::BLUE ) ) {
+        if ( colors & PlayerColor::BLUE ) {
             return PlayerColor::BLUE;
         }
-        if ( haveCommonColors( colors, PlayerColor::GREEN ) ) {
+        if ( colors & PlayerColor::GREEN ) {
             return PlayerColor::GREEN;
         }
-        if ( haveCommonColors( colors, PlayerColor::RED ) ) {
+        if ( colors & PlayerColor::RED ) {
             return PlayerColor::RED;
         }
-        if ( haveCommonColors( colors, PlayerColor::YELLOW ) ) {
+        if ( colors & PlayerColor::YELLOW ) {
             return PlayerColor::YELLOW;
         }
-        if ( haveCommonColors( colors, PlayerColor::ORANGE ) ) {
+        if ( colors & PlayerColor::ORANGE ) {
             return PlayerColor::ORANGE;
         }
-        if ( haveCommonColors( colors, PlayerColor::PURPLE ) ) {
+        if ( colors & PlayerColor::PURPLE ) {
             return PlayerColor::PURPLE;
         }
 
@@ -221,14 +221,14 @@ const char * fheroes2::getTentColorName( const int color )
     return "None";
 }
 
-bool ColorBase::isFriends( const PlayerColor col ) const
+bool ColorBase::isFriends( const PlayerColor color ) const
 {
-    return Color::haveCommonColors( PlayerColor::ALL, col ) && ( _color == col || Players::isFriends( _color, col ) );
+    return ( Color::allPlayerColors() & color ) && ( _color == color || Players::isFriends( _color, static_cast<PlayerColors>( color ) ) );
 }
 
-void ColorBase::SetColor( const PlayerColor col )
+void ColorBase::SetColor( const PlayerColor color )
 {
-    switch ( col ) {
+    switch ( color ) {
     case PlayerColor::NONE:
     case PlayerColor::BLUE:
     case PlayerColor::GREEN:
@@ -236,7 +236,7 @@ void ColorBase::SetColor( const PlayerColor col )
     case PlayerColor::YELLOW:
     case PlayerColor::ORANGE:
     case PlayerColor::PURPLE:
-        _color = col;
+        _color = color;
         break;
     default:
 #ifdef WITH_DEBUG

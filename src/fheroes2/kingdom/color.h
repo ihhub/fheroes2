@@ -53,69 +53,85 @@ enum class PlayerColor : uint8_t
     ORANGE = 0x10,
     PURPLE = 0x20,
     UNUSED = 0x80,
-    ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
 };
 
-using PlayerColorUnderlyingType = std::underlying_type_t<PlayerColor>;
+using PlayerColors = std::underlying_type_t<PlayerColor>;
 
-constexpr PlayerColor operator|( const PlayerColor lhs, const PlayerColor rhs )
+static_assert( static_cast<PlayerColors>( PlayerColor::NONE ) == 0, "The enumerator `NONE` mus be equal to 0! Otherwise the game logic will break." );
+
+constexpr PlayerColors operator|( const PlayerColors lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColor>( static_cast<PlayerColorUnderlyingType>( lhs ) | static_cast<PlayerColorUnderlyingType>( rhs ) );
+    return lhs | static_cast<PlayerColors>( rhs );
 }
 
-constexpr PlayerColor & operator|=( PlayerColor & lhs, const PlayerColor rhs )
+constexpr PlayerColors operator|( const PlayerColor lhs, const PlayerColor rhs )
+{
+    return static_cast<PlayerColors>( lhs ) | static_cast<PlayerColors>( rhs );
+}
+
+constexpr PlayerColors & operator|=( PlayerColors & lhs, const PlayerColor rhs )
 {
     return lhs = lhs | rhs;
 }
 
-constexpr PlayerColor operator&( const PlayerColor lhs, const PlayerColor rhs )
+constexpr PlayerColors operator&( const PlayerColors lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColor>( static_cast<PlayerColorUnderlyingType>( lhs ) & static_cast<PlayerColorUnderlyingType>( rhs ) );
+    return lhs & static_cast<PlayerColors>( rhs );
 }
 
-constexpr PlayerColor & operator&=( PlayerColor & lhs, const PlayerColor rhs )
+constexpr PlayerColors operator&( const PlayerColor lhs, const PlayerColor rhs )
+{
+    return static_cast<PlayerColors>( lhs ) & static_cast<PlayerColors>( rhs );
+}
+
+constexpr PlayerColors & operator&=( PlayerColors & lhs, const PlayerColor rhs )
 {
     return lhs = lhs & rhs;
 }
 
-constexpr PlayerColor operator^( const PlayerColor lhs, const PlayerColor rhs )
+constexpr PlayerColors operator^( const PlayerColors lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColor>( static_cast<PlayerColorUnderlyingType>( lhs ) ^ static_cast<PlayerColorUnderlyingType>( rhs ) );
+    return lhs ^ static_cast<PlayerColors>( rhs );
 }
 
-constexpr PlayerColor & operator^=( PlayerColor & lhs, const PlayerColor rhs )
+constexpr PlayerColors operator^( const PlayerColor lhs, const PlayerColor rhs )
+{
+    return static_cast<PlayerColors>( lhs ) ^ static_cast<PlayerColors>( rhs );
+}
+
+constexpr PlayerColors & operator^=( PlayerColors & lhs, const PlayerColor rhs )
 {
     return lhs = lhs ^ rhs;
 }
 
-constexpr PlayerColor operator~( const PlayerColor color )
+constexpr PlayerColors operator~( PlayerColor color )
 {
-    return static_cast<PlayerColor>( ~static_cast<PlayerColorUnderlyingType>( color ) );
+    return ~static_cast<PlayerColors>( color );
 }
 
-class PlayerColors : public std::vector<PlayerColor>
+class PlayerColorsVector : public std::vector<PlayerColor>
 {
 public:
-    explicit PlayerColors( const PlayerColor colors = PlayerColor::ALL );
+    explicit PlayerColorsVector( const PlayerColors colors );
 };
 
 namespace Color
 {
-    constexpr bool haveCommonColors( const PlayerColor firstColorSet, const PlayerColor secondColorSet )
+    constexpr PlayerColors allPlayerColors()
     {
-        return ( firstColorSet & secondColorSet ) != PlayerColor::NONE;
+        return PlayerColor::BLUE | PlayerColor::GREEN | PlayerColor::RED | PlayerColor::YELLOW | PlayerColor::ORANGE | PlayerColor::PURPLE;
     }
 
     std::string String( const PlayerColor color );
 
     int GetIndex( const PlayerColor color );
 
-    constexpr int Count( const PlayerColor colors )
+    constexpr int Count( const PlayerColors colors )
     {
-        return CountBits( static_cast<uint32_t>( colors & PlayerColor::ALL ) );
+        return CountBits( static_cast<uint32_t>( colors & allPlayerColors() ) );
     }
 
-    PlayerColor GetFirst( const PlayerColor colors );
+    PlayerColor GetFirst( const PlayerColors colors );
 
     PlayerColor IndexToColor( const int index );
 }
@@ -125,17 +141,17 @@ class ColorBase
 public:
     ColorBase() = default;
 
-    explicit ColorBase( const PlayerColor col )
-        : _color( col )
+    explicit ColorBase( const PlayerColor color )
+        : _color( color )
     {
         // Do nothing.
     }
 
-    bool isFriends( const PlayerColor col ) const;
+    bool isFriends( const PlayerColor color ) const;
 
     Kingdom & GetKingdom() const;
 
-    void SetColor( const PlayerColor col );
+    void SetColor( const PlayerColor color );
 
     PlayerColor GetColor() const
     {

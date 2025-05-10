@@ -920,10 +920,10 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColor friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColors friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
-        if ( friendColors != PlayerColor::NONE && tile.isFog( friendColors ) ) {
+        if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
 #else

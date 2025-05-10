@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "editor_ui_helper.h"
@@ -64,7 +63,7 @@ namespace
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColor humanPlayerColors, const PlayerColor computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                          const fheroes2::SupportedLanguage language )
     {
         // An event can be outdated in terms of players since we don't update players while placing or removing heroes and castles.

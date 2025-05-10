@@ -79,17 +79,17 @@ namespace Maps
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
-        PlayerColor AllowCompHumanColors() const
+        PlayerColors AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
         }
 
-        PlayerColor HumanOnlyColors() const
+        PlayerColors HumanOnlyColors() const
         {
             return colorsAvailableForHumans & ~colorsAvailableForComp;
         }
 
-        PlayerColor ComputerOnlyColors() const
+        PlayerColors ComputerOnlyColors() const
         {
             return colorsAvailableForComp & ~colorsAvailableForHumans;
         }
@@ -131,14 +131,14 @@ namespace Maps
             return lossConditionParams[0];
         }
 
-        void removeHumanColors( const PlayerColor colors )
+        void removeHumanColors( const PlayerColors colors )
         {
             colorsAvailableForHumans &= ~colors;
         }
 
         bool AllowChangeRace( const PlayerColor color ) const
         {
-            return ( colorsOfRandomRaces & color ) != PlayerColor::NONE;
+            return ( colorsOfRandomRaces & color ) != 0;
         }
 
         void Reset();
@@ -187,12 +187,13 @@ namespace Maps
         uint8_t difficulty;
 
         std::array<uint8_t, maxNumOfPlayers> races;
-        std::array<PlayerColor, maxNumOfPlayers> unions;
+        std::array<PlayerColors, maxNumOfPlayers> unions;
 
-        PlayerColor kingdomColors;
-        PlayerColor colorsAvailableForHumans;
-        PlayerColor colorsAvailableForComp;
-        PlayerColor colorsOfRandomRaces;
+        static_assert( std::is_same_v<PlayerColors, uint8_t> );
+        PlayerColors kingdomColors{ 0 };
+        PlayerColors colorsAvailableForHumans{ 0 };
+        PlayerColors colorsAvailableForComp{ 0 };
+        PlayerColors colorsOfRandomRaces{ 0 };
 
         // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
@@ -222,7 +223,7 @@ namespace Maps
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
     private:
-        void FillUnions( const PlayerColor side1Colors, const PlayerColor side2Colors );
+        void FillUnions( const PlayerColors side1Colors, const PlayerColors side2Colors );
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );

@@ -386,7 +386,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
-    const PlayerColor alliedColors = Players::GetPlayerFriends( playerColor );
+    const PlayerColors alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );

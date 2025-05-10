@@ -504,7 +504,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || Color::haveCommonColors( _autoCombatColors, _currentUnit->GetCurrentColor() ) ) {
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _autoCombatColors & _currentUnit->GetCurrentColor() ) ) {
                 AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
@@ -1421,7 +1421,7 @@ bool Battle::Arena::AutoCombatInProgress() const
         return false;
     }
 
-    if ( Color::haveCommonColors( _autoCombatColors, GetCurrentColor() ) ) {
+    if ( _autoCombatColors & GetCurrentColor() ) {
         // Auto combat mode cannot be enabled for a player controlled by the AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
@@ -1447,7 +1447,7 @@ bool Battle::Arena::EnemyOfAIHasAutoCombatInProgress() const
         return false;
     }
 
-    return Color::haveCommonColors( _autoCombatColors, enemyForce.GetColor() );
+    return ( _autoCombatColors & enemyForce.GetColor() );
 }
 
 bool Battle::Arena::CanToggleAutoCombat() const

@@ -28,7 +28,6 @@
 
 #include "agg_image.h"
 #include "castle.h"
-#include "color.h"
 #include "dialog.h"
 #include "ground.h"
 #include "heroes.h"
@@ -272,7 +271,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     _cursorArea.hide();
 
     if ( renderMapObjects ) {
-        RedrawObjects( PlayerColor::NONE, ViewWorldMode::ViewAll );
+        RedrawObjects( 0, ViewWorldMode::ViewAll );
         const fheroes2::Rect & rect = GetArea();
         fheroes2::Copy( _map, 0, 0, fheroes2::Display::instance(), rect.x, rect.y, _map.width(), _map.height() );
     }
@@ -281,7 +280,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     RedrawCursor();
 }
 
-void Interface::Radar::RedrawObjects( const PlayerColor playerColor, const ViewWorldMode flags )
+void Interface::Radar::RedrawObjects( const PlayerColors playerColor, const ViewWorldMode flags )
 {
 #ifdef WITH_DEBUG
     const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();
