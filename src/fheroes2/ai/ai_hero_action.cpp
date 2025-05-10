@@ -81,31 +81,37 @@
 
 namespace
 {
-    uint32_t AIGetAllianceColors()
+    PlayerColors AIGetAllianceColors()
     {
         // accumulate colors
-        uint32_t colors = 0;
+        PlayerColors colors = 0;
 
         if ( Settings::Get().GameType() & Game::TYPE_HOTSEAT ) {
-            const Colors vcolors( Players::HumanColors() );
+            const PlayerColorsVector vcolors( Players::HumanColors() );
 
-            for ( const int color : vcolors ) {
+            for ( const PlayerColor color : vcolors ) {
                 const Player * player = Players::Get( color );
-                if ( player )
+                if ( player ) {
                     colors |= player->GetFriends();
+                }
             }
         }
         else {
-            const Player * player = Players::Get( Players::HumanColors() );
-            if ( player )
+            const PlayerColors humanColor = Players::HumanColors();
+
+            assert( Color::Count( humanColor ) == 1 );
+
+            const Player * player = Players::Get( static_cast<PlayerColor>( humanColor ) );
+            if ( player ) {
                 colors = player->GetFriends();
+            }
         }
 
         return colors;
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIIsShowAnimationForHero( const Heroes & hero, const uint32_t colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColors colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -134,7 +140,7 @@ namespace
         return false;
     }
 
-    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const uint32_t colors )
+    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColors colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -1546,7 +1552,7 @@ namespace
         Maps::Tile & tile = world.getTile( tileIndex );
         bool recruitmentAllowed = true;
 
-        if ( getColorFromTile( tile ) == Color::NONE ) {
+        if ( getColorFromTile( tile ) == PlayerColor::NONE ) {
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
@@ -1554,7 +1560,7 @@ namespace
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
-                setColorOnTile( tile, Color::UNUSED );
+                setColorOnTile( tile, PlayerColor::UNUSED );
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1627,7 +1633,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
+        if ( kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) ) ) {
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
@@ -1640,7 +1646,7 @@ namespace
         const Maps::Tile & tile = world.getTile( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getColorFromTile( tile ) );
+        kingdom.SetVisitTravelersTent( getBarrierColorFromTile( tile ) );
     }
 
     void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2171,7 +2177,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     const Settings & conf = Settings::Get();
 
-    const uint32_t colors = AIGetAllianceColors();
+    const PlayerColors colors = AIGetAllianceColors();
     bool recenterNeeded = true;
 
     int heroAnimationFrameCount = 0;
@@ -2359,7 +2365,7 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
 
     hero.SpellCasted( summonBoat );
 
-    const int heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
 
     Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
 

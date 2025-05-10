@@ -376,7 +376,7 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
         return;
     }
 
-    const int friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    const PlayerColors friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
     if ( friendColors == 0 ) {
         // No allies.
         return;
@@ -389,8 +389,8 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
 
     const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( false );
 
-    const Colors playerColors( friendColors );
-    for ( const int color : playerColors ) {
+    const PlayerColorsVector playerColors( friendColors );
+    for ( const PlayerColor color : playerColors ) {
         ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
     }
 }

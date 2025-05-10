@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,6 +36,8 @@
 #include "monster.h"
 
 class HeroBase;
+
+enum class PlayerColor : uint8_t;
 
 namespace Battle
 {
@@ -135,7 +137,7 @@ namespace Battle
         uint32_t GetDeadHitPoints() const;
         uint32_t GetDeadCounts() const;
 
-        int GetColor() const;
+        PlayerColor GetColor() const;
         int GetControl() const;
 
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield

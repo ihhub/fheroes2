@@ -40,6 +40,8 @@
 class Spell;
 class HeroBase;
 
+enum class PlayerColor : uint8_t;
+
 namespace Rand
 {
     class DeterministicRandomGenerator;
@@ -167,17 +169,17 @@ namespace Battle
         uint32_t GetAttack() const override;
         uint32_t GetDefense() const override;
 
-        int GetArmyColor() const
+        PlayerColor GetArmyColor() const
         {
             return GetColor();
         }
 
         // Returns the current color of the unit according to its current combat state (the unit
         // may be under a spell that changes its affiliation).
-        int GetCurrentColor() const;
+        PlayerColor GetCurrentColor() const;
         // Returns the current unit color (if valid, the unit's color can be invalid if the unit
         // is under the Berserker spell), otherwise returns the color of the unit's army.
-        int GetCurrentOrArmyColor() const;
+        PlayerColor GetCurrentOrArmyColor() const;
 
         int GetControl() const override;
         int GetCurrentControl() const;
