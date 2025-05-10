@@ -261,7 +261,7 @@ public:
 
     bool isMouseLeftButtonHeldInArea( const fheroes2::Rect & area ) const
     {
-        return isMouseLeftButtonPressed() && isMouseCursorPosInArea(area);
+        return isMouseLeftButtonPressed() && isMouseCursorPosInArea( area );
     }
 
     bool isMouseRightButtonPressed() const
