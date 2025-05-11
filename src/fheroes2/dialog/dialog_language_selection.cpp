@@ -183,7 +183,7 @@ namespace
 
             fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
 
-            fheroes2::Point offset{};
+            fheroes2::Point offset;
 
             bool isSelected{ false };
         };
