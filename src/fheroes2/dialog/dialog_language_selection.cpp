@@ -71,8 +71,8 @@ namespace
 
         void RedrawItem( const fheroes2::SupportedLanguage & language, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
-            // This method is supposed to perform rendering, but since generating language resources is too resource-intensive,
-            // we cache the information needed for rendering here and perform the actual rendering later in the Redraw() method.
+            // This method supposed to do rendering but since language resource generation is too resource demanding
+            // we are caching needed to render information here and only then do the real rendering within Redraw() method.
             _languagesRenderingInfo[fheroes2::getCodePage( language ) ].emplace_back( language, offsetX, offsetY, isSelected );
         }
 
@@ -144,12 +144,12 @@ namespace
             // This is why we set language switcher here and then initiate real rendering.
             const fheroes2::LanguageSwitcher languageSwitcher( mainLanguage );
 
-            // Rendering of items in the base class is strictly top-to-bottom.
-            // However, this class cannot afford to do the same due to the extensive computation
-            // required just to switch language resources.
-            // Therefore, we first determine the location of each language,
-            // then group them by code page,
-            // and only afterward render all languages—minimizing the number of resource-switching operations.
+            // Rendering of items in the base class is strictly in top to bottom order.
+            // However, this class cannot afford doing the same due to extensive calculations
+            // just to switch language resource.
+            // This is why we first check the location of each language,
+            // then group them in between code pages and
+            // only after render all languages, minimizing the number of resource rendering manipulations.
             _languagesRenderingInfo.clear();
 
             Interface::ListBox<fheroes2::SupportedLanguage>::Redraw();
