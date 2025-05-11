@@ -27,6 +27,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
