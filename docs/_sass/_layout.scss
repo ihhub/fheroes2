@@ -338,11 +338,13 @@ $body-font: "Asul";
       }
 
       img.full-image {
+        aspect-ratio: 16/9;
         width: 100%;
         height: auto;
       }
 
       img.half-image {
+        aspect-ratio: 4/3;
         width: calc(50% - 0.5em);
         height: auto;
       }

@@ -11,11 +11,11 @@ You can find a complete list of all of our changes and enhancements in [**its ow
 <!-- markdownlint-disable MD033 -->
 <div class="image-showcase">
     <div class="row">
-        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" class="full-image game-screenshot" alt="Screenshot of the world map">
+        <img src="images/screenshots/screenshot_world_map.webp?raw=true" width="820" class="full-image game-screenshot" alt="Screenshot of the world map">
     </div>
     <div class="row">
-        <img src="images/screenshots/screenshot_battle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
-        <img src="images/screenshots/screenshot_castle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the castle screen">
+        <img src="images/screenshots/screenshot_battle.webp?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
+        <img src="images/screenshots/screenshot_castle.webp?raw=true" class="half-image game-screenshot" alt="Screenshot of the castle screen">
     </div>
 </div>
 <!-- markdownlint-enable MD033 -->
@@ -41,7 +41,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how to contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 

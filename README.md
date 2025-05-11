@@ -9,19 +9,19 @@ and user interface improvements), breathing new life into one of the most addict
 You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="820" alt="Screenshot of the world map">
+    <img src="docs/images/screenshots/screenshot_world_map.webp" width="820" alt="Screenshot of the world map">
 </p>
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="410" alt="Screenshot of the battle screen">
-    <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
+    <img loading="lazy" src="docs/images/screenshots/screenshot_battle.webp" width="410" alt="Screenshot of the battle screen">
+    <img loading="lazy" src="docs/images/screenshots/screenshot_castle.webp" width="410" alt="Screenshot of the castle screen">
 </p>
 
 ## Download and Install
 
 Please follow the [**installation guide**](docs/INSTALL.md) to download and install fheroes2.
 
-[![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
+<a loading="lazy" href="https://github.com/ihhub/fheroes2/releases"><img src="https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg" alt="Github Downloads"></a>
 
 ## Copyright
 
@@ -63,18 +63,18 @@ To build the [website](https://ihhub.github.io/fheroes2/) from source, please fo
 We accept donations via [**Patreon**](https://www.patreon.com/fheroes2), [**PayPal**](https://www.paypal.com/paypalme/fheroes2) or [**Boosty**](https://boosty.to/fheroes2).
 All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
 
-[![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
-[![Donate](https://img.shields.io/badge/Donate-Boosty-green.svg)](https://boosty.to/fheroes2)
+<a href="https://www.patreon.com/fheroes2"><img loading="lazy" src="https://img.shields.io/badge/Donate-Patreon-green.svg" alt="Patreon Donate"></a>
+<a href="https://www.paypal.com/paypalme/fheroes2"><img loading="lazy" src="https://img.shields.io/badge/Donate-PayPal-green.svg" alt="Paypal Donate"></a>
+<a href="https://boosty.to/fheroes2"><img loading="lazy" src="https://img.shields.io/badge/Donate-Boosty-green.svg" alt="Boosty Donate"></a>
 
 ## Contacts
 
 Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2).
 We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the development of the project.
 
-[![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2)
-[![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2)
-[![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
+<a href="https://www.facebook.com/groups/fheroes2"><img loading="lazy" src="https://img.shields.io/badge/Facebook-blue.svg" alt="Facebook"></a>
+<a href="https://vk.com/fheroes2"><img loading="lazy" src="https://img.shields.io/badge/VK-blue.svg" alt="VK"></a>
+<a href="https://discord.gg/xF85vbZ"><img loading="lazy" src="https://img.shields.io/discord/733093692860137523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Discord"></a>
 
 ## Frequently Asked Questions (FAQ)
 
