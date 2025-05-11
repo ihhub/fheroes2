@@ -5896,8 +5896,6 @@ namespace fheroes2
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-            generateCP1252Alphabet( icnVsSprite );
-            break;
         case SupportedLanguage::French:
             generateCP1252Alphabet( icnVsSprite );
             break;
