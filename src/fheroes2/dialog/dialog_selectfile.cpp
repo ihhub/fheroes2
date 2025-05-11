@@ -343,7 +343,7 @@ namespace
 
             MapsFileInfoList::iterator it = lists.begin();
             for ( ; it != lists.end(); ++it ) {
-                if ( ( *it ).filename == lastfile ) {
+                if ( it->filename == lastfile ) {
                     break;
                 }
             }
@@ -422,12 +422,11 @@ namespace
         const size_t lengthLimit{ 255 };
 
         LocalEvent & le = LocalEvent::Get();
-        bool listUpdated = false;
 
         while ( le.HandleEvents() && result.empty() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-            buttonSort.drawOnState(le.isMouseLeftButtonPressedAndHeldInArea(buttonSort.area()));
+            buttonSort.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSort.area() ) );
             if ( isEditing ) {
                 buttonVirtualKB->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonVirtualKB->area() ) );
             }
@@ -443,6 +442,7 @@ namespace
             bool isListboxSelected = listbox.isSelected();
 
             bool needRedraw = ( listId != listbox.getCurrentId() );
+            bool listUpdated = false;
 
             if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
@@ -483,10 +483,31 @@ namespace
                 }
             }
             else if ( le.MouseClickLeft( buttonSort.area() ) ) {
+                const int currentId = listbox.getCurrentId();
+
                 settings.CycleSaveFileSortType();
                 (void)settings.Save( Settings::configFileName );
                 sortMapInfos( lists );
                 listUpdated = true;
+
+                // re-select the last selected file if any, unless we're typing in the list box
+                if ( !filename.empty() && !isListboxSelected ) {
+                    const std::string lastChoice = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
+
+                    MapsFileInfoList::const_iterator it = lists.cbegin();
+                    for ( ; it != lists.end(); ++it ) {
+                        if ( it->filename == lastChoice ) {
+                            break;
+                        }
+                    }
+                    if ( it != lists.cend() ) {
+                        const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
+                        if ( newId != currentId ) {
+                            listbox.SetCurrent( newId );
+                            needRedraw = true;
+                        }
+                    }
+                }
             }
             else if ( isEditing ) {
                 assert( textInput != nullptr );
