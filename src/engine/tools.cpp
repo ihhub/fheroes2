@@ -205,7 +205,7 @@ namespace fheroes2
                 c = static_cast<char>( 234 );
                 break;
             case 125:
-                // Closing brace (}). Used for lowercase i with circumflex.
+                // Closing brace (}). Used for lowercase i with diaeresis.
                 c = static_cast<char>( 239 );
                 break;
             case 126:
@@ -214,7 +214,7 @@ namespace fheroes2
                 break;
             case 127:
                 // Delete (DEL). Used for lowercase i with circumflex.
-                c = static_cast<char>( 239 );
+                c = static_cast<char>( 238 );
                 break;
             default:
                 break;
