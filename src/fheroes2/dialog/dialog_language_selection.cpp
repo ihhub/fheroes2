@@ -141,7 +141,7 @@ namespace
         void Redraw( const fheroes2::SupportedLanguage language )
         {
             // Since we are setting languages for each item to be rendered
-            // we cannot afford switch the language back to the current one using fheroes2::LanguageSwitcher.
+            // we cannot afford to switch the language back to the current one using fheroes2::LanguageSwitcher.
             // This is why we set language switcher here and then initiate real rendering.
             const fheroes2::LanguageSwitcher languageSwitcher( language );
 
