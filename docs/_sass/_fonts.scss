@@ -1,0 +1,32 @@
+// Font declarations for self-hosted fonts
+
+// Asul font
+@font-face {
+  font-family: "Asul";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Asul/Asul-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Asul";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/Asul/Asul-Bold.ttf") format("truetype");
+}
+
+// Lancelot font
+@font-face {
+  font-family: "Lancelot";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Lancelot/Lancelot-Regular.ttf") format("truetype");
+}
+
+// Jacquard 24 font
+@font-face {
+  font-family: "Jacquard 24";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Jacquard_24/Jacquard24-Regular.woff2") format("woff2");
+}

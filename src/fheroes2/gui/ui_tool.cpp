@@ -24,7 +24,6 @@
 #include <array>
 #include <cassert>
 #include <cmath>
-#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <stdexcept>
@@ -592,24 +591,16 @@ namespace fheroes2
         return out;
     }
 
-    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX /* = 0.05 */, const double waveFrequency /* = 20.0 */ )
+    Sprite createRippleEffect( const Sprite & in, const int32_t amplitudeInPixels, const double phaseAtImageTop, const int32_t periodInPixels )
     {
-        if ( in.empty() || in.singleLayer() ) {
-            return {};
+        if ( in.empty() || in.singleLayer() || amplitudeInPixels == 0 ) {
+            return in;
         }
 
         const int32_t widthIn = in.width();
         const int32_t height = in.height();
 
-        // convert frames to -10...10 range with a period of 40
-        const int32_t linearWave = std::abs( 20 - ( frameId + 10 ) % 40 ) - 10;
-        const int32_t progress = 7 - frameId / 10;
-
-        const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
-        const int32_t offsetX = static_cast<int32_t>( std::abs( rippleXModifier ) );
-        const int32_t limitY = static_cast<int32_t>( waveFrequency * M_PI );
-
-        Image out( widthIn + offsetX * 2, height );
+        Sprite out( widthIn + amplitudeInPixels * 2, height, in.x() - amplitudeInPixels, in.y() );
         out.reset();
 
         const int32_t widthOut = out.width();
@@ -621,9 +612,9 @@ namespace fheroes2
         const uint8_t * inTransformY = in.transform();
 
         for ( int32_t y = 0; y < height; ++y, inImageY += widthIn, inTransformY += widthIn, outImageY += widthOut, outTransformY += widthOut ) {
-            // Take top half the sin wave starting at 0 with period set by waveFrequency, result is -1...1
-            const double sinYEffect = sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
-            const int32_t offset = static_cast<int32_t>( rippleXModifier * sinYEffect ) + offsetX;
+            // Calculate sin starting at `phaseAtImageTop` with period set by `periodInPixels`, result is in interval [-1.0, 1.0].
+            const double sinResult = std::sin( ( 2.0 * M_PI ) * y / periodInPixels + phaseAtImageTop );
+            const int32_t offset = static_cast<int32_t>( std::round( amplitudeInPixels * ( sinResult + 1.0 ) ) );
 
             memcpy( outImageY + offset, inImageY, widthIn );
             memcpy( outTransformY + offset, inTransformY, widthIn );

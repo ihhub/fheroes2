@@ -1025,7 +1025,7 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
     if ( top ) {
         _upperText.set( messageString, fheroes2::FontType::normalWhite() );
         // The text cannot go beyond the text area so it is important to truncate it when necessary.
-        _upperText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
+        _upperText.fitToOneRow( width - offsetForTextBar * 2 );
 
         if ( _battleStatusLog ) {
             _battleStatusLog->AddMessage( std::move( messageString ) );
@@ -1034,7 +1034,7 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
     else if ( messageString != _lastMessage ) {
         _lowerText.set( messageString, fheroes2::FontType::normalWhite() );
         // The text cannot go beyond the text area so it is important to truncate it when necessary.
-        _lowerText.fitToOneRow( _upperBackground.width() - offsetForTextBar * 2 );
+        _lowerText.fitToOneRow( width - offsetForTextBar * 2 );
 
         _lastMessage = std::move( messageString );
     }
@@ -1042,15 +1042,15 @@ void Battle::Status::setMessage( std::string messageString, const bool top )
 
 void Battle::Status::redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Copy( _upperBackground, 0, 0, output, x, y, _upperBackground.width(), _upperBackground.height() );
-    fheroes2::Copy( _lowerBackground, 0, 0, output, x, y + _upperBackground.height(), _lowerBackground.width(), _lowerBackground.height() );
+    fheroes2::Copy( _upperBackground, 0, 0, output, x, y, width, _upperBackground.height() );
+    fheroes2::Copy( _lowerBackground, 0, 0, output, x, y + _upperBackground.height(), width, _lowerBackground.height() );
 
     if ( !_upperText.empty() ) {
-        _upperText.draw( x + ( _upperBackground.width() - _upperText.width() ) / 2, y + 4, output );
+        _upperText.draw( x + ( width - _upperText.width() ) / 2, y + 4, output );
     }
 
     if ( !_lowerText.empty() ) {
-        _lowerText.draw( x + ( _lowerBackground.width() - _lowerText.width() ) / 2, y + _upperBackground.height(), output );
+        _lowerText.draw( x + ( width - _lowerText.width() ) / 2, y + _upperBackground.height(), output );
     }
 }
 
@@ -1545,9 +1545,11 @@ void Battle::Interface::RedrawArmies()
 
             std::vector<const Unit *> troopBeforeWall;
             std::vector<const Unit *> troopAfterWall;
+            std::vector<const Unit *> upwardMovingTroopBeforeWall;
 
             std::vector<const Unit *> movingTroopBeforeWall;
             std::vector<const Unit *> movingTroopAfterWall;
+            std::vector<const Unit *> upwardMovingTroopAfterWall;
 
             // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
@@ -1596,7 +1598,8 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+                const Cell * currentCell = Board::GetCell( cellId );
+                const Unit * unitOnCell = currentCell->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
                     continue;
                 }
@@ -1620,10 +1623,22 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     if ( isCellBefore ) {
-                        movingTroopBeforeWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                            // The troop is moving to the upper row. We should render it prior to this row units.
+                            upwardMovingTroopBeforeWall.emplace_back( unitOnCell );
+                        }
+                        else {
+                            movingTroopBeforeWall.emplace_back( unitOnCell );
+                        }
                     }
                     else {
-                        movingTroopAfterWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y < currentCell->GetPos().y ) {
+                            // The troop is moving to the upper row. We should render it prior to this row units.
+                            upwardMovingTroopAfterWall.emplace_back( unitOnCell );
+                        }
+                        else {
+                            movingTroopAfterWall.emplace_back( unitOnCell );
+                        }
                     }
                 }
 
@@ -1641,6 +1656,10 @@ void Battle::Interface::RedrawArmies()
             }
 
             for ( const Unit * unit : deadTroopBeforeWall ) {
+                RedrawTroopSprite( *unit );
+            }
+
+            for ( const Unit * unit : upwardMovingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1669,6 +1688,10 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
+            for ( const Unit * unit : upwardMovingTroopAfterWall ) {
+                RedrawTroopSprite( *unit );
+            }
+
             for ( const Unit * unit : troopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
@@ -1694,7 +1717,6 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> movingTroop;
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
-            // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
 
@@ -1707,7 +1729,8 @@ void Battle::Interface::RedrawArmies()
                     }
                 }
 
-                const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+                const Cell * currentCell = Board::GetCell( cellId );
+                const Unit * unitOnCell = currentCell->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
                     continue;
                 }
@@ -1721,6 +1744,10 @@ void Battle::Interface::RedrawArmies()
 
                     troop.emplace_back( unitOnCell );
                 }
+                else if ( _movingPos.y < currentCell->GetPos().y ) {
+                    // The troop is moving to the upper row. Render it prior to this row units.
+                    RedrawTroopSprite( *unitOnCell );
+                }
                 else {
                     movingTroop.emplace_back( unitOnCell );
                 }
@@ -1733,11 +1760,12 @@ void Battle::Interface::RedrawArmies()
                 }
             }
 
-            // Redraw monster counters.
+            // Redraw monsters.
             for ( const Unit * unit : troop ) {
                 RedrawTroopSprite( *unit );
             }
 
+            // Redraw monster counters.
             for ( const Unit * unit : troopCounter ) {
                 RedrawTroopCount( *unit );
             }
@@ -1845,56 +1873,34 @@ void Battle::Interface::RedrawOpponentsFlags()
 
 void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 {
-    if ( b_current_sprite && _currentUnit == &unit ) {
-        drawTroopSprite( unit, *b_current_sprite );
-    }
-    else if ( unit.Modes( SP_STONE ) ) {
-        // Current monster can't be active if it's under Stunning effect.
-        const int monsterIcnId = unit.GetMonsterSprite();
-        fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
-        fheroes2::ApplyPalette( monsterSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-        drawTroopSprite( unit, monsterSprite );
-    }
-    else if ( unit.Modes( CAP_MIRRORIMAGE ) ) {
-        fheroes2::Sprite monsterSprite;
+    const bool isCurrentMonsterAction = ( _currentUnit == &unit && _spriteInsteadCurrentUnit != nullptr );
 
-        if ( _currentUnit == &unit && b_current_sprite != nullptr ) {
-            monsterSprite = *b_current_sprite;
-        }
-        else {
-            const int monsterIcnId = unit.GetMonsterSprite();
-            monsterSprite = fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
-        }
+    const fheroes2::Sprite & monsterSprite = isCurrentMonsterAction ? *_spriteInsteadCurrentUnit : fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
 
-        fheroes2::ApplyPalette( monsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+    fheroes2::Point drawnPosition;
 
-        const fheroes2::Point drawnPosition = drawTroopSprite( unit, monsterSprite );
+    if ( unit.Modes( SP_STONE | CAP_MIRRORIMAGE ) ) {
+        // Apply Stone or Mirror image visual effect.
+        fheroes2::Sprite modifiedMonsterSprite( monsterSprite );
+        const PAL::PaletteType paletteType = unit.Modes( SP_STONE ) ? PAL::PaletteType::GRAY : PAL::PaletteType::MIRROR_IMAGE;
 
-        if ( _currentUnit == &unit && b_current_sprite == nullptr ) {
-            // Current unit's turn which is idling.
-            const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
-            fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
-        }
+        fheroes2::ApplyPalette( modifiedMonsterSprite, PAL::GetPalette( paletteType ) );
+
+        drawnPosition = _drawTroopSprite( unit, modifiedMonsterSprite );
     }
     else {
-        const int monsterIcnId = unit.GetMonsterSprite();
-        const bool isCurrentMonsterAction = ( _currentUnit == &unit && b_current_sprite != nullptr );
+        drawnPosition = _drawTroopSprite( unit, monsterSprite );
+    }
 
-        const fheroes2::Sprite & monsterSprite = isCurrentMonsterAction ? *b_current_sprite : fheroes2::AGG::GetICN( monsterIcnId, unit.GetFrame() );
-
-        const fheroes2::Point drawnPosition = drawTroopSprite( unit, monsterSprite );
-
-        if ( _currentUnit == &unit && b_current_sprite == nullptr ) {
-            // Current unit's turn which is idling.
-            const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
-            fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
-        }
+    if ( _currentUnit == &unit && _spriteInsteadCurrentUnit == nullptr ) {
+        // Current unit's turn which is idling. Highlight this unit's contour.
+        const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
+        fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
     }
 }
 
-fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
+fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
 {
-    const fheroes2::Rect & unitPosition = unit.GetRectPosition();
     // Get the sprite rendering offset.
     fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
 
@@ -1907,6 +1913,7 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
 
         if ( _movingUnit->animation.animationLength() ) {
             // Get the horizontal and vertical movement projections.
+            const fheroes2::Rect & unitPosition = unit.GetRectPosition();
             const int32_t moveX = _movingPos.x - unitPosition.x;
             const int32_t moveY = _movingPos.y - unitPosition.y;
 
@@ -1926,6 +1933,7 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
     else if ( _flyingUnit == &unit ) {
         // Monster is flying.
         // Get the horizontal and vertical movement projections.
+        const fheroes2::Rect & unitPosition = unit.GetRectPosition();
         const int32_t moveX = _flyingPos.x - unitPosition.x;
         const int32_t moveY = _flyingPos.y - unitPosition.y;
 
@@ -4583,13 +4591,13 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
                 RedrawActionColdRaySpell( *target );
                 break;
             case Spell::DISRUPTINGRAY:
-                RedrawActionDisruptingRaySpell( *target );
+                _redrawActionDisruptingRaySpell( *target );
                 break;
             case Spell::BLOODLUST:
-                RedrawActionBloodLustSpell( *target );
+                _redrawActionBloodLustSpell( *target );
                 break;
             case Spell::PETRIFY:
-                RedrawActionStoneSpell( *target );
+                _redrawActionStoneSpell( *target );
                 break;
             default:
                 break;
@@ -5191,46 +5199,111 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
     }
 }
 
-void Battle::Interface::RedrawActionTeleportSpell( Unit & target, const int32_t dst )
+void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t dst )
 {
     LocalEvent & le = LocalEvent::Get();
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    uint8_t currentAlpha = target.GetCustomAlpha();
-    const uint8_t alphaStep = 15;
+    // Hide the counter.
+    target.SwitchAnimation( Monster_Info::STAND_STILL );
 
-    AudioManager::PlaySound( M82::TELPTOUT );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    fheroes2::Sprite rippleSprite;
+    _spriteInsteadCurrentUnit = &rippleSprite;
+    const int32_t spriteHeight = unitSprite.height();
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+    const Unit * oldCurrent = _currentUnit;
+    _currentUnit = &target;
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
+    // Don't highlight the cursor position.
+    _curentCellIndex = -1;
+
+    // Don't highlight movement area cells while animating teleportation.
+    Settings & conf = Settings::Get();
+    const bool showMoveShadowState = conf.BattleShowMoveShadow();
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( false );
+    }
+
+    const bool soundOn = conf.SoundVolume() > 0;
+
+    if ( soundOn ) {
+        AudioManager::PlaySound( M82::TELPTOUT );
+    }
+
+    int32_t frame = 1;
+    const int32_t frameLimit = 25;
+    const int32_t maxAmplitude = 3;
+    const int32_t imageCutFrames = 7;
+    const double phaseCoeff = 0.6;
+    const int32_t wavePeriod = 60;
+
+    Game::passAnimationDelay( Game::BATTLE_DISRUPTING_DELAY );
+
+    // Animate first teleportation phase: disappearing.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && ( frame <= frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha >= alphaStep && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha -= alphaStep;
-            target.SetCustomAlpha( currentAlpha );
+        if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            if ( frame >= frameLimit ) {
+                // Render battlefield without this unit.
+                rippleSprite.clear();
+            }
+            else {
+                const int32_t amplitude = std::min( frame / 2, maxAmplitude );
+                rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, -phaseCoeff * frame, wavePeriod );
+
+                if ( frame > frameLimit - imageCutFrames ) {
+                    // Animate disappearing by making sprite transparent starting from the top.
+                    fheroes2::FillTransform( rippleSprite, 0, 0, rippleSprite.width(), spriteHeight * ( frame - frameLimit + imageCutFrames ) / imageCutFrames, 1 );
+                }
+            }
+
+            ++frame;
+
             Redraw();
         }
     }
-
-    currentAlpha = 0;
-    Redraw();
 
     target.SetPosition( dst );
-    AudioManager::PlaySound( M82::TELPTIN );
+    if ( soundOn ) {
+        AudioManager::PlaySound( M82::TELPTIN );
+    }
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
+    frame = 1;
+    // Animate second teleportation phase: appearing.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && ( frame < frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha <= ( 255 - alphaStep ) && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha += alphaStep;
-            target.SetCustomAlpha( currentAlpha );
+        if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            if ( frame == frameLimit ) {
+                // Render battlefield with this unit.
+                _spriteInsteadCurrentUnit = &unitSprite;
+            }
+            else {
+                const int32_t amplitude = std::min( ( frameLimit - frame ) / 2, maxAmplitude );
+                rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, phaseCoeff * ( frame + frameLimit ), wavePeriod );
+
+                if ( frame < imageCutFrames ) {
+                    // Animate appearing from bottom to top by making the top part transparent.
+                    fheroes2::FillTransform( rippleSprite, 0, 0, rippleSprite.width(), spriteHeight * ( imageCutFrames - frame ) / imageCutFrames, 1 );
+                }
+
+                ++frame;
+            }
+
             Redraw();
         }
     }
 
-    target.SetCustomAlpha( 255 );
+    // Restore the initial state.
+    target.SwitchAnimation( Monster_Info::STATIC );
+    _currentUnit = oldCurrent;
+    _spriteInsteadCurrentUnit = nullptr;
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( true );
+    }
 }
 
 void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
@@ -5435,47 +5508,27 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
     RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
-void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
+void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
-
-    std::vector<std::vector<uint8_t>> originalPalette;
-    if ( target.Modes( SP_STONE ) ) {
-        originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::GRAY ) );
-    }
-    else if ( target.Modes( CAP_MIRRORIMAGE ) ) {
-        originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
-    }
-
-    if ( !originalPalette.empty() ) {
-        for ( size_t i = 1; i < originalPalette.size(); ++i ) {
-            originalPalette[0] = PAL::CombinePalettes( originalPalette[0], originalPalette[i] );
-        }
-        fheroes2::ApplyPalette( unitSprite, originalPalette[0] );
-    }
-
-    std::vector<uint8_t> convert = PAL::GetPalette( PAL::PaletteType::RED );
-    if ( !originalPalette.empty() ) {
-        convert = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), convert );
-    }
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite bloodlustEffect( unitSprite );
-    fheroes2::ApplyPalette( bloodlustEffect, convert );
+    fheroes2::ApplyPalette( bloodlustEffect, PAL::GetPalette( PAL::PaletteType::RED ) );
 
-    fheroes2::Sprite mixSprite( unitSprite );
+    fheroes2::Sprite mixSprite;
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = &target;
-    b_current_sprite = &mixSprite;
+    _spriteInsteadCurrentUnit = &mixSprite;
 
     const uint32_t bloodlustDelay = 1800 / 20;
     // duration is 1900ms
     AudioManager::PlaySound( M82::BLOODLUS );
 
-    uint32_t alpha = 0;
+    uint8_t alpha = 0;
     uint32_t frame = 0;
 
     // Immediately indicate that the delay has passed to render first frame immediately.
@@ -5488,7 +5541,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
         if ( frame < 20 && Game::validateCustomAnimationDelay( bloodlustDelay ) ) {
             mixSprite = unitSprite;
-            fheroes2::AlphaBlit( bloodlustEffect, mixSprite, static_cast<uint8_t>( alpha ) );
+            fheroes2::AlphaBlit( bloodlustEffect, mixSprite, alpha );
             Redraw();
 
             alpha += ( frame < 10 ) ? 20 : -20;
@@ -5497,10 +5550,10 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
     }
 
     _currentUnit = nullptr;
-    b_current_sprite = nullptr;
+    _spriteInsteadCurrentUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
+void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -5509,23 +5562,33 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     fheroes2::Sprite stoneEffect( unitSprite );
     fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
 
-    fheroes2::Sprite mixSprite( unitSprite );
+    fheroes2::Sprite mixSprite;
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
+    // Don't highlight the cursor position.
+    _curentCellIndex = -1;
+
+    // Don't highlight movement area cells while animating teleportation.
+    Settings & conf = Settings::Get();
+    const bool showMoveShadowState = conf.BattleShowMoveShadow();
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( false );
+    }
+
     _currentUnit = &target;
-    b_current_sprite = &mixSprite;
+    _spriteInsteadCurrentUnit = &mixSprite;
 
     AudioManager::PlaySound( M82::PARALIZE );
 
-    uint32_t alpha = 0;
+    uint8_t alpha = 0;
     uint32_t frame = 0;
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( frame < 25 && Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            mixSprite = fheroes2::Sprite( unitSprite );
-            fheroes2::AlphaBlit( stoneEffect, mixSprite, static_cast<uint8_t>( alpha ) );
+            mixSprite = unitSprite;
+            fheroes2::AlphaBlit( stoneEffect, mixSprite, alpha );
             Redraw();
 
             alpha += 10;
@@ -5534,7 +5597,10 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     }
 
     _currentUnit = nullptr;
-    b_current_sprite = nullptr;
+    _spriteInsteadCurrentUnit = nullptr;
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( true );
+    }
 }
 
 void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
@@ -5604,37 +5670,59 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, const int spellICN,
     }
 }
 
-void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
+void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
     RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
+    // Hide the counter.
+    target.SwitchAnimation( Monster_Info::STAND_STILL );
+
     // Part 2 - ripple effect
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
     fheroes2::Sprite rippleSprite;
+    _spriteInsteadCurrentUnit = &rippleSprite;
 
-    const Unit * old_current = _currentUnit;
+    const Unit * oldCurrent = _currentUnit;
     _currentUnit = &target;
-    _movingPos = { 0, 0 };
 
-    int32_t frame = 0;
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame < 60 ) {
+    // Don't highlight the cursor position.
+    _curentCellIndex = -1;
+
+    // Don't highlight movement area cells while animating teleportation.
+    Settings & conf = Settings::Get();
+    const bool showMoveShadowState = conf.BattleShowMoveShadow();
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( false );
+    }
+
+    int32_t frame = 1;
+    const int32_t frameLimit = 60;
+    const int32_t maxAmplitude = 3;
+
+    Game::passAnimationDelay( Game::BATTLE_DISRUPTING_DELAY );
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame < frameLimit ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            rippleSprite = fheroes2::CreateRippleEffect( unitSprite, frame );
-            rippleSprite.setPosition( unitSprite.x(), unitSprite.y() );
+            const int32_t amplitude = std::min( std::min( frame, ( frameLimit - frame ) ) / 3, maxAmplitude );
+            rippleSprite = fheroes2::createRippleEffect( unitSprite, amplitude, -0.4 * frame, 60 );
 
-            b_current_sprite = &rippleSprite;
             Redraw();
 
-            frame += 2;
+            ++frame;
         }
     }
 
-    _currentUnit = old_current;
-    b_current_sprite = nullptr;
+    // Restore the initial state.
+    target.SwitchAnimation( Monster_Info::STATIC );
+    _currentUnit = oldCurrent;
+    _spriteInsteadCurrentUnit = nullptr;
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( true );
+    }
 }
 
 void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )

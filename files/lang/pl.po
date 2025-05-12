@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-30 13:25+0000\n"
+"POT-Creation-Date: 2025-05-06 13:36+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -670,9 +670,6 @@ msgstr "Szczęście"
 msgid "Spell Points"
 msgstr "Pkt. magii"
 
-msgid "Hero's Options"
-msgstr "Opcje bohatera"
-
 msgid "Cast Spell"
 msgstr "Rzuć zaklęcie"
 
@@ -690,6 +687,9 @@ msgstr "Ekran bohatera"
 
 msgid "Captain's Options"
 msgstr "Opcje kapitana"
+
+msgid "Hero's Options"
+msgstr "Opcje bohatera"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "

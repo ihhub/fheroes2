@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -51,20 +51,40 @@ namespace Battle
 
     struct ModeDuration : public std::pair<uint32_t, uint32_t>
     {
-        ModeDuration( uint32_t, uint32_t );
+        ModeDuration( const uint32_t mode, const uint32_t duration )
+            : std::pair<uint32_t, uint32_t>( mode, duration )
+        {
+            // Do nothing.
+        }
 
-        bool isMode( uint32_t ) const;
-        bool isZeroDuration() const;
-        void DecreaseDuration();
+        bool isMode( const uint32_t mode ) const
+        {
+            return ( first & mode ) != 0;
+        }
+
+        bool isZeroDuration() const
+        {
+            return 0 == second;
+        }
+
+        void DecreaseDuration()
+        {
+            if ( second ) {
+                --second;
+            }
+        }
     };
 
     struct ModesAffected : public std::vector<ModeDuration>
     {
-        ModesAffected();
+        ModesAffected()
+        {
+            reserve( 3 );
+        }
 
-        uint32_t GetMode( uint32_t ) const;
-        void AddMode( uint32_t, uint32_t );
-        void RemoveMode( uint32_t );
+        uint32_t GetMode( const uint32_t mode ) const;
+        void AddMode( const uint32_t mode, const uint32_t duration );
+        void RemoveMode( const uint32_t mode );
         void DecreaseDuration();
 
         uint32_t FindZeroDuration() const;
@@ -73,7 +93,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid );
+        Unit( const Troop & troop, const Position & pos, const bool isReflected, const uint32_t uid );
 
         Unit( const Unit & ) = delete;
 
@@ -81,24 +101,24 @@ namespace Battle
 
         Unit & operator=( const Unit & ) = delete;
 
-        bool isModes( uint32_t v ) const override;
+        bool isModes( const uint32_t modes_ ) const override;
         bool isBattle() const override;
         std::string GetShotString() const override;
         std::string GetSpeedString() const override;
         uint32_t GetHitPointsLeft() const override;
         virtual uint32_t GetMissingHitPoints() const;
-        uint32_t GetAffectedDuration( uint32_t mod ) const override;
+        uint32_t GetAffectedDuration( const uint32_t mode ) const override;
         uint32_t GetSpeed() const override;
         int GetMorale() const override;
 
         Unit * GetMirror()
         {
-            return mirror;
+            return _mirrorUnit;
         }
 
         void SetMirror( Unit * ptr )
         {
-            mirror = ptr;
+            _mirrorUnit = ptr;
         }
 
         void SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator );
@@ -114,22 +134,22 @@ namespace Battle
 
         bool isReflect() const
         {
-            return reflect;
+            return _isReflected;
         }
 
         bool isHaveDamage() const;
         bool isOutOfCastleWalls() const;
 
-        std::string String( bool more = false ) const;
+        std::string String( const bool more = false ) const;
 
         uint32_t GetUID() const
         {
             return _uid;
         }
 
-        bool isUID( uint32_t v ) const
+        bool isUID( const uint32_t uid ) const
         {
-            return _uid == v;
+            return _uid == uid;
         }
 
         int32_t GetHeadIndex() const;
@@ -137,12 +157,12 @@ namespace Battle
 
         const Position & GetPosition() const
         {
-            return position;
+            return _position;
         }
 
-        void SetPosition( const int32_t idx );
+        void SetPosition( const int32_t index );
         void SetPosition( const Position & pos );
-        void SetReflection( bool );
+        void SetReflection( const bool isReflected );
 
         uint32_t GetAttack() const override;
         uint32_t GetDefense() const override;
@@ -176,9 +196,20 @@ namespace Battle
         // the implementation for details.
         int32_t evaluateThreatForUnit( const Unit & defender ) const;
 
-        uint32_t GetInitialCount() const;
-        uint32_t GetDead() const;
-        uint32_t GetHitPoints() const;
+        uint32_t GetInitialCount() const
+        {
+            return _initialCount;
+        }
+
+        uint32_t GetDead() const
+        {
+            return _deadCount;
+        }
+
+        uint32_t GetHitPoints() const
+        {
+            return _hitPoints;
+        }
 
         // Returns the cost of this unit, suitable for calculating the cost of surrendering the army (see
         // the implementation for details). Discounts are not applied when calculating this cost.
@@ -186,15 +217,15 @@ namespace Battle
 
         uint32_t GetShots() const override
         {
-            return shots;
+            return _shotsLeft;
         }
 
         bool isImmovable() const;
 
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
 
-        uint32_t CalculateMinDamage( const Unit & ) const;
-        uint32_t CalculateMaxDamage( const Unit & ) const;
+        uint32_t CalculateMinDamage( const Unit & enemy ) const;
+        uint32_t CalculateMaxDamage( const Unit & enemy ) const;
         uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
 
         // Returns a very rough estimate of the retaliatory damage after this unit receives the damage of the specified value.
@@ -209,15 +240,20 @@ namespace Battle
         void PostAttackAction( const Unit & enemy );
 
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
-        void SetBlindRetaliation( const bool value );
+        void SetBlindRetaliation( const bool value )
+        {
+            _blindRetaliation = value;
+        }
 
         uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                        const bool ignoreDefendingHero ) const;
 
-        bool SwitchAnimation( int rule, bool reverse = false );
-        bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
+        // Returns true if the animation was correctly changed and if it is valid.
+        bool SwitchAnimation( const int rule, const bool reverse = false );
+        // Returns true if the animation was correctly changed and if it is valid.
+        bool SwitchAnimation( const std::vector<int> & animationList, const bool reverse = false );
 
-        void IncreaseAnimFrame( bool loop = false )
+        void IncreaseAnimFrame( const bool loop = false )
         {
             animation.playAnimation( loop );
         }
@@ -234,15 +270,15 @@ namespace Battle
 
         uint8_t GetCustomAlpha() const
         {
-            return customAlphaMask;
+            return _customAlphaMask;
         }
 
-        void SetCustomAlpha( uint8_t alpha )
+        void SetCustomAlpha( const uint8_t alpha )
         {
-            customAlphaMask = alpha;
+            _customAlphaMask = alpha;
         }
 
-        fheroes2::Point GetStartMissileOffset( size_t ) const;
+        fheroes2::Point GetStartMissileOffset( const size_t direction ) const;
 
         int M82Attk( const Unit & enemy ) const;
         int M82Kill() const;
@@ -257,25 +293,25 @@ namespace Battle
 
         fheroes2::Rect GetRectPosition() const
         {
-            return position.GetRect();
+            return _position.GetRect();
         }
 
         uint32_t HowManyWillBeKilled( const uint32_t dmg ) const;
 
         void SetResponse();
         void UpdateDirection();
-        bool UpdateDirection( const fheroes2::Rect & );
+        bool UpdateDirection( const fheroes2::Rect & pos );
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
-        int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        Spell GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
         // If the color of the current unit is valid (i.e. this unit is not under the influence of a Berserker spell), then returns the commander of the army with the
         // corresponding color. Otherwise, returns the commander of the unit's army.
         const HeroBase * GetCurrentOrArmyCommander() const;
 
-        // Checks whether the attacker will fight the defender in melee
+        // Checks whether the attacker will fight the defender in melee.
         static bool isHandFighting( const Unit & attacker, const Unit & defender );
 
         int GetAnimationState() const
@@ -287,7 +323,7 @@ namespace Battle
 
         bool checkIdleDelay()
         {
-            return idleTimer.checkDelay();
+            return _idleTimer.checkDelay();
         }
 
         // Removes temporary affection(s) (usually spell effect(s)). Multiple affections can be removed using a single call.
@@ -297,39 +333,40 @@ namespace Battle
         AnimationState animation;
 
     private:
-        uint32_t ApplyDamage( const uint32_t dmg );
-        uint32_t Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
+        // Returns the count of killed troops.
+        uint32_t _applyDamage( const uint32_t dmg );
+        uint32_t _resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
 
-        // Applies a damage-causing spell to this unit
-        void SpellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target );
-        // Applies a restoring or reviving spell to this unit
-        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero );
-        // Applies a spell to this unit that changes its parameters
-        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero );
+        // Applies a damage-causing spell to this unit.
+        void _spellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target );
+        // Applies a restoring or reviving spell to this unit.
+        void _spellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero );
+        // Applies a spell to this unit that changes its parameters.
+        void _spellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero );
 
         // Adds a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
-        void addAffection( const uint32_t mode, const uint32_t duration );
+        void _addAffection( const uint32_t mode, const uint32_t duration );
 
         // Replaces some temporary affection(s) with another affection. Multiple affections can be replaced by a new one (but
         // only one) with a single call.
-        void replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
+        void _replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
 
-        const uint32_t _uid;
-        uint32_t hp;
-        uint32_t _initialCount;
-        uint32_t dead;
-        uint32_t shots;
-        uint32_t _disruptingRaysNum;
-        bool reflect;
+        const uint32_t _uid{ 0 };
+        uint32_t _hitPoints{ 0 };
+        uint32_t _initialCount{ 0 };
+        uint32_t _deadCount{ 0 };
+        uint32_t _shotsLeft{ 0 };
+        uint32_t _disruptingRaysNum{ 0 };
 
-        Position position;
-        ModesAffected affected;
-        Unit * mirror;
-        RandomizedDelay idleTimer;
+        Position _position;
+        ModesAffected _affected;
+        Unit * _mirrorUnit{ nullptr };
+        RandomizedDelay _idleTimer;
 
+        uint8_t _customAlphaMask{ 255 };
+
+        bool _isReflected{ false };
         // Whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
-        bool _blindRetaliation;
-
-        uint8_t customAlphaMask;
+        bool _blindRetaliation{ false };
     };
 }

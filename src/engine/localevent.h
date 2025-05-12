@@ -328,9 +328,11 @@ public:
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
-        if ( newSpeed > 0 ) {
-            _controllerPointerSpeed = newSpeed / _constrollerSpeedModifier;
+        if ( newSpeed <= 0 ) {
+            return;
         }
+
+        _controllerPointerSpeed = newSpeed / _controllerSpeedModifier;
     }
 
     bool isDragInProgress() const
@@ -473,8 +475,8 @@ private:
     fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more usable ones
-    const double _constrollerSpeedModifier{ 2000000.0 };
-    double _controllerPointerSpeed{ 10.0 / _constrollerSpeedModifier };
+    const double _controllerSpeedModifier{ 2000000.0 };
+    double _controllerPointerSpeed{ 10.0 / _controllerSpeedModifier };
     fheroes2::PointBase2D<double> _emulatedPointerPos;
 
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values

@@ -537,7 +537,7 @@ namespace
 
             // If the enemy is not vanquished we update only the area around the castle on radar.
             if ( !enemyKingdom.isLoss() ) {
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE );
                 const fheroes2::Point castlePosition = Maps::GetPoint( dstIndex );
 
                 I.getRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
@@ -2517,7 +2517,7 @@ namespace
             fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Dialog::OK );
         }
 
-        const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
+        const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER );
         Maps::ClearFog( dst_index, scoutRange, hero.GetColor() );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -3439,7 +3439,7 @@ namespace
 
                 const size_t maxDelay = 7;
 
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                const int32_t scoutRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
                 bool skipAnimation = false;
                 fheroes2::Rect radarRenderArea;
 
@@ -3773,6 +3773,9 @@ void Heroes::Action( int tileIndex )
 
         I.getGameArea().SetCenter( GetCenter() );
         I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
+
+        // Render the screen with the hero at the action object before rendering the action.
+        fheroes2::Display::instance().render();
     }
 
     switch ( objectType ) {

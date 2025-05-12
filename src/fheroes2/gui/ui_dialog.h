@@ -88,7 +88,7 @@ namespace fheroes2
     // It is essential to store members by values rather than by references.
     // This leads to more memory consumption but at the same time prevents any memory related issues.
 
-    class TextDialogElement : public DialogElement
+    class TextDialogElement final : public DialogElement
     {
     public:
         explicit TextDialogElement( const std::shared_ptr<TextBase> & text );
@@ -106,7 +106,7 @@ namespace fheroes2
         const std::shared_ptr<TextBase> _text;
     };
 
-    class CustomImageDialogElement : public DialogElement
+    class CustomImageDialogElement final : public DialogElement
     {
     public:
         explicit CustomImageDialogElement( const Image & image );
@@ -126,7 +126,7 @@ namespace fheroes2
         const Image _image;
     };
 
-    class ArtifactDialogElement : public DialogElement
+    class ArtifactDialogElement final : public DialogElement
     {
     public:
         explicit ArtifactDialogElement( const Artifact & artifact );
@@ -143,7 +143,7 @@ namespace fheroes2
         const Artifact _artifact;
     };
 
-    class ResourceDialogElement : public DialogElement
+    class ResourceDialogElement final : public DialogElement
     {
     public:
         ResourceDialogElement( const int32_t resourceType, std::string text );
@@ -166,7 +166,7 @@ namespace fheroes2
 
     int showResourceMessage( const TextBase & header, const TextBase & body, const int buttons, const Funds & funds );
 
-    class SpellDialogElement : public DialogElement
+    class SpellDialogElement final : public DialogElement
     {
     public:
         SpellDialogElement( const Spell & spell, const HeroBase * hero );
@@ -184,7 +184,7 @@ namespace fheroes2
         const HeroBase * _hero;
     };
 
-    class LuckDialogElement : public DialogElement
+    class LuckDialogElement final : public DialogElement
     {
     public:
         explicit LuckDialogElement( const bool goodLuck );
@@ -201,7 +201,7 @@ namespace fheroes2
         const bool _goodLuck;
     };
 
-    class MoraleDialogElement : public DialogElement
+    class MoraleDialogElement final : public DialogElement
     {
     public:
         explicit MoraleDialogElement( const bool goodMorale );
@@ -218,7 +218,7 @@ namespace fheroes2
         const bool _goodMorale;
     };
 
-    class ExperienceDialogElement : public DialogElement
+    class ExperienceDialogElement final : public DialogElement
     {
     public:
         explicit ExperienceDialogElement( const int32_t experience );
@@ -253,7 +253,7 @@ namespace fheroes2
         const std::string _text;
     };
 
-    class SmallPrimarySkillDialogElement : public PrimarySkillDialogElement
+    class SmallPrimarySkillDialogElement final : public PrimarySkillDialogElement
     {
     public:
         SmallPrimarySkillDialogElement( const int32_t skillType, std::string text );
@@ -266,7 +266,7 @@ namespace fheroes2
         const Size _iconSize{ 34, 34 };
     };
 
-    class SecondarySkillDialogElement : public DialogElement
+    class SecondarySkillDialogElement final : public DialogElement
     {
     public:
         SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero );
@@ -284,7 +284,7 @@ namespace fheroes2
         const Heroes & _hero;
     };
 
-    class AnimationDialogElement : public DialogElement
+    class AnimationDialogElement final : public DialogElement
     {
     public:
         explicit AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay );
@@ -314,7 +314,7 @@ namespace fheroes2
         Point _internalOffset;
     };
 
-    class CustomAnimationDialogElement : public DialogElement
+    class CustomAnimationDialogElement final : public DialogElement
     {
     public:
         explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point & animationPositionOffset, const uint32_t animationIndexOffset,
@@ -345,7 +345,7 @@ namespace fheroes2
         mutable uint32_t _currentIndex;
     };
 
-    class MonsterDialogElement : public DialogElement
+    class MonsterDialogElement final : public DialogElement
     {
     public:
         explicit MonsterDialogElement( const Monster & monster );
@@ -406,7 +406,7 @@ namespace fheroes2
 
         bool _isIgnoreMouseWheelEventRoiCheck{ false };
 
-        bool _isMouseWheelUpEvent( const LocalEvent & eventHandler ) const;
-        bool _isMouseWheelDownEvent( const LocalEvent & eventHandler ) const;
+        bool _isIncreaseValueEvent( const LocalEvent & eventHandler ) const;
+        bool _isDecreaseValueEvent( const LocalEvent & eventHandler ) const;
     };
 }

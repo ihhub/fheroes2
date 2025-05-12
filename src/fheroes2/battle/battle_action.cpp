@@ -1539,7 +1539,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         targetsInfo.push_back( targetInfo );
 
         _interface->RedrawActionSpellCastStatus( Spell( Spell::TELEPORT ), src, commander->GetName(), targetsInfo );
-        _interface->RedrawActionTeleportSpell( *unit, pos.GetHead()->GetIndex() );
+        _interface->redrawActionTeleportSpell( *unit, pos.GetHead()->GetIndex() );
     }
 
     unit->SetPosition( pos );

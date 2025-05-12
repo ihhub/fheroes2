@@ -11,7 +11,7 @@ You can find a complete list of all of our changes and enhancements in [**its ow
 <!-- markdownlint-disable MD033 -->
 <div class="image-showcase">
     <div class="row">
-        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820px" class="full-image game-screenshot" alt="Screenshot of the world map">
+        <img src="images/screenshots/screenshot_world_map.png?raw=true" width="820" class="full-image game-screenshot" alt="Screenshot of the world map">
     </div>
     <div class="row">
         <img src="images/screenshots/screenshot_battle.png?raw=true" class="half-image game-screenshot" alt="Screenshot of the battle screen">
@@ -43,16 +43,18 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
-To build the project from source, please follow [**this guide**](DEVELOPMENT.md).
+### Developing fheroes2 engine
 
-[![Build Status](https://github.com/ihhub/fheroes2/actions/workflows/push.yml/badge.svg)](https://github.com/ihhub/fheroes2/actions)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
+To build the project from source, please follow [**this guide**](DEVELOPMENT.md).
 
 To assist with the graphical asset efforts of the project, please look at our [**graphical artist guide**](GRAPHICAL_ASSETS.md).
 
 If you would like to help translating the project, please read the [**translation guide**](TRANSLATION.md).
+
+### Developing fheroes2 documentation site
+
+To build the [website](https://ihhub.github.io/fheroes2/) from source, please follow
+[**this guide**](WEBSITE_LOCAL_DEV.md).
 
 ## Donation
 

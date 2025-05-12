@@ -43,6 +43,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mode.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
@@ -616,7 +617,7 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
     updatePriorityForEnemyArmy( kingdom, *enemyArmy );
 }
 
-void AI::Planner::KingdomTurn( Kingdom & kingdom )
+fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
 #if defined( WITH_DEBUG )
     class AIAutoControlModeCommitter
@@ -661,7 +662,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     if ( kingdom.isLoss() || myColor == Color::NONE ) {
         kingdom.LossPostActions();
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     // Reset the turn progress indicator
@@ -806,7 +807,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         uint32_t const endProgressValue
             = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
 
-        bool moreTaskForHeroes = HeroesTurn( heroes, currentProgressValue, endProgressValue );
+        bool moreTaskForHeroes = false;
+        const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );
+        if ( gameState != fheroes2::GameMode::END_TURN ) {
+            return gameState;
+        }
 
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
@@ -870,6 +875,8 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     }
 
     status.resetAITurnProgress();
+
+    return fheroes2::GameMode::END_TURN;
 }
 
 bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,

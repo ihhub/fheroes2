@@ -24,8 +24,10 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -54,7 +56,7 @@ namespace
     const int32_t scrollBarAreaWidth = 48;
     const int32_t paddingLeftSide = 24;
 
-    class LanguageList : public Interface::ListBox<fheroes2::SupportedLanguage>
+    class LanguageList final : public Interface::ListBox<fheroes2::SupportedLanguage>
     {
     public:
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListSingleClick;
@@ -70,10 +72,9 @@ namespace
 
         void RedrawItem( const fheroes2::SupportedLanguage & language, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
-            fheroes2::LanguageSwitcher languageSwitcher( language );
-            const fheroes2::Text languageName( fheroes2::getLanguageName( language ),
-                                               isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-            languageName.draw( ( textAreaWidth - languageName.width() ) / 2 + offsetX, offsetY, fheroes2::Display::instance() );
+            // This method is supposed to do rendering but since the language resource generation is too performance extensive,
+            // we cache the information needed to render here and perform the actual rendering in the Redraw() method.
+            _languagesRenderingInfo[fheroes2::getCodePage( language )].emplace_back( language, offsetX, offsetY, isSelected );
         }
 
         void RedrawBackground( const fheroes2::Point & /* unused */ ) override
@@ -130,9 +131,68 @@ namespace
             _scrollbar.moveToIndex( _topId );
         }
 
+        void Redraw() override
+        {
+            // Do not call this method!
+            // Use the overloaded method below!
+            assert( 0 );
+        }
+
+        void Redraw( const fheroes2::SupportedLanguage mainLanguage )
+        {
+            // Since we are setting languages for each item to be rendered
+            // we cannot afford to switch the language back to the current one using fheroes2::LanguageSwitcher.
+            // This is why we set language switcher here and then initiate real rendering.
+            const fheroes2::LanguageSwitcher languageSwitcher( mainLanguage );
+
+            // Rendering of items in the base class is strictly in the top-to-bottom order.
+            // However, this class cannot afford doing the same due to extensive calculations
+            // for the language switching operation.
+            // This is why we first check the location of each language,
+            // then group them by code page,
+            // and only afterward render all languages, minimizing the number of resource switching operations.
+            _languagesRenderingInfo.clear();
+
+            Interface::ListBox<fheroes2::SupportedLanguage>::Redraw();
+
+            // Now we can do the real rendering.
+            fheroes2::Display & display = fheroes2::Display::instance();
+
+            for ( const auto & [codePage, languages] : _languagesRenderingInfo ) {
+                for ( const auto & info : languages ) {
+                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( info.language ) );
+
+                    const fheroes2::Text languageName( fheroes2::getLanguageName( info.language ),
+                                                       info.isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+                    languageName.draw( ( textAreaWidth - languageName.width() ) / 2 + info.offset.x, info.offset.y, display );
+                }
+            }
+        }
+
     private:
+        struct LanguageInfo
+        {
+            LanguageInfo() = delete;
+
+            LanguageInfo( const fheroes2::SupportedLanguage language_, int32_t offsetX, int32_t offsetY, bool isSelected_ )
+                : language( language_ )
+                , offset( offsetX, offsetY )
+                , isSelected( isSelected_ )
+            {
+                // Do nothing.
+            }
+
+            fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
+
+            fheroes2::Point offset;
+
+            bool isSelected{ false };
+        };
+
         bool _isDoubleClicked;
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+
+        std::map<fheroes2::CodePage, std::vector<LanguageInfo>> _languagesRenderingInfo;
     };
 
     void redrawDialogInfo( const fheroes2::Rect & listRoi, const fheroes2::SupportedLanguage language, const bool isGameLanguage )
@@ -224,7 +284,7 @@ namespace
             }
         }
 
-        listBox.Redraw();
+        listBox.Redraw( chosenLanguage );
 
         redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
 
@@ -283,7 +343,7 @@ namespace
                 }
             }
 
-            listBox.Redraw();
+            listBox.Redraw( chosenLanguage );
             display.render( roi );
         }
 

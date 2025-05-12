@@ -47,6 +47,8 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_mode.h"
+#include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "interface_base.h"
@@ -1814,7 +1816,7 @@ namespace
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
             const auto & eyeMagiIndexes = world.getAllEyeOfMagiPositions();
-            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
+            const int32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, distance, hero.GetColor() );
             }
@@ -2140,7 +2142,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     }
 }
 
-void AI::HeroesMove( Heroes & hero )
+fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 {
     const Route::Path & path = hero.GetPath();
 
@@ -2155,11 +2157,11 @@ void AI::HeroesMove( Heroes & hero )
 
         // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
         // The further path of this hero will be re-planned by AI.
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     if ( !path.isValidForMovement() ) {
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     hero.SetMove( true );
@@ -2198,6 +2200,16 @@ void AI::HeroesMove( Heroes & hero )
 
             hero.Move( true );
             recenterNeeded = true;
+
+            if ( hero.isAction() ) {
+                hero.ResetAction();
+
+                // Check if the game is over after the hero's action.
+                const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
+                if ( gameState != fheroes2::GameMode::CANCEL ) {
+                    return gameState;
+                }
+            }
 
             // Render a frame only if there is a need to show one.
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2266,6 +2278,16 @@ void AI::HeroesMove( Heroes & hero )
                         }
                     }
                 }
+
+                if ( hero.isAction() ) {
+                    hero.ResetAction();
+
+                    // Check if the game is over after the hero's action.
+                    const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver();
+                    if ( gameState != fheroes2::GameMode::CANCEL ) {
+                        return gameState;
+                    }
+                }
             }
 
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -2285,6 +2307,8 @@ void AI::HeroesMove( Heroes & hero )
     }
 
     hero.SetMove( false );
+
+    return fheroes2::GameMode::END_TURN;
 }
 
 void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
