@@ -202,8 +202,10 @@ public:
     // Generate 2x2 map for Battle Only mode.
     void generateBattleOnlyMap();
 
+    // Generates a map without initializing tiles. Use this function only before loading tiles.
     void generateVoidMapForEditor( const int32_t size );
 
+    // Generates a map with all tiles initialized as water without any objects.
     void generateBlankMapForEditor( const int32_t size );
 
     static World & Get();
