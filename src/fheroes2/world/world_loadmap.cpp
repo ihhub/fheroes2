@@ -476,7 +476,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load castle: " << "not found, index: " << objectTileId )
+                        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                                   "load castle: "
+                                       << "not found, index: " << objectTileId )
                     }
                 }
                 break;
@@ -495,7 +497,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load castle: " << "not found, index: " << objectTileId )
+                        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                                   "load castle: "
+                                       << "not found, index: " << objectTileId )
                     }
                 }
                 break;
@@ -556,7 +560,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_HERO:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN, "read heroes: " << "incorrect size block: " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN,
+                               "read heroes: "
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
