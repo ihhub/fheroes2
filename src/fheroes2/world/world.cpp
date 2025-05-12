@@ -249,15 +249,15 @@ int CapturedObjects::GetColor( const int32_t index ) const
 void CapturedObjects::ClearFog( const int colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
-        const ObjectColor & objCol = capturedObj.objCol;
+        const auto [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( colors ) ) {
+        if ( !( colors & objectColor ) ) {
             continue;
         }
 
-        int scoutingDistance = 0;
+        int32_t scoutingDistance = 0;
 
-        switch ( objCol.first ) {
+        switch ( objectType ) {
         case MP2::OBJ_MINE:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
@@ -273,7 +273,7 @@ void CapturedObjects::ClearFog( const int colors ) const
             continue;
         }
 
-        Maps::ClearFog( idx, scoutingDistance, colors );
+        Maps::ClearFog( idx, scoutingDistance, objectColor );
     }
 }
 
