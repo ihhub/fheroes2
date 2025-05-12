@@ -59,6 +59,8 @@ namespace Game
 
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
+
+        // Never use the entry below directly in the code! Utilize helper functions for this matter.
         CUSTOM_DELAY,
 
         // IMPORTANT!!! All new entries must be put before this entry!
@@ -83,7 +85,7 @@ namespace Game
     void AnimateResetDelay( const DelayType delayType );
     void UpdateGameSpeed();
 
-    uint32_t ApplyBattleSpeed( uint32_t delay );
+    uint32_t ApplyBattleSpeed( const uint32_t delay );
 
     // Returns the animation speed multiplier for a human-controlled hero.
     int HumanHeroAnimSpeedMultiplier();
