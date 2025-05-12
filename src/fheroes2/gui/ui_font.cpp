@@ -31,6 +31,7 @@
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
+#include "ui_language.h"
 
 namespace
 {
@@ -1321,6 +1322,7 @@ namespace
             updateSmallFontLetterShadow( font[253 - 32] );
         }
     }
+
     // The original French version replaces several ASCII special characters with language-specific characters.
     // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
     // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
@@ -5949,45 +5951,35 @@ namespace fheroes2
 {
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
-        switch ( language ) {
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::Slovak:
+        const CodePage codePage = getCodePage( language );
+
+        switch ( codePage ) {
+        case CodePage::CP1250:
             generateCP1250Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Belarusian:
-        case SupportedLanguage::Bulgarian:
-        case SupportedLanguage::Russian:
-        case SupportedLanguage::Ukrainian:
+        case CodePage::CP1251:
             generateCP1251Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::German:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Portuguese:
-        case SupportedLanguage::Spanish:
-        case SupportedLanguage::Swedish:
+        case CodePage::CP1252:
             generateCP1252Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::French:
+        case CodePage::CP1252_French:
             generateCP1252Alphabet( icnVsSprite );
+
             // This serves to make the font compatible with the original French custom encoding.
             generateFrenchAlphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Turkish:
+        case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Vietnamese:
+        case CodePage::CP1258:
             generateCP1258Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Romanian:
+        case CodePage::ISO8859_16:
             generateISO8859_16Alphabet( icnVsSprite );
             break;
         default:
-            // Add new language generation code!
+            // Add new code page generation code!
             assert( 0 );
             break;
         }
@@ -6006,25 +5998,25 @@ namespace fheroes2
     bool isAlphabetSupported( const SupportedLanguage language )
     {
         switch ( language ) {
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::German:
-        case SupportedLanguage::French:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Russian:
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Czech:
+        case SupportedLanguage::Danish:
+        case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
+        case SupportedLanguage::German:
+        case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Polish:
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Romanian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Slovak:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
         case SupportedLanguage::Turkish:
         case SupportedLanguage::Ukrainian:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Slovak:
         case SupportedLanguage::Vietnamese:
             return true;
         default:
@@ -6046,45 +6038,34 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
 
-        switch ( language ) {
-        case SupportedLanguage::English:
+        const CodePage codePage = getCodePage( language );
+
+        switch ( codePage ) {
+        case CodePage::ASCII:
             generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                                     icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
             return;
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::Slovak:
+        case CodePage::CP1250:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Belarusian:
-        case SupportedLanguage::Bulgarian:
-        case SupportedLanguage::Russian:
-        case SupportedLanguage::Ukrainian:
+        case CodePage::CP1251:
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::French:
-        case SupportedLanguage::German:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Portuguese:
-        case SupportedLanguage::Spanish:
-        case SupportedLanguage::Swedish:
+        case CodePage::CP1252:
+        case CodePage::CP1252_French:
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Turkish:
+        case CodePage::CP1254:
             generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Vietnamese:
+        case CodePage::CP1258:
             // generateGoodCP1258ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Romanian:
+        case CodePage::ISO8859_16:
             // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
-            // Add new language generation code!
+            // Add new code page generation code!
             assert( 0 );
             break;
         }
