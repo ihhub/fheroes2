@@ -188,6 +188,10 @@ namespace fheroes2
                 // At sign (@). Used for lowercase a with grave accent.
                 c = static_cast<char>( 224 );
                 break;
+            case 92:
+                // Backslash (\). Used in some maps as the full stop '.'.
+                c = '.';
+                break;
             case 94:
                 // Caret - circumflex (^). Used for lowercase c with cedilla.
                 c = static_cast<char>( 231 );
