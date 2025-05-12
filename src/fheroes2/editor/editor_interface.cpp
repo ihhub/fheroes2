@@ -223,10 +223,19 @@ namespace
     }
 
     // Returns true if object can be owned, excluding Towns and Castles.
-    bool isCapturableObject( const Maps::ObjectGroup objectGroup, const MP2::MapObjectType objectType )
+    bool isCapturableObject( const MP2::MapObjectType objectType )
     {
-        return ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES && objectType != MP2::OBJ_ABANDONED_MINE )
-               || ( objectGroup == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objectType == MP2::OBJ_LIGHTHOUSE );
+        switch ( objectType ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
     }
 
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
@@ -293,9 +302,13 @@ namespace
                     continue;
                 }
 
+                const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+                assert( objectIter->index < objects.size() );
+                const auto objectType = objects[objectIter->index].objectType;
+
                 // Remove ownership data for capturable objects.
-                if ( isCapturableObject( objectIter->group, Maps::getObjectsByGroup( objectIter->group )[objectIter->index].objectType ) ) {
-                    mapFormat.ownershipMetadata.erase( static_cast<int32_t>( mapTileIndex ) );
+                if ( isCapturableObject( objectType ) ) {
+                    mapFormat.capturableObjectsMetadata.erase( static_cast<int32_t>( mapTileIndex ) );
                 }
 
                 if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -384,10 +397,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     switch ( objectType ) {
                     case MP2::OBJ_EVENT:
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
@@ -415,10 +424,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     if ( objectType == MP2::OBJ_BOTTLE ) {
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
@@ -435,10 +440,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     if ( objectType == MP2::OBJ_RESOURCE ) {
                         mapFormat.standardMetadata.erase( objectIter->id );
                     }
@@ -460,10 +461,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     switch ( objectType ) {
                     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
                     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -1594,15 +1591,15 @@ namespace Interface
 
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
-                else if ( isCapturableObject( object.group, objectType ) ) {
+                else if ( isCapturableObject( objectType ) ) {
                     if ( Color::Count( _mapFormat.availablePlayerColors ) == 0 ) {
                         _warningMessage.reset( _( "There are no players on the map, so no one can own this object." ) );
                         return;
                     }
 
-                    auto ownershipMetadata = _mapFormat.ownershipMetadata.find( tileIndex );
-                    const bool hasOwnershipMetadata = ownershipMetadata != _mapFormat.ownershipMetadata.end();
-                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second : uint8_t{ Color::NONE };
+                    auto ownershipMetadata = _mapFormat.capturableObjectsMetadata.find( tileIndex );
+                    const bool hasOwnershipMetadata = ( ownershipMetadata != _mapFormat.capturableObjectsMetadata.end() );
+                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second.ownerColor : uint8_t{ Color::NONE };
 
                     const uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
@@ -1610,13 +1607,13 @@ namespace Interface
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         if ( newColor == Color::NONE ) {
-                            _mapFormat.ownershipMetadata.erase( tileIndex );
+                            _mapFormat.capturableObjectsMetadata.erase( tileIndex );
                         }
                         else if ( hasOwnershipMetadata ) {
-                            ownershipMetadata->second = newColor;
+                            ownershipMetadata->second.ownerColor = newColor;
                         }
                         else {
-                            _mapFormat.ownershipMetadata[tileIndex] = newColor;
+                            _mapFormat.capturableObjectsMetadata[tileIndex].ownerColor = newColor;
                         }
 
                         world.CaptureObject( tileIndex, newColor );

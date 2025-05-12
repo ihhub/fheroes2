@@ -476,9 +476,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN,
-                                   "load castle: "
-                                       << "not found, index: " << objectTileId )
+                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load castle: " << "not found, index: " << objectTileId )
                     }
                 }
                 break;
@@ -497,9 +495,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN,
-                                   "load castle: "
-                                       << "not found, index: " << objectTileId )
+                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load castle: " << "not found, index: " << objectTileId )
                     }
                 }
                 break;
@@ -560,9 +556,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_HERO:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN,
-                               "read heroes: "
-                                   << "incorrect size block: " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "read heroes: " << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
@@ -708,6 +702,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         // No players inside the map.
         return false;
     }
+
+    Maps::updateWorldObjectsOwnership( map );
 
     // Read and populate objects.
     const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -1254,11 +1250,6 @@ bool World::loadResurrectionMap( const std::string & filename )
     updateCastleNames( vec_castles );
 
     updateArtifactStats();
-
-    for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
-        assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
-        world.CaptureObject( tileIndex, color );
-    }
 
     if ( !ProcessNewMP2Map( filename, false ) ) {
         return false;

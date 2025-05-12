@@ -127,14 +127,6 @@ namespace
         }
     }
 
-    void updateWorldOwnership( const Maps::Map_Format::MapFormat & map )
-    {
-        for ( const auto [tileIndex, color] : map.ownershipMetadata ) {
-            assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
-            world.CaptureObject( tileIndex, color );
-        }
-    }
-
     // This function only checks for Streams and ignores River Deltas.
     bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
@@ -612,7 +604,7 @@ namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
     {
-        world.generateForEditor( map.size, false );
+        world.generateVoidMapForEditor( map.size );
 
         if ( !readAllTiles( map ) ) {
             return false;
@@ -622,7 +614,7 @@ namespace Maps
 
         updateWorldCastlesHeroes( map );
 
-        updateWorldOwnership( map );
+        updateWorldObjectsOwnership( map );
 
         return true;
     }
@@ -635,6 +627,10 @@ namespace Maps
 
         for ( size_t i = 0; i < tilesConut; ++i ) {
             auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
+
+            // We must clear all tiles before writing something on them.
+            worldTile = {};
+
             worldTile.setIndex( static_cast<int32_t>( i ) );
             worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlag );
         }
@@ -1203,17 +1199,25 @@ namespace Maps
         }
 
         // Check and update owner metadata to avoid non-used player color ownership.
-        auto ownershipIter = map.ownershipMetadata.begin();
-        while ( ownershipIter != map.ownershipMetadata.end() ) {
-            if ( !( ownershipIter->second & map.availablePlayerColors ) ) {
-                ownershipIter = map.ownershipMetadata.erase( ownershipIter );
+        auto capturableIter = map.capturableObjectsMetadata.begin();
+        while ( capturableIter != map.capturableObjectsMetadata.end() ) {
+            if ( !( capturableIter->second.ownerColor & map.availablePlayerColors ) ) {
+                capturableIter = map.capturableObjectsMetadata.erase( capturableIter );
             }
             else {
-                ++ownershipIter;
+                ++capturableIter;
             }
         }
 
         return true;
+    }
+
+    void updateWorldObjectsOwnership( const Map_Format::MapFormat & map )
+    {
+        for ( const auto & [tileIndex, metadata] : map.capturableObjectsMetadata ) {
+            assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
+            world.CaptureObject( tileIndex, metadata.ownerColor );
+        }
     }
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id )

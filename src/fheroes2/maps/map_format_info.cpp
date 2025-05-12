@@ -59,6 +59,9 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectsMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectsMetadata & metadata );
 }
 
 namespace
@@ -256,7 +259,7 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.ownershipMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -309,7 +312,7 @@ namespace
 
         static_assert( minimumSupportedVersion <= 8, "Remove this check." );
         if ( map.version > 8 ) {
-            decompressed >> map.ownershipMetadata;
+            decompressed >> map.capturableObjectsMetadata;
         }
 
         convertFromV2ToV3( map );
@@ -437,6 +440,16 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata )
     {
         return stream >> metadata.selectedItems;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectsMetadata & metadata )
+    {
+        return stream << metadata.ownerColor;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectsMetadata & metadata )
+    {
+        return stream >> metadata.ownerColor;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

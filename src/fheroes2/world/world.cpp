@@ -393,7 +393,7 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateForEditor( const int32_t size, const bool initTiles )
+void World::generateVoidMapForEditor( const int32_t size )
 {
     assert( size > 0 );
 
@@ -417,12 +417,13 @@ void World::generateForEditor( const int32_t size, const bool initTiles )
     Defaults();
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
+}
 
-    if ( !initTiles ) {
-        return;
-    }
+void World::generateBlankMapForEditor( const int32_t size )
+{
+    generateVoidMapForEditor( size );
 
-    // init all tiles
+    // Initialize all tiles.
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         vec_tiles[i] = {};
 
