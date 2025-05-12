@@ -4779,11 +4779,6 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
-    // Reset the delay to wait till the next frame if is not already waiting.
-    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
-        Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
-    }
-
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -4795,6 +4790,11 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
+        // Reset the delay to wait till the next frame if is not already waiting.
+        if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
+        }
+
         const fheroes2::Rect & battleArea = border.GetArea();
         const fheroes2::Point rainbowDescendPoint( pos.x + pos.width / 2, pos.y - pos.height / 2 );
 
@@ -4918,28 +4918,45 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         }
     }
     else {
-        const int maxHeight = GetAbsoluteICNHeight( ICN::CLOUDLUK );
-        int y = pos.y + pos.height + cellYOffset;
+        // Reset the delay to wait till the next frame if is not already waiting.
+        if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+        }
+        const int32_t offsetX = pos.x + pos.width / 2;
+        // Don't let the Bad Luck sprite clip outside the top of the battlefield.
+        const int32_t offsetY = std::max( GetAbsoluteICNHeight( ICN::CLOUDLUK ), pos.y + pos.height + cellYOffset );
 
-        // move drawing position if it will clip outside of the battle window
-        if ( y - maxHeight < 0 )
-            y = maxHeight;
+        const uint32_t frameLimit = 8;
+        uint32_t frameId = 0;
 
-        AudioManager::PlaySound( M82::BADLUCK );
+        // Don't waste time waiting for Bad Luck sound if the game sounds are turned off.
+        const bool soundOn = Settings::Get().SoundVolume() > 0;
 
-        int frameId = 0;
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
+        if ( soundOn ) {
+            // This sound lasts for about 2200 milliseconds.
+            AudioManager::PlaySound( M82::BADLUCK );
+        }
+
+        const uint64_t animationDelay = Game::ApplyBattleSpeed( 2200 / frameLimit );
+        // Immediately indicate that the delay has passed to render first frame immediately.
+        Game::passCustomAnimationDelay( animationDelay );
+        // Make sure that the first run is passed immediately.
+        assert( !Game::isCustomDelayNeeded( animationDelay ) );
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && ( frameId < frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
             CheckGlobalEvents( le );
 
-            if ( frameId < 8 && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Game::validateCustomAnimationDelay( animationDelay ) ) {
                 RedrawPartialStart();
 
-                const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
-                fheroes2::Blit( luckSprite, _mainSurface, pos.x + pos.width / 2 + luckSprite.x(), y + luckSprite.y() );
+                if ( frameId < frameLimit ) {
+                    const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
+                    fheroes2::Blit( luckSprite, _mainSurface, offsetX + luckSprite.x(), offsetY + luckSprite.y() );
+
+                    ++frameId;
+                }
 
                 RedrawPartialFinish();
-
-                ++frameId;
             }
         }
     }
@@ -5902,7 +5919,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     // The last frame is the full power of spell effect. It will be used to produce other frames.
     spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 / maxFrame );
     uint32_t frame = 0;
     uint8_t alpha = 30;
     const uint8_t alphaStep = 25;

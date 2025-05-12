@@ -592,7 +592,9 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomG
     if ( Modes( LUCK_GOOD ) ) {
         res *= 2;
     }
-    else if ( Modes( LUCK_BAD ) ) {
+    else if ( Modes( LUCK_BAD ) && res > 1 ) {
+        // We halves the damage in the case of Bad Luck.
+        // If the damage is less than 2 it is 1 and this is a minimal damage that should not be halved.
         res /= 2;
     }
 
