@@ -88,7 +88,7 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
     <img loading="lazy"
         width="93"
         height="20"
-        src="https://img.shields.io/discord/733093692860137523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2"
+        src="https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"
         alt="Discord" />
 </a>
 
