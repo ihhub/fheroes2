@@ -43,7 +43,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more to learn [**how to contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 
