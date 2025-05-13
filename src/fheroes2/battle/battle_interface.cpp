@@ -4793,7 +4793,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
-        // Reset the delay to wait till the next frame if is not already waiting.
+        // Reset the delay to wait till the next frame if it's not already waiting.
         if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
             Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
         }
