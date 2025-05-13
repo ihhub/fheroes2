@@ -4788,6 +4788,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     StringReplaceWithLowercase( msg, "%{attacker}", unit.GetName() );
     setStatus( msg, true );
 
+    // Don't waste time waiting for Luck sound if the game sounds are turned off.
+    const bool soundOn = Settings::Get().SoundVolume() > 0;
+
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         // Reset the delay to wait till the next frame if is not already waiting.
@@ -4869,9 +4872,6 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
         const double drawStep = static_cast<double>( rainbowLength ) / rainbowDrawSteps;
 
-        // Don't waste time waiting for Good Luck sound if the game sounds are turned off
-        const bool soundOn = Settings::Get().SoundVolume() > 0;
-
         if ( soundOn ) {
             AudioManager::PlaySound( M82::GOODLUCK );
         }
@@ -4918,10 +4918,6 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         }
     }
     else {
-        // Reset the delay to wait till the next frame if is not already waiting.
-        if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
-        }
         const int32_t offsetX = pos.x + pos.width / 2;
         // Don't let the Bad Luck sprite clip outside the top of the battlefield.
         const int32_t offsetY = std::max( GetAbsoluteICNHeight( ICN::CLOUDLUK ), pos.y + pos.height + cellYOffset );
@@ -4929,14 +4925,12 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         const uint32_t frameLimit = 8;
         uint32_t frameId = 0;
 
-        // Don't waste time waiting for Bad Luck sound if the game sounds are turned off.
-        const bool soundOn = Settings::Get().SoundVolume() > 0;
-
         if ( soundOn ) {
             // This sound lasts for about 2200 milliseconds.
             AudioManager::PlaySound( M82::BADLUCK );
         }
 
+        // Make the animation duration consistent with the played sound on the normal battle speed.
         const uint64_t animationDelay = Game::ApplyBattleSpeed( 2200 / frameLimit );
         // Immediately indicate that the delay has passed to render first frame immediately.
         Game::passCustomAnimationDelay( animationDelay );
