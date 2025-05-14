@@ -2142,18 +2142,18 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToSirens( hero, objectType, dst_index );
         break;
     default:
-        if ( isUltimateArtifact ) {
-            AIToUltimateArtifact( hero );
-        }
-        else {
-            // AI should know what to do with this type of action object! Please add logic for it.
-            assert( !isActionObject );
-        }
+        // AI should know what to do with this type of action object! Please add logic for it.
+        assert( !isActionObject || isUltimateArtifact );
         break;
     }
 
     if ( MP2::isNeedStayFront( objectType ) ) {
         hero.GetPath().Reset();
+    }
+
+    // Ultimate artifact can be placed under an object (e.g. under the Coast)
+    if ( isUltimateArtifact ) {
+        AIToUltimateArtifact( hero );
     }
 
     // Ignore empty tiles
