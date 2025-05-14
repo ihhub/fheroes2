@@ -2373,57 +2373,59 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     }
 
     if ( const UltimateArtifact & art = world.GetUltimateArtifact(); isUltimateArtifactAvailableToHero( art, hero ) ) {
-        const int32_t ultimateArtifactIdx = art.getPosition();
-        assert( Maps::isValidAbsIndex( ultimateArtifactIdx ) );
+        const int32_t idx = art.getPosition();
+        assert( Maps::isValidAbsIndex( idx ) );
 
-        double ultimateArtifactValue = 5000 * art.getArtifactValue();
+        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
 
-        auto [distanceToUltimateArtifact, useDimensionDoor] = getDistanceToTile( _pathfinder, ultimateArtifactIdx );
+        if ( dist > 0 ) {
+            double value = 5000 * art.getArtifactValue();
+            getObjectValue( idx, dist, value, MP2::OBJ_NONE, useDimensionDoor );
 
-        getObjectValue( ultimateArtifactIdx, distanceToUltimateArtifact, ultimateArtifactValue, MP2::OBJ_NONE, useDimensionDoor );
+            if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
+                maxPriority = value;
+                priorityTarget = idx;
 
-        if ( priorityTarget == -1 || ultimateArtifactValue > maxPriority ) {
-            priorityTarget = ultimateArtifactIdx;
-            maxPriority = ultimateArtifactValue;
-
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
+            }
         }
     }
 
     // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
-    if ( const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero ); Maps::isValidAbsIndex( fogDiscoveryTarget ) ) {
-        double fogDiscoveryValue = getFogDiscoveryValue( hero );
+    if ( const auto [idx, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero ); Maps::isValidAbsIndex( idx ) ) {
+        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
+        assert( dist > 0 );
 
-        auto [distanceToFogDiscovery, useDimensionDoor] = getDistanceToTile( _pathfinder, fogDiscoveryTarget );
+        double value = getFogDiscoveryValue( hero );
 
         if ( isTerritoryExpansion ) {
             // Over time the AI should focus more on territory expansion.
             const uint32_t period = getTimeoutBeforeFogDiscoveryIntensification( hero );
             assert( period > 0 );
 
-            if ( fogDiscoveryValue < 0 ) {
+            if ( value < 0 ) {
                 // This is actually a very useful fog discovery action which might lead to finding of new objects.
                 // Increase the value of this action.
 
                 if ( world.CountDay() > period ) {
-                    fogDiscoveryValue = 0;
+                    value = 0;
                 }
                 else {
-                    fogDiscoveryValue = fogDiscoveryValue / 2 * ( period - world.CountDay() ) / period;
+                    value = value / 2 * ( period - world.CountDay() ) / period;
                 }
             }
             else {
                 // Over time the AI should focus more on territory expansion.
                 // Scouts must focus on expansion so they should reach maximum "attention" in a month.
-                fogDiscoveryValue += std::min( 1000.0 * world.CountDay() / period, 1000.0 );
+                value += std::min( 1000.0 * world.CountDay() / period, 1000.0 );
             }
         }
 
-        getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, MP2::OBJ_NONE, useDimensionDoor );
+        getObjectValue( idx, dist, value, MP2::OBJ_NONE, useDimensionDoor );
 
-        if ( priorityTarget == -1 || fogDiscoveryValue > maxPriority ) {
-            priorityTarget = fogDiscoveryTarget;
-            maxPriority = fogDiscoveryValue;
+        if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
+            maxPriority = value;
+            priorityTarget = idx;
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
         }
