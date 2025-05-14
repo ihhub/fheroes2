@@ -404,7 +404,8 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
         return false;
     }
 
-    if ( !Maps::isValidAbsIndex( art.getPosition() ) ) {
+    // The hero's kingdom must have a fully open obelisk map
+    if ( !hero.GetKingdom().PuzzleMaps().all() ) {
         return false;
     }
 
@@ -412,6 +413,7 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
         return false;
     }
 
-    // The hero's kingdom must have a fully open obelisk map
-    return hero.GetKingdom().PuzzleMaps().all();
+    const int32_t idx = art.getPosition();
+
+    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).GoodForUltimateArtifact();
 }

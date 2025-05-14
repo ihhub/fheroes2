@@ -1874,23 +1874,6 @@ namespace
         (void)hero;
 #endif
     }
-
-    void AIToUltimateArtifact( Heroes & hero )
-    {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
-
-        const UltimateArtifact & art = world.GetUltimateArtifact();
-        assert( AI::isUltimateArtifactAvailableToHero( art, hero ) );
-
-        if ( world.DiggingForUltimateArtifact( hero.GetCenter() ) ) {
-            if ( !hero.PickupArtifact( art.GetArtifact() ) ) {
-                assert( 0 );
-            }
-        }
-        else {
-            assert( 0 );
-        }
-    }
 }
 
 void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
@@ -1900,17 +1883,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const Maps::Tile & tile = world.getTile( dst_index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
-    const bool isUltimateArtifact = [&hero = std::as_const( hero ), dst_index]() {
-        const UltimateArtifact & art = world.GetUltimateArtifact();
-        if ( !isUltimateArtifactAvailableToHero( art, hero ) ) {
-            return false;
-        }
-
-        return art.isPosition( dst_index );
-    }();
-
-    const bool isActionObject = isUltimateArtifact || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
-
+    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
     if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
     }
@@ -2143,7 +2116,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         break;
     default:
         // AI should know what to do with this type of action object! Please add logic for it.
-        assert( !isActionObject || isUltimateArtifact );
+        assert( !isActionObject );
         break;
     }
 
@@ -2152,8 +2125,10 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     }
 
     // Ultimate artifact can be placed under an object (e.g. under the Coast)
-    if ( isUltimateArtifact ) {
-        AIToUltimateArtifact( hero );
+    if ( const UltimateArtifact & art = world.GetUltimateArtifact(); art.isPosition( dst_index ) && isUltimateArtifactAvailableToHero( art, hero ) ) {
+        hero.SetModes( Heroes::SLEEPER );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is ready to dig up the Ultimate Artifact at tile " << dst_index << " during the next turn" )
     }
 
     // Ignore empty tiles

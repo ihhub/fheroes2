@@ -683,6 +683,8 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     Heroes * bestHeroToViewAll = nullptr;
 
     for ( Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
         hero->ResetModes( Heroes::SLEEPER );
         hero->setDimensionDoorUsage( 0 );
 
@@ -692,6 +694,23 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
             bestHeroToViewAll = hero;
+        }
+
+        if ( const UltimateArtifact & art = world.GetUltimateArtifact(); art.isPosition( hero->GetIndex() ) && isUltimateArtifactAvailableToHero( art, *hero ) ) {
+            assert( !hero->isShipMaster() && hero->GetMovePoints() == hero->GetMaxMovePoints() && hero->GetPath().empty() );
+
+            hero->ResetMovePoints();
+
+            if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
+                if ( !hero->PickupArtifact( art.GetArtifact() ) ) {
+                    assert( 0 );
+                }
+            }
+            else {
+                assert( 0 );
+            }
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << " dug up the Ultimate Artifact at tile " << hero->GetIndex() )
         }
     }
 
