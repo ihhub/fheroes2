@@ -2367,7 +2367,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             objectType = objType;
 #endif
 
-            DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ": valid object at " << idx << " value is " << value << " (" << MP2::StringObject( objType ) << ")" )
+            DEBUG_LOG( DBG_AI, DBG_TRACE,
+                       hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objType ) << ")" )
         }
     }
 
@@ -2385,15 +2386,14 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             priorityTarget = ultimateArtifactIdx;
             maxPriority = ultimateArtifactValue;
 
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
         }
     }
 
-    double fogDiscoveryValue = getFogDiscoveryValue( hero );
     // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
-    const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
+    if ( const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero ); Maps::isValidAbsIndex( fogDiscoveryTarget ) ) {
+        double fogDiscoveryValue = getFogDiscoveryValue( hero );
 
-    if ( fogDiscoveryTarget >= 0 ) {
         auto [distanceToFogDiscovery, useDimensionDoor] = getDistanceToTile( _pathfinder, fogDiscoveryTarget );
 
         if ( isTerritoryExpansion ) {
@@ -2420,22 +2420,21 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
 
         getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, MP2::OBJ_NONE, useDimensionDoor );
-    }
 
-    if ( priorityTarget != -1 ) {
-        if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
+        if ( priorityTarget == -1 || fogDiscoveryValue > maxPriority ) {
             priorityTarget = fogDiscoveryTarget;
             maxPriority = fogDiscoveryValue;
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
-        }
-        else {
-            DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
         }
     }
+
+    if ( priorityTarget == -1 ) {
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find a meaningful tile to visit" )
+    }
     else {
-        priorityTarget = fogDiscoveryTarget;
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
+        DEBUG_LOG( DBG_AI, DBG_INFO,
+                   hero.GetName() << ": target tile at " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
     }
 
     return priorityTarget;
