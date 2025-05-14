@@ -32,10 +32,11 @@ UltimateArtifact::UltimateArtifact()
     , _isFound( false )
 {}
 
-void UltimateArtifact::Set( const int32_t position, const Artifact & a )
+void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 {
     Artifact & art = *this;
-    art = a.isValid() ? a : Artifact::Rand( Artifact::ART_ULTIMATE );
+    art = artifact.isValid() ? artifact : Artifact::Rand( Artifact::ART_ULTIMATE );
+
     _index = position;
     _isFound = false;
 

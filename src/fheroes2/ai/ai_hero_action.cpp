@@ -1873,6 +1873,23 @@ namespace
         (void)hero;
 #endif
     }
+
+    void AIToUltimateArtifact( Heroes & hero )
+    {
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
+
+        const UltimateArtifact & art = world.GetUltimateArtifact();
+        assert( AI::isUltimateArtifactAvailableToHero( art, hero ) );
+
+        if ( world.DiggingForUltimateArtifact( hero.GetCenter() ) ) {
+            if ( !hero.PickupArtifact( art.GetArtifact() ) ) {
+                assert( 0 );
+            }
+        }
+        else {
+            assert( 0 );
+        }
+    }
 }
 
 void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
@@ -1882,9 +1899,20 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const Maps::Tile & tile = world.getTile( dst_index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
-    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
-    if ( isActionObject )
+    const bool isUltimateArtifact = [&hero = std::as_const( hero ), dst_index]() {
+        const UltimateArtifact & art = world.GetUltimateArtifact();
+        if ( !isUltimateArtifactAvailableToHero( art, hero ) ) {
+            return false;
+        }
+
+        return art.isPosition( dst_index );
+    }();
+
+    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() ) || isUltimateArtifact;
+
+    if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
+    }
 
     switch ( objectType ) {
     case MP2::OBJ_BOAT:
@@ -2128,13 +2156,19 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToSirens( hero, objectType, dst_index );
         break;
     default:
-        // AI should know what to do with this type of action object! Please add logic for it.
-        assert( !isActionObject );
+        if ( isUltimateArtifact ) {
+            AIToUltimateArtifact( hero );
+        }
+        else {
+            // AI should know what to do with this type of action object! Please add logic for it.
+            assert( !isActionObject );
+        }
         break;
     }
 
-    if ( MP2::isNeedStayFront( objectType ) )
+    if ( MP2::isNeedStayFront( objectType ) ) {
         hero.GetPath().Reset();
+    }
 
     // Ignore empty tiles
     if ( isActionObject ) {

@@ -40,6 +40,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "artifact_ultimate.h"
 #include "castle.h"
 #include "color.h"
 #include "difficulty.h"
@@ -89,23 +90,6 @@ namespace
         }
 
         return false;
-    }
-
-    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
-    {
-        assert( art.isValid() );
-
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-
-        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
-            return false;
-        }
-
-        if ( mapInfo.WinsFindUltimateArtifact() ) {
-            return art.isUltimate();
-        }
-
-        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
     }
 
     bool isCastleLossConditionForHuman( const Castle * castle )
@@ -261,15 +245,6 @@ namespace
         const Maps::Tile & tile = world.getTile( index );
         const MP2::MapObjectType objectType = tile.getMainObjectType( !underHero );
 
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = getArtifactFromTile( tile );
-
-            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
-                return false;
-            }
-        }
-
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
@@ -354,9 +329,7 @@ namespace
         }
 
         case MP2::OBJ_OBELISK:
-            // TODO: add the logic to dig an Ultimate artifact when a digging tile is visible.
-            // But for now AI should not waste time visiting Obelisks.
-            return false;
+            return !kingdom.isVisited( tile );
 
         case MP2::OBJ_BARRIER:
             return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
@@ -1197,23 +1170,10 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         const Artifact art = getArtifactFromTile( tile );
         assert( art.isValid() );
 
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-
         return 1000.0 * art.getArtifactValue();
     }
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST: {
-        const Artifact art = getArtifactFromTile( tile );
-        if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-
         // This is an average gold amount you can get from a treasure chest or sea chest.
         return getFundsValueBasedOnPriority( { Resource::GOLD, 1500 } );
     }
@@ -1231,16 +1191,9 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON: {
-        if ( !getArtifactFromTile( tile ).isValid() ) {
-            // Don't waste time to go here.
-            return -dangerousTaskPenalty;
-        }
-
         const Artifact art = getArtifactFromTile( tile );
-
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-            assert( 0 );
+        if ( !art.isValid() ) {
+            // Don't waste time to go here.
             return -dangerousTaskPenalty;
         }
 
@@ -1429,6 +1382,9 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         }
         return fogCountToUncoverByTower;
     }
+    case MP2::OBJ_OBELISK: {
+        return 1000;
+    }
     case MP2::OBJ_MAGELLANS_MAPS: {
         // Very valuable object.
         return 5000;
@@ -1593,7 +1549,6 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         // These objects are useless for AI.
         return -dangerousTaskPenalty;
     }
-    case MP2::OBJ_OBELISK:
     case MP2::OBJ_SIRENS:
     case MP2::OBJ_SPHINX:
     case MP2::OBJ_TRADING_POST: {
@@ -1812,12 +1767,6 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
         const Artifact art = getArtifactFromTile( tile );
         assert( art.isValid() );
 
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-
         return 1500.0 * art.getArtifactValue();
     }
     case MP2::OBJ_CAMPFIRE:
@@ -1987,13 +1936,6 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
     }
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST: {
-        const Artifact art = getArtifactFromTile( tile );
-        if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-
         return twoTiles;
     }
     case MP2::OBJ_ARENA:
@@ -2426,6 +2368,33 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ": valid object at " << idx << " value is " << value << " (" << MP2::StringObject( objType ) << ")" )
+        }
+    }
+
+    {
+        auto [ultimateArtifactIdx, ultimateArtifactValue] = [&hero = std::as_const( hero )]() -> std::pair<int32_t, double> {
+            const UltimateArtifact & art = world.GetUltimateArtifact();
+            if ( !isUltimateArtifactAvailableToHero( art, hero ) ) {
+                return { -1, 0.0 };
+            }
+
+            const int32_t idx = art.getPosition();
+            assert( Maps::isValidAbsIndex( idx ) );
+
+            return { idx, 5000 * art.getArtifactValue() };
+        }();
+
+        if ( Maps::isValidAbsIndex( ultimateArtifactIdx ) ) {
+            auto [distanceToUltimateArtifact, useDimensionDoor] = getDistanceToTile( _pathfinder, ultimateArtifactIdx );
+
+            getObjectValue( ultimateArtifactIdx, distanceToUltimateArtifact, ultimateArtifactValue, MP2::OBJ_NONE, useDimensionDoor );
+
+            if ( priorityTarget == -1 || ultimateArtifactValue > maxPriority ) {
+                priorityTarget = ultimateArtifactIdx;
+                maxPriority = ultimateArtifactValue;
+
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
+            }
         }
     }
 

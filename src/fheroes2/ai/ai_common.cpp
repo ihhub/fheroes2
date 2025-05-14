@@ -394,3 +394,20 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
         ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
     }
 }
+
+bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero )
+{
+    if ( art.isFound() ) {
+        return false;
+    }
+
+    if ( !Maps::isValidAbsIndex( art.getPosition() ) ) {
+        return false;
+    }
+
+    if ( hero.IsFullBagArtifacts() ) {
+        return false;
+    }
+
+    return hero.GetKingdom().PuzzleMaps().all();
+}
