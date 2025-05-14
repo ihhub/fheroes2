@@ -412,5 +412,6 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
         return false;
     }
 
+    // The hero's kingdom must have a fully open obelisk map
     return hero.GetKingdom().PuzzleMaps().all();
 }
