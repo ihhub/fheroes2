@@ -91,10 +91,11 @@ namespace
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
-        // For the original French version we update the language-specific characters to match CP1252.
+        // For the original French version we update the language-specific characters
+        // to match CP1252 only if the French language is currently selected.
         const bool updateFrenchLangugeSpecificCharacters
             = isOriginalMapFormat
-              && ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French || fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French );
+              && ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French );
 
         for ( const std::string & mapFile : mapFiles ) {
             Maps::FileInfo fi;

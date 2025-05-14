@@ -439,9 +439,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         infoBlockCount = 256 * h + l - 1;
     }
 
-    // For the original French version we update the language-specific characters to match CP1252.
+    // For the original French version we update the language-specific characters
+    // to match CP1252 only if the French language is selected.
     const bool updateFrenchLanguageSpecificCharacters
-        = fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French || fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French;
+        = fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French;
 
     // castle or heroes or (events, rumors, etc)
     for ( uint32_t i = 0; i < infoBlockCount; ++i ) {
