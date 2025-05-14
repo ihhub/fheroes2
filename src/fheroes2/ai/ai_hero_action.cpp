@@ -39,6 +39,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "artifact_ultimate.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
