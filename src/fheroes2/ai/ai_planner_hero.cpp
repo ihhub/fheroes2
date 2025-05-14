@@ -2371,30 +2371,21 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
     }
 
-    {
-        auto [ultimateArtifactIdx, ultimateArtifactValue] = [&hero = std::as_const( hero )]() -> std::pair<int32_t, double> {
-            const UltimateArtifact & art = world.GetUltimateArtifact();
-            if ( !isUltimateArtifactAvailableToHero( art, hero ) ) {
-                return { -1, 0.0 };
-            }
+    if ( const UltimateArtifact & art = world.GetUltimateArtifact(); isUltimateArtifactAvailableToHero( art, hero ) ) {
+        const int32_t ultimateArtifactIdx = art.getPosition();
+        assert( Maps::isValidAbsIndex( ultimateArtifactIdx ) );
 
-            const int32_t idx = art.getPosition();
-            assert( Maps::isValidAbsIndex( idx ) );
+        double ultimateArtifactValue = 5000 * art.getArtifactValue();
 
-            return { idx, 5000 * art.getArtifactValue() };
-        }();
+        auto [distanceToUltimateArtifact, useDimensionDoor] = getDistanceToTile( _pathfinder, ultimateArtifactIdx );
 
-        if ( Maps::isValidAbsIndex( ultimateArtifactIdx ) ) {
-            auto [distanceToUltimateArtifact, useDimensionDoor] = getDistanceToTile( _pathfinder, ultimateArtifactIdx );
+        getObjectValue( ultimateArtifactIdx, distanceToUltimateArtifact, ultimateArtifactValue, MP2::OBJ_NONE, useDimensionDoor );
 
-            getObjectValue( ultimateArtifactIdx, distanceToUltimateArtifact, ultimateArtifactValue, MP2::OBJ_NONE, useDimensionDoor );
+        if ( priorityTarget == -1 || ultimateArtifactValue > maxPriority ) {
+            priorityTarget = ultimateArtifactIdx;
+            maxPriority = ultimateArtifactValue;
 
-            if ( priorityTarget == -1 || ultimateArtifactValue > maxPriority ) {
-                priorityTarget = ultimateArtifactIdx;
-                maxPriority = ultimateArtifactValue;
-
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
-            }
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
         }
     }
 
