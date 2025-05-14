@@ -1909,7 +1909,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         return art.isPosition( dst_index );
     }();
 
-    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() ) || isUltimateArtifact;
+    const bool isActionObject = isUltimateArtifact || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
 
     if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
