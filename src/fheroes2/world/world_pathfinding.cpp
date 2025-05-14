@@ -56,23 +56,6 @@
 
 namespace
 {
-    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
-    {
-        assert( art.isValid() );
-
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-
-        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
-            return false;
-        }
-
-        if ( mapInfo.WinsFindUltimateArtifact() ) {
-            return art.isUltimate();
-        }
-
-        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
-    }
-
     bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )
     {
         const Maps::Tile & tile = world.getTile( tileIndex );
@@ -169,11 +152,6 @@ namespace
             const Artifact art = Maps::getArtifactFromTile( tile );
             if ( !art.isValid() ) {
                 return true;
-            }
-
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                return false;
             }
 
             // This object contains an artifact, but it is not an artifact itself, pick it up and go through
