@@ -113,11 +113,8 @@ namespace
         assert( castle != nullptr );
 
         const Heroes * hero = castle->GetHero();
-        if ( hero && hero == world.GetHeroesCondWins() ) {
-            return true;
-        }
 
-        return false;
+        return hero && hero == world.GetHeroesCondWins();
     }
 
     bool isCastleLossDefeatConditionForHuman( const Castle * castle )
