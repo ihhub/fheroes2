@@ -707,7 +707,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         bestHeroToViewAll->SpellCasted( Spell::VIEWALL );
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, bestHeroToViewAll->GetName() << " cast the View All spell" )
+        DEBUG_LOG( DBG_AI, DBG_INFO, bestHeroToViewAll->GetName() << " casts the View All spell" )
 
         return true;
     }();
