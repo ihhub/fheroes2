@@ -5845,10 +5845,10 @@ namespace
         fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
 
         // O with slash.
-        released[216 - 32].resize( released[79 - 32].width(), released[79 - 32].height() );
+        released[216 - 32].resize( released[79 - 32].width() + 2, released[79 - 32].height() + 2 );
         released[216 - 32].reset();
-        fheroes2::Copy( released[79 - 32], 0, 0, released[216 - 32], 0, 0, released[79 - 32].width(), released[79 - 32].height() );
-        fheroes2::DrawLine( released[216 - 32], { released[216 - 32].width(), 0 }, { 0, released[216 - 32].height() }, buttonGoodReleasedColor );
+        fheroes2::Copy( released[79 - 32], 0, 0, released[216 - 32], 1, 1, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::DrawLine( released[216 - 32], { released[79 - 32].width() - 1, 2 }, { 2, released[79 - 32].height() - 1 }, buttonGoodReleasedColor );
 
         // U with grave.
         released[217 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 3 );
