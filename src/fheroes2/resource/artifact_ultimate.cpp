@@ -34,8 +34,8 @@ UltimateArtifact::UltimateArtifact()
 
 void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 {
-    Artifact & art = *this;
-    art = artifact.isValid() ? artifact : Artifact::Rand( Artifact::ART_ULTIMATE );
+    Artifact & thisArt = *this;
+    thisArt = artifact.isValid() ? artifact : Artifact::Rand( Artifact::ART_ULTIMATE );
 
     _index = position;
     _isFound = false;
