@@ -80,6 +80,34 @@
 
 namespace
 {
+    bool isFindUltimateArtifactVictoryCondition()
+    {
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+            return false;
+        }
+
+        return mapInfo.WinsFindUltimateArtifact();
+    }
+
+    bool isFindArtifactVictoryCondition( const Artifact & art )
+    {
+        assert( art.isValid() );
+
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+            return false;
+        }
+
+        if ( mapInfo.WinsFindUltimateArtifact() ) {
+            return art.isUltimate();
+        }
+
+        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
+    }
+
     bool isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( const Castle * castle )
     {
         assert( castle != nullptr );
@@ -92,7 +120,7 @@ namespace
         return false;
     }
 
-    bool isCastleLossConditionForHuman( const Castle * castle )
+    bool isCastleLossDefeatConditionForHuman( const Castle * castle )
     {
         assert( castle != nullptr );
 
@@ -100,12 +128,12 @@ namespace
         const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
         if ( isSinglePlayer && ( mapInfo.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == mapInfo.LossMapsPositionObject() ) {
-            // It is a loss town condition for human.
+            // It is a "lose a specific town" defeat condition for human.
             return true;
         }
 
         if ( mapInfo.WinsCompAlsoWins() && ( mapInfo.ConditionWins() & GameOver::WINS_TOWN ) != 0 && castle->GetCenter() == mapInfo.WinsMapsPositionObject() ) {
-            // It is a town capture winning condition for AI.
+            // It is a "capture a specific town" victory condition for AI.
             return true;
         }
 
@@ -963,7 +991,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
             value += 15000;
         }
 
-        if ( isCastleLossConditionForHuman( castle ) ) {
+        if ( isCastleLossDefeatConditionForHuman( castle ) ) {
             value += 20000;
         }
 
@@ -1170,7 +1198,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         const Artifact art = getArtifactFromTile( tile );
         assert( art.isValid() );
 
-        return 1000.0 * art.getArtifactValue();
+        return ( isFindArtifactVictoryCondition( art ) ? 3000.0 : 1000.0 ) * art.getArtifactValue();
     }
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST: {
@@ -1383,7 +1411,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return fogCountToUncoverByTower;
     }
     case MP2::OBJ_OBELISK: {
-        return 1000;
+        return isFindUltimateArtifactVictoryCondition() ? 2500 : 1000;
     }
     case MP2::OBJ_MAGELLANS_MAPS: {
         // Very valuable object.
@@ -1582,7 +1610,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
             value += 15000;
         }
 
-        if ( isCastleLossConditionForHuman( castle ) ) {
+        if ( isCastleLossDefeatConditionForHuman( castle ) ) {
             value += 20000;
         }
 
@@ -1767,7 +1795,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
         const Artifact art = getArtifactFromTile( tile );
         assert( art.isValid() );
 
-        return 1500.0 * art.getArtifactValue();
+        return ( isFindArtifactVictoryCondition( art ) ? 3000.0 : 1500.0 ) * art.getArtifactValue();
     }
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
@@ -2330,16 +2358,15 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     // Set baseline target if it's a special role
     if ( hero.getAIRole() == Heroes::Role::COURIER ) {
-        const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
-        if ( courierTarget != -1 ) {
+        if ( const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue ); courierTarget != -1 ) {
             // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
-            maxPriority = 0;
             priorityTarget = courierTarget;
+            maxPriority = 0;
 #ifdef WITH_DEBUG
-            objectType = world.getTile( courierTarget ).getMainObjectType();
+            objectType = world.getTile( priorityTarget ).getMainObjectType();
 #endif
 
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << priorityTarget )
         }
         else {
             // If there's nothing to do as a Courier reset the role
@@ -2361,14 +2388,14 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         getObjectValue( idx, dist, value, objType, useDimensionDoor );
 
         if ( dist > 0 && value > maxPriority ) {
-            maxPriority = value;
             priorityTarget = idx;
+            maxPriority = value;
 #ifdef WITH_DEBUG
             objectType = objType;
 #endif
 
             DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objType ) << ")" )
+                       hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
     }
 
@@ -2379,14 +2406,17 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
 
         if ( dist > 0 ) {
-            double value = 5000 * art.getArtifactValue();
-            getObjectValue( idx, dist, value, MP2::OBJ_NONE, useDimensionDoor );
+            double value = ( isFindUltimateArtifactVictoryCondition() ? 3000.0 : 1500.0 ) * art.getArtifactValue();
+            getObjectValue( idx, dist, value, MP2::OBJ_ARTIFACT, useDimensionDoor );
 
             if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
-                maxPriority = value;
                 priorityTarget = idx;
+                maxPriority = value;
+#ifdef WITH_DEBUG
+                objectType = world.getTile( priorityTarget ).getMainObjectType();
+#endif
 
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (ultimate artifact)" )
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (Ultimate Artifact)" )
             }
         }
     }
@@ -2424,8 +2454,11 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         getObjectValue( idx, dist, value, MP2::OBJ_NONE, useDimensionDoor );
 
         if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
-            maxPriority = value;
             priorityTarget = idx;
+            maxPriority = value;
+#ifdef WITH_DEBUG
+            objectType = world.getTile( priorityTarget ).getMainObjectType();
+#endif
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
         }
