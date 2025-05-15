@@ -681,7 +681,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )
 
     // Scan visible map (based on game difficulty), add goals and threats
-    bool underViewSpell = false;
     int32_t availableHeroCount = 0;
     Heroes * bestHeroToViewAll = nullptr;
 
@@ -700,9 +699,19 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
     }
 
-    if ( bestHeroToViewAll && HeroesCastAdventureSpell( *bestHeroToViewAll, Spell::VIEWALL ) ) {
-        underViewSpell = true;
-    }
+    const bool isUnderViewSpell = [bestHeroToViewAll]() {
+        if ( bestHeroToViewAll == nullptr ) {
+            return false;
+        }
+
+        assert( bestHeroToViewAll->CanCastSpell( Spell::VIEWALL ) );
+
+        bestHeroToViewAll->SpellCasted( Spell::VIEWALL );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, bestHeroToViewAll->GetName() << " cast the View All spell" )
+
+        return true;
+    }();
 
     const int mapSize = world.w() * world.h();
 
@@ -717,7 +726,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
 
         RegionStats & stats = _regions[regionID];
-        if ( !underViewSpell && tile.isFog( myColor ) ) {
+        if ( !isUnderViewSpell && tile.isFog( myColor ) ) {
             continue;
         }
 

@@ -45,6 +45,4 @@ namespace AI
     // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
     // before calling this function.
     int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
-
-    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 }

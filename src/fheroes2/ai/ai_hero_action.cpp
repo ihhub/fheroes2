@@ -2375,14 +2375,3 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
 
     return boatSource;
 }
-
-bool AI::HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
-{
-    if ( !hero.CanCastSpell( spell ) ) {
-        return false;
-    }
-
-    hero.SpellCasted( spell );
-
-    return true;
-}
