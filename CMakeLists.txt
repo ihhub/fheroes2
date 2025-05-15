@@ -89,6 +89,14 @@ endif(NOT WIN32)
 #
 if(MACOS_APP_BUNDLE)
 	add_custom_target(
+		app_bundle_fh2m_maps
+		ALL
+		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/maps
+		COMMAND cp *.fh2m ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/maps
+		DEPENDS fheroes2
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/maps
+		)
+	add_custom_target(
 		app_bundle_h2d_files
 		ALL
 		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d
@@ -108,7 +116,7 @@ if(MACOS_APP_BUNDLE)
 		run_dylibbundler
 		ALL
 		COMMAND dylibbundler -od -b -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME} -d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs
-		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_translations
+		DEPENDS fheroes2 app_bundle_fh2m_maps app_bundle_h2d_files app_bundle_translations
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 endif(MACOS_APP_BUNDLE)
@@ -122,6 +130,12 @@ if(NOT MACOS_APP_BUNDLE)
 		DESTINATION ${FHEROES2_DATA}/files/data
 		FILES_MATCHING
 		PATTERN *.h2d
+		)
+	install(
+		DIRECTORY maps/
+		DESTINATION ${FHEROES2_DATA}/maps
+		FILES_MATCHING
+		PATTERN *.fh2m
 		)
 	install(
 		FILES docs/README.txt LICENSE changelog.txt

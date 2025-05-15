@@ -99,6 +99,7 @@ jobs:
                                files\\data\\*.h2d \
                                files\\lang\\*.mo \
                                files\\timidity\\* \
+                               maps\\*.fh2m \
                                .\\script\\demo\\*.bat \
                                .\\script\\demo\\*.ps1 \
                                .\\script\\homm2\\*.bat \

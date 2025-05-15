@@ -30,9 +30,11 @@ CCFLAGS := $(CCFLAGS) \
 	-sSTRICT
 
 LDFLAGS := $(LDFLAGS) \
-	--preload-file ../../../files/data/resurrection.h2d@/files/data/resurrection.h2d \
-	--preload-file ../../../files/lang/@/files/lang/ \
-	--preload-file ../../../files/timidity/@/files/timidity/ \
+	$(patsubst %, --preload-file ../%@/files/data/, $(wildcard ../../files/data/*.h2d)) \
+	$(patsubst %, --preload-file ../%@/files/lang/, $(wildcard ../../files/lang/*.mo)) \
+	--preload-file ../../../files/timidity/timidity.cfg@/files/timidity/ \
+	$(patsubst %, --preload-file ../%@/files/timidity/instruments/, $(wildcard ../../files/timidity/instruments/*.pat)) \
+	$(patsubst %, --preload-file ../%@/maps/, $(wildcard ../../maps/*.fh2m)) \
 	-sALLOW_MEMORY_GROWTH \
 	-sASYNCIFY \
 	-sASYNCIFY_STACK_SIZE=64kb \
