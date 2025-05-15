@@ -36,6 +36,7 @@
 #include "ai_planner.h" // IWYU pragma: associated
 #include "ai_planner_internals.h"
 #include "army.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
@@ -57,6 +58,7 @@
 #include "mus.h"
 #include "players.h"
 #include "resource.h"
+#include "route.h"
 #include "skill.h"
 #include "spell.h"
 #include "world.h"
