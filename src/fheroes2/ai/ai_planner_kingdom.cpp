@@ -695,10 +695,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             ++availableHeroCount;
         }
 
-        if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
-            bestHeroToViewAll = hero;
-        }
-
         if ( const UltimateArtifact & art = world.GetUltimateArtifact(); art.isPosition( hero->GetIndex() ) && isUltimateArtifactAvailableToHero( art, *hero ) ) {
             assert( !hero->isShipMaster() && hero->GetMovePoints() == hero->GetMaxMovePoints() && hero->GetPath().empty() );
 
@@ -718,6 +714,10 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             if ( const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver(); gameState != fheroes2::GameMode::CANCEL ) {
                 return gameState;
             }
+        }
+
+        if ( hero->CanCastSpell( Spell::VIEWALL ) && ( bestHeroToViewAll == nullptr || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
+            bestHeroToViewAll = hero;
         }
     }
 
