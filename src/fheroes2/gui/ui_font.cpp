@@ -5844,7 +5844,7 @@ namespace
         fheroes2::SetPixel( released[214 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
 
-         // O with slash.
+        // O with slash.
         released[216 - 32].resize( released[79 - 32].width(), released[79 - 32].height() );
         released[216 - 32].reset();
         fheroes2::Copy( released[79 - 32], 0, 0, released[216 - 32], 0, 0, released[79 - 32].width(), released[79 - 32].height() );
@@ -6078,8 +6078,6 @@ namespace fheroes2
 
         updateButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                           icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
-
-        //fheroes2::Save( icnVsSprite[216 - 32], "oWithDiagonalBar.png", 96 );
     }
 
     void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
