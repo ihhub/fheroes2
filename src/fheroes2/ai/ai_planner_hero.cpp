@@ -2665,7 +2665,7 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
     // Hero has stopped at the tile with the Ultimate Artifact and is ready to dig it up
     if ( [&hero = std::as_const( hero ), &path = std::as_const( path ), heroIdx]() {
              // Hero should intentionally come to this tile (on foot or using teleportation), it should not be in transit.
-             // Note that the current step is not yet completed at the moment.
+             // Note that the current step is not yet completed at the moment if the hero came to this tile on foot.
              if ( path.size() > 1 ) {
                  return false;
              }
