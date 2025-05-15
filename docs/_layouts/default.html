@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=640" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="author" content="{{ site.github.owner_name }}" />
     <!-- Open Graph Meta Tags -->
@@ -19,7 +19,7 @@
     />
     <meta
       property="og:image"
-      content="{{ '/images/screenshots/screenshot_world_map.png' | absolute_url }}"
+      content="{{ '/images/screenshots/screenshot_world_map.webp' | absolute_url }}"
     />
     <meta property="og:url" content="{{ page.url | absolute_url }}" />
     <meta property="og:type" content="website" />
@@ -39,17 +39,40 @@
     {% endif %}
 
     <link
-      rel="stylesheet"
+      href="{{ '/assets/css/fonts.css?v=' | append: site.github.build_revision | relative_url }}"
+      rel="preload"
+      as="style"
+      onload="this.rel='stylesheet';this.removeAttribute('onload');"
+    />
+
+    <link
       href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}"
-      media="screen"
+      rel="preload"
+      as="style"
+      onload="this.rel='stylesheet';this.removeAttribute('onload');"
     />
 
     <!-- Scripts -->
-    <script src="{{ '/assets/js/accessibility-manager.js?v=' | append: site.github.build_revision | relative_url }}"></script>
-    <script src="{{ '/assets/js/theme-manager.js?v=' | append: site.github.build_revision | relative_url }}"></script>
-    <script src="{{ '/assets/js/templates.js?v=' | append: site.github.build_revision | relative_url }}"></script>
-    <script src="{{ '/assets/js/heading-copy-manager.js?v=' | append: site.github.build_revision | relative_url }}"></script>
-    <script src="{{ '/assets/js/code-copy-manager.js?v=' | append: site.github.build_revision | relative_url }}"></script>
+    <script
+      src="{{ '/assets/js/accessibility-manager.js?v=' | append: site.github.build_revision | relative_url }}"
+      defer
+    ></script>
+    <script
+      src="{{ '/assets/js/theme-manager.js?v=' | append: site.github.build_revision | relative_url }}"
+      defer
+    ></script>
+    <script
+      src="{{ '/assets/js/templates.js?v=' | append: site.github.build_revision | relative_url }}"
+      defer
+    ></script>
+    <script
+      src="{{ '/assets/js/heading-copy-manager.js?v=' | append: site.github.build_revision | relative_url }}"
+      defer
+    ></script>
+    <script
+      src="{{ '/assets/js/code-copy-manager.js?v=' | append: site.github.build_revision | relative_url }}"
+      defer
+    ></script>
 
     {% seo %}
     <link

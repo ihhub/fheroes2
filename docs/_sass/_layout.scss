@@ -282,7 +282,7 @@ $body-font: "Asul";
 
       h2 {
         font-family: $body-font, sans-serif;
-        font-size: 1.5em;
+        font-size: 1em;
         margin: 0.625em 0;
         border: none;
       }
@@ -320,7 +320,7 @@ $body-font: "Asul";
       padding: 0 1.25em 1.25em;
       background: rgba(map-get($theme-map, page-color), 0.9);
       box-shadow: 0 0 1.25em map-get($theme-map, border-color);
-      font-size: 1.6em;
+      font-size: 1.5em;
     }
 
     .image-showcase {
@@ -338,11 +338,13 @@ $body-font: "Asul";
       }
 
       img.full-image {
+        aspect-ratio: 16/9;
         width: 100%;
         height: auto;
       }
 
       img.half-image {
+        aspect-ratio: 4/3;
         width: calc(50% - 0.5em);
         height: auto;
       }
@@ -570,7 +572,7 @@ $body-font: "Asul";
 
       .shell {
         padding: 0.625em;
-        font-size: 2.5em;
+        font-size: 1.5em;
       }
 
       img.game-screenshot {
