@@ -2124,13 +2124,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         hero.GetPath().Reset();
     }
 
-    // Ultimate artifact can be placed under an object (e.g. under the Coast)
-    if ( const UltimateArtifact & art = world.GetUltimateArtifact(); art.isPosition( dst_index ) && isUltimateArtifactAvailableToHero( art, hero ) ) {
-        hero.SetModes( Heroes::SLEEPER );
-
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is ready to dig up the Ultimate Artifact at tile " << dst_index << " during the next turn" )
-    }
-
     // Ignore empty tiles
     if ( isActionObject ) {
         AI::Planner::Get().HeroesActionComplete( hero, dst_index, objectType );

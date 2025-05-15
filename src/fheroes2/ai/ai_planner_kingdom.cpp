@@ -44,6 +44,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "game_mode.h"
+#include "game_over.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
@@ -711,6 +712,10 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             }
 
             DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << " dug up the Ultimate Artifact at tile " << hero->GetIndex() )
+
+            if ( const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver(); gameState != fheroes2::GameMode::CANCEL ) {
+                return gameState;
+            }
         }
     }
 

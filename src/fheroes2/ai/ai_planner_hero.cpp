@@ -2660,12 +2660,40 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
     }
 
     Route::Path & path = hero.GetPath();
+    const int32_t heroIdx = hero.GetIndex();
+
+    // Hero has stopped at the tile with the Ultimate Artifact and is ready to dig it up
+    if ( [&hero = std::as_const( hero ), &path = std::as_const( path ), heroIdx]() {
+             // Hero should intentionally come to this tile (on foot or using teleportation), it should not be in transit (the current step is not yet completed at the
+             // moment)
+             if ( path.size() > 1 ) {
+                 return false;
+             }
+
+             assert( path.empty() || path.GetFrontIndex() == heroIdx );
+
+             const UltimateArtifact & art = world.GetUltimateArtifact();
+             if ( !art.isPosition( heroIdx ) ) {
+                 return false;
+             }
+
+             return isUltimateArtifactAvailableToHero( art, hero );
+         }() ) {
+        // We need to hold this hero on this tile until the next turn
+        hero.SetModes( Heroes::SLEEPER );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is ready to dig up the Ultimate Artifact at tile " << heroIdx << " during the next turn" )
+
+        return;
+    }
+
+    // The rest of the logic handles the transparent casting of the Summon Boat spell during the hero's movement
+
     if ( !path.isValidForMovement() ) {
         return;
     }
 
-    const int32_t heroIdx = hero.GetIndex();
-    assert( heroIdx == path.GetFrontIndex() );
+    assert( path.GetFrontIndex() == heroIdx );
 
     const int nextStepDirection = path.GetNextStepDirection();
     if ( !Maps::isValidDirection( heroIdx, nextStepDirection ) ) {
