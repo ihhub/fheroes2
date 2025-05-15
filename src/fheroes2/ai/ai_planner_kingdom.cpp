@@ -32,7 +32,6 @@
 #include <vector>
 
 #include "ai_common.h"
-#include "ai_hero_action.h"
 #include "ai_planner.h" // IWYU pragma: associated
 #include "ai_planner_internals.h"
 #include "army.h"

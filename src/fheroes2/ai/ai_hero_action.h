@@ -23,7 +23,6 @@
 #include <cstdint>
 
 class Heroes;
-class Spell;
 
 namespace fheroes2
 {
