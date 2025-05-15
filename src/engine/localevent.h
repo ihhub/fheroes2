@@ -259,6 +259,11 @@ public:
         return isMouseLeftButtonPressed() && ( area & _mousePressLeftPos );
     }
 
+    bool isMouseLeftButtonHeldInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseLeftButtonPressed() && isMouseCursorPosInArea( area );
+    }
+
     bool isMouseRightButtonPressed() const
     {
         return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_RIGHT;
