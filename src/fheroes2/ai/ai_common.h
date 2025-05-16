@@ -69,7 +69,7 @@ namespace AI
     void shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex );
 
     // Returns true if Ultimate Artifact is available to the given hero for pickup, otherwise returns false. In short,
-    // the main artifact is considered available to the given hero if he knows its exact location and there is a free
-    // space in the hero's artifact bag. See the implementation for details.
+    // the Ultimate Artifact is considered available to the given hero if this hero knows its exact location and there
+    // is a free slot in the hero's artifact bag. See the implementation for details.
     bool isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero );
 }
