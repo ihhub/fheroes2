@@ -389,6 +389,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
+        case fheroes2::SupportedLanguage::Danish:
             return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
             // Did you add a new layout type? Add the logic above!
