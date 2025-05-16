@@ -73,7 +73,7 @@ namespace
 
     bool needFadeIn{ false };
 
-    std::string CapturedExtInfoString( const int resource, const int color, const Funds & funds )
+    std::string CapturedExtInfoString( const int resource, const PlayerColor color, const Funds & funds )
     {
         std::string output = std::to_string( world.CountCapturedMines( resource, color ) );
 

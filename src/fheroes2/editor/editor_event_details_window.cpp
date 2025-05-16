@@ -31,7 +31,6 @@
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
@@ -68,7 +67,7 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
                              const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
@@ -264,7 +263,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = humanCheckbox->getColor();
+                    const PlayerColor color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
@@ -293,7 +292,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = computerCheckbox->getColor();
+                    const PlayerColor color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }

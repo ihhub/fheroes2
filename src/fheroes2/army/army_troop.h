@@ -34,6 +34,8 @@ class OStreamBase;
 
 class Army;
 
+enum class PlayerColor : uint8_t;
+
 class Troop : public Monster
 {
 public:
@@ -150,7 +152,7 @@ public:
     int GetMorale() const override;
     int GetLuck() const override;
 
-    int GetColor() const;
+    PlayerColor GetColor() const;
 
     void SetArmy( const Army & army )
     {

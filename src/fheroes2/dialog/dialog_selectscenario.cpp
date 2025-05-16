@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,7 +31,6 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -402,7 +401,7 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
     }
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t colors )
+const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const PlayerColors colors )
 {
     const uint32_t iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );

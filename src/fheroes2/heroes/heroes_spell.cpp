@@ -163,7 +163,7 @@ namespace
         // Player should have a summonable boat before calling this function.
         assert( Maps::isValidAbsIndex( boatSource ) );
 
-        const int heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
 
         Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
 
@@ -335,7 +335,7 @@ namespace
         Maps::setMineSpellOnTile( tile, spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
-            world.CaptureObject( tile.GetIndex(), Color::NONE );
+            world.CaptureObject( tile.GetIndex(), PlayerColor::NONE );
 
             // Update the color of haunted mine on radar.
             Interface::AdventureMap & I = Interface::AdventureMap::Get();

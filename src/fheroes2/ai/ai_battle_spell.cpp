@@ -272,7 +272,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
     else {
         // Area of effect spells like Fireball
         const auto areaOfEffectCheck
-            = [this, &damageHeuristic, &bestOutcome, &currentUnit, retreating]( const Battle::TargetsInfo & targets, const int32_t index, int myColor ) {
+            = [this, &damageHeuristic, &bestOutcome, &currentUnit, retreating]( const Battle::TargetsInfo & targets, const int32_t index, PlayerColor myColor ) {
                   double spellHeuristic = 0;
 
                   for ( const Battle::TargetInfo & target : targets ) {
@@ -635,7 +635,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellResurrectValue( const Spell & spell
     return bestOutcome;
 }
 
-AI::SpellcastOutcome AI::BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const
+AI::SpellcastOutcome AI::BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const
 {
     if ( !spell.isSummon() ) {
         return {};
