@@ -1062,7 +1062,7 @@ std::string Maps::Tile::String() const
     return os.str();
 }
 
-bool Maps::Tile::GoodForUltimateArtifact() const
+bool Maps::Tile::isSuitableForUltimateArtifact() const
 {
     if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
         return false;

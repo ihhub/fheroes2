@@ -415,5 +415,5 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
 
     const int32_t idx = art.getPosition();
 
-    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).GoodForUltimateArtifact();
+    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
 }
