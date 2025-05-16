@@ -106,7 +106,7 @@ Castle::Castle( const int32_t posX, const int32_t posY, int race )
     // Do nothing.
 }
 
-void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharactersInName )
 {
     assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
@@ -345,6 +345,10 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
         _name = dataStream.getString( 13 );
+
+        if ( updateFrenchLanguageSpecificCharactersInName ) {
+            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( _name );
+        }
     }
     else {
         // Skip 13 bytes since the name is not set.
@@ -2402,6 +2406,13 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 
     ColorBase & color = castle;
     stream >> castle._captain >> color >> castle._name >> castle._mageGuild;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( castle._name );
+    }
 
     if ( const uint32_t size = stream.get32(); castle._dwelling.size() != size ) {
         // Most likely the save file is corrupted.

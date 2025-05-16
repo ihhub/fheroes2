@@ -41,7 +41,7 @@
 #include "translations.h"
 #include "ui_language.h"
 
-void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )
+void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
 {
     assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
@@ -158,12 +158,16 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
 
     message = dataStream.getString();
 
+    if ( updateFrenchLanguageSpecificCharacters ) {
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message );
+    }
+
     setUIDAndIndex( index );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
 
-void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data )
+void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
 {
     assert( data.size() >= MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE );
 
@@ -249,11 +253,15 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     // Get all possible answers.
     for ( uint32_t i = 0; i < 8; ++i ) {
-        const std::string answer = dataStream.getString( 13 );
+        std::string answer = dataStream.getString( 13 );
 
         if ( answerCount > 0 ) {
             --answerCount;
             if ( !answer.empty() ) {
+                if ( updateFrenchLanguageSpecificCharacters ) {
+                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( answer );
+                }
+
                 answers.push_back( StringLower( answer ) );
             }
         }
@@ -263,6 +271,10 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     if ( riddle.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
+    }
+
+    if ( updateFrenchLanguageSpecificCharacters ) {
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( riddle );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << riddle << "'." )
@@ -283,7 +295,7 @@ bool MapSphinx::isCorrectAnswer( std::string answer )
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
-void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )
+void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
 {
     assert( data.size() >= MP2::MP2_SIGN_STRUCTURE_MIN_SIZE );
     assert( data[0] == 0x1 );
@@ -305,6 +317,9 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
 
     if ( message.text.empty() ) {
         setDefaultMessage();
+    }
+    else if ( updateFrenchLanguageSpecificCharacters ) {
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message.text );
     }
 
     setUIDAndIndex( mapIndex );
@@ -351,6 +366,13 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
     stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message );
+    }
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
         obj.secondarySkill = {};
@@ -371,6 +393,17 @@ OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj )
 IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 {
     stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.riddle >> obj.valid;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.riddle );
+
+        for ( std::string & str : obj.answers ) {
+            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( str );
+        }
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
@@ -399,6 +432,13 @@ IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
     }
     else {
         stream >> obj.message;
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message.text );
     }
 
     return stream;

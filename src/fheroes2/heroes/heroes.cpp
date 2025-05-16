@@ -320,7 +320,8 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data,
+                          const bool updateFrenchLanguageSpecificCharactersInName )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -595,6 +596,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
+
+            if ( updateFrenchLanguageSpecificCharactersInName ) {
+                fheroes2::updateFrenchLanguageSpecificCharactersForMaps( name );
+            }
         }
     }
     else {
@@ -2602,6 +2607,13 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
 
     // Heroes
     stream >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        // The special ASCII characters should not be used in game objects' strings.
+        // We can update French language-specific characters to use CP1252.
+        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( hero.name );
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {

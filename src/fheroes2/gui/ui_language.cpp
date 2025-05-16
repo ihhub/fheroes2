@@ -273,10 +273,20 @@ namespace fheroes2
     {
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
         const SupportedLanguage resourceLanguage = getResourceLanguage();
-        const bool isOriginalResourceLanguage
-            = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && SupportedLanguage::French != resourceLanguage );
 
-        AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        // The original French assets replaces several ASCII special characters with language-specific characters.
+        // In the engine we use CP1252 for these characters.
+        if ( ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French ) ) {
+            // Force generate CP1252 alphabet when English language is selected for French assets.
+            AGG::updateLanguageDependentResources( SupportedLanguage::French, false );
+        }
+        else {
+            // To generate CP1252 alphabet for French assets we must assume that these assets are not original.
+            const bool isOriginalResourceLanguage
+                = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French );
+
+            AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        }
     }
 
     SupportedLanguage getCurrentLanguage()
@@ -307,9 +317,8 @@ namespace fheroes2
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-            return CodePage::CP1252;
         case SupportedLanguage::French:
-            return CodePage::CP1252_French;
+            return CodePage::CP1252;
         case SupportedLanguage::Turkish:
             return CodePage::CP1254;
         case SupportedLanguage::Vietnamese:

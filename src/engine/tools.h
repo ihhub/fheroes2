@@ -100,6 +100,12 @@ namespace fheroes2
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 
+    // The original French version replaces several ASCII special characters with language-specific characters.
+    // In the engine we use CP1252 for the French translation.
+    // This function replaces the special ASCII characters with the language-specific characters from CP1252
+    // to properly display texts for maps from French assets.
+    void updateFrenchLanguageSpecificCharactersForMaps( std::string & str );
+
     std::string abbreviateNumber( const int num );
 
     // Appends the given modifier to the end of the given string (e.g. "Coliseum +2")
