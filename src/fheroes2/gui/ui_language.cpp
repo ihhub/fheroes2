@@ -275,13 +275,18 @@ namespace fheroes2
         const SupportedLanguage resourceLanguage = getResourceLanguage();
 
         // The original French assets replaces several ASCII special characters with language-specific characters.
-        // In the engine we use CP1252 for these characters so we need to generate CP1252 alphabet
-        // to properly draw these characters when English language is selected with French assets.
-        const bool loadFrenchAlphabet = ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French );
-        const bool isOriginalResourceLanguage
-            = !loadFrenchAlphabet && ( ( language == SupportedLanguage::English ) || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French ) );
+        // In the engine we use CP1252 for these characters.
+        if ( ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French ) ) {
+            // Force generate CP1252 alphabet when English language is selected for French assets.
+            AGG::updateLanguageDependentResources( SupportedLanguage::French, false );
+        }
+        else {
+            // To generate CP1252 alphabet for French assets we must assume that these assets are not original.
+            const bool isOriginalResourceLanguage
+                = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French );
 
-        AGG::updateLanguageDependentResources( loadFrenchAlphabet ? resourceLanguage : language, isOriginalResourceLanguage );
+            AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        }
     }
 
     SupportedLanguage getCurrentLanguage()

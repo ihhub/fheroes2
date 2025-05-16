@@ -169,7 +169,7 @@ namespace fheroes2
                 c = static_cast<char>( 251 );
                 break;
             case 38:
-                // Ampersand (&). Used forLowercase u with grave accent.
+                // Ampersand (&). Used for lowercase u with grave accent.
                 c = static_cast<char>( 249 );
                 break;
             case 42:
