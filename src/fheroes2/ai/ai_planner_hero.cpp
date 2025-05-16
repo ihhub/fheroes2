@@ -2400,20 +2400,23 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         const int32_t idx = art.getPosition();
         assert( Maps::isValidAbsIndex( idx ) );
 
-        auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
+        // If there is already a hero on this tile, then this tile should be ignored and that hero should be considered as an independent object
+        if ( world.getTile( idx ).getMainObjectType() != MP2::OBJ_HERO ) {
+            auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
 
-        if ( dist > 0 ) {
-            double value = ( isFindUltimateArtifactVictoryCondition() ? 3000.0 : 1500.0 ) * art.getArtifactValue();
-            getObjectValue( idx, dist, value, MP2::OBJ_ARTIFACT, useDimensionDoor );
+            if ( dist > 0 ) {
+                double value = ( isFindUltimateArtifactVictoryCondition() ? 3000.0 : 1500.0 ) * art.getArtifactValue();
+                getObjectValue( idx, dist, value, MP2::OBJ_ARTIFACT, useDimensionDoor );
 
-            if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
-                priorityTarget = idx;
-                maxPriority = value;
+                if ( dist > 0 && ( priorityTarget == -1 || value > maxPriority ) ) {
+                    priorityTarget = idx;
+                    maxPriority = value;
 #ifdef WITH_DEBUG
-                objectType = world.getTile( priorityTarget ).getMainObjectType();
+                    objectType = world.getTile( priorityTarget ).getMainObjectType();
 #endif
 
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (Ultimate Artifact)" )
+                    DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": candidate tile at " << priorityTarget << " value is " << maxPriority << " (Ultimate Artifact)" )
+                }
             }
         }
     }
