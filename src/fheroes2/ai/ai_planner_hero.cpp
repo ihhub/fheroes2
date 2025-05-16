@@ -2400,8 +2400,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         const int32_t idx = art.getPosition();
         assert( Maps::isValidAbsIndex( idx ) );
 
-        // If there is already a hero on this tile, then this tile should be ignored and that hero should be considered as an independent object
-        if ( world.getTile( idx ).getMainObjectType() != MP2::OBJ_HERO ) {
+        // If there is an action object on this tile (e.g. a hero), then this tile should be ignored, and that object should already be considered
+        if ( _mapActionObjects.count( idx ) == 0 ) {
             auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, idx );
 
             if ( dist > 0 ) {
