@@ -5678,9 +5678,7 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
-        for ( const int & charCode : { 216 } ) {
-            released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 1 );
-        }
+        released[216 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 1 );
 
         // Offset A-related letters to have less space to neighboring letters. Keep the y-offset change from earlier.
         for ( const int & charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
