@@ -74,15 +74,15 @@ namespace
         case fheroes2::SupportedLanguage::English:
             // English is a default language so it is not considered as an extra language.
             return false;
-        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-        case fheroes2::SupportedLanguage::Danish:
             return true;
         default:
             break;
@@ -382,6 +382,7 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
@@ -389,7 +390,6 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-        case fheroes2::SupportedLanguage::Danish:
             return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
             // Did you add a new layout type? Add the logic above!
@@ -412,6 +412,8 @@ namespace
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xA1\xC7\xD5\x92", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xB2\xD2\xDC\xC1\xDE\xA8" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
+        case fheroes2::SupportedLanguage::Danish:
+            return { "QWERTYUIOP\xC5", "ASDFGHJKL\xC6\xD8", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::French:
@@ -426,8 +428,6 @@ namespace
             return { "\xCF\xBC\x8A\xC8\x8D\x8E\xDD\xC1\xCD\xC9\xD3", "QWERTZUIOP\xDA", "ASDFGHJKL\xD4\xD2", "\xC4YXCVBNM\xC5\xC0" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xAF", "\xD4\xB2\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xAA", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA5" };
-        case fheroes2::SupportedLanguage::Danish:
-            return { "QWERTYUIOP\xC5", "ASDFGHJKL\xC6\xD8", "ZXCVBNM" };
         default:
             // Did you add a new layout type? Add the logic above!
             assert( 0 );
@@ -444,6 +444,8 @@ namespace
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xA2\xE7\xF5\x92", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xB3\xF2\xFC\xE1\xFE\xB8" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
+        case fheroes2::SupportedLanguage::Danish:
+            return { "qwertyuiop\xE5", "asdfghjkl\xE6\xF8", "zxcvbnm" };
         case fheroes2::SupportedLanguage::English:
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::French:
@@ -458,8 +460,6 @@ namespace
             return { "\xEF\xBE\x9A\xE8\x9D\x9E\xFD\xE1\xED\xE9\xF3", "qwertzuiop\xFA", "asdfghjkl\xF4\xF2", "\xE4yxcvbnm\xE5\xE0" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xBF", "\xF4\xB3\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xBA", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB4" };
-        case fheroes2::SupportedLanguage::Danish:
-            return { "qwertyuiop\xE5", "asdfghjkl\xE6\xF8", "zxcvbnm" };
         default:
             // Did you add a new layout type? Add the logic above!
             assert( 0 );
@@ -507,12 +507,12 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
             return { 30, defaultButtonHeight };
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-        case fheroes2::SupportedLanguage::Danish:
             return { 24, defaultButtonHeight };
         default:
             // Did you add a new supported language? Add the value above!
@@ -717,6 +717,7 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
         case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
@@ -724,7 +725,6 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
         case fheroes2::SupportedLanguage::Ukrainian:
-        case fheroes2::SupportedLanguage::Danish:
             addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
             break;
         default:
