@@ -98,7 +98,8 @@ namespace
         }
     }
 
-    void updateWorldCastlesHeroesAndCapturableObjects( const Maps::Map_Format::MapFormat & map )
+    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
     {
         assert( map.size == world.w() && map.size == world.h() );
 
@@ -630,7 +631,7 @@ namespace Maps
 
         world.updatePassabilities();
 
-        updateWorldCastlesHeroesAndCapturableObjects( map );
+        updatePlayerRelatedObjects( map );
 
         return true;
     }
