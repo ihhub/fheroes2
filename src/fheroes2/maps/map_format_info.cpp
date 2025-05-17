@@ -60,8 +60,8 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata );
 
-    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectsMetadata & metadata );
-    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectsMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata );
 }
 
 namespace
@@ -442,12 +442,12 @@ namespace Maps::Map_Format
         return stream >> metadata.selectedItems;
     }
 
-    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectsMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectMetadata & metadata )
     {
         return stream << metadata.ownerColor;
     }
 
-    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectsMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata )
     {
         return stream >> metadata.ownerColor;
     }

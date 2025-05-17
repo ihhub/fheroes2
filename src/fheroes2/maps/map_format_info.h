@@ -253,7 +253,7 @@ namespace Maps::Map_Format
         std::vector<int32_t> selectedItems;
     };
 
-    struct CapturableObjectsMetadata
+    struct CapturableObjectMetadata
     {
         uint8_t ownerColor{ 0 };
     };
@@ -336,8 +336,7 @@ namespace Maps::Map_Format
 
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
 
-        // This metadata contains the owner color in relation to tile ID.
-        std::map<int32_t, CapturableObjectsMetadata> capturableObjectsMetadata;
+        std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

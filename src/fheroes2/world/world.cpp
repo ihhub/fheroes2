@@ -393,7 +393,7 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateVoidMapForEditor( const int32_t size )
+void World::generateUninitializedMap( const int32_t size )
 {
     assert( size > 0 );
 
@@ -419,9 +419,9 @@ void World::generateVoidMapForEditor( const int32_t size )
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 }
 
-void World::generateBlankMapForEditor( const int32_t size )
+void World::generateMapForEditor( const int32_t size )
 {
-    generateVoidMapForEditor( size );
+    generateUninitializedMap( size );
 
     // Initialize all tiles.
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {

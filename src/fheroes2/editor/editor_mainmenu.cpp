@@ -260,7 +260,7 @@ namespace Editor
             if ( le.MouseClickLeft( buttonScratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::MapSize mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    world.generateBlankMapForEditor( mapSize );
+                    world.generateMapForEditor( mapSize );
 
                     // Reset object UID to keep track of newly added objects.
                     Maps::resetObjectUID();
@@ -332,7 +332,7 @@ namespace Editor
     {
         const Maps::MapSize mapSize = selectMapSize();
         if ( mapSize != Maps::ZERO ) {
-            world.generateBlankMapForEditor( mapSize );
+            world.generateMapForEditor( mapSize );
 
             // Reset object UID to keep track of newly added objects.
             Maps::resetObjectUID();

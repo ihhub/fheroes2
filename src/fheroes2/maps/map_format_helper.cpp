@@ -98,20 +98,24 @@ namespace
         }
     }
 
-    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
+    void updateWorldCastlesHeroesAndCapturableObjects( const Maps::Map_Format::MapFormat & map )
     {
         assert( map.size == world.w() && map.size == world.h() );
 
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            for ( const auto & object : map.tiles[i].objects ) {
+        // Capturable objects exist in Miscellaneous and Mines groups.
+        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            for ( const auto & object : map.tiles[tileId].objects ) {
                 if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
+                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
                     const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
 
-                    world.addCastle( static_cast<int32_t>( i ), race, color );
+                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
                 }
                 else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
                     const auto & metadata = heroObjects[object.index].metadata;
@@ -119,9 +123,23 @@ namespace
 
                     Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
                     if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
                         hero->SetColor( color );
                     }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( object.index < miscObjects.size() );
+
+                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    assert( object.index < minesObjects.size() );
+
+                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
                 }
             }
         }
@@ -604,7 +622,7 @@ namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
     {
-        world.generateVoidMapForEditor( map.size );
+        world.generateUninitializedMap( map.size );
 
         if ( !readAllTiles( map ) ) {
             return false;
@@ -612,9 +630,7 @@ namespace Maps
 
         world.updatePassabilities();
 
-        updateWorldCastlesHeroes( map );
-
-        updateWorldObjectsOwnership( map );
+        updateWorldCastlesHeroesAndCapturableObjects( map );
 
         return true;
     }
@@ -1212,14 +1228,6 @@ namespace Maps
         return true;
     }
 
-    void updateWorldObjectsOwnership( const Map_Format::MapFormat & map )
-    {
-        for ( const auto & [tileIndex, metadata] : map.capturableObjectsMetadata ) {
-            assert( tileIndex < static_cast<int32_t>( world.getSize() ) );
-            world.CaptureObject( tileIndex, metadata.ownerColor );
-        }
-    }
-
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id )
     {
         if ( map.tiles.empty() ) {
@@ -1272,6 +1280,31 @@ namespace Maps
     bool isJailObject( const ObjectGroup group, const uint32_t index )
     {
         return ( group == ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
+    }
+
+    bool isCapturableObject( const MP2::MapObjectType objectType )
+    {
+        switch ( objectType ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType )
+    {
+        if ( Maps::isCapturableObject( objectType ) ) {
+            auto ownershipMetadata = map.capturableObjectsMetadata.find( objectId );
+            if ( ownershipMetadata != map.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( tileIndex, ownershipMetadata->second.ownerColor );
+            }
+        }
     }
 
     uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )
