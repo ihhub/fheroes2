@@ -254,7 +254,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

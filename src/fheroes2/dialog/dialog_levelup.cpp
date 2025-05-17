@@ -156,9 +156,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnLeft.area() ) );
-            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLearnRight.area() ) );
-            buttonHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHero.area() ) );
+            buttonLearnLeft.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLearnLeft.area() ) );
+            buttonLearnRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLearnRight.area() ) );
+            buttonHero.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHero.area() ) );
 
             if ( le.MouseClickLeft( buttonLearnLeft.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
                 return sec1.Skill();

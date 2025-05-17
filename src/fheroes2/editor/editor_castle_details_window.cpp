@@ -469,7 +469,7 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -479,7 +479,7 @@ namespace Editor
                 buildingRestriction = !buildingRestriction;
             }
 
-            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuilding.area() ) );
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedAndHeldInArea( buttonRestrictBuilding.area() ) );
 
             if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );

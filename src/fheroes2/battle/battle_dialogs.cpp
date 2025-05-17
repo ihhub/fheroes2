@@ -309,7 +309,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
             bool redrawScreen = false;
 
@@ -672,10 +672,10 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     int sequenceId = sequence.id();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
         if ( allowToRestart ) {
-            buttonRestart->drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart->area() ) );
+            buttonRestart->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRestart->area() ) );
         }
 
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
@@ -796,7 +796,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             }
 
             while ( le.HandleEvents() ) {
-                buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
                 // Display captured artifact info on right click
                 if ( le.isMouseRightButtonPressedInArea( artifactArea ) ) {
@@ -876,7 +876,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     int sequenceId = sequence.id();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
@@ -1022,16 +1022,16 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     while ( le.HandleEvents() && !result ) {
         if ( btnCast.isEnabled() ) {
-            btnCast.drawOnState( le.isMouseLeftButtonPressedInArea( btnCast.area() ) );
+            btnCast.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnCast.area() ) );
         }
         if ( btnRetreat.isEnabled() ) {
-            btnRetreat.drawOnState( le.isMouseLeftButtonPressedInArea( btnRetreat.area() ) );
+            btnRetreat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnRetreat.area() ) );
         }
         if ( btnSurrender.isEnabled() ) {
-            btnSurrender.drawOnState( le.isMouseLeftButtonPressedInArea( btnSurrender.area() ) );
+            btnSurrender.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnSurrender.area() ) );
         }
 
-        btnClose.drawOnState( le.isMouseLeftButtonPressedInArea( btnClose.area() ) );
+        btnClose.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnClose.area() ) );
 
         // The Cast Spell is available for a hero and a captain.
         if ( le.isMouseCursorPosInArea( btnCast.area() ) && currentColor == hero.GetColor() ) {
@@ -1214,13 +1214,13 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     while ( le.HandleEvents() && !result ) {
         if ( btnAccept.isEnabled() ) {
-            btnAccept.drawOnState( le.isMouseLeftButtonPressedInArea( btnAccept.area() ) );
+            btnAccept.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnAccept.area() ) );
         }
 
-        btnDecline.drawOnState( le.isMouseLeftButtonPressedInArea( btnDecline.area() ) );
+        btnDecline.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnDecline.area() ) );
 
         if ( btnMarket.isEnabled() ) {
-            btnMarket.drawOnState( le.isMouseLeftButtonPressedInArea( btnMarket.area() ) );
+            btnMarket.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( btnMarket.area() ) );
         }
 
         if ( btnAccept.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( btnAccept.area() ) ) ) {

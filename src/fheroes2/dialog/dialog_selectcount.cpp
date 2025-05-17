@@ -133,11 +133,11 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
         bool needRedraw = false;
 
         if ( buttonMax.isVisible() ) {
-            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMax.area() ) );
         }
 
         if ( buttonMin.isVisible() ) {
-            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMin.area() ) );
         }
 
         if ( const auto value = fheroes2::processIntegerValueTyping( min, max, typedValueBuf ); value ) {
@@ -288,11 +288,11 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
         }
 
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-        buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedInArea( buttonVirtualKB.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+        buttonVirtualKB.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonVirtualKB.area() ) );
 
         // In this dialog we input text so we need to use hotkeys that cannot be use in text typing.
         if ( ( !isMultiLine && le.isKeyPressed( fheroes2::Key::KEY_ENTER ) ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
@@ -486,11 +486,11 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
         bool needRedraw = false;
 
         if ( buttonMax.isVisible() ) {
-            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMax.area() ) );
         }
 
         if ( buttonMin.isVisible() ) {
-            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMin.area() ) );
         }
 
         if ( const auto value = fheroes2::processIntegerValueTyping( redistributeMin, redistributeMax, typedValueBuf ); value ) {

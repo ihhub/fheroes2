@@ -281,12 +281,12 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-            buttonAdd.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAdd.area() ) );
-            buttonEdit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEdit.area() ) );
-            buttonDelete.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDelete.area() ) );
-            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonAdd.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonAdd.area() ) );
+            buttonEdit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonEdit.area() ) );
+            buttonDelete.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDelete.area() ) );
+            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteArtifact.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 break;

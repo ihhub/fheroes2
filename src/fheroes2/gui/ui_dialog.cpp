@@ -986,8 +986,8 @@ namespace fheroes2
     {
         LocalEvent & le = LocalEvent::Get();
 
-        _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
-        _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
+        _buttonUp.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonUp.area() ) );
+        _buttonDown.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonDown.area() ) );
 
         if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isIncreaseValueEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
             _value += _step;

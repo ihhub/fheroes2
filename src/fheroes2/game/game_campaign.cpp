@@ -1011,7 +1011,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
             if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -1486,11 +1486,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     bool updateDisplay = false;
 
     while ( le.HandleEvents() ) {
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) );
-        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) );
-        buttonRestart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonViewIntro.area() ) );
+        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDifficulty.area() ) );
+        buttonRestart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRestart.area() ) );
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {

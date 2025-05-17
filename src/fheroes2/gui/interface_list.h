@@ -333,8 +333,8 @@ namespace Interface
         {
             LocalEvent & le = LocalEvent::Get();
 
-            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgUp.area() ) );
-            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgDn.area() ) );
+            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgUp.area() ) );
+            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgDn.area() ) );
 
             if ( !IsValid() ) {
                 return false;

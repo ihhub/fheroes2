@@ -103,11 +103,11 @@ fheroes2::GameMode Game::LoadMulti()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHotSeat.area() ) );
+        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
         if ( buttonNetwork.isEnabled() ) {
-            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNetwork.area() ) );
+            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNetwork.area() ) );
         }
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ) ) ) {
@@ -178,7 +178,7 @@ fheroes2::GameMode Game::LoadGame()
 
     while ( le.HandleEvents() ) {
         for ( fheroes2::ButtonBase * button : buttons ) {
-            button->drawOnState( le.isMouseLeftButtonPressedInArea( button->area() ) );
+            button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
         }
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
