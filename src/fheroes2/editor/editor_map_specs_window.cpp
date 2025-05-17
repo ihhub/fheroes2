@@ -2443,7 +2443,9 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCreatorNotes.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Creator's Notes" ), _( "Click to change notes from map creator." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Creator's Notes" ),
+                                                   _( "Click to edit notes from the map creator. These notes are optional and do not appear during gameplay." ),
+                                                   Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( mapNameRoi ) ) {
                 fheroes2::MultiFontText message;
