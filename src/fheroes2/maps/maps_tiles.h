@@ -179,7 +179,7 @@ namespace Maps
         }
 
         bool isStream() const;
-        bool GoodForUltimateArtifact() const;
+        bool isSuitableForUltimateArtifact() const;
 
         ObjectPart * getGroundObjectPart( const uint32_t uid );
         ObjectPart * getTopObjectPart( const uint32_t uid );

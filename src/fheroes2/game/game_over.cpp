@@ -152,6 +152,19 @@ namespace
             break;
         }
 
+        case GameOver::LOSS_ENEMY_WINS_ARTIFACT:
+            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
+
+            if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
+                StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+            }
+            else {
+                const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
+                StringReplace( body, "%{name}", art.GetName() );
+            }
+
+            break;
+
         case GameOver::LOSS_ENEMY_WINS_GOLD:
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
             StringReplace( body, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );

@@ -3797,7 +3797,6 @@ void Heroes::Action( int tileIndex )
         ActionToCoast( *this, tileIndex );
         break;
 
-    // resource object
     case MP2::OBJ_WINDMILL:
     case MP2::OBJ_WATER_WHEEL:
     case MP2::OBJ_MAGIC_GARDEN:
@@ -3836,7 +3835,6 @@ void Heroes::Action( int tileIndex )
         ActionToArtifact( *this, tileIndex );
         break;
 
-    // shrine circle
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
@@ -3847,12 +3845,10 @@ void Heroes::Action( int tileIndex )
         ActionToWitchsHut( *this, objectType, tileIndex );
         break;
 
-    // info message
     case MP2::OBJ_SIGN:
         ActionToSign( *this, tileIndex );
         break;
 
-    // luck modification
     case MP2::OBJ_FOUNTAIN:
     case MP2::OBJ_FAERIE_RING:
     case MP2::OBJ_IDOL:
@@ -3869,7 +3865,6 @@ void Heroes::Action( int tileIndex )
         ActionToTradingPost( *this );
         break;
 
-    // primary skill modification
     case MP2::OBJ_FORT:
     case MP2::OBJ_MERCENARY_CAMP:
     case MP2::OBJ_WITCH_DOCTORS_HUT:
@@ -3877,7 +3872,6 @@ void Heroes::Action( int tileIndex )
         ActionToPrimarySkillObject( *this, objectType, tileIndex );
         break;
 
-    // morale modification
     case MP2::OBJ_OASIS:
     case MP2::OBJ_TEMPLE:
     case MP2::OBJ_WATERING_HOLE:
@@ -3891,7 +3885,6 @@ void Heroes::Action( int tileIndex )
         ActionToPoorMoraleObject( *this, objectType, tileIndex );
         break;
 
-    // experience modification
     case MP2::OBJ_GAZEBO:
         ActionToExperienceObject( *this, objectType, tileIndex );
         break;
@@ -3899,7 +3892,6 @@ void Heroes::Action( int tileIndex )
         ActionToDaemonCave( *this, objectType, tileIndex );
         break;
 
-    // teleports
     case MP2::OBJ_STONE_LITHS:
         ActionToTeleports( *this, tileIndex );
         break;
@@ -3914,7 +3906,6 @@ void Heroes::Action( int tileIndex )
         ActionToMagellanMaps( *this, objectType, tileIndex );
         break;
 
-    // capture color object
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_MINE:
     case MP2::OBJ_SAWMILL:
@@ -3926,7 +3917,6 @@ void Heroes::Action( int tileIndex )
         ActionToAbandonedMine( *this, objectType, tileIndex );
         break;
 
-    // accept army
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_EXCAVATION:
     case MP2::OBJ_CAVE:
@@ -3939,7 +3929,6 @@ void Heroes::Action( int tileIndex )
         ActionToDwellingJoinMonster( *this, objectType, tileIndex );
         break;
 
-    // recruit army
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_WAGON_CAMP:
@@ -3947,7 +3936,6 @@ void Heroes::Action( int tileIndex )
         ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
         break;
 
-    // battle and recruit army
     case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_TROLL_BRIDGE:
@@ -3986,7 +3974,7 @@ void Heroes::Action( int tileIndex )
         ActionToSphinx( *this, objectType, tileIndex );
         break;
 
-    // loyalty version
+    // Price of Loyalty objects
     case MP2::OBJ_WATER_ALTAR:
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_FIRE_ALTAR:
@@ -4026,7 +4014,6 @@ void Heroes::Action( int tileIndex )
         ActionToTravellersTent( *this, objectType, tileIndex );
         break;
 
-    // other object
     default:
         break;
     }

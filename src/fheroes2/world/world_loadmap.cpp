@@ -1457,7 +1457,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
             return false;
         }
 
-        return getTile( idx ).GoodForUltimateArtifact();
+        return getTile( idx ).isSuitableForUltimateArtifact();
     };
 
     if ( tileId < 0 ) {

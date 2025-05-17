@@ -442,7 +442,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.getTile( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).isSuitableForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();

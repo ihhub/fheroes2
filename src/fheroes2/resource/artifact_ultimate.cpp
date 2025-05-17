@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,10 +32,11 @@ UltimateArtifact::UltimateArtifact()
     , _isFound( false )
 {}
 
-void UltimateArtifact::Set( const int32_t position, const Artifact & a )
+void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 {
-    Artifact & art = *this;
-    art = a.isValid() ? a : Artifact::Rand( Artifact::ART_ULTIMATE );
+    Artifact & thisArt = *this;
+    thisArt = artifact.isValid() ? artifact : Artifact::Rand( Artifact::ART_ULTIMATE );
+
     _index = position;
     _isFound = false;
 

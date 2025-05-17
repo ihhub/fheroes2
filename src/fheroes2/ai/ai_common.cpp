@@ -34,6 +34,7 @@
 
 #include "army.h"
 #include "army_troop.h"
+#include "artifact_ultimate.h"
 #include "castle.h"
 #include "color.h"
 #include "difficulty.h"
@@ -41,9 +42,11 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "payment.h"
 #include "players.h"
+#include "puzzle.h"
 #include "resource.h"
 #include "resource_trading.h"
 #include "world.h"
@@ -393,4 +396,24 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
     for ( const int color : playerColors ) {
         ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
     }
+}
+
+bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero )
+{
+    if ( art.isFound() ) {
+        return false;
+    }
+
+    // The hero's kingdom must have a fully open obelisk map
+    if ( !hero.GetKingdom().PuzzleMaps().all() ) {
+        return false;
+    }
+
+    if ( hero.IsFullBagArtifacts() ) {
+        return false;
+    }
+
+    const int32_t idx = art.getPosition();
+
+    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
 }
