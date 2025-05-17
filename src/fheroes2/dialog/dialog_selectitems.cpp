@@ -763,8 +763,8 @@ namespace Dialog
         LocalEvent & le = LocalEvent::Get();
 
         while ( !_isDoubleClicked && le.HandleEvents() ) {
-            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonOk.area() ) );
-            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonCancel.area() ) );
+            _buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonOk.area() ) );
+            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 return Dialog::OK;
@@ -1046,8 +1046,8 @@ int Dialog::selectHeroType( const int heroType )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return heroColor * 7 + heroRace;
@@ -1302,8 +1302,8 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
             if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
@@ -1661,8 +1661,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         bool needRedraw = listbox.QueueEventProcessing();
 

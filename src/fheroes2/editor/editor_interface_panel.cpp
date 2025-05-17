@@ -1206,12 +1206,12 @@ namespace Interface
             }
         }
 
-        _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedInArea( _rectMagnify ) );
-        _buttonUndo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectUndo ) );
-        _buttonRedo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectRedo ) );
-        _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSpecs ) );
-        _buttonFile.drawOnState( le.isMouseLeftButtonPressedInArea( _rectFile ) );
-        _buttonSystem.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSystem ) );
+        _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectMagnify ) );
+        _buttonUndo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectUndo ) );
+        _buttonRedo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectRedo ) );
+        _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectSpecs ) );
+        _buttonFile.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectFile ) );
+        _buttonSystem.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectSystem ) );
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();

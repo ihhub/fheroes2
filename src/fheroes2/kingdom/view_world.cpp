@@ -715,8 +715,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // message loop
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
-        buttonZoom.drawOnState( le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+        buttonZoom.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonZoom.area() ) );
 
         bool changed = false;
 

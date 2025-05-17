@@ -132,7 +132,7 @@ namespace
 
         while ( le.HandleEvents() ) {
             for ( size_t i = 0; i < mapSizeCount; ++i ) {
-                buttons[i].drawOnState( le.isMouseLeftButtonPressedInArea( buttons[i].area() ) );
+                buttons[i].drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttons[i].area() ) );
 
                 if ( le.MouseClickLeft( buttons[i].area() ) || Game::HotKeyPressEvent( mapSizeHotkeys[i] ) ) {
                     return mapSizes[i];
@@ -147,7 +147,7 @@ namespace
                 }
             }
 
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return Maps::ZERO;
@@ -193,9 +193,9 @@ namespace Editor
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            buttonNewMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNewMap.area() ) );
-            buttonLoadMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoadMap.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonNewMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNewMap.area() ) );
+            buttonLoadMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLoadMap.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonNewMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
@@ -249,13 +249,13 @@ namespace Editor
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            buttonScratchMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonScratchMap.area() ) );
+            buttonScratchMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonScratchMap.area() ) );
 
             if ( buttonRandomMap.isEnabled() ) {
-                buttonRandomMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRandomMap.area() ) );
+                buttonRandomMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRandomMap.area() ) );
             }
 
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonScratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::MapSize mapSize = selectMapSize();
