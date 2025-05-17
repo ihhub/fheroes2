@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -120,7 +120,7 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
@@ -191,7 +191,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -269,7 +269,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

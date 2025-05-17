@@ -333,8 +333,8 @@ namespace Interface
         {
             LocalEvent & le = LocalEvent::Get();
 
-            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgUp.area() ) );
-            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgDn.area() ) );
+            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgUp.area() ) );
+            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgDn.area() ) );
 
             if ( !IsValid() ) {
                 return false;
@@ -448,7 +448,7 @@ namespace Interface
 
                 return true;
             }
-            if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) || le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( _scrollbar.getArea() ) || le.isMouseLeftButtonPressedAndHeldInArea( rtAreaItems ) ) {
                 const fheroes2::Point mousePosition = le.getMouseCursorPos();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
@@ -456,11 +456,11 @@ namespace Interface
 
                 UpdateScrollbarRange();
 
-                if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+                if ( le.isMouseLeftButtonPressedAndHeldInArea( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                     _scrollbar.moveToPos( mousePosition );
                 }
 
-                if ( le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
+                if ( le.isMouseLeftButtonPressedAndHeldInArea( rtAreaItems ) ) {
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         _dragStartPos = mousePosition;

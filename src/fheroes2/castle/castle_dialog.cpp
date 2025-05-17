@@ -404,13 +404,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
-                buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) );
+                buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevCastle.area() ) );
             }
             if ( buttonNextCastle.isEnabled() ) {
-                buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) );
+                buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextCastle.area() ) );
             }
 
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {

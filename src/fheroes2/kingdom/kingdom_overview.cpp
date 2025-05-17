@@ -844,7 +844,7 @@ void Kingdom::openOverviewDialog()
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.isMouseRightButtonPressedInArea( buttonHeroes.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Heroes" ), _( "View Heroes." ), Dialog::ZERO );

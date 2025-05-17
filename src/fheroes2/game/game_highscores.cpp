@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -380,8 +380,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
-        buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOtherHighScore.area() ) );
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOtherHighScore.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
             if ( isAfterGameCompletion || isDefaultScreenSize ) {

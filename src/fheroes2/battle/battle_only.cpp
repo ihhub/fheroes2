@@ -216,13 +216,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawControlInfo = false;
 
         if ( buttonStart.isEnabled() ) {
-            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStart.area() ) );
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonStart.area() ) );
         }
         if ( buttonExit.isEnabled() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
         }
         if ( buttonReset.isEnabled() ) {
-            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonReset.area() ) );
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
         if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
