@@ -43,9 +43,18 @@ class HeroesIndicator
 public:
     explicit HeroesIndicator( const Heroes * hero );
 
-    const fheroes2::Rect & GetArea() const;
+    const fheroes2::Rect & GetArea() const
+    {
+        return _area;
+    }
 
     void SetPos( const fheroes2::Point & pt );
+
+    // Restores the background under this indicator. The indicator itself is not drawn.
+    void redrawOnlyBackground()
+    {
+        _back.restore();
+    }
 
 protected:
     const Heroes * _hero;
@@ -54,7 +63,7 @@ protected:
     std::string _description;
 };
 
-class LuckIndicator : public HeroesIndicator
+class LuckIndicator final : public HeroesIndicator
 {
 public:
     explicit LuckIndicator( const Heroes * hero )
@@ -66,19 +75,13 @@ public:
 
     void Redraw();
 
-    // Redraws only the background under this indicator, but not the indicator itself
-    void redrawOnlyBackground()
-    {
-        _back.restore();
-    }
-
     static void QueueEventProcessing( const LuckIndicator & indicator );
 
 private:
     int _luck{ Luck::NORMAL };
 };
 
-class MoraleIndicator : public HeroesIndicator
+class MoraleIndicator final : public HeroesIndicator
 {
 public:
     explicit MoraleIndicator( const Heroes * hero )
@@ -90,19 +93,13 @@ public:
 
     void Redraw();
 
-    // Redraws only the background under this indicator, but not the indicator itself
-    void redrawOnlyBackground()
-    {
-        _back.restore();
-    }
-
     static void QueueEventProcessing( const MoraleIndicator & indicator );
 
 private:
     int _morale{ Morale::NORMAL };
 };
 
-class ExperienceIndicator : public HeroesIndicator
+class ExperienceIndicator final : public HeroesIndicator
 {
 public:
     explicit ExperienceIndicator( const Heroes * hero );
@@ -121,12 +118,12 @@ private:
     bool _isDefault{ false };
 };
 
-class SpellPointsIndicator : public HeroesIndicator
+class SpellPointsIndicator final : public HeroesIndicator
 {
 public:
     explicit SpellPointsIndicator( const Heroes * hero );
 
-    void Redraw() const;
+    void Redraw();
     void QueueEventProcessing() const;
 
     // Set if default value is used. Use this method only in Editor!
@@ -138,4 +135,5 @@ public:
 private:
     // This state is used in Editor to show that default value is used.
     bool _isDefault{ false };
+    bool _needBackgroundRestore{ false };
 };
