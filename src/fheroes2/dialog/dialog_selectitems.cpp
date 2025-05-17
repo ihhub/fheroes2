@@ -1306,7 +1306,7 @@ void Dialog::selectTownType( int & type, int & color )
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
-            if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonTown.area() ) ) {
                 buttonTown.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonTown.area() ) ) {
@@ -1319,7 +1319,7 @@ void Dialog::selectTownType( int & type, int & color )
             }
         }
         else {
-            if ( le.isMouseLeftButtonPressedInArea( buttonCastle.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonCastle.area() ) ) {
                 buttonCastle.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonCastle.area() ) ) {
