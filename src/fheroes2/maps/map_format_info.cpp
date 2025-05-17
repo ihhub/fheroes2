@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cstddef>
+#include <initializer_list>
 
 #include "serialize.h"
 #include "zzlib.h"
