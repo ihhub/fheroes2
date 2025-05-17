@@ -804,12 +804,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         hero->ResetMovePoints();
 
-        if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-            if ( !hero->PickupArtifact( world.GetUltimateArtifact().GetArtifact() ) ) {
-                assert( 0 );
-            }
-        }
-        else {
+        if ( !world.DiggingForUltimateArtifact( hero->GetCenter() ) || !hero->PickupArtifact( world.GetUltimateArtifact().GetArtifact() ) ) {
             assert( 0 );
         }
 
