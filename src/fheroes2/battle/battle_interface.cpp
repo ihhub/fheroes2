@@ -1545,11 +1545,11 @@ void Battle::Interface::RedrawArmies()
 
             std::vector<const Unit *> troopBeforeWall;
             std::vector<const Unit *> troopAfterWall;
-            std::vector<const Unit *> upwardMovingTroopBeforeWall;
-
             std::vector<const Unit *> movingTroopBeforeWall;
+
+            std::vector<const Unit *> downwardMovingTroopBeforeWall;
+            std::vector<const Unit *> downwardMovingTroopAfterWall;
             std::vector<const Unit *> movingTroopAfterWall;
-            std::vector<const Unit *> upwardMovingTroopAfterWall;
 
             // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
@@ -1623,21 +1623,21 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     if ( isCellBefore ) {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
-                            // The troop is moving to the upper row. We should render it prior to this row units.
-                            upwardMovingTroopBeforeWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
+                            // The troop is moving horizontally or upwards. We should render it prior to this row units.
+                            movingTroopBeforeWall.emplace_back( unitOnCell );
                         }
                         else {
-                            movingTroopBeforeWall.emplace_back( unitOnCell );
+                            downwardMovingTroopBeforeWall.emplace_back( unitOnCell );
                         }
                     }
                     else {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
-                            // The troop is moving to the upper row. We should render it prior to this row units.
-                            upwardMovingTroopAfterWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
+                            // The troop is moving horizontally or upwards. We should render it prior to this row units.
+                            movingTroopAfterWall.emplace_back( unitOnCell );
                         }
                         else {
-                            movingTroopAfterWall.emplace_back( unitOnCell );
+                            downwardMovingTroopAfterWall.emplace_back( unitOnCell );
                         }
                     }
                 }
@@ -1659,7 +1659,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
-            for ( const Unit * unit : upwardMovingTroopBeforeWall ) {
+            for ( const Unit * unit : movingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1671,7 +1671,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroopBeforeWall ) {
+            for ( const Unit * unit : downwardMovingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1688,7 +1688,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
-            for ( const Unit * unit : upwardMovingTroopAfterWall ) {
+            for ( const Unit * unit : movingTroopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1700,7 +1700,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroopAfterWall ) {
+            for ( const Unit * unit : downwardMovingTroopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1714,7 +1714,7 @@ void Battle::Interface::RedrawArmies()
         else {
             std::vector<const Unit *> troopCounter;
             std::vector<const Unit *> troop;
-            std::vector<const Unit *> movingTroop;
+            std::vector<const Unit *> downwardMovingTroop;
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
             for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
@@ -1744,12 +1744,12 @@ void Battle::Interface::RedrawArmies()
 
                     troop.emplace_back( unitOnCell );
                 }
-                else if ( _movingPos.y < currentCell->GetPos().y ) {
-                    // The troop is moving to the upper row. Render it prior to this row units.
+                else if ( _movingPos.y <= currentCell->GetPos().y ) {
+                    // The troop is moving horizontally or upwards. Render it prior to this row units.
                     RedrawTroopSprite( *unitOnCell );
                 }
                 else {
-                    movingTroop.emplace_back( unitOnCell );
+                    downwardMovingTroop.emplace_back( unitOnCell );
                 }
 
                 // Check for overlay sprites for 'unitOnCell'.
@@ -1770,7 +1770,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroop ) {
+            for ( const Unit * unit : downwardMovingTroop ) {
                 RedrawTroopSprite( *unit );
             }
 
