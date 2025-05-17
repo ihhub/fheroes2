@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cstddef>
+#include <initializer_list>
 
 #include "serialize.h"
 #include "zzlib.h"
@@ -72,7 +73,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 8 };
+    constexpr uint16_t currentSupportedVersion{ 9 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -218,7 +219,8 @@ namespace
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description
+               << map.creatorNotes;
 
         return !stream.fail();
     }
@@ -240,6 +242,13 @@ namespace
         }
 
         stream >> map.mainLanguage >> map.name >> map.description;
+
+        if ( map.version < 9 ) {
+            map.creatorNotes = {};
+        }
+        else {
+            stream >> map.creatorNotes;
+        }
 
         return !stream.fail();
     }
