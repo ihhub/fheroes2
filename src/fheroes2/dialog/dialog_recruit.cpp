@@ -461,14 +461,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-        if ( le.isMouseLeftButtonPressedInArea( buttonUp.area() ) ) {
+        if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
         }
         else {
             buttonReleaseRestore( buttonUp );
         }
 
-        if ( le.isMouseLeftButtonPressedInArea( buttonDn.area() ) ) {
+        if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
         else {
@@ -485,14 +485,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         bool updateMonsterInfo = false;
 
         if ( showDowngradedMonsterSwitchButtons ) {
-            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchLeft.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( monsterSwitchLeft.area() ) ) {
                 monsterSwitchLeft.drawOnPress();
             }
             else {
                 buttonReleaseRestore( monsterSwitchLeft );
             }
 
-            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchRight.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( monsterSwitchRight.area() ) ) {
                 monsterSwitchRight.drawOnPress();
             }
             else {
