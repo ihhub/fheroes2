@@ -169,7 +169,8 @@ namespace fheroes2
         // larger than 2^24 can be exactly represented with a guarantee. However, any sane 2^N integer value can be exactly represented
         // in an IEEE 754 floating-point format, and that's what we're going to use here.
         if constexpr ( std::is_signed_v<To> ) {
-            // Value of 'from' should be not less than -(2^N) and also it should be less than 2^N
+            // Value of 'from' should be not less than -(2^N) and also it should be less than 2^N, where N is a number of significant
+            // bits in the target type
             if ( from < std::ldexp( static_cast<From>( -1.0 ), std::numeric_limits<To>::digits )
                  || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
                 return {};
@@ -178,7 +179,8 @@ namespace fheroes2
             return static_cast<To>( from );
         }
         else {
-            // Value of 'from' should be not less than 0 and also it should be less than 2^N
+            // Value of 'from' should be not less than 0 and also it should be less than 2^N, where N is a number of significant bits
+            // in the target type
             if ( from < 0 || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
                 return {};
             }
