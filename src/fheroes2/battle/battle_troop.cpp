@@ -572,7 +572,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
 
-    return static_cast<uint32_t>( dmg ) < 1 ? 1 : static_cast<uint32_t>( dmg );
+    return std::max( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
 }
 
 uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
@@ -596,7 +596,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomG
         res /= 2;
     }
 
-    return res;
+    return std::max( res, 1U );
 }
 
 uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
