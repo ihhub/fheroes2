@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cstddef>
+#include <initializer_list>
 
 #include "serialize.h"
 #include "zzlib.h"
@@ -221,7 +222,8 @@ namespace
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description
+               << map.creatorNotes;
 
         return !stream.fail();
     }
@@ -243,6 +245,13 @@ namespace
         }
 
         stream >> map.mainLanguage >> map.name >> map.description;
+
+        if ( map.version < 9 ) {
+            map.creatorNotes = {};
+        }
+        else {
+            stream >> map.creatorNotes;
+        }
 
         return !stream.fail();
     }

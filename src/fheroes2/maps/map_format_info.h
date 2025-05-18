@@ -308,6 +308,11 @@ namespace Maps::Map_Format
 
         std::string name;
         std::string description;
+
+        // This is an optional parameter where a map maker can leave their contact details.
+        // This parameter is only visible within the Editor, it doesn't affect the gameplay in any way.
+        // The parameter is mandatory to fill out by map makers who want to have their creations bundled with the engine.
+        std::string creatorNotes;
     };
 
     struct MapFormat : public BaseMapFormat
