@@ -5969,6 +5969,9 @@ namespace fheroes2
             // This serves to make the font compatible with the original French custom encoding.
             generateFrenchAlphabet( icnVsSprite );
             break;
+        case CodePage::CP1253:
+            // generateCP1253Alphabet( icnVsSprite );
+            break;
         case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
             break;
@@ -6005,6 +6008,7 @@ namespace fheroes2
         case SupportedLanguage::Dutch:
         case SupportedLanguage::French:
         case SupportedLanguage::German:
+        case SupportedLanguage::Greek:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
@@ -6054,6 +6058,9 @@ namespace fheroes2
         case CodePage::CP1252:
         case CodePage::CP1252_French:
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case CodePage::CP1253:
+            // generateCP1253GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1254:
             generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
