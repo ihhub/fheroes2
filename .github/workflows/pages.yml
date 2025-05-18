@@ -1,10 +1,7 @@
 name: Build and deploy website
 
 on:
-  workflow_run:
-    workflows: ["Push"]
-    types:
-      - completed
+  workflow_call:
   workflow_dispatch:
 
 permissions:

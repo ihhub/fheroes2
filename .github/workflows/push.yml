@@ -11,6 +11,8 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  pages: write      # to deploy to Pages
+  id-token: write   # to verify the deployment originates from an appropriate source
 
 jobs:
   android:
@@ -38,3 +40,9 @@ jobs:
     - make
     - msvc
     uses: ./.github/workflows/translation_update.yml
+
+  pages:
+    name: Pages
+    needs:
+    - make
+    uses: ./.github/workflows/pages.yml
