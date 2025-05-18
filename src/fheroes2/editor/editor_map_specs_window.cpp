@@ -2263,7 +2263,7 @@ namespace Editor
                                                   fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonCreatorNotes;
-        translatedText = fheroes2::getSupportedText( gettext_noop( "INFO" ), fheroes2::FontType::buttonReleasedWhite() );
+        translatedText = fheroes2::getSupportedText( gettext_noop( "ABOUT" ), fheroes2::FontType::buttonReleasedWhite() );
         background.renderTextAdaptedButtonSprite( buttonCreatorNotes, translatedText, { 21, 12 }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
