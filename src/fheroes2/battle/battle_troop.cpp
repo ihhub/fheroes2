@@ -1157,7 +1157,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
         attackerThreat /= 1.25;
     }
 
-    return static_cast<int32_t>( attackerThreat * 100 );
+    return fheroes2::checkedCast<int32_t>( attackerThreat * 100 ).value();
 }
 
 Funds Battle::Unit::GetSurrenderCost() const
