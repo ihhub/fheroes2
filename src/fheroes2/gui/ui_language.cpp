@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <optional>
 #include <set>
 #include <utility>
 
@@ -85,20 +86,28 @@ namespace fheroes2
 
     SupportedLanguage getResourceLanguage()
     {
+        static std::optional<SupportedLanguage> language;
+        if ( language.has_value() ) {
+            return *language;
+        }
+
         const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::FONT ), false );
         if ( data.empty() ) {
             // How is it possible to run the game without a font?
             assert( 0 );
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
         const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
         auto iter = languageCRC32.find( crc32 );
         if ( iter == languageCRC32.end() ) {
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
-        return iter->second;
+        language = iter->second;
+        return *language;
     }
 
     std::vector<SupportedLanguage> getSupportedLanguages()
