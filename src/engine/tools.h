@@ -24,6 +24,7 @@
 #pragma once
 
 #include <bitset>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
