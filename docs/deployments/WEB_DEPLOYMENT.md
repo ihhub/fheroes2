@@ -4,6 +4,7 @@ This document describes the end-to-end deployment strategy for the fheroes2 site
 We target Github Pages for hosting and leverage GitHub Actions for automation.
 
 ## Functionality
+
 * Builds the documentation site for the fheroes2 project
 * Deploys the site, along with WebAssembly build, to Github Pages on push.
 * Allows end users to view the documentation via the web.
