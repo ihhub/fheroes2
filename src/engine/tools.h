@@ -155,12 +155,12 @@ namespace fheroes2
               = true>
     std::optional<To> checkedCast( const From from )
     {
-        static_assert( std::numeric_limits<int8_t>::min() == -128 && std::numeric_limits<int8_t>::max() == 127,
-                       "The following logic will only work on platforms with two's complement signed integer representation" );
-
         if ( !std::isfinite( from ) ) {
             return {};
         }
+
+        static_assert( std::numeric_limits<int8_t>::min() == -128 && std::numeric_limits<int8_t>::max() == 127,
+                       "The following logic will only work on platforms with two's complement signed integer representation" );
 
         // Value of 'from' in general case cannot be compared with std::numeric_limits<To>::min()/max() the way it's usually done for
         // integers due to the fact that most values exceeding a certain limit cannot be exactly represented in floating-point format.
