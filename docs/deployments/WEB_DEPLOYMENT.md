@@ -10,37 +10,27 @@ We target Github Pages for hosting and leverage GitHub Actions for automation.
 * Allows end users to view the documentation via the web.
 * Allows end users to click a link and launch the game via the web.
 
-## Infrastructure Diagram
+## Build and Deployment Diagram
 
 ```mermaid
-C4Context
-    title FHeroes2 WebAssembly Infrastructure
-    Person(user, "End User", "Plays the game via web browser")
-    Person(committer, "Engineer", "Engineer who commits into master")
+sequenceDiagram
+    actor EndUser
+    actor Engineer
+    participant GitHubRepo
+    participant PushAction
+    participant MakeAction
+    participant GitHubReleases
+    participant PagesAction
+    participant GitHubPages
 
-    System_Boundary(github-pages, "GitHub Pages") {
-        System(site, "Website", "Github pages hosted website")
-    }
-    System_Boundary(github, "GitHub") {
-        System(repo, "GitHub Repository", "Source code and infrastructure")
-    }
-    System_Boundary(github-releases, "GitHub Releases") {
-        System(releases, "GitHub Releases", "Stores build artifacts")
-    }
-    System_Boundary(github_actions, "GitHub Actions") {
-        System(push_action, "Push Action ", "Triggers the build of the application")
-        System(make_action, "Make Action ", "Builds the releases including emscripten release")
-        System(pages_action, "Pages Action", "Builds and deploys the pages site")
-    }
-
-    Rel(committer, repo, "Pushes change into master")
-    Rel(repo, push_action, "Triggers workflows", "On push")
-    Rel(push_action, make_action, "Builds Applicaion", "workflow_call")
-    Rel(make_action, releases, "Uploads Releases", "latest commit")
-    Rel(push_action, pages_action, "Builds site", "workflow_run")
-    Rel(releases, pages_action, "Downloads release")
-    Rel(pages_action, site, "Deploys Site")
-    Rel(user, site, "Plays game", "HTTPS")
+    Engineer->>GitHubRepo: Pushes change to master
+    GitHubRepo->>PushAction: Triggers workflow
+    PushAction->>MakeAction: Calls workflow
+    MakeAction->>GitHubReleases: Uploads release artifacts
+    PushAction->>PagesAction: Triggers workflow
+    PagesAction->>GitHubReleases: Downloads latest release
+    PagesAction->>GitHubPages: Deploys site
+    EndUser->>GitHubPages: Plays game via browser
 ```
 
 ## Deployment Pipeline Overview
