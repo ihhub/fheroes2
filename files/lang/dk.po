@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:51+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3664,6 +3664,10 @@ msgstr "Vælg Power Up-objekt:"
 msgid "Select Adventure Object:"
 msgstr "Vælg Eventyr-objekt:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Vælg væsen:"
+
 msgid "Players Icon"
 msgstr "Spiller-ikon"
 
@@ -4276,6 +4280,9 @@ msgstr "Dette artefakt"
 msgid "The total number of obelisks is %{count}."
 msgstr "Det samlede antal obelisker er %{count}."
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Veje"
 
@@ -4723,6 +4730,9 @@ msgstr "BEGIVENHEDER"
 msgid "LANGUAGE"
 msgstr "SPROG"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4745,6 +4755,9 @@ msgstr "Skift kortnavn"
 msgid "Change Map Description"
 msgstr "Skift kortbeskrivelse"
 
+msgid "About"
+msgstr ""
+
 msgid "Click to accept the changes made."
 msgstr "Klik for at acceptere de foretagne ændringer."
 
@@ -4762,6 +4775,11 @@ msgstr "Begivenheder"
 
 msgid "Click to change the language of the map."
 msgstr "Klik for at ændre kortets sprog."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr "Klik for at ændre kortnavn."

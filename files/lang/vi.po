@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:51+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3667,6 +3667,10 @@ msgstr "Chọn Đối tượng Đại dương:"
 msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Chọn Quái vật:"
+
 msgid "Players Icon"
 msgstr "Biểu tượng Người chơi"
 
@@ -4301,6 +4305,9 @@ msgstr "với 1 bảo vật."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Đường"
 
@@ -4794,6 +4801,9 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4811,6 +4821,9 @@ msgstr ""
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Chọn Mô tả"
+
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4834,6 +4847,11 @@ msgstr "Sự kiện"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Thay đổi ngôn ngữ của trò chơi."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
