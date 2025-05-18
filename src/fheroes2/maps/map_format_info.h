@@ -253,6 +253,11 @@ namespace Maps::Map_Format
         std::vector<int32_t> selectedItems;
     };
 
+    struct CapturableObjectMetadata
+    {
+        uint8_t ownerColor{ 0 };
+    };
+
     struct DailyEvent
     {
         std::string message;
@@ -330,6 +335,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
+
+        std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
