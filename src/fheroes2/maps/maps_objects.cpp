@@ -39,7 +39,6 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_font.h"
 #include "ui_language.h"
 
 void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )

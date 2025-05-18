@@ -1834,7 +1834,5 @@ OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 {
-    stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
-
-    return stream;
+    return stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
 }

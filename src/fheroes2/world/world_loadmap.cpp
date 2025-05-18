@@ -67,8 +67,6 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
-#include "tools.h"
-#include "ui_font.h"
 #include "ui_language.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
