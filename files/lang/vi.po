@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:01+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3667,6 +3667,10 @@ msgstr "Chọn Đối tượng Đại dương:"
 msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Chọn Quái vật:"
+
 msgid "Players Icon"
 msgstr "Biểu tượng Người chơi"
 
@@ -4299,6 +4303,9 @@ msgid "This artifact"
 msgstr "với 1 bảo vật."
 
 msgid "The total number of obelisks is %{count}."
+msgstr ""
+
+msgid "There are no players on the map, so no one can own this object."
 msgstr ""
 
 msgid "Roads"

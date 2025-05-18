@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:01+0000\n"
 "PO-Revision-Date: 2025-04-20 12:45+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3628,6 +3628,10 @@ msgstr "Выберите объект типа бонус:"
 msgid "Select Adventure Object:"
 msgstr "Выберите интерактивный объект:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Выберите существо:"
+
 msgid "Players Icon"
 msgstr "Значок игроков"
 
@@ -4238,6 +4242,9 @@ msgstr "Этот артефакт"
 
 msgid "The total number of obelisks is %{count}."
 msgstr "Общее количество обелисков на карте: %{count}."
+
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
 
 msgid "Roads"
 msgstr "Дороги"

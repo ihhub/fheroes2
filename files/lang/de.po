@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:01+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3716,6 +3716,10 @@ msgstr "Ozean-Objekte"
 msgid "Select Adventure Object:"
 msgstr "Ozean-Objekte"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Monster auswählen:"
+
 msgid "Players Icon"
 msgstr "Spieleranzahl"
 
@@ -4354,6 +4358,9 @@ msgid "This artifact"
 msgstr "mit 1 Artefakt."
 
 msgid "The total number of obelisks is %{count}."
+msgstr ""
+
+msgid "There are no players on the map, so no one can own this object."
 msgstr ""
 
 #, fuzzy
