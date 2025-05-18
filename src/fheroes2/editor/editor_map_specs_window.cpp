@@ -2262,9 +2262,9 @@ namespace Editor
         background.renderTextAdaptedButtonSprite( buttonLanguage, translatedText, { 20 + buttonRumors.area().width + buttonEvents.area().width + 2 * 10, 6 },
                                                   fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
-        fheroes2::ButtonSprite buttonCreatorNotes;
+        fheroes2::ButtonSprite buttonAbout;
         translatedText = fheroes2::getSupportedText( gettext_noop( "ABOUT" ), fheroes2::FontType::buttonReleasedWhite() );
-        background.renderTextAdaptedButtonSprite( buttonCreatorNotes, translatedText, { 21, 12 }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderTextAdaptedButtonSprite( buttonAbout, translatedText, { 21, 12 }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
             text.set( mapFormat.name, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
@@ -2305,7 +2305,7 @@ namespace Editor
             buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguage.area() ) );
             victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
             lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
-            buttonCreatorNotes.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCreatorNotes.area() ) );
+            buttonAbout.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAbout.area() ) );
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
@@ -2419,10 +2419,10 @@ namespace Editor
 
                 display.render( fheroes2::getBoundaryRect( lossTextRoi, lossConditionUIRoi ) );
             }
-            else if ( le.MouseClickLeft( buttonCreatorNotes.area() ) ) {
+            else if ( le.MouseClickLeft( buttonAbout.area() ) ) {
                 std::string notes = mapFormat.creatorNotes;
 
-                const fheroes2::Text body{ _( "Creator's Notes" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "About" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, notes, 150, true, mapFormat.mainLanguage ) ) {
                     mapFormat.creatorNotes = std::move( notes );
                 }
@@ -2442,8 +2442,8 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonLanguage.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonCreatorNotes.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Creator's Notes" ),
+            else if ( le.isMouseRightButtonPressedInArea( buttonAbout.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "About" ),
                                                    _( "Click to edit notes from the map creator. These notes are optional and do not appear during gameplay." ),
                                                    Dialog::ZERO );
             }
