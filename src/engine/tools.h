@@ -165,9 +165,9 @@ namespace fheroes2
         // Value of 'from' in general case cannot be compared with std::numeric_limits<To>::min()/max() the way it's usually done for
         // integers due to the fact that most values exceeding a certain limit cannot be exactly represented in floating-point format.
         // For instance, when converting from 'float' to 'int32_t', 'INT32_MAX' (2^31 - 1) cannot be exactly represented as 'float',
-        // because the significand of 'float' is just 24 bits long (23 "real" bits + 1 "imaginary" bit), therefore, only numbers not
-        // larger than 2^24 can be exactly represented with a guarantee. However, any sane 2^N integer value can be exactly represented
-        // in an IEEE 754 floating-point format, and that's what we're going to use here.
+        // because the significand of 'float' is just 24 bits long (23 "real" bits + 1 "imaginary" bit), therefore, only those integers
+        // whose absolute values do not exceed 2^24 can be guaranteed to be exactly represented. However, any sane integer which absolute
+        // value is 2^N can be exactly represented in an IEEE 754 floating-point format, and that's what we're going to use here.
         if constexpr ( std::is_signed_v<To> ) {
             // Value of 'from' should be not less than -(2^N) and also it should be less than 2^N, where N is a number of significant
             // bits in the target type
