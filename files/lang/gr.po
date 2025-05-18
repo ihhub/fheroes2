@@ -5757,6 +5757,9 @@ msgstr ""
 msgid "German"
 msgstr ""
 
+msgid "Greek"
+msgstr "Ελληνικά"
+
 msgid "Russian"
 msgstr ""
 
