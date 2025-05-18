@@ -321,8 +321,7 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data,
-                          const bool fixFrenchLanguageCharacters )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -597,10 +596,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         if ( !temp.empty() ) {
             SetModes( CUSTOM );
             name = std::move( temp );
-
-            if ( fixFrenchLanguageCharacters ) {
-                fheroes2::fixFrenchCharactersForMP2Map( name );
-            }
         }
     }
     else {
@@ -2518,6 +2513,11 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
     return nullptr;
 }
 
+void Heroes::fixFrenchCharactersInName()
+{
+    fheroes2::fixFrenchCharactersForMP2Map( name );
+}
+
 OStreamBase & operator<<( OStreamBase & stream, const VecHeroes & heroes )
 {
     stream.put32( static_cast<uint32_t>( heroes.size() ) );
@@ -2608,15 +2608,6 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
 
     // Heroes
     stream >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // Hero's name should not contain special ASCII characters. These characters can appear by 2 reasons:
-        // - hacked maps
-        // - using a French version of the original Editor
-        // Therefore, we try to fix them here.
-        fheroes2::fixFrenchCharactersForMP2Map( hero.name );
-    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {

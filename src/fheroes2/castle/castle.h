@@ -153,7 +153,7 @@ public:
 
     Castle & operator=( const Castle & ) = delete;
 
-    void LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters );
+    void LoadFromMP2( const std::vector<uint8_t> & data );
 
     void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata );
 
@@ -369,6 +369,10 @@ public:
     {
         return ( _disabledBuildings & buildingType ) != 0;
     }
+
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
 
 private:
     enum class ConstructionDialogResult : int

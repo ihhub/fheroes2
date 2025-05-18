@@ -43,6 +43,7 @@
 #include "system.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
 #include "ui_language.h"
 #include "world.h"
 #include "zzlib.h"
@@ -281,6 +282,20 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     Game::SetLastSaveName( filePath );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE && header.info.version != GameVersion::RESURRECTION
+         && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+        // Text strings should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+
+        fheroes2::fixFrenchCharactersForMP2Map( header.info.name );
+        fheroes2::fixFrenchCharactersForMP2Map( header.info.description );
+
+        world.fixFrenchCharactersInStrings();
+    }
 
     return returnValue;
 }

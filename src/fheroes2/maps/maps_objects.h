@@ -70,7 +70,7 @@ struct MapEvent final : public MapBaseObject
 {
     MapEvent() = default;
 
-    void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters );
+    void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
     bool isAllow( const int color ) const
     {
@@ -99,7 +99,7 @@ struct MapSphinx final : public MapBaseObject
 {
     MapSphinx() = default;
 
-    void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters );
+    void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
     bool isCorrectAnswer( std::string answer );
 
@@ -145,7 +145,7 @@ struct MapSign final : public MapBaseObject
 {
     MapSign() = default;
 
-    void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters );
+    void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
     void setDefaultMessage();
 

@@ -687,16 +687,6 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     // Only the filename part of the path to the map file is loaded
     stream >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // Map name and description should not contain special ASCII characters. These characters can appear by 2 reasons:
-        // - hacked maps
-        // - using a French version of the original Editor
-        // Therefore, we try to fix them here.
-        fheroes2::fixFrenchCharactersForMP2Map( fi.name );
-        fheroes2::fixFrenchCharactersForMP2Map( fi.description );
-    }
-
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, maxNumOfPlayers>> );
 

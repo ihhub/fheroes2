@@ -306,8 +306,7 @@ public:
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data,
-                      const bool fixFrenchLanguageCharacters );
+    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
     void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor );
     // Updates data in heroMetadata and returns true if it has changes.
@@ -700,6 +699,10 @@ public:
     }
 
     void resetHeroSprite();
+
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
 
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );

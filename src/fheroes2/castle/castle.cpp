@@ -107,7 +107,7 @@ Castle::Castle( const int32_t posX, const int32_t posY, int race )
     // Do nothing.
 }
 
-void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
     assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
@@ -346,10 +346,6 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenc
     const bool isCustomTownNameSet = ( dataStream.get() != 0 );
     if ( isCustomTownNameSet ) {
         _name = dataStream.getString( 13 );
-
-        if ( fixFrenchLanguageCharacters ) {
-            fheroes2::fixFrenchCharactersForMP2Map( _name );
-        }
     }
     else {
         // Skip 13 bytes since the name is not set.
@@ -667,6 +663,11 @@ Troops Castle::getAvailableArmy( Funds potentialBudget ) const
         }
     }
     return reinforcement;
+}
+
+void Castle::fixFrenchCharactersInName()
+{
+    fheroes2::fixFrenchCharactersForMP2Map( _name );
 }
 
 double Castle::getArmyRecruitmentValue() const
@@ -2407,15 +2408,6 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 
     ColorBase & color = castle;
     stream >> castle._captain >> color >> castle._name >> castle._mageGuild;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // Castles's name should not contain special ASCII characters. These characters can appear by 2 reasons:
-        // - hacked maps
-        // - using a French version of the original Editor
-        // Therefore, we try to fix them here.
-        fheroes2::fixFrenchCharactersForMP2Map( castle._name );
-    }
 
     if ( const uint32_t size = stream.get32(); castle._dwelling.size() != size ) {
         // Most likely the save file is corrupted.

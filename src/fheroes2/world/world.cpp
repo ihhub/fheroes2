@@ -1435,6 +1435,54 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     return false;
 }
 
+void World::fixFrenchCharactersInStrings()
+{
+    for ( Heroes * hero : vec_heroes ) {
+        hero->fixFrenchCharactersInName();
+    }
+    for ( Castle * castle : vec_castles ) {
+        castle->fixFrenchCharactersInName();
+    }
+    for ( std::string & str : _customRumors ) {
+        fheroes2::fixFrenchCharactersForMP2Map( str );
+    }
+    for ( EventDate & event : vec_eventsday ) {
+        fheroes2::fixFrenchCharactersForMP2Map( event.message );
+    }
+
+    for ( auto & tile : vec_tiles ) {
+        switch ( tile.getMainObjectType() ) {
+        case MP2::OBJ_SIGN:
+        case MP2::OBJ_BOTTLE: {
+            MapSign * sign = dynamic_cast<MapSign *>( map_objects.get( tile.GetIndex() ) );
+            if ( sign != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( sign->message.text );
+            }
+            break;
+        }
+        case MP2::OBJ_EVENT: {
+            MapEvent * event = dynamic_cast<MapEvent *>( map_objects.get( tile.GetIndex() ) );
+            if ( event != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( event->message );
+            }
+            break;
+        }
+        case MP2::OBJ_SPHINX: {
+            MapSphinx * sphinx = dynamic_cast<MapSphinx *>( map_objects.get( tile.GetIndex() ) );
+            if ( sphinx != nullptr ) {
+                for ( std::string & text : sphinx->answers ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( text );
+                }
+                fheroes2::fixFrenchCharactersForMP2Map( sphinx->riddle );
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )
 {
     return stream << obj.objCol << obj.guardians;
@@ -1580,17 +1628,6 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     stream >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // Rumors should not contain special ASCII characters. These characters can appear by 2 reasons:
-        // - hacked maps
-        // - using a French version of the original Editor
-        // Therefore, we try to fix them here.
-        for ( std::string & str : w._customRumors ) {
-            fheroes2::fixFrenchCharactersForMP2Map( str );
-        }
-    }
-
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++w.heroIdAsWinCondition;
@@ -1636,7 +1673,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     return stream;
 }
 
-void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
+void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
 {
     assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
@@ -1763,10 +1800,6 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFr
 
     message = dataStream.getString();
 
-    if ( fixFrenchLanguageCharacters ) {
-        fheroes2::fixFrenchCharactersForMP2Map( message );
-    }
-
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
 
@@ -1802,15 +1835,6 @@ OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj )
 IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 {
     stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // Messages should not contain special ASCII characters. These characters can appear by 2 reasons:
-        // - hacked maps
-        // - using a French version of the original Editor
-        // Therefore, we try to fix them here.
-        fheroes2::fixFrenchCharactersForMP2Map( obj.message );
-    }
 
     return stream;
 }
