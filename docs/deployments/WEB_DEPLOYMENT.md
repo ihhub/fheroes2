@@ -1,4 +1,4 @@
-# Website Duild and Deployment
+# Website Build and Deployment
 
 This document describes the end-to-end deployment strategy for the fheroes2 site deployment.
 We target Github Pages for hosting and leverage GitHub Actions for automation.
@@ -80,4 +80,4 @@ C4Context
 ## Future Considerations
 
 * Hook up a custom domain if needed
-* Allow better devex around pages/emscripten process for local builds
+* Allow better developer experience around pages/emscripten process for local builds
