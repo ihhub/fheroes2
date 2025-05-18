@@ -1,12 +1,13 @@
-# FHeroes2 WebAssembly Deployment Process
+# Website Duild and Deployment
 
-This document describes the end-to-end deployment strategy for the FHeroes2 WebAssembly build,
-targeting Github Pages for hosting and leveraging GitHub Actions for automation.
+This document describes the end-to-end deployment strategy for the fheroes2 site deployment.
+We target Github Pages for hosting and leverage GitHub Actions for automation.
 
-## Goals
-
-* Allow end users to click a link and launch the game via the web.
-* Automatically deploy the WebAssembly build to Github Pages on push.
+## Functionality
+* Builds the documentation site for the fheroes2 project
+* Deploys the site, along with WebAssembly build, to Github Pages on push.
+* Allows end users to view the documentation via the web.
+* Allows end users to click a link and launch the game via the web.
 
 ## Infrastructure Diagram
 
