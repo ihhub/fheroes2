@@ -51,5 +51,4 @@ namespace fheroes2
     // This function replaces the special ASCII characters with the language-specific characters from CP1252
     // to properly display texts for maps from French assets.
     void fixFrenchCharactersForMP2Map( std::string & str );
-
 }
