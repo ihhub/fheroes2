@@ -311,13 +311,13 @@ namespace fheroes2
             return CodePage::CP1251;
         case SupportedLanguage::Danish:
         case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-        case SupportedLanguage::French:
             return CodePage::CP1252;
         case SupportedLanguage::Turkish:
             return CodePage::CP1254;

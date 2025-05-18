@@ -39,9 +39,10 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_font.h"
 #include "ui_language.h"
 
-void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
+void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
 {
     assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
@@ -158,8 +159,8 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
 
     message = dataStream.getString();
 
-    if ( updateFrenchLanguageSpecificCharacters ) {
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message );
+    if ( fixFrenchLanguageCharacters ) {
+        fheroes2::fixFrenchCharactersForMP2Map( message );
     }
 
     setUIDAndIndex( index );
@@ -167,7 +168,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
 
-void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
+void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
 {
     assert( data.size() >= MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE );
 
@@ -258,8 +259,8 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         if ( answerCount > 0 ) {
             --answerCount;
             if ( !answer.empty() ) {
-                if ( updateFrenchLanguageSpecificCharacters ) {
-                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( answer );
+                if ( fixFrenchLanguageCharacters ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( answer );
                 }
 
                 answers.push_back( StringLower( answer ) );
@@ -273,8 +274,8 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         return;
     }
 
-    if ( updateFrenchLanguageSpecificCharacters ) {
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( riddle );
+    if ( fixFrenchLanguageCharacters ) {
+        fheroes2::fixFrenchCharactersForMP2Map( riddle );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << riddle << "'." )
@@ -295,7 +296,7 @@ bool MapSphinx::isCorrectAnswer( std::string answer )
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
-void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
+void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
 {
     assert( data.size() >= MP2::MP2_SIGN_STRUCTURE_MIN_SIZE );
     assert( data[0] == 0x1 );
@@ -318,8 +319,8 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
     if ( message.text.empty() ) {
         setDefaultMessage();
     }
-    else if ( updateFrenchLanguageSpecificCharacters ) {
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message.text );
+    else if ( fixFrenchLanguageCharacters ) {
+        fheroes2::fixFrenchCharactersForMP2Map( message.text );
     }
 
     setUIDAndIndex( mapIndex );
@@ -368,9 +369,11 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message );
+        // Messages should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( obj.message );
     }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
@@ -396,12 +399,14 @@ IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.riddle );
+        // Riddles should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( obj.riddle );
 
         for ( std::string & str : obj.answers ) {
-            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( str );
+            fheroes2::fixFrenchCharactersForMP2Map( str );
         }
     }
 
@@ -436,9 +441,11 @@ IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message.text );
+        // Messages should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( obj.message.text );
     }
 
     return stream;

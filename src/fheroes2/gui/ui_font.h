@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 namespace fheroes2
@@ -44,4 +45,11 @@ namespace fheroes2
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite );
 
     void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor );
+
+    // The original French version replaces several ASCII special characters with language-specific characters.
+    // In the engine we use CP1252 for the French translation.
+    // This function replaces the special ASCII characters with the language-specific characters from CP1252
+    // to properly display texts for maps from French assets.
+    void fixFrenchCharactersForMP2Map( std::string & str );
+
 }

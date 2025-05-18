@@ -2286,7 +2286,7 @@ namespace
     }
 
     // CP1252 supports German, Italian, Spanish, Norwegian, Swedish, Danish and French
-    // (French localized maps have custom encoding that should be fixed by `fheroes2::updateFrenchLanguageSpecificCharactersForMaps()`)
+    // (French localized maps have custom encoding that should be fixed by `fheroes2::fixFrenchCharactersForMP2Map()`)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -6101,6 +6101,80 @@ namespace fheroes2
                         *transformX = 1;
                     }
                 }
+            }
+        }
+    }
+
+    void fixFrenchCharactersForMP2Map( std::string & str )
+    {
+        for ( char & c : str ) {
+            switch ( c ) {
+            case 9:
+                // Horizontal tab. Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 35:
+                // Number sign (#). Used for lowercase o with circumflex.
+                c = static_cast<char>( 244 );
+                break;
+            case 36:
+                // Dollar ($). Used for lowercase u with circumflex.
+                c = static_cast<char>( 251 );
+                break;
+            case 38:
+                // Ampersand (&). Used for lowercase u with grave accent.
+                c = static_cast<char>( 249 );
+                break;
+            case 42:
+                // Asterisk (*). Used for lowercase a with circumflex.
+                c = static_cast<char>( 226 );
+                break;
+            case 60:
+                // Less sign (<). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 62:
+                // Greater sign (>). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 64:
+                // At sign (@). Used for lowercase a with grave accent.
+                c = static_cast<char>( 224 );
+                break;
+            case 92:
+                // Backslash (\). Used in some maps as the full stop '.'.
+                c = '.';
+                break;
+            case 94:
+                // Caret - circumflex (^). Used for lowercase c with cedilla.
+                c = static_cast<char>( 231 );
+                break;
+            case 96:
+                // Grave accent (`). Used for lowercase e with grave accent.
+                c = static_cast<char>( 232 );
+                break;
+            case 123:
+                // Opening brace ({). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 124:
+                // Vertical bar (|). Used for lowercase e with circumflex.
+                c = static_cast<char>( 234 );
+                break;
+            case 125:
+                // Closing brace (}). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 126:
+                // Tilde (~). Used for lowercase e with acute.
+                c = static_cast<char>( 233 );
+                break;
+            case 127:
+                // Delete (DEL). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            default:
+                break;
             }
         }
     }

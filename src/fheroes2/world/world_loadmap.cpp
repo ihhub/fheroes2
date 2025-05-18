@@ -68,6 +68,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
+#include "ui_font.h"
 #include "ui_language.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
@@ -441,7 +442,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // For the original French version we update the language-specific characters
     // to match CP1252 only if the French language is selected.
-    const bool updateFrenchLanguageSpecificCharacters
+    const bool fixFrenchLanguageCharacters
         = fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French;
 
     // castle or heroes or (events, rumors, etc)
@@ -480,7 +481,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( objectTileId ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( pblock, updateFrenchLanguageSpecificCharacters );
+                        castle->LoadFromMP2( pblock, fixFrenchLanguageCharacters );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
                     else {
@@ -499,7 +500,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
                     Castle * castle = getCastle( Maps::GetPoint( objectTileId ) );
                     if ( castle ) {
-                        castle->LoadFromMP2( pblock, updateFrenchLanguageSpecificCharacters );
+                        castle->LoadFromMP2( pblock, fixFrenchLanguageCharacters );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
                         Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -559,7 +560,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock, updateFrenchLanguageSpecificCharacters );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock, fixFrenchLanguageCharacters );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -596,7 +597,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         }
 
                         if ( hero ) {
-                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock, updateFrenchLanguageSpecificCharacters );
+                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock, fixFrenchLanguageCharacters );
                         }
                         else {
                             DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( colorRace.second ) )
@@ -611,7 +612,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_BOTTLE:
                 if ( MP2::MP2_SIGN_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
                     auto obj = std::make_unique<MapSign>();
-                    obj->LoadFromMP2( objectTileId, pblock, updateFrenchLanguageSpecificCharacters );
+                    obj->LoadFromMP2( objectTileId, pblock, fixFrenchLanguageCharacters );
 
                     map_objects.add( std::move( obj ) );
                 }
@@ -619,7 +620,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_EVENT:
                 if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
                     auto obj = std::make_unique<MapEvent>();
-                    obj->LoadFromMP2( objectTileId, pblock, updateFrenchLanguageSpecificCharacters );
+                    obj->LoadFromMP2( objectTileId, pblock, fixFrenchLanguageCharacters );
 
                     map_objects.add( std::move( obj ) );
                 }
@@ -627,7 +628,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_SPHINX:
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
                     auto obj = std::make_unique<MapSphinx>();
-                    obj->LoadFromMP2( objectTileId, pblock, updateFrenchLanguageSpecificCharacters );
+                    obj->LoadFromMP2( objectTileId, pblock, fixFrenchLanguageCharacters );
 
                     obj->validate();
 
@@ -644,7 +645,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             // Daily event.
             if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && pblock[42] == 1 ) {
                 vec_eventsday.emplace_back();
-                vec_eventsday.back().LoadFromMP2( pblock, updateFrenchLanguageSpecificCharacters );
+                vec_eventsday.back().LoadFromMP2( pblock, fixFrenchLanguageCharacters );
             }
             else if ( MP2::MP2_RUMOR_STRUCTURE_MIN_SIZE <= pblock.size() ) {
                 // Structure containing information about a rumor.
@@ -660,8 +661,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 std::string rumor( reinterpret_cast<const char *>( pblock.data() ) + 8 );
 
                 if ( !rumor.empty() ) {
-                    if ( updateFrenchLanguageSpecificCharacters ) {
-                        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( rumor );
+                    if ( fixFrenchLanguageCharacters ) {
+                        fheroes2::fixFrenchCharactersForMP2Map( rumor );
                     }
 
                     _customRumors.emplace_back( std::move( rumor ) );

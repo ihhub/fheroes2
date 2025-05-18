@@ -52,6 +52,7 @@
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
+#include "ui_font.h"
 #include "ui_language.h"
 
 namespace
@@ -91,9 +92,11 @@ namespace
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
-        // For the original French version we update the language-specific characters
-        // to match CP1252 only if the French language is currently selected.
-        const bool updateFrenchLangugeSpecificCharacters
+        // Maps made by the original French version Editor or hacked maps could contain
+        // special ASCII characters that are not supposed to be there.
+        // While reading the original maps we attempt to fix these characters
+        // with an assumption that it might alter the original map maker text but to be true to the original game allowed characters.
+        const bool fixSpecialFrenchCharacters
             = isOriginalMapFormat
               && ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French );
 
@@ -132,9 +135,9 @@ namespace
                 }
 
                 // Update French language-specific characters to match CP1252.
-                if ( updateFrenchLangugeSpecificCharacters ) {
-                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.name );
-                    fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.description );
+                if ( fixSpecialFrenchCharacters ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( fi.name );
+                    fheroes2::fixFrenchCharactersForMP2Map( fi.description );
                 }
             }
 
@@ -686,10 +689,12 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.name );
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( fi.description );
+        // Map name and description should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( fi.name );
+        fheroes2::fixFrenchCharactersForMP2Map( fi.description );
     }
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, maxNumOfPlayers>> );

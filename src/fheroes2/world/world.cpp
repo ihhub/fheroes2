@@ -62,6 +62,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world_object_uid.h"
 
@@ -1581,10 +1582,12 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
+        // Rumors should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
         for ( std::string & str : w._customRumors ) {
-            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( str );
+            fheroes2::fixFrenchCharactersForMP2Map( str );
         }
     }
 
@@ -1633,7 +1636,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     return stream;
 }
 
-void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharacters )
+void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
 {
     assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
@@ -1760,8 +1763,8 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data, const bool updat
 
     message = dataStream.getString();
 
-    if ( updateFrenchLanguageSpecificCharacters ) {
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( message );
+    if ( fixFrenchLanguageCharacters ) {
+        fheroes2::fixFrenchCharactersForMP2Map( message );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
@@ -1802,9 +1805,11 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( obj.message );
+        // Messages should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( obj.message );
     }
 
     return stream;

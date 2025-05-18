@@ -74,6 +74,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world.h"
 
@@ -106,7 +107,7 @@ Castle::Castle( const int32_t posX, const int32_t posY, int race )
     // Do nothing.
 }
 
-void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharactersInName )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters )
 {
     assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
@@ -346,8 +347,8 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFr
     if ( isCustomTownNameSet ) {
         _name = dataStream.getString( 13 );
 
-        if ( updateFrenchLanguageSpecificCharactersInName ) {
-            fheroes2::updateFrenchLanguageSpecificCharactersForMaps( _name );
+        if ( fixFrenchLanguageCharacters ) {
+            fheroes2::fixFrenchCharactersForMP2Map( _name );
         }
     }
     else {
@@ -2409,9 +2410,11 @@ IStreamBase & operator>>( IStreamBase & stream, Castle & castle )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        // The special ASCII characters should not be used in game objects' strings.
-        // We can update French language-specific characters to use CP1252.
-        fheroes2::updateFrenchLanguageSpecificCharactersForMaps( castle._name );
+        // Castles's name should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+        fheroes2::fixFrenchCharactersForMP2Map( castle._name );
     }
 
     if ( const uint32_t size = stream.get32(); castle._dwelling.size() != size ) {

@@ -153,7 +153,7 @@ public:
 
     Castle & operator=( const Castle & ) = delete;
 
-    void LoadFromMP2( const std::vector<uint8_t> & data, const bool updateFrenchLanguageSpecificCharactersInName );
+    void LoadFromMP2( const std::vector<uint8_t> & data, const bool fixFrenchLanguageCharacters );
 
     void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata );
 
