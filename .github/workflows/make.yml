@@ -318,21 +318,26 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+
   make-emscripten:
     strategy:
       matrix:
         include:
         - name: Emscripten
-          on: [ 'pull_request' ]
+          on: [ 'pull_request', 'push' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
           package_name: fheroes2_emscripten.zip
+          release_tag: fheroes2-emscripten-sdl2_dev
+          release_name: Emscripten build (latest commit)
         - name: Emscripten Multithreaded
-          on: [ 'pull_request' ]
+          on: [ 'pull_request', 'push' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_THREADS: ON
           package_name: fheroes2_emscripten_mt.zip
+          release_tag: fheroes2-emscripten-sdl2-mt_dev
+          release_name: Emscripten Multithreaded build (latest commit)
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
     container: emscripten/emsdk:latest
@@ -364,3 +369,15 @@ jobs:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
         if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: ${{ matrix.package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.release_name }}
+        tag: ${{ matrix.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
