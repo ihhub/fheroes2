@@ -6,8 +6,8 @@ on:
 
 permissions:
   contents: write
-  pages: write
   id-token: write
+  pages: write
 
 concurrency:
   group: "pages"
@@ -19,23 +19,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./docs
           destination: ./_site
-
       - name: Download Emscripten release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release download fheroes2-emscripten-sdl2_dev -D ./dist
-
       - name: Extract and prepare site
         working-directory: ./dist
         run: |
@@ -43,12 +39,10 @@ jobs:
           unzip -q fheroes2_emscripten.zip -d site/play-online
           cp -r ../_site/* ./site/
           rm -f fheroes2_emscripten.zip
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./dist/site"
-
   deploy:
     environment:
       name: github-pages

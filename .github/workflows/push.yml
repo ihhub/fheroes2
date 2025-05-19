@@ -10,9 +10,9 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write   # To verify the deployment originates from an appropriate source
+  pages: write      # To deploy to Pages
   pull-requests: write
-  pages: write      # to deploy to Pages
-  id-token: write   # to verify the deployment originates from an appropriate source
 
 jobs:
   android:
@@ -33,6 +33,11 @@ jobs:
     uses: ./.github/workflows/sonarcloud.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  pages:
+    name: Pages
+    needs:
+    - make
+    uses: ./.github/workflows/pages.yml
   translation:
     name: Translation update
     needs:
@@ -40,9 +45,3 @@ jobs:
     - make
     - msvc
     uses: ./.github/workflows/translation_update.yml
-
-  pages:
-    name: Pages
-    needs:
-    - make
-    uses: ./.github/workflows/pages.yml

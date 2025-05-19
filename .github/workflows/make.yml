@@ -318,7 +318,6 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-
   make-emscripten:
     strategy:
       matrix:
