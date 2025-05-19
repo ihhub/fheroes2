@@ -6025,11 +6025,50 @@ namespace
         // Greek capital letter alpha
         released[193 - 32] = released[65 - 32];
 
+        // Greek capital letter beta
+        released[194 - 32] = released[66 - 32];
+
         // Greek capital letter epsilon
         released[197 - 32] = released[69 - 32];
 
+        // Greek capital letter zeta
+        released[198 - 32] = released[90 - 32];
+
+        // Greek capital letter eta
+        released[199 - 32] = released[72 - 32];
+
         // Greek capital letter iota
         released[201 - 32] = released[73 - 32];
+
+        // Greek capital letter kappa
+        released[202 - 32] = released[75 - 32];
+
+        // Greek capital letter mu
+        released[204 - 32] = released[77 - 32];
+
+        // Greek capital letter nu
+        released[205 - 32] = released[78 - 32];
+
+        // Greek capital letter omicron
+        released[207 - 32] = released[79 - 32];
+
+        // Greek capital letter rho
+        released[209 - 32] = released[80 - 32];
+
+        // Greek capital letter tau
+        released[212 - 32] = released[84 - 32];
+
+        // Greek capital letter upsilon
+        released[213 - 32] = released[89 - 32];
+
+        // Greek capital letter chi
+        released[215 - 32] = released[88 - 32];
+
+        // Greek small letter nu
+        released[237 - 32] = released[118 - 32];
+
+        // Greek small letter omicron
+        released[239 - 32] = released[111 - 32];
     }
 
     void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
