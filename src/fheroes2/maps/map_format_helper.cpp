@@ -1218,7 +1218,7 @@ namespace Maps
         // Check and update owner metadata to avoid non-used player color ownership.
         auto capturableIter = map.capturableObjectsMetadata.begin();
         while ( capturableIter != map.capturableObjectsMetadata.end() ) {
-            if ( !( capturableIter->second.ownerColor & map.availablePlayerColors ) ) {
+            if ( !( map.availablePlayerColors & capturableIter->second.ownerColor ) ) {
                 capturableIter = map.capturableObjectsMetadata.erase( capturableIter );
             }
             else {

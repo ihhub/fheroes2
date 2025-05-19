@@ -233,8 +233,7 @@ namespace Interface
                 if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
                     // For mine we need to decode the objectType.
                     int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
+                    getMineObjectProperties( type );
 
                     return getObjectOccupiedArea( objectGroup, type );
                 }
@@ -827,10 +826,9 @@ namespace Interface
             case AdventureObjectBrush::MINES:
                 _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
                     int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
+                    getMineObjectProperties( type );
 
-                    if ( type == -1 || color == -1 ) {
+                    if ( type == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
                         return;
@@ -1115,12 +1113,11 @@ namespace Interface
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
                 handleObjectMouseClick( [this]( const int32_t /* type */ ) {
                     int32_t type = -1;
-                    int32_t color = -1;
 
-                    getMineObjectProperties( type, color );
-                    Dialog::selectMineType( type, color );
+                    getMineObjectProperties( type );
+                    Dialog::selectMineType( type );
 
-                    return _generateMineObjectProperties( type, color );
+                    return _generateMineObjectProperties( type );
                 } );
                 return res;
             }
@@ -1336,22 +1333,20 @@ namespace Interface
         return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
 
-    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & color ) const
+    void EditorPanel::getMineObjectProperties( int32_t & type ) const
     {
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
             // How is it even possible?
             assert( 0 );
             type = -1;
-            color = -1;
             return;
         }
 
         type = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
-        color = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / static_cast<int32_t>( mineObjects.size() );
     }
 
-    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t color )
+    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type )
     {
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
@@ -1360,7 +1355,7 @@ namespace Interface
             return -1;
         }
 
-        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type );
+        const int32_t objectType = static_cast<int32_t>( mineObjects.size() ) + type;
         return ( objectType < 0 ) ? -1 : objectType;
     }
 }

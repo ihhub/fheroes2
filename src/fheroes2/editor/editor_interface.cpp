@@ -1583,14 +1583,14 @@ namespace Interface
 
                     auto ownershipMetadata = _mapFormat.capturableObjectsMetadata.find( object.id );
                     const bool hasOwnershipMetadata = ( ownershipMetadata != _mapFormat.capturableObjectsMetadata.end() );
-                    const uint8_t ownerColor = hasOwnershipMetadata ? ownershipMetadata->second.ownerColor : uint8_t{ Color::NONE };
+                    const PlayerColor ownerColor = hasOwnershipMetadata ? ownershipMetadata->second.ownerColor : PlayerColor::NONE;
 
-                    const uint8_t newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
+                    const PlayerColor newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
                     if ( newColor != ownerColor ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        if ( newColor == Color::NONE ) {
+                        if ( newColor == PlayerColor::NONE ) {
                             _mapFormat.capturableObjectsMetadata.erase( object.id );
                         }
                         else if ( hasOwnershipMetadata ) {
@@ -1890,10 +1890,9 @@ namespace Interface
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
-            int32_t color = -1;
 
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            _editorPanel.getMineObjectProperties( type );
+            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return;
@@ -2193,10 +2192,9 @@ namespace Interface
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
-            int32_t color = -1;
 
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            _editorPanel.getMineObjectProperties( type );
+            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return false;

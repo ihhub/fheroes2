@@ -257,7 +257,7 @@ namespace Maps::Map_Format
 
     struct CapturableObjectMetadata
     {
-        uint8_t ownerColor{ 0 };
+        PlayerColor ownerColor{ 0 };
     };
 
     struct DailyEvent
