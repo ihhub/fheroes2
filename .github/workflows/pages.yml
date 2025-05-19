@@ -40,7 +40,7 @@ jobs:
           rm -f fheroes2_emscripten.zip
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist/site"
+          path: ./dist/site
   deploy:
     needs:
     - build
