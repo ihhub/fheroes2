@@ -3423,6 +3423,28 @@ namespace
             updateSmallFontLetterShadow( font[252 - 32] );
         }
     }
+
+    // Greek uses CP1253
+    void generateCP1253Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        // Resize fonts.
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            icnVsSprite[icnId].resize( baseFontSize );
+
+            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
+        }
+
+        // Normal font.
+        {
+            // std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+        }
+        // Small font.
+        {
+            // std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+        }
+    }
+
     // Turkish uses CP1254
     void generateCP1254Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
@@ -5978,7 +6000,7 @@ namespace fheroes2
             generateFrenchAlphabet( icnVsSprite );
             break;
         case CodePage::CP1253:
-            // generateCP1253Alphabet( icnVsSprite );
+            generateCP1253Alphabet( icnVsSprite );
             break;
         case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
