@@ -6067,8 +6067,12 @@ namespace
         released[194 - 32] = released[66 - 32];
 
         // Greek capital letter gamma
-        released[195 - 32] = released[38];
-        fheroes2::FillTransform( released[195 - 32], 6, 4, 3, 4, 1 );
+        released[195 - 32].resize( 8 + offset * 2, 10 + offset * 2 );
+        released[195 - 32].reset();
+        fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor )
 
         // Greek capital letter epsilon
         released[197 - 32] = released[69 - 32];
@@ -6095,11 +6099,13 @@ namespace
         released[207 - 32] = released[79 - 32];
 
         // Greek capital letter pi
-        released[208 - 32] = released[195 - 32];
-        fheroes2::Copy( released[208 - 32], 4, 1, released[207 - 32], 8, 1, 2, 9 );
-        fheroes2::Copy( released[208 - 32], 4, 9, released[207 - 32], 8, 10, 2, 1 );
-        fheroes2::Copy( released[208 - 32], 6, 0, released[207 - 32], 10, 0, 1, 2 );
-        updateNormalreleasedLetterShadow( released[208 - 32] );
+        released[208 - 32].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[208 - 32].reset();
+        fheroes2::DrawLine( released[208 - 32], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 6, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor )
 
         // Greek capital letter rho
         released[209 - 32] = released[80 - 32];
@@ -6111,12 +6117,15 @@ namespace
         released[213 - 32] = released[89 - 32];
 
         // Greek capital letter phi
-        released[214 - 32].resize( released[48].width() + 1, released[48].height() );
+        released[214 - 32].resize( 10 + offset * 2, 10 + offset * 2 );
         released[214 - 32].reset();
-        fheroes2::Copy( released[48], 0, 0, released[214 - 32], 1, 0, released[48].width(), released[48].height() );
-        fheroes2::Flip( released[48], 6, 0, released[214 - 32], 1, 0, 5, 6, true, false );
-        released[214 - 32].setPosition( released[48].x(), released[48].y() );
-        updateNormalFontLetterShadow( font[214 - 32] );
+        fheroes2::DrawLine( released[214 - 32], { offset + 1, offset + 2 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 1, offset + 7 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 8, offset + 3 }, { offset + 8, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 4, offset + 1 }, { offset + 4, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 3, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 3, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
 
         // Greek capital letter chi
         released[215 - 32] = released[88 - 32];
