@@ -3445,6 +3445,10 @@ namespace
             // Greek capital letter beta
             font[194 - 32] = font[66 - 32];
 
+            // Greek capital letter gamma
+            font[195 - 32] = font[38];
+            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
+
             // Greek capital letter epsilon
             font[197 - 32] = font[69 - 32];
 
@@ -3469,6 +3473,13 @@ namespace
             // Greek capital letter omicron
             font[207 - 32] = font[79 - 32];
 
+            // Greek capital letter pi
+            font[208 - 32] = font[195 - 32];
+            fheroes2::Copy( font[208 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[208 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[208 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+            updateNormalFontLetterShadow( font[208 - 32] );
+
             // Greek capital letter rho
             font[209 - 32] = font[80 - 32];
 
@@ -3478,6 +3489,14 @@ namespace
             // Greek capital letter upsilon
             font[213 - 32] = font[89 - 32];
 
+            // Greek capital letter phi
+            font[214 - 32].resize( font[48].width() + 1, font[48].height() );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[48], 0, 0, font[214 - 32], 1, 0, font[48].width(), font[48].height() );
+            fheroes2::Flip( font[48], 6, 0, font[214 - 32], 1, 0, 5, 6, true, false );
+            font[214 - 32].setPosition( font[48].x(), font[48].y() );
+            updateNormalFontLetterShadow( font[214 - 32] );
+
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
@@ -3485,7 +3504,7 @@ namespace
             font[237 - 32] = font[118 - 32];
 
             // Greek small letter omicron
-            font[239 - 32] = font[111 - 32];
+            font[239 - 32] = font[111 - 32];            
         }
         // Small font.
         {
@@ -3497,6 +3516,10 @@ namespace
             // Greek capital letter beta
             font[194 - 32] = font[66 - 32];
 
+            // Greek capital letter gamma
+            font[195 - 32] = font[38];
+            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
+
             // Greek capital letter epsilon
             font[197 - 32] = font[69 - 32];
 
@@ -3521,6 +3544,13 @@ namespace
             // Greek capital letter omicron
             font[207 - 32] = font[79 - 32];
 
+            // Greek capital letter pi
+            font[208 - 32] = font[195 - 32];
+            fheroes2::Copy( font[208 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[208 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[208 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+            updateNormalFontLetterShadow( font[208 - 32] );
+
             // Greek capital letter rho
             font[209 - 32] = font[80 - 32];
 
@@ -3530,6 +3560,14 @@ namespace
             // Greek capital letter upsilon
             font[213 - 32] = font[89 - 32];
 
+            // Greek capital letter phi
+            font[214 - 32].resize( font[48].width() + 1, font[48].height() );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[48], 0, 0, font[214 - 32], 1, 0, font[48].width(), font[48].height() );
+            fheroes2::Flip( font[48], 6, 0, font[214 - 32], 1, 0, 5, 6, true, false );
+            font[214 - 32].setPosition( font[48].x(), font[48].y() );
+            updateNormalFontLetterShadow( font[214 - 32] );
+
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
@@ -3537,7 +3575,7 @@ namespace
             font[237 - 32] = font[118 - 32];
 
             // Greek small letter omicron
-            font[239 - 32] = font[111 - 32];
+            font[239 - 32] = font[111 - 32]; 
         }
     }
 
@@ -6028,6 +6066,10 @@ namespace
         // Greek capital letter beta
         released[194 - 32] = released[66 - 32];
 
+        // Greek capital letter gamma
+        released[195 - 32] = released[38];
+        fheroes2::FillTransform( released[195 - 32], 6, 4, 3, 4, 1 );
+
         // Greek capital letter epsilon
         released[197 - 32] = released[69 - 32];
 
@@ -6052,6 +6094,13 @@ namespace
         // Greek capital letter omicron
         released[207 - 32] = released[79 - 32];
 
+        // Greek capital letter pi
+        released[208 - 32] = released[195 - 32];
+        fheroes2::Copy( released[208 - 32], 4, 1, released[207 - 32], 8, 1, 2, 9 );
+        fheroes2::Copy( released[208 - 32], 4, 9, released[207 - 32], 8, 10, 2, 1 );
+        fheroes2::Copy( released[208 - 32], 6, 0, released[207 - 32], 10, 0, 1, 2 );
+        updateNormalreleasedLetterShadow( released[208 - 32] );
+
         // Greek capital letter rho
         released[209 - 32] = released[80 - 32];
 
@@ -6060,6 +6109,14 @@ namespace
 
         // Greek capital letter upsilon
         released[213 - 32] = released[89 - 32];
+
+        // Greek capital letter phi
+        released[214 - 32].resize( released[48].width() + 1, released[48].height() );
+        released[214 - 32].reset();
+        fheroes2::Copy( released[48], 0, 0, released[214 - 32], 1, 0, released[48].width(), released[48].height() );
+        fheroes2::Flip( released[48], 6, 0, released[214 - 32], 1, 0, 5, 6, true, false );
+        released[214 - 32].setPosition( released[48].x(), released[48].y() );
+        updateNormalFontLetterShadow( font[214 - 32] );
 
         // Greek capital letter chi
         released[215 - 32] = released[88 - 32];
