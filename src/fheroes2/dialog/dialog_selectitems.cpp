@@ -1446,8 +1446,6 @@ int32_t Dialog::selectMineType( const int32_t type )
     int32_t offsetY = area.y + 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
 
-    // There can be up to 6 player colors plus none.
-
     // There are 7 resource types (WOOD, MERCURY, ORE, SULFUR, CRYSTAL, GEMS, GOLD) and abandoned mine.
     const uint32_t resourceCount{ 8 };
     const int32_t stepY = 35;
