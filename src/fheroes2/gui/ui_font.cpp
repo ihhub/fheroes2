@@ -6020,7 +6020,7 @@ namespace
         released.insert( released.end(), 160, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
-        const int32_t offset = 2;
+        // const int32_t offset = 2;
 
         // Greek capital letter alpha
         released[193 - 32] = released[65 - 32];
