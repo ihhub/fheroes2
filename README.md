@@ -9,12 +9,12 @@ and user interface improvements), breathing new life into one of the most addict
 You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="820" alt="Screenshot of the world map">
+    <img src="docs/images/screenshots/screenshot_world_map.webp" width="820" alt="Screenshot of the world map">
 </p>
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="410" alt="Screenshot of the battle screen">
-    <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410" alt="Screenshot of the castle screen">
+    <img src="docs/images/screenshots/screenshot_battle.webp" width="410" alt="Screenshot of the battle screen">
+    <img src="docs/images/screenshots/screenshot_castle.webp" width="410" alt="Screenshot of the castle screen">
 </p>
 
 ## Download and Install
@@ -38,7 +38,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 
@@ -63,9 +63,9 @@ To build the [website](https://ihhub.github.io/fheroes2/) from source, please fo
 We accept donations via [**Patreon**](https://www.patreon.com/fheroes2), [**PayPal**](https://www.paypal.com/paypalme/fheroes2) or [**Boosty**](https://boosty.to/fheroes2).
 All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
 
-[![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
-[![Donate](https://img.shields.io/badge/Donate-Boosty-green.svg)](https://boosty.to/fheroes2)
+[![Patreon Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
+[![Paypal Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
+[![Boosty Donate](https://img.shields.io/badge/Donate-Boosty-green.svg)](https://boosty.to/fheroes2)
 
 ## Contacts
 

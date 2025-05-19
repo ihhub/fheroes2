@@ -2,31 +2,36 @@
 
 // Asul font
 @font-face {
+  font-display: swap;
   font-family: "Asul";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/Asul/Asul-Regular.ttf") format("truetype");
+  src: url("../fonts/Asul/Asul-Regular.woff2") format("woff2");
 }
 
 @font-face {
+  font-display: swap;
   font-family: "Asul";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/Asul/Asul-Bold.ttf") format("truetype");
+  src: url("../fonts/Asul/Asul-Bold.woff2") format("woff2");
 }
 
 // Lancelot font
 @font-face {
+  font-display: swap;
   font-family: "Lancelot";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/Lancelot/Lancelot-Regular.ttf") format("truetype");
+  src: url("../fonts/Lancelot/Lancelot-Regular.woff2") format("woff2");
 }
 
 // Jacquard 24 font
 @font-face {
+  font-display: swap;
   font-family: "Jacquard 24";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/Jacquard_24/Jacquard24-Regular.woff2") format("woff2");
+  src: url("../fonts/Jacquard_24/Jacquard24-Regular-latin-only.woff2")
+    format("woff2");
 }

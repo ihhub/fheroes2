@@ -3775,6 +3775,9 @@ void Heroes::Action( int tileIndex )
 
         I.getGameArea().SetCenter( GetCenter() );
         I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
+
+        // Render the screen with the hero at the action object before rendering the action.
+        fheroes2::Display::instance().render();
     }
 
     switch ( objectType ) {

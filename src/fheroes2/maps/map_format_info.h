@@ -255,6 +255,11 @@ namespace Maps::Map_Format
         std::vector<int32_t> selectedItems;
     };
 
+    struct CapturableObjectMetadata
+    {
+        uint8_t ownerColor{ 0 };
+    };
+
     struct DailyEvent
     {
         std::string message;
@@ -306,6 +311,11 @@ namespace Maps::Map_Format
 
         std::string name;
         std::string description;
+
+        // This is an optional parameter where a map maker can leave their contact details.
+        // This parameter is only visible within the Editor, it doesn't affect the gameplay in any way.
+        // The parameter is mandatory to fill out by map makers who want to have their creations bundled with the engine.
+        std::string creatorNotes;
     };
 
     struct MapFormat : public BaseMapFormat
@@ -333,6 +343,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
+
+        std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

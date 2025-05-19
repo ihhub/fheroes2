@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <optional>
 #include <set>
 #include <utility>
 
@@ -85,29 +86,38 @@ namespace fheroes2
 
     SupportedLanguage getResourceLanguage()
     {
+        static std::optional<SupportedLanguage> language;
+        if ( language.has_value() ) {
+            return *language;
+        }
+
         const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::FONT ), false );
         if ( data.empty() ) {
             // How is it possible to run the game without a font?
             assert( 0 );
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
         const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
         auto iter = languageCRC32.find( crc32 );
         if ( iter == languageCRC32.end() ) {
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
-        return iter->second;
+        language = iter->second;
+        return *language;
     }
 
     std::vector<SupportedLanguage> getSupportedLanguages()
     {
-        std::vector<SupportedLanguage> languages;
+        // We need to group languages by code pages to avoid recreating font related resources while switching languages.
+        std::map<CodePage, std::vector<SupportedLanguage>> supportedLanguges;
 
         const SupportedLanguage resourceLanguage = getResourceLanguage();
         if ( resourceLanguage != SupportedLanguage::English ) {
-            languages.emplace_back( resourceLanguage );
+            supportedLanguges[getCodePage( resourceLanguage )].emplace_back( resourceLanguage );
         }
 
         const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
@@ -120,7 +130,7 @@ namespace fheroes2
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
-                languages.emplace_back( language );
+                supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }
 
@@ -130,9 +140,13 @@ namespace fheroes2
 
         std::vector<fheroes2::SupportedLanguage> validSupportedLanguages{ fheroes2::SupportedLanguage::English };
 
-        for ( fheroes2::SupportedLanguage language : languages ) {
-            if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
-                validSupportedLanguages.emplace_back( language );
+        for ( const auto & [codePage, languages] : supportedLanguges ) {
+            for ( const auto language : languages ) {
+                // TODO: we shouldn't load all language resources just for the sake of verifying whether their translations exist.
+                //       Find another way to avoid this heavy operation.
+                if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
+                    validSupportedLanguages.emplace_back( language );
+                }
             }
         }
 
@@ -277,5 +291,46 @@ namespace fheroes2
     SupportedLanguage getCurrentLanguage()
     {
         return fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+    }
+
+    CodePage getCodePage( const SupportedLanguage language )
+    {
+        switch ( language ) {
+        case SupportedLanguage::English:
+            return CodePage::ASCII;
+        case SupportedLanguage::Czech:
+        case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Polish:
+        case SupportedLanguage::Slovak:
+            return CodePage::CP1250;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Ukrainian:
+            return CodePage::CP1251;
+        case SupportedLanguage::Danish:
+        case SupportedLanguage::Dutch:
+        case SupportedLanguage::German:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Spanish:
+        case SupportedLanguage::Swedish:
+            return CodePage::CP1252;
+        case SupportedLanguage::French:
+            return CodePage::CP1252_French;
+        case SupportedLanguage::Turkish:
+            return CodePage::CP1254;
+        case SupportedLanguage::Vietnamese:
+            return CodePage::CP1258;
+        case SupportedLanguage::Romanian:
+            return CodePage::ISO8859_16;
+        default:
+            // Add new language handling code!
+            assert( 0 );
+            break;
+        }
+
+        return CodePage::ASCII;
     }
 }
