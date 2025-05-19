@@ -6130,6 +6130,13 @@ namespace
         // Greek capital letter chi
         released[215 - 32] = released[88 - 32];
 
+        // Greek capital letter iota with dialytika
+        released[218 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 2 );
+        released[218 - 32].reset();
+        fheroes2::Copy( released[73 - 32], 0, 0, released[218 - 32], 0, 2, released[73 - 32].width(), released[73 - 32].height() );
+        fheroes2::SetPixel( released[218 - 32], offset + 0, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[218 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+
         // Greek small letter nu
         released[237 - 32] = released[118 - 32];
 
