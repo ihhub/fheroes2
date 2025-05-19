@@ -38,7 +38,7 @@ sequenceDiagram
 ### Trigger
 
 * Deployment is triggered **when a new Git commit is pushed**.
-* A GitHub Action workflow listens via `workflow_run` to wait for the build-and-release process.
+* A GitHub Action workflow waits for the completion of the build-and-release process (`build.yml` workflow).
 
 ### Build Process (Upstream)
 
@@ -62,7 +62,7 @@ sequenceDiagram
 
 ### pages.yml
 
-* Triggered on `workflow_run` completion of `push.yml`
+* Triggered on completion of `build.yml`
 * Builds Jekyll site
 * Downloads release
 * Deploys to Github Pages
