@@ -149,4 +149,6 @@ namespace Dialog
     int selectPowerUpObjectType( const int powerUpObjectType );
 
     int selectAdventureMiscellaneousObjectType( const int objectType );
+
+    uint8_t selectPlayerColor( const uint8_t color, const uint8_t availableColors );
 }

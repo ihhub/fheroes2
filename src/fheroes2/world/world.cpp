@@ -249,19 +249,20 @@ int CapturedObjects::GetColor( const int32_t index ) const
 void CapturedObjects::ClearFog( const int colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
-        const ObjectColor & objCol = capturedObj.objCol;
+        const auto [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( colors ) ) {
+        if ( !( colors & objectColor ) ) {
             continue;
         }
 
-        int scoutingDistance = 0;
+        int32_t scoutingDistance = 0;
 
-        switch ( objCol.first ) {
+        switch ( objectType ) {
         case MP2::OBJ_MINE:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
-            scoutingDistance = 2;
+        case MP2::OBJ_LIGHTHOUSE:
+            scoutingDistance = 3;
             break;
 
         default:
@@ -272,7 +273,7 @@ void CapturedObjects::ClearFog( const int colors ) const
             continue;
         }
 
-        Maps::ClearFog( idx, scoutingDistance, colors );
+        Maps::ClearFog( idx, scoutingDistance, objectColor );
     }
 }
 
@@ -392,7 +393,7 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateForEditor( const int32_t size )
+void World::generateUninitializedMap( const int32_t size )
 {
     assert( size > 0 );
 
@@ -416,8 +417,13 @@ void World::generateForEditor( const int32_t size )
     Defaults();
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
+}
 
-    // init all tiles
+void World::generateMapForEditor( const int32_t size )
+{
+    generateUninitializedMap( size );
+
+    // Initialize all tiles.
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         vec_tiles[i] = {};
 
@@ -903,6 +909,9 @@ void World::CaptureObject( const int32_t index, const int color )
     assert( CountBits( color ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
+
+    // The owner can be set not only for the objects returned by `MP2::isCaptureObject()`.
+    // In example, dwellings can also marked by the player's color.
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {

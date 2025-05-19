@@ -39,19 +39,21 @@ all:
 	$(MAKE) -C src/dist
 	$(MAKE) -C files/lang
 ifdef FHEROES2_MACOS_APP_BUNDLE
-	mkdir -p fheroes2.app/Contents/Resources/translations
-	mkdir -p fheroes2.app/Contents/Resources/h2d
 	mkdir -p fheroes2.app/Contents/MacOS
-	cp src/resources/fheroes2.icns fheroes2.app/Contents/Resources
-	cp files/lang/*.mo fheroes2.app/Contents/Resources/translations
+	mkdir -p fheroes2.app/Contents/Resources/h2d
+	mkdir -p fheroes2.app/Contents/Resources/maps
+	mkdir -p fheroes2.app/Contents/Resources/translations
 	cp files/data/*.h2d fheroes2.app/Contents/Resources/h2d
+	cp files/lang/*.mo fheroes2.app/Contents/Resources/translations
+	cp maps/*.fh2m fheroes2.app/Contents/Resources/maps
+	cp src/dist/fheroes2/fheroes2 fheroes2.app/Contents/MacOS
+	cp src/resources/fheroes2.icns fheroes2.app/Contents/Resources
 	sed -e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/$(PROJECT_NAME)/" \
 	    -e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(PROJECT_VERSION)/" \
 	    -e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/fheroes2/" \
 	    -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.fheroes2.$(PROJECT_NAME)/" \
 	    -e "s/\$${MACOSX_BUNDLE_ICON_FILE}/fheroes2.icns/" \
 	    -e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(PROJECT_VERSION)/" src/resources/Info.plist.in > fheroes2.app/Contents/Info.plist
-	cp src/dist/fheroes2/fheroes2 fheroes2.app/Contents/MacOS
 	dylibbundler -od -b -x fheroes2.app/Contents/MacOS/fheroes2 -d fheroes2.app/Contents/libs
 else
 	cp src/dist/fheroes2/fheroes2 .

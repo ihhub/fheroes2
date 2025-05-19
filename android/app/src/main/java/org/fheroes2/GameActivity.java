@@ -48,6 +48,7 @@ public final class GameActivity extends SDLActivity
         if ( isAssetsDigestChanged( "assets.digest", new File( filesDir, "assets.digest" ) ) ) {
             try {
                 extractAssets( "files", externalFilesDir );
+                extractAssets( "maps", externalFilesDir );
                 // Digest should be updated only after successful extraction of all assets
                 extractAssets( "assets.digest", filesDir );
             }

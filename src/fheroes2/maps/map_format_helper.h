@@ -26,6 +26,11 @@
 
 class Army;
 
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
+
 namespace Maps
 {
     class Tile;
@@ -70,6 +75,11 @@ namespace Maps
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
 
     bool isJailObject( const ObjectGroup group, const uint32_t index );
+
+    // Returns true if object can be owned, excluding Towns and Castles.
+    bool isCapturableObject( const MP2::MapObjectType objectType );
+
+    void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType );
 
     uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector );
 
