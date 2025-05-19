@@ -6108,7 +6108,7 @@ namespace
         fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[195 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[195 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor )
+        fheroes2::DrawLine( released[195 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
 
         // Greek capital letter epsilon
         released[197 - 32] = released[69 - 32];
@@ -6141,7 +6141,7 @@ namespace
         fheroes2::DrawLine( released[208 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[208 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[208 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[208 - 32], { offset + 6, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor )
+        fheroes2::DrawLine( released[208 - 32], { offset + 6, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
 
         // Greek capital letter rho
         released[209 - 32] = released[80 - 32];
