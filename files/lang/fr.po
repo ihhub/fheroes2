@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:51+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3669,6 +3669,10 @@ msgstr "Choix d'élément (bonus) :"
 msgid "Select Adventure Object:"
 msgstr "Choix d'élément (aventure) :"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Choisir créature :"
+
 msgid "Players Icon"
 msgstr "Icônes des joueurs"
 
@@ -4303,6 +4307,9 @@ msgstr "avec un artéfact."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Routes"
 
@@ -4802,6 +4809,9 @@ msgstr "ÉVÉNEMENT"
 msgid "LANGUAGE"
 msgstr "LANGUE"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4819,6 +4829,9 @@ msgstr ""
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Description sélectionnée"
+
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4841,6 +4854,11 @@ msgstr "Événements"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Changer la langue du jeu."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."

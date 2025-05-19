@@ -1545,11 +1545,11 @@ void Battle::Interface::RedrawArmies()
 
             std::vector<const Unit *> troopBeforeWall;
             std::vector<const Unit *> troopAfterWall;
-            std::vector<const Unit *> upwardMovingTroopBeforeWall;
-
             std::vector<const Unit *> movingTroopBeforeWall;
+
+            std::vector<const Unit *> downwardMovingTroopBeforeWall;
+            std::vector<const Unit *> downwardMovingTroopAfterWall;
             std::vector<const Unit *> movingTroopAfterWall;
-            std::vector<const Unit *> upwardMovingTroopAfterWall;
 
             // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
@@ -1623,21 +1623,21 @@ void Battle::Interface::RedrawArmies()
                 }
                 else {
                     if ( isCellBefore ) {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
-                            // The troop is moving to the upper row. We should render it prior to this row units.
-                            upwardMovingTroopBeforeWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
+                            // The troop is moving horizontally or upwards. We should render it prior to this row units.
+                            movingTroopBeforeWall.emplace_back( unitOnCell );
                         }
                         else {
-                            movingTroopBeforeWall.emplace_back( unitOnCell );
+                            downwardMovingTroopBeforeWall.emplace_back( unitOnCell );
                         }
                     }
                     else {
-                        if ( _movingPos.y < currentCell->GetPos().y ) {
-                            // The troop is moving to the upper row. We should render it prior to this row units.
-                            upwardMovingTroopAfterWall.emplace_back( unitOnCell );
+                        if ( _movingPos.y <= currentCell->GetPos().y ) {
+                            // The troop is moving horizontally or upwards. We should render it prior to this row units.
+                            movingTroopAfterWall.emplace_back( unitOnCell );
                         }
                         else {
-                            movingTroopAfterWall.emplace_back( unitOnCell );
+                            downwardMovingTroopAfterWall.emplace_back( unitOnCell );
                         }
                     }
                 }
@@ -1659,7 +1659,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
-            for ( const Unit * unit : upwardMovingTroopBeforeWall ) {
+            for ( const Unit * unit : movingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1671,7 +1671,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroopBeforeWall ) {
+            for ( const Unit * unit : downwardMovingTroopBeforeWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1688,7 +1688,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unit );
             }
 
-            for ( const Unit * unit : upwardMovingTroopAfterWall ) {
+            for ( const Unit * unit : movingTroopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1700,7 +1700,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroopAfterWall ) {
+            for ( const Unit * unit : downwardMovingTroopAfterWall ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -1714,7 +1714,7 @@ void Battle::Interface::RedrawArmies()
         else {
             std::vector<const Unit *> troopCounter;
             std::vector<const Unit *> troop;
-            std::vector<const Unit *> movingTroop;
+            std::vector<const Unit *> downwardMovingTroop;
             std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
             for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
@@ -1744,12 +1744,12 @@ void Battle::Interface::RedrawArmies()
 
                     troop.emplace_back( unitOnCell );
                 }
-                else if ( _movingPos.y < currentCell->GetPos().y ) {
-                    // The troop is moving to the upper row. Render it prior to this row units.
+                else if ( _movingPos.y <= currentCell->GetPos().y ) {
+                    // The troop is moving horizontally or upwards. Render it prior to this row units.
                     RedrawTroopSprite( *unitOnCell );
                 }
                 else {
-                    movingTroop.emplace_back( unitOnCell );
+                    downwardMovingTroop.emplace_back( unitOnCell );
                 }
 
                 // Check for overlay sprites for 'unitOnCell'.
@@ -1770,7 +1770,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *unit );
             }
 
-            for ( const Unit * unit : movingTroop ) {
+            for ( const Unit * unit : downwardMovingTroop ) {
                 RedrawTroopSprite( *unit );
             }
 
@@ -4779,11 +4779,6 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
-    // Reset the delay to wait till the next frame if is not already waiting.
-    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
-        Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
-    }
-
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -4793,8 +4788,16 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     StringReplaceWithLowercase( msg, "%{attacker}", unit.GetName() );
     setStatus( msg, true );
 
+    // Don't waste time waiting for Luck sound if the game sounds are turned off.
+    const bool soundOn = Settings::Get().SoundVolume() > 0;
+
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
+        // Reset the delay to wait till the next frame if it's not already waiting.
+        if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
+        }
+
         const fheroes2::Rect & battleArea = border.GetArea();
         const fheroes2::Point rainbowDescendPoint( pos.x + pos.width / 2, pos.y - pos.height / 2 );
 
@@ -4869,9 +4872,6 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
         const double drawStep = static_cast<double>( rainbowLength ) / rainbowDrawSteps;
 
-        // Don't waste time waiting for Good Luck sound if the game sounds are turned off
-        const bool soundOn = Settings::Get().SoundVolume() > 0;
-
         if ( soundOn ) {
             AudioManager::PlaySound( M82::GOODLUCK );
         }
@@ -4918,28 +4918,39 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         }
     }
     else {
-        const int maxHeight = GetAbsoluteICNHeight( ICN::CLOUDLUK );
-        int y = pos.y + pos.height + cellYOffset;
+        const int32_t offsetX = pos.x + pos.width / 2;
+        // Don't let the Bad Luck sprite clip outside the top of the battlefield.
+        const int32_t offsetY = std::max( GetAbsoluteICNHeight( ICN::CLOUDLUK ), pos.y + pos.height + cellYOffset );
 
-        // move drawing position if it will clip outside of the battle window
-        if ( y - maxHeight < 0 )
-            y = maxHeight;
+        const uint32_t frameLimit = 8;
+        uint32_t frameId = 0;
 
-        AudioManager::PlaySound( M82::BADLUCK );
+        if ( soundOn ) {
+            // This sound lasts for about 2200 milliseconds.
+            AudioManager::PlaySound( M82::BADLUCK );
+        }
 
-        int frameId = 0;
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
+        // Make the animation duration consistent with the played sound on the normal battle speed.
+        const uint64_t animationDelay = Game::ApplyBattleSpeed( 2200 / frameLimit );
+        // Immediately indicate that the delay has passed to render first frame immediately.
+        Game::passCustomAnimationDelay( animationDelay );
+        // Make sure that the first run is passed immediately.
+        assert( !Game::isCustomDelayNeeded( animationDelay ) );
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && ( frameId < frameLimit || ( soundOn && Mixer::isPlaying( -1 ) ) ) ) {
             CheckGlobalEvents( le );
 
-            if ( frameId < 8 && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Game::validateCustomAnimationDelay( animationDelay ) ) {
                 RedrawPartialStart();
 
-                const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
-                fheroes2::Blit( luckSprite, _mainSurface, pos.x + pos.width / 2 + luckSprite.x(), y + luckSprite.y() );
+                if ( frameId < frameLimit ) {
+                    const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
+                    fheroes2::Blit( luckSprite, _mainSurface, offsetX + luckSprite.x(), offsetY + luckSprite.y() );
+
+                    ++frameId;
+                }
 
                 RedrawPartialFinish();
-
-                ++frameId;
             }
         }
     }
@@ -5902,7 +5913,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     // The last frame is the full power of spell effect. It will be used to produce other frames.
     spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 / maxFrame );
     uint32_t frame = 0;
     uint8_t alpha = 30;
     const uint8_t alphaStep = 25;

@@ -27,6 +27,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl2.sh
@@ -71,6 +72,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl2.sh
@@ -115,6 +117,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/macos/Brewfile
@@ -253,7 +256,7 @@ jobs:
         fi
     - name: Create package
       run: |
-        # Translations and H2D files are already included in fheroes2.vpk
+        # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
         7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
@@ -299,7 +302,7 @@ jobs:
         make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
     - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -356,7 +359,7 @@ jobs:
     - name: Create package
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
-        # Translations and H2D files are already included in fheroes2.data
+        # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
         7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v4
       if: ${{ contains( matrix.on, github.event_name ) }}

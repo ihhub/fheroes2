@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:51+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3582,6 +3582,10 @@ msgstr "Vyberte objekt pro zvýšení síly:"
 msgid "Select Adventure Object:"
 msgstr "Vyberte dobrodružný objekt:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Vybrat jednotku:"
+
 msgid "Players Icon"
 msgstr "Ikona hráče"
 
@@ -4190,6 +4194,9 @@ msgstr "Tento artefakt"
 msgid "The total number of obelisks is %{count}."
 msgstr "Celkový počet obelisků je %{count}."
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Cesty"
 
@@ -4636,6 +4643,9 @@ msgstr "UDÁLOSTI"
 msgid "LANGUAGE"
 msgstr "JAZYK"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4657,6 +4667,9 @@ msgstr "Změnit název mapy"
 msgid "Change Map Description"
 msgstr "Změnit popis mapy"
 
+msgid "About"
+msgstr ""
+
 msgid "Click to accept the changes made."
 msgstr "Klikněte pro potvrzení provedených změn."
 
@@ -4674,6 +4687,11 @@ msgstr "Události"
 
 msgid "Click to change the language of the map."
 msgstr "Klikněte pro změnu jazyka mapy."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr "Klikněte pro změnu názvu mapy."
