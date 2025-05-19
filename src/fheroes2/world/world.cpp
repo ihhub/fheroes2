@@ -910,11 +910,8 @@ void World::CaptureObject( const int32_t index, const int color )
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
 
-    if ( !MP2::isCaptureObject( objectType ) ) {
-        assert( 0 );
-        return;
-    }
-
+    // The owner can be set not only for the objects returned by `MP2::isCaptureObject()`.
+    // In example, dwellings can also marked by the player's color.
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {
