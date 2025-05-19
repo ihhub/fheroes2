@@ -326,15 +326,15 @@ jobs:
           env:
             FHEROES2_STRICT_COMPILATION: ON
           package_name: fheroes2_emscripten.zip
-          release_tag: fheroes2-emscripten-sdl2_dev
           release_name: Emscripten build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2_dev
         - name: Emscripten Multithreaded
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_THREADS: ON
           package_name: fheroes2_emscripten_mt.zip
-          release_tag: fheroes2-emscripten-sdl2-mt_dev
           release_name: Emscripten Multithreaded build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2-mt_dev
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
     container: emscripten/emsdk:latest
