@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-06 13:36+0000\n"
+"POT-Creation-Date: 2025-05-18 12:51+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3476,6 +3476,9 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
+msgid "Select color"
+msgstr ""
+
 msgid "Players Icon"
 msgstr ""
 
@@ -4056,6 +4059,9 @@ msgstr "Artifact"
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
@@ -4497,6 +4503,9 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4512,6 +4521,9 @@ msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
+msgstr ""
+
+msgid "About"
 msgstr ""
 
 #, fuzzy
@@ -4535,6 +4547,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr ""

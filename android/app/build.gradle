@@ -95,6 +95,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
 }
 
+tasks.register('copyFH2M', Copy) {
+    from('../../maps') {
+        include '*.fh2m'
+    }
+    into 'src/main/assets/maps'
+}
+
 tasks.register('copyH2D', Copy) {
     from('../../files/data') {
         include '*.h2d'
@@ -118,7 +125,7 @@ tasks.register('copyTranslations', Copy) {
 }
 
 tasks.register('generateAssetsDigest') {
-    dependsOn copyH2D, copyTimidity, copyTranslations
+    dependsOn copyFH2M, copyH2D, copyTimidity, copyTranslations
 
     doLast {
         final java.nio.file.Path assetsDirPath = layout.projectDirectory.getAsFile()
