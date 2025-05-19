@@ -796,11 +796,11 @@ namespace Interface
             return;
         case Instrument::LANDSCAPE_OBJECTS:
             switch ( _selectedLandscapeObject ) {
+            case LandscapeObjectBrush::LANDSCAPE_MISC:
             case LandscapeObjectBrush::MOUNTAINS:
             case LandscapeObjectBrush::ROCKS:
             case LandscapeObjectBrush::TREES:
             case LandscapeObjectBrush::WATER_OBJECTS:
-            case LandscapeObjectBrush::LANDSCAPE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
                 return;
@@ -810,29 +810,15 @@ namespace Interface
             break;
         case Instrument::ADVENTURE_OBJECTS:
             switch ( _selectedAdventureObject ) {
+            case AdventureObjectBrush::ADVENTURE_MISC:
             case AdventureObjectBrush::ARTIFACTS:
             case AdventureObjectBrush::DWELLINGS:
+            case AdventureObjectBrush::MINES:
             case AdventureObjectBrush::POWER_UPS:
             case AdventureObjectBrush::TREASURES:
             case AdventureObjectBrush::WATER_ADVENTURE:
-            case AdventureObjectBrush::ADVENTURE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
-                return;
-            case AdventureObjectBrush::MINES:
-                _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
-                    if ( type == -1 ) {
-                        // The object type is not set. We show the POINTER cursor for this case.
-                        Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
-
-                    const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::ADVENTURE_MINES, type );
-
-                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-                } );
                 return;
             default:
                 break;
