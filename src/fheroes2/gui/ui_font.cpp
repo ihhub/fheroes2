@@ -3442,11 +3442,50 @@ namespace
             // Greek capital letter alpha
             font[193 - 32] = font[65 - 32];
 
+            // Greek capital letter beta
+            font[194 - 32] = font[66 - 32];
+
             // Greek capital letter epsilon
             font[197 - 32] = font[69 - 32];
 
+            // Greek capital letter zeta
+            font[198 - 32] = font[90 - 32];
+
+            // Greek capital letter eta
+            font[199 - 32] = font[72 - 32];
+
             // Greek capital letter iota
             font[201 - 32] = font[73 - 32];
+
+            // Greek capital letter kappa
+            font[202 - 32] = font[75 - 32];
+
+            // Greek capital letter mu
+            font[204 - 32] = font[77 - 32];
+
+            // Greek capital letter nu
+            font[205 - 32] = font[78 - 32];
+
+            // Greek capital letter omicron
+            font[207 - 32] = font[79 - 32];
+
+            // Greek capital letter rho
+            font[209 - 32] = font[80 - 32];
+
+            // Greek capital letter tau
+            font[212 - 32] = font[84 - 32];
+
+            // Greek capital letter upsilon
+            font[213 - 32] = font[89 - 32];
+
+            // Greek capital letter chi
+            font[215 - 32] = font[88 - 32];
+
+            // Greek small letter nu
+            font[237 - 32] = font[118 - 32];
+
+            // Greek small letter omicron
+            font[239 - 32] = font[111 - 32];
         }
         // Small font.
         {
@@ -3455,11 +3494,50 @@ namespace
             // Greek capital letter alpha
             font[193 - 32] = font[65 - 32];
 
+            // Greek capital letter beta
+            font[194 - 32] = font[66 - 32];
+
             // Greek capital letter epsilon
             font[197 - 32] = font[69 - 32];
 
+            // Greek capital letter zeta
+            font[198 - 32] = font[90 - 32];
+
+            // Greek capital letter eta
+            font[199 - 32] = font[72 - 32];
+
             // Greek capital letter iota
             font[201 - 32] = font[73 - 32];
+
+            // Greek capital letter kappa
+            font[202 - 32] = font[75 - 32];
+
+            // Greek capital letter mu
+            font[204 - 32] = font[77 - 32];
+
+            // Greek capital letter nu
+            font[205 - 32] = font[78 - 32];
+
+            // Greek capital letter omicron
+            font[207 - 32] = font[79 - 32];
+
+            // Greek capital letter rho
+            font[209 - 32] = font[80 - 32];
+
+            // Greek capital letter tau
+            font[212 - 32] = font[84 - 32];
+
+            // Greek capital letter upsilon
+            font[213 - 32] = font[89 - 32];
+
+            // Greek capital letter chi
+            font[215 - 32] = font[88 - 32];
+
+            // Greek small letter nu
+            font[237 - 32] = font[118 - 32];
+
+            // Greek small letter omicron
+            font[239 - 32] = font[111 - 32];
         }
     }
 
