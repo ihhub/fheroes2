@@ -34,7 +34,7 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   pages:
-    name: Pages
+    name: Build and deploy website
     needs:
     - make
     uses: ./.github/workflows/pages.yml
