@@ -3500,11 +3500,29 @@ namespace
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
+            // Greek small letter kappa
+            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
+            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
+            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
+            updateNormalFontLetterShadow( font[234 - 32] );
+
             // Greek small letter nu
             font[237 - 32] = font[118 - 32];
 
             // Greek small letter omicron
-            font[239 - 32] = font[111 - 32];            
+            font[239 - 32] = font[111 - 32];
+
+            // Greek small letter omicron with tonos
+            font[243 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[243 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
+            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[243 - 32] );
         }
         // Small font.
         {
@@ -3571,11 +3589,29 @@ namespace
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
+            // Greek small letter kappa
+            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
+            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
+            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
+            updateNormalFontLetterShadow( font[234 - 32] );
+
             // Greek small letter nu
             font[237 - 32] = font[118 - 32];
 
             // Greek small letter omicron
-            font[239 - 32] = font[111 - 32]; 
+            font[239 - 32] = font[111 - 32];
+
+            // Greek small letter omicron with tonos
+            font[243 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[243 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
+            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[243 - 32] );
         }
     }
 
