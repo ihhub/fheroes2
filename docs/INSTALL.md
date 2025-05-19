@@ -31,7 +31,7 @@ Precompiled binaries of the release version are currently available for the foll
 * [**PlayStation Vita**](#playstation-vita)
 * [**Nintendo Switch**](#nintendo-switch)
 
-Alternatively, you can download the precompiled binaries of the latest commit (snapshot) [**here**](#snapshots-latest-builds).
+Alternatively, you can [**download the precompiled binaries of the latest commit (snapshot)**](#snapshots-latest-builds).
 
 ## Windows
 
