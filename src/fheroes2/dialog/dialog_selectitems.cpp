@@ -1435,7 +1435,7 @@ int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
-void Dialog::selectMineType( int32_t & type, int32_t & color )
+int32_t Dialog::selectMineType( const int32_t type )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 380, 395, true, display );
@@ -1667,12 +1667,10 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
         bool needRedraw = listbox.QueueEventProcessing();
 
         if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            type = objectInfoIndexes[listbox.getCurrentId()];
-            color = 0;
-            return;
+            return objectInfoIndexes[listbox.getCurrentId()];
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            return;
+            return type;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
@@ -1720,6 +1718,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
         listbox.Redraw();
         display.render( area );
     }
+
+    return type;
 }
 
 int Dialog::selectMountainType( const int mountainType )

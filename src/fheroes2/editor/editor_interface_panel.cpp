@@ -231,12 +231,7 @@ namespace Interface
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
                 if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    // For mine we need to decode the objectType.
-                    int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
-
-                    return getObjectOccupiedArea( objectGroup, type );
+                    return getObjectOccupiedArea( objectGroup, getMineObjectType() );
                 }
 
                 return getObjectOccupiedArea( objectGroup, objectType );
@@ -826,11 +821,9 @@ namespace Interface
                 return;
             case AdventureObjectBrush::MINES:
                 _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
-                    int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
+                    const int32_t type = getMineObjectType();
 
-                    if ( type == -1 || color == -1 ) {
+                    if ( type == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
                         return;
@@ -838,7 +831,6 @@ namespace Interface
 
                     assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
 
-                    // TODO: Implement a function to render also the owner flag after ownership selection is implemented.
                     const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::ADVENTURE_MINES, type );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
@@ -1113,15 +1105,7 @@ namespace Interface
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
-                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
-                    int32_t type = -1;
-                    int32_t color = -1;
-
-                    getMineObjectProperties( type, color );
-                    Dialog::selectMineType( type, color );
-
-                    return _generateMineObjectProperties( type, color );
-                } );
+                handleObjectMouseClick( Dialog::selectMineType );
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
@@ -1336,22 +1320,7 @@ namespace Interface
         return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
 
-    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & color ) const
-    {
-        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-        if ( mineObjects.empty() ) {
-            // How is it even possible?
-            assert( 0 );
-            type = -1;
-            color = -1;
-            return;
-        }
-
-        type = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
-        color = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / static_cast<int32_t>( mineObjects.size() );
-    }
-
-    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t color )
+    int32_t EditorPanel::getMineObjectType() const
     {
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
@@ -1360,7 +1329,6 @@ namespace Interface
             return -1;
         }
 
-        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type );
-        return ( objectType < 0 ) ? -1 : objectType;
+        return _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
     }
 }

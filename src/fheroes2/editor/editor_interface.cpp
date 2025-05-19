@@ -1889,11 +1889,8 @@ namespace Interface
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            int32_t type = -1;
-            int32_t color = -1;
-
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            const int32_t type = _editorPanel.getMineObjectType();
+            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return;
@@ -1910,7 +1907,6 @@ namespace Interface
                 return;
             }
 
-            // TODO: Place owner flag according to the color state.
             action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
@@ -2192,11 +2188,9 @@ namespace Interface
             objectIndex = type;
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            int32_t type = -1;
-            int32_t color = -1;
+            const int32_t type = _editorPanel.getMineObjectType();
 
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return false;
