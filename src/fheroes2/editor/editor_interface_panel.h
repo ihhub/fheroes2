@@ -116,7 +116,6 @@ namespace Interface
         Maps::ObjectGroup getSelectedObjectGroup() const;
 
         void getTownObjectProperties( int32_t & type, int32_t & color ) const;
-        int32_t getMineObjectType() const;
 
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
 

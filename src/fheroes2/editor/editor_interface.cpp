@@ -1889,21 +1889,20 @@ namespace Interface
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const int32_t type = _editorPanel.getMineObjectType();
-            if ( type < 0 ) {
+            if ( objectType < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return;
             }
 
-            if ( !verifyObjectPlacement( tilePos, groupType, type, errorMessage ) ) {
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
                 return;
             }
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( !_setObjectOnTile( tile, groupType, type ) ) {
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
                 return;
             }
 
@@ -2188,7 +2187,7 @@ namespace Interface
             objectIndex = type;
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const int32_t type = _editorPanel.getMineObjectType();
+            const int32_t type = _editorPanel.getSelectedObjectType();
 
             if ( type < 0 ) {
                 // Check your logic!

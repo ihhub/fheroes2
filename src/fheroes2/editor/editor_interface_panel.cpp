@@ -231,7 +231,7 @@ namespace Interface
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
                 if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    return getObjectOccupiedArea( objectGroup, getMineObjectType() );
+                    return getObjectOccupiedArea( objectGroup, objectType );
                 }
 
                 return getObjectOccupiedArea( objectGroup, objectType );
@@ -820,9 +820,7 @@ namespace Interface
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
                 return;
             case AdventureObjectBrush::MINES:
-                _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
-                    const int32_t type = getMineObjectType();
-
+                _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
                     if ( type == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
@@ -1318,17 +1316,5 @@ namespace Interface
         }
 
         return color * static_cast<int32_t>( townObjects.size() ) + type;
-    }
-
-    int32_t EditorPanel::getMineObjectType() const
-    {
-        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-        if ( mineObjects.empty() ) {
-            // How is it even possible?
-            assert( 0 );
-            return -1;
-        }
-
-        return _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
     }
 }
