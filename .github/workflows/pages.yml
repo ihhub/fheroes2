@@ -10,20 +10,19 @@ permissions:
   pages: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/jekyll-build-pages@v1
         with:
           source: ./docs
           destination: ./_site
@@ -32,24 +31,25 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release download fheroes2-emscripten-sdl2_dev -D ./dist
-      - name: Extract and prepare site
+      - name: Extract and prepare website
         working-directory: ./dist
         run: |
           mkdir -p ./site/play-online
           unzip -q fheroes2_emscripten.zip -d site/play-online
           cp -r ../_site/* ./site/
           rm -f fheroes2_emscripten.zip
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: "./dist/site"
   deploy:
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     environment:
       name: github-pages
-      url: ${{steps.deployment.outputs.page_url}}
-    runs-on: ubuntu-latest
-    needs: build
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v4
