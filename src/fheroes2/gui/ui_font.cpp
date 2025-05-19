@@ -3437,11 +3437,29 @@ namespace
 
         // Normal font.
         {
-            // std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // Greek capital letter alpha
+            font[193 - 32] = font[65 - 32];
+
+            // Greek capital letter epsilon
+            font[197 - 32] = font[69 - 32];
+
+            // Greek capital letter iota
+            font[201 - 32] = font[73 - 32];
         }
         // Small font.
         {
-            // std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // Greek capital letter alpha
+            font[193 - 32] = font[65 - 32];
+
+            // Greek capital letter epsilon
+            font[197 - 32] = font[69 - 32];
+
+            // Greek capital letter iota
+            font[201 - 32] = font[73 - 32];
         }
     }
 
@@ -5917,7 +5935,26 @@ namespace
         fheroes2::SetPixel( released[223 - 32], offset + 5, offset + 8, buttonGoodReleasedColor );
     }
 
-    void generateGoodCP1254ButtonFont( std::vector<fheroes2::Sprite> & released )
+    void generateCP1253GoodButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
+        const fheroes2::Sprite firstSprite{ released[0] };
+        released.insert( released.end(), 160, firstSprite );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Greek capital letter alpha
+        released[193 - 32] = released[65 - 32];
+
+        // Greek capital letter epsilon
+        released[197 - 32] = released[69 - 32];
+
+        // Greek capital letter iota
+        released[201 - 32] = released[73 - 32];
+    }
+
+    void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
@@ -6090,16 +6127,16 @@ namespace fheroes2
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1253:
-            // generateCP1253GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1253GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1254:
-            generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1254GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1258:
-            // generateGoodCP1258ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            // generateCP1258GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::ISO8859_16:
-            // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            // generateISO8859_16GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new code page generation code!
