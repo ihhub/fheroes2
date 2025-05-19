@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   build:
+    name: Build website
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -43,6 +44,7 @@ jobs:
         with:
           path: ./dist/site
   deploy:
+    name: Deploy website
     needs:
     - build
     runs-on: ubuntu-latest
