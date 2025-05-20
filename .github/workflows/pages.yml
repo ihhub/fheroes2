@@ -16,6 +16,7 @@ concurrency:
 jobs:
   build:
     name: Build website
+    if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -45,6 +46,7 @@ jobs:
           path: ./dist/site
   deploy:
     name: Deploy website
+    if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}
     needs:
     - build
     runs-on: ubuntu-latest
