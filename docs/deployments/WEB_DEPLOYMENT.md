@@ -38,7 +38,7 @@ sequenceDiagram
 ### Trigger
 
 * Deployment is triggered **when a new Git commit is pushed**.
-* A GitHub Action workflow waits for the completion of the build-and-release process (`build.yml` workflow).
+* A GitHub Action workflow waits for the completion of the build-and-release process (`make.yml` workflow).
 
 ### Build Process (Upstream)
 
