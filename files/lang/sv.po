@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-03 14:59+0000\n"
+"POT-Creation-Date: 2025-05-20 09:02+0000\n"
 "PO-Revision-Date: 2025-04-01 22:23+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -684,9 +684,6 @@ msgstr "Tur"
 msgid "Spell Points"
 msgstr "Besvärjelsepoäng"
 
-msgid "Hero's Options"
-msgstr "Hjältealternativ"
-
 msgid "Cast Spell"
 msgstr "Kasta besvärjelse"
 
@@ -704,6 +701,9 @@ msgstr "Hjältevy"
 
 msgid "Captain's Options"
 msgstr "Kaptensalternativ"
+
+msgid "Hero's Options"
+msgstr "Hjältealternativ"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -3599,6 +3599,10 @@ msgstr "Välj Kraftökningsföremål:"
 msgid "Select Adventure Object:"
 msgstr "Välj Äventyrsföremål:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Välj Varelse:"
+
 msgid "Players Icon"
 msgstr "Spelarikon"
 
@@ -4211,6 +4215,9 @@ msgstr "Denna artefakten"
 msgid "The total number of obelisks is %{count}."
 msgstr "Det totala antalet obelisker är %{count}."
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Vägar"
 
@@ -4652,6 +4659,9 @@ msgstr "HÄNDELSER"
 msgid "LANGUAGE"
 msgstr "SPRÅK"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4674,6 +4684,9 @@ msgstr "Ändra Kartnamn"
 msgid "Change Map Description"
 msgstr "Ändra Kartbeskrivning"
 
+msgid "About"
+msgstr ""
+
 msgid "Click to accept the changes made."
 msgstr "Klicka för att acceptera ändringarna."
 
@@ -4691,6 +4704,11 @@ msgstr "Händelser"
 
 msgid "Click to change the language of the map."
 msgstr "Klicka för att ändra kartans språk."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr "Klicka för att ändra kartans namn."
@@ -5790,6 +5808,14 @@ msgid ""
 msgstr ""
 "Fienden har tillfångatagit %{name}!\n"
 "Dem jublar."
+
+#, fuzzy
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
+msgstr ""
+"Du har hittat %{name}.\n"
+"Ditt uppdrag är slufört."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -7177,24 +7203,17 @@ msgstr ""
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
-msgstr ""
-"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
-"öppnar du den och hittar %{gold} guldmynt."
-
-msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
 "Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
 "öppnar du den och hittar %{gold} guld och %{art}."
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
-"Efter att ha spenderat timmar på att försöka fiska upp skattkistan ur sjön, "
-"öppnar du den, bara för att hitta den tom."
+"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
+"öppnar du den och hittar %{gold} guldmynt."
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
@@ -7204,13 +7223,6 @@ msgstr ""
 "Efter att ha letat igenom området hittar du en skattgömma. Du kan välja att "
 "beslagta skatten själv eller dela ut skatten med bönderna för erfarenhet.\n"
 "Vill du behålla skatten själv?"
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
-msgstr ""
-"Efter att ha renskrubbat området, finner du en gömd kista som innehåller de "
-"%{gold} guldmynten."
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
@@ -12113,6 +12125,20 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "After spending hours trying to fish the chest out of the sea, you open "
+#~ "it, only to find it empty."
+#~ msgstr ""
+#~ "Efter att ha spenderat timmar på att försöka fiska upp skattkistan ur "
+#~ "sjön, öppnar du den, bara för att hitta den tom."
+
+#~ msgid ""
+#~ "After scouring the area, you fall upon a hidden chest, containing the "
+#~ "%{gold} gold pieces."
+#~ msgstr ""
+#~ "Efter att ha renskrubbat området, finner du en gömd kista som innehåller "
+#~ "de %{gold} guldmynten."
 
 #~ msgid ""
 #~ "Select the campaign difficulty. This can be lowered at any point during "

@@ -249,19 +249,20 @@ int CapturedObjects::GetColor( const int32_t index ) const
 void CapturedObjects::ClearFog( const int colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
-        const ObjectColor & objCol = capturedObj.objCol;
+        const auto [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( colors ) ) {
+        if ( !( colors & objectColor ) ) {
             continue;
         }
 
-        int scoutingDistance = 0;
+        int32_t scoutingDistance = 0;
 
-        switch ( objCol.first ) {
+        switch ( objectType ) {
         case MP2::OBJ_MINE:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
-            scoutingDistance = 2;
+        case MP2::OBJ_LIGHTHOUSE:
+            scoutingDistance = 3;
             break;
 
         default:
@@ -272,7 +273,7 @@ void CapturedObjects::ClearFog( const int colors ) const
             continue;
         }
 
-        Maps::ClearFog( idx, scoutingDistance, colors );
+        Maps::ClearFog( idx, scoutingDistance, objectColor );
     }
 }
 
@@ -392,7 +393,7 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateForEditor( const int32_t size )
+void World::generateUninitializedMap( const int32_t size )
 {
     assert( size > 0 );
 
@@ -416,8 +417,13 @@ void World::generateForEditor( const int32_t size )
     Defaults();
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
+}
 
-    // init all tiles
+void World::generateMapForEditor( const int32_t size )
+{
+    generateUninitializedMap( size );
+
+    // Initialize all tiles.
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         vec_tiles[i] = {};
 
@@ -903,6 +909,9 @@ void World::CaptureObject( const int32_t index, const int color )
     assert( CountBits( color ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
+
+    // The owner can be set not only for the objects returned by `MP2::isCaptureObject()`.
+    // In example, dwellings can also marked by the player's color.
     map_captureobj.Set( index, objectType, color );
 
     if ( color != Color::NONE && !( color & Color::ALL ) ) {
@@ -1101,9 +1110,6 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_ARTIFACT: {
-        // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
-
         const VecHeroes & heroes = kingdom.GetHeroes();
         if ( mapInfo.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
@@ -1222,10 +1228,8 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     const Settings & conf = Settings::Get();
 
     if ( conf.isCampaignGameType() ) {
-        const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
-        if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY );
-            if ( visited ) {
+        if ( Campaign::getCurrentScenarioVictoryCondition() == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+            if ( kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) ) {
                 return GameOver::WINS_SIDE;
             }
 
@@ -1233,10 +1237,10 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
         }
     }
 
-    const std::array<uint32_t, 6> wins
+    const std::array<uint32_t, 6> victoryConditions
         = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
 
-    for ( const uint32_t cond : wins ) {
+    for ( const uint32_t cond : victoryConditions ) {
         if ( ( ( conf.getCurrentMapInfo().ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
             return cond;
         }
@@ -1263,42 +1267,39 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    // First of all, check if the other players have not completed WINS_TOWN or WINS_GOLD yet
-    const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
+    // First of all, check if the other players have fulfilled certain victory conditions yet
+    const std::array<std::pair<uint32_t, uint32_t>, 3> enemyVictoryConditions
+        = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+            std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+            std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
-    for ( const auto & item : enemy_wins ) {
-        if ( conf.getCurrentMapInfo().ConditionWins() & item.first ) {
-            const int color = vec_kingdoms.FindWins( item.first );
+    for ( const auto & [victoryCond, defeatCond] : enemyVictoryConditions ) {
+        if ( conf.getCurrentMapInfo().ConditionWins() & victoryCond ) {
+            const int color = vec_kingdoms.FindWins( victoryCond );
 
             if ( color && color != kingdom.GetColor() ) {
-                return item.second;
+                return defeatCond;
             }
         }
     }
 
     if ( conf.isCampaignGameType() ) {
-        const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
-        if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+        if ( Campaign::getCurrentScenarioLossCondition() == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
             const VecCastles & castles = kingdom.GetCastles();
-            bool hasSorceressVillage = false;
 
-            for ( size_t i = 0; i < castles.size(); ++i ) {
-                if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
-                    continue;
+            if ( std::none_of( castles.begin(), castles.end(), []( const Castle * castle ) {
+                     assert( castle != nullptr );
 
-                hasSorceressVillage = true;
-                break;
-            }
-
-            if ( !hasSorceressVillage )
+                     return !castle->isCastle() && castle->GetRace() == Race::SORC;
+                 } ) ) {
                 return GameOver::LOSS_ALL;
+            }
         }
     }
 
-    const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
+    const std::array<uint32_t, 4> defeatConditions = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
-    for ( const uint32_t cond : loss ) {
+    for ( const uint32_t cond : defeatConditions ) {
         if ( ( ( conf.getCurrentMapInfo().ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
             return cond;
         }

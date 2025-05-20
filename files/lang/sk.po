@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 14:24+0000\n"
+"POT-Creation-Date: 2025-05-20 09:02+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -681,9 +681,6 @@ msgstr "Šťastie"
 msgid "Spell Points"
 msgstr "Body kúziel"
 
-msgid "Hero's Options"
-msgstr "Ukáž hrdinu"
-
 msgid "Cast Spell"
 msgstr "Kúzli"
 
@@ -701,6 +698,9 @@ msgstr "Okno hrdinu"
 
 msgid "Captain's Options"
 msgstr "Možnosti kapitána"
+
+msgid "Hero's Options"
+msgstr "Ukáž hrdinu"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -3671,6 +3671,10 @@ msgstr "Objekty oceánu"
 msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Zvoľ bojovníka:"
+
 msgid "Players Icon"
 msgstr "Ikona hráča"
 
@@ -4305,6 +4309,9 @@ msgstr "s jedným artefaktom."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Cesta"
@@ -4795,6 +4802,9 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4812,6 +4822,9 @@ msgstr ""
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Zvolený opis"
+
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4835,6 +4848,11 @@ msgstr "Udalosť"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Zmeň jazyk hry."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5961,6 +5979,14 @@ msgid ""
 msgstr ""
 "Nepriateľ obsadil %{name}!\n"
 "Triumfálne zvíťazili."
+
+#, fuzzy
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
+msgstr ""
+"Podarilo sa ti nájsť %{name}.\n"
+"Tvoja úloha je splnená."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -7338,24 +7364,17 @@ msgstr ""
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
-msgstr ""
-"Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a nájdeš "
-"%{gold} zlatých."
-
-msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
 "Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a nájdeš "
 "%{gold} zlatých a %{art}."
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
-"Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a zistíš, "
-"že je prázdna."
+"Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a nájdeš "
+"%{gold} zlatých."
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
@@ -7364,13 +7383,6 @@ msgid ""
 msgstr ""
 "Po prehľadaní oblasti narazíš na skrytú skrýšu s pokladom. Zlato si môžeš "
 "vziať alebo ho rozdať sedliakom za skúsenosti. Chceš si zlato nechať?"
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
-msgstr ""
-"Po prehľadaní oblasti narazíš na skrytú truhlicu, ktorá obsahuje %{gold} "
-"zlatých."
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
@@ -12327,6 +12339,20 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "After spending hours trying to fish the chest out of the sea, you open "
+#~ "it, only to find it empty."
+#~ msgstr ""
+#~ "Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a "
+#~ "zistíš, že je prázdna."
+
+#~ msgid ""
+#~ "After scouring the area, you fall upon a hidden chest, containing the "
+#~ "%{gold} gold pieces."
+#~ msgstr ""
+#~ "Po prehľadaní oblasti narazíš na skrytú truhlicu, ktorá obsahuje %{gold} "
+#~ "zlatých."
 
 #~ msgid ""
 #~ "Select the campaign difficulty. This can be lowered at any point during "

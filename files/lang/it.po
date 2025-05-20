@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 14:24+0000\n"
+"POT-Creation-Date: 2025-05-20 09:02+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -617,9 +617,6 @@ msgstr "Fortuna"
 msgid "Spell Points"
 msgstr "Pt. Magia"
 
-msgid "Hero's Options"
-msgstr "Opzioni Eroe"
-
 msgid "Cast Spell"
 msgstr "Lancia magia"
 
@@ -638,6 +635,9 @@ msgstr "Schermata Eroe"
 #, fuzzy
 msgid "Captain's Options"
 msgstr "Opzioni Castello"
+
+msgid "Hero's Options"
+msgstr "Opzioni Eroe"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -3501,6 +3501,10 @@ msgstr "Scegli artefatto:"
 msgid "Select Adventure Object:"
 msgstr "Scegli artefatto:"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Scegli mostro:"
+
 msgid "Players Icon"
 msgstr "Icona dei Giocatori"
 
@@ -4132,6 +4136,9 @@ msgstr "con 1 artefatto."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 #, fuzzy
 msgid "Roads"
 msgstr "Strada"
@@ -4604,6 +4611,9 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4621,6 +4631,9 @@ msgstr ""
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Descrizione scelta"
+
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4644,6 +4657,11 @@ msgstr "Evento"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Cambia la lingua del gioco."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5744,6 +5762,11 @@ msgstr ""
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
+msgstr ""
+
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
 msgstr ""
 
 msgid ""
@@ -6956,28 +6979,18 @@ msgstr ""
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
-msgstr ""
-
-msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
 "the gold or distribute the gold to the peasants for experience. Do you wish "
 "to keep the gold?"
-msgstr ""
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
 msgstr ""
 
 msgid ""

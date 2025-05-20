@@ -868,7 +868,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Planner::Get().KingdomTurn( kingdom );
+                    res = AI::Planner::Get().KingdomTurn( kingdom );
+                    // This function must return only game state related values.
+                    assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
                     if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -1162,16 +1164,24 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 // Adventure map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    _gameArea.SetScroll( SCROLL_LEFT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_LEFT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    _gameArea.SetScroll( SCROLL_RIGHT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_RIGHT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    _gameArea.SetScroll( SCROLL_TOP );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_TOP );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    _gameArea.SetScroll( SCROLL_BOTTOM );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_BOTTOM );
+                    }
                 }
                 // Default action
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {

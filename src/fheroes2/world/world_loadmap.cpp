@@ -717,6 +717,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
     const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
     const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
+    const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -1031,6 +1032,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                     break;
                 }
                 default:
+                    // Update object ownership.
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+
                     // Other objects do not have metadata as of now.
                     break;
                 }
@@ -1139,6 +1143,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                 default:
                     break;
                 }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                assert( object.index < minesObjects.size() );
+
+                const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
             }
         }
     }
@@ -1457,7 +1468,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
             return false;
         }
 
-        return getTile( idx ).GoodForUltimateArtifact();
+        return getTile( idx ).isSuitableForUltimateArtifact();
     };
 
     if ( tileId < 0 ) {

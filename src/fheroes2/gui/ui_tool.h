@@ -28,7 +28,7 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <string_view>
+#include <utility>
 #include <vector>
 
 #include "image.h"
@@ -41,11 +41,13 @@ enum class InterfaceType : uint8_t;
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     class MovableSprite : public Sprite
     {
     public:
         MovableSprite();
-        MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
+        MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y );
         explicit MovableSprite( const Sprite & sprite );
 
         MovableSprite( const MovableSprite & ) = delete;
@@ -76,7 +78,7 @@ namespace fheroes2
             return { x(), y(), width(), height() };
         }
 
-        void setPosition( int32_t x_, int32_t y_ ) override;
+        void setPosition( const int32_t x, const int32_t y ) override;
 
     protected:
         void _resetRestorer()
@@ -86,13 +88,18 @@ namespace fheroes2
 
     private:
         ImageRestorer _restorer;
-        bool _isHidden;
+        bool _isHidden{ true };
     };
 
     class MovableText
     {
     public:
-        explicit MovableText( Image & output );
+        explicit MovableText( Image & output )
+            : _output( output )
+            , _restorer( output, 0, 0, 0, 0 )
+        {
+            // Do nothing.
+        }
 
         MovableText( const MovableText & ) = delete;
 
@@ -100,20 +107,73 @@ namespace fheroes2
 
         MovableText & operator=( const MovableText & ) = delete;
 
-        void update( std::unique_ptr<TextBase> text );
+        void update( std::unique_ptr<TextBase> text )
+        {
+            _text = std::move( text );
+        }
 
-        void draw( const int32_t x, const int32_t y );
+        void draw( const int32_t x, const int32_t y )
+        {
+            drawInRoi( x, y, { 0, 0, _output.width(), _output.height() } );
+        }
 
         // Draw text within a specified ROI (Region of Interest) that acts as a bounding box
         void drawInRoi( const int32_t x, const int32_t y, const Rect & roi );
 
-        void hide();
+        void hide()
+        {
+            if ( !_isHidden ) {
+                _restorer.restore();
+                _isHidden = true;
+            }
+        }
 
     private:
         Image & _output;
         ImageRestorer _restorer;
         std::unique_ptr<TextBase> _text;
-        bool _isHidden;
+        bool _isHidden{ true };
+    };
+
+    class TextInputField final
+    {
+    public:
+        TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output, const std::optional<SupportedLanguage> language = {} );
+
+        // Returns `true` when rendering of this UI element is needed.
+        bool eventProcessing();
+
+        // TODO: Process text input from keyboard and other cursor-related operations to avoid use of `_cursorPosition` outside if this class.
+
+        Rect getCursorArea() const
+        {
+            return _cursor.getArea();
+        }
+
+        Rect getOverallArea() const
+        {
+            return _background.rect();
+        }
+
+        void draw( const std::string & newText, const int32_t cursorPositionInText );
+
+        void set( std::string text, const int32_t cursorPosition )
+        {
+            _text.set( std::move( text ), cursorPosition );
+        }
+
+        size_t getCursorInTextPosition( const Point & pos ) const
+        {
+            return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
+        }
+
+    private:
+        Image & _output;
+        TextInput _text;
+        MovableSprite _cursor;
+        ImageRestorer _background;
+        Rect _textInputArea;
+        bool _isSingleLineTextCenterAligned{ false };
     };
 
     // Renderer of current time and FPS on screen
@@ -200,7 +260,7 @@ namespace fheroes2
 
     Image CreateHolyShoutEffect( const Image & in, const int32_t blurRadius, const uint8_t darkredStrength );
 
-    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
+    Sprite createRippleEffect( const Sprite & in, const int32_t amplitudeInPixels, const double phaseAtImageTop, const int32_t periodInPixels );
 
     // Fade-out the whole screen.
     void fadeOutDisplay();
@@ -219,15 +279,6 @@ namespace fheroes2
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );
-
-    // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string_view text, const FontType fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset );
-
-    // Returns the character position number in the text.
-    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
-    size_t getTextInputCursorPosition( const TextInput & textInput, const std::string_view fullText, const bool isCenterAlignedText,
-                                       const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 

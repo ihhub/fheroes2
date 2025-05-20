@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 14:24+0000\n"
+"POT-Creation-Date: 2025-05-20 09:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -688,9 +688,6 @@ msgstr "Noroc"
 msgid "Spell Points"
 msgstr "Puncte de vrajă"
 
-msgid "Hero's Options"
-msgstr "Opțiunile eroului"
-
 msgid "Cast Spell"
 msgstr "Aruncă vraja"
 
@@ -708,6 +705,9 @@ msgstr "Ecranul eroului"
 
 msgid "Captain's Options"
 msgstr "Opțiunile căpitanului"
+
+msgid "Hero's Options"
+msgstr "Opțiunile eroului"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -3476,6 +3476,9 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
+msgid "Select color"
+msgstr ""
+
 msgid "Players Icon"
 msgstr ""
 
@@ -4056,6 +4059,9 @@ msgstr "Artifact"
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
@@ -4497,6 +4503,9 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4512,6 +4521,9 @@ msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
+msgstr ""
+
+msgid "About"
 msgstr ""
 
 #, fuzzy
@@ -4535,6 +4547,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr ""
@@ -5582,6 +5599,11 @@ msgstr ""
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
+msgstr ""
+
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
 msgstr ""
 
 msgid ""
@@ -6753,28 +6775,18 @@ msgstr ""
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
-msgstr ""
-
-msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
 "the gold or distribute the gold to the peasants for experience. Do you wish "
 "to keep the gold?"
-msgstr ""
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
 msgstr ""
 
 msgid ""

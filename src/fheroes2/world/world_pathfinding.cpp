@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,12 +34,10 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "game_over.h"
 #include "ground.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
-#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -48,7 +46,6 @@
 #include "players.h"
 #include "rand.h"
 #include "route.h"
-#include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
 #include "tools.h"
@@ -56,23 +53,6 @@
 
 namespace
 {
-    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
-    {
-        assert( art.isValid() );
-
-        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
-
-        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
-            return false;
-        }
-
-        if ( mapInfo.WinsFindUltimateArtifact() ) {
-            return art.isUltimate();
-        }
-
-        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
-    }
-
     bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )
     {
         const Maps::Tile & tile = world.getTile( tileIndex );
@@ -169,11 +149,6 @@ namespace
             const Artifact art = Maps::getArtifactFromTile( tile );
             if ( !art.isValid() ) {
                 return true;
-            }
-
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                return false;
             }
 
             // This object contains an artifact, but it is not an artifact itself, pick it up and go through

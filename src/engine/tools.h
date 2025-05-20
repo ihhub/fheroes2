@@ -24,6 +24,7 @@
 #pragma once
 
 #include <bitset>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -64,21 +65,18 @@ void StringReplace( std::string & dst, const char * pred, const T value )
 }
 
 // Returns the number of bits that are set in the number passed as an argument
-constexpr int CountBits( const uint32_t val )
+constexpr int CountBits( uint32_t val )
 {
     int res = 0;
 
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
-        if ( val & itr ) {
-            ++res;
-        }
+    // Using Brian Kernighan's algorithm: https://yuminlee2.medium.com/brian-kernighans-algorithm-count-set-bits-in-a-number-18ab05edca93
+    while ( val ) {
+        val &= ( val - 1 );
+        ++res;
     }
 
     return res;
 }
-
-// Returns a new text string with the inserted character in the input string at the specified position.
-std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
 
 namespace fheroes2
 {
@@ -141,6 +139,49 @@ namespace fheroes2
 
             constexpr std::make_unsigned_t<To> unsignedMaxTo = maxTo;
             if ( from > unsignedMaxTo ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+    }
+
+    // Performs a checked conversion of a floating-point value of type From to an integer type To. Returns an empty std::optional<To>
+    // if the source value does not fit into the target type.
+    template <typename To, typename From,
+              std::enable_if_t<std::is_integral_v<To> && std::numeric_limits<To>::radix == 2 && std ::is_floating_point_v<From> && std::numeric_limits<From>::is_iec559
+                                   && std::numeric_limits<From>::radix == 2 && std::numeric_limits<From>::max_exponent >= std::numeric_limits<To>::digits,
+                               bool>
+              = true>
+    std::optional<To> checkedCast( const From from )
+    {
+        if ( !std::isfinite( from ) ) {
+            return {};
+        }
+
+        static_assert( std::numeric_limits<int8_t>::min() == -128 && std::numeric_limits<int8_t>::max() == 127,
+                       "The following logic will only work on platforms with two's complement signed integer representation" );
+
+        // Value of 'from' in general case cannot be compared with std::numeric_limits<To>::max() the way it's usually done for integers due
+        // to the fact that most values exceeding a certain limit cannot be exactly represented in floating-point format. For instance, when
+        // converting from 'float' to 'int32_t', 'INT32_MAX' (2^31 - 1) cannot be exactly represented as 'float', because the significand of
+        // 'float' is just 24 bits long (23 "real" bits + 1 "imaginary" bit), therefore, only those integers whose absolute values do not
+        // exceed 2^24 can be guaranteed to be exactly represented. However, any sane integer which absolute value is 2^N can be exactly
+        // represented in an IEEE 754 floating-point format, and that's what we're going to use here.
+        if constexpr ( std::is_signed_v<To> ) {
+            // Value of 'from' should be not less than -(2^N) and also it should be less than 2^N, where N is a number of significant
+            // bits in the target type
+            if ( from < std::ldexp( static_cast<From>( -1.0 ), std::numeric_limits<To>::digits )
+                 || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+        else {
+            // Value of 'from' should be not less than 0 and also it should be less than 2^N, where N is a number of significant bits
+            // in the target type
+            if ( from < 0 || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
                 return {};
             }
 

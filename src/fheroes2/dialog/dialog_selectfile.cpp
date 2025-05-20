@@ -38,7 +38,6 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "dir.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "icn.h"
@@ -50,7 +49,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -102,23 +100,19 @@ namespace
         text.draw( dstx + 105 - text.width() / 2, dsty, output );
     }
 
-    void redrawTextInputField( fheroes2::TextInput & textInput, const std::string & filename, const fheroes2::Rect & field, const size_t cursorLocation,
-                               const bool isEditing )
+    void redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, fheroes2::Image & output )
     {
         if ( filename.empty() ) {
             return;
         }
 
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        textInput.set( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
-        textInput.setCursorPosition( cursorLocation );
+        fheroes2::Text textInput( filename, fheroes2::FontType::normalYellow() );
 
         // Do not ignore spaces at the end.
         textInput.keepLineTrailingSpaces();
         textInput.fitToOneRow( maxFileNameWidth );
 
-        textInput.draw( field.x + 4 + ( ( maxFileNameWidth - textInput.width() ) / 2 ), field.y + 4, display );
+        textInput.drawInRoi( field.x + 4 + ( maxFileNameWidth - textInput.width() ) / 2, field.y + 4, output, field );
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -277,8 +271,8 @@ namespace
         // Dialog height is also capped with the current screen height.
         fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
-        const fheroes2::Rect area( background.activeArea() );
-        const fheroes2::Rect listRoi( area.x + 24, area.y + 37, area.width - 75, area.height - listHeightDeduction );
+        const fheroes2::Rect dialogArea( background.activeArea() );
+        const fheroes2::Rect listRoi( dialogArea.x + 24, dialogArea.y + 37, dialogArea.width - 75, dialogArea.height - listHeightDeduction );
         const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
         const int32_t dateTimeoffsetX = textInputRoi.x + textInputRoi.width;
         const int32_t dateTimeWidth = listRoi.width - textInputRoi.width;
@@ -290,7 +284,9 @@ namespace
         // Make background for the selected file date and time.
         background.applyTextBackgroundShading( { dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height } );
 
-        fheroes2::ImageRestorer textInputAndDateBackground( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
+        fheroes2::ImageRestorer textInputBackground( display, textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
+        fheroes2::ImageRestorer dateBackground( display, dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height );
+        const fheroes2::Rect textInputAndDateROI( textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
@@ -301,10 +297,7 @@ namespace
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
-        // Virtual keyboard button is used only in save game mode (when 'isEditing' is true ).
-        std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
-
-        FileInfoListBox listbox( area.getPosition() );
+        FileInfoListBox listbox( dialogArea.getPosition() );
 
         // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
         listbox.initListBackgroundRestorer( listRoi );
@@ -313,7 +306,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        int32_t scrollbarOffsetX = area.x + area.width - 35;
+        int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
@@ -371,21 +364,32 @@ namespace
         };
 
         listbox.Redraw();
-        fheroes2::TextInput textInput;
-        redrawTextInputField( textInput, filename, textInputRoi, 0, isEditing );
+
+        // Virtual keyboard button, text input and blinking cursor are used only in save game mode (when 'isEditing' is true ).
+        std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
+        std::unique_ptr<fheroes2::TextInputField> textInput;
 
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
-        title.draw( area.x + ( area.width - title.width() ) / 2, area.y + 16, display );
+        title.drawInRoi( dialogArea.x + ( dialogArea.width - title.width() ) / 2, dialogArea.y + 16, display, dialogArea );
 
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
             background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-            Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+            // Prepare the text input and set it to always fit the file name input field width.
+            textInput = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ textInputRoi.x + 4, textInputRoi.y + 2, maxFileNameWidth, textInputRoi.height - 2 },
+                                                                    false, true, display );
+
+            if ( !listbox.isSelected() ) {
+                textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
+                redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
+            }
         }
-        else if ( listbox.isSelected() ) {
-            // Render the saved file date and time.
+
+        if ( listbox.isSelected() ) {
+            // Render the saved file name, date and time.
+            redrawTextInputField( filename, textInputRoi, display );
             redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
 
@@ -396,13 +400,11 @@ namespace
 
         const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-        bool isCursorVisible = true;
-
         const size_t lengthLimit{ 255 };
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
+        while ( le.HandleEvents() && result.empty() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
             if ( isEditing ) {
@@ -419,7 +421,7 @@ namespace
 
             bool isListboxSelected = listbox.isSelected();
 
-            bool needRedraw = listId != listbox.getCurrentId();
+            bool needRedraw = ( listId != listbox.getCurrentId() );
 
             if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
@@ -460,31 +462,43 @@ namespace
                 }
             }
             else if ( isEditing ) {
+                assert( textInput != nullptr );
+
+                bool prepareRedraw = false;
+
                 if ( le.MouseClickLeft( buttonVirtualKB->area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputRoi ) ) ) {
                     fheroes2::openVirtualKeyboard( filename, lengthLimit );
 
                     charInsertPos = filename.size();
-                    listbox.Unselect();
-                    isListboxSelected = false;
-                    needRedraw = true;
-
-                    buttonOkDisabler();
+                    prepareRedraw = true;
 
                     // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
                 }
                 else if ( !filename.empty() && le.MouseClickLeft( textInputRoi ) ) {
-                    charInsertPos = fheroes2::getTextInputCursorPosition( textInput, filename, true, charInsertPos, le.getMouseCursorPos(), textInputRoi );
-                    listbox.Unselect();
-                    isListboxSelected = false;
-                    needRedraw = true;
-                }
-                else if ( !listboxEvent && le.isAnyKeyPressed()
-                          && ( filename.size() < lengthLimit || fheroes2::Key::KEY_BACKSPACE == le.getPressedKeyValue()
-                               || fheroes2::Key::KEY_DELETE == le.getPressedKeyValue() )
-                          && le.getPressedKeyValue() != fheroes2::Key::KEY_UP && le.getPressedKeyValue() != fheroes2::Key::KEY_DOWN ) {
-                    charInsertPos = InsertKeySym( filename, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                    if ( isListboxSelected ) {
+                        // To proper position the text cursor update the textInput text and set cursor position to 0 to correspond
+                        // the behavior of `fitToOneRow` of `fheroes2::Text` before calling `fheroes2::getTextInputCursorPosition()`.
+                        textInput->set( filename, 0 );
+                    }
 
+                    const size_t newPos = textInput->getCursorInTextPosition( le.getMouseLeftButtonPressedPos() );
+
+                    if ( newPos != charInsertPos || isListboxSelected ) {
+                        charInsertPos = newPos;
+                        prepareRedraw = true;
+                    }
+                }
+                else if ( !listboxEvent && le.isAnyKeyPressed() ) {
+                    const fheroes2::Key pressedKey = le.getPressedKeyValue();
+                    if ( ( filename.size() < lengthLimit || pressedKey == fheroes2::Key::KEY_BACKSPACE || pressedKey == fheroes2::Key::KEY_DELETE )
+                         && pressedKey != fheroes2::Key::KEY_UP && pressedKey != fheroes2::Key::KEY_DOWN ) {
+                        charInsertPos = InsertKeySym( filename, charInsertPos, pressedKey, LocalEvent::getCurrentKeyModifiers() );
+                        prepareRedraw = true;
+                    }
+                }
+
+                if ( prepareRedraw ) {
                     buttonOkDisabler();
 
                     needRedraw = true;
@@ -508,49 +522,52 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
 
-            // Text input cursor blink.
-            if ( isEditing && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-                isCursorVisible = !isCursorVisible;
-                needRedraw = true;
+            const bool needRedrawListbox = listbox.IsNeedRedraw();
+
+            if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
+                // Text input blinking cursor render is done in Save Game dialog when no file is selected
+                // and when the render of the filename (with cursor) is not planned.
+                display.render( textInput->getCursorArea() );
             }
 
-            if ( !needRedraw && !listbox.IsNeedRedraw() ) {
+            if ( !needRedraw && !needRedrawListbox ) {
                 continue;
             }
 
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? System::GetStem( listbox.GetCurrent().filename ) : "";
-                if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
-                    lastSelectedSaveFileName = selectedFileName;
-                    filename = selectedFileName;
-                    charInsertPos = filename.size();
+                if ( isListboxSelected ) {
+                    const std::string selectedFileName = System::GetStem( listbox.GetCurrent().filename );
+                    if ( lastSelectedSaveFileName != selectedFileName ) {
+                        lastSelectedSaveFileName = selectedFileName;
+                        filename = selectedFileName;
+                        charInsertPos = filename.size();
 
-                    buttonOkDisabler();
+                        buttonOkDisabler();
+                    }
+
+                    textInputBackground.restore();
+                    dateBackground.restore();
+
+                    redrawTextInputField( filename, textInputRoi, display );
+                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
                     // But when loading (i.e. isEditing == false), this doesn't matter since we cannot write to the input field
-                    lastSelectedSaveFileName = "";
-                }
+                    lastSelectedSaveFileName.clear();
 
-                textInputAndDateBackground.restore();
-
-                if ( isListboxSelected ) {
-                    redrawTextInputField( textInput, filename, textInputRoi, 0, false );
-                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
-                }
-                else if ( isEditing ) {
-                    redrawTextInputField( textInput, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, charInsertPos, true );
+                    dateBackground.restore();
+                    textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
                     redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
             }
 
-            if ( listbox.IsNeedRedraw() ) {
+            if ( needRedrawListbox ) {
                 listbox.Redraw();
-                display.render( area );
+                display.render( dialogArea );
             }
             else {
-                display.render( textInputAndDateBackground.rect() );
+                display.render( textInputAndDateROI );
             }
         }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-31 14:24+0000\n"
+"POT-Creation-Date: 2025-05-20 09:02+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -687,9 +687,6 @@ msgstr "Chance"
 msgid "Spell Points"
 msgstr "Points de magie"
 
-msgid "Hero's Options"
-msgstr "Les options du héros"
-
 msgid "Cast Spell"
 msgstr "Lancer un sort"
 
@@ -707,6 +704,9 @@ msgstr "Fenêtre d'informations du héros"
 
 msgid "Captain's Options"
 msgstr "Options du capitaine"
+
+msgid "Hero's Options"
+msgstr "Les options du héros"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -3669,6 +3669,10 @@ msgstr "Choix d'élément (bonus) :"
 msgid "Select Adventure Object:"
 msgstr "Choix d'élément (aventure) :"
 
+#, fuzzy
+msgid "Select color"
+msgstr "Choisir créature :"
+
 msgid "Players Icon"
 msgstr "Icônes des joueurs"
 
@@ -4303,6 +4307,9 @@ msgstr "avec un artéfact."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Routes"
 
@@ -4802,6 +4809,9 @@ msgstr "ÉVÉNEMENT"
 msgid "LANGUAGE"
 msgstr "LANGUE"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4819,6 +4829,9 @@ msgstr ""
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Description sélectionnée"
+
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to accept the changes made."
@@ -4841,6 +4854,11 @@ msgstr "Événements"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Changer la langue du jeu."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -5965,6 +5983,14 @@ msgid ""
 msgstr ""
 "L'ennemi a capturé %{name} !\n"
 "Ce camp adverse a triomphé."
+
+#, fuzzy
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
+msgstr ""
+"Vous avez trouvé le %{name}.\n"
+"Votre quête est terminée."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -7389,24 +7415,17 @@ msgstr ""
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
-msgstr ""
-"Après avoir passé des heures à essayer de repêcher le coffre de la mer, vous "
-"l'ouvrez et trouvez %{gold} pièces d'or."
-
-msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
 "Après avoir passé des heures à essayer de repêcher le coffre de la mer, vous "
 "l'ouvrez et trouvez %{gold} pièces d'or et l'artéfact '%{art}'."
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
 "Après avoir passé des heures à essayer de repêcher le coffre de la mer, vous "
-"l'ouvrez, et découvrez qu'il est vide."
+"l'ouvrez et trouvez %{gold} pièces d'or."
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
@@ -7416,13 +7435,6 @@ msgstr ""
 "Après avoir parcouru la zone, vous tombez sur une cache au trésor. Vous "
 "pouvez prendre l'or ou distribuer l'or aux paysans pour l'expérience. "
 "Souhaitez-vous garder l'or ?"
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
-msgstr ""
-"Après avoir parcouru la zone, vous tombez sur un coffre caché, contenant "
-"%{gold} pièces d'or."
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
@@ -12421,6 +12433,20 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "After spending hours trying to fish the chest out of the sea, you open "
+#~ "it, only to find it empty."
+#~ msgstr ""
+#~ "Après avoir passé des heures à essayer de repêcher le coffre de la mer, "
+#~ "vous l'ouvrez, et découvrez qu'il est vide."
+
+#~ msgid ""
+#~ "After scouring the area, you fall upon a hidden chest, containing the "
+#~ "%{gold} gold pieces."
+#~ msgstr ""
+#~ "Après avoir parcouru la zone, vous tombez sur un coffre caché, contenant "
+#~ "%{gold} pièces d'or."
 
 #~ msgid ""
 #~ "Select the campaign difficulty. This can be lowered at any point during "

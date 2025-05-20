@@ -442,7 +442,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.getTile( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).isSuitableForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
@@ -597,45 +597,48 @@ void Interface::AdventureMap::EventSwitchShowControlPanel() const
     }
 }
 
-void Interface::AdventureMap::EventKeyArrowPress( int dir )
+void Interface::AdventureMap::EventKeyArrowPress( const int dir )
 {
-    Heroes * hero = GetFocusHeroes();
-
-    // move hero
-    if ( hero )
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         MoveHeroFromArrowKeys( *hero, dir );
-    else
-        // scroll map
-        switch ( dir ) {
-        case Direction::TOP_LEFT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::TOP:
-            _gameArea.SetScroll( SCROLL_TOP );
-            break;
-        case Direction::TOP_RIGHT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::RIGHT:
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM_RIGHT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            break;
-        case Direction::BOTTOM_LEFT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::LEFT:
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        default:
-            break;
-        }
+
+        return;
+    }
+
+    if ( _gameArea.isDragScroll() ) {
+        return;
+    }
+
+    switch ( dir ) {
+    case Direction::TOP_LEFT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::TOP:
+        _gameArea.SetScroll( SCROLL_TOP );
+        break;
+    case Direction::TOP_RIGHT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::RIGHT:
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM_RIGHT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        break;
+    case Direction::BOTTOM_LEFT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::LEFT:
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    default:
+        break;
+    }
 }

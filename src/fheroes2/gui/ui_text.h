@@ -141,6 +141,9 @@ namespace fheroes2
         // Returns number of multi-line text rows limited by width of a line. It can be 0 if the text is empty.
         virtual int32_t rows( const int32_t maxWidth ) const = 0;
 
+        // Returns the text line ROI relative to the text line begin. It analyzes offset and size of all characters in the text.
+        virtual Rect area() const = 0;
+
         // Draw text as a single line text.
         void draw( const int32_t x, const int32_t y, Image & output ) const
         {
@@ -217,6 +220,8 @@ namespace fheroes2
 
         int32_t rows( const int32_t maxWidth ) const override;
 
+        Rect area() const override;
+
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
@@ -247,23 +252,18 @@ namespace fheroes2
             return _text;
         }
 
-        FontType getFontType() const
-        {
-            return _fontType;
-        }
-
         // Sets to keep trailing spaces at each text line end including the end of the text.
         void keepLineTrailingSpaces()
         {
             _keepLineTrailingSpaces = true;
         }
 
+    protected:
         // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
         // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
         // The 'keepTextTrailingSpaces' is used to take into account all the spaces at the text end in example when you want to join multiple texts in multi-font texts.
-        void getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
+        void _getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const;
 
-    protected:
         std::string _text;
 
         FontType _fontType;
@@ -274,23 +274,68 @@ namespace fheroes2
     class TextInput final : public Text
     {
     public:
-        using Text::Text;
-
-        void setCursorPosition( const size_t position )
+        // Every text input field has limited width and the only font type.
+        explicit TextInput( const FontType fontType, const int32_t maxTextWidth, const bool isMultiLine, const std::optional<SupportedLanguage> language )
+            : Text( {}, fontType )
+            , _maxTextWidth( maxTextWidth )
+            , _isMultiLine( isMultiLine )
         {
-            _cursorPosition = position;
+            _language = language;
+            _keepLineTrailingSpaces = true;
+
+            _updateCursorAreaInText();
         }
+
+        void set( std::string text, const int32_t cursorPosition )
+        {
+            _text = std::move( text );
+            _cursorPositionInText = cursorPosition;
+            _visibleTextLength = static_cast<int32_t>( _text.size() );
+
+            _updateCursorAreaInText();
+        }
+
+        int32_t width() const override;
+        // Use `width( const int32_t maxWidth )` from the Text class.
+        using Text::width;
+
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+        // Use `drawInRoi( ..., const int32_t maxWidth, ... )` from the Text class.
+        using Text::drawInRoi;
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
-        size_t getOffsetX() const
+        size_t getCursorPosition( const Point & pos, const Rect & roi, const bool isCenterAligned ) const
         {
-            return _textOffsetX;
+            if ( _isMultiLine ) {
+                return _getMultiLineTextInputCursorPosition( pos, roi );
+            }
+
+            return _getTextInputCursorPosition( pos.x, roi, isCenterAligned );
+        }
+
+        Rect cursorArea() const
+        {
+            return _cursorArea;
         }
 
     private:
-        size_t _cursorPosition{ 0 };
-        size_t _textOffsetX{ 0 };
+        // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
+        void _updateCursorAreaInText();
+
+        size_t _getMultiLineTextInputCursorPosition( const Point & cursorOffset, const Rect & roi ) const;
+        size_t _getTextInputCursorPosition( const int32_t cursorOffsetX, const Rect & roi, const bool isCenterAligned ) const;
+
+        // Cursor position relative to the text draw position and cursor's size.
+        Rect _cursorArea;
+        int32_t _cursorPositionInText{ 0 };
+        int32_t _visibleTextBeginPos{ 0 };
+        int32_t _visibleTextLength{ 0 };
+
+        // The (<1) value of `_maxTextWidth` will make the code to render text in one line without limiting its width.
+        int32_t _maxTextWidth{ 0 };
+        // When `false` the text that exceeds the `_maxTextWidth` will be moved to the next line, otherwise it will be truncated.
+        bool _isMultiLine{ false };
     };
 
     class MultiFontText final : public TextBase
@@ -308,6 +353,8 @@ namespace fheroes2
         int32_t height( const int32_t maxWidth ) const override;
 
         int32_t rows( const int32_t maxWidth ) const override;
+
+        Rect area() const override;
 
         void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
         void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
@@ -355,4 +402,9 @@ namespace fheroes2
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );
+
+    // This function will return the width in pixels of the truncation symbol for the given font type.
+    int32_t getTruncationSymbolWidth( const FontType fontType );
+
+    const Sprite & getCursorSprite( const FontType type );
 }

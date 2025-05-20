@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.security.MessageDigest
+
 plugins {
     id 'com.android.application'
 }
@@ -82,14 +85,21 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.5'
 
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
 
     implementation 'com.google.android.material:material:1.12.0'
+}
+
+tasks.register('copyFH2M', Copy) {
+    from('../../maps') {
+        include '*.fh2m'
+    }
+    into 'src/main/assets/maps'
 }
 
 tasks.register('copyH2D', Copy) {
@@ -104,7 +114,7 @@ tasks.register('copyTimidity', Copy) {
         include 'instruments/*.pat'
         include 'timidity.cfg'
     }
-    into 'src/main/assets'
+    into 'src/main/assets/files/timidity'
 }
 
 tasks.register('copyTranslations', Copy) {
@@ -114,6 +124,34 @@ tasks.register('copyTranslations', Copy) {
     into 'src/main/assets/files/lang'
 }
 
+tasks.register('generateAssetsDigest') {
+    dependsOn copyFH2M, copyH2D, copyTimidity, copyTranslations
+
+    doLast {
+        final java.nio.file.Path assetsDirPath = layout.projectDirectory.getAsFile()
+                .toPath().resolve('src/main/assets')
+        final java.nio.file.Path digestPath = assetsDirPath.resolve('assets.digest')
+        final boolean isDigestExists = Files.exists(digestPath)
+
+        final StringBuilder sb = new StringBuilder()
+
+        fileTree(dir: assetsDirPath).each {
+            final java.nio.file.Path itPath = it.toPath()
+            if (isDigestExists && Files.isSameFile(itPath, digestPath)) {
+                return
+            }
+
+            final byte[] itBuf = Files.readAllBytes(itPath)
+
+            sb.append(String.format('%032x % 12d %s\n',
+                    new BigInteger(1, MessageDigest.getInstance('MD5').digest(itBuf)),
+                    itBuf.length, assetsDirPath.relativize(itPath)))
+        }
+
+        Files.write(digestPath, sb.toString().getBytes('UTF-8'))
+    }
+}
+
 preBuild {
-    dependsOn copyH2D, copyTimidity, copyTranslations
+    dependsOn generateAssetsDigest
 }

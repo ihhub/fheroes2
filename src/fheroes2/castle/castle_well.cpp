@@ -387,7 +387,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 
     const fheroes2::Rect textRoi{ 0, bottomBarOffsetY, backgroundWidth, bottomBar.height() - 1 };
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType::normalWhite() );
-    text.drawInRoi( 315 - text.width() / 2, bottomBarOffsetY + 2, background, textRoi );
+    text.drawInRoi( 315 - text.width() / 2, bottomBarOffsetY + 3, background, textRoi );
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
@@ -506,7 +506,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += text.height( text.width() );
 
-        text.set( Speed::String( static_cast<int>( monster.GetSpeed() ) ), statsFontType );
+        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 
