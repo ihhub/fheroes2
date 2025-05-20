@@ -149,8 +149,8 @@ namespace fheroes2
     // Performs a checked conversion of a floating-point value of type From to an integer type To. Returns an empty std::optional<To>
     // if the source value does not fit into the target type.
     template <typename To, typename From,
-              std::enable_if_t<std::is_integral_v<To> && std::numeric_limits<To>::radix == 2 && std ::is_floating_point_v<From> && std::numeric_limits<From>::is_iec559
-                                   && std::numeric_limits<From>::radix == 2 && std::numeric_limits<From>::max_exponent >= std::numeric_limits<To>::digits,
+              std::enable_if_t<( std::is_integral_v<To> && std::numeric_limits<To>::radix == 2 && std ::is_floating_point_v<From> && std::numeric_limits<From>::is_iec559
+                                 && std::numeric_limits<From>::radix == 2 && std::numeric_limits<To>::digits < std::numeric_limits<From>::max_exponent ),
                                bool>
               = true>
     std::optional<To> checkedCast( const From from )
