@@ -59,7 +59,6 @@ namespace fheroes2
         CP1250,
         CP1251,
         CP1252,
-        CP1252_French, // French is modified CP-1252 code page.
         CP1253,
         CP1254,
         CP1258,

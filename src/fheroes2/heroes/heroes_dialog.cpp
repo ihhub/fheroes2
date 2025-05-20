@@ -417,7 +417,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // dialog menu loop
     while ( le.HandleEvents() ) {
         // Exit this dialog.
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
@@ -460,7 +460,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Dismiss hero.
         else if ( buttonDismiss && buttonDismiss->isEnabled() ) {
-            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) );
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDismiss->area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) );
 
             if ( ( le.MouseClickLeft( buttonDismiss->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
                  && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
@@ -473,7 +473,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Previous hero.
         if ( buttonPrevHero.isEnabled() ) {
-            buttonPrevHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevHero.area() ) );
+            buttonPrevHero.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevHero.area() ) );
             if ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) {
                 return Dialog::PREV;
             }
@@ -481,7 +481,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // Next hero.
         if ( buttonNextHero.isEnabled() ) {
-            buttonNextHero.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextHero.area() ) );
+            buttonNextHero.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextHero.area() ) );
             if ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) {
                 return Dialog::NEXT;
             }

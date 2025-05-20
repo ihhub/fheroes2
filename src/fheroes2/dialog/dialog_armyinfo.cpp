@@ -571,14 +571,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         if ( buttonUpgrade ) {
-            buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedInArea( buttonUpgrade->area() ) );
+            buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonUpgrade->area() ) );
         }
 
         if ( buttonDismiss ) {
-            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedInArea( buttonDismiss->area() ) );
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDismiss->area() ) );
         }
 
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( buttonUpgrade && ( le.MouseClickLeft( buttonUpgrade->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
             // If this assertion blows up then you are executing this code for a monster which has no upgrades.

@@ -906,10 +906,10 @@ namespace
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
                 if ( buttonInfo.isInvertedRenderingLogic ) {
-                    buttonInfo.button.drawOnState( !le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
+                    buttonInfo.button.drawOnState( !le.isMouseLeftButtonPressedAndHeldInArea( buttonInfo.button.area() ) );
                 }
                 else {
-                    buttonInfo.button.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.button.area() ) );
+                    buttonInfo.button.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonInfo.button.area() ) );
                 }
             }
         }
@@ -964,7 +964,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            okayButton.drawOnState( le.isMouseLeftButtonPressedInArea( okayButton.area() ) );
+            okayButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( okayButton.area() ) );
 
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 // Reset all event states including the hotkey pressed state so the caller dialog will not process it right after closing this dialog.

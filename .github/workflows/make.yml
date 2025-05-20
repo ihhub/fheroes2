@@ -326,16 +326,18 @@ jobs:
       matrix:
         include:
         - name: Emscripten
-          on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
           package_name: fheroes2_emscripten.zip
+          release_name: Emscripten build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2_dev
         - name: Emscripten Multithreaded
-          on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_THREADS: ON
           package_name: fheroes2_emscripten_mt.zip
+          release_name: Emscripten Multithreaded build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2-mt_dev
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
     container: emscripten/emsdk:latest
@@ -345,25 +347,33 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v4
-      if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
     - name: Build
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         emmake make -f Makefile.emscripten -j "$(nproc)"
       env: ${{ matrix.env }}
     - name: Create package
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
         7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v4
-      if: ${{ contains( matrix.on, github.event_name ) }}
+      if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
         if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: ${{ matrix.package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.release_name }}
+        tag: ${{ matrix.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
