@@ -1451,7 +1451,7 @@ void World::fixFrenchCharactersInStrings()
         fheroes2::fixFrenchCharactersForMP2Map( event.message );
     }
 
-    for ( auto & tile : vec_tiles ) {
+    for ( const auto & tile : vec_tiles ) {
         switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_SIGN:
         case MP2::OBJ_BOTTLE: {
