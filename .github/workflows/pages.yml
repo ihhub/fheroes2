@@ -6,7 +6,7 @@ on:
 
 permissions:
   contents: write
-  id-token: write
+  id-token: write # To verify the deployment originates from an appropriate source
   pages: write
 
 concurrency:
@@ -25,25 +25,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Prepare directory structure
+        run: |
+          mkdir -p .pages/dist/play-online
       - uses: actions/jekyll-build-pages@v1
         with:
-          source: ./docs
-          destination: ./_site
-      - name: Download Emscripten release
+          source: docs
+          destination: .pages/dist
+      - name: Download and extract Emscripten release
+        run: |
+          gh release download fheroes2-emscripten-sdl2_dev -D .pages
+          unzip .pages/fheroes2_emscripten.zip -d .pages/dist/play-online
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release download fheroes2-emscripten-sdl2_dev -D ./dist
-      - name: Extract and prepare website
-        working-directory: ./dist
-        run: |
-          mkdir -p ./site/play-online
-          unzip -q fheroes2_emscripten.zip -d site/play-online
-          cp -r ../_site/* ./site/
-          rm -f fheroes2_emscripten.zip
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/site
+          path: .pages/dist
   deploy:
     name: Deploy website
     if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}

@@ -10,8 +10,8 @@ concurrency:
 
 permissions:
   contents: write
-  id-token: write   # To verify the deployment originates from an appropriate source
-  pages: write      # To deploy to Pages
+  id-token: write
+  pages: write
   pull-requests: write
 
 jobs:
