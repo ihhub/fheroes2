@@ -861,7 +861,7 @@ int Kingdoms::GetNotLossColors() const
     return result;
 }
 
-int Kingdoms::FindWins( const int cond ) const
+int Kingdoms::FindWins( const uint32_t cond ) const
 {
     for ( const Kingdom & kingdom : _kingdoms ) {
         if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) ) {

@@ -502,7 +502,7 @@ namespace
                          return true;
                      }
 
-                     return tileToCheck.GoodForUltimateArtifact();
+                     return tileToCheck.isSuitableForUltimateArtifact();
                  } ) ) {
                 errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
