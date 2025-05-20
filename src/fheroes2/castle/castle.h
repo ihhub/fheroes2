@@ -370,6 +370,10 @@ public:
         return ( _disabledBuildings & buildingType ) != 0;
     }
 
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
+
 private:
     enum class ConstructionDialogResult : int
     {

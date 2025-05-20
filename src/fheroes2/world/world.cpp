@@ -62,6 +62,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world_object_uid.h"
 
@@ -1433,6 +1434,54 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
         }
     }
     return false;
+}
+
+void World::fixFrenchCharactersInStrings()
+{
+    for ( Heroes * hero : vec_heroes ) {
+        hero->fixFrenchCharactersInName();
+    }
+    for ( Castle * castle : vec_castles ) {
+        castle->fixFrenchCharactersInName();
+    }
+    for ( std::string & str : _customRumors ) {
+        fheroes2::fixFrenchCharactersForMP2Map( str );
+    }
+    for ( EventDate & event : vec_eventsday ) {
+        fheroes2::fixFrenchCharactersForMP2Map( event.message );
+    }
+
+    for ( auto & tile : vec_tiles ) {
+        switch ( tile.getMainObjectType() ) {
+        case MP2::OBJ_SIGN:
+        case MP2::OBJ_BOTTLE: {
+            MapSign * sign = dynamic_cast<MapSign *>( map_objects.get( tile.GetIndex() ) );
+            if ( sign != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( sign->message.text );
+            }
+            break;
+        }
+        case MP2::OBJ_EVENT: {
+            MapEvent * event = dynamic_cast<MapEvent *>( map_objects.get( tile.GetIndex() ) );
+            if ( event != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( event->message );
+            }
+            break;
+        }
+        case MP2::OBJ_SPHINX: {
+            MapSphinx * sphinx = dynamic_cast<MapSphinx *>( map_objects.get( tile.GetIndex() ) );
+            if ( sphinx != nullptr ) {
+                for ( std::string & text : sphinx->answers ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( text );
+                }
+                fheroes2::fixFrenchCharactersForMP2Map( sphinx->riddle );
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )

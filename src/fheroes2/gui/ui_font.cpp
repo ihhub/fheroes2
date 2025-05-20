@@ -1323,82 +1323,6 @@ namespace
         }
     }
 
-    // The original French version replaces several ASCII special characters with language-specific characters.
-    // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
-    // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
-    // but the original French Price of Loyalty maps use 0x09 for lowercase i with circumflex. This is currently
-    // not supported by the engine. See original maps' descriptions for Utopie and Sables du Temps.
-    void generateFrenchAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
-    {
-        // Normal font.
-        {
-            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
-
-            // Lowercase o with circumflex
-            font[35 - 32] = font[244 - 32];
-            // Lowercase u with circumflex
-            font[36 - 32] = font[251 - 32];
-            // Lowercase u with grave accent
-            font[38 - 32] = font[249 - 32];
-            // Lowercase a with circumflex
-            font[42 - 32] = font[226 - 32];
-            // Lowercase i with diaeresis
-            font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex <- Confirmed used in the OG Succession wars.
-            font[62 - 32] = font[238 - 32];
-            // Lowercase a with grave accent
-            font[64 - 32] = font[224 - 32];
-            // Lowercase c with cedilla
-            font[94 - 32] = font[231 - 32];
-            // Lowercase e with grave accent
-            font[96 - 32] = font[232 - 32];
-            // Lowercase i with diaeresis
-            font[123 - 32] = font[239 - 32];
-            // Lowercase e with circumflex
-            font[124 - 32] = font[234 - 32];
-            // Lowercase i with circumflex
-            font[125 - 32] = font[239 - 32];
-            // Lowercase e with acute
-            font[126 - 32] = font[233 - 32];
-            // Lowercase i with circumflex
-            font[127 - 32] = font[239 - 32];
-        }
-
-        // Small font.
-        {
-            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
-
-            // Lowercase o with circumflex
-            font[35 - 32] = font[244 - 32];
-            // Lowercase u with circumflex
-            font[36 - 32] = font[251 - 32];
-            // Lowercase u with grave accent
-            font[38 - 32] = font[249 - 32];
-            // Lowercase a with circumflex
-            font[42 - 32] = font[226 - 32];
-            // Lowercase i with diaeresis
-            font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex
-            font[62 - 32] = font[238 - 32];
-            // Lowercase a with grave accent
-            font[64 - 32] = font[224 - 32];
-            // Lowercase c with cedilla
-            font[94 - 32] = font[231 - 32];
-            // Lowercase e with grave accent
-            font[96 - 32] = font[232 - 32];
-            // Lowercase i with diaeresis
-            font[123 - 32] = font[239 - 32];
-            // Lowercase e with circumflex
-            font[124 - 32] = font[234 - 32];
-            // Lowercase i with circumflex
-            font[125 - 32] = font[239 - 32];
-            // Lowercase e with acute
-            font[126 - 32] = font[233 - 32];
-            // Lowercase i with circumflex
-            font[127 - 32] = font[239 - 32];
-        }
-    }
-
     // CP-1251 supports Russian, Ukrainian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
     void generateCP1251Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
@@ -2361,7 +2285,8 @@ namespace
         }
     }
 
-    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
+    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish, Danish and French
+    // (French localized maps have custom encoding that should be fixed by `fheroes2::fixFrenchCharactersForMP2Map()`)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -5971,12 +5896,6 @@ namespace fheroes2
         case CodePage::CP1252:
             generateCP1252Alphabet( icnVsSprite );
             break;
-        case CodePage::CP1252_French:
-            generateCP1252Alphabet( icnVsSprite );
-
-            // This serves to make the font compatible with the original French custom encoding.
-            generateFrenchAlphabet( icnVsSprite );
-            break;
         case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
             break;
@@ -6060,7 +5979,6 @@ namespace fheroes2
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1252:
-        case CodePage::CP1252_French:
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case CodePage::CP1254:
@@ -6191,6 +6109,80 @@ namespace fheroes2
                         *transformX = 1;
                     }
                 }
+            }
+        }
+    }
+
+    void fixFrenchCharactersForMP2Map( std::string & str )
+    {
+        for ( char & c : str ) {
+            switch ( c ) {
+            case 9:
+                // Horizontal tab. Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 35:
+                // Number sign (#). Used for lowercase o with circumflex.
+                c = static_cast<char>( 244 );
+                break;
+            case 36:
+                // Dollar ($). Used for lowercase u with circumflex.
+                c = static_cast<char>( 251 );
+                break;
+            case 38:
+                // Ampersand (&). Used for lowercase u with grave accent.
+                c = static_cast<char>( 249 );
+                break;
+            case 42:
+                // Asterisk (*). Used for lowercase a with circumflex.
+                c = static_cast<char>( 226 );
+                break;
+            case 60:
+                // Less sign (<). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 62:
+                // Greater sign (>). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 64:
+                // At sign (@). Used for lowercase a with grave accent.
+                c = static_cast<char>( 224 );
+                break;
+            case 92:
+                // Backslash (\). Used in some maps as the full stop '.'.
+                c = '.';
+                break;
+            case 94:
+                // Caret - circumflex (^). Used for lowercase c with cedilla.
+                c = static_cast<char>( 231 );
+                break;
+            case 96:
+                // Grave accent (`). Used for lowercase e with grave accent.
+                c = static_cast<char>( 232 );
+                break;
+            case 123:
+                // Opening brace ({). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 124:
+                // Vertical bar (|). Used for lowercase e with circumflex.
+                c = static_cast<char>( 234 );
+                break;
+            case 125:
+                // Closing brace (}). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 126:
+                // Tilde (~). Used for lowercase e with acute.
+                c = static_cast<char>( 233 );
+                break;
+            case 127:
+                // Delete (DEL). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            default:
+                break;
             }
         }
     }
