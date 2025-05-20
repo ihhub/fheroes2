@@ -62,7 +62,7 @@ sequenceDiagram
 
 ### pages.yml
 
-* Triggered on completion of `build.yml`
+* Triggered on completion of `make.yml`
 * Builds Jekyll site
 * Downloads release
 * Deploys to Github Pages
