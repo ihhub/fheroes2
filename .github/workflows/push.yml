@@ -10,6 +10,8 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write   # To verify the deployment originates from an appropriate source
+  pages: write      # To deploy to Pages
   pull-requests: write
 
 jobs:
@@ -31,6 +33,11 @@ jobs:
     uses: ./.github/workflows/sonarcloud.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  pages:
+    name: Build and deploy website
+    needs:
+    - make
+    uses: ./.github/workflows/pages.yml
   translation:
     name: Translation update
     needs:

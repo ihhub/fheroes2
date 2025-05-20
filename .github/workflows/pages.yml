@@ -1,0 +1,59 @@
+name: Build and deploy website
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build website
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs
+          destination: ./_site
+      - name: Download Emscripten release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download fheroes2-emscripten-sdl2_dev -D ./dist
+      - name: Extract and prepare website
+        working-directory: ./dist
+        run: |
+          mkdir -p ./site/play-online
+          unzip -q fheroes2_emscripten.zip -d site/play-online
+          cp -r ../_site/* ./site/
+          rm -f fheroes2_emscripten.zip
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist/site
+  deploy:
+    name: Deploy website
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
