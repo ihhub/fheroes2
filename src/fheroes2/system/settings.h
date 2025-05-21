@@ -360,8 +360,6 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    void SetProgramPath( const char * path );
-
     SaveFileSortType GetSaveFileSortType() const
     {
         return _saveFileSortType;
@@ -376,6 +374,8 @@ public:
             _saveFileSortType = SaveFileSortType::FILENAME;
         }
     }
+
+    void SetProgramPath( const char * path );
 
     static std::string GetVersion();
 
