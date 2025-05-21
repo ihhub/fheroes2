@@ -829,7 +829,7 @@ PlayerColors Kingdoms::GetNotLossColors() const
     return result;
 }
 
-PlayerColor Kingdoms::FindWins( const int cond ) const
+PlayerColor Kingdoms::FindWins( const uint32_t cond ) const
 {
     for ( const Kingdom & kingdom : _kingdoms ) {
         if ( kingdom.GetColor() != PlayerColor::NONE && world.KingdomIsWins( kingdom, cond ) ) {

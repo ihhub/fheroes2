@@ -457,7 +457,7 @@ void Dialog::ThievesGuild( const bool oracle )
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;

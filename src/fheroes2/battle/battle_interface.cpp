@@ -2786,9 +2786,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
-    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonAuto.area() ) );
-    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSettings.area() ) );
-    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonSkip.area() ) );
+    _buttonAuto.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonAuto.area() ) );
+    _buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSettings.area() ) );
+    _buttonSkip.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSkip.area() ) );
 
     if ( le.isAnyKeyPressed() ) {
         // Skip the turn
@@ -3273,9 +3273,9 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        autoCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( autoCombatButton.area() ) );
-        quickCombatButton.drawOnState( le.isMouseLeftButtonPressedInArea( quickCombatButton.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        autoCombatButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( autoCombatButton.area() ) );
+        quickCombatButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( quickCombatButton.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return;

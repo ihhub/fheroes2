@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -127,6 +127,7 @@ namespace
         LOCALE_FI,
         LOCALE_FR,
         LOCALE_GL,
+        LOCALE_GR,
         LOCALE_HE,
         LOCALE_HR,
         LOCALE_HU,
@@ -198,6 +199,9 @@ namespace
                                                                                   // Galician
                                                                                   { "gl", LocaleType::LOCALE_GL },
                                                                                   { "galician", LocaleType::LOCALE_GL },
+                                                                                  // Greek
+                                                                                  { "gr", LocaleType::LOCALE_GR },
+                                                                                  { "greek", LocaleType::LOCALE_GR },
                                                                                   // Hebrew
                                                                                   { "he", LocaleType::LOCALE_HE },
                                                                                   { "hebrew", LocaleType::LOCALE_HE },
@@ -620,6 +624,7 @@ const char * Translation::ngettext( const char * str, const char * plural, size_
         case LocaleType::LOCALE_EU:
         case LocaleType::LOCALE_FI:
         case LocaleType::LOCALE_GL:
+        case LocaleType::LOCALE_GR:
         case LocaleType::LOCALE_HE:
         case LocaleType::LOCALE_HU:
         case LocaleType::LOCALE_ID:

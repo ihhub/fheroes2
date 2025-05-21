@@ -67,11 +67,11 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            newGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( newGameButton.area() ) );
-            loadGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( loadGameButton.area() ) );
-            saveGameButton.drawOnState( le.isMouseLeftButtonPressedInArea( saveGameButton.area() ) );
-            quitButton.drawOnState( le.isMouseLeftButtonPressedInArea( quitButton.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            newGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( newGameButton.area() ) );
+            loadGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( loadGameButton.area() ) );
+            saveGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( saveGameButton.area() ) );
+            quitButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( quitButton.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( newGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
                 if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {

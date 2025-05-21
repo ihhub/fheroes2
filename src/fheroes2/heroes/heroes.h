@@ -700,6 +700,10 @@ public:
 
     void resetHeroSprite();
 
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
+
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );
     friend IStreamBase & operator>>( IStreamBase & stream, Heroes & hero );

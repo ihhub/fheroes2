@@ -47,6 +47,7 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_language.h"
 #include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
@@ -74,6 +75,8 @@
 #include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -1011,7 +1014,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
             if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -1486,11 +1489,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     bool updateDisplay = false;
 
     while ( le.HandleEvents() ) {
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) );
-        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) );
-        buttonRestart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonViewIntro.area() ) );
+        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDifficulty.area() ) );
+        buttonRestart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRestart.area() ) );
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
@@ -1573,6 +1576,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             }
 
             Maps::FileInfo mapInfo = scenario.loadMap();
+
+            // Update French language-specific characters to match CP1252 only for French assets when French language is selected.
+            if ( mapInfo.version != GameVersion::RESURRECTION && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French
+                 && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.name );
+                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.description );
+            }
+
             Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
 
             conf.setCurrentMapInfo( mapInfo );

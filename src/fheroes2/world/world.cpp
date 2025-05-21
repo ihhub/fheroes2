@@ -62,6 +62,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world_object_uid.h"
 
@@ -898,11 +899,8 @@ void World::CaptureObject( const int32_t index, const PlayerColor color )
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
 
-    if ( !MP2::isCaptureObject( objectType ) ) {
-        assert( 0 );
-        return;
-    }
-
+    // The owner can be set not only for the objects returned by `MP2::isCaptureObject()`.
+    // In example, dwellings can also marked by the player's color.
     map_captureobj.Set( index, objectType, color );
 
     if ( color != PlayerColor::NONE && !( Color::allPlayerColors() & color ) ) {
@@ -1104,9 +1102,6 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_ARTIFACT: {
-        // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
-
         const VecHeroes & heroes = kingdom.GetHeroes();
         if ( mapInfo.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
@@ -1224,22 +1219,18 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    if ( conf.isCampaignGameType() ) {
-        const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
-        if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY );
-            if ( visited ) {
-                return GameOver::WINS_SIDE;
-            }
-
-            return GameOver::COND_NONE;
+    if ( conf.isCampaignGameType() && Campaign::getCurrentScenarioVictoryCondition() == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+        if ( kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) ) {
+            return GameOver::WINS_SIDE;
         }
+
+        return GameOver::COND_NONE;
     }
 
-    const std::array<uint32_t, 6> wins
+    const std::array<uint32_t, 6> victoryConditions
         = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
 
-    for ( const uint32_t cond : wins ) {
+    for ( const uint32_t cond : victoryConditions ) {
         if ( ( ( conf.getCurrentMapInfo().ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
             return cond;
         }
@@ -1266,42 +1257,37 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    // First of all, check if the other players have not completed WINS_TOWN or WINS_GOLD yet
-    const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
+    // First of all, check if the other players have fulfilled certain victory conditions yet
+    const std::array<std::pair<uint32_t, uint32_t>, 3> enemyVictoryConditions
+        = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
+            std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
+            std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
-    for ( const auto & item : enemy_wins ) {
-        if ( conf.getCurrentMapInfo().ConditionWins() & item.first ) {
-            const PlayerColor color = vec_kingdoms.FindWins( static_cast<int>( item.first ) );
+    for ( const auto & [victoryCond, defeatCond] : enemyVictoryConditions ) {
+        if ( conf.getCurrentMapInfo().ConditionWins() & victoryCond ) {
+            const PlayerColor color = vec_kingdoms.FindWins( victoryCond );
 
             if ( color != PlayerColor::NONE && color != kingdom.GetColor() ) {
-                return item.second;
+                return defeatCond;
             }
         }
     }
 
-    if ( conf.isCampaignGameType() ) {
-        const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
-        if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-            const VecCastles & castles = kingdom.GetCastles();
-            bool hasSorceressVillage = false;
+    if ( conf.isCampaignGameType() && Campaign::getCurrentScenarioLossCondition() == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+        const VecCastles & castles = kingdom.GetCastles();
 
-            for ( size_t i = 0; i < castles.size(); ++i ) {
-                if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
-                    continue;
+        if ( std::none_of( castles.begin(), castles.end(), []( const Castle * castle ) {
+                 assert( castle != nullptr );
 
-                hasSorceressVillage = true;
-                break;
-            }
-
-            if ( !hasSorceressVillage )
-                return GameOver::LOSS_ALL;
+                 return !castle->isCastle() && castle->GetRace() == Race::SORC;
+             } ) ) {
+            return GameOver::LOSS_ALL;
         }
     }
 
-    const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
+    const std::array<uint32_t, 4> defeatConditions = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
-    for ( const uint32_t cond : loss ) {
+    for ( const uint32_t cond : defeatConditions ) {
         if ( ( ( conf.getCurrentMapInfo().ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
             return cond;
         }
@@ -1425,6 +1411,54 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     const PlayerColorsVector colors( Game::GetKingdomColors() );
     return std::any_of( colors.cbegin(), colors.cend(),
                         [this, objectType, dstIndex]( const PlayerColor color ) { return GetKingdom( color ).isVisited( dstIndex, objectType ); } );
+}
+
+void World::fixFrenchCharactersInStrings()
+{
+    for ( Heroes * hero : vec_heroes ) {
+        hero->fixFrenchCharactersInName();
+    }
+    for ( Castle * castle : vec_castles ) {
+        castle->fixFrenchCharactersInName();
+    }
+    for ( std::string & str : _customRumors ) {
+        fheroes2::fixFrenchCharactersForMP2Map( str );
+    }
+    for ( EventDate & event : vec_eventsday ) {
+        fheroes2::fixFrenchCharactersForMP2Map( event.message );
+    }
+
+    for ( const auto & tile : vec_tiles ) {
+        switch ( tile.getMainObjectType() ) {
+        case MP2::OBJ_SIGN:
+        case MP2::OBJ_BOTTLE: {
+            MapSign * sign = dynamic_cast<MapSign *>( map_objects.get( tile.GetIndex() ) );
+            if ( sign != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( sign->message.text );
+            }
+            break;
+        }
+        case MP2::OBJ_EVENT: {
+            MapEvent * event = dynamic_cast<MapEvent *>( map_objects.get( tile.GetIndex() ) );
+            if ( event != nullptr ) {
+                fheroes2::fixFrenchCharactersForMP2Map( event->message );
+            }
+            break;
+        }
+        case MP2::OBJ_SPHINX: {
+            MapSphinx * sphinx = dynamic_cast<MapSphinx *>( map_objects.get( tile.GetIndex() ) );
+            if ( sphinx != nullptr ) {
+                for ( std::string & text : sphinx->answers ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( text );
+                }
+                fheroes2::fixFrenchCharactersForMP2Map( sphinx->riddle );
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj )

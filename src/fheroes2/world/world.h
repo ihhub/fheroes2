@@ -439,6 +439,10 @@ public:
         return _allEyeOfMagi;
     }
 
+    // Update French language-specific characters in all strings to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInStrings();
+
 private:
     World() = default;
 

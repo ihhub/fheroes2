@@ -58,8 +58,8 @@ graphical artists.
 ## Where is Help Needed
 
 We have labelled and tracked some issues that need help from graphical artists.
-Issues that require changes of the original art can be found [here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"original+assets").
-New art tasks can be found [here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"new+assets").
+[Issues that require changes of the original art can be found here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"original+assets").
+[New art tasks can be found here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"new+assets").
 
 NOTE! Before starting to work on an issue make sure to check if someone isn't already assigned to it by looking at the relevant place
 within the issue. Also notify the fheroes2 team that you wish to work on the issue. This is to avoid duplicate work.

@@ -139,7 +139,7 @@ namespace Dialog
 
     int selectLandscapeMiscellaneousObjectType( const int objectType );
 
-    void selectMineType( int32_t & type );
+    int32_t selectMineType( const int32_t type );
 
     int selectMountainType( const int mountainType );
 

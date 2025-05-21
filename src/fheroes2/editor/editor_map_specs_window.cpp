@@ -2295,14 +2295,14 @@ namespace Editor
         display.render( background.totalArea() );
 
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-            buttonRumors.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRumors.area() ) );
-            buttonEvents.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEvents.area() ) );
-            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLanguage.area() ) );
-            victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( victoryDroplistButtonRoi ) );
-            lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedInArea( lossDroplistButtonRoi ) );
-            buttonAbout.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAbout.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonRumors.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRumors.area() ) );
+            buttonEvents.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonEvents.area() ) );
+            buttonLanguage.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLanguage.area() ) );
+            victoryDroplistButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( victoryDroplistButtonRoi ) );
+            lossDroplistButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( lossDroplistButtonRoi ) );
+            buttonAbout.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonAbout.area() ) );
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;

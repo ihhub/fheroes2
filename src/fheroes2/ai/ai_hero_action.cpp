@@ -1889,8 +1889,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
     const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
-    if ( isActionObject )
+    if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
+    }
 
     switch ( objectType ) {
     case MP2::OBJ_BOAT:
@@ -1911,7 +1912,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToCastle( hero, dst_index );
         break;
 
-    // pickup object
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:
@@ -1958,7 +1958,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToShipwreckSurvivor( hero, objectType, dst_index );
         break;
 
-    // event
     case MP2::OBJ_EVENT:
         AIToEvent( hero, dst_index );
         break;
@@ -1967,7 +1966,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToSign( hero, dst_index );
         break;
 
-    // increase view
     case MP2::OBJ_OBSERVATION_TOWER:
         AIToObservationTower( hero, dst_index );
         break;
@@ -1975,7 +1973,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToMagellanMaps( hero, dst_index );
         break;
 
-    // teleports
     case MP2::OBJ_STONE_LITHS:
         AIToTeleports( hero, dst_index );
         break;
@@ -1983,7 +1980,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToWhirlpools( hero, dst_index );
         break;
 
-    // primary skill modification
     case MP2::OBJ_FORT:
     case MP2::OBJ_MERCENARY_CAMP:
     case MP2::OBJ_WITCH_DOCTORS_HUT:
@@ -1992,24 +1988,20 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToPrimarySkillObject( hero, objectType, dst_index );
         break;
 
-    // experience modification
     case MP2::OBJ_GAZEBO:
         AIToExperienceObject( hero, objectType, dst_index );
         break;
 
-    // Witch's hut
     case MP2::OBJ_WITCHS_HUT:
         AIToWitchsHut( hero, dst_index );
         break;
 
-    // shrine circle
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         AIToShrine( hero, dst_index );
         break;
 
-    // luck modification
     case MP2::OBJ_FOUNTAIN:
     case MP2::OBJ_FAERIE_RING:
     case MP2::OBJ_IDOL:
@@ -2017,7 +2009,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToGoodLuckObject( hero, dst_index );
         break;
 
-    // morale modification
     case MP2::OBJ_OASIS:
     case MP2::OBJ_TEMPLE:
     case MP2::OBJ_WATERING_HOLE:
@@ -2029,7 +2020,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToObelisk( hero, tile );
         break;
 
-    // magic point
     case MP2::OBJ_ARTESIAN_SPRING:
         AIToArtesianSpring( hero, objectType, dst_index );
         break;
@@ -2037,7 +2027,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToMagicWell( hero, dst_index );
         break;
 
-    // increase skill
     case MP2::OBJ_XANADU:
         AIToXanadu( hero, dst_index );
         break;
@@ -2064,7 +2053,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToTreeKnowledge( hero, dst_index );
         break;
 
-    // accept army
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_EXCAVATION:
     case MP2::OBJ_CAVE:
@@ -2077,13 +2065,12 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToDwellingJoinMonster( hero, dst_index );
         break;
 
-    // recruit army
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_DESERT_TENT:
     case MP2::OBJ_GENIE_LAMP:
-    // loyalty version objects
+    // Price of Loyalty objects
     case MP2::OBJ_WATER_ALTAR:
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_FIRE_ALTAR:
@@ -2092,7 +2079,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToDwellingRecruitMonster( hero, objectType, dst_index );
         break;
 
-    // recruit army (battle)
     case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_TROLL_BRIDGE:
@@ -2139,8 +2125,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         break;
     }
 
-    if ( MP2::isNeedStayFront( objectType ) )
+    if ( MP2::isNeedStayFront( objectType ) ) {
         hero.GetPath().Reset();
+    }
 
     // Ignore empty tiles
     if ( isActionObject ) {
@@ -2393,15 +2380,4 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
     DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " summoned the boat from " << boatSource << " to " << boatDestinationIndex )
 
     return boatSource;
-}
-
-bool AI::HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
-{
-    if ( !hero.CanCastSpell( spell ) ) {
-        return false;
-    }
-
-    hero.SpellCasted( spell );
-
-    return true;
 }

@@ -212,9 +212,9 @@ fheroes2::GameMode Game::CampaignSelection()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonSuccessionWars.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSuccessionWars.area() ) );
-        buttonPriceOfLoyalty.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPriceOfLoyalty.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonSuccessionWars.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSuccessionWars.area() ) );
+        buttonPriceOfLoyalty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPriceOfLoyalty.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) ) {
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
@@ -494,9 +494,9 @@ fheroes2::GameMode Game::NewNetwork()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonHost.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHost.area() ) );
-        buttonGuest.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGuest.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonHost.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHost.area() ) );
+        buttonGuest.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonGuest.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             return fheroes2::GameMode::MAIN_MENU;
@@ -568,14 +568,14 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
     }
 
     while ( le.HandleEvents() ) {
-        buttonStandardGame.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStandardGame.area() ) );
+        buttonStandardGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonStandardGame.area() ) );
         if ( buttonCampaignGame.isEnabled() ) {
-            buttonCampaignGame.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCampaignGame.area() ) );
+            buttonCampaignGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCampaignGame.area() ) );
         }
-        buttonMultiGame.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMultiGame.area() ) );
-        buttonBattleGame.drawOnState( le.isMouseLeftButtonPressedInArea( buttonBattleGame.area() ) );
-        buttonSettings.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSettings.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonMultiGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMultiGame.area() ) );
+        buttonBattleGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonBattleGame.area() ) );
+        buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSettings.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) || le.MouseClickLeft( buttonStandardGame.area() ) ) {
             return fheroes2::GameMode::NEW_STANDARD;
@@ -647,11 +647,11 @@ fheroes2::GameMode Game::NewMulti()
     LocalEvent & le = LocalEvent::Get();
     // new game loop
     while ( le.HandleEvents() ) {
-        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedInArea( buttonHotSeat.area() ) );
+        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
         if ( buttonNetwork.isEnabled() ) {
-            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNetwork.area() ) );
+            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNetwork.area() ) );
         }
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
             return fheroes2::GameMode::NEW_HOT_SEAT;
@@ -701,12 +701,12 @@ uint8_t Game::SelectCountPlayers()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        button2Players.drawOnState( le.isMouseLeftButtonPressedInArea( button2Players.area() ) );
-        button3Players.drawOnState( le.isMouseLeftButtonPressedInArea( button3Players.area() ) );
-        button4Players.drawOnState( le.isMouseLeftButtonPressedInArea( button4Players.area() ) );
-        button5Players.drawOnState( le.isMouseLeftButtonPressedInArea( button5Players.area() ) );
-        button6Players.drawOnState( le.isMouseLeftButtonPressedInArea( button6Players.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        button2Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button2Players.area() ) );
+        button3Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button3Players.area() ) );
+        button4Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button4Players.area() ) );
+        button5Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button5Players.area() ) );
+        button6Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button6Players.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( button2Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_2 ) ) {
             return 2;

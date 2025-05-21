@@ -595,7 +595,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     display.render();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
         listbox.QueueEventProcessing();
 
@@ -673,11 +673,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
 
         // The currentPressedButton must be set correctly before the following button redrawing code block, otherwise, the map size selection button that has just been
         // clicked will be redrawn in the released state for a short time.
-        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
-        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
-        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
-        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
-        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
+        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
+        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
+        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
+        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
+        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
 
         if ( le.isMouseRightButtonPressedInArea( buttonSelectSmall.area() ) ) {
             ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );

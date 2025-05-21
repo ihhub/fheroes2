@@ -276,7 +276,7 @@ public:
     const Kingdom & GetKingdom( const PlayerColor color ) const;
 
     PlayerColors GetNotLossColors() const;
-    PlayerColor FindWins( const int cond ) const;
+    PlayerColor FindWins( const uint32_t cond ) const;
 
     void AddHeroes( const AllHeroes & heroes );
     void AddCastles( const AllCastles & castles );
