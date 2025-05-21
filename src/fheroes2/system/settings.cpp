@@ -358,7 +358,7 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "save load order" ) ) {
         if ( config.StrParams( "save load order" ) == "date" ) {
-            _saveFileSortType = SaveFileSortType::LATEST;
+            _saveFileSortType = SaveFileSortType::TIMESTAMP;
         }
         else {
             _saveFileSortType = SaveFileSortType::FILENAME;
@@ -530,7 +530,7 @@ std::string Settings::String() const
     os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# sort game saves when loading: name/date" << std::endl;
-    os << "save load order = " << ( _saveFileSortType == SaveFileSortType::LATEST ? "date" : "name" ) << std::endl;
+    os << "save load order = " << ( _saveFileSortType == SaveFileSortType::TIMESTAMP ? "date" : "name" ) << std::endl;
 
     return os.str();
 }
