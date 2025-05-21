@@ -235,7 +235,7 @@ namespace
             std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
         }
         else {
-            assert( sortType == SaveFileSortType::LATEST );
+            assert( sortType == SaveFileSortType::TIMESTAMP );
             std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByTimestamp );
         }
     }
