@@ -365,8 +365,13 @@ namespace Battle
         void RedrawCover();
         void _redrawBattleGround();
         void _redrawCoverStatic();
-        void RedrawLowObjects( const int32_t cellId );
-        void RedrawHighObjects( const int32_t cellId );
+
+        // Draws cracks and pools that are not higher than the ground level.
+        void _redrawGroundObjects( const int32_t cellId );
+
+        // Draws trees, rocks, bushes and other objects that are higher than the ground level.
+        void _redrawHighObjects( const int32_t cellId );
+
         void RedrawCastle( const Castle & castle, const int32_t cellId );
         void RedrawCastleMainTower( const Castle & castle );
         void RedrawKilled();
