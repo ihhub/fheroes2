@@ -73,7 +73,7 @@ enum class InterfaceType : uint8_t
     DYNAMIC = 2
 };
 
-enum class SaveFileSortType : uint8_t
+enum class SaveFileSortingMethod : uint8_t
 {
     FILENAME = 0,
     TIMESTAMP = 1,
@@ -360,18 +360,18 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    SaveFileSortType GetSaveFileSortType() const
+    SaveFileSortingMethod GetSaveFileSortType() const
     {
         return _saveFileSortType;
     }
 
     void changeSaveFileSortingMethod()
     {
-        if ( _saveFileSortType == SaveFileSortType::FILENAME ) {
-            _saveFileSortType = SaveFileSortType::TIMESTAMP;
+        if ( _saveFileSortType == SaveFileSortingMethod::FILENAME ) {
+            _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
         }
         else {
-            _saveFileSortType = SaveFileSortType::FILENAME;
+            _saveFileSortType = SaveFileSortingMethod::FILENAME;
         }
     }
 
@@ -410,7 +410,7 @@ private:
 
     Maps::FileInfo _currentMapInfo;
 
-    SaveFileSortType _saveFileSortType;
+    SaveFileSortingMethod _saveFileSortType;
 
     int sound_volume;
     int music_volume;
