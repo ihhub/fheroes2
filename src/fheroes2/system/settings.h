@@ -363,7 +363,7 @@ public:
         return _saveFileSortType;
     }
 
-    void CycleSaveFileSortType()
+    void changeSaveFileSortingMethod()
     {
         if ( _saveFileSortType == SaveFileSortType::FILENAME ) {
             _saveFileSortType = SaveFileSortType::TIMESTAMP;
