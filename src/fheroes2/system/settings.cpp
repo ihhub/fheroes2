@@ -356,8 +356,8 @@ bool Settings::Read( const std::string & filePath )
         setEditorPassability( config.StrParams( "editor passability" ) == "on" );
     }
 
-    if ( config.Exists( "save load order" ) ) {
-        if ( config.StrParams( "save load order" ) == "date" ) {
+    if ( config.Exists( "save file sorting" ) ) {
+        if ( config.StrParams( "save file sorting" ) == "date" ) {
             _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
         }
         else {
@@ -530,7 +530,7 @@ std::string Settings::String() const
     os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# save files sorting method: name/date" << std::endl;
-    os << "save load order = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
+    os << "save file sorting = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
 
     return os.str();
 }
