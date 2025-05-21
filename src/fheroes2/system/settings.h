@@ -77,8 +77,6 @@ enum class SaveFileSortType : uint8_t
 {
     FILENAME = 0,
     TIMESTAMP = 1,
-
-    VALUES_COUNT = 2,
 };
 
 class Settings
