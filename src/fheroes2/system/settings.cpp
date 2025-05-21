@@ -602,16 +602,6 @@ void Settings::SetProgramPath( const char * path )
     _programPath = path;
 }
 
-SaveFileSortType Settings::GetSaveFileSortType() const
-{
-    return _saveFileSortType;
-}
-
-void Settings::CycleSaveFileSortType()
-{
-    _saveFileSortType = static_cast<SaveFileSortType>( ( static_cast<uint8_t>( _saveFileSortType ) + 1 ) % static_cast<uint8_t>( SaveFileSortType::VALUES_COUNT ) );
-}
-
 const std::vector<std::string> & Settings::GetRootDirs()
 {
     static const std::vector<std::string> rootDirs = []() {
