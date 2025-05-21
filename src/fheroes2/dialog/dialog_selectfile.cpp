@@ -573,7 +573,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date" ), Dialog::ZERO );
             }
 
-            const bool needRedrawListbox = listbox.IsNeedRedraw() || listUpdated;
+            const bool needRedrawListbox = listUpdated || listbox.IsNeedRedraw();
 
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
                 // Text input blinking cursor render is done in Save Game dialog when no file is selected
