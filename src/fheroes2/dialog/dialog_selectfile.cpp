@@ -389,7 +389,7 @@ namespace
         fheroes2::ButtonSprite buttonSort;
         // SORT should be in the middle if "..." isn't present, otherwise they should be side by side
         const int sortOffsetX = isEditing ? -offsetFromCenter : 0;
-        background.renderCustomButtonSprite( buttonSort, _( "SORT" ), { 56, 25 }, { sortOffsetX, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        background.renderCustomButtonSprite( buttonSort, _( "SORT" ), { 80, 25 }, { sortOffsetX, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
