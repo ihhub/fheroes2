@@ -230,9 +230,6 @@ namespace Interface
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
-                if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    return getObjectOccupiedArea( objectGroup, objectType );
-                }
 
                 return getObjectOccupiedArea( objectGroup, objectType );
             }
