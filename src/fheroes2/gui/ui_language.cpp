@@ -68,7 +68,8 @@ namespace
             { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
             { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
-            { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese } };
+            { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
+            { "gr", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek } };
 }
 
 namespace fheroes2
@@ -120,13 +121,13 @@ namespace fheroes2
             supportedLanguges[getCodePage( resourceLanguage )].emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
-                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
-                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
-                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
-                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
-                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish,
-                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese };
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,     SupportedLanguage::German,
+                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,    SupportedLanguage::Norwegian,
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian,  SupportedLanguage::Ukrainian,
+                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,    SupportedLanguage::Portuguese,
+                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,    SupportedLanguage::Dutch,
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,      SupportedLanguage::Danish,
+                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese, SupportedLanguage::Greek };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -202,6 +203,8 @@ namespace fheroes2
             return _( "Slovak" );
         case SupportedLanguage::Vietnamese:
             return _( "Vietnamese" );
+        case SupportedLanguage::Greek:
+            return _( "Greek" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -254,6 +257,8 @@ namespace fheroes2
             return "sk";
         case SupportedLanguage::Vietnamese:
             return "vi";
+        case SupportedLanguage::Greek:
+            return "gr";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -328,6 +333,8 @@ namespace fheroes2
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
             return CodePage::CP1252;
+        case SupportedLanguage::Greek:
+            return CodePage::CP1253;
         case SupportedLanguage::Turkish:
             return CodePage::CP1254;
         case SupportedLanguage::Vietnamese:
