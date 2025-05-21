@@ -1525,7 +1525,7 @@ void Battle::Interface::RedrawArmies()
         // Redraw objects.
         for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
             const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
-            RedrawHighObjects( cellId );
+            _redrawHighObjects( cellId );
         }
 
         if ( castle != nullptr ) {
@@ -2244,7 +2244,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Ground obstacles.
     for ( int32_t cellId = 0; cellId < Board::sizeInCells; ++cellId ) {
-        RedrawLowObjects( cellId );
+        _redrawLowObjects( cellId );
     }
 
     // Castle top wall.
@@ -2399,8 +2399,7 @@ void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-// Draws cracks and pools that are not higher than the ground level.
-void Battle::Interface::RedrawLowObjects( const int32_t cellId )
+void Battle::Interface::_redrawLowObjects( const int32_t cellId )
 {
     const Cell * cell = Board::GetCell( cellId );
     if ( cell == nullptr )
@@ -2433,8 +2432,7 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
     fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
-// Draws trees, rocks, bushes and other objects that are higher than the ground level.
-void Battle::Interface::RedrawHighObjects( const int32_t cellId )
+void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 {
     const Cell * cell = Board::GetCell( cellId );
     if ( cell == nullptr )
