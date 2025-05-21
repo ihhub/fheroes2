@@ -118,7 +118,7 @@ namespace
         const std::array<const Battle::Cell *, 2> targetCells = { targetPos.GetHead(), targetPos.GetTail() };
 
         std::pair<int32_t, int> bestAttackVector{ -1, Battle::UNKNOWN };
-        double bestAttackValue{ 0.0 };
+        double bestAttackValue = 0.0;
 
         for ( const Battle::Cell * attackCell : attackCells ) {
             if ( attackCell == nullptr ) {
@@ -1386,7 +1386,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     // Archers are blocked and there is nowhere to retreat, they are fighting in melee
     else if ( currentUnit.isHandFighting() ) {
         BattleTargetPair target;
-        int32_t bestOutcome{ INT32_MIN };
+        int32_t bestOutcome = INT32_MIN;
 
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
@@ -1430,7 +1430,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     // Archers are able to shoot
     else {
         BattleTargetPair target;
-        double highestPriority{ DBL_MIN };
+        double highestPriority = DBL_MIN;
 
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
@@ -1546,7 +1546,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
     // 2. For units that don't have a target within reach, choose a target depending on distance-based priority
     {
         const auto chooseDistantTarget = [this, &arena, &currentUnit, &target, &enemies]( const auto enemyPredicate ) {
-            double maxPriority{ DBL_MIN };
+            double maxPriority = DBL_MIN;
 
             for ( const Battle::Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
@@ -1638,7 +1638,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
 
     // 3. Try to get closer to the castle walls during the siege
     if ( _attackingCastle ) {
-        uint32_t shortestDist{ UINT32_MAX };
+        uint32_t shortestDist = UINT32_MAX;
 
         for ( const int32_t cellIdx : cellsUnderWallsIndexes ) {
             const Battle::Position pos = Battle::Position::GetPosition( currentUnit, cellIdx );
@@ -1710,7 +1710,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
         // covered.
         const double defenseDistanceModifier = _myRangedUnitsOnly / 15.0;
 
-        double bestArcherValue{ DBL_MIN };
+        double bestArcherValue = DBL_MIN;
 
         for ( const Battle::Unit * frnd : friendly ) {
             assert( frnd != nullptr );
@@ -1950,7 +1950,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
             // If the decision is made to attack one of the neighboring enemy units (if any) while covering the archer, then we should choose the best target
             {
-                double bestAttackValue{ 0.0 };
+                double bestAttackValue = 0.0;
 
                 for ( const Battle::Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
