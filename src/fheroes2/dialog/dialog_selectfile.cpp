@@ -485,7 +485,7 @@ namespace
             else if ( le.MouseClickLeft( buttonSort.area() ) ) {
                 const int currentId = listbox.getCurrentId();
 
-                settings.CycleSaveFileSortType();
+                settings.changeSaveFileSortingMethod();
                 (void)settings.Save( Settings::configFileName );
                 sortMapInfos( lists );
                 listUpdated = true;
