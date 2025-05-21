@@ -364,8 +364,15 @@ public:
 
     void SetProgramPath( const char * path );
 
-    SaveFileSortType GetSaveFileSortType() const;
-    void CycleSaveFileSortType();
+    SaveFileSortType GetSaveFileSortType() const
+    {
+        return _saveFileSortType;
+    }
+
+    void CycleSaveFileSortType()
+    {
+        _saveFileSortType = static_cast<SaveFileSortType>( ( static_cast<uint8_t>( _saveFileSortType ) + 1 ) % static_cast<uint8_t>( SaveFileSortType::VALUES_COUNT ) );
+    }
 
     static std::string GetVersion();
 
