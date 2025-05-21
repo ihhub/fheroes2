@@ -529,7 +529,7 @@ std::string Settings::String() const
     os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
     os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# sort game saves when loading: name/date" << std::endl;
+    os << std::endl << "# save files sorting method: name/date" << std::endl;
     os << "save load order = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
 
     return os.str();
