@@ -318,7 +318,7 @@ void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomG
 void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 12 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
