@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 09:02+0000\n"
+"POT-Creation-Date: 2025-05-21 04:50+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -6201,6 +6201,9 @@ msgstr ""
 #, fuzzy
 msgid "Vietnamese"
 msgstr "Zie %{name}"
+
+msgid "Greek"
+msgstr ""
 
 msgid "Slow"
 msgstr ""
