@@ -2244,7 +2244,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Ground obstacles.
     for ( int32_t cellId = 0; cellId < Board::sizeInCells; ++cellId ) {
-        _redrawLowObjects( cellId );
+        _redrawGroundObjects( cellId );
     }
 
     // Castle top wall.
@@ -2399,7 +2399,7 @@ void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-void Battle::Interface::_redrawLowObjects( const int32_t cellId )
+void Battle::Interface::_redrawGroundObjects( const int32_t cellId )
 {
     const Cell * cell = Board::GetCell( cellId );
     if ( cell == nullptr )

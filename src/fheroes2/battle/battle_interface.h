@@ -367,7 +367,7 @@ namespace Battle
         void _redrawCoverStatic();
 
         // Draws cracks and pools that are not higher than the ground level.
-        void _redrawLowObjects( const int32_t cellId );
+        void _redrawGroundObjects( const int32_t cellId );
 
         // Draws trees, rocks, bushes and other objects that are higher than the ground level.
         void _redrawHighObjects( const int32_t cellId );
