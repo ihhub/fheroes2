@@ -252,7 +252,8 @@ namespace
                     // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
                     // account
                     if ( attacker.isAllAdjacentCellsAttack() ) {
-                        assert( iter->second == attackValue );
+                        // Silence the -Wfloat-equal, since the values here should be literally equal
+                        assert( std::make_tuple( iter->second ) == std::make_tuple( attackValue ) );
                     }
                     else if ( enemyUnit->isArchers() ) {
                         iter->second += attackValue;
