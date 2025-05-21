@@ -238,11 +238,6 @@ int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
     return UNKNOWN;
 }
 
-bool Battle::Board::isNearIndexes( const int32_t index1, const int32_t index2 )
-{
-    return index1 != index2 && UNKNOWN != GetDirection( index1, index2 );
-}
-
 int Battle::Board::GetReflectDirection( const int dir )
 {
     switch ( dir ) {
@@ -280,12 +275,14 @@ bool Battle::Board::isValidDirection( const int32_t index, const int dir )
         return false;
     }
 
+    if ( dir == CENTER ) {
+        return true;
+    }
+
     const int32_t x = index % widthInCells;
     const int32_t y = index / widthInCells;
 
     switch ( dir ) {
-    case CENTER:
-        return true;
     case TOP_LEFT:
         return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
     case TOP_RIGHT:
@@ -311,23 +308,21 @@ int32_t Battle::Board::GetIndexDirection( const int32_t index, const int dir )
         return -1;
     }
 
-    const int32_t y = index / widthInCells;
-
     switch ( dir ) {
     case CENTER:
         return index;
     case TOP_LEFT:
-        return index - ( ( y % 2 ) ? widthInCells + 1 : widthInCells );
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells + 1 : widthInCells );
     case TOP_RIGHT:
-        return index - ( ( y % 2 ) ? widthInCells : widthInCells - 1 );
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells - 1 );
     case LEFT:
         return index - 1;
     case RIGHT:
         return index + 1;
     case BOTTOM_LEFT:
-        return index + ( ( y % 2 ) ? widthInCells - 1 : widthInCells );
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells - 1 : widthInCells );
     case BOTTOM_RIGHT:
-        return index + ( ( y % 2 ) ? widthInCells : widthInCells + 1 );
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells + 1 );
     default:
         break;
     }
@@ -344,11 +339,6 @@ int32_t Battle::Board::GetIndexAbsPosition( const fheroes2::Point & pt ) const
             break;
 
     return it != end() ? ( *it ).GetIndex() : -1;
-}
-
-bool Battle::Board::isValidIndex( const int32_t index )
-{
-    return 0 <= index && index < sizeInCells;
 }
 
 bool Battle::Board::isCastleIndex( const int32_t index )
@@ -669,7 +659,23 @@ void Battle::Board::SetCovrObjects( int icn )
     }
 }
 
-Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* = CENTER */ )
+Battle::Cell * Battle::Board::GetCell( const int32_t position )
+{
+    if ( !isValidIndex( position ) ) {
+        return nullptr;
+    }
+
+    Board * board = Arena::GetBoard();
+    assert( board != nullptr );
+
+#ifdef WITH_DEBUG
+    return &board->at( position );
+#else
+    return &board->operator[]( position );
+#endif
+}
+
+Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir )
 {
     if ( !isValidDirection( position, dir ) ) {
         return nullptr;
@@ -681,7 +687,11 @@ Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* 
     const int32_t idx = GetIndexDirection( position, dir );
     assert( isValidIndex( idx ) );
 
+#ifdef WITH_DEBUG
     return &board->at( idx );
+#else
+    return &board->operator[]( idx );
+#endif
 }
 
 Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const bool reflect )
