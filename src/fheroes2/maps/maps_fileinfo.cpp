@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,6 +52,8 @@
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
+#include "ui_font.h"
+#include "ui_language.h"
 
 namespace
 {
@@ -90,6 +92,14 @@ namespace
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
+        // Maps made by the original French version Editor or hacked maps could contain
+        // special ASCII characters that are not supposed to be there.
+        // While reading the original maps we attempt to fix these characters
+        // with an assumption that it might alter the original map maker text but to be true to the original game allowed characters.
+        const bool fixSpecialFrenchCharacters
+            = isOriginalMapFormat
+              && ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French );
+
         for ( const std::string & mapFile : mapFiles ) {
             Maps::FileInfo fi;
 
@@ -122,6 +132,12 @@ namespace
                 if ( humanOnlyColorsCount == humanPlayerCount ) {
                     // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
                     fi.removeHumanColors( fi.AllowCompHumanColors() );
+                }
+
+                // Update French language-specific characters to match CP1252.
+                if ( fixSpecialFrenchCharacters ) {
+                    fheroes2::fixFrenchCharactersForMP2Map( fi.name );
+                    fheroes2::fixFrenchCharactersForMP2Map( fi.description );
                 }
             }
 

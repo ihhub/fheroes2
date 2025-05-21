@@ -456,19 +456,19 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         bool redraw = false;
 
         if ( buttonOk.isEnabled() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
         }
 
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-        if ( le.isMouseLeftButtonPressedInArea( buttonUp.area() ) ) {
+        if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
         }
         else {
             buttonReleaseRestore( buttonUp );
         }
 
-        if ( le.isMouseLeftButtonPressedInArea( buttonDn.area() ) ) {
+        if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
         else {
@@ -476,23 +476,23 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
 
         if ( buttonMax.isEnabled() ) {
-            buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+            buttonMax.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMax.area() ) );
         }
         if ( buttonMin.isEnabled() ) {
-            buttonMin.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMin.area() ) );
+            buttonMin.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMin.area() ) );
         }
 
         bool updateMonsterInfo = false;
 
         if ( showDowngradedMonsterSwitchButtons ) {
-            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchLeft.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( monsterSwitchLeft.area() ) ) {
                 monsterSwitchLeft.drawOnPress();
             }
             else {
                 buttonReleaseRestore( monsterSwitchLeft );
             }
 
-            if ( le.isMouseLeftButtonPressedInArea( monsterSwitchRight.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( monsterSwitchRight.area() ) ) {
                 monsterSwitchRight.drawOnPress();
             }
             else {

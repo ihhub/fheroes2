@@ -763,8 +763,8 @@ namespace Dialog
         LocalEvent & le = LocalEvent::Get();
 
         while ( !_isDoubleClicked && le.HandleEvents() ) {
-            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonOk.area() ) );
-            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonCancel.area() ) );
+            _buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonOk.area() ) );
+            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 return Dialog::OK;
@@ -1046,8 +1046,8 @@ int Dialog::selectHeroType( const int heroType )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return heroColor * 7 + heroRace;
@@ -1302,11 +1302,11 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
-            if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonTown.area() ) ) {
                 buttonTown.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonTown.area() ) ) {
@@ -1319,7 +1319,7 @@ void Dialog::selectTownType( int & type, int & color )
             }
         }
         else {
-            if ( le.isMouseLeftButtonPressedInArea( buttonCastle.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonCastle.area() ) ) {
                 buttonCastle.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonCastle.area() ) ) {
@@ -1435,7 +1435,7 @@ int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
-void Dialog::selectMineType( int32_t & type, int32_t & color )
+int32_t Dialog::selectMineType( const int32_t type )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 380, 395, true, display );
@@ -1445,8 +1445,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     fheroes2::Text text( _( "Mine placing" ), fheroes2::FontType::normalYellow() );
     int32_t offsetY = area.y + 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
-
-    // There can be up to 6 player colors plus none.
 
     // There are 7 resource types (WOOD, MERCURY, ORE, SULFUR, CRYSTAL, GEMS, GOLD) and abandoned mine.
     const uint32_t resourceCount{ 8 };
@@ -1661,18 +1659,16 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         bool needRedraw = listbox.QueueEventProcessing();
 
         if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            type = objectInfoIndexes[listbox.getCurrentId()];
-            color = 0;
-            return;
+            return objectInfoIndexes[listbox.getCurrentId()];
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            return;
+            return type;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
@@ -1720,6 +1716,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
         listbox.Redraw();
         display.render( area );
     }
+
+    return type;
 }
 
 int Dialog::selectMountainType( const int mountainType )

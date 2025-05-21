@@ -42,6 +42,7 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "game_language.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -66,6 +67,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "ui_language.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
@@ -663,6 +665,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: unknown information object of size of " << pblock.size() )
         }
+    }
+
+    // For the original French version we update the language-specific characters
+    // to match CP1252 only if the French language is selected.
+    if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+        fixFrenchCharactersInStrings();
     }
 
     // If this assertion blows up it means that we are not reading the data properly from the file.

@@ -74,6 +74,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world.h"
 
@@ -662,6 +663,11 @@ Troops Castle::getAvailableArmy( Funds potentialBudget ) const
         }
     }
     return reinforcement;
+}
+
+void Castle::fixFrenchCharactersInName()
+{
+    fheroes2::fixFrenchCharactersForMP2Map( _name );
 }
 
 double Castle::getArmyRecruitmentValue() const

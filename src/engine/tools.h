@@ -116,8 +116,6 @@ namespace fheroes2
             if ( from < std::numeric_limits<To>::min() || from > std::numeric_limits<To>::max() ) {
                 return {};
             }
-
-            return static_cast<To>( from );
         }
         // From is signed, To is unsigned
         else if constexpr ( std::is_signed_v<From> ) {
@@ -129,8 +127,6 @@ namespace fheroes2
             if ( unsignedFrom > std::numeric_limits<To>::max() ) {
                 return {};
             }
-
-            return static_cast<To>( from );
         }
         // From is unsigned, To is signed
         else {
@@ -141,16 +137,16 @@ namespace fheroes2
             if ( from > unsignedMaxTo ) {
                 return {};
             }
-
-            return static_cast<To>( from );
         }
+
+        return static_cast<To>( from );
     }
 
     // Performs a checked conversion of a floating-point value of type From to an integer type To. Returns an empty std::optional<To>
     // if the source value does not fit into the target type.
     template <typename To, typename From,
-              std::enable_if_t<std::is_integral_v<To> && std::numeric_limits<To>::radix == 2 && std ::is_floating_point_v<From> && std::numeric_limits<From>::is_iec559
-                                   && std::numeric_limits<From>::radix == 2 && std::numeric_limits<From>::max_exponent >= std::numeric_limits<To>::digits,
+              std::enable_if_t<( std::is_integral_v<To> && std::numeric_limits<To>::radix == 2 && std ::is_floating_point_v<From> && std::numeric_limits<From>::is_iec559
+                                 && std::numeric_limits<From>::radix == 2 && std::numeric_limits<To>::digits < std::numeric_limits<From>::max_exponent ),
                                bool>
               = true>
     std::optional<To> checkedCast( const From from )
@@ -175,8 +171,6 @@ namespace fheroes2
                  || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
                 return {};
             }
-
-            return static_cast<To>( from );
         }
         else {
             // Value of 'from' should be not less than 0 and also it should be less than 2^N, where N is a number of significant bits
@@ -184,8 +178,8 @@ namespace fheroes2
             if ( from < 0 || from >= std::ldexp( static_cast<From>( 1.0 ), std::numeric_limits<To>::digits ) ) {
                 return {};
             }
-
-            return static_cast<To>( from );
         }
+
+        return static_cast<To>( from );
     }
 }
