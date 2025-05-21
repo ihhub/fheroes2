@@ -117,7 +117,7 @@ namespace
         const std::array<const Battle::Cell *, 2> targetCells = { targetPos.GetHead(), targetPos.GetTail() };
 
         std::pair<int32_t, int> bestAttackVector{ -1, Battle::UNKNOWN };
-        double bestAttackValue = 0.0;
+        double bestAttackValue{ 0.0 };
 
         for ( const Battle::Cell * attackCell : attackCells ) {
             if ( attackCell == nullptr ) {
