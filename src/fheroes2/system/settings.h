@@ -371,7 +371,12 @@ public:
 
     void CycleSaveFileSortType()
     {
-        _saveFileSortType = static_cast<SaveFileSortType>( ( static_cast<uint8_t>( _saveFileSortType ) + 1 ) % static_cast<uint8_t>( SaveFileSortType::VALUES_COUNT ) );
+        if ( _saveFileSortType == SaveFileSortType::FILENAME ) {
+            _saveFileSortType = SaveFileSortType::LATEST;
+        }
+        else {
+            _saveFileSortType = SaveFileSortType::FILENAME;
+        }
     }
 
     static std::string GetVersion();
