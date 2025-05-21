@@ -76,7 +76,7 @@ enum class InterfaceType : uint8_t
 enum class SaveFileSortType : uint8_t
 {
     FILENAME = 0,
-    LATEST = 1,
+    TIMESTAMP = 1,
 
     VALUES_COUNT = 2,
 };
@@ -372,7 +372,7 @@ public:
     void CycleSaveFileSortType()
     {
         if ( _saveFileSortType == SaveFileSortType::FILENAME ) {
-            _saveFileSortType = SaveFileSortType::LATEST;
+            _saveFileSortType = SaveFileSortType::TIMESTAMP;
         }
         else {
             _saveFileSortType = SaveFileSortType::FILENAME;
