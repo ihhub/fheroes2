@@ -486,7 +486,7 @@ namespace
                 const int currentId = listbox.getCurrentId();
 
                 settings.changeSaveFileSortingMethod();
-                (void)settings.Save( Settings::configFileName );
+                settings.Save( Settings::configFileName );
                 sortMapInfos( lists );
                 listUpdated = true;
 
