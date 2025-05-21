@@ -1228,14 +1228,12 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    if ( conf.isCampaignGameType() ) {
-        if ( Campaign::getCurrentScenarioVictoryCondition() == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            if ( kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) ) {
-                return GameOver::WINS_SIDE;
-            }
-
-            return GameOver::COND_NONE;
+    if ( conf.isCampaignGameType() && Campaign::getCurrentScenarioVictoryCondition() == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+        if ( kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) ) {
+            return GameOver::WINS_SIDE;
         }
+
+        return GameOver::COND_NONE;
     }
 
     const std::array<uint32_t, 6> victoryConditions
@@ -1284,17 +1282,15 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    if ( conf.isCampaignGameType() ) {
-        if ( Campaign::getCurrentScenarioLossCondition() == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-            const VecCastles & castles = kingdom.GetCastles();
+    if ( conf.isCampaignGameType() && Campaign::getCurrentScenarioLossCondition() == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+        const VecCastles & castles = kingdom.GetCastles();
 
-            if ( std::none_of( castles.begin(), castles.end(), []( const Castle * castle ) {
-                     assert( castle != nullptr );
+        if ( std::none_of( castles.begin(), castles.end(), []( const Castle * castle ) {
+                 assert( castle != nullptr );
 
-                     return !castle->isCastle() && castle->GetRace() == Race::SORC;
-                 } ) ) {
-                return GameOver::LOSS_ALL;
-            }
+                 return !castle->isCastle() && castle->GetRace() == Race::SORC;
+             } ) ) {
+            return GameOver::LOSS_ALL;
         }
     }
 
@@ -1451,7 +1447,7 @@ void World::fixFrenchCharactersInStrings()
         fheroes2::fixFrenchCharactersForMP2Map( event.message );
     }
 
-    for ( auto & tile : vec_tiles ) {
+    for ( const auto & tile : vec_tiles ) {
         switch ( tile.getMainObjectType() ) {
         case MP2::OBJ_SIGN:
         case MP2::OBJ_BOTTLE: {
