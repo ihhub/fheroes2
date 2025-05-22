@@ -1,0 +1,144 @@
+#include "game_cheats.h"
+
+#include <SDL2/SDL.h>
+#include "logging.h"
+#include "settings.h"
+#include "world.h"
+#include "kingdom.h"
+#include "resource.h"
+#include "game_interface.h"
+#include "heroes.h"
+#include "castle.h"
+#include "monster.h"
+#include "spell.h"
+#include "spell_storage.h"
+#include "game_over.h"
+
+namespace GameCheats
+{
+    namespace
+    {
+        std::string buffer;
+        bool enabled = false;
+
+        const size_t MAX_BUFFER = 32;
+
+        void checkBuffer()
+        {
+            const Settings & conf = Settings::Get();
+            if ( buffer.find( "99999" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: reveal map" );
+                World::Get().ClearFog( conf.CurrentColor() );
+                buffer.clear();
+            }
+            else if ( buffer.find( "10000" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: resources" );
+                Kingdom & kingdom = World::Get().GetKingdom( conf.CurrentColor() );
+                kingdom.AddFundsResource( Funds( 0, 0, 0, 0, 0, 0, 10000 ) );
+                kingdom.AddFundsResource( Funds( Resource::WOOD, 999 ) );
+                kingdom.AddFundsResource( Funds( Resource::ORE, 999 ) );
+                kingdom.AddFundsResource( Funds( Resource::MERCURY, 999 ) );
+                kingdom.AddFundsResource( Funds( Resource::SULFUR, 999 ) );
+                kingdom.AddFundsResource( Funds( Resource::CRYSTAL, 999 ) );
+                kingdom.AddFundsResource( Funds( Resource::GEMS, 999 ) );
+                buffer.clear();
+            }
+            else if ( buffer.find( "32167" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: black dragons" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    hero->GetArmy().JoinTroop( Monster::BLACK_DRAGON, 5, true );
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "1234" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: max primary skills" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    hero->setAttackBaseValue( 20 );
+                    hero->setDefenseBaseValue( 20 );
+                    hero->setPowerBaseValue( 20 );
+                    hero->setKnowledgeBaseValue( 20 );
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "654321" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: max secondary skills" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    for ( int skill = 1; skill <= Skill::Secondary::ESTATES; ++skill ) {
+                        hero->LearnSkill( Skill::Secondary( skill, Skill::Level::EXPERT ) );
+                    }
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "11111" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: infinite movement" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    hero->IncreaseMovePoints( hero->GetMaxMovePoints() * 10 );
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "77777" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: all spells" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    SpellStorage storage;
+                    for ( int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+                        storage.Append( Spell( spellId ) );
+                    }
+                    hero->AppendSpellsToBook( storage, true );
+                    hero->SetSpellPoints( hero->GetMaxSpellPoints() );
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "42424" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: build all" );
+                if ( Castle * castle = Interface::GetFocusCastle() ) {
+                    for ( uint32_t build = 0x00000001; build; build <<= 1 ) {
+                        castle->BuyBuilding( build );
+                    }
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "88888" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: instant win" );
+                GameOver::Result::Get().SetResult( GameOver::WINS_ALL );
+                GameOver::Result::Get().checkGameOver();
+                buffer.clear();
+            }
+        }
+    }
+
+    void enableCheats( bool enable )
+    {
+        enabled = enable;
+        if ( !enable )
+            buffer.clear();
+    }
+
+    bool cheatsEnabled()
+    {
+        return enabled;
+    }
+
+    void reset()
+    {
+        buffer.clear();
+    }
+
+    void onKeyPressed( const fheroes2::Key key, const int32_t modifier )
+    {
+        if ( !enabled || SDL_IsTextInputActive() )
+            return;
+
+        std::string tmp;
+        size_t pos = 0;
+        pos = fheroes2::InsertKeySym( tmp, pos, key, modifier );
+        if ( pos == 0 || tmp.empty() )
+            return;
+
+        buffer += tmp;
+        if ( buffer.size() > MAX_BUFFER )
+            buffer.erase( 0, buffer.size() - MAX_BUFFER );
+
+        checkBuffer();
+    }
+}
+

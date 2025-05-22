@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "game_hotkeys.h"
+#include "game_cheats.h"
 
 #include <algorithm>
 #include <array>
@@ -490,6 +491,10 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 {
     if ( ( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT ) || ( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
         return;
+    }
+
+    if ( Settings::Get().areCheatsEnabled() ) {
+        GameCheats::onKeyPressed( key, modifier );
     }
 
     Settings & conf = Settings::Get();
