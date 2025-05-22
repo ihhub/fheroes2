@@ -230,7 +230,7 @@ namespace
 
     void sortMapInfos( MapsFileInfoList & mapInfos )
     {
-        const SaveFileSortingMethod sortType = Settings::Get().GetSaveFileSortType();
+        const SaveFileSortingMethod sortType = Settings::Get().GetSaveFileSortingMethod();
         if ( sortType == SaveFileSortingMethod::FILENAME ) {
             std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
         }
