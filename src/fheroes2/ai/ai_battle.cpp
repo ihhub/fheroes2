@@ -73,8 +73,8 @@ namespace
     struct MeleeAttackOutcome
     {
         int32_t fromIndex{ -1 };
-        double attackValue{ DBL_MIN };
-        double positionValue{ DBL_MIN };
+        double attackValue{ std::numeric_limits<double>::lowest() };
+        double positionValue{ std::numeric_limits<double>::lowest() };
         bool canAttackImmediately{ false };
     };
 
@@ -1430,7 +1430,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     // Archers are able to shoot
     else {
         BattleTargetPair target;
-        double highestPriority = DBL_MIN;
+        double highestPriority = std::numeric_limits<double>::lowest();
 
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
@@ -1546,7 +1546,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
     // 2. For units that don't have a target within reach, choose a target depending on distance-based priority
     {
         const auto chooseDistantTarget = [this, &arena, &currentUnit, &target, &enemies]( const auto enemyPredicate ) {
-            double maxPriority = DBL_MIN;
+            double maxPriority = std::numeric_limits<double>::lowest();
 
             for ( const Battle::Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
@@ -1710,7 +1710,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
         // covered.
         const double defenseDistanceModifier = _myRangedUnitsOnly / 15.0;
 
-        double bestArcherValue = DBL_MIN;
+        double bestArcherValue = std::numeric_limits<double>::lowest();
 
         for ( const Battle::Unit * frnd : friendly ) {
             assert( frnd != nullptr );
