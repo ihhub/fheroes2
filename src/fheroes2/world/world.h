@@ -383,7 +383,7 @@ public:
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color ) const;
-    void RevealMap( int color ) const;
+    void RevealMap( int color );
 
     bool KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const;
     bool KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const;
