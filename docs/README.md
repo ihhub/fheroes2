@@ -94,12 +94,13 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 
 ### Cheats
 
-Cheat support can be enabled by setting `cheats = on` in `fheroes2.cfg`.
-When active, type the following words during gameplay:
 
-* **showmap** – reveal the entire world map.
-* **resources** – gain a large amount of all resources.
-* **blackdragon** – add a stack of Black Dragons to the focused hero.
+Cheat support can be enabled by setting `cheats = on` in `fheroes2.cfg` or by toggling developer mode.
+When active, type the following numeric codes during gameplay:
+
+* **12345** – reveal the entire world map.
+* **67890** – gain a large amount of all resources.
+* **32167** – add two Black Dragons to the focused hero.
 
 ## Frequently Asked Questions (FAQ)
 

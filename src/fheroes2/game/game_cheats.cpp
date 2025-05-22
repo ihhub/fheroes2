@@ -8,6 +8,7 @@
 #include "resource.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "army.h"
 #include "monster.h"
 
 namespace GameCheats
@@ -19,14 +20,18 @@ namespace GameCheats
 
         const size_t MAX_BUFFER = 32;
 
+        constexpr const char * CHEAT_SHOWMAP = "12345";
+        constexpr const char * CHEAT_RESOURCES = "67890";
+        constexpr const char * CHEAT_BLACKDRAGON = "32167";
+
         void checkBuffer()
         {
-            if ( buffer.find( "showmap" ) != std::string::npos ) {
+            if ( buffer.find( CHEAT_SHOWMAP ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: showmap" );
                 World::Get().ClearFog( Settings::Get().CurrentColor() );
                 buffer.clear();
             }
-            else if ( buffer.find( "resources" ) != std::string::npos ) {
+            else if ( buffer.find( CHEAT_RESOURCES ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: resources" );
                 Kingdom & kingdom = World::Get().GetKingdom( Settings::Get().CurrentColor() );
                 kingdom.AddFundsResource( Funds( 0, 0, 0, 0, 0, 0, 10000 ) );
@@ -38,10 +43,10 @@ namespace GameCheats
                 kingdom.AddFundsResource( Funds( Resource::GEMS, 999 ) );
                 buffer.clear();
             }
-            else if ( buffer.find( "blackdragon" ) != std::string::npos ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: blackdragon" );
+            else if ( buffer.find( CHEAT_BLACKDRAGON ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: black dragons" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
-                    hero->GetArmy().JoinTroop( Monster::BLACK_DRAGON, 5, false );
+                    hero->GetArmy().JoinTroop( Monster::BLACK_DRAGON, 2, false );
                 }
                 buffer.clear();
             }
