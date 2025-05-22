@@ -6298,12 +6298,18 @@ namespace fheroes2
             return;
         }
 
+        // $ (dollar sign). Fix position.
+        icnVsSprite[36 - 32].setPosition( 0, 1 );
+
         // Remove white line from % symbol
         FillTransform( icnVsSprite[37 - 32], 5, 0, 5, 1, 1 );
         FillTransform( icnVsSprite[37 - 32], 6, 2, 2, 1, 1 );
         updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
 
-        // * (asterisk) is present in SW assets, but replaced with dot in PoL assets. Restore it.
+        // & (ampersand). Fix position.
+        icnVsSprite[36 - 32].setPosition( 0, 1 );
+
+        // * (asterisk) is present in SW assets, but replaced with dot in English PoL assets. Restore it.
         icnVsSprite[42 - 32].resize( 12, 15 );
         icnVsSprite[42 - 32].reset();
         icnVsSprite[42 - 32].setPosition( 0, 0 );
@@ -6370,13 +6376,11 @@ namespace fheroes2
         Copy( icnVsSprite[91 - 32], 0, icnVsSprite[91 - 32].height() - 7, icnVsSprite[124 - 32], 0, icnVsSprite[91 - 32].height() - 4, 3, 7 );
         icnVsSprite[124 - 32].setPosition( icnVsSprite[91 - 32].x(), icnVsSprite[91 - 32].y() );
 
+        // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
         if ( getResourceLanguage() == SupportedLanguage::French ) {
-            // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
-
             // $ (dollar sign).
             icnVsSprite[36 - 32].resize( 9, 12 );
             icnVsSprite[36 - 32].reset();
-            icnVsSprite[36 - 32].setPosition( 0, 0 );
             SetPixel( icnVsSprite[36 - 32], 3, 0, 23 );
             SetPixel( icnVsSprite[36 - 32], 4, 0, 18 );
             SetPixel( icnVsSprite[36 - 32], 5, 0, 12 );
@@ -6414,7 +6418,6 @@ namespace fheroes2
             // & (ampersand).
             icnVsSprite[38 - 32].resize( 11, 12 );
             icnVsSprite[38 - 32].reset();
-            icnVsSprite[38 - 32].setPosition( 0, 0 );
             SetPixel( icnVsSprite[38 - 32], 1, 0, 25 );
             SetPixel( icnVsSprite[38 - 32], 2, 0, 18 );
             DrawLine( icnVsSprite[38 - 32], { 3, 0 }, { 5, 0 }, 12 );
@@ -6489,31 +6492,103 @@ namespace fheroes2
             return;
         }
 
+        // $ (dollar sign). Fix position.
+        icnVsSprite[36 - 32].setPosition( 0, -1 );
+
         // Remove white line from % symbol
-        FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
-        FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
-        updateNormalFontLetterShadow( icnVsSprite[5] );
+        FillTransform( icnVsSprite[37 - 32], 3, 0, 4, 1, 1 );
+        FillTransform( icnVsSprite[37 - 32], 4, 1, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
+
+        // * (asterisk) is present in SW assets, but replaced with dot in PoL assets. Restore it.
+        icnVsSprite[42 - 32].resize( 6, 8 );
+        icnVsSprite[42 - 32].reset();
+        icnVsSprite[42 - 32].setPosition( 0, 0 );
+        DrawLine( icnVsSprite[42 - 32], { 3, 0 }, { 3, 6 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 1, 1 }, { 5, 5 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 5, 1 }, { 1, 5 }, 10 );
+        updateSmallFontLetterShadow( icnVsSprite[42 - 32] );
 
         // Add the '\' character.
-        icnVsSprite[60].resize( 5, 9 );
-        icnVsSprite[60].reset();
-        Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 1, 0, 1, 2 );
-        Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 2, 2, 1, 2 );
-        Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 3, 4, 1, 2 );
-        Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 4, 6, 1, 2 );
-        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
-        updateSmallFontLetterShadow( icnVsSprite[60] );
+        icnVsSprite[92 - 32].resize( 5, 9 );
+        icnVsSprite[92 - 32].reset();
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 1, 0, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 2, 2, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 3, 4, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 4, 6, 1, 2 );
+        icnVsSprite[92 - 32].setPosition( icnVsSprite[47 - 32].x(), icnVsSprite[47 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[92 - 32] );
 
         // Proper lowercase k.
-        icnVsSprite[75].resize( 6, 8 );
-        icnVsSprite[75].reset();
-        Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 0, 2, 7 );
-        Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 6, 1, 1 );
-        Copy( icnVsSprite[56], 6, 0, icnVsSprite[75], 3, 2, 3, 3 );
-        Copy( icnVsSprite[65], 2, icnVsSprite[65].height() - 2, icnVsSprite[75], 5, 6, 2, 1 );
-        Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
-        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
-        updateSmallFontLetterShadow( icnVsSprite[75] );
+        icnVsSprite[107 - 32].resize( 6, 8 );
+        icnVsSprite[107 - 32].reset();
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 0, 2, 7 );
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 6, 1, 1 );
+        Copy( icnVsSprite[88 - 32], 6, 0, icnVsSprite[107 - 32], 3, 2, 3, 3 );
+        Copy( icnVsSprite[97 - 32], 2, icnVsSprite[97 - 32].height() - 2, icnVsSprite[107 - 32], 5, 6, 2, 1 );
+        Copy( icnVsSprite[97 - 32], 2, 0, icnVsSprite[107 - 32], 4, 5, 1, 1 );
+        icnVsSprite[107 - 32].setPosition( icnVsSprite[107 - 32].x(), icnVsSprite[107 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[107 - 32] );
+
+        // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
+        if ( getResourceLanguage() == SupportedLanguage::French ) {
+            // $ (dollar sign).
+            icnVsSprite[36 - 32].resize( 6, 10 );
+            icnVsSprite[36 - 32].reset();
+            DrawLine( icnVsSprite[36 - 32], { 3, 0 }, { 3, 8 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 1, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 1, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 1, 2 }, { 1, 3 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 5, 2, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 4, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 5, 5 }, { 5, 6 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 1, 6, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 7, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 7, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[36 - 32] );
+
+            // & (ampersand).
+            icnVsSprite[38 - 32].resize( 7, 8 );
+            icnVsSprite[38 - 32].reset();
+            icnVsSprite[38 - 32].setPosition( 0, 0 );
+            SetPixel( icnVsSprite[38 - 32], 3, 0, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 1 }, { 2, 2 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 4, 1 }, { 4, 2 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 3, 3, 10 );
+            SetPixel( icnVsSprite[38 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 4, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 1, 5, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 5, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 6 }, { 4, 6 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 6, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[38 - 32] );
+
+            // Put dots instead of the other replaced ASCII characters like it is done in the original English assets.
+            // TODO: make ASCII character's sprites for the printable characters instead dots for all languages.
+            const Sprite & dotSptite = icnVsSprite[46 - 32];
+            // # (number sign).
+            icnVsSprite[35 - 32] = dotSptite;
+            // < (less than).
+            icnVsSprite[60 - 32] = dotSptite;
+            // > (greater than).
+            icnVsSprite[62 - 32] = dotSptite;
+            // @ (at sign).
+            icnVsSprite[64 - 32] = dotSptite;
+            // ^ (caret - circumflex).
+            icnVsSprite[94 - 32] = dotSptite;
+            // ` (grave accent).
+            icnVsSprite[96 - 32] = dotSptite;
+            // { (opening brace).
+            icnVsSprite[123 - 32] = dotSptite;
+            // } (closing brace).
+            icnVsSprite[125 - 32] = dotSptite;
+            // ~ (tilde).
+            icnVsSprite[126 - 32] = dotSptite;
+            // DEL (delete).
+            icnVsSprite[127 - 32] = dotSptite;
+        }
     }
 
     void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor )
