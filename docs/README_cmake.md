@@ -60,6 +60,23 @@ cmake --build build --config Release
 
 After building, executable can be found in `build\Release` directory.
 
+## Windows / Visual Studio Code
+
+Visual Studio Code can be used instead of the full Visual Studio IDE to build
+the project on Windows 11. Install the **CMake Tools** extension and follow the
+steps below:
+
+1. Install the dependencies using [vcpkg](https://vcpkg.readthedocs.io/en/latest/)
+   as described in the section above.
+2. Open the `fheroes2` folder in Visual Studio Code.
+3. Press `Ctrl+Shift+P` and run **CMake: Configure**. When prompted, provide
+   `-DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake` and
+   `-DVCPKG_TARGET_TRIPLET=x64-windows` as configure arguments.
+4. After configuration run **CMake: Build** to compile the project.
+
+The resulting executable will be placed in the selected build configuration
+inside the `build` directory.
+
 ## Using Demo Data
 
 CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
