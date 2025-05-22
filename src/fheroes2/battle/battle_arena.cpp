@@ -25,9 +25,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cfloat>
 #include <cstddef>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <numeric>
 #include <ostream>
