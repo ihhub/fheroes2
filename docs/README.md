@@ -100,7 +100,8 @@ When active, type one of the following numeric codes during gameplay:
 * **99999** – reveal the entire world map
 * **10000** – gain a large amount of all resources
 * **32167** – add five Black Dragons to the focused hero
-* **24680** – fill the focused hero's army with upgraded units from their faction (levels 2–6)
+* **24680** – replace the focused hero's army with upgraded units from tiers 2–6 of their faction
+* **13579** – add five of a randomly selected unit to the focused hero
 * **1234** – max out the focused hero's primary skills
 * **654321** – learn every secondary skill at expert level
 * **11111** – give the focused hero unlimited movement points for the turn

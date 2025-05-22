@@ -25,6 +25,7 @@
 #include "game_interface.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "army_troop.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "monster.h"
@@ -75,11 +76,37 @@ namespace GameCheats
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     const int race = hero->GetRace();
                     const uint32_t dwellings[] = { DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE7 };
+
+                    Army & army = hero->GetArmy();
+                    for ( size_t i = 0; i < Army::maximumTroopCount; ++i ) {
+                        Troop * troop = army.GetTroop( i );
+                        if ( troop && troop->isValid() ) {
+                            bool keep = false;
+                            for ( const uint32_t dw : dwellings ) {
+                                const Monster m( race, dw );
+                                if ( troop->isMonster( m.GetID() ) ) {
+                                    keep = true;
+                                    break;
+                                }
+                            }
+                            if ( !keep )
+                                troop->Reset();
+                        }
+                    }
+
                     for ( const uint32_t dw : dwellings ) {
                         const Monster monster( race, dw );
                         if ( monster.isValid() )
-                            hero->GetArmy().JoinTroop( monster, 5, true );
+                            army.JoinTroop( monster, 5, true );
                     }
+                }
+                buffer.clear();
+            }
+            else if ( buffer.find( "13579" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: random troop" );
+                if ( Heroes * hero = Interface::GetFocusHeroes() ) {
+                    const Monster monster = Monster::Rand( Monster::LevelType::LEVEL_ANY );
+                    hero->GetArmy().JoinTroop( monster, 5, true );
                 }
                 buffer.clear();
             }
