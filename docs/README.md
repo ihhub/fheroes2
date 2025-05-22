@@ -94,6 +94,7 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 
 ### Cheats
 
+
 Cheat support can be enabled by setting `cheats = on` in `fheroes2.cfg` or by toggling developer mode.
 When active, type the following numeric codes during gameplay:
 
