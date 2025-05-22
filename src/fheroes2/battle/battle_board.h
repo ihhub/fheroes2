@@ -79,10 +79,19 @@ namespace Battle
 
         static std::string GetMoatInfo();
 
-        static Cell * GetCell( const int32_t position, const int dir = CENTER );
+        static Cell * GetCell( const int32_t position );
+        static Cell * GetCell( const int32_t position, const int dir );
 
-        static bool isNearIndexes( const int32_t index1, const int32_t index2 );
-        static bool isValidIndex( const int32_t index );
+        static bool isNearIndexes( const int32_t index1, const int32_t index2 )
+        {
+            return ( index1 != index2 ) && ( GetDirection( index1, index2 ) != UNKNOWN );
+        }
+
+        static bool isValidIndex( const int32_t index )
+        {
+            return ( index >= 0 ) && ( index < sizeInCells );
+        }
+
         // Returns true if the given index is considered to be inside the castle from the point of view of castle defense,
         // otherwise returns false. Indexes of destructible walls are considered to be located inside the castle.
         static bool isCastleIndex( const int32_t index );
