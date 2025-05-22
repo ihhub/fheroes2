@@ -25,6 +25,7 @@ add_compile_options("$<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,GNU>:${GNU_CXX
 add_compile_options("$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:${MSVC_CC_WARN_OPTS}>")
 
 add_library(engine STATIC ${LIBENGINE_SOURCES})
+set_target_properties(engine PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_definitions(
 	engine

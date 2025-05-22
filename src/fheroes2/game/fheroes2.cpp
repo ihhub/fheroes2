@@ -275,7 +275,9 @@ namespace
     }
 }
 
-int main( int argc, char ** argv )
+#include "main_lib.h"
+
+int fheroes2_main( int argc, char ** argv )
 {
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
 #if defined( _WIN32 )
@@ -379,4 +381,9 @@ int main( int argc, char ** argv )
     }
 
     return EXIT_SUCCESS;
+}
+
+int main( int argc, char ** argv )
+{
+    return fheroes2_main( argc, argv );
 }
