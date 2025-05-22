@@ -98,6 +98,7 @@ Cheat support can be enabled by setting `cheats = on` in `fheroes2.cfg` or by to
 When active, type one of the following numeric codes during gameplay:
 
 * **99999** – reveal the entire world map
+* **55555** – clear fog across the entire map
 * **10000** – gain a large amount of all resources
 * **32167** – add five Black Dragons to the focused hero
 * **24680** – replace the focused hero's army with upgraded units from tiers 2–6 of their faction
