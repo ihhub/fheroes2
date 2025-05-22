@@ -955,7 +955,7 @@ void World::ClearFog( int colors ) const
     map_captureobj.ClearFog( colors );
 }
 
-void World::RevealMap( int colors ) const
+void World::RevealMap( int colors )
 {
     colors = Players::GetPlayerFriends( colors );
 
