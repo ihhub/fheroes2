@@ -34,6 +34,7 @@
 #include "spell.h"
 #include "spell_storage.h"
 #include "world.h"
+#include "interface_gamearea.h"
 
 namespace GameCheats
 {
@@ -50,6 +51,12 @@ namespace GameCheats
             if ( buffer.find( "99999" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: reveal map" );
                 World::Get().ClearFog( conf.CurrentColor() );
+                buffer.clear();
+            }
+            else if ( buffer.find( "55555" ) != std::string::npos ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: reveal all fog" );
+                World::Get().RevealMap( conf.CurrentColor() );
+                Interface::GameArea::updateMapFogDirections();
                 buffer.clear();
             }
             else if ( buffer.find( "10000" ) != std::string::npos ) {
