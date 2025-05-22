@@ -318,6 +318,7 @@ namespace
 
         Settings & settings = Settings::Get();
         const bool isEvilInterface = settings.isEvilInterfaceEnabled();
+        const SaveFileSortingMethod fileSortingMethod = settings.GetSaveFileSortingMethod();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -432,7 +433,7 @@ namespace
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                return {};
+                break;
             }
 
             const int listId = listbox.getCurrentId();
@@ -486,7 +487,6 @@ namespace
                 const int currentId = listbox.getCurrentId();
 
                 settings.changeSaveFileSortingMethod();
-                settings.Save( Settings::configFileName );
                 sortMapInfos( lists );
                 listUpdated = true;
 
@@ -620,6 +620,12 @@ namespace
             else {
                 display.render( textInputAndDateROI );
             }
+        }
+
+        const SaveFileSortingMethod lastFileSortingMethod = settings.GetSaveFileSortingMethod();
+
+        if ( lastFileSortingMethod != fileSortingMethod ) {
+            settings.Save( Settings::configFileName );
         }
 
         return result;
