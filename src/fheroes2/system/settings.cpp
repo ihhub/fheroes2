@@ -80,7 +80,8 @@ namespace
         GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        GAME_CHEATS = 0x40000000
     };
 
     enum EditorOptions : uint32_t
@@ -328,6 +329,10 @@ bool Settings::Read( const std::string & filePath )
         setSystemInfo( config.StrParams( "system info" ) == "on" );
     }
 
+    if ( config.Exists( "cheats" ) ) {
+        setCheatsEnabled( config.StrParams( "cheats" ) == "on" );
+    }
+
     if ( config.Exists( "auto save at the beginning of the turn" ) ) {
         setAutoSaveAtBeginningOfTurn( config.StrParams( "auto save at the beginning of the turn" ) == "on" );
     }
@@ -503,6 +508,9 @@ std::string Settings::String() const
 
     os << std::endl << "# display system information: on/off" << std::endl;
     os << "system info = " << ( _gameOptions.Modes( GAME_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable cheat codes input: on/off" << std::endl;
+    os << "cheats = " << ( _gameOptions.Modes( GAME_CHEATS ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
@@ -779,6 +787,16 @@ void Settings::setTextSupportMode( const bool enable )
     }
 }
 
+void Settings::setCheatsEnabled( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_CHEATS );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_CHEATS );
+    }
+}
+
 void Settings::set3DAudio( const bool enable )
 {
     if ( enable ) {
@@ -873,6 +891,11 @@ bool Settings::isMonochromeCursorEnabled() const
 bool Settings::isTextSupportModeEnabled() const
 {
     return _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE );
+}
+
+bool Settings::areCheatsEnabled() const
+{
+    return _gameOptions.Modes( GAME_CHEATS );
 }
 
 bool Settings::is3DAudioEnabled() const
