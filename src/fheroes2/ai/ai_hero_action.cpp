@@ -43,6 +43,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
@@ -237,6 +238,37 @@ namespace
         }
 
         return true;
+    }
+
+    void castGuardianSpellOnCapturedObject( Heroes & hero )
+    {
+        if ( !hero.HaveSpellBook() ) {
+            // The hero doesn't have a spell book.
+            return;
+        }
+
+        const MP2::MapObjectType objectType = hero.getObjectTypeUnderHero();
+        assert( world.getTile( hero.GetIndex() ).getMainObjectType( false ) == objectType );
+
+        // Guardian spells can only be cast on mines.
+        if ( objectType != MP2::OBJ_MINE ) {
+            return;
+        }
+
+        std::vector<Spell> spells = { Spell::SETAGUARDIAN, Spell::SETEGUARDIAN, Spell::SETFGUARDIAN, Spell::SETWGUARDIAN };
+        // Shuffle spells as all of them seem to be equal in power.
+        Rand::Shuffle( spells );
+
+        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+
+        for ( const Spell spell : spells ) {
+            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
+                // Looks like this hero knows the spell and casting it won't take too many spell points.
+                // So, let's do it!
+                hero.ActionSpellCast( spell );
+                return;
+            }
+        }
     }
 
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
@@ -770,7 +802,7 @@ namespace
 
                 setColorOnTile( tile, hero.GetColor() );
 
-                AI::Planner::castAdventureSpellOnCapturedObject( hero );
+                castGuardianSpellOnCapturedObject( hero );
             };
 
             if ( isCaptureObjectProtected( tile ) ) {
@@ -1613,7 +1645,7 @@ namespace
             hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
             setColorOnTile( tile, hero.GetColor() );
 
-            AI::Planner::castAdventureSpellOnCapturedObject( hero );
+            castGuardianSpellOnCapturedObject( hero );
         }
         else {
             AIBattleLose( hero, result, true );
