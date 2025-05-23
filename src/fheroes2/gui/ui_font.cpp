@@ -6307,7 +6307,7 @@ namespace fheroes2
         updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
 
         // & (ampersand). Fix position.
-        icnVsSprite[36 - 32].setPosition( 0, 1 );
+        icnVsSprite[38 - 32].setPosition( 0, 1 );
 
         // Move "-" further down
         icnVsSprite[45 - 32].setPosition( icnVsSprite[45 - 32].x(), icnVsSprite[45 - 32].y() + 1 );
