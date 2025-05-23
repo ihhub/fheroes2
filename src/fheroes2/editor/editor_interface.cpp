@@ -1059,7 +1059,7 @@ namespace Interface
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
-                        Maps::setTerrainOnTiles( _areaSelectionStartTileId, _tileUnderCursor, groundId );
+                        Maps::setTerrainOnTiles( _mapFormat, _areaSelectionStartTileId, _tileUnderCursor, groundId );
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
@@ -1624,13 +1624,13 @@ namespace Interface
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
-                Maps::setTerrainOnTiles( indices.x, indices.y, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, indices.x, indices.y, groundId );
             }
             else {
                 assert( brushSize.width == 0 );
 
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, tileIndex, tileIndex, groundId );
 
                 _areaSelectionStartTileId = -1;
             }

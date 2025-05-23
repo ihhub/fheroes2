@@ -40,24 +40,14 @@ namespace
     public:
         explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
             : _mapFormat( mapFormat )
+            , _beforeMapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-            }
-
-            _beforeMapFormat = _mapFormat;
+            // Do nothing.
         }
 
         bool prepare()
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-                return false;
-            }
-
             _afterMapFormat = _mapFormat;
 
             _latestObjectUIDAfter = Maps::getLastObjectUID();
