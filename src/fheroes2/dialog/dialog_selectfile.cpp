@@ -573,6 +573,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date." ), Dialog::ZERO );
             }
 
+            // TODO: ListBox::SetCurrent() call should update needRedraw variable as it changes the internal UI view of the class.
             const bool needRedrawListbox = listUpdated || listbox.IsNeedRedraw();
 
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
