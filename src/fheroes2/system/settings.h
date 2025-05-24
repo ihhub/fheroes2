@@ -196,6 +196,7 @@ public:
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
+    bool isArmyEstimationViewNumeric() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -269,6 +270,7 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
+    void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
