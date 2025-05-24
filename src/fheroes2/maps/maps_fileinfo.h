@@ -145,6 +145,11 @@ namespace Maps
         static bool sortByFileName( const FileInfo & lhs, const FileInfo & rhs );
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
+        static bool sortByTimestamp( const FileInfo & lhs, const FileInfo & rhs )
+        {
+            // we want the latest timestamp first
+            return lhs.timestamp > rhs.timestamp;
+        }
 
         // Only Resurrection Maps contain supported language.
         std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
