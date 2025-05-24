@@ -49,7 +49,7 @@ namespace GameCheats
         {
             const Settings & conf = Settings::Get();
 
-            if ( buffer.find( "19960214" ) != std::string::npos ) {
+            if ( buffer.find( "318798" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: resources" );
                 Kingdom & kingdom = World::Get().GetKingdom( conf.CurrentColor() );
                 kingdom.AddFundsResource( Funds( 0, 0, 0, 0, 0, 0, 999999 ) );
@@ -115,13 +115,13 @@ namespace GameCheats
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "12345" ) != std::string::npos ) {
+            else if ( buffer.find( "123456" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: max primary skills" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
-                    hero->setAttackBaseValue( 20 );
-                    hero->setDefenseBaseValue( 20 );
-                    hero->setPowerBaseValue( 20 );
-                    hero->setKnowledgeBaseValue( 20 );
+                    hero->setAttackBaseValue( 99 );
+                    hero->setDefenseBaseValue( 99 );
+                    hero->setPowerBaseValue( 99 );
+                    hero->setKnowledgeBaseValue( 99 );
                 }
                 buffer.clear();
             }
