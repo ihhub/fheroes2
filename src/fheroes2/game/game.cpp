@@ -38,6 +38,7 @@
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "cursor.h"
+#include "game_cheats.h"
 #include "difficulty.h"
 #include "game_credits.h"
 #include "game_hotkeys.h"
@@ -195,6 +196,8 @@ void Game::Init()
     LocalEvent & eventHandler = LocalEvent::Get();
     eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
+
+    GameCheats::enableCheats( Settings::Get().areCheatsEnabled() );
 
     AnimateDelaysInitialize();
 

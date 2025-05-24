@@ -191,6 +191,7 @@ public:
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
+    bool areCheatsEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
@@ -263,6 +264,7 @@ public:
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
+    void setCheatsEnabled( const bool enable );
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );

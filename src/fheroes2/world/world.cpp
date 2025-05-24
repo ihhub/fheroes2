@@ -955,6 +955,15 @@ void World::ClearFog( int colors ) const
     map_captureobj.ClearFog( colors );
 }
 
+void World::RevealMap( int colors )
+{
+    colors = Players::GetPlayerFriends( colors );
+
+    for ( Maps::Tile & tile : vec_tiles ) {
+        tile.ClearFog( colors );
+    }
+}
+
 const UltimateArtifact & World::GetUltimateArtifact() const
 {
     return ultimate_artifact;
