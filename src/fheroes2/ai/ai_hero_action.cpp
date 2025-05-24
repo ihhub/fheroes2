@@ -1919,6 +1919,12 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         hero.SetModes( Heroes::ACTION );
     }
 
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+            // Most likely there will be some action, center the map on the hero to avoid subsequent minor screen movements.
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+        }
+    }
+
     switch ( objectType ) {
     case MP2::OBJ_BOAT:
         AIToBoat( hero, dst_index );
@@ -2256,14 +2262,17 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
                 gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                 gameArea.SetRedraw();
+
                 heroAnimationFrameCount -= heroMovementSkipValue;
                 if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                     hero.SetSpriteIndex( heroAnimationSpriteId );
 
-                    if ( heroAnimationFrameCount == 0 )
+                    if ( heroAnimationFrameCount == 0 ) {
                         resetHeroSprite = true;
-                    else
+                    }
+                    else {
                         ++heroAnimationSpriteId;
+                    }
                 }
                 const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
                 hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
@@ -2286,6 +2295,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
                         heroAnimationOffset = movement;
                         gameArea.ShiftCenter( movement );
+
                         heroAnimationFrameCount = 32 - heroMovementSkipValue;
                         heroAnimationSpriteId = hero.GetSpriteIndex();
                         if ( heroMovementSkipValue < 4 ) {
