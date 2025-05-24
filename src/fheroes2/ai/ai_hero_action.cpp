@@ -1919,10 +1919,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         hero.SetModes( Heroes::ACTION );
     }
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
-            // Most likely there will be some action, center the map on the hero to avoid subsequent minor screen movements.
-            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-        }
+    if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        // Most likely there will be some action, center the map on the hero to avoid subsequent minor screen movements.
+        Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
     }
 
     switch ( objectType ) {
