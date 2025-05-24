@@ -75,8 +75,8 @@ enum class InterfaceType : uint8_t
 
 enum class SaveFileSortingMethod : uint8_t
 {
-    FILENAME = 0,
-    TIMESTAMP = 1,
+    FILENAME,
+    TIMESTAMP,
 };
 
 class Settings
