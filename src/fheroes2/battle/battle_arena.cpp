@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstddef>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <numeric>
 #include <ostream>
@@ -686,7 +687,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
     // Target unit and its threat level
-    std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
+    std::pair<const Unit *, double> targetInfo{ nullptr, std::numeric_limits<double>::lowest() };
 
     for ( const Cell & cell : board ) {
         const Unit * unit = cell.GetUnit();
@@ -695,7 +696,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
             continue;
         }
 
-        const int32_t unitThreatLevel = unit->evaluateThreatForUnit( twr );
+        const double unitThreatLevel = unit->evaluateThreatForUnit( twr );
 
         if ( targetInfo.first == nullptr || targetInfo.second < unitThreatLevel ) {
             targetInfo = { unit, unitThreatLevel };

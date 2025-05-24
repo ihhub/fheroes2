@@ -1525,7 +1525,7 @@ void Battle::Interface::RedrawArmies()
         // Redraw objects.
         for ( int32_t cellColumnId = 0; cellColumnId < Board::widthInCells; ++cellColumnId ) {
             const int32_t cellId = cellRowId * Board::widthInCells + cellColumnId;
-            RedrawHighObjects( cellId );
+            _redrawHighObjects( cellId );
         }
 
         if ( castle != nullptr ) {
@@ -2213,7 +2213,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Ground obstacles.
     for ( int32_t cellId = 0; cellId < Board::sizeInCells; ++cellId ) {
-        RedrawLowObjects( cellId );
+        _redrawGroundObjects( cellId );
     }
 
     // Castle top wall.
@@ -2368,7 +2368,7 @@ void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-void Battle::Interface::RedrawLowObjects( const int32_t cellId )
+void Battle::Interface::_redrawGroundObjects( const int32_t cellId )
 {
     const Cell * cell = Board::GetCell( cellId );
     if ( cell == nullptr )
@@ -2383,12 +2383,6 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
     int objectIcnId = 0;
 
     switch ( cellObjectId ) {
-    case 0x84:
-        objectIcnId = ICN::COBJ0004;
-        break;
-    case 0x87:
-        objectIcnId = ICN::COBJ0007;
-        break;
     case 0x90:
         objectIcnId = ICN::COBJ0016;
         break;
@@ -2407,7 +2401,7 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
     fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
-void Battle::Interface::RedrawHighObjects( const int32_t cellId )
+void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 {
     const Cell * cell = Board::GetCell( cellId );
     if ( cell == nullptr )
@@ -2434,11 +2428,17 @@ void Battle::Interface::RedrawHighObjects( const int32_t cellId )
     case 0x83:
         objectIcnId = ICN::COBJ0003;
         break;
+    case 0x84:
+        objectIcnId = ICN::COBJ0004;
+        break;
     case 0x85:
         objectIcnId = ICN::COBJ0005;
         break;
     case 0x86:
         objectIcnId = ICN::COBJ0006;
+        break;
+    case 0x87:
+        objectIcnId = ICN::COBJ0007;
         break;
     case 0x88:
         objectIcnId = ICN::COBJ0008;

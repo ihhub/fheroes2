@@ -993,7 +993,7 @@ uint32_t Battle::Unit::GetDefense() const
     return res;
 }
 
-int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
+double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 {
     const Unit & attacker = *this;
 
@@ -1157,7 +1157,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
         attackerThreat /= 1.25;
     }
 
-    return fheroes2::checkedCast<int32_t>( attackerThreat * 100 ).value();
+    return attackerThreat;
 }
 
 Funds Battle::Unit::GetSurrenderCost() const
