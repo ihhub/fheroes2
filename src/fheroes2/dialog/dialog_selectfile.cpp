@@ -570,7 +570,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonSort.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date." ), Dialog::ZERO );
             }
 
             const bool needRedrawListbox = listUpdated || listbox.IsNeedRedraw();
