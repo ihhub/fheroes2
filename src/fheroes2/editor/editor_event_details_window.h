@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,8 @@
 #pragma once
 #include <cstdint>
 
+#include "color.h"
+
 namespace Maps::Map_Format
 {
     struct AdventureMapEventMetadata;
@@ -33,6 +35,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
-                             const fheroes2::SupportedLanguage language );
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColorsSet humanPlayerColors,
+                             const PlayerColorsSet computerPlayerColors, const fheroes2::SupportedLanguage language );
 }

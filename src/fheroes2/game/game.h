@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
 class Players;
@@ -93,9 +94,9 @@ namespace Game
     // If display fade-in state is set reset it to false and return true. Otherwise return false.
     bool validateDisplayFadeIn();
 
-    int GetKingdomColors();
-    int GetActualKingdomColors();
-    void DialogPlayers( int color, std::string title, std::string message );
+    PlayerColorsSet GetKingdomColors();
+    PlayerColorsSet GetActualKingdomColors();
+    void DialogPlayers( const PlayerColor color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
     void updateAdventureMapAnimationIndex();

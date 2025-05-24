@@ -31,7 +31,6 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -402,7 +401,7 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
     }
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t colors )
+const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const PlayerColorsSet colors )
 {
     const uint32_t iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );

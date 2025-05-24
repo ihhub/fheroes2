@@ -25,6 +25,7 @@
 
 #include <cstdint>
 
+#include "color.h"
 #include "image.h"
 #include "interface_border.h"
 #include "math_base.h"
@@ -88,7 +89,7 @@ namespace Interface
         void SavePosition() override;
         void SetZoom();
 
-        void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
+        void RedrawObjects( const PlayerColorsSet playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType _radarType;

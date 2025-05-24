@@ -33,6 +33,7 @@
 #include "battle_animation.h"
 #include "battle_board.h"
 #include "battle_troop.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
@@ -220,7 +221,7 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const int opponentColor )
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor )
         {
             _area = roi;
             _orderOfUnits = units;
@@ -249,7 +250,7 @@ namespace Battle
                           fheroes2::Image & output ) const;
 
         std::weak_ptr<const Units> _orderOfUnits;
-        int _opponentColor{ 0 };
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
     };
@@ -420,7 +421,7 @@ namespace Battle
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
         void InterruptAutoCombatIfRequested( LocalEvent & le );
-        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
+        void SetHeroAnimationReactionToTroopDeath( const PlayerColor deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
@@ -467,7 +468,7 @@ namespace Battle
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
 
-        int _interruptAutoCombatForColor{ 0 };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };

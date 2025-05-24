@@ -893,7 +893,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::POINTER );
 
-    const int currentColor = GetCurrentColor();
+    const PlayerColor currentColor = GetCurrentColor();
     const bool readonly = ( currentColor != hero.GetColor() || !buttons );
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
@@ -914,7 +914,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
     const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
-    int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
+    const int col = ( PlayerColor::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
 
     std::string str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );

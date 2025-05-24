@@ -36,6 +36,7 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
+#include "color.h"
 #include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
@@ -113,27 +114,38 @@ namespace Battle
             return _turnNumber;
         }
 
-        Result & GetResult();
+        Result & GetResult()
+        {
+            return result_game;
+        }
 
         HeroBase * GetCommander1() const;
         HeroBase * GetCommander2() const;
 
-        const HeroBase * getCommander( const int color ) const;
-        const HeroBase * getEnemyCommander( const int color ) const;
+        const HeroBase * getCommander( const PlayerColor color ) const;
+        const HeroBase * getEnemyCommander( const PlayerColor color ) const;
         const HeroBase * GetCurrentCommander() const;
 
-        Force & GetForce1() const;
-        Force & GetForce2() const;
-        Force & getForce( const int color ) const;
-        Force & getEnemyForce( const int color ) const;
+        Force & GetForce1() const
+        {
+            return *_army1;
+        }
+
+        Force & GetForce2() const
+        {
+            return *_army2;
+        }
+
+        Force & getForce( const PlayerColor color ) const;
+        Force & getEnemyForce( const PlayerColor color ) const;
         Force & GetCurrentForce() const;
 
-        int GetArmy1Color() const;
-        int GetArmy2Color() const;
-        int GetCurrentColor() const;
+        PlayerColor GetArmy1Color() const;
+        PlayerColor GetArmy2Color() const;
+        PlayerColor GetCurrentColor() const;
         // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
         // returns the color of the attacking army.
-        int GetOppositeColor( const int col ) const;
+        PlayerColor GetOppositeColor( const PlayerColor col ) const;
 
         Unit * GetTroopBoard( int32_t );
         const Unit * GetTroopBoard( int32_t ) const;
@@ -218,8 +230,8 @@ namespace Battle
         // during the current turn, or nullptr if there is no such unit.
         Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
-        bool CanSurrenderOpponent( int color ) const;
-        bool CanRetreatOpponent( int color ) const;
+        bool CanSurrenderOpponent( const PlayerColor color ) const;
+        bool CanRetreatOpponent( const PlayerColor color ) const;
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
 
@@ -228,7 +240,7 @@ namespace Battle
             return _covrIcnId;
         }
 
-        int32_t GetFreePositionNearHero( const int heroColor ) const;
+        int32_t GetFreePositionNearHero( const PlayerColor heroColor ) const;
 
         static Board * GetBoard();
         static Tower * GetTower( const TowerType type );
@@ -322,7 +334,7 @@ namespace Battle
 
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
         // bad morale is not considered as such).
-        int _lastActiveUnitArmyColor{ -1 };
+        PlayerColor _lastActiveUnitArmyColor{ PlayerColor::UNUSED };
 
         const Castle * castle;
         // Is the battle taking place in a town or a castle
@@ -344,7 +356,7 @@ namespace Battle
 
         uint32_t _turnNumber{ 0 };
         // A set of colors of players for whom the auto combat mode is enabled
-        int _autoCombatColors{ 0 };
+        PlayerColorsSet _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other

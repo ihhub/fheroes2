@@ -97,19 +97,19 @@ namespace
     struct HeroInfo
     {
         int32_t tileIndex{ -1 };
-        int32_t color{ Color::NONE };
+        PlayerColor color{ PlayerColor::NONE };
         const Maps::Map_Format::HeroMetadata * heroMetadata{ nullptr };
     };
 
     struct TownInfo
     {
         int32_t tileIndex{ -1 };
-        int32_t color{ Color::NONE };
+        PlayerColor color{ PlayerColor::NONE };
         int32_t race{ Race::NONE };
         const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
     };
 
-    fheroes2::Sprite getHeroIcon( const int32_t heroPortait, const int32_t race, const int32_t color, const int townIcnId )
+    fheroes2::Sprite getHeroIcon( const int32_t heroPortait, const int32_t race, const PlayerColor color, const int townIcnId )
     {
         // To render hero icons we use castle flags and frame.
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
@@ -167,7 +167,7 @@ namespace
         return castleIcon;
     }
 
-    fheroes2::Sprite getTownIcon( const bool isTown, const int32_t race, const int32_t color, const int townIcnId )
+    fheroes2::Sprite getTownIcon( const bool isTown, const int32_t race, const PlayerColor color, const int townIcnId )
     {
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
 
@@ -335,9 +335,9 @@ namespace
         const std::vector<TownInfo> & _townInfos;
     };
 
-    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors )
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors )
     {
-        if ( allowedColors == Color::NONE ) {
+        if ( allowedColors == 0 ) {
             // Nothing to do.
             return {};
         }
@@ -359,9 +359,9 @@ namespace
                 }
 
                 const auto & metadata = heroObjects[object.index].metadata;
-                const int32_t color = 1 << metadata[0];
+                const PlayerColor color = static_cast<PlayerColor>( 1 << metadata[0] );
 
-                if ( !( color & allowedColors ) ) {
+                if ( !( allowedColors & color ) ) {
                     // Current hero color is not allowed.
                     continue;
                 }
@@ -382,9 +382,9 @@ namespace
         return heroInfos;
     }
 
-    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const int32_t allowedColors, const bool excludeNeutralTowns )
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors, const bool excludeNeutralTowns )
     {
-        if ( excludeNeutralTowns && allowedColors == Color::NONE ) {
+        if ( excludeNeutralTowns && allowedColors == 0 ) {
             // Nothing to do.
             return {};
         }
@@ -404,8 +404,8 @@ namespace
                     continue;
                 }
 
-                const int32_t color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
-                if ( !( color & allowedColors ) && ( excludeNeutralTowns || color != Color::NONE ) ) {
+                const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileIndex, object.id ) );
+                if ( !( allowedColors & color ) && ( excludeNeutralTowns || color != PlayerColor::NONE ) ) {
                     // Current town color is not allowed.
                     continue;
                 }
@@ -701,15 +701,15 @@ namespace
                 break;
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
-                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _townToCapture.begin() );
+                    _townToCapture.first = static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] );
+                    _townToCapture.second = static_cast<PlayerColor>( mapFormat.victoryConditionMetadata[1] );
 
                     // Verify that this is a valid computer-only town.
                     _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false );
-                    const int32_t townTileIndex = static_cast<int32_t>( _townToCapture[0] );
 
                     bool townFound = false;
                     for ( const auto & town : _mapTownInfos ) {
-                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
+                        if ( _townToCapture.first == town.tileIndex && _townToCapture.second == town.color ) {
                             townFound = true;
                             break;
                         }
@@ -730,14 +730,15 @@ namespace
                 break;
             case Maps::FileInfo::VICTORY_KILL_HERO:
                 if ( mapFormat.victoryConditionMetadata.size() == 2 ) {
-                    std::copy( mapFormat.victoryConditionMetadata.begin(), mapFormat.victoryConditionMetadata.end(), _heroToKill.begin() );
+                    _heroToKill.first = static_cast<int32_t>( mapFormat.victoryConditionMetadata[0] );
+                    _heroToKill.second = static_cast<PlayerColor>( mapFormat.victoryConditionMetadata[1] );
 
                     // Verify that this is a valid computer-only hero.
                     _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
-                    const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
+
                     bool heroFound = false;
                     for ( const auto & hero : _mapHeroInfos ) {
-                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
+                        if ( _heroToKill.first == hero.tileIndex && _heroToKill.second == hero.color ) {
                             heroFound = true;
                             break;
                         }
@@ -793,8 +794,8 @@ namespace
                 // Fill in the default alliances: the first human player against all others.
                 _alliances.clear();
 
-                const uint8_t firstColor = static_cast<uint8_t>( Color::GetFirst( mapFormat.humanPlayerColors ) );
-                _alliances.push_back( firstColor );
+                const PlayerColor firstColor = Color::GetFirst( mapFormat.humanPlayerColors );
+                _alliances.push_back( static_cast<PlayerColorsSet>( firstColor ) );
                 _alliances.push_back( mapFormat.availablePlayerColors ^ firstColor );
             }
         }
@@ -819,7 +820,7 @@ namespace
 
                 bool townFound = false;
                 for ( const auto & town : _mapTownInfos ) {
-                    if ( static_cast<int32_t>( _townToCapture[0] ) == town.tileIndex && static_cast<int32_t>( _townToCapture[1] ) == town.color ) {
+                    if ( _townToCapture.first == town.tileIndex && _townToCapture.second == town.color ) {
                         townFound = true;
                         break;
                     }
@@ -827,8 +828,7 @@ namespace
 
                 if ( !townFound ) {
                     // The town doesn't exist in the list. Select the first one.
-                    _townToCapture[0] = static_cast<uint32_t>( _mapTownInfos[0].tileIndex );
-                    _townToCapture[1] = static_cast<uint32_t>( _mapTownInfos[0].color );
+                    _townToCapture = { _mapTownInfos[0].tileIndex, _mapTownInfos[0].color };
                     return true;
                 }
 
@@ -844,10 +844,9 @@ namespace
                     return true;
                 }
 
-                const int32_t heroTileIndex = static_cast<int32_t>( _heroToKill[0] );
                 bool heroFound = false;
                 for ( const auto & hero : _mapHeroInfos ) {
-                    if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToKill[1] ) == hero.color ) {
+                    if ( _heroToKill.first == hero.tileIndex && _heroToKill.second == hero.color ) {
                         heroFound = true;
                         break;
                     }
@@ -855,8 +854,7 @@ namespace
 
                 if ( !heroFound ) {
                     // The hero doesn't exist in the list. Select the first one.
-                    _heroToKill[0] = static_cast<uint32_t>( _mapHeroInfos[0].tileIndex );
-                    _heroToKill[1] = static_cast<uint32_t>( _mapHeroInfos[0].color );
+                    _heroToKill = { _mapHeroInfos[0].tileIndex, _mapHeroInfos[0].color };
                 }
 
                 return false;
@@ -887,12 +885,13 @@ namespace
                     mapFormat.victoryConditionMetadata.resize( 2 );
                 }
 
-                std::copy( _townToCapture.begin(), _townToCapture.end(), mapFormat.victoryConditionMetadata.begin() );
+                mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( _townToCapture.first );
+                mapFormat.victoryConditionMetadata[1] = static_cast<uint32_t>( _townToCapture.second );
 
                 mapFormat.allowNormalVictory = _isNormalVictoryAllowed;
 
                 // For all non-neutral towns disable the "Allow this condition also for AI" setting.
-                mapFormat.isVictoryConditionApplicableForAI = ( _townToCapture[1] == Color::NONE ) ? _isVictoryConditionApplicableForAI : false;
+                mapFormat.isVictoryConditionApplicableForAI = ( _townToCapture.second == PlayerColor::NONE ) ? _isVictoryConditionApplicableForAI : false;
 
                 return;
             case Maps::FileInfo::VICTORY_KILL_HERO:
@@ -900,7 +899,8 @@ namespace
                     mapFormat.victoryConditionMetadata.resize( 2 );
                 }
 
-                std::copy( _heroToKill.begin(), _heroToKill.end(), mapFormat.victoryConditionMetadata.begin() );
+                mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( _heroToKill.first );
+                mapFormat.victoryConditionMetadata[1] = static_cast<uint32_t>( _heroToKill.second );
 
                 mapFormat.allowNormalVictory = false;
                 mapFormat.isVictoryConditionApplicableForAI = false;
@@ -972,8 +972,7 @@ namespace
 
                 size_t selectedTownIndex = 0;
                 for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _townToCapture[0] ) == _mapTownInfos[i].tileIndex
-                         && static_cast<int32_t>( _townToCapture[1] ) == _mapTownInfos[i].color ) {
+                    if ( _townToCapture.first == _mapTownInfos[i].tileIndex && _townToCapture.second == _mapTownInfos[i].color ) {
                         selectedTownIndex = i;
                         break;
                     }
@@ -1010,7 +1009,7 @@ namespace
                 }
 
                 // Allow "Allow this condition also for AI" setting only for neutral towns.
-                if ( _townToCapture[1] == Color::NONE ) {
+                if ( _townToCapture.second == PlayerColor::NONE ) {
                     if ( !_isVictoryConditionApplicableForAI ) {
                         _allowVictoryConditionForAI.hide();
                     }
@@ -1047,14 +1046,14 @@ namespace
 
                 size_t selectedHeroIndex = 0;
                 for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _heroToKill[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToKill[1] ) == _mapHeroInfos[i].color ) {
+                    if ( _heroToKill.first == _mapHeroInfos[i].tileIndex && _heroToKill.second == _mapHeroInfos[i].color ) {
                         selectedHeroIndex = i;
                         break;
                     }
                 }
 
                 // To render hero icons we use castle flags and frame.
-                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<int>( _heroToKill[1] ) );
+                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( _heroToKill.second );
                 const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
                 const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
                 Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
@@ -1073,8 +1072,7 @@ namespace
                     fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
                 }
 
-                fheroes2::Text extraText( getHeroTitle( heroMetadata->customName, heroMetadata->race, static_cast<int32_t>( _heroToKill[0] ), _mapWidth ),
-                                          fheroes2::FontType::normalWhite() );
+                fheroes2::Text extraText( getHeroTitle( heroMetadata->customName, heroMetadata->race, _heroToKill.first, _mapWidth ), fheroes2::FontType::normalWhite() );
                 extraText.fitToOneRow( roi.width );
                 extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
 
@@ -1226,8 +1224,7 @@ namespace
                     int initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
-                        if ( static_cast<int32_t>( _townToCapture[0] ) == _mapTownInfos[i].tileIndex
-                             && static_cast<int32_t>( _townToCapture[1] ) == _mapTownInfos[i].color ) {
+                        if ( _townToCapture.first == _mapTownInfos[i].tileIndex && _townToCapture.second == _mapTownInfos[i].color ) {
                             initiallySelectedTownIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedTownIndex );
                             break;
@@ -1238,8 +1235,7 @@ namespace
                         const int townIndex = listbox.GetCurrent();
 
                         if ( townIndex != initiallySelectedTownIndex ) {
-                            _townToCapture[0] = static_cast<uint32_t>( _mapTownInfos[townIndex].tileIndex );
-                            _townToCapture[1] = static_cast<uint32_t>( _mapTownInfos[townIndex].color );
+                            _townToCapture = { _mapTownInfos[townIndex].tileIndex, _mapTownInfos[townIndex].color };
                         }
                     }
 
@@ -1287,7 +1283,7 @@ namespace
                     int initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
-                        if ( static_cast<int32_t>( _heroToKill[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToKill[1] ) == _mapHeroInfos[i].color ) {
+                        if ( _heroToKill.first == _mapHeroInfos[i].tileIndex && _heroToKill.second == _mapHeroInfos[i].color ) {
                             initiallySelectedHeroIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedHeroIndex );
                             break;
@@ -1298,8 +1294,7 @@ namespace
                         const int heroIndex = listbox.GetCurrent();
 
                         if ( heroIndex != initiallySelectedHeroIndex ) {
-                            _heroToKill[0] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].tileIndex );
-                            _heroToKill[1] = static_cast<uint32_t>( _mapHeroInfos[heroIndex].color );
+                            _heroToKill = { _mapHeroInfos[heroIndex].tileIndex, _mapHeroInfos[heroIndex].color };
                         }
                     }
 
@@ -1350,7 +1345,7 @@ namespace
 
                         // Allow to select player only if it is not already selected.
                         if ( le.MouseClickLeft( checkboxRect ) ) {
-                            const uint8_t color = static_cast<uint8_t>( _alliancesCheckboxes[allianceNumber][playerNumber]->getColor() );
+                            const PlayerColor color = _alliancesCheckboxes[allianceNumber][playerNumber]->getColor();
 
                             // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
                             if ( ( ( _alliances[allianceNumber] & color ) == 0 )
@@ -1422,16 +1417,16 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
-        const uint8_t _availableColors{ Color::NONE };
+        const PlayerColorsSet _availableColors{ 0 };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         const int32_t _mapWidth{ 0 };
         // Town or hero loss metadata include tile ID and color.
-        std::array<uint32_t, 2> _heroToKill{ 0 };
-        std::array<uint32_t, 2> _townToCapture{ 0 };
-        std::vector<uint8_t> _alliances;
+        std::pair<int32_t, PlayerColor> _heroToKill{ 0, PlayerColor::NONE };
+        std::pair<int32_t, PlayerColor> _townToCapture{ 0, PlayerColor::NONE };
+        std::vector<PlayerColorsSet> _alliances;
         std::vector<std::vector<std::unique_ptr<Editor::Checkbox>>> _alliancesCheckboxes;
         std::vector<TownInfo> _mapTownInfos;
         std::vector<HeroInfo> _mapHeroInfos;
@@ -1471,7 +1466,7 @@ namespace
 
                     bool townFound = false;
                     for ( const auto & town : _mapTownInfos ) {
-                        if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToLose[1] ) == town.color ) {
+                        if ( townTileIndex == town.tileIndex && static_cast<PlayerColor>( _townToLose[1] ) == town.color ) {
                             townFound = true;
                             break;
                         }
@@ -1499,7 +1494,7 @@ namespace
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                     bool heroFound = false;
                     for ( const auto & hero : _mapHeroInfos ) {
-                        if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
+                        if ( heroTileIndex == hero.tileIndex && static_cast<PlayerColor>( _heroToLose[1] ) == hero.color ) {
                             heroFound = true;
                             break;
                         }
@@ -1554,7 +1549,7 @@ namespace
 
                 bool townFound = false;
                 for ( const auto & town : _mapTownInfos ) {
-                    if ( townTileIndex == town.tileIndex && static_cast<int32_t>( _townToLose[1] ) == town.color ) {
+                    if ( townTileIndex == town.tileIndex && static_cast<PlayerColor>( _townToLose[1] ) == town.color ) {
                         townFound = true;
                         break;
                     }
@@ -1582,7 +1577,7 @@ namespace
                 const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                 bool heroFound = false;
                 for ( const auto & hero : _mapHeroInfos ) {
-                    if ( heroTileIndex == hero.tileIndex && static_cast<int32_t>( _heroToLose[1] ) == hero.color ) {
+                    if ( heroTileIndex == hero.tileIndex && static_cast<PlayerColor>( _heroToLose[1] ) == hero.color ) {
                         heroFound = true;
                         break;
                     }
@@ -1670,7 +1665,7 @@ namespace
 
                 size_t selectedTownIndex = 0;
                 for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex && static_cast<int32_t>( _townToLose[1] ) == _mapTownInfos[i].color ) {
+                    if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex && static_cast<PlayerColor>( _townToLose[1] ) == _mapTownInfos[i].color ) {
                         selectedTownIndex = i;
                         break;
                     }
@@ -1719,14 +1714,14 @@ namespace
 
                 size_t selectedHeroIndex = 0;
                 for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
-                    if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
+                    if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<PlayerColor>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
                         selectedHeroIndex = i;
                         break;
                     }
                 }
 
                 // To render hero icons we use castle flags and frame.
-                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<int>( _heroToLose[1] ) );
+                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<PlayerColor>( _heroToLose[1] ) );
                 const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
                 const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
                 Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
@@ -1806,7 +1801,8 @@ namespace
                     int initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
-                        if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex && static_cast<int32_t>( _townToLose[1] ) == _mapTownInfos[i].color ) {
+                        if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex
+                             && static_cast<PlayerColor>( _townToLose[1] ) == _mapTownInfos[i].color ) {
                             initiallySelectedTownIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedTownIndex );
                             break;
@@ -1855,7 +1851,8 @@ namespace
                     int initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
-                        if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex && static_cast<int32_t>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
+                        if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex
+                             && static_cast<PlayerColor>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
                             initiallySelectedHeroIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedHeroIndex );
                             break;
@@ -1987,7 +1984,7 @@ namespace
         return selectedCondition;
     }
 
-    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const int currentColor )
+    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const PlayerColor currentColor )
     {
         if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.
@@ -2112,7 +2109,7 @@ namespace Editor
         int32_t offsetY = scenarioBoxRoi.y + scenarioBoxRoi.height + 10;
 
         std::vector<fheroes2::Rect> playerRects( availablePlayersCount );
-        const Colors availableColors( mapFormat.availablePlayerColors );
+        const PlayerColorsVector availableColors( mapFormat.availablePlayerColors );
 
         const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
         for ( int32_t i = 0; i < availablePlayersCount; ++i ) {

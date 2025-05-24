@@ -165,7 +165,7 @@ namespace Maps
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
-        bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const;
+        bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const;
 
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const
@@ -190,15 +190,15 @@ namespace Maps
 
         void resetBoatOwnerColor()
         {
-            _boatOwnerColor = Color::NONE;
+            _boatOwnerColor = PlayerColor::NONE;
         }
 
-        int getBoatOwnerColor() const
+        PlayerColor getBoatOwnerColor() const
         {
             return _boatOwnerColor;
         }
 
-        void setBoat( const int direction, const int color );
+        void setBoat( const int direction, const PlayerColor color );
         int getBoatDirection() const;
 
         void resetMainObjectPart()
@@ -219,7 +219,7 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        void setOwnershipFlag( const MP2::MapObjectType objectType, int color );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, PlayerColor color );
 
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
@@ -275,13 +275,18 @@ namespace Maps
 
         std::string String() const;
 
-        bool isFog( const int colors ) const
+        bool isFog( const PlayerColor color ) const
+        {
+            return ( _fogColors & color );
+        }
+
+        bool isFog( const PlayerColorsSet colors ) const
         {
             // colors may be the union friends
             return ( _fogColors & colors ) == colors;
         }
 
-        void ClearFog( const int colors );
+        void ClearFog( const PlayerColorsSet colors );
 
         const std::array<uint32_t, 3> & metadata() const
         {
@@ -346,7 +351,7 @@ namespace Maps
         ObjectPart * getObjectPartWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.
-        void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
+        void updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
 
         void _updateRoadFlag();
 
@@ -392,10 +397,10 @@ namespace Maps
 
         // The following members are only used in the game.
 
-        uint8_t _fogColors{ Color::ALL };
+        PlayerColorsSet _fogColors{ Color::allPlayerColors() };
 
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
-        uint8_t _boatOwnerColor{ Color::NONE };
+        PlayerColor _boatOwnerColor{ PlayerColor::NONE };
 
         // Fog direction to render fog in Game Area.
         uint16_t _fogDirection{ DIRECTION_ALL };

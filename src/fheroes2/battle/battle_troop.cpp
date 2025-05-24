@@ -1636,10 +1636,10 @@ fheroes2::Point Battle::Unit::GetStartMissileOffset( const size_t direction ) co
     return animation.getProjectileOffset( direction );
 }
 
-int Battle::Unit::GetCurrentColor() const
+PlayerColor Battle::Unit::GetCurrentColor() const
 {
     if ( Modes( SP_BERSERKER ) ) {
-        return -1; // Be aware of unknown color
+        return PlayerColor::UNUSED; // Be aware of unknown color
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -1652,12 +1652,12 @@ int Battle::Unit::GetCurrentColor() const
     return GetColor();
 }
 
-int Battle::Unit::GetCurrentOrArmyColor() const
+PlayerColor Battle::Unit::GetCurrentOrArmyColor() const
 {
-    const int color = GetCurrentColor();
+    const PlayerColor color = GetCurrentColor();
 
     // Unknown color in case of SP_BERSERKER mode
-    if ( color < 0 ) {
+    if ( color == PlayerColor::UNUSED ) {
         return GetArmyColor();
     }
 

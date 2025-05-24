@@ -133,27 +133,27 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     colors = 0;
 
     if ( dataStream.get() ) {
-        colors |= Color::BLUE;
+        colors |= PlayerColor::BLUE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::GREEN;
+        colors |= PlayerColor::GREEN;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::RED;
+        colors |= PlayerColor::RED;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::YELLOW;
+        colors |= PlayerColor::YELLOW;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::ORANGE;
+        colors |= PlayerColor::ORANGE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PURPLE;
+        colors |= PlayerColor::PURPLE;
     }
 
     message = dataStream.getString();
@@ -349,7 +349,19 @@ OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
-    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int colors;
+        stream >> colors;
+        obj.colors = static_cast<PlayerColorsSet>( colors );
+    }
+    else {
+        stream >> obj.colors;
+    }
+
+    stream >> obj.message;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {

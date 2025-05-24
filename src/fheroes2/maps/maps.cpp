@@ -30,6 +30,7 @@
 #include <ostream>
 
 #include "ai_planner.h"
+#include "color.h"
 #include "direction.h"
 #include "heroes.h"
 #include "kingdom.h"
@@ -366,13 +367,13 @@ MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
     const uint32_t dist = hero.GetVisionsDistance();
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
-    const int32_t heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.getTile( index ).isFog( heroColor ); } ),
                     monsters.end() );
     return monsters;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const int playerColor )
+void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
@@ -386,7 +387,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
-    const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const PlayerColorsSet alliedColors = Players::GetPlayerFriends( playerColor );
 
     const int32_t minY = std::max( center.y - scoutingDistance, 0 );
     const int32_t maxY = std::min( center.y + scoutingDistance, world.h() - 1 );
@@ -438,7 +439,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         return 0;

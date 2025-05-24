@@ -371,7 +371,7 @@ namespace
     std::string showBarrierInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Barrier" );
-        const int32_t barrierColor = getColorFromTile( tile );
+        const int32_t barrierColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getBarrierColorName( barrierColor ) );
 
         if ( kingdom.IsVisitTravelersTent( barrierColor ) ) {
@@ -385,7 +385,7 @@ namespace
     std::string showTentInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
-        const int32_t tentColor = getColorFromTile( tile );
+        const int32_t tentColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
@@ -448,7 +448,7 @@ namespace
 
     std::string getQuickInfoText( const Maps::Tile & tile )
     {
-        const int32_t playerColor = Settings::Get().CurrentColor();
+        const PlayerColor playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
@@ -626,7 +626,7 @@ namespace
         const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
         fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
-        const int currentColor = conf.CurrentColor();
+        const PlayerColor currentColor = conf.CurrentColor();
         const Kingdom & kingdom = world.GetKingdom( currentColor );
 
         const bool isDetailedView = castle.isFriends( currentColor ) || kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
@@ -699,7 +699,7 @@ namespace
 
         const Settings & conf = Settings::Get();
 
-        const bool isNeutralHero = ( hero.GetColor() == Color::NONE );
+        const bool isNeutralHero = ( hero.GetColor() == PlayerColor::NONE );
         const bool isFullInfo = [&hero, showFullInfo, &conf, isNeutralHero]() {
             if ( showFullInfo ) {
                 return *showFullInfo;
@@ -901,9 +901,9 @@ void Dialog::QuickInfo( const Maps::Tile & tile )
 {
     std::string infoString;
 
-    const int32_t playerColor = Settings::Get().CurrentColor();
+    const PlayerColor playerColor = Settings::Get().CurrentColor();
 
-    if ( ( playerColor != 0 ) && tile.isFog( playerColor ) ) {
+    if ( ( playerColor != PlayerColor::NONE ) && tile.isFog( playerColor ) ) {
         infoString = _( "Uncharted Territory" );
     }
     else {
