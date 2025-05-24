@@ -82,10 +82,10 @@
 
 namespace
 {
-    PlayerColors AIGetAllianceColors()
+    PlayerColorsSet AIGetAllianceColors()
     {
         // accumulate colors
-        PlayerColors colors = 0;
+        PlayerColorsSet colors = 0;
 
         if ( Settings::Get().GameType() & Game::TYPE_HOTSEAT ) {
             const PlayerColorsVector vcolors( Players::HumanColors() );
@@ -98,7 +98,7 @@ namespace
             }
         }
         else {
-            const PlayerColors humanColor = Players::HumanColors();
+            const PlayerColorsSet humanColor = Players::HumanColors();
 
             assert( Color::Count( humanColor ) == 1 );
 
@@ -112,7 +112,7 @@ namespace
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColors colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColorsSet colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -141,7 +141,7 @@ namespace
         return false;
     }
 
-    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColors colors )
+    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColorsSet colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -2201,7 +2201,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     const Settings & conf = Settings::Get();
 
-    const PlayerColors colors = AIGetAllianceColors();
+    const PlayerColorsSet colors = AIGetAllianceColors();
     bool recenterNeeded = true;
 
     int heroAnimationFrameCount = 0;

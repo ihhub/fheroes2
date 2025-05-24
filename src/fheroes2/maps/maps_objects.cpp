@@ -355,7 +355,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int colors;
         stream >> colors;
-        obj.colors = static_cast<PlayerColors>( colors );
+        obj.colors = static_cast<PlayerColorsSet>( colors );
     }
     else {
         stream >> obj.colors;

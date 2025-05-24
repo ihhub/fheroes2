@@ -752,7 +752,7 @@ namespace Campaign
                 return;
             }
 
-            const PlayerColors aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
+            const PlayerColorsSet aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
             if ( aiColors == 0 ) {
                 // This is definitely not the map to modify.
                 assert( 0 );
@@ -761,8 +761,8 @@ namespace Campaign
 
             const PlayerColor humanColor = humanColors.front();
 
-            for ( PlayerColors & allianceColor : mapInfo.unions ) {
-                if ( allianceColor != static_cast<PlayerColors>( humanColor ) && ( allianceColor & aiColors ) ) {
+            for ( PlayerColorsSet & allianceColor : mapInfo.unions ) {
+                if ( allianceColor != static_cast<PlayerColorsSet>( humanColor ) && ( allianceColor & aiColors ) ) {
                     allianceColor = aiColors;
                 }
             }

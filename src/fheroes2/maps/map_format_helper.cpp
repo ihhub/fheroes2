@@ -1059,7 +1059,7 @@ namespace Maps
                 std::array<bool, mainColors> usedAllianceColors{ false };
 
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
-                    PlayerColors & allianceColors = *iter;
+                    PlayerColorsSet & allianceColors = *iter;
 
                     // Only available players should be in the alliances.
                     allianceColors &= map.availablePlayerColors;
@@ -1096,7 +1096,7 @@ namespace Maps
                         const PlayerColor color = static_cast<PlayerColor>( 1 << i );
                         if ( ( map.availablePlayerColors & color ) != 0 && !usedAllianceColors[i] ) {
                             if ( map.alliances.empty() ) {
-                                map.alliances.push_back( static_cast<PlayerColors>( color ) );
+                                map.alliances.push_back( static_cast<PlayerColorsSet>( color ) );
                             }
                             else {
                                 map.alliances.back() |= color;

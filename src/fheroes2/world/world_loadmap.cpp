@@ -881,8 +881,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
-                    const PlayerColors humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const PlayerColors computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+                    const PlayerColorsSet humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
                     if ( humanColors == 0 && computerColors == 0 ) {
                         // This event is not being executed for anyone. Skip it.
@@ -1210,8 +1210,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        const PlayerColors humanColors = Players::HumanColors() & event.humanPlayerColors;
-        const PlayerColors computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+        const PlayerColorsSet humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
 
         if ( humanColors == 0 && computerColors == 0 ) {
             // This event is not being executed for anyone. Skip it.

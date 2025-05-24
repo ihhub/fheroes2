@@ -289,9 +289,9 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         assert( currentPlayer != nullptr );
 
         const PlayerColor currentColor = currentPlayer->GetColor();
-        const PlayerColors friendColors = currentPlayer->GetFriends();
+        const PlayerColorsSet friendColors = currentPlayer->GetFriends();
 
-        const auto makeListOfPlayers = []( const PlayerColors colors ) {
+        const auto makeListOfPlayers = []( const PlayerColorsSet colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
             for ( const PlayerColor col : PlayerColorsVector( colors ) ) {
@@ -414,7 +414,7 @@ void GameOver::Result::Reset()
 
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
-    const PlayerColors humanColors = Players::HumanColors();
+    const PlayerColorsSet humanColors = Players::HumanColors();
     const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const Settings & conf = Settings::Get();
@@ -622,7 +622,7 @@ IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        res._colors = static_cast<PlayerColors>( temp );
+        res._colors = static_cast<PlayerColorsSet>( temp );
     }
     else {
         stream >> res._colors;

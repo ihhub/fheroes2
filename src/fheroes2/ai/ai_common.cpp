@@ -379,7 +379,7 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
         return;
     }
 
-    const PlayerColors friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    const PlayerColorsSet friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
     if ( friendColors == 0 ) {
         // No allies.
         return;

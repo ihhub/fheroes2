@@ -150,7 +150,7 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
     void SetColor( const int32_t index, const PlayerColor color );
     void ResetColor( const PlayerColor color );
 
-    void ClearFog( const PlayerColors colors ) const;
+    void ClearFog( const PlayerColorsSet colors ) const;
 
     CapturedObject & Get( const int32_t index )
     {
@@ -177,7 +177,7 @@ struct EventDate
     Funds resource;
     uint32_t firstOccurrenceDay{ 0 };
     uint32_t repeatPeriodInDays{ 0 };
-    PlayerColors colors{ 0 };
+    PlayerColorsSet colors{ 0 };
     bool isApplicableForAIPlayers{ false };
     std::string message;
 

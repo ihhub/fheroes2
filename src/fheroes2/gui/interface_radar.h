@@ -89,7 +89,7 @@ namespace Interface
         void SavePosition() override;
         void SetZoom();
 
-        void RedrawObjects( const PlayerColors playerColor, const ViewWorldMode flags );
+        void RedrawObjects( const PlayerColorsSet playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType _radarType;

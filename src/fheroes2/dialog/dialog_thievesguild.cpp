@@ -61,10 +61,10 @@
 
 namespace
 {
-    struct ValueColors : std::pair<int, PlayerColors>
+    struct ValueColors : std::pair<int, PlayerColorsSet>
     {
-        ValueColors( int value, PlayerColors colors )
-            : std::pair<int, PlayerColors>( value, colors )
+        ValueColors( int value, PlayerColorsSet colors )
+            : std::pair<int, PlayerColorsSet>( value, colors )
         {}
 
         static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
@@ -78,7 +78,7 @@ namespace
         const auto it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.first == value; } );
 
         if ( it == v.end() ) {
-            v.emplace_back( value, static_cast<PlayerColors>( color ) );
+            v.emplace_back( value, static_cast<PlayerColorsSet>( color ) );
         }
         else {
             ( *it ).second |= color;

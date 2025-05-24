@@ -335,7 +335,7 @@ namespace
         const std::vector<TownInfo> & _townInfos;
     };
 
-    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColors allowedColors )
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors )
     {
         if ( allowedColors == 0 ) {
             // Nothing to do.
@@ -382,7 +382,7 @@ namespace
         return heroInfos;
     }
 
-    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColors allowedColors, const bool excludeNeutralTowns )
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors, const bool excludeNeutralTowns )
     {
         if ( excludeNeutralTowns && allowedColors == 0 ) {
             // Nothing to do.
@@ -795,7 +795,7 @@ namespace
                 _alliances.clear();
 
                 const PlayerColor firstColor = Color::GetFirst( mapFormat.humanPlayerColors );
-                _alliances.push_back( static_cast<PlayerColors>( firstColor ) );
+                _alliances.push_back( static_cast<PlayerColorsSet>( firstColor ) );
                 _alliances.push_back( mapFormat.availablePlayerColors ^ firstColor );
             }
         }
@@ -1417,7 +1417,7 @@ namespace
 
     private:
         uint8_t _conditionType{ Maps::FileInfo::VICTORY_DEFEAT_EVERYONE };
-        const PlayerColors _availableColors{ 0 };
+        const PlayerColorsSet _availableColors{ 0 };
         bool _isNormalVictoryAllowed{ false };
         bool _isVictoryConditionApplicableForAI{ false };
         const bool _isEvilInterface{ false };
@@ -1426,7 +1426,7 @@ namespace
         // Town or hero loss metadata include tile ID and color.
         std::pair<int32_t, PlayerColor> _heroToKill{ 0, PlayerColor::NONE };
         std::pair<int32_t, PlayerColor> _townToCapture{ 0, PlayerColor::NONE };
-        std::vector<PlayerColors> _alliances;
+        std::vector<PlayerColorsSet> _alliances;
         std::vector<std::vector<std::unique_ptr<Editor::Checkbox>>> _alliancesCheckboxes;
         std::vector<TownInfo> _mapTownInfos;
         std::vector<HeroInfo> _mapHeroInfos;

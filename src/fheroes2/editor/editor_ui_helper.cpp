@@ -65,7 +65,7 @@ namespace Editor
         return !_checkmark.isHidden();
     }
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColors availableColors, const PlayerColors selectedColors,
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColorsSet availableColors, const PlayerColorsSet selectedColors,
                                 const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output )
     {
         int32_t colorsAdded = 0;

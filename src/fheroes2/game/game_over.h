@@ -89,7 +89,7 @@ namespace GameOver
 
         Result() = default;
 
-        PlayerColors _colors{ 0 };
+        PlayerColorsSet _colors{ 0 };
         uint32_t result{ 0 };
     };
 

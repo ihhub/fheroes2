@@ -1545,7 +1545,7 @@ void Maps::Tile::updateObjectImageIndex( const uint32_t objectUid, const MP2::Ob
     }
 }
 
-void Maps::Tile::ClearFog( const PlayerColors colors )
+void Maps::Tile::ClearFog( const PlayerColorsSet colors )
 {
     _fogColors &= ~colors;
 

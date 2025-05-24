@@ -87,7 +87,7 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
         swap = true;
     }
     else if ( ( mapInfo.AllowCompHumanColors() & player1Color ) && ( mapInfo.AllowCompHumanColors() & player2Color ) ) {
-        const PlayerColors humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+        const PlayerColorsSet humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
         if ( humans & player1Color ) {
             Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
@@ -177,7 +177,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
-    const PlayerColors humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    const PlayerColorsSet humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
@@ -352,7 +352,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             const PlayerColor playerColor = player->GetColor();
 
             if ( fi.colorsAvailableForHumans & playerColor ) {
-                const PlayerColors humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+                const PlayerColorsSet humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( ( Color::Count( humans ) != 1 ) && playerColor != static_cast<PlayerColor>( humans ) ) {
                     Player * currentPlayer = Players::Get( static_cast<PlayerColor>( humans ) );

@@ -36,6 +36,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColorsSet humanPlayerColors, const PlayerColorsSet computerPlayerColors,
                          const fheroes2::SupportedLanguage language );
 }

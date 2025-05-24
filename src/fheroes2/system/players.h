@@ -151,7 +151,7 @@ public:
 
     void SetPlay( const bool f );
 
-    void SetFriends( const PlayerColors friendsColors )
+    void SetFriends( const PlayerColorsSet friendsColors )
     {
         _friendsColors = friendsColors;
     }
@@ -170,7 +170,7 @@ public:
         return _race;
     }
 
-    PlayerColors GetFriends() const
+    PlayerColorsSet GetFriends() const
     {
         return _friendsColors;
     }
@@ -225,7 +225,7 @@ protected:
     int _control{ CONTROL_NONE };
     int _race{ Race::NONE };
     PlayerColor _color;
-    PlayerColors _friendsColors;
+    PlayerColorsSet _friendsColors;
     HandicapStatus _handicapStatus{ HandicapStatus::NONE };
 
 #if defined( WITH_DEBUG )
@@ -255,13 +255,13 @@ public:
 
     Players & operator=( const Players & ) = delete;
 
-    void Init( const PlayerColors colors );
+    void Init( const PlayerColorsSet colors );
     void Init( const Maps::FileInfo & fi );
     void clear();
 
     void SetStartGame();
-    PlayerColors GetColors( const int control = 0xFF, const bool strong = false ) const;
-    PlayerColors GetActualColors() const;
+    PlayerColorsSet GetColors( const int control = 0xFF, const bool strong = false ) const;
+    PlayerColorsSet GetActualColors() const;
     std::string String() const;
 
     const std::vector<Player *> & getVector() const
@@ -276,16 +276,16 @@ public:
     static Player * Get( const PlayerColor color );
     static int GetPlayerControl( const PlayerColor color );
     static int GetPlayerRace( const PlayerColor color );
-    static PlayerColors GetPlayerFriends( const PlayerColor color );
+    static PlayerColorsSet GetPlayerFriends( const PlayerColor color );
     static bool GetPlayerInGame( const PlayerColor color );
     static std::vector<PlayerColor> getInPlayOpponents( const PlayerColor color );
-    static bool isFriends( const PlayerColor playerColor, const PlayerColors colors );
+    static bool isFriends( const PlayerColor playerColor, const PlayerColorsSet colors );
     static void SetPlayerRace( const PlayerColor color, const int race );
     static void SetPlayerControl( const PlayerColor color, const int control );
     static void SetPlayerInGame( const PlayerColor color, const bool isPlay );
-    static PlayerColors HumanColors();
+    static PlayerColorsSet HumanColors();
     // Return current player friends colors, if player does not exist he has no friends (returns 0).
-    static PlayerColors FriendColors();
+    static PlayerColorsSet FriendColors();
 
     PlayerColor getCurrentColor() const
     {

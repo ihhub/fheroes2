@@ -63,7 +63,7 @@ namespace
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColorsSet humanPlayerColors, const PlayerColorsSet computerPlayerColors,
                          const fheroes2::SupportedLanguage language )
     {
         // An event can be outdated in terms of players since we don't update players while placing or removing heroes and castles.

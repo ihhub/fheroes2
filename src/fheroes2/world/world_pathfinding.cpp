@@ -96,7 +96,7 @@ namespace
 
             const PlayerColor tileArmyColor = tileArmy.GetColor();
             // Tile can be guarded by our own or a friendly army (for example, our ally used a Set Elemental Guardian spell on his mine)
-            if ( color == tileArmyColor || Players::isFriends( color, static_cast<PlayerColors>( tileArmyColor ) ) ) {
+            if ( color == tileArmyColor || Players::isFriends( color, static_cast<PlayerColorsSet>( tileArmyColor ) ) ) {
                 return true;
             }
 

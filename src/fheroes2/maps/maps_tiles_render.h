@@ -57,7 +57,7 @@ namespace Maps
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColors friendColors, const Interface::GameArea & area, const bool isEditor );
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor );
 
     void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
 

@@ -95,14 +95,14 @@ namespace
 
     // Get colors value of players to use in fog directions update.
     // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
-    PlayerColors hotSeatAIFogColors( const Player * player )
+    PlayerColorsSet hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
 
         // This function should be called when AI makes a move.
         assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
 
-        const PlayerColors humanColors = Players::HumanColors();
+        const PlayerColorsSet humanColors = Players::HumanColors();
         // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
@@ -119,7 +119,7 @@ namespace
         // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
         // discovered fog.
 
-        PlayerColors friendColors = 0;
+        PlayerColorsSet friendColors = 0;
 
         for ( const PlayerColor color : PlayerColorsVector( humanColors ) ) {
             const Player * humanPlayer = Players::Get( color );

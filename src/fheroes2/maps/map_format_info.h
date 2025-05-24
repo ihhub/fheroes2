@@ -205,9 +205,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        static_assert( std::is_same_v<PlayerColors, uint8_t> );
-        PlayerColors humanPlayerColors{ 0 };
-        PlayerColors computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         // Does this event occur more than once?
         bool isRecurringEvent{ false };
@@ -264,9 +264,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        static_assert( std::is_same_v<PlayerColors, uint8_t> );
-        PlayerColors humanPlayerColors{ 0 };
-        PlayerColors computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         uint32_t firstOccurrenceDay{ 1 };
 
@@ -286,11 +286,11 @@ namespace Maps::Map_Format
         // Normal difficulty.
         uint8_t difficulty{ 1 };
 
-        static_assert( std::is_same_v<PlayerColors, uint8_t> );
-        PlayerColors availablePlayerColors{ 0 };
-        PlayerColors humanPlayerColors{ 0 };
-        PlayerColors computerPlayerColors{ 0 };
-        std::vector<PlayerColors> alliances;
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet availablePlayerColors{ 0 };
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
+        std::vector<PlayerColorsSet> alliances;
 
         // Only 6 players are allowed per map.
         std::array<uint8_t, 6> playerRace{ 0 };

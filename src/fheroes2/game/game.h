@@ -94,8 +94,8 @@ namespace Game
     // If display fade-in state is set reset it to false and return true. Otherwise return false.
     bool validateDisplayFadeIn();
 
-    PlayerColors GetKingdomColors();
-    PlayerColors GetActualKingdomColors();
+    PlayerColorsSet GetKingdomColors();
+    PlayerColorsSet GetActualKingdomColors();
     void DialogPlayers( const PlayerColor color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();

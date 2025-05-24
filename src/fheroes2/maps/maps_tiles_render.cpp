@@ -919,7 +919,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColors friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {

@@ -48,7 +48,7 @@ namespace
     };
 }
 
-PlayerColorsVector::PlayerColorsVector( const PlayerColors colors )
+PlayerColorsVector::PlayerColorsVector( const PlayerColorsSet colors )
 {
     reserve( 6 );
 
@@ -122,7 +122,7 @@ namespace Color
         return 6;
     }
 
-    PlayerColor GetFirst( const PlayerColors colors )
+    PlayerColor GetFirst( const PlayerColorsSet colors )
     {
         if ( colors & PlayerColor::BLUE ) {
             return PlayerColor::BLUE;
@@ -223,7 +223,7 @@ const char * fheroes2::getTentColorName( const int color )
 
 bool ColorBase::isFriends( const PlayerColor color ) const
 {
-    return ( Color::allPlayerColors() & color ) && ( _color == color || Players::isFriends( _color, static_cast<PlayerColors>( color ) ) );
+    return ( Color::allPlayerColors() & color ) && ( _color == color || Players::isFriends( _color, static_cast<PlayerColorsSet>( color ) ) );
 }
 
 void ColorBase::SetColor( const PlayerColor color )

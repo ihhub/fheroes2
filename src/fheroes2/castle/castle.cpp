@@ -2338,7 +2338,7 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     return _castles[iter->second].get();
 }
 
-void AllCastles::Scout( const PlayerColors colors ) const
+void AllCastles::Scout( const PlayerColorsSet colors ) const
 {
     for ( const Castle * castle : *this ) {
         assert( castle != nullptr );

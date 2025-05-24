@@ -2676,7 +2676,7 @@ namespace Maps
         return false;
     }
 
-    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColors colors )
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColorsSet colors )
     {
         assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 

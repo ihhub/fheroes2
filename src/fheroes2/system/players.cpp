@@ -46,7 +46,7 @@
 namespace
 {
     std::array<Player *, maxNumOfPlayers + 1> playersArray{};
-    PlayerColors humanColors{ 0 };
+    PlayerColorsSet humanColors{ 0 };
 
     enum
     {
@@ -110,7 +110,7 @@ namespace
 Player::Player( const PlayerColor color /* = PlayerColor::NONE */ )
     : _aiPersonality( AI::getRandomPersonality() )
     , _color( color )
-    , _friendsColors( static_cast<PlayerColors>( color ) )
+    , _friendsColors( static_cast<PlayerColorsSet>( color ) )
 {
     // Do nothing.
 }
@@ -296,7 +296,7 @@ void Players::clear()
     humanColors = 0;
 }
 
-void Players::Init( const PlayerColors colors )
+void Players::Init( const PlayerColorsSet colors )
 {
     clear();
 
@@ -360,7 +360,7 @@ Player * Players::Get( const PlayerColor color )
     return playersArray[Color::GetIndex( color )];
 }
 
-bool Players::isFriends( const PlayerColor playerColor, PlayerColors colors )
+bool Players::isFriends( const PlayerColor playerColor, PlayerColorsSet colors )
 {
     const Player * player = Get( playerColor );
     return player ? ( player->GetFriends() & colors ) : false;
@@ -384,9 +384,9 @@ void Players::SetPlayerControl( const PlayerColor color, const int control )
     }
 }
 
-PlayerColors Players::GetColors( const int control, const bool strong ) const
+PlayerColorsSet Players::GetColors( const int control, const bool strong ) const
 {
-    PlayerColors res = 0;
+    PlayerColorsSet res = 0;
 
     for ( const Player * player : *this ) {
         if ( control == 0xFF || ( strong && player->GetControl() == control ) || ( !strong && ( player->GetControl() & control ) ) ) {
@@ -407,9 +407,9 @@ const Player * Players::GetCurrent() const
     return Get( _currentColor );
 }
 
-PlayerColors Players::GetActualColors() const
+PlayerColorsSet Players::GetActualColors() const
 {
-    PlayerColors res = 0;
+    PlayerColorsSet res = 0;
 
     for ( const Player * player : *this ) {
         if ( player->isPlay() ) {
@@ -420,7 +420,7 @@ PlayerColors Players::GetActualColors() const
     return res;
 }
 
-PlayerColors Players::GetPlayerFriends( const PlayerColor color )
+PlayerColorsSet Players::GetPlayerFriends( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetFriends() : 0;
@@ -451,7 +451,7 @@ std::vector<PlayerColor> Players::getInPlayOpponents( const PlayerColor color )
     const Player * playerOfColor = Players::Get( color );
     assert( playerOfColor != nullptr );
 
-    const PlayerColors friends = playerOfColor->GetFriends();
+    const PlayerColorsSet friends = playerOfColor->GetFriends();
 
     for ( const Player * player : Settings::Get().GetPlayers() ) {
         assert( player != nullptr );
@@ -492,7 +492,7 @@ void Players::SetStartGame()
     DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
-PlayerColors Players::HumanColors()
+PlayerColorsSet Players::HumanColors()
 {
     if ( humanColors == 0 ) {
         humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
@@ -501,7 +501,7 @@ PlayerColors Players::HumanColors()
     return humanColors;
 }
 
-PlayerColors Players::FriendColors()
+PlayerColorsSet Players::FriendColors()
 {
     const Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player ) {
@@ -514,7 +514,7 @@ PlayerColors Players::FriendColors()
 void Players::setCurrentColor( const PlayerColor color )
 {
     // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
-    assert( Color::Count( static_cast<PlayerColors>( color ) ) == 1 || color == PlayerColor::NONE );
+    assert( Color::Count( static_cast<PlayerColorsSet>( color ) ) == 1 || color == PlayerColor::NONE );
 
     _currentColor = color;
 }
@@ -554,7 +554,7 @@ std::string Players::String() const
 
 OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 {
-    static_assert( std::is_same_v<PlayerColors, uint8_t> );
+    static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
     stream << players.GetColors() << players.getCurrentColor();
 
     std::for_each( players.begin(), players.end(), [&stream]( const Player * player ) {
@@ -568,8 +568,8 @@ OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 
 IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
-    static_assert( std::is_same_v<PlayerColors, uint8_t> );
-    PlayerColors colors;
+    static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+    PlayerColorsSet colors;
     PlayerColor current;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
@@ -579,7 +579,7 @@ IStreamBase & operator>>( IStreamBase & stream, Players & players )
 
         stream >> colorsTemp >> currentTemp;
 
-        colors = static_cast<PlayerColors>( colorsTemp );
+        colors = static_cast<PlayerColorsSet>( colorsTemp );
         current = static_cast<PlayerColor>( currentTemp );
     }
     else {

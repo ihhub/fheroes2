@@ -35,6 +35,6 @@ namespace fheroes2
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColors humanPlayerColors, const PlayerColors computerPlayerColors,
-                             const fheroes2::SupportedLanguage language );
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColorsSet humanPlayerColors,
+                             const PlayerColorsSet computerPlayerColors, const fheroes2::SupportedLanguage language );
 }

@@ -468,12 +468,12 @@ uint32_t Game::GetWhirlpoolPercent()
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-PlayerColors Game::GetKingdomColors()
+PlayerColorsSet Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-PlayerColors Game::GetActualKingdomColors()
+PlayerColorsSet Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }

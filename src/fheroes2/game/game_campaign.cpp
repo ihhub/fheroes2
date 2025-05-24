@@ -704,7 +704,7 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
-        const PlayerColors humanColor = Players::HumanColors();
+        const PlayerColorsSet humanColor = Players::HumanColors();
         assert( Color::Count( humanColor ) == 1 );
 
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -1176,7 +1176,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const PlayerColors humanColor = Players::HumanColors();
+            const PlayerColorsSet humanColor = Players::HumanColors();
             assert( Color::Count( humanColor ) == 1 );
 
             const VecHeroes & humanKingdomHeroes = world.GetKingdom( static_cast<PlayerColor>( humanColor ) ).GetHeroes();

@@ -89,7 +89,7 @@ struct MapEvent final : public MapBaseObject
     Artifact artifact;
     bool isComputerPlayerAllowed{ false };
     bool isSingleTimeEvent{ true };
-    PlayerColors colors{ 0 };
+    PlayerColorsSet colors{ 0 };
     std::string message;
 
     Skill::Secondary secondarySkill;

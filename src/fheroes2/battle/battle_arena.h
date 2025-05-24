@@ -356,7 +356,7 @@ namespace Battle
 
         uint32_t _turnNumber{ 0 };
         // A set of colors of players for whom the auto combat mode is enabled
-        PlayerColors _autoCombatColors{ 0 };
+        PlayerColorsSet _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other

@@ -280,7 +280,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     RedrawCursor();
 }
 
-void Interface::Radar::RedrawObjects( const PlayerColors playerColor, const ViewWorldMode flags )
+void Interface::Radar::RedrawObjects( const PlayerColorsSet playerColor, const ViewWorldMode flags )
 {
 #ifdef WITH_DEBUG
     const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();

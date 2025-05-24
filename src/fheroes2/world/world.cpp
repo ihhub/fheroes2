@@ -237,7 +237,7 @@ PlayerColor CapturedObjects::GetColor( const int32_t index ) const
     return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( const PlayerColors colors ) const
+void CapturedObjects::ClearFog( const PlayerColorsSet colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
         const auto [objectType, objectColor] = capturedObj.objCol;
@@ -895,7 +895,7 @@ uint32_t World::CountCapturedMines( const int type, const PlayerColor color ) co
 
 void World::CaptureObject( const int32_t index, const PlayerColor color )
 {
-    assert( Color::Count( static_cast<PlayerColors>( color ) ) <= 1 );
+    assert( Color::Count( static_cast<PlayerColorsSet>( color ) ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
 
@@ -932,7 +932,7 @@ void World::ResetCapturedObjects( const PlayerColor color )
 
 void World::ClearFog( PlayerColor color ) const
 {
-    const PlayerColors colors = Players::GetPlayerFriends( color );
+    const PlayerColorsSet colors = Players::GetPlayerFriends( color );
 
     // clear abroad castles
     vec_castles.Scout( colors );
@@ -1014,7 +1014,7 @@ void World::ActionForMagellanMaps( const PlayerColor color )
     const Kingdom & kingdom = world.GetKingdom( color );
     const bool isAIPlayer = kingdom.isControlAI();
 
-    const PlayerColors alliedColors = Players::GetPlayerFriends( color );
+    const PlayerColorsSet alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
@@ -1079,7 +1079,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        return static_cast<PlayerColors>( kingdom.GetColor() ) == vec_kingdoms.GetNotLossColors();
+        return static_cast<PlayerColorsSet>( kingdom.GetColor() ) == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
         const Castle * town = getCastleEntrance( mapInfo.WinsMapsPositionObject() );
@@ -1181,7 +1181,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         // .. or be hired by an AI-controlled kingdom
         if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
-            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), static_cast<PlayerColors>( hero->GetColor() ) ) ) {
+            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), static_cast<PlayerColorsSet>( hero->GetColor() ) ) ) {
                 return false;
             }
 
@@ -1818,7 +1818,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
         int temp;
         stream >> temp;
-        obj.colors = static_cast<PlayerColors>( temp );
+        obj.colors = static_cast<PlayerColorsSet>( temp );
     }
     else {
         stream >> obj.colors;

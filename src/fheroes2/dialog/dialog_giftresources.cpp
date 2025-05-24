@@ -78,7 +78,7 @@ namespace
     {
         static constexpr int recipientSpacing = 22;
         const PlayerColorsVector colors;
-        PlayerColors recipients{ 0 };
+        PlayerColorsSet recipients{ 0 };
         std::vector<fheroes2::Rect> positions;
 
         SelectRecipientsColors( const fheroes2::Point & pos, PlayerColor senderColor )

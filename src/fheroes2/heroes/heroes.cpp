@@ -2464,7 +2464,7 @@ Heroes * AllHeroes::Get( const fheroes2::Point & center ) const
     return nullptr;
 }
 
-void AllHeroes::Scout( PlayerColors colors ) const
+void AllHeroes::Scout( PlayerColorsSet colors ) const
 {
     for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );

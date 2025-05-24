@@ -436,7 +436,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
         const PlayerColor tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
-        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColors>( tileColor ) );
+        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColorsSet>( tileColor ) );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
@@ -444,11 +444,11 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
         const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
-        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColors>( hero->GetColor() ) ) );
+        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColorsSet>( hero->GetColor() ) ) );
     }
 
     if ( MP2::isCaptureObject( objectType ) ) {
-        return !Players::isFriends( _color, static_cast<PlayerColors>( getColorFromTile( tile ) ) );
+        return !Players::isFriends( _color, static_cast<PlayerColorsSet>( getColorFromTile( tile ) ) );
     }
 
     if ( MP2::isValuableResourceObject( objectType ) ) {
@@ -818,9 +818,9 @@ void Kingdoms::NewWeek()
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
 }
 
-PlayerColors Kingdoms::GetNotLossColors() const
+PlayerColorsSet Kingdoms::GetNotLossColors() const
 {
-    PlayerColors result = 0;
+    PlayerColorsSet result = 0;
     for ( const Kingdom & kingdom : _kingdoms ) {
         if ( kingdom.GetColor() != PlayerColor::NONE && !kingdom.isLoss() ) {
             result |= kingdom.GetColor();

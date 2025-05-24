@@ -55,69 +55,69 @@ enum class PlayerColor : uint8_t
     UNUSED = 0x80,
 };
 
-using PlayerColors = std::underlying_type_t<PlayerColor>;
+using PlayerColorsSet = std::underlying_type_t<PlayerColor>;
 
-static_assert( static_cast<PlayerColors>( PlayerColor::NONE ) == 0, "The enumerator `NONE` mus be equal to 0! Otherwise the game logic will break." );
+static_assert( static_cast<PlayerColorsSet>( PlayerColor::NONE ) == 0, "The enumerator `NONE` mus be equal to 0! Otherwise the game logic will break." );
 
-constexpr PlayerColors operator|( const PlayerColors lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator|( const PlayerColorsSet lhs, const PlayerColor rhs )
 {
-    return lhs | static_cast<PlayerColors>( rhs );
+    return lhs | static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors operator|( const PlayerColor lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator|( const PlayerColor lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColors>( lhs ) | static_cast<PlayerColors>( rhs );
+    return static_cast<PlayerColorsSet>( lhs ) | static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors & operator|=( PlayerColors & lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet & operator|=( PlayerColorsSet & lhs, const PlayerColor rhs )
 {
     return lhs = lhs | rhs;
 }
 
-constexpr PlayerColors operator&( const PlayerColors lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator&( const PlayerColorsSet lhs, const PlayerColor rhs )
 {
-    return lhs & static_cast<PlayerColors>( rhs );
+    return lhs & static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors operator&( const PlayerColor lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator&( const PlayerColor lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColors>( lhs ) & static_cast<PlayerColors>( rhs );
+    return static_cast<PlayerColorsSet>( lhs ) & static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors & operator&=( PlayerColors & lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet & operator&=( PlayerColorsSet & lhs, const PlayerColor rhs )
 {
     return lhs = lhs & rhs;
 }
 
-constexpr PlayerColors operator^( const PlayerColors lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator^( const PlayerColorsSet lhs, const PlayerColor rhs )
 {
-    return lhs ^ static_cast<PlayerColors>( rhs );
+    return lhs ^ static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors operator^( const PlayerColor lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet operator^( const PlayerColor lhs, const PlayerColor rhs )
 {
-    return static_cast<PlayerColors>( lhs ) ^ static_cast<PlayerColors>( rhs );
+    return static_cast<PlayerColorsSet>( lhs ) ^ static_cast<PlayerColorsSet>( rhs );
 }
 
-constexpr PlayerColors & operator^=( PlayerColors & lhs, const PlayerColor rhs )
+constexpr PlayerColorsSet & operator^=( PlayerColorsSet & lhs, const PlayerColor rhs )
 {
     return lhs = lhs ^ rhs;
 }
 
-constexpr PlayerColors operator~( PlayerColor color )
+constexpr PlayerColorsSet operator~( PlayerColor color )
 {
-    return ~static_cast<PlayerColors>( color );
+    return ~static_cast<PlayerColorsSet>( color );
 }
 
 class PlayerColorsVector : public std::vector<PlayerColor>
 {
 public:
-    explicit PlayerColorsVector( const PlayerColors colors );
+    explicit PlayerColorsVector( const PlayerColorsSet colors );
 };
 
 namespace Color
 {
-    constexpr PlayerColors allPlayerColors()
+    constexpr PlayerColorsSet allPlayerColors()
     {
         return PlayerColor::BLUE | PlayerColor::GREEN | PlayerColor::RED | PlayerColor::YELLOW | PlayerColor::ORANGE | PlayerColor::PURPLE;
     }
@@ -126,12 +126,12 @@ namespace Color
 
     int GetIndex( const PlayerColor color );
 
-    constexpr int Count( const PlayerColors colors )
+    constexpr int Count( const PlayerColorsSet colors )
     {
         return CountBits( static_cast<uint32_t>( colors & allPlayerColors() ) );
     }
 
-    PlayerColor GetFirst( const PlayerColors colors );
+    PlayerColor GetFirst( const PlayerColorsSet colors );
 
     PlayerColor IndexToColor( const int index );
 }
