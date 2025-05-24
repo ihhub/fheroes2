@@ -191,8 +191,6 @@ namespace AI
 
         static Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right );
 
-        static void castAdventureSpellOnCapturedObject( Heroes & hero );
-
     private:
         Planner() = default;
 
