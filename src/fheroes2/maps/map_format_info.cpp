@@ -349,12 +349,12 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )
     {
-        return stream << tile.terrainIndex << tile.terrainFlag << tile.objects;
+        return stream << tile.terrainIndex << tile.terrainFlags << tile.objects;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile )
     {
-        return stream >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
+        return stream >> tile.terrainIndex >> tile.terrainFlags >> tile.objects;
     }
 
     OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo )

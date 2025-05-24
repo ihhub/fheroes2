@@ -465,22 +465,6 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     }
 }
 
-void Maps::Tile::setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
-{
-    _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
-
-    const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
-
-    if ( ( _isTileMarkedAsRoad || isStream() ) && ( newGround != Ground::WATER ) && Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
-        // There cannot be extra objects under the roads and streams.
-        _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
-
-        return;
-    }
-
-    _terrainImageIndex = terrainImageIndex;
-}
-
 Heroes * Maps::Tile::getHero() const
 {
     return MP2::OBJ_HERO == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;

@@ -53,7 +53,7 @@ namespace Maps
 
     bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
-    void writeTile( const Tile & tile, Map_Format::TileInfo & info );
+    void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 

@@ -45,7 +45,7 @@ namespace Maps::Map_Format
     struct TileInfo
     {
         uint16_t terrainIndex{ 0 };
-        uint8_t terrainFlag{ 0 };
+        uint8_t terrainFlags{ 0 };
 
         std::vector<TileObjectInfo> objects;
     };
