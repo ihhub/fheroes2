@@ -2224,6 +2224,11 @@ namespace
                 for ( fheroes2::Sprite & fontImage : imageArray ) {
                     ReplaceColorIdByTransformId( fontImage, 50, 2 );
                 }
+
+                // The PoL assets contain a dot ('.') sprite instead of asterisk ('*') while the SW assets contain correct asterisk sprite.
+                // We replace PoL sprite with the correct one from SW assets.
+                replacePOLAssetWithSW( id, 42 - 32 );
+
                 modifyBaseNormalFont( _icnVsSprite[id] );
             }
 
