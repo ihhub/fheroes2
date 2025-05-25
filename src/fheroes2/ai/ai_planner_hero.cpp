@@ -507,6 +507,10 @@ namespace
         case MP2::OBJ_XANADU:
             return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
 
+        case MP2::OBJ_BLACK_CAT:
+            // Visit the Black Cat only if hero will not decrease his Luck by adding "-2" and if he can gain Morale.
+            return !hero.isVisited( tile ) && hero.GetMorale() < Morale::GREAT && hero.getTotalLuckValue() > Luck::IRISH + 1;
+
         // Dwellings with free army.
         case MP2::OBJ_ARCHER_HOUSE:
         case MP2::OBJ_CAVE:
@@ -823,6 +827,7 @@ namespace
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_MERMAID:
+        case MP2::OBJ_BLACK_CAT:
             // In most situations Luck and Morale modifier objects are useful to be visited when they are very close.
             return 1.1;
         default:
@@ -1439,7 +1444,8 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return hero.isPotentSpellcaster() ? 1500 : 0;
     }
     case MP2::OBJ_BUOY:
-    case MP2::OBJ_TEMPLE: {
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_BLACK_CAT: {
         if ( hero.GetArmy().AllTroopsAreUndead() ) {
             // All troops are undead, no use of Morale.
             return 0;

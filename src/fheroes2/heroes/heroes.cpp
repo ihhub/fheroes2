@@ -1130,6 +1130,16 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     return Luck::Normalize( result );
 }
 
+int Heroes::getTotalLuckValue() const
+{
+    if ( bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK ).isValid() ) {
+        return INT_MAX;
+    }
+
+    return Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), nullptr ) + getObjectLuckModifiers( getAllVisitedObjectTypes(), nullptr )
+           + GetLuckModificator( nullptr );
+}
+
 bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
@@ -2193,6 +2203,7 @@ std::string Heroes::String() const
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
        << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "morale, luck    : " << GetMorale() << ", " << GetLuck() << std ::endl
        << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
        << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl

@@ -391,6 +391,10 @@ public:
     int GetMoraleWithModificators( std::string * str = nullptr ) const;
     int GetLuckWithModificators( std::string * str = nullptr ) const;
 
+    // This function returns the sum of all Luck effects to use in the other calculations.
+    // WARNING: This function can return values outside of allowed Luck [-2 .. +2] scope.
+    int getTotalLuckValue() const;
+
     int GetLevel() const
     {
         return GetLevelFromExperience( experience );

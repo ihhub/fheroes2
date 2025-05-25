@@ -1905,6 +1905,16 @@ namespace
         (void)hero;
 #endif
     }
+
+    void AIToBlackCatObject( Heroes & hero, int32_t dst_index )
+    {
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( MP2::OBJ_BLACK_CAT ) )
+
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
+            hero.SetVisited( dst_index );
+        }
+    }
+
 }
 
 void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
@@ -2149,6 +2159,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     case MP2::OBJ_SIRENS:
         // AI must have some action even if it goes on this object by mistake.
         AIToSirens( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_BLACK_CAT:
+        AIToBlackCatObject( hero, dst_index );
         break;
     default:
         // AI should know what to do with this type of action object! Please add logic for it.
