@@ -47,6 +47,7 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "players.h"
@@ -1203,9 +1204,6 @@ namespace Maps
 
         for ( size_t i = 0; i < tilesConut; ++i ) {
             auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-
-            // We must clear all tiles before writing something on them.
-            worldTile = {};
 
             worldTile.setIndex( static_cast<int32_t>( i ) );
             worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlags );

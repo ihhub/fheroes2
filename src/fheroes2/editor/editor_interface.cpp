@@ -788,7 +788,7 @@ namespace Interface
         return editorInterface;
     }
 
-    fheroes2::GameMode EditorInterface::startEdit( const bool isNewMap )
+    fheroes2::GameMode EditorInterface::startEdit()
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
@@ -803,12 +803,6 @@ namespace Interface
         reset();
 
         _historyManager.reset();
-
-        if ( isNewMap ) {
-            _mapFormat = {};
-            Maps::saveMapInEditor( _mapFormat );
-            _loadedFileName.clear();
-        }
 
         // Stop all sounds and music.
         AudioManager::ResetAudio();
@@ -2002,6 +1996,51 @@ namespace Interface
         }
 
         return false;
+    }
+
+    bool EditorInterface::generateNewMap( const int32_t size )
+    {
+        if ( size <= 0 ) {
+            return false;
+        }
+
+        Settings & conf = Settings::Get();
+
+        if ( !conf.isPriceOfLoyaltySupported() ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat = {};
+
+        world.generateUninitializedMap( size );
+
+        if ( world.w() != size || world.h() != size ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat.size = size;
+
+        const int32_t tilesCount = size * size;
+
+        _mapFormat.tiles.resize( tilesCount );
+
+        for ( int32_t i = 0; i < size; ++i ) {
+            world.getTile( i ).setIndex( i );
+        }
+
+        Maps::setTerrainOnTiles( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
+
+        Maps::resetObjectUID();
+
+        _loadedFileName.clear();
+
+        conf.getCurrentMapInfo().version = GameVersion::RESURRECTION;
+
+        return true;
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )

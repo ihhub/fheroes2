@@ -29,7 +29,6 @@
 #include <list>
 #include <optional>
 #include <ostream>
-#include <string>
 #include <type_traits>
 #include <vector>
 
@@ -40,7 +39,6 @@
 #include "color.h"
 #include "direction.h"
 #include "game_static.h"
-#include "ground.h"
 #include "logging.h"
 #include "map_object_info.h"
 #include "maps.h"

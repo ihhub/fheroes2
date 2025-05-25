@@ -362,33 +362,11 @@ void World::generateBattleOnlyMap()
     const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
                                          Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
 
-    Reset();
-
-    width = 2;
-    height = 2;
-
-    Maps::FileInfo fi;
-
-    fi.width = static_cast<uint16_t>( width );
-    fi.height = static_cast<uint16_t>( height );
-
-    Settings & conf = Settings::Get();
-
-    if ( conf.isPriceOfLoyaltySupported() ) {
-        fi.version = GameVersion::PRICE_OF_LOYALTY;
-    }
-
-    conf.setCurrentMapInfo( std::move( fi ) );
-
-    Defaults();
-
-    vec_tiles.resize( static_cast<size_t>( width ) * height );
+    generateUninitializedMap( 2 );
 
     const int groundType = Rand::Get( terrainTypes );
 
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
         vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), 0 );
     }
@@ -409,14 +387,17 @@ void World::generateUninitializedMap( const int32_t size )
     fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
-    assert( conf.isPriceOfLoyaltySupported() );
 
-    fi.version = GameVersion::PRICE_OF_LOYALTY;
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi.version = GameVersion::PRICE_OF_LOYALTY;
+    }
 
     conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
+    // The tiles are cleared and resizing their vector also initializes tiles with the default values.
+    assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 }
 
@@ -426,8 +407,6 @@ void World::generateMapForEditor( const int32_t size )
 
     // Initialize all tiles.
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
 
         const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
