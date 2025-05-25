@@ -46,11 +46,9 @@ namespace
             // Do nothing.
         }
 
-        // Disable the copy and move constructors.
+        // Disable the copy and move (implicitly) constructors and assignment operators.
         MapAction( const MapAction & ) = delete;
         MapAction & operator=( const MapAction & ) = delete;
-        MapAction( const MapAction && ) = delete;
-        MapAction & operator=( const MapAction && ) = delete;
         ~MapAction() override = default;
 
         bool prepare()
