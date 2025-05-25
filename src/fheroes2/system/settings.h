@@ -38,6 +38,8 @@
 class IStreamBase;
 class OStreamBase;
 
+enum class PlayerColor : uint8_t;
+
 inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
@@ -326,13 +328,13 @@ public:
         return players;
     }
 
-    int CurrentColor() const
+    PlayerColor CurrentColor() const
     {
         return players.getCurrentColor();
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( const int color )
+    void SetCurrentColor( const PlayerColor color )
     {
         players.setCurrentColor( color );
     }

@@ -165,9 +165,9 @@ uint32_t ArmyTroop::GetDefense() const
     return Troop::GetDefense() + ( _army && _army->GetCommander() ? _army->GetCommander()->GetDefense() : 0 );
 }
 
-int ArmyTroop::GetColor() const
+PlayerColor ArmyTroop::GetColor() const
 {
-    return _army ? _army->GetColor() : Color::NONE;
+    return _army ? _army->GetColor() : PlayerColor::NONE;
 }
 
 int ArmyTroop::GetMorale() const

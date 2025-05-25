@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "color.h"
 #include "math_base.h"
 
 class Heroes;
@@ -56,7 +57,7 @@ namespace Maps
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor );
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor );
 
     void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
 

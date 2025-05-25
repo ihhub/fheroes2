@@ -25,8 +25,10 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
+#include "color.h"
 #include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
@@ -203,9 +205,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        uint8_t humanPlayerColors{ 0 };
-
-        uint8_t computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         // Does this event occur more than once?
         bool isRecurringEvent{ false };
@@ -255,16 +257,16 @@ namespace Maps::Map_Format
 
     struct CapturableObjectMetadata
     {
-        uint8_t ownerColor{ 0 };
+        PlayerColor ownerColor{ 0 };
     };
 
     struct DailyEvent
     {
         std::string message;
 
-        uint8_t humanPlayerColors{ 0 };
-
-        uint8_t computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         uint32_t firstOccurrenceDay{ 1 };
 
@@ -284,10 +286,11 @@ namespace Maps::Map_Format
         // Normal difficulty.
         uint8_t difficulty{ 1 };
 
-        uint8_t availablePlayerColors{ 0 };
-        uint8_t humanPlayerColors{ 0 };
-        uint8_t computerPlayerColors{ 0 };
-        std::vector<uint8_t> alliances;
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet availablePlayerColors{ 0 };
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
+        std::vector<PlayerColorsSet> alliances;
 
         // Only 6 players are allowed per map.
         std::array<uint8_t, 6> playerRace{ 0 };

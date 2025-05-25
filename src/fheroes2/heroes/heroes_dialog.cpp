@@ -266,7 +266,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     };
 
     if ( isEditor && Modes( JAIL ) ) {
-        assert( GetColor() == Color::NONE );
+        assert( GetColor() == PlayerColor::NONE );
         fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
                                 PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
@@ -285,9 +285,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
     else {
         // Color "crest" icon.
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST,
-                                               Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ),
-                        0, 0, display, crestRect );
+        const PlayerColor color = GetColor();
+        const uint32_t icnIndex = Color::GetIndex( color == PlayerColor::NONE ? Settings::Get().CurrentColor() : color );
+
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST, icnIndex ), 0, 0, display, crestRect );
     }
 
     // Hero's army.
