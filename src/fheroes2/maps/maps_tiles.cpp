@@ -592,12 +592,7 @@ void Maps::Tile::setBoat( const int direction, const PlayerColor color )
     _mainObjectPart._uid = getNewObjectUID();
 #endif // WITH_DEBUG
 
-    using BoatOwnerColorType = decltype( _boatOwnerColor );
-    static_assert( std::is_same_v<BoatOwnerColorType, PlayerColor> );
-
-    assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
-
-    _boatOwnerColor = static_cast<BoatOwnerColorType>( color );
+    _boatOwnerColor = color;
 }
 
 int Maps::Tile::getBoatDirection() const
