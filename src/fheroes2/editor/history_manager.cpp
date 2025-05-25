@@ -86,7 +86,7 @@ namespace
     private:
         Maps::Map_Format::MapFormat & _mapFormat;
 
-        Maps::Map_Format::MapFormat _beforeMapFormat;
+        const Maps::Map_Format::MapFormat _beforeMapFormat;
         Maps::Map_Format::MapFormat _afterMapFormat;
 
         const uint32_t _latestObjectUIDBefore{ 0 };
