@@ -31,6 +31,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -114,6 +115,26 @@ namespace
 
         textInput.drawInRoi( field.x + 4 + ( maxFileNameWidth - textInput.width() ) / 2, field.y + 4, output, field );
     }
+
+    struct CompareByTimestamp
+    {
+        bool operator()( const Maps::FileInfo & info, uint32_t timestamp ) const
+        {
+            return info.timestamp > timestamp;
+        }
+        bool operator()( uint32_t timestamp, const Maps::FileInfo & info ) const
+        {
+            return timestamp > info.timestamp;
+        }
+    };
+
+    struct CompareByFilename
+    {
+        bool operator()( const Maps::FileInfo & info, const std::string & filename ) const
+        {
+            return Maps::CaseInsensitiveCompare( info.filename, filename );
+        }
+    };
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
     {
@@ -341,16 +362,16 @@ namespace
         if ( !lastfile.empty() ) {
             filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
-
-            MapsFileInfoList::iterator it = lists.begin();
-            for ( ; it != lists.end(); ++it ) {
-                if ( it->filename == lastfile ) {
-                    break;
-                }
+            MapsFileInfoList::const_iterator it;
+            if ( settings.GetSaveFileSortingMethod() == SaveFileSortingMethod::FILENAME ) {
+                it = std::lower_bound( lists.cbegin(), lists.cend(), lastfile, CompareByFilename() );
+            }
+            else {
+                it = std::find_if( it, lists.cend(), [&lastfile]( const Maps::FileInfo & info ) { return info.filename == lastfile; } );
             }
 
-            if ( it != lists.end() ) {
-                listbox.SetCurrent( std::distance( lists.begin(), it ) );
+            if ( it != lists.cend() ) {
+                listbox.SetCurrent( std::distance( lists.cbegin(), it ) );
             }
             else {
                 if ( !isEditing ) {
@@ -485,22 +506,32 @@ namespace
             }
             else if ( le.MouseClickLeft( buttonSort.area() ) ) {
                 const int currentId = listbox.getCurrentId();
+                std::string lastChoice{};
+                uint32_t lastChoiceTimestamp{};
+                if ( currentId >= 0 && static_cast<size_t>( currentId ) < lists.size() ) {
+                    lastChoice = lists[currentId].filename;
+                    lastChoiceTimestamp = lists[currentId].timestamp;
+                }
 
                 settings.changeSaveFileSortingMethod();
                 sortMapInfos( lists );
                 listUpdated = true;
 
                 // re-select the last selected file if any, unless we're typing in the list box
-                if ( !filename.empty() && !isListboxSelected ) {
-                    const std::string lastChoice = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
-
+                if ( !lastChoice.empty() ) {
                     MapsFileInfoList::const_iterator it = lists.cbegin();
-                    for ( ; it != lists.end(); ++it ) {
-                        if ( it->filename == lastChoice ) {
-                            break;
-                        }
+                    MapsFileInfoList::const_iterator end = lists.cend();
+                    const SaveFileSortingMethod sortingMethod = settings.GetSaveFileSortingMethod();
+
+                    if ( sortingMethod == SaveFileSortingMethod::TIMESTAMP ) {
+                        std::tie( it, end ) = std::equal_range( lists.cbegin(), lists.cend(), lastChoiceTimestamp, CompareByTimestamp() );
+                        it = std::find_if( it, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
                     }
-                    if ( it != lists.cend() ) {
+                    else {
+                        it = std::lower_bound( lists.cbegin(), lists.cend(), lastChoice, CompareByFilename() );
+                    }
+
+                    if ( it != end ) {
                         const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
                         if ( newId != currentId ) {
                             listbox.SetCurrent( newId );
