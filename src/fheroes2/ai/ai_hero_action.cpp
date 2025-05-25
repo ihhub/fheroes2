@@ -1581,7 +1581,7 @@ namespace
             return;
         }
 
-        Maps::Tile & tile = world.getTile( tileIndex );
+        const Maps::Tile & tile = world.getTile( tileIndex );
         bool recruitmentAllowed = true;
 
         if ( getColorFromTile( tile ) == PlayerColor::NONE ) {
