@@ -46,6 +46,13 @@ namespace
             // Do nothing.
         }
 
+        // Disable the copy and move constructors.
+        MapAction( const MapAction & ) = delete;
+        MapAction & operator=( const MapAction & ) = delete;
+        MapAction( const MapAction && ) = delete;
+        MapAction & operator=( const MapAction && ) = delete;
+        ~MapAction() override = default;
+
         bool prepare()
         {
             _afterMapFormat = _mapFormat;
