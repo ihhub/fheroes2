@@ -49,8 +49,6 @@ namespace Maps
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );
 
-    bool saveMapInEditor( Map_Format::MapFormat & map );
-
     bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
     void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId );

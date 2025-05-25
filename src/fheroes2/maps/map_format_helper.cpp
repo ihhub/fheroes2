@@ -1232,26 +1232,6 @@ namespace Maps
         return true;
     }
 
-    bool saveMapInEditor( Map_Format::MapFormat & map )
-    {
-        assert( world.w() > 0 && world.w() == world.h() );
-
-        map.size = world.w();
-
-        const size_t size = static_cast<size_t>( map.size ) * map.size;
-
-        map.tiles.resize( size );
-
-        for ( size_t i = 0; i < size; ++i ) {
-            const Maps::Tile & tile = world.getTile( static_cast<int32_t>( i ) );
-
-            map.tiles[i].terrainIndex = tile.getTerrainImageIndex();
-            map.tiles[i].terrainFlags = tile.getTerrainFlags();
-        }
-
-        return true;
-    }
-
     bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
