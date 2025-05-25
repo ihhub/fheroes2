@@ -2421,18 +2421,24 @@ namespace Maps
     {
         std::pair<PlayerColor, int> res;
 
-        if ( 7 > heroSpriteIndex )
+        if ( 7 > heroSpriteIndex ) {
             res.first = PlayerColor::BLUE;
-        else if ( 14 > heroSpriteIndex )
+        }
+        else if ( 14 > heroSpriteIndex ) {
             res.first = PlayerColor::GREEN;
-        else if ( 21 > heroSpriteIndex )
+        }
+        else if ( 21 > heroSpriteIndex ) {
             res.first = PlayerColor::RED;
-        else if ( 28 > heroSpriteIndex )
+        }
+        else if ( 28 > heroSpriteIndex ) {
             res.first = PlayerColor::YELLOW;
-        else if ( 35 > heroSpriteIndex )
+        }
+        else if ( 35 > heroSpriteIndex ) {
             res.first = PlayerColor::ORANGE;
-        else
+        }
+        else {
             res.first = PlayerColor::PURPLE;
+        }
 
         switch ( heroSpriteIndex % 7 ) {
         case 0:
