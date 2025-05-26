@@ -3700,7 +3700,7 @@ namespace
 
         const fheroes2::MoraleDialogElement moraleUI( true );
         const fheroes2::LuckDialogElement luckUI( false );
-        std::vector<const fheroes2::DialogElement *> elementUI{ &moraleUI, &moraleUI, &moraleUI, &luckUI, &luckUI };
+        const std::vector<const fheroes2::DialogElement *> elementUI{ &moraleUI, &moraleUI, &moraleUI, &luckUI, &luckUI };
 
         fheroes2::showStandardTextMessage(
             std::string( MP2::StringObject( MP2::OBJ_BLACK_CAT ) ),

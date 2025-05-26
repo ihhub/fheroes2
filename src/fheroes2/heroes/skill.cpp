@@ -853,7 +853,7 @@ int Skill::GetLeadershipModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    const uint32_t skillValue = skill.GetValue();
+    const int skillValue = static_cast<int>( skill.GetValue() );
 
     if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
@@ -868,7 +868,7 @@ int Skill::GetLuckModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    const uint32_t skillValue = skill.GetValue();
+    const int skillValue = static_cast<int>( skill.GetValue() );
 
     if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
