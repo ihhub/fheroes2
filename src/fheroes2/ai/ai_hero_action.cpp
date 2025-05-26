@@ -1920,7 +1920,6 @@ namespace
             hero.SetVisited( dst_index );
         }
     }
-
 }
 
 void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
