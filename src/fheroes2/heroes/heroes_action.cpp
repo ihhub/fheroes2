@@ -3690,7 +3690,7 @@ namespace
         if ( hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
             fheroes2::showStandardTextMessage(
                 MP2::StringObject( MP2::OBJ_BLACK_CAT ),
-                _( "You approached a large black cat, but it calmly leaves into the nearest bushes upon seeing you as if it had never been there." ), Dialog::OK );
+                _( "You approached a big black cat, but it calmly leaves into the nearest bushes upon seeing you as if it had never been there." ), Dialog::OK );
 
             return;
         }
