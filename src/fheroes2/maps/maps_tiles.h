@@ -308,8 +308,6 @@ namespace Maps
             return _terrainImageIndex;
         }
 
-        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip );
-
         void setTerrain( const uint16_t terrainImageIndex, const uint8_t terrainFlags )
         {
             _terrainFlags = terrainFlags;
