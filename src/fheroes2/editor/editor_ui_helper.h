@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "color.h"
 #include "math_base.h"
 #include "ui_tool.h"
 
@@ -41,7 +42,7 @@ namespace Editor
     class Checkbox
     {
     public:
-        Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output );
+        Checkbox( const int32_t x, const int32_t y, const PlayerColor boxColor, const bool checked, fheroes2::Image & output );
 
         Checkbox( Checkbox && other ) = delete;
         ~Checkbox() = default;
@@ -53,7 +54,7 @@ namespace Editor
             return _area;
         }
 
-        int getColor() const
+        PlayerColor getColor() const
         {
             return _color;
         }
@@ -61,13 +62,13 @@ namespace Editor
         bool toggle();
 
     private:
-        const int _color{ 0 };
+        const PlayerColor _color{ PlayerColor::NONE };
         fheroes2::Rect _area;
         fheroes2::MovableSprite _checkmark;
     };
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
-                                const int32_t boxOffsetY, fheroes2::Image & output );
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColorsSet availableColors, const PlayerColorsSet selectedColors,
+                                const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output );
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
                                          const bool isEvil, const int32_t maxWidth );

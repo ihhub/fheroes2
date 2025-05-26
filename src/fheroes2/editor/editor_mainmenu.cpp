@@ -48,8 +48,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_tool.h"
-#include "world.h"
-#include "world_object_uid.h"
 
 namespace
 {
@@ -260,15 +258,13 @@ namespace Editor
             if ( le.MouseClickLeft( buttonScratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::MapSize mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    world.generateMapForEditor( mapSize );
-
-                    // Reset object UID to keep track of newly added objects.
-                    Maps::resetObjectUID();
-
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::EditorInterface::Get().startEdit( true );
+                    Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+                    if ( editorInterface.generateNewMap( mapSize ) ) {
+                        return editorInterface.startEdit();
+                    }
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
@@ -325,22 +321,20 @@ namespace Editor
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
 
-        return Interface::EditorInterface::Get().startEdit( false );
+        return Interface::EditorInterface::Get().startEdit();
     }
 
     fheroes2::GameMode menuNewFromScratchMap()
     {
         const Maps::MapSize mapSize = selectMapSize();
         if ( mapSize != Maps::ZERO ) {
-            world.generateMapForEditor( mapSize );
-
-            // Reset object UID to keep track of newly added objects.
-            Maps::resetObjectUID();
-
             fheroes2::fadeOutDisplay();
             Game::setDisplayFadeIn();
 
-            return Interface::EditorInterface::Get().startEdit( true );
+            Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+            if ( editorInterface.generateNewMap( mapSize ) ) {
+                return editorInterface.startEdit();
+            }
         }
         return fheroes2::GameMode::EDITOR_MAIN_MENU;
     }

@@ -1765,7 +1765,7 @@ int Dialog::selectAdventureMiscellaneousObjectType( const int objectType )
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
-uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableColors )
+PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t availableColors )
 {
     const int32_t stepX = 70;
     const int32_t minWidth = 250;
@@ -1801,9 +1801,9 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
 
     pos.x += stepX;
     for ( int32_t i = 0; i < 7; ++i ) {
-        const uint8_t currentColor = Color::IndexToColor( i );
+        const PlayerColor currentColor = Color::IndexToColor( i );
 
-        if ( ( currentColor & availableColors ) == 0 ) {
+        if ( ( availableColors & currentColor ) == 0 ) {
             continue;
         }
 
@@ -1818,11 +1818,11 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
         pos.x += stepX;
     }
 
-    int selectedColor = Color::GetIndex( color );
+    int selectedColorIndex = Color::GetIndex( color );
 
     for ( int32_t i = 0; i < 7; ++i ) {
         if ( colorRect[i] != fheroes2::Rect{} ) {
-            fheroes2::Blit( ( i == selectedColor ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x, colorRect[i].y );
+            fheroes2::Blit( ( i == selectedColorIndex ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x, colorRect[i].y );
         }
     }
 
@@ -1840,7 +1840,7 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            return Color::IndexToColor( selectedColor );
+            return Color::IndexToColor( selectedColorIndex );
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return color;
@@ -1854,13 +1854,13 @@ uint8_t Dialog::selectPlayerColor( const uint8_t color, const uint8_t availableC
         }
         else {
             for ( size_t i = 0; i < 7; ++i ) {
-                if ( static_cast<int>( i ) != selectedColor && colorRect[i] != fheroes2::Rect{} && le.MouseClickLeft( colorRect[i] ) ) {
-                    fheroes2::Blit( colorSpriteBorder, display, colorRect[selectedColor].x, colorRect[selectedColor].y );
+                if ( static_cast<int>( i ) != selectedColorIndex && colorRect[i] != fheroes2::Rect{} && le.MouseClickLeft( colorRect[i] ) ) {
+                    fheroes2::Blit( colorSpriteBorder, display, colorRect[selectedColorIndex].x, colorRect[selectedColorIndex].y );
                     fheroes2::Blit( colorSpriteBorderSelected, display, colorRect[i].x, colorRect[i].y );
 
-                    display.render( fheroes2::getBoundaryRect( colorRect[selectedColor], colorRect[i] ) );
+                    display.render( fheroes2::getBoundaryRect( colorRect[selectedColorIndex], colorRect[i] ) );
 
-                    selectedColor = static_cast<int>( i );
+                    selectedColorIndex = static_cast<int>( i );
 
                     break;
                 }

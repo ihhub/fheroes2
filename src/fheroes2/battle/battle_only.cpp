@@ -62,7 +62,7 @@
 
 namespace
 {
-    const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
+    const std::array<PlayerColor, 2> playerColor{ PlayerColor::BLUE, PlayerColor::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
@@ -505,7 +505,7 @@ void Battle::Only::StartBattle()
     Battle::Loader( ( armyInfo[0].hero ? armyInfo[0].hero->GetArmy() : armyInfo[0].monster ), ( armyInfo[1].hero ? armyInfo[1].hero->GetArmy() : armyInfo[1].monster ),
                     1 );
 
-    conf.SetCurrentColor( Color::NONE );
+    conf.SetCurrentColor( PlayerColor::NONE );
 }
 
 void Battle::Only::reset()

@@ -42,6 +42,7 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "game_io.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -54,6 +55,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -992,8 +994,6 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
 
 Army::Army( HeroBase * cmdr /* = nullptr */ )
     : commander( cmdr )
-    , _isSpreadCombatFormation( true )
-    , color( Color::NONE )
 {
     reserve( maximumTroopCount );
 
@@ -1004,8 +1004,6 @@ Army::Army( HeroBase * cmdr /* = nullptr */ )
 
 Army::Army( const Maps::Tile & tile )
     : commander( nullptr )
-    , _isSpreadCombatFormation( true )
-    , color( Color::NONE )
 {
     reserve( maximumTroopCount );
 
@@ -1016,11 +1014,6 @@ Army::Army( const Maps::Tile & tile )
     setFromTile( tile );
 }
 
-const Troops & Army::getTroops() const
-{
-    return *this;
-}
-
 void Army::setFromTile( const Maps::Tile & tile )
 {
     assert( commander == nullptr );
@@ -1029,10 +1022,10 @@ void Army::setFromTile( const Maps::Tile & tile )
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.getMainObjectType( false ) );
     if ( isCaptureObject ) {
-        color = getColorFromTile( tile );
+        _color = getColorFromTile( tile );
     }
     else {
-        color = Color::NONE;
+        _color = PlayerColor::NONE;
     }
 
     switch ( tile.getMainObjectType( false ) ) {
@@ -1175,10 +1168,10 @@ void Army::setFromTile( const Maps::Tile & tile )
     }
 }
 
-int Army::GetColor() const
+PlayerColor Army::GetColor() const
 {
     const HeroBase * currentCommander = GetCommander();
-    return currentCommander != nullptr ? currentCommander->GetColor() : color;
+    return currentCommander != nullptr ? currentCommander->GetColor() : _color;
 }
 
 int Army::GetLuck() const
@@ -1370,7 +1363,7 @@ const HeroBase * Army::GetCommander() const
 
 int Army::GetControl() const
 {
-    return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
+    return commander ? commander->GetControl() : ( _color == PlayerColor::NONE ? CONTROL_AI : Players::GetPlayerControl( _color ) );
 }
 
 uint32_t Army::getTotalCount() const
@@ -1962,7 +1955,7 @@ OStreamBase & operator<<( OStreamBase & stream, const Army & army )
         stream << *troop;
     } );
 
-    return stream << army._isSpreadCombatFormation << army.color;
+    return stream << army._isSpreadCombatFormation << army._color;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Army & army )
@@ -1985,7 +1978,17 @@ IStreamBase & operator>>( IStreamBase & stream, Army & army )
         } );
     }
 
-    stream >> army._isSpreadCombatFormation >> army.color;
+    stream >> army._isSpreadCombatFormation;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        army._color = static_cast<PlayerColor>( temp );
+    }
+    else {
+        stream >> army._color;
+    }
 
     assert( std::all_of( army.begin(), army.end(), [&army]( const Troop * troop ) {
         const ArmyTroop * armyTroop = dynamic_cast<const ArmyTroop *>( troop );

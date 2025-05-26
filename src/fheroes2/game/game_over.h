@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
 class IStreamBase;
@@ -86,10 +87,10 @@ namespace GameOver
         friend OStreamBase & operator<<( OStreamBase & stream, const Result & res );
         friend IStreamBase & operator>>( IStreamBase & stream, Result & res );
 
-        Result();
+        Result() = default;
 
-        int colors;
-        uint32_t result;
+        PlayerColorsSet _colors{ 0 };
+        uint32_t result{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const Result & res );
