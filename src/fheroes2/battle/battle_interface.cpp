@@ -647,6 +647,10 @@ namespace
             return Cursor::SWORD_BOTTOMRIGHT;
         case Battle::LEFT:
             return Cursor::SWORD_RIGHT;
+        case Battle::BOTTOM:
+            return Cursor::SWORD_TOP;
+        case Battle::TOP:
+            return Cursor::SWORD_BOTTOM;
         default:
             break;
         }
@@ -668,6 +672,10 @@ namespace
             return Battle::TOP_LEFT;
         case Cursor::SWORD_RIGHT:
             return Battle::LEFT;
+        case Cursor::SWORD_TOP:
+            return Battle::BOTTOM;
+        case Cursor::SWORD_BOTTOM:
+            return Battle::TOP;
         default:
             break;
         }

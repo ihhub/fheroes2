@@ -280,22 +280,33 @@ Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point 
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
+    const fheroes2::Point one_half( ( _coord[1].x + _coord[2].x ) / 2, ( _coord[1].y + _coord[2].y ) / 2 );
+    const fheroes2::Point two_half( ( _coord[2].x + _coord[3].x ) / 2, ( _coord[2].y + _coord[3].y ) / 2 );
+    const fheroes2::Point four_half( ( _coord[4].x + _coord[5].x ) / 2, ( _coord[4].y + _coord[5].y ) / 2 );
+    const fheroes2::Point five_half( ( _coord[5].x + _coord[6].x ) / 2, ( _coord[5].y + _coord[6].y ) / 2 );
+
     if ( pt == _coord[0] ) {
         return CENTER;
     }
-    if ( inABC( pt, _coord[0], _coord[1], _coord[2] ) ) {
+    if ( inABC( pt, _coord[0], _coord[1], one_half ) ) {
         return TOP_LEFT;
     }
-    if ( inABC( pt, _coord[0], _coord[2], _coord[3] ) ) {
+    if ( inABC( pt, _coord[0], one_half, two_half ) ) {
+        return TOP;
+    }
+    if ( inABC( pt, _coord[0], two_half, _coord[3] ) ) {
         return TOP_RIGHT;
     }
     if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) ) {
         return RIGHT;
     }
-    if ( inABC( pt, _coord[0], _coord[4], _coord[5] ) ) {
+    if ( inABC( pt, _coord[0], _coord[4], four_half ) ) {
         return BOTTOM_RIGHT;
     }
-    if ( inABC( pt, _coord[0], _coord[5], _coord[6] ) ) {
+    if ( inABC( pt, _coord[0], four_half, five_half ) ) {
+        return BOTTOM;
+    }
+    if ( inABC( pt, _coord[0], five_half, _coord[6] ) ) {
         return BOTTOM_LEFT;
     }
     if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) ) {
