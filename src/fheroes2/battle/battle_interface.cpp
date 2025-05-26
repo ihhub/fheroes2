@@ -682,6 +682,19 @@ namespace
 
         return Battle::UNKNOWN;
     }
+
+    int intentDirectionToAttackDirection( const Battle::Unit & unit, const int dir )
+    {
+        using namespace Battle;
+
+        if ( dir == TOP ) {
+            return unit.isReflect() ? TOP_LEFT : TOP_RIGHT;
+}
+        if ( dir == BOTTOM ) {
+            return unit.isReflect() ? BOTTOM_LEFT : BOTTOM_RIGHT;
+        }
+        return dir;
+    }
 }
 
 namespace Battle
@@ -2593,6 +2606,32 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 if ( Board::isValidDirection( _curentCellIndex, direction )
                      && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( _curentCellIndex, direction ) ) ) {
                     availableAttackDirection.emplace( direction );
+                }
+            }
+
+            // Wide monsters can also attack from the top and bottom.
+            if ( _currentUnit->isWide() ) {
+                const auto checkTopBottom = [this]( const int topOrBottomDirection, const int leftDirection, const int rightDirection ) {
+                    const int32_t dst = Board::GetIndexDirection( _curentCellIndex, topOrBottomDirection );
+                    if ( !Board::isValidDirection( _curentCellIndex, leftDirection ) || !Board::isValidDirection( _curentCellIndex, rightDirection ) ) {
+                        return false;
+            }
+                    Position position = Position::GetReachable( *_currentUnit, dst );
+                    Cell * head = position.GetHead();
+                    // Position must be both reachable and not "fixed" to be a tail attack. Tail attacks are covered above.
+                    return head != nullptr && head->GetIndex() == dst;
+                };
+
+                // Attack from the top is actually from the TOP_RIGHT, where the head is.
+                const int32_t topDirection = _currentUnit->isReflect() ? TOP_LEFT : TOP_RIGHT;
+                if ( checkTopBottom( topDirection, TOP_LEFT, TOP_RIGHT ) ) {
+                    availableAttackDirection.emplace( TOP );
+                }
+
+                // Attack from the bottom is actually from the BOTTOM_RIGHT, where the head is.
+                const int32_t bottomDirection = _currentUnit->isReflect() ? BOTTOM_LEFT : BOTTOM_RIGHT;
+                if ( checkTopBottom( bottomDirection, BOTTOM_LEFT, BOTTOM_RIGHT ) ) {
+                    availableAttackDirection.emplace( BOTTOM );
                 }
             }
 
