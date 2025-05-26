@@ -3413,9 +3413,11 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             break;
 
         case Cursor::SWORD_TOPLEFT:
+        case Cursor::SWORD_TOP:
         case Cursor::SWORD_TOPRIGHT:
         case Cursor::SWORD_RIGHT:
         case Cursor::SWORD_BOTTOMRIGHT:
+        case Cursor::SWORD_BOTTOM:
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT: {
             if ( !isConfirmed ) {
@@ -3424,11 +3426,49 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
 
             const int dir = GetDirectionFromCursorSword( themes );
 
-            if ( unitOnCell && Board::isValidDirection( index, dir ) ) {
-                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
+            if ( !unitOnCell ) {
+                break;
+            }
+
+            if ( !_currentUnit->isWide() && Board::isValidDirection( index, dir ) ) {
+                const int32_t move = Board::GetIndexDirection( index, dir );
 
                 actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
                                       Board::GetReflectDirection( dir ) );
+
+                humanturn_exit = true;
+            }
+
+            if ( _currentUnit->isWide() ) {
+                // Wide creatures can attack from top/bottom, we need to ge the actual attack direction
+                const int attack_dir = intentDirectionToAttackDirection( *_currentUnit, dir );
+                if ( !Board::isValidDirection( index, attack_dir ) ) {
+                    break;
+                }
+
+                int32_t move = Board::GetIndexDirection( index, attack_dir );
+                // Some attacks may require a small nudge, but not top/bottom attacks
+                if ( attack_dir == dir ) {
+                    move = fixupDestinationCell( *_currentUnit, move );
+                }
+                // if the intent direction means tail attack, we might need to move the highlighted cells by one
+                const auto adjustForTailAttack = [this, dir, &move]( const int moveDirection, const int topDirection, const int bottomDirection ) {
+                    if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
+                        const int32_t move_candidate = Board::GetIndexDirection( move, moveDirection );
+                        if ( Position::GetReachable( *_currentUnit, move_candidate ).GetHead() != nullptr ) {
+                            move = move_candidate;
+                        }
+                    }
+                };
+                if ( _currentUnit->isReflect() ) {
+                    adjustForTailAttack( LEFT, TOP_LEFT, BOTTOM_LEFT );
+                }
+                else {
+                    adjustForTailAttack( RIGHT, TOP_RIGHT, BOTTOM_RIGHT );
+                }
+
+                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
+                                      Board::GetReflectDirection( attack_dir ) );
 
                 humanturn_exit = true;
             }
