@@ -689,7 +689,7 @@ namespace
 
         if ( dir == TOP ) {
             return unit.isReflect() ? TOP_LEFT : TOP_RIGHT;
-}
+        }
         if ( dir == BOTTOM ) {
             return unit.isReflect() ? BOTTOM_LEFT : BOTTOM_RIGHT;
         }
@@ -2075,7 +2075,8 @@ void Battle::Interface::RedrawCover()
             highlightedCells.emplace( pos.GetTail() );
         }
         else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
-                  || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
+                  || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT || cursorType == Cursor::SWORD_TOP
+                  || cursorType == Cursor::SWORD_BOTTOM ) {
             highlightedCells.emplace( cell );
 
             int direction = 0;
@@ -2097,11 +2098,20 @@ void Battle::Interface::RedrawCover()
             else if ( cursorType == Cursor::SWORD_RIGHT ) {
                 direction = LEFT;
             }
+            else if ( cursorType == Cursor::SWORD_TOP ) {
+                direction = BOTTOM;
+            }
+            else if ( cursorType == Cursor::SWORD_BOTTOM ) {
+                direction = TOP;
+            }
             else {
                 assert( 0 );
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( _curentCellIndex, direction ) );
+            // Wide creatures can attack from top/bottom, we need to ge the actual attack direction
+            const int attackDirection = intentDirectionToAttackDirection( *_currentUnit, direction );
+            const int32_t dst = Board::GetIndexDirection( _curentCellIndex, attackDirection );
+            const Position pos = Position::GetReachable( *_currentUnit, dst );
             assert( pos.GetHead() != nullptr );
 
             highlightedCells.emplace( pos.GetHead() );
@@ -2109,11 +2119,30 @@ void Battle::Interface::RedrawCover()
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                highlightedCells.emplace( pos.GetTail() );
+                // if the intent direction means tail attack, we might need to move the highlighted cells by one
+                const auto tryHighlightTailAttack
+                    = [this, &highlightedCells, direction, dst]( const int moveDirection, const int directionTop, const int directionBottom ) -> bool {
+                    if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
+                        const int32_t move_candidate = Board::GetIndexDirection( dst, moveDirection );
+                        Position position = Position::GetReachable( *_currentUnit, move_candidate );
+                        if ( position.GetHead() != nullptr ) {
+                            highlightedCells.emplace( position.GetHead() );
+                            highlightedCells.emplace( position.GetTail() );
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                const bool wasMoved
+                    = _currentUnit->isReflect() ? tryHighlightTailAttack( LEFT, TOP_LEFT, BOTTOM_LEFT ) : tryHighlightTailAttack( RIGHT, TOP_RIGHT, BOTTOM_RIGHT );
+
+                if ( !wasMoved ) {
+                    highlightedCells.emplace( pos.GetTail() );
+                }
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
-                const Cell * secondAttackedCell = Board::GetCell( _curentCellIndex, Board::GetReflectDirection( direction ) );
+                const Cell * secondAttackedCell = Board::GetCell( _curentCellIndex, Board::GetReflectDirection( attackDirection ) );
 
                 if ( secondAttackedCell ) {
                     highlightedCells.emplace( secondAttackedCell );
@@ -2615,7 +2644,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     const int32_t dst = Board::GetIndexDirection( _curentCellIndex, topOrBottomDirection );
                     if ( !Board::isValidDirection( _curentCellIndex, leftDirection ) || !Board::isValidDirection( _curentCellIndex, rightDirection ) ) {
                         return false;
-            }
+                    }
                     Position position = Position::GetReachable( *_currentUnit, dst );
                     Cell * head = position.GetHead();
                     // Position must be both reachable and not "fixed" to be a tail attack. Tail attacks are covered above.
