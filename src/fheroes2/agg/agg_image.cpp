@@ -4902,8 +4902,9 @@ namespace
                 // - 2 extra River Delta objects. Each object has 7 image parts.
                 // - 1 new Stone Liths with 3 image parts.
                 // - 3 new variants of Observation Tower object. Each object has 2 image parts.
-                // - 4 a "cat" object that has: 1 main image + 6 animation images.
-                // In total, 6 new image parts.
+                // - 1 new "Black Cat" object that has: 1 main image + 6 animation images.
+                // In total, 7 new objects (30 new images).
+
                 images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) );
 
                 // 2 River Deltas.
