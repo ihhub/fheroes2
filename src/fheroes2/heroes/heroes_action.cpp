@@ -3690,7 +3690,8 @@ namespace
         if ( hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
             fheroes2::showStandardTextMessage(
                 MP2::StringObject( MP2::OBJ_BLACK_CAT ),
-                _( "You catch sight of an unusually large black cat. As you draw near, you blink - and the cat vanishes without a trace, leaving behind a lingering sense of wonder." ), Dialog::OK );
+                _( "You catch sight of an unusually large black cat. As you draw near, you blink - and the cat vanishes without a trace, leaving behind a lingering sense of wonder." ),
+                Dialog::OK );
 
             return;
         }
