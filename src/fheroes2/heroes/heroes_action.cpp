@@ -3705,7 +3705,7 @@ namespace
 
         fheroes2::showStandardTextMessage(
             std::string( MP2::StringObject( MP2::OBJ_BLACK_CAT ) ),
-            _( "You approach an unusually large black cat staring intensely at you. To your surprise, it trots forward, brushes your leg, and purrs. Charmed, you reach down to pet it. Without warning, the cat bites your hand and vanishes into the nearby bushes. \"Typical cats.\" you mutter as your troops burst into laughter at your misfortune." ),
+            _( "You approach an unusually large black cat staring intensely at you. To your surprise, it trots forward, brushes your leg, and purrs. Charmed, you reach down to pet it. Without warning, the cat bites your hand and vanishes into the nearby bushes. \"Typical cats,\" you mutter as your troops burst into laughter at your misfortune." ),
             Dialog::OK, elementUI );
     }
 }
