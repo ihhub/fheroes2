@@ -253,7 +253,7 @@ namespace
 
     bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
     {
-        if ( objectsUids.empty() ) {
+        if ( objectsUids.empty() || objectGroups.empty() ) {
             return false;
         }
 
@@ -285,6 +285,9 @@ namespace
                     ++objectIter;
                     continue;
                 }
+
+                // Remove the object also from the `world` tiles. It is needed for proper rendering of the map.
+                Maps::removeObjectFromMapByUID( static_cast<int32_t>( mapTileIndex ), objectIter->id );
 
                 const auto & objects = Maps::getObjectsByGroup( objectIter->group );
                 assert( objectIter->index < objects.size() );
@@ -1059,9 +1062,6 @@ namespace Interface
                         action.commit();
 
                         _redraw |= mapUpdateFlags;
-
-                        // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                        Maps::readMapInEditor( _mapFormat );
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
@@ -1071,9 +1071,6 @@ namespace Interface
                                             _editorPanel.getEraseObjectGroups() ) ) {
                             action.commit();
                             _redraw |= mapUpdateFlags;
-
-                            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                            Maps::readMapInEditor( _mapFormat );
                         }
                     }
                 }
@@ -1634,9 +1631,6 @@ namespace Interface
             _redraw |= mapUpdateFlags;
 
             action.commit();
-
-            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-            Maps::readMapInEditor( _mapFormat );
         }
         else if ( _editorPanel.isRoadDraw() ) {
             if ( tile.isWater() ) {
@@ -1680,9 +1674,6 @@ namespace Interface
             if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
                 action.commit();
                 _redraw |= mapUpdateFlags;
-
-                // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                Maps::readMapInEditor( _mapFormat );
             }
 
             if ( brushSize.width == 0 ) {
@@ -2157,6 +2148,7 @@ namespace Interface
         std::string errorMessage;
 
         std::set<uint32_t> uids;
+        std::set<Maps::ObjectGroup> groups;
 
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
@@ -2179,6 +2171,7 @@ namespace Interface
 
                 if ( !verifyTerrainPlacement( pos, object.group, static_cast<int32_t>( object.index ), errorMessage ) ) {
                     uids.emplace( object.id );
+                    groups.emplace( object.group );
                 }
             }
 
@@ -2188,11 +2181,6 @@ namespace Interface
         }
 
         if ( !uids.empty() ) {
-            std::set<Maps::ObjectGroup> groups;
-            for ( int32_t i = 0; i < static_cast<int32_t>( Maps::ObjectGroup::GROUP_COUNT ); ++i ) {
-                groups.emplace( static_cast<Maps::ObjectGroup>( i ) );
-            }
-
             removeObjects( _mapFormat, uids, groups );
         }
 
