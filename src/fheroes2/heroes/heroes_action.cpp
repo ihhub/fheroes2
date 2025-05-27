@@ -3685,7 +3685,7 @@ namespace
     // Black Cat gives +3 morale and -2 luck.
     void actionToBlackCat( Heroes & hero, int32_t dst_index )
     {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( MP2::OBJ_BLACK_CAT ) )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
         if ( hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
             fheroes2::showStandardTextMessage(

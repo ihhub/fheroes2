@@ -1914,7 +1914,7 @@ namespace
 
     void AIToBlackCatObject( Heroes & hero, int32_t dst_index )
     {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( MP2::OBJ_BLACK_CAT ) )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
         if ( !hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
             hero.SetVisited( dst_index );
