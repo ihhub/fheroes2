@@ -3690,7 +3690,7 @@ namespace
         if ( hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
             fheroes2::showStandardTextMessage(
                 MP2::StringObject( MP2::OBJ_BLACK_CAT ),
-                _( "You catch sight of an unusually large black cat. As you draw near, you blink - and the cat vanishes without a trace, leaving behind a lingering sense of wonder." ),
+                _( "The sting of your previous encounter still lingers, and you keep your distance from the intimidating cat until you have regained your courage in battle." ),
                 Dialog::OK );
 
             return;
@@ -3705,7 +3705,7 @@ namespace
 
         fheroes2::showStandardTextMessage(
             std::string( MP2::StringObject( MP2::OBJ_BLACK_CAT ) ),
-            _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees, while your troops laugh at your misfortune." ),
+            _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees. At least the laughter at your misfortune lifts your troops' spirits." ),
             Dialog::OK, elementUI );
     }
 }
