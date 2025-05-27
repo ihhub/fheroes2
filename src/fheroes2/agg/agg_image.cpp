@@ -4951,24 +4951,9 @@ namespace
                 // Black Cat. Main object image.
                 fheroes2::h2d::readImage( "black_cat.image", images[241] );
 
-                // Black Cat. Tail animation.
+                // Black Cat. Tail and eyes animation.
                 for ( size_t i = 0; i < 6; ++i ) {
-                    fheroes2::h2d::readImage( "black_cat_tail_" + std::to_string( i ) + ".image", images[242 + i] );
-                }
-
-                // Black Cat. Add eyes blinking.
-                fheroes2::h2d::readImage( "black_cat_closed_eyes.image", temp );
-                for ( size_t i = 4; i < 6; ++i ) {
-                    fheroes2::Sprite & animationImage = images[242 + i];
-                    fheroes2::Sprite combined( animationImage.x() + animationImage.width() - temp.x(), animationImage.y() + animationImage.height() - temp.y() );
-                    combined.reset();
-                    combined.setPosition( temp.x(), temp.y() );
-
-                    fheroes2::Blit( temp, combined );
-                    fheroes2::Blit( animationImage, 0, 0, combined, animationImage.x() - temp.x(), animationImage.y() - temp.y(), animationImage.width(),
-                                    animationImage.height() );
-
-                    animationImage = std::move( combined );
+                    fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
                 }
             }
 
