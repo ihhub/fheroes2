@@ -849,7 +849,7 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs )
+int Skill::getLeadershipModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
@@ -864,7 +864,7 @@ int Skill::GetLeadershipModifiers( int level, std::string * strs )
     return skillValue;
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs )
+int Skill::getLuckModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LUCK, level );
 

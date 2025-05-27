@@ -508,8 +508,8 @@ namespace
             return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
 
         case MP2::OBJ_BLACK_CAT:
-            // Visit the Black Cat only if hero will not decrease his Luck by adding "-2" and if he can gain Morale.
-            return !hero.isVisited( tile ) && hero.GetMorale() < Morale::GREAT && hero.getTotalLuckValue() > Luck::IRISH + 1;
+            // Visit the Black Cat only if hero can increase his Morale and his Luck is maximum.
+            return !hero.isVisited( tile ) && hero.GetMorale() < Morale::GREAT && hero.GetLuck() >= Luck::IRISH;
 
         // Dwellings with free army.
         case MP2::OBJ_ARCHER_HOUSE:

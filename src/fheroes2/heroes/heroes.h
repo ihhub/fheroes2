@@ -388,12 +388,8 @@ public:
 
     int GetMorale() const override;
     int GetLuck() const override;
-    int GetMoraleWithModificators( std::string * str = nullptr ) const;
-    int GetLuckWithModificators( std::string * str = nullptr ) const;
-
-    // This function returns the sum of all Luck effects to use in the other calculations.
-    // WARNING: This function can return values outside of allowed Luck [-2 .. +2] scope.
-    int getTotalLuckValue() const;
+    int getMoraleWithModifiers( std::string * str = nullptr ) const;
+    int getLuckWithModifiers( std::string * str = nullptr ) const;
 
     int GetLevel() const
     {
