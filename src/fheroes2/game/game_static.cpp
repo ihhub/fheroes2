@@ -182,8 +182,8 @@ int32_t GameStatic::getObjectLuckEffect( const MP2::MapObjectType objectType )
     case MP2::OBJ_IDOL:
     case MP2::OBJ_MERMAID:
         return 1;
-    case MP2::OBJ_PYRAMID:
     case MP2::OBJ_BLACK_CAT:
+    case MP2::OBJ_PYRAMID:
         return -2;
     default:
         break;

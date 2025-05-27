@@ -800,6 +800,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     switch ( objectType ) {
     case OBJ_ARTIFACT:
     case OBJ_BARRIER:
+    case OBJ_BLACK_CAT:
     case OBJ_BOAT:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
@@ -830,7 +831,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_SKELETON:
     case OBJ_TREASURE_CHEST:
     case OBJ_WHIRLPOOL:
-    case OBJ_BLACK_CAT:
         return DIRECTION_ALL;
     case OBJ_ABANDONED_MINE:
     case OBJ_AIR_ALTAR:
