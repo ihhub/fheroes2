@@ -563,6 +563,8 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     case OBJ_SHIPWRECK:
     case OBJ_TEMPLE:
     case OBJ_WATERING_HOLE:
+    // Morale and Luck modifiers.
+    case OBJ_BLACK_CAT:
         return true;
     default:
         break;
