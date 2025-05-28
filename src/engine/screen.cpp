@@ -960,6 +960,27 @@ namespace
             _toggleVSync();
         }
 
+        fheroes2::Point getWindowPos() const override
+        {
+            if ( _window == nullptr ) {
+                return { -1, -1 };
+            }
+            int x = 0;
+            int y = 0;
+            SDL_GetWindowPosition( _window, &x, &y );
+            return { x, y };
+        }
+
+        void setWindowPos( fheroes2::Point pos ) override
+        {
+            if ( pos == fheroes2::Point{ -1, -1 } ) {
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+            }
+            else {
+                _prevWindowPos = pos;
+            }
+        }
+
     private:
         SDL_Window * _window{ nullptr };
         SDL_Surface * _surface{ nullptr };
@@ -1361,6 +1382,11 @@ namespace fheroes2
         Image::reset();
 
         _screenSize = { info.screenWidth, info.screenHeight };
+    }
+
+    void Display::setWindowPos( Point point )
+    {
+        _engine->setWindowPos( point );
     }
 
     Display & Display::instance()

@@ -176,6 +176,7 @@ namespace
                 }
             }
 
+            display.setWindowPos( conf.getStarttWindowPos() );
             display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
@@ -343,7 +344,8 @@ int main( int argc, char ** argv )
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );
-        fheroes2::Display::instance().changePalette( nullptr, true );
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        display.changePalette( nullptr, true );
 
         // Update the fonts according to the game language set in the configuration.
         // NOTICE: it must be done before initializing the engine to properly load all
@@ -364,8 +366,13 @@ int main( int argc, char ** argv )
 
         try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
+            const fheroes2::Point pos = conf.getStarttWindowPos();
             Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
+            const fheroes2::Point currentPos = display.getWindowPos();
+            if ( !conf.FullScreen() && pos != currentPos ) {
+                conf.setStartWindowPos( currentPos );
+                conf.Save( Settings::configFileName );
+            }
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )
