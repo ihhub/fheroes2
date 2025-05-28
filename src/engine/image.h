@@ -130,7 +130,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        Sprite( const Image & image, const int32_t x = 0, const int32_t y = 0 )
+        explicit Sprite( const Image & image, const int32_t x = 0, const int32_t y = 0 )
             : Image( image )
             , _x( x )
             , _y( y )
@@ -171,6 +171,7 @@ namespace fheroes2
         ImageRestorer( Image & image, const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
         ImageRestorer( const ImageRestorer & ) = delete;
+        ImageRestorer & operator=( const ImageRestorer & ) = delete;
 
         // Restores the original image if necessary, see the implementation for details
         ~ImageRestorer()
