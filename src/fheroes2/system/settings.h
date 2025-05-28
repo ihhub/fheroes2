@@ -73,6 +73,12 @@ enum class InterfaceType : uint8_t
     DYNAMIC = 2
 };
 
+enum class SaveFileSortingMethod : uint8_t
+{
+    FILENAME,
+    TIMESTAMP,
+};
+
 class Settings
 {
 public:
@@ -354,6 +360,21 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
+    SaveFileSortingMethod GetSaveFileSortingMethod() const
+    {
+        return _saveFileSortType;
+    }
+
+    void changeSaveFileSortingMethod()
+    {
+        if ( _saveFileSortType == SaveFileSortingMethod::FILENAME ) {
+            _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
+        }
+        else {
+            _saveFileSortType = SaveFileSortingMethod::FILENAME;
+        }
+    }
+
     void SetProgramPath( const char * path );
 
     static std::string GetVersion();
@@ -388,6 +409,8 @@ private:
     std::string _loadedFileLanguage;
 
     Maps::FileInfo _currentMapInfo;
+
+    SaveFileSortingMethod _saveFileSortType;
 
     int sound_volume;
     int music_volume;

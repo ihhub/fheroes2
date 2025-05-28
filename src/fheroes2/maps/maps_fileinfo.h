@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <locale>
 #include <optional>
 #include <string>
 #include <type_traits>
@@ -147,6 +148,11 @@ namespace Maps
         static bool sortByFileName( const FileInfo & lhs, const FileInfo & rhs );
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
+        static bool sortByTimestamp( const FileInfo & lhs, const FileInfo & rhs )
+        {
+            // we want the latest timestamp first
+            return lhs.timestamp > rhs.timestamp;
+        }
 
         // Only Resurrection Maps contain supported language.
         std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
@@ -229,6 +235,32 @@ namespace Maps
 
     OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );
     IStreamBase & operator>>( IStreamBase & stream, FileInfo & fi );
+
+    template <typename CharType>
+    bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+    {
+        typename std::basic_string<CharType>::const_iterator li = lhs.begin();
+        typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
+
+        while ( li != lhs.end() && ri != rhs.end() ) {
+            const CharType lc = std::tolower( *li, std::locale() );
+            const CharType rc = std::tolower( *ri, std::locale() );
+
+            ++li;
+            ++ri;
+
+            if ( lc < rc ) {
+                return true;
+            }
+            if ( lc > rc ) {
+                return false;
+            }
+            // the chars are "equal", so proceed to check the next pair
+        }
+
+        // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
+        return li == lhs.end() && ri != rhs.end();
+    }
 }
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;

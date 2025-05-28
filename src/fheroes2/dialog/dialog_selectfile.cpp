@@ -31,6 +31,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -114,6 +115,26 @@ namespace
 
         textInput.drawInRoi( field.x + 4 + ( maxFileNameWidth - textInput.width() ) / 2, field.y + 4, output, field );
     }
+
+    struct CompareByTimestamp
+    {
+        bool operator()( const Maps::FileInfo & info, uint32_t timestamp ) const
+        {
+            return info.timestamp > timestamp;
+        }
+        bool operator()( uint32_t timestamp, const Maps::FileInfo & info ) const
+        {
+            return timestamp > info.timestamp;
+        }
+    };
+
+    struct CompareByFilename
+    {
+        bool operator()( const Maps::FileInfo & info, const std::string & filename ) const
+        {
+            return Maps::CaseInsensitiveCompare( info.filename, filename );
+        }
+    };
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
     {
@@ -228,6 +249,18 @@ namespace
         // Do nothing.
     }
 
+    void sortMapInfos( MapsFileInfoList & mapInfos )
+    {
+        const SaveFileSortingMethod sortType = Settings::Get().GetSaveFileSortingMethod();
+        if ( sortType == SaveFileSortingMethod::FILENAME ) {
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        }
+        else {
+            assert( sortType == SaveFileSortingMethod::TIMESTAMP );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByTimestamp );
+        }
+    }
+
     MapsFileInfoList getSortedMapsFileInfoList()
     {
         ListFiles files;
@@ -244,7 +277,7 @@ namespace
             }
         }
 
-        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        sortMapInfos( mapInfos );
 
         return mapInfos;
     }
@@ -304,7 +337,9 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        Settings & settings = Settings::Get();
+        const bool isEvilInterface = settings.isEvilInterfaceEnabled();
+        const SaveFileSortingMethod fileSortingMethod = settings.GetSaveFileSortingMethod();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -327,16 +362,16 @@ namespace
         if ( !lastfile.empty() ) {
             filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
-
-            MapsFileInfoList::iterator it = lists.begin();
-            for ( ; it != lists.end(); ++it ) {
-                if ( ( *it ).filename == lastfile ) {
-                    break;
-                }
+            MapsFileInfoList::const_iterator it;
+            if ( settings.GetSaveFileSortingMethod() == SaveFileSortingMethod::FILENAME ) {
+                it = std::lower_bound( lists.cbegin(), lists.cend(), lastfile, CompareByFilename() );
+            }
+            else {
+                it = std::find_if( it, lists.cend(), [&lastfile]( const Maps::FileInfo & info ) { return info.filename == lastfile; } );
             }
 
-            if ( it != lists.end() ) {
-                listbox.SetCurrent( std::distance( lists.begin(), it ) );
+            if ( it != lists.cend() ) {
+                listbox.SetCurrent( std::distance( lists.cbegin(), it ) );
             }
             else {
                 if ( !isEditing ) {
@@ -372,10 +407,16 @@ namespace
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
         title.drawInRoi( dialogArea.x + ( dialogArea.width - title.width() ) / 2, dialogArea.y + 16, display, dialogArea );
 
+        const int offsetFromCenter = dialogArea.width / 10;
+        fheroes2::ButtonSprite buttonSort;
+        // SORT should be in the middle if "..." isn't present, otherwise they should be side by side
+        const int sortOffsetX = isEditing ? -offsetFromCenter : 0;
+        background.renderCustomButtonSprite( buttonSort, _( "SORT" ), { 80, 25 }, { sortOffsetX, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { offsetFromCenter, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             // Prepare the text input and set it to always fit the file name input field width.
             textInput = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ textInputRoi.x + 4, textInputRoi.y + 2, maxFileNameWidth, textInputRoi.height - 2 },
@@ -407,12 +448,13 @@ namespace
         while ( le.HandleEvents() && result.empty() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonSort.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSort.area() ) );
             if ( isEditing ) {
                 buttonVirtualKB->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonVirtualKB->area() ) );
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                return {};
+                break;
             }
 
             const int listId = listbox.getCurrentId();
@@ -422,6 +464,7 @@ namespace
             bool isListboxSelected = listbox.isSelected();
 
             bool needRedraw = ( listId != listbox.getCurrentId() );
+            bool listUpdated = false;
 
             if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
@@ -459,6 +502,42 @@ namespace
                 }
                 else if ( !filename.empty() ) {
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
+                }
+            }
+            else if ( le.MouseClickLeft( buttonSort.area() ) ) {
+                const int currentId = listbox.getCurrentId();
+                std::string lastChoice{};
+                uint32_t lastChoiceTimestamp{};
+                if ( currentId >= 0 && static_cast<size_t>( currentId ) < lists.size() ) {
+                    lastChoice = lists[currentId].filename;
+                    lastChoiceTimestamp = lists[currentId].timestamp;
+                }
+
+                settings.changeSaveFileSortingMethod();
+                sortMapInfos( lists );
+                listUpdated = true;
+
+                // re-select the last selected file if any, unless we're typing in the list box
+                if ( !lastChoice.empty() ) {
+                    MapsFileInfoList::const_iterator it = lists.cbegin();
+                    MapsFileInfoList::const_iterator end = lists.cend();
+                    const SaveFileSortingMethod sortingMethod = settings.GetSaveFileSortingMethod();
+
+                    if ( sortingMethod == SaveFileSortingMethod::TIMESTAMP ) {
+                        std::tie( it, end ) = std::equal_range( lists.cbegin(), lists.cend(), lastChoiceTimestamp, CompareByTimestamp() );
+                        it = std::find_if( it, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+                    }
+                    else {
+                        it = std::lower_bound( lists.cbegin(), lists.cend(), lastChoice, CompareByFilename() );
+                    }
+
+                    if ( it != end ) {
+                        const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
+                        if ( newId != currentId ) {
+                            listbox.SetCurrent( newId );
+                            needRedraw = true;
+                        }
+                    }
                 }
             }
             else if ( isEditing ) {
@@ -521,8 +600,12 @@ namespace
             else if ( isEditing && le.isMouseRightButtonPressedInArea( buttonVirtualKB->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonSort.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Sort" ), _( "Click to toggle sorting by name/date." ), Dialog::ZERO );
+            }
 
-            const bool needRedrawListbox = listbox.IsNeedRedraw();
+            // TODO: ListBox::SetCurrent() call should update needRedraw variable as it changes the internal UI view of the class.
+            const bool needRedrawListbox = listUpdated || listbox.IsNeedRedraw();
 
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
                 // Text input blinking cursor render is done in Save Game dialog when no file is selected
@@ -569,6 +652,12 @@ namespace
             else {
                 display.render( textInputAndDateROI );
             }
+        }
+
+        const SaveFileSortingMethod lastFileSortingMethod = settings.GetSaveFileSortingMethod();
+
+        if ( lastFileSortingMethod != fileSortingMethod ) {
+            settings.Save( Settings::configFileName );
         }
 
         return result;
