@@ -2650,13 +2650,13 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
 
             // Find all possible directions where the current monster can attack.
-            std::set<AttackDirection> availableAttackDirection;
+            std::set<AttackDirection> availableAttackDirections;
 
             for ( const CellDirection direction : { CellDirection::BOTTOM_RIGHT, CellDirection::BOTTOM_LEFT, CellDirection::RIGHT, CellDirection::TOP_RIGHT,
                                                     CellDirection::TOP_LEFT, CellDirection::LEFT } ) {
                 if ( Board::isValidDirection( _curentCellIndex, direction )
                      && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( _curentCellIndex, direction ) ) ) {
-                    availableAttackDirection.emplace( asAttackDirection( direction ) );
+                    availableAttackDirections.emplace( asAttackDirection( direction ) );
                 }
             }
 
@@ -2676,27 +2676,27 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 // Attack from the top is actually from the TOP_RIGHT, where the head is.
                 const CellDirection topDirection = _currentUnit->isReflect() ? CellDirection::TOP_LEFT : CellDirection::TOP_RIGHT;
                 if ( checkTopBottom( topDirection, CellDirection::TOP_LEFT, CellDirection::TOP_RIGHT ) ) {
-                    availableAttackDirection.emplace( AttackDirection::TOP );
+                    availableAttackDirections.emplace( AttackDirection::TOP );
                 }
 
                 // Attack from the bottom is actually from the BOTTOM_RIGHT, where the head is.
                 const CellDirection bottomDirection = _currentUnit->isReflect() ? CellDirection::BOTTOM_LEFT : CellDirection::BOTTOM_RIGHT;
                 if ( checkTopBottom( bottomDirection, CellDirection::BOTTOM_LEFT, CellDirection::BOTTOM_RIGHT ) ) {
-                    availableAttackDirection.emplace( AttackDirection::BOTTOM );
+                    availableAttackDirections.emplace( AttackDirection::BOTTOM );
                 }
             }
 
-            if ( !availableAttackDirection.empty() ) {
+            if ( !availableAttackDirections.empty() ) {
                 AttackDirection currentDirection = cell->GetTriangleDirection( getRelativeMouseCursorPos() );
                 if ( currentDirection == AttackDirection::UNKNOWN ) {
                     // This could happen when another window has popped up and the user moved the mouse.
                     currentDirection = AttackDirection::CENTER;
                 }
 
-                if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                if ( availableAttackDirections.count( currentDirection ) == 0 ) {
                     // This direction is not valid. Find the nearest one.
-                    if ( availableAttackDirection.size() == 1 ) {
-                        currentDirection = *availableAttackDirection.begin();
+                    if ( availableAttackDirections.size() == 1 ) {
+                        currentDirection = *availableAttackDirections.begin();
                     }
                     else {
                         // First search clockwise.
@@ -2705,13 +2705,13 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
                         while ( true ) {
                             ++clockWiseDirection;
-                            if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                            if ( availableAttackDirections.count( clockWiseDirection ) > 0 ) {
                                 currentDirection = clockWiseDirection;
                                 break;
                             }
 
                             --antiClockWiseDirection;
-                            if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                            if ( availableAttackDirections.count( antiClockWiseDirection ) > 0 ) {
                                 currentDirection = antiClockWiseDirection;
                                 break;
                             }
