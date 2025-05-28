@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 04:50+0000\n"
+"POT-Creation-Date: 2025-05-28 00:46+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -8073,6 +8073,18 @@ msgstr ""
 "\"På mine rejser har jeg lært meget om mystisk magi. Et stort orakel lærte "
 "mig sine færdigheder. Jeg har svaret, du søger.\""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 msgid "No spell book is present."
 msgstr "Der er ingen magibog at finde."
 
@@ -9471,6 +9483,10 @@ msgstr "Sumpsø"
 
 msgid "Frozen Lake"
 msgstr "Frossen sø"
+
+#, fuzzy
+msgid "Black Cat"
+msgstr "Den Sorte Perle"
 
 msgid "randomRace|level 1 creatures"
 msgstr "niveau 1 væsener"
