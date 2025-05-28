@@ -85,7 +85,7 @@ void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 void LuckIndicator::Redraw()
 {
     std::string modificators;
-    _luck = _hero->GetLuckWithModificators( &modificators );
+    _luck = _hero->getLuckWithModifiers( &modificators );
 
     _description.clear();
     _description.append( Luck::Description( _luck ) );
@@ -131,7 +131,7 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
 void MoraleIndicator::Redraw()
 {
     std::string modificators;
-    _morale = _hero->GetMoraleWithModificators( &modificators );
+    _morale = _hero->getMoraleWithModifiers( &modificators );
 
     _description.clear();
     _description.append( Morale::Description( _morale ) );
