@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 04:50+0000\n"
+"POT-Creation-Date: 2025-05-28 00:46+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -7922,6 +7922,18 @@ msgstr ""
 "Zvedne hlavu a říká: \"Na svých cestách jsem se mnoho naučila v oblasti "
 "tajemné magie. Mám odpověď, kterou hledáš.\""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 msgid "No spell book is present."
 msgstr "Nemáš Knihu kouzel, bez ní nemůžeš kouzlit."
 
@@ -9327,6 +9339,10 @@ msgstr "Bažinaté jezero"
 
 msgid "Frozen Lake"
 msgstr "Zamrzlé jezero"
+
+#, fuzzy
+msgid "Black Cat"
+msgstr "Černá perla"
 
 msgid "randomRace|level 1 creatures"
 msgstr "Jednotky 1. úrovně"

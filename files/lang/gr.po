@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 04:50+0000\n"
+"POT-Creation-Date: 2025-05-28 00:46+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -7012,6 +7012,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 msgid "No spell book is present."
 msgstr ""
 
@@ -8319,6 +8331,9 @@ msgid "Swampy Lake"
 msgstr ""
 
 msgid "Frozen Lake"
+msgstr ""
+
+msgid "Black Cat"
 msgstr ""
 
 msgid "randomRace|level 1 creatures"
