@@ -46,7 +46,6 @@ namespace Battle
         CENTER = 0x40,
         RIGHT_SIDE = TOP_RIGHT | RIGHT | BOTTOM_RIGHT,
         LEFT_SIDE = TOP_LEFT | LEFT | BOTTOM_LEFT,
-        AROUND = RIGHT_SIDE | LEFT_SIDE
     };
 
     inline CellDirection operator<<( const CellDirection d, int shift )
@@ -67,11 +66,6 @@ namespace Battle
     inline bool isRightSide( const CellDirection d )
     {
         return static_cast<int>( d ) & static_cast<int>( CellDirection::RIGHT_SIDE );
-    }
-
-    inline bool isAround( const CellDirection d )
-    {
-        return static_cast<int>( d ) & static_cast<int>( CellDirection::AROUND );
     }
 
     enum class AttackDirection
