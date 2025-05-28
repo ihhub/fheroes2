@@ -336,8 +336,8 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
     }
 
     const CellDirection tailDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::RIGHT : CellDirection::LEFT;
-    // if CellDirection is RIGHT, then dir is either TOP_RIGHT or BOTTOM_RIGHT
-    assert( tailDir == CellDirection::LEFT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
+    // if CellDirection is LEFT, then dir is either TOP_RIGHT or BOTTOM_RIGHT
+    assert( tailDir == CellDirection::RIGHT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
 
     const Cell * tail = Board::GetCell( _index, tailDir );
 
