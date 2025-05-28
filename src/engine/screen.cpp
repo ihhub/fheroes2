@@ -456,9 +456,8 @@ namespace
             if ( _emulation ) {
                 return fheroes2::Cursor::isVisible();
             }
-            else {
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
-            }
+
+            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -1411,7 +1410,7 @@ namespace fheroes2
             }
         }
 
-        _prevRoi = std::move( temp );
+        _prevRoi = temp;
     }
 
     void Display::updateNextRenderRoi( const Rect & roi )
