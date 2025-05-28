@@ -325,32 +325,23 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
 {
     assert( Board::isNearIndexes( _index, adjacent._index ) );
 
-    if ( unit.isWide() ) {
-        const CellDirection dir = Board::GetDirection( adjacent._index, _index );
-
-        bool reflect = true;
-        switch ( dir ) {
-        case CellDirection::BOTTOM_RIGHT:
-        case CellDirection::TOP_RIGHT:
-            reflect = false;
-            [[fallthrough]];
-        case CellDirection::BOTTOM_LEFT:
-        case CellDirection::TOP_LEFT: {
-            const Cell * tail = Board::GetCell( _index, reflect ? CellDirection::RIGHT : CellDirection::LEFT );
-
-            return tail && tail->isPassable( true ) && isPassable( true );
-        }
-
-        case CellDirection::LEFT:
-        case CellDirection::RIGHT:
-            return isPassable( true ) || _index == unit.GetTailIndex();
-
-        default:
-            break;
-        }
+    if ( !unit.isWide() ) {
+        return isPassable( true );
     }
 
-    return isPassable( true );
+    const CellDirection dir = Board::GetDirection( adjacent._index, _index );
+
+    if ( dir == CellDirection::LEFT || dir == CellDirection::RIGHT ) {
+        return isPassable( true ) || _index == unit.GetTailIndex();
+    }
+
+    const CellDirection sideDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::LEFT : CellDirection::RIGHT;
+    // if CellDirection is RIGHT, then dir is either TOP_RIGHT or BOTTOM_RIGHT
+    assert( sideDir == CellDirection::LEFT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
+
+    const Cell * tail = Board::GetCell( _index, sideDir );
+
+    return tail && tail->isPassable( true ) && isPassable( true );
 }
 
 bool Battle::Cell::isPassableForUnit( const Unit & unit ) const
