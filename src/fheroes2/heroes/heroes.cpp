@@ -1064,15 +1064,15 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
 
 int Heroes::GetMorale() const
 {
-    return GetMoraleWithModificators( nullptr );
+    return getMoraleWithModifiers( nullptr );
 }
 
-int Heroes::GetMoraleWithModificators( std::string * strs ) const
+int Heroes::getMoraleWithModifiers( std::string * strs ) const
 {
     int result = Morale::NORMAL;
 
     // bonus leadership
-    result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
+    result += Skill::getLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     result += getObjectMoraleModifiers( getAllVisitedObjectTypes(), strs );
 
@@ -1086,9 +1086,11 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
             *strs += maxMoraleArtifact.GetName();
             *strs += _( " gives you maximum morale" );
         }
-        result = Morale::BLOOD;
+
+        return Morale::BLOOD;
     }
-    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+
+    if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
         // Remove the possible empty line at the end of the string.
         strs->pop_back();
     }
@@ -1098,15 +1100,15 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
 int Heroes::GetLuck() const
 {
-    return GetLuckWithModificators( nullptr );
+    return getLuckWithModifiers( nullptr );
 }
 
-int Heroes::GetLuckWithModificators( std::string * strs ) const
+int Heroes::getLuckWithModifiers( std::string * strs ) const
 {
     int result = Luck::NORMAL;
 
     // bonus luck
-    result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
+    result += Skill::getLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
     result += getObjectLuckModifiers( getAllVisitedObjectTypes(), strs );
@@ -1120,9 +1122,11 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
             *strs += maxLuckArtifact.GetName();
             *strs += _( " gives you maximum luck" );
         }
-        result = Luck::IRISH;
+
+        return Luck::IRISH;
     }
-    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+
+    if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
         // Remove the possible empty line at the end of the string.
         strs->pop_back();
     }
@@ -2197,6 +2201,7 @@ std::string Heroes::String() const
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
        << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "morale, luck    : " << GetMorale() << ", " << GetLuck() << std ::endl
        << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
        << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl

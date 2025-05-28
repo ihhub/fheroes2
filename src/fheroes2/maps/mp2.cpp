@@ -488,6 +488,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Swampy Lake" );
     case OBJ_FROZEN_LAKE:
         return _( "Frozen Lake" );
+    case OBJ_NON_ACTION_BLACK_CAT:
+        return _( "Black Cat" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -561,6 +563,8 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     case OBJ_SHIPWRECK:
     case OBJ_TEMPLE:
     case OBJ_WATERING_HOLE:
+    // Morale and Luck modifiers.
+    case OBJ_BLACK_CAT:
         return true;
     default:
         break;
@@ -796,6 +800,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     switch ( objectType ) {
     case OBJ_ARTIFACT:
     case OBJ_BARRIER:
+    case OBJ_BLACK_CAT:
     case OBJ_BOAT:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
