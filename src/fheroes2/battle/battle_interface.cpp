@@ -685,34 +685,33 @@ namespace
 
     Battle::CellDirection intentDirectionToAttackDirection( const Battle::Unit & unit, const Battle::AttackDirection dir )
     {
-        using namespace Battle;
-
         switch ( dir ) {
-        case AttackDirection::TOP:
+        case Battle::AttackDirection::TOP:
             return unit.isReflect() ? Battle::CellDirection::TOP_LEFT : Battle::CellDirection::TOP_RIGHT;
-        case AttackDirection::BOTTOM:
+        case Battle::AttackDirection::BOTTOM:
             return unit.isReflect() ? Battle::CellDirection::BOTTOM_LEFT : Battle::CellDirection::BOTTOM_RIGHT;
-        case AttackDirection::UNKNOWN:
-            return CellDirection::UNKNOWN;
-        case AttackDirection::TOP_LEFT:
-            return CellDirection::TOP_LEFT;
-        case AttackDirection::TOP_RIGHT:
-            return CellDirection::TOP_RIGHT;
-        case AttackDirection::RIGHT:
-            return CellDirection::RIGHT;
-        case AttackDirection::BOTTOM_RIGHT:
-            return CellDirection::BOTTOM_RIGHT;
-        case AttackDirection::BOTTOM_LEFT:
-            return CellDirection::BOTTOM_LEFT;
-        case AttackDirection::LEFT:
-            return CellDirection::LEFT;
-        case AttackDirection::CENTER:
-            return CellDirection::CENTER;
+        case Battle::AttackDirection::UNKNOWN:
+            return Battle::CellDirection::UNKNOWN;
+        case Battle::AttackDirection::TOP_LEFT:
+            return Battle::CellDirection::TOP_LEFT;
+        case Battle::AttackDirection::TOP_RIGHT:
+            return Battle::CellDirection::TOP_RIGHT;
+        case Battle::AttackDirection::RIGHT:
+            return Battle::CellDirection::RIGHT;
+        case Battle::AttackDirection::BOTTOM_RIGHT:
+            return Battle::CellDirection::BOTTOM_RIGHT;
+        case Battle::AttackDirection::BOTTOM_LEFT:
+            return Battle::CellDirection::BOTTOM_LEFT;
+        case Battle::AttackDirection::LEFT:
+            return Battle::CellDirection::LEFT;
+        case Battle::AttackDirection::CENTER:
+            return Battle::CellDirection::CENTER;
         default:
+            assert( 0 );
             break;
         }
-        assert( 0 );
-        return CellDirection::UNKNOWN;
+
+        return Battle::CellDirection::UNKNOWN;
     }
 }
 
