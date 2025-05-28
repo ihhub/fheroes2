@@ -254,7 +254,8 @@ namespace
                     return EXIT_FAILURE;
                 }
 
-                if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(), image ) ) {
+                if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(),
+                                                 static_cast<fheroes2::Sprite>( image ) ) ) {
                     std::cerr << "Error adding file " << inputFileName << std::endl;
                     return EXIT_FAILURE;
                 }
