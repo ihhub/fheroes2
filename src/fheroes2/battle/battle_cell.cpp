@@ -335,8 +335,10 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
         return isPassable( true ) || _index == unit.GetTailIndex();
     }
 
+    // When a wide unit moves diagonally to the left (to the top left or bottom left cell), its tail should be on the right side (because units can't move "tail first"),
+    // and vise versa - when such a unit moves diagonally to the right, its tail should be on the left side.
     const CellDirection tailDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::RIGHT : CellDirection::LEFT;
-    // if CellDirection is LEFT, then dir is either TOP_RIGHT or BOTTOM_RIGHT
+    // If 'tailDir' is LEFT, then 'dir' is either TOP_RIGHT or BOTTOM_RIGHT
     assert( tailDir == CellDirection::RIGHT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
 
     const Cell * tail = Board::GetCell( _index, tailDir );
