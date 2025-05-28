@@ -2141,8 +2141,8 @@ void Battle::Interface::RedrawCover()
                 const auto tryHighlightTailAttack = [this, &highlightedCells, direction, dst]( const CellDirection moveDirection, const AttackDirection directionTop,
                                                                                                const AttackDirection directionBottom ) -> bool {
                     if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
-                        const int32_t move_candidate = Board::GetIndexDirection( dst, moveDirection );
-                        Position position = Position::GetReachable( *_currentUnit, move_candidate );
+                        const int32_t moveCandidate = Board::GetIndexDirection( dst, moveDirection );
+                        Position position = Position::GetReachable( *_currentUnit, moveCandidate );
                         if ( position.GetHead() != nullptr ) {
                             highlightedCells.emplace( position.GetHead() );
                             highlightedCells.emplace( position.GetTail() );
@@ -3504,9 +3504,9 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 const auto adjustForTailAttack
                     = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
                           if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
-                              const int32_t move_candidate = Board::GetIndexDirection( move, moveDirection );
-                              if ( Position::GetReachable( *_currentUnit, move_candidate ).GetHead() != nullptr ) {
-                                  move = move_candidate;
+                              const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
+                              if ( Position::GetReachable( *_currentUnit, moveCandidate ).GetHead() != nullptr ) {
+                                  move = moveCandidate;
                               }
                           }
                       };
