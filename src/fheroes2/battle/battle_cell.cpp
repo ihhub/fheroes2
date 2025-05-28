@@ -335,7 +335,7 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
         return isPassable( true ) || _index == unit.GetTailIndex();
     }
 
-    const CellDirection sideDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::LEFT : CellDirection::RIGHT;
+    const CellDirection sideDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::RIGHT : CellDirection::LEFT;
     // if CellDirection is RIGHT, then dir is either TOP_RIGHT or BOTTOM_RIGHT
     assert( sideDir == CellDirection::LEFT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
 
