@@ -2126,7 +2126,7 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            // Wide creatures can attack from top/bottom, we need to ge the actual attack direction
+            // Wide creatures can attack from top/bottom, we need to get the actual attack direction
             const CellDirection attackDirection = intentDirectionToAttackDirection( *_currentUnit, direction );
             const int32_t dst = Board::GetIndexDirection( _curentCellIndex, attackDirection );
             const Position pos = Position::GetReachable( *_currentUnit, dst );
@@ -3490,7 +3490,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             }
 
             if ( _currentUnit->isWide() ) {
-                // Wide creatures can attack from top/bottom, we need to ge the actual attack direction
+                // Wide creatures can attack from top/bottom, we need to get the actual attack direction
                 if ( !Board::isValidDirection( index, attackDir ) ) {
                     break;
                 }
