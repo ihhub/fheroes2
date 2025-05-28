@@ -831,6 +831,9 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
+                // update the window position, in case we get queried for it
+                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
                 // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
                 // case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used under the hood. To avoid
@@ -962,6 +965,9 @@ namespace
 
         fheroes2::Point getWindowPos() const override
         {
+            if ( isFullScreen() ) {
+                return _prevWindowPos;
+            }
             if ( _window == nullptr ) {
                 return { -1, -1 };
             }

@@ -72,6 +72,7 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
@@ -369,7 +370,7 @@ int main( int argc, char ** argv )
             const fheroes2::Point pos = conf.getStarttWindowPos();
             Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
             const fheroes2::Point currentPos = display.getWindowPos();
-            if ( !conf.FullScreen() && pos != currentPos ) {
+            if ( pos != currentPos ) {
                 conf.setStartWindowPos( currentPos );
                 conf.Save( Settings::configFileName );
             }
