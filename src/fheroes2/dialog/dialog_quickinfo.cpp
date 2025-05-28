@@ -461,25 +461,25 @@ namespace
         case MP2::OBJ_MONSTER:
             return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) );
 
+        case MP2::OBJ_COAST:
         case MP2::OBJ_EVENT:
         case MP2::OBJ_NONE:
-        case MP2::OBJ_COAST:
             return showGroundInfo( tile );
 
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_SPHINX:
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_WAGON:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_ARTESIAN_SPRING:
+        case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_OBELISK:
+        case MP2::OBJ_PYRAMID:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_SPHINX:
+        case MP2::OBJ_WAGON:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
             return showObjectVisitInfo( objectType, kingdom.isVisited( tile ) );
 
         case MP2::OBJ_MAGELLANS_MAPS:
@@ -509,51 +509,52 @@ namespace
         }
 
         // join army
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
         case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_CAVE:
         case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_WATCH_TOWER:
         // recruit army
+        case MP2::OBJ_DESERT_TENT:
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
         // battle and recruit army
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-        case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WATER_ALTAR:
             return showDwellingInfo( tile, kingdom.isVisited( tile ) );
 
-        case MP2::OBJ_GAZEBO:
         case MP2::OBJ_FORT:
-        case MP2::OBJ_XANADU:
+        case MP2::OBJ_GAZEBO:
         case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_XANADU:
             return showLocalVisitTileInfo( tile );
 
-        case MP2::OBJ_MAGIC_WELL:
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_BUOY:
-        case MP2::OBJ_MERMAID:
-        case MP2::OBJ_WATERING_HOLE:
         case MP2::OBJ_ARENA:
-        case MP2::OBJ_STABLES:
+        case MP2::OBJ_BLACK_CAT:
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MAGIC_WELL:
+        case MP2::OBJ_MERMAID:
+        case MP2::OBJ_OASIS:
         case MP2::OBJ_SIRENS:
+        case MP2::OBJ_STABLES:
+        case MP2::OBJ_TEMPLE:
+        case MP2::OBJ_WATERING_HOLE:
             return showLocalVisitObjectInfo( objectType );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:

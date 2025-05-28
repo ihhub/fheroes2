@@ -4671,6 +4671,15 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Black Cat, "fheroes2 Resurrection" object.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BLACK_CAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 241U, fheroes2::Point{ 0, 0 }, MP2::OBJ_BLACK_CAT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateKingdomHeroes( std::vector<Maps::ObjectInfo> & objects )
