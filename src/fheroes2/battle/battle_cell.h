@@ -49,27 +49,27 @@ namespace Battle
         AROUND = RIGHT_SIDE | LEFT_SIDE
     };
 
-    inline CellDirection operator<<( CellDirection d, int shift )
+    inline CellDirection operator<<( const CellDirection d, int shift )
     {
         return static_cast<CellDirection>( static_cast<int>( d ) << shift );
     }
 
-    inline CellDirection operator>>( CellDirection d, int shift )
+    inline CellDirection operator>>( const CellDirection d, int shift )
     {
         return static_cast<CellDirection>( static_cast<int>( d ) >> shift );
     }
 
-    inline bool isLeftSide( CellDirection d )
+    inline bool isLeftSide( const CellDirection d )
     {
         return static_cast<int>( d ) & static_cast<int>( CellDirection::LEFT_SIDE );
     }
 
-    inline bool isRightSide( CellDirection d )
+    inline bool isRightSide( const CellDirection d )
     {
         return static_cast<int>( d ) & static_cast<int>( CellDirection::RIGHT_SIDE );
     }
 
-    inline bool isAround( CellDirection d )
+    inline bool isAround( const CellDirection d )
     {
         return static_cast<int>( d ) & static_cast<int>( CellDirection::AROUND );
     }
@@ -88,17 +88,17 @@ namespace Battle
         CENTER = 0x100,
     };
 
-    inline AttackDirection operator<<( AttackDirection d, int shift )
+    inline AttackDirection operator<<( const AttackDirection d, int shift )
     {
         return static_cast<AttackDirection>( static_cast<int>( d ) << shift );
     }
 
-    inline AttackDirection operator>>( AttackDirection d, int shift )
+    inline AttackDirection operator>>( const AttackDirection d, int shift )
     {
         return static_cast<AttackDirection>( static_cast<int>( d ) >> shift );
     }
 
-    inline AttackDirection asAttackDirection( CellDirection d )
+    inline AttackDirection asAttackDirection( const CellDirection d )
     {
         switch ( d ) {
         case CellDirection::TOP_LEFT:
