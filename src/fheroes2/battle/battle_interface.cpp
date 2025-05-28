@@ -2137,15 +2137,17 @@ void Battle::Interface::RedrawCover()
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                // if the intent direction means tail attack, we might need to move the highlighted cells by one
+                // If the intent direction means tail attack, we might need to move the highlighted cells by one
                 const auto tryHighlightTailAttack = [this, &highlightedCells, direction, dst]( const CellDirection moveDirection, const AttackDirection directionTop,
                                                                                                const AttackDirection directionBottom ) -> bool {
                     if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
-                        const int32_t moveCandidate = Board::GetIndexDirection( dst, moveDirection );
-                        Position position = Position::GetReachable( *_currentUnit, moveCandidate );
-                        if ( position.GetHead() != nullptr ) {
+                        if ( const Position position = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( dst, moveDirection ) );
+                             position.GetHead() != nullptr ) {
+                            assert( position.GetTail() != nullptr );
+
                             highlightedCells.emplace( position.GetHead() );
                             highlightedCells.emplace( position.GetTail() );
+
                             return true;
                         }
                     }
@@ -3500,12 +3502,14 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 if ( dir != AttackDirection::TOP && dir != AttackDirection::BOTTOM ) {
                     move = fixupDestinationCell( *_currentUnit, move );
                 }
-                // if the intent direction means tail attack, we might need to move the highlighted cells by one
+                // If the intent direction means tail attack, we might need to move the attack position by one cell
                 const auto adjustForTailAttack
                     = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
                           if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
                               const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
-                              if ( Position::GetReachable( *_currentUnit, moveCandidate ).GetHead() != nullptr ) {
+                              if ( const Position position = Position::GetReachable( *_currentUnit, moveCandidate ); position.GetHead() != nullptr ) {
+                                  assert( position.GetTail() != nullptr );
+
                                   move = moveCandidate;
                               }
                           }
