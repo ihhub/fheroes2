@@ -278,7 +278,7 @@ namespace Battle
         // structure still has enough hitpoints.
         void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
-        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, Battle::CellDirection dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );

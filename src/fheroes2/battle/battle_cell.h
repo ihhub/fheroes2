@@ -34,7 +34,47 @@ namespace Battle
 {
     class Unit;
 
-    enum CellDirection : int
+    enum class CellDirection
+    {
+        UNKNOWN = 0x00,
+        TOP_LEFT = 0x01,
+        TOP_RIGHT = 0x02,
+        RIGHT = 0x04,
+        BOTTOM_RIGHT = 0x08,
+        BOTTOM_LEFT = 0x10,
+        LEFT = 0x20,
+        CENTER = 0x40,
+        RIGHT_SIDE = TOP_RIGHT | RIGHT | BOTTOM_RIGHT,
+        LEFT_SIDE = TOP_LEFT | LEFT | BOTTOM_LEFT,
+        AROUND = RIGHT_SIDE | LEFT_SIDE
+    };
+
+    inline CellDirection operator<<( CellDirection d, int shift )
+    {
+        return static_cast<CellDirection>( static_cast<int>( d ) << shift );
+    }
+
+    inline CellDirection operator>>( CellDirection d, int shift )
+    {
+        return static_cast<CellDirection>( static_cast<int>( d ) >> shift );
+    }
+
+    inline bool isLeftSide( CellDirection d )
+    {
+        return static_cast<int>( d ) & static_cast<int>( CellDirection::LEFT_SIDE );
+    }
+
+    inline bool isRightSide( CellDirection d )
+    {
+        return static_cast<int>( d ) & static_cast<int>( CellDirection::RIGHT_SIDE );
+    }
+
+    inline bool isAround( CellDirection d )
+    {
+        return static_cast<int>( d ) & static_cast<int>( CellDirection::AROUND );
+    }
+
+    enum class AttackDirection
     {
         UNKNOWN = 0x00,
         TOP_LEFT = 0x01,
@@ -46,10 +86,37 @@ namespace Battle
         BOTTOM_LEFT = 0x40,
         LEFT = 0x80,
         CENTER = 0x100,
-        RIGHT_SIDE = TOP_RIGHT | RIGHT | BOTTOM_RIGHT,
-        LEFT_SIDE = TOP_LEFT | LEFT | BOTTOM_LEFT,
-        AROUND = RIGHT_SIDE | LEFT_SIDE
     };
+
+    inline AttackDirection operator<<( AttackDirection d, int shift )
+    {
+        return static_cast<AttackDirection>( static_cast<int>( d ) << shift );
+    }
+
+    inline AttackDirection operator>>( AttackDirection d, int shift )
+    {
+        return static_cast<AttackDirection>( static_cast<int>( d ) >> shift );
+    }
+
+    inline AttackDirection asAttackDirection( CellDirection d )
+    {
+        switch ( d ) {
+        case CellDirection::TOP_LEFT:
+            return AttackDirection::TOP_LEFT;
+        case CellDirection::TOP_RIGHT:
+            return AttackDirection::TOP_RIGHT;
+        case CellDirection::RIGHT:
+            return AttackDirection::RIGHT;
+        case CellDirection::BOTTOM_RIGHT:
+            return AttackDirection::BOTTOM_RIGHT;
+        case CellDirection::BOTTOM_LEFT:
+            return AttackDirection::BOTTOM_LEFT;
+        case CellDirection::LEFT:
+            return AttackDirection::LEFT;
+        default:
+            return AttackDirection::UNKNOWN;
+        }
+    }
 
     class Cell final
     {
@@ -98,7 +165,7 @@ namespace Battle
             return _unit;
         }
 
-        CellDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
+        AttackDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
 
         bool isPositionIncludePoint( const fheroes2::Point & pt ) const;
 

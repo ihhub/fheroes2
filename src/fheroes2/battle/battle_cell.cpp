@@ -50,7 +50,7 @@ void Battle::Position::Set( const int32_t head, const bool wide, const bool refl
     first = Board::GetCell( head );
 
     if ( first && wide ) {
-        second = Board::GetCell( first->GetIndex(), reflect ? RIGHT : LEFT );
+        second = Board::GetCell( first->GetIndex(), reflect ? CellDirection::RIGHT : CellDirection::LEFT );
     }
     else {
         second = nullptr;
@@ -97,7 +97,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
             return pos;
         };
 
-        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+        const CellDirection tailDirection = unit.isReflect() ? CellDirection::RIGHT : CellDirection::LEFT;
 
         if ( Board::isValidDirection( dst, tailDirection ) ) {
             Cell * headCell = Board::GetCell( dst );
@@ -107,7 +107,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
         }
 
         if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
-            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+            const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
@@ -161,7 +161,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
         };
 
         const auto tryHead = [&unit, dst, &checkCells]() -> Position {
-            const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+            const CellDirection tailDirection = unit.isReflect() ? CellDirection::RIGHT : CellDirection::LEFT;
 
             if ( Board::isValidDirection( dst, tailDirection ) ) {
                 Cell * headCell = Board::GetCell( dst );
@@ -174,7 +174,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
         };
 
         const auto tryTail = [&unit, dst, &checkCells]() -> Position {
-            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+            const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
@@ -276,7 +276,7 @@ void Battle::Cell::SetArea( const fheroes2::Rect & area )
     _coord[6] = { offsetX, _coord[4].y };
 }
 
-Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
+Battle::AttackDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
@@ -286,39 +286,39 @@ Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point 
     const fheroes2::Point five_half( ( _coord[5].x + _coord[6].x ) / 2, ( _coord[5].y + _coord[6].y ) / 2 );
 
     if ( pt == _coord[0] ) {
-        return CENTER;
+        return AttackDirection::CENTER;
     }
     if ( inABC( pt, _coord[0], _coord[1], one_half ) ) {
-        return TOP_LEFT;
+        return AttackDirection::TOP_LEFT;
     }
     if ( inABC( pt, _coord[0], one_half, two_half ) ) {
-        return TOP;
+        return AttackDirection::TOP;
     }
     if ( inABC( pt, _coord[0], two_half, _coord[3] ) ) {
-        return TOP_RIGHT;
+        return AttackDirection::TOP_RIGHT;
     }
     if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) ) {
-        return RIGHT;
+        return AttackDirection::RIGHT;
     }
     if ( inABC( pt, _coord[0], _coord[4], four_half ) ) {
-        return BOTTOM_RIGHT;
+        return AttackDirection::BOTTOM_RIGHT;
     }
     if ( inABC( pt, _coord[0], four_half, five_half ) ) {
-        return BOTTOM;
+        return AttackDirection::BOTTOM;
     }
     if ( inABC( pt, _coord[0], five_half, _coord[6] ) ) {
-        return BOTTOM_LEFT;
+        return AttackDirection::BOTTOM_LEFT;
     }
     if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) ) {
-        return LEFT;
+        return AttackDirection::LEFT;
     }
 
-    return UNKNOWN;
+    return AttackDirection::UNKNOWN;
 }
 
 bool Battle::Cell::isPositionIncludePoint( const fheroes2::Point & pt ) const
 {
-    return UNKNOWN != GetTriangleDirection( pt );
+    return AttackDirection::UNKNOWN != GetTriangleDirection( pt );
 }
 
 bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const
@@ -326,21 +326,23 @@ bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjac
     assert( Board::isNearIndexes( _index, adjacent._index ) );
 
     if ( unit.isWide() ) {
-        const int dir = Board::GetDirection( adjacent._index, _index );
+        const CellDirection dir = Board::GetDirection( adjacent._index, _index );
 
+        bool reflect = true;
         switch ( dir ) {
-        case BOTTOM_RIGHT:
-        case TOP_RIGHT:
-        case BOTTOM_LEFT:
-        case TOP_LEFT: {
-            const bool reflect = ( ( BOTTOM_LEFT | TOP_LEFT ) & dir ) != 0;
-            const Cell * tail = Board::GetCell( _index, reflect ? RIGHT : LEFT );
+        case CellDirection::BOTTOM_RIGHT:
+        case CellDirection::TOP_RIGHT:
+            reflect = false;
+            [[fallthrough]];
+        case CellDirection::BOTTOM_LEFT:
+        case CellDirection::TOP_LEFT: {
+            const Cell * tail = Board::GetCell( _index, reflect ? CellDirection::RIGHT : CellDirection::LEFT );
 
             return tail && tail->isPassable( true ) && isPassable( true );
         }
 
-        case LEFT:
-        case RIGHT:
+        case CellDirection::LEFT:
+        case CellDirection::RIGHT:
             return isPassable( true ) || _index == unit.GetTailIndex();
 
         default:
