@@ -48,12 +48,12 @@ namespace Battle
         LEFT_SIDE = TOP_LEFT | LEFT | BOTTOM_LEFT,
     };
 
-    inline CellDirection operator<<( const CellDirection d, int shift )
+    inline CellDirection operator<<( const CellDirection d, const int shift )
     {
         return static_cast<CellDirection>( static_cast<int>( d ) << shift );
     }
 
-    inline CellDirection operator>>( const CellDirection d, int shift )
+    inline CellDirection operator>>( const CellDirection d, const int shift )
     {
         return static_cast<CellDirection>( static_cast<int>( d ) >> shift );
     }
@@ -82,12 +82,12 @@ namespace Battle
         CENTER = 0x100,
     };
 
-    inline AttackDirection operator<<( const AttackDirection d, int shift )
+    inline AttackDirection operator<<( const AttackDirection d, const int shift )
     {
         return static_cast<AttackDirection>( static_cast<int>( d ) << shift );
     }
 
-    inline AttackDirection operator>>( const AttackDirection d, int shift )
+    inline AttackDirection operator>>( const AttackDirection d, const int shift )
     {
         return static_cast<AttackDirection>( static_cast<int>( d ) >> shift );
     }
