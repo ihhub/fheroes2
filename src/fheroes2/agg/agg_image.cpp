@@ -1313,8 +1313,9 @@ namespace
         case ICN::BUTTONS_FILE_DIALOG_GOOD: {
             _icnVsSprite[id].resize( 8 );
 
+            const bool isEvilInterface = id == ICN::BUTTONS_FILE_DIALOG_EVIL;
             if ( useOriginalResources() ) {
-                const int buttonIcnID = id == ICN::BUTTONS_FILE_DIALOG_EVIL ? ICN::CPANELE : ICN::CPANEL;
+                const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
                 }
@@ -1327,7 +1328,7 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
-                                                      false, 80 );
+                                                      isEvilInterface, 80 );
 
             break;
         }
