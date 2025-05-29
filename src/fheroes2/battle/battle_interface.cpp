@@ -688,9 +688,10 @@ namespace
     Battle::CellDirection getAttackingCellDirectionForAttackDirection( const Battle::Unit & attacker, const Battle::AttackDirection dir )
     {
         switch ( dir ) {
-        // The attack is performed from the head cell of the wide attacking unit in the direction of "back and up" or "back and down", respectively.
+        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and down".
         case Battle::AttackDirection::TOP:
             return attacker.isReflect() ? Battle::CellDirection::TOP_LEFT : Battle::CellDirection::TOP_RIGHT;
+        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and up".
         case Battle::AttackDirection::BOTTOM:
             return attacker.isReflect() ? Battle::CellDirection::BOTTOM_LEFT : Battle::CellDirection::BOTTOM_RIGHT;
         case Battle::AttackDirection::UNKNOWN:
@@ -2676,13 +2677,13 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return head != nullptr && head->GetIndex() == dst;
                 };
 
-                // Attack from the top is actually from the TOP_RIGHT, where the head is.
+                // The attack from the top is performed from the head cell of the wide attacking unit in the direction of "back and down".
                 const CellDirection topDirection = _currentUnit->isReflect() ? CellDirection::TOP_LEFT : CellDirection::TOP_RIGHT;
                 if ( checkTopBottom( topDirection, CellDirection::TOP_LEFT, CellDirection::TOP_RIGHT ) ) {
                     availableAttackDirections.emplace( AttackDirection::TOP );
                 }
 
-                // Attack from the bottom is actually from the BOTTOM_RIGHT, where the head is.
+                // The attack from the bottom is performed from the head cell of the wide attacking unit in the direction of "back and up".
                 const CellDirection bottomDirection = _currentUnit->isReflect() ? CellDirection::BOTTOM_LEFT : CellDirection::BOTTOM_RIGHT;
                 if ( checkTopBottom( bottomDirection, CellDirection::BOTTOM_LEFT, CellDirection::BOTTOM_RIGHT ) ) {
                     availableAttackDirections.emplace( AttackDirection::BOTTOM );
