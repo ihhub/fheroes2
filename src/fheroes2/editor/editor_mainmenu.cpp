@@ -251,7 +251,7 @@ namespace Editor
                 buttonBack.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonBack.area() ) );
 
                 // TODO: Remove this call once random map generator has been added. This serves only to silence clang check for unused functions.
-                outputEditorMapSizeMenuInTextSupportMode();
+                outputEditorNewMapMenuInTextSupportMode();
 
                 if ( le.MouseClickLeft( buttonScratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                     mapCreationModeButtons.disable();
