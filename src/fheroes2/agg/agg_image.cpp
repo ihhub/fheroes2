@@ -1429,9 +1429,9 @@ namespace
             }
 
             if ( useOriginalResources() ) {
-                for ( uint32_t i = 0; i < 3; ++i ) {
-                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
-                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
+                for ( size_t i = 0; i < 3; ++i ) {
+                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
                 // Add generated buttons.
                 const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
@@ -1447,9 +1447,9 @@ namespace
                 _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
                 _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
                 // Add player count buttons.
-                for ( uint32_t i = 0; i < 5; ++i ) {
-                    _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
-                    _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
+                for ( size_t i = 0; i < 5; ++i ) {
+                    _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
 
                 if ( isPoLPresent ) {
@@ -1485,9 +1485,9 @@ namespace
             _icnVsSprite[id].resize( 20 );
 
             if ( useOriginalResources() ) {
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, i * 2 );
-                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, i * 2 + 1 );
+                for ( size_t i = 0; i < 2; ++i ) {
+                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
                 // Add generated Main Menu button.
                 const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
@@ -1499,14 +1499,14 @@ namespace
                                              fheroes2::getSupportedText( gettext_noop( "EditorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
 
                 // Add From Scratch and Random buttons.
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    _icnVsSprite[id][( i + 4 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNENEW, i * 2 );
-                    _icnVsSprite[id][( i + 4 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNENEW, i * 2 + 1 );
+                for ( size_t i = 0; i < 2; ++i ) {
+                    _icnVsSprite[id][( i + 4 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNENEW, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 4 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNENEW, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
                 // Add map size buttons.
-                for ( uint32_t i = 0; i < 4; ++i ) {
-                    _icnVsSprite[id][( i + 6 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNESIZE, i * 2 );
-                    _icnVsSprite[id][( i + 6 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNESIZE, i * 2 + 1 );
+                for ( size_t i = 0; i < 4; ++i ) {
+                    _icnVsSprite[id][( i + 6 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 6 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
 
                 break;
@@ -1765,9 +1765,9 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            for ( uint32_t i = 0; i < 3; ++i ) {
-                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
-                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
+            for ( size_t i = 0; i < 3; ++i ) {
+                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
             }
             // Add battle only button.
             for ( int32_t i = 0; i < 2; ++i ) {
@@ -1813,9 +1813,9 @@ namespace
             _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
             _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
             // Add player count buttons.
-            for ( uint32_t i = 0; i < 5; ++i ) {
-                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
-                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
+            for ( size_t i = 0; i < 5; ++i ) {
+                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
             }
             if ( isPoLPresent ) {
                 _icnVsSprite[id][24] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
@@ -1985,9 +1985,9 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            for ( uint32_t i = 0; i < 3; ++i ) {
-                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
-                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
+            for ( size_t i = 0; i < 3; ++i ) {
+                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
             }
             // Add battle only button.
             for ( int32_t i = 0; i < 2; ++i ) {
@@ -2016,9 +2016,9 @@ namespace
             _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
             _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
             // Add player count buttons.
-            for ( uint32_t i = 0; i < 5; ++i ) {
-                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
-                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
+            for ( size_t i = 0; i < 5; ++i ) {
+                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
             }
             if ( isPoLPresent ) {
                 _icnVsSprite[id][24] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
@@ -2457,7 +2457,7 @@ namespace
         case ICN::X_LOADCM: {
             LoadOriginalICN( id );
             // Remove embedded shadows and backgrounds because we generate our own. We can safely divide by two because every button has 2 states.
-            for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() / 2 ); ++i ) {
+            for ( size_t i = 0; i < _icnVsSprite[id].size() / 2; ++i ) {
                 fheroes2::Sprite & released = _icnVsSprite[id][i * 2];
                 fheroes2::Sprite & pressed = _icnVsSprite[id][i * 2 + 1];
 
