@@ -114,7 +114,6 @@ namespace Editor
 {
     fheroes2::GameMode menuMain( const bool straightToSelectMapSize )
     {
-
         // Stop all sounds, but not the music
         AudioManager::stopSounds();
 
