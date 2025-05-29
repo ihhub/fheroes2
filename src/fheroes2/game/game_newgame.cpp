@@ -430,14 +430,14 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
         mainModeButtons.createButton( 0, 0, menuButtonsIcnIndex, i * 2, i * 2 + 1, i );
     }
 
-    fheroes2::ButtonBase & buttonStandardGame = mainModeButtons.button( 0 );
+    const fheroes2::ButtonBase & buttonStandardGame = mainModeButtons.button( 0 );
     fheroes2::ButtonBase & buttonCampaignGame = mainModeButtons.button( 1 );
-    fheroes2::ButtonBase & buttonMultiGame = mainModeButtons.button( 2 );
-    fheroes2::ButtonBase & buttonBattleGame = mainModeButtons.button( 3 );
-    fheroes2::ButtonBase & buttonSettings = mainModeButtons.button( 4 );
+    const fheroes2::ButtonBase & buttonMultiGame = mainModeButtons.button( 2 );
+    const fheroes2::ButtonBase & buttonBattleGame = mainModeButtons.button( 3 );
+    const fheroes2::ButtonBase & buttonSettings = mainModeButtons.button( 4 );
 
     // Generate dialog background with extra space added for the cancel button.
-    const uint32_t spaceBetweenButtons = 10;
+    const int32_t spaceBetweenButtons = 10;
     fheroes2::StandardWindow background( mainModeButtons, true, buttonStandardGame.area().height + spaceBetweenButtons );
 
     // Make corners like in the original game.

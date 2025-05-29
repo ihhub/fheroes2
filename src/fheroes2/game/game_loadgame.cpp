@@ -94,15 +94,15 @@ fheroes2::GameMode Game::LoadGame()
 
     fheroes2::ButtonGroup gameModeButtons;
     const int menuButtonsIcnIndex = Settings::Get().isEvilInterfaceEnabled() ? ICN::BUTTONS_NEW_GAME_MENU_EVIL : ICN::BUTTONS_NEW_GAME_MENU_GOOD;
-    for ( uint32_t i = 0; i < 3; ++i ) {
+    for ( int32_t i = 0; i < 3; ++i ) {
         gameModeButtons.createButton( 0, 0, menuButtonsIcnIndex, i * 2, i * 2 + 1, i );
     }
 
-    fheroes2::ButtonBase & buttonStandardGame = gameModeButtons.button( 0 );
+    const fheroes2::ButtonBase & buttonStandardGame = gameModeButtons.button( 0 );
     fheroes2::ButtonBase & buttonCampaignGame = gameModeButtons.button( 1 );
-    fheroes2::ButtonBase & buttonMultiplayerGame = gameModeButtons.button( 2 );
+    const fheroes2::ButtonBase & buttonMultiplayerGame = gameModeButtons.button( 2 );
 
-    const uint32_t spaceBetweenButtons = 10;
+    const int32_t spaceBetweenButtons = 10;
 
     fheroes2::StandardWindow background( gameModeButtons, true, buttonStandardGame.area().height * 3 + spaceBetweenButtons * 3 );
 

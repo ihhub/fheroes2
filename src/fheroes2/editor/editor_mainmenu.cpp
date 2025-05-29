@@ -138,11 +138,11 @@ namespace Editor
             mainModeButtons.createButton( 0, 0, menuButtonsIcnIndex, i * 2, i * 2 + 1, i );
         }
 
-        fheroes2::ButtonBase & buttonNewMap = mainModeButtons.button( 0 );
-        fheroes2::ButtonBase & buttonLoadMap = mainModeButtons.button( 1 );
+        const fheroes2::ButtonBase & buttonNewMap = mainModeButtons.button( 0 );
+        const fheroes2::ButtonBase & buttonLoadMap = mainModeButtons.button( 1 );
 
         // Generate dialog background with extra space for cancel button and empty space for 3 buttons to match the original dialog's height.
-        const uint32_t spaceBetweenButtons = 10;
+        const int32_t spaceBetweenButtons = 10;
         fheroes2::StandardWindow background( mainModeButtons, true, ( buttonNewMap.area().height + spaceBetweenButtons ) * 4 );
 
         background.applyGemDecoratedCorners();
@@ -168,12 +168,12 @@ namespace Editor
         }
         mapCreationModeButtons.disable();
 
-        fheroes2::ButtonBase & buttonScratchMap = mapCreationModeButtons.button( 0 );
-        fheroes2::ButtonBase & buttonRandomMap = mapCreationModeButtons.button( 1 );
+        const fheroes2::ButtonBase & buttonScratchMap = mapCreationModeButtons.button( 0 );
+        const fheroes2::ButtonBase & buttonRandomMap = mapCreationModeButtons.button( 1 );
 
         // Add map size buttons
         fheroes2::ButtonGroup mapSizeButtons;
-        for ( int32_t i = 0; i < mapSizeCount; ++i ) {
+        for ( int32_t i = 0; i < static_cast<int32_t>( mapSizeCount ); ++i ) {
             mapSizeButtons.createButton( buttonNewMap.area().x, buttonNewMap.area().y + i * ( buttonNewMap.area().height + spaceBetweenButtons ), menuButtonsIcnIndex,
                                          ( i + 6 ) * 2, ( i + 6 ) * 2 + 1, i );
         }

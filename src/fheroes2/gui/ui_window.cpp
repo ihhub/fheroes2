@@ -79,9 +79,7 @@ namespace
         }
         fheroes2::Point placement;
         if ( isSingleColumn ) {
-            const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - dialogHeight;
             const fheroes2::Sprite mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-            const int32_t backgroundWidth = mainMenuBackground.width();
             const int32_t panelXPos = output.width() - mainMenuBackground.x() - ( dialogWidth + fheroes2::borderWidthPx ) - 8;
             const int32_t panelYPos = mainMenuBackground.y() + fheroes2::borderWidthPx + 8;
             placement.x = panelXPos;
@@ -360,7 +358,7 @@ namespace fheroes2
     void StandardWindow::applyGemDecoratedCorners()
     {
         fheroes2::Sprite gem;
-        const uint32_t gemSideLength = 9;
+        const int32_t gemSideLength = 9;
         gem.resize( gemSideLength, gemSideLength );
         gem.reset();
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -370,7 +368,7 @@ namespace fheroes2
         }
         else {
             const fheroes2::Sprite & corners = fheroes2::AGG::GetICN( ICN::EVIL_DIALOG_PLAIN_CORNERS, 0 );
-            const uint32_t cornerSideLength = 43;
+            const int32_t cornerSideLength = 43;
             Copy( corners, 0, 0, _output, _windowArea.x, _windowArea.y, cornerSideLength, cornerSideLength );
             Copy( corners, cornerSideLength, 0, _output, _windowArea.x + _windowArea.width - cornerSideLength, _windowArea.y, cornerSideLength, cornerSideLength );
             Copy( corners, 0, cornerSideLength, _output, _windowArea.x, _windowArea.y + _windowArea.height - cornerSideLength, cornerSideLength, cornerSideLength );

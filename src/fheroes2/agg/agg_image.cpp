@@ -371,7 +371,7 @@ namespace
     }
 
     // NOTE: Do not call this with an evil style button's ICN ID.
-    void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId, const int index )
+    void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId, const uint32_t index )
     {
         released = fheroes2::AGG::GetICN( goodButtonIcnId, index );
         pressed = fheroes2::AGG::GetICN( goodButtonIcnId, index + 1 );
@@ -1298,13 +1298,13 @@ namespace
             else if ( id == ICN::BUTTONS_NEW_GAME_MENU_EVIL ) {
                 goodButtonIcnID = ICN::BUTTONS_NEW_GAME_MENU_GOOD;
             }
-            else if ( id == ICN::BUTTONS_EDITOR_MENU_EVIL) {
+            else if ( id == ICN::BUTTONS_EDITOR_MENU_EVIL ) {
                 goodButtonIcnID = ICN::BUTTONS_EDITOR_MENU_GOOD;
             }
             _icnVsSprite[id].resize( fheroes2::AGG::GetICNCount( goodButtonIcnID ) );
             const size_t icnSize = _icnVsSprite[id].size();
-            for ( uint32_t i = 0; i < ( icnSize / 2 ); ++i ) {
-                convertToEvilButtonBackground( _icnVsSprite[id][i * 2], _icnVsSprite[id][i * 2 + 1], goodButtonIcnID, i * 2 );
+            for ( size_t i = 0; i < ( icnSize / 2 ); ++i ) {
+                convertToEvilButtonBackground( _icnVsSprite[id][i * 2], _icnVsSprite[id][i * 2 + 1], goodButtonIcnID, static_cast<uint32_t>( i * 2 ) );
             }
 
             break;
@@ -1429,7 +1429,7 @@ namespace
             }
 
             if ( useOriginalResources() ) {
-                for ( int i = 0; i < 3; ++i ) {
+                for ( uint32_t i = 0; i < 3; ++i ) {
                     _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
                     _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
                 }
@@ -1447,7 +1447,7 @@ namespace
                 _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
                 _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
                 // Add player count buttons.
-                for ( int i = 0; i < 5; ++i ) {
+                for ( uint32_t i = 0; i < 5; ++i ) {
                     _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
                     _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
                 }
@@ -1485,7 +1485,7 @@ namespace
             _icnVsSprite[id].resize( 20 );
 
             if ( useOriginalResources() ) {
-                for ( int i = 0; i < 2; ++i ) {
+                for ( uint32_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, i * 2 );
                     _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, i * 2 + 1 );
                 }
@@ -1499,12 +1499,12 @@ namespace
                                              fheroes2::getSupportedText( gettext_noop( "EditorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
 
                 // Add From Scratch and Random buttons.
-                for ( int i = 0; i < 2; ++i ) {
+                for ( uint32_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][( i + 4 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNENEW, i * 2 );
                     _icnVsSprite[id][( i + 4 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNENEW, i * 2 + 1 );
                 }
                 // Add map size buttons.
-                for ( int i = 0; i < 4; ++i ) {
+                for ( uint32_t i = 0; i < 4; ++i ) {
                     _icnVsSprite[id][( i + 6 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNESIZE, i * 2 );
                     _icnVsSprite[id][( i + 6 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNESIZE, i * 2 + 1 );
                 }
@@ -1512,16 +1512,16 @@ namespace
                 break;
             }
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-            std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
-                                                fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
-                                                fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
-                                                fheroes2::getSupportedText( gettext_noop( "editorMainMenu|BACK" ), buttonFontType ),
-                                                fheroes2::getSupportedText( gettext_noop( "newMap|FROM\nSCRATCH" ), buttonFontType ),
-                                                fheroes2::getSupportedText( gettext_noop( "newMap|RANDOM" ), buttonFontType ),
-                                                "36 X 36",
-                                                "72 X 72",
-                                                "108 X 108",
-                                                "144 X 144" };
+            const std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "editorMainMenu|BACK" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "newMap|FROM\nSCRATCH" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "newMap|RANDOM" ), buttonFontType ),
+                                                      "36 X 36",
+                                                      "72 X 72",
+                                                      "108 X 108",
+                                                      "144 X 144" };
 
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 80 );
             break;
@@ -1765,7 +1765,7 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            for ( int i = 0; i < 3; ++i ) {
+            for ( uint32_t i = 0; i < 3; ++i ) {
                 _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
                 _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
             }
@@ -1813,7 +1813,7 @@ namespace
             _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
             _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
             // Add player count buttons.
-            for ( int i = 0; i < 5; ++i ) {
+            for ( uint32_t i = 0; i < 5; ++i ) {
                 _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
                 _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
             }
@@ -1985,7 +1985,7 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            for ( int i = 0; i < 3; ++i ) {
+            for ( uint32_t i = 0; i < 3; ++i ) {
                 _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 );
                 _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, i * 2 + 1 );
             }
@@ -2016,7 +2016,7 @@ namespace
             _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
             _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
             // Add player count buttons.
-            for ( int i = 0; i < 5; ++i ) {
+            for ( uint32_t i = 0; i < 5; ++i ) {
                 _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 );
                 _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, i * 2 + 1 );
             }
@@ -2457,7 +2457,7 @@ namespace
         case ICN::X_LOADCM: {
             LoadOriginalICN( id );
             // Remove embedded shadows and backgrounds because we generate our own. We can safely divide by two because every button has 2 states.
-            for ( uint32_t i = 0; i < ( _icnVsSprite[id].size() / 2 ); ++i ) {
+            for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() / 2 ); ++i ) {
                 fheroes2::Sprite & released = _icnVsSprite[id][i * 2];
                 fheroes2::Sprite & pressed = _icnVsSprite[id][i * 2 + 1];
 
@@ -2581,7 +2581,7 @@ namespace
             _icnVsSprite[id].resize( 1 );
 
             fheroes2::Sprite & cornerSprite = _icnVsSprite[id][0];
-            const uint32_t cornerSideLength = 43;
+            const int32_t cornerSideLength = 43;
             cornerSprite.resize( cornerSideLength * 2, cornerSideLength * 2 );
             const fheroes2::Sprite & originalGoodDialog = fheroes2::AGG::GetICN( ICN::WINLOSE, 0 );
             Copy( originalGoodDialog, 0, 0, cornerSprite, 0, 0, cornerSideLength, cornerSideLength );
