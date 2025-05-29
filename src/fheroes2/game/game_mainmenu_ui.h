@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include "math_base.h"
-
 namespace fheroes2
 {
     void drawMainMenuScreen();
