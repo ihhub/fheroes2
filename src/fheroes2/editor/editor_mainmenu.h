@@ -24,10 +24,7 @@
 
 namespace Editor
 {
-    fheroes2::GameMode menuMain();
-    fheroes2::GameMode menuNewMap();
+    // TODO: The bool needs to be changed when random map generation is implemented.
+    fheroes2::GameMode menuMain( const bool straightToSelectMapSize );
     fheroes2::GameMode menuLoadMap();
-
-    // TODO: this is a temporary solution before we implement random maps.
-    fheroes2::GameMode menuNewFromScratchMap();
 }

@@ -3256,6 +3256,8 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
 
     fheroes2::StandardWindow background( autoButtons, false, titleYOffset + title.height() );
 
+    background.renderSymmetricButtons( autoButtons, titleYOffset + title.height(), false );
+
     fheroes2::Button buttonCancel;
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
