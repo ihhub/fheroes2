@@ -23,7 +23,6 @@
 
 #include "game.h" // IWYU pragma: associated
 
-#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
@@ -39,9 +38,9 @@
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"

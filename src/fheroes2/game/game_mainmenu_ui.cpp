@@ -31,7 +31,6 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
-#include "ui_constants.h"
 #include "ui_tool.h"
 
 namespace
