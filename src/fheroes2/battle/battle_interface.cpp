@@ -2141,7 +2141,7 @@ void Battle::Interface::RedrawCover()
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                // If the intent direction means tail attack, we might need to move the highlighted cells by one
+                // If the intended attack direction means tail attack, we might need to move the highlighted cells by one
                 const auto tryHighlightTailAttack = [this, &highlightedCells, direction, dst]( const CellDirection moveDirection, const AttackDirection directionTop,
                                                                                                const AttackDirection directionBottom ) -> bool {
                     if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
@@ -3452,7 +3452,6 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
     };
 
     const int32_t index = cell.GetIndex();
-    const Unit * unitOnCell = cell.GetUnit();
 
     if ( _currentUnit ) {
         switch ( themes ) {
@@ -3465,6 +3464,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
 
             humanturn_exit = true;
+
             break;
 
         case Cursor::SWORD_TOPLEFT:
@@ -3475,84 +3475,94 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         case Cursor::SWORD_BOTTOM:
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT: {
+            const Unit * unitOnCell = cell.GetUnit();
+            if ( !unitOnCell ) {
+                break;
+            }
+
             if ( !isConfirmed ) {
                 break;
             }
 
             const AttackDirection dir = getAttackDirectionForSwordCursor( themes );
-            const CellDirection attackingCellDir = getAttackingCellDirectionForAttackDirection( *_currentUnit, dir );
 
-            if ( !unitOnCell ) {
+            // Wide creatures can attack from top/bottom, we need to get the actual attack direction
+            const CellDirection attackingCellDir = getAttackingCellDirectionForAttackDirection( *_currentUnit, dir );
+            if ( !Board::isValidDirection( index, attackingCellDir ) ) {
                 break;
             }
 
-            if ( !_currentUnit->isWide() && Board::isValidDirection( index, attackingCellDir ) ) {
+            if ( !_currentUnit->isWide() ) {
                 const int32_t move = Board::GetIndexDirection( index, attackingCellDir );
 
                 actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
                                       static_cast<int>( Board::GetReflectDirection( attackingCellDir ) ) );
 
                 humanturn_exit = true;
+
+                break;
             }
 
-            if ( _currentUnit->isWide() ) {
-                // Wide creatures can attack from top/bottom, we need to get the actual attack direction
-                if ( !Board::isValidDirection( index, attackingCellDir ) ) {
-                    break;
-                }
+            int32_t move = Board::GetIndexDirection( index, attackingCellDir );
+            // Some attacks may require a small nudge, but not top/bottom attacks
+            if ( dir != AttackDirection::TOP && dir != AttackDirection::BOTTOM ) {
+                move = fixupDestinationCell( *_currentUnit, move );
+            }
+            // If the intended attack direction means tail attack, we might need to move the attack position by one cell
+            const auto adjustForTailAttack
+                = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
+                      if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
+                          const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
+                          if ( const Position position = Position::GetReachable( *_currentUnit, moveCandidate ); position.GetHead() != nullptr ) {
+                              assert( position.GetTail() != nullptr );
 
-                int32_t move = Board::GetIndexDirection( index, attackingCellDir );
-                // Some attacks may require a small nudge, but not top/bottom attacks
-                if ( dir != AttackDirection::TOP && dir != AttackDirection::BOTTOM ) {
-                    move = fixupDestinationCell( *_currentUnit, move );
-                }
-                // If the intent direction means tail attack, we might need to move the attack position by one cell
-                const auto adjustForTailAttack
-                    = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
-                          if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
-                              const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
-                              if ( const Position position = Position::GetReachable( *_currentUnit, moveCandidate ); position.GetHead() != nullptr ) {
-                                  assert( position.GetTail() != nullptr );
-
-                                  move = moveCandidate;
-                              }
+                              move = moveCandidate;
                           }
-                      };
-                if ( _currentUnit->isReflect() ) {
-                    adjustForTailAttack( CellDirection::LEFT, AttackDirection::TOP_LEFT, AttackDirection::BOTTOM_LEFT );
-                }
-                else {
-                    adjustForTailAttack( CellDirection::RIGHT, AttackDirection::TOP_RIGHT, AttackDirection::BOTTOM_RIGHT );
-                }
-
-                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
-                                      static_cast<int>( Board::GetReflectDirection( attackingCellDir ) ) );
-
-                humanturn_exit = true;
+                      }
+                  };
+            if ( _currentUnit->isReflect() ) {
+                adjustForTailAttack( CellDirection::LEFT, AttackDirection::TOP_LEFT, AttackDirection::BOTTOM_LEFT );
             }
+            else {
+                adjustForTailAttack( CellDirection::RIGHT, AttackDirection::TOP_RIGHT, AttackDirection::BOTTOM_RIGHT );
+            }
+
+            actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
+                                  static_cast<int>( Board::GetReflectDirection( attackingCellDir ) ) );
+
+            humanturn_exit = true;
+
             break;
         }
 
         case Cursor::WAR_BROKENARROW:
         case Cursor::WAR_ARROW: {
+            const Unit * unitOnCell = cell.GetUnit();
+            if ( !unitOnCell ) {
+                break;
+            }
+
             if ( !isConfirmed ) {
                 break;
             }
 
-            if ( unitOnCell ) {
-                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), -1, index, 0 );
+            actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), -1, index, 0 );
 
-                humanturn_exit = true;
-            }
+            humanturn_exit = true;
+
             break;
         }
 
         case Cursor::WAR_INFO: {
-            if ( unitOnCell ) {
-                Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect() );
-
-                humanturn_redraw = true;
+            const Unit * unitOnCell = cell.GetUnit();
+            if ( !unitOnCell ) {
+                break;
             }
+
+            Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect() );
+
+            humanturn_redraw = true;
+
             break;
         }
 
