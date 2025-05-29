@@ -633,7 +633,7 @@ namespace
         return Cursor::WAR_NONE;
     }
 
-    int getSwordCursorForDirection( const Battle::AttackDirection direction )
+    int getSwordCursorForAttackDirection( const Battle::AttackDirection direction )
     {
         switch ( direction ) {
         case Battle::AttackDirection::BOTTOM_RIGHT:
@@ -2721,7 +2721,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     }
                 }
 
-                const int cursor = getSwordCursorForDirection( currentDirection );
+                const int cursor = getSwordCursorForAttackDirection( currentDirection );
 
                 statusMsg = _( "Attack %{monster}" );
                 StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetName() );
@@ -3106,7 +3106,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         else if ( _swipeAttack.isValidDestination( themes, _curentCellIndex ) ) {
             // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
-            themes = getSwordCursorForDirection( asAttackDirection( Board::GetDirection( _curentCellIndex, _swipeAttack.srcCellIndex ) ) );
+            themes = getSwordCursorForAttackDirection( asAttackDirection( Board::GetDirection( _curentCellIndex, _swipeAttack.srcCellIndex ) ) );
 
             // Remember the swipe destination cell and theme.
             _swipeAttack.setDst( themes, _curentCellIndex );
