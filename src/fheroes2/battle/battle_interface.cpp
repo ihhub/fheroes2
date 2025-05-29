@@ -546,7 +546,7 @@ namespace
         return 10;
     }
 
-    int GetCursorFromSpell( const int spell )
+    int getCursorForSpell( const int spell )
     {
         switch ( spell ) {
         case Spell::SLOW:
@@ -629,10 +629,11 @@ namespace
         default:
             break;
         }
+
         return Cursor::WAR_NONE;
     }
 
-    int GetSwordCursorDirection( const Battle::AttackDirection direction )
+    int getSwordCursorForDirection( const Battle::AttackDirection direction )
     {
         switch ( direction ) {
         case Battle::AttackDirection::BOTTOM_RIGHT:
@@ -654,10 +655,11 @@ namespace
         default:
             break;
         }
+
         return 0;
     }
 
-    Battle::AttackDirection GetDirectionFromCursorSword( const uint32_t sword )
+    Battle::AttackDirection getAttackDirectionForSwordCursor( const uint32_t sword )
     {
         switch ( sword ) {
         case Cursor::SWORD_TOPLEFT:
@@ -2719,7 +2721,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     }
                 }
 
-                const int cursor = GetSwordCursorDirection( currentDirection );
+                const int cursor = getSwordCursorForDirection( currentDirection );
 
                 statusMsg = _( "Attack %{monster}" );
                 StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetName() );
@@ -2772,14 +2774,14 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
             StringReplaceWithLowercase( statusMsg, "%{monster}", unitOnCell->GetName() );
 
-            return GetCursorFromSpell( spell.GetID() );
+            return getCursorForSpell( spell.GetID() );
         }
 
         if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
             statusMsg = _( "Cast %{spell}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
 
-            return GetCursorFromSpell( spell.GetID() );
+            return getCursorForSpell( spell.GetID() );
         }
     }
 
@@ -3104,7 +3106,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         else if ( _swipeAttack.isValidDestination( themes, _curentCellIndex ) ) {
             // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
-            themes = GetSwordCursorDirection( asAttackDirection( Board::GetDirection( _curentCellIndex, _swipeAttack.srcCellIndex ) ) );
+            themes = getSwordCursorForDirection( asAttackDirection( Board::GetDirection( _curentCellIndex, _swipeAttack.srcCellIndex ) ) );
 
             // Remember the swipe destination cell and theme.
             _swipeAttack.setDst( themes, _curentCellIndex );
@@ -3475,7 +3477,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 break;
             }
 
-            const AttackDirection dir = GetDirectionFromCursorSword( themes );
+            const AttackDirection dir = getAttackDirectionForSwordCursor( themes );
             const CellDirection attackDir = intentDirectionToAttackDirection( *_currentUnit, dir );
 
             if ( !unitOnCell ) {
