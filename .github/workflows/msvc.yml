@@ -57,7 +57,7 @@ jobs:
         "%SIGNTOOL_DIR%\signtool.exe" verify /v /d /all /pa /r "Microsoft Root Certificate Authority" .vcredist\vcredist.exe
       shell: cmd
       env:
-        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\x64
+        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
