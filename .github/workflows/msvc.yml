@@ -42,7 +42,7 @@ jobs:
         script/windows/install_packages.bat
     - name: Install MSYS2 tools
       run: |
-        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel
+        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel make
       shell: cmd
     - name: Download MSVC Redistributable package
       run: |
