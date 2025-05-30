@@ -1313,7 +1313,7 @@ namespace
         case ICN::BUTTONS_FILE_DIALOG_GOOD: {
             _icnVsSprite[id].resize( 8 );
 
-            const bool isEvilInterface = id == ICN::BUTTONS_FILE_DIALOG_EVIL;
+            const bool isEvilInterface = ( id == ICN::BUTTONS_FILE_DIALOG_EVIL );
             if ( useOriginalResources() ) {
                 const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {

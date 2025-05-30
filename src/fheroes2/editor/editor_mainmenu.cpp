@@ -99,7 +99,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to New Map menu." )
     }
 
-    fheroes2::GameMode selectMapSize( const Maps::MapSize & mapSize )
+    fheroes2::GameMode editNewMapFromScratch( const Maps::MapSize & mapSize )
     {
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
@@ -286,7 +286,7 @@ namespace Editor
                 // Loop through all map size buttons.
                 for ( size_t i = 0; i < mapSizeCount; ++i ) {
                     if ( le.MouseClickLeft( mapSizeButtons.button( i ).area() ) || Game::HotKeyPressEvent( mapSizeHotkeys[i] ) ) {
-                        return selectMapSize( mapSizes[i] );
+                        return editNewMapFromScratch( mapSizes[i] );
                     }
 
                     if ( le.isMouseRightButtonPressedInArea( mapSizeButtons.button( i ).area() ) ) {
