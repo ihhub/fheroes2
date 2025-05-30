@@ -3475,12 +3475,12 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         case Cursor::SWORD_BOTTOM:
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT: {
-            const Unit * unitOnCell = cell.GetUnit();
-            if ( !unitOnCell ) {
+            if ( !isConfirmed ) {
                 break;
             }
 
-            if ( !isConfirmed ) {
+            const Unit * unitOnCell = cell.GetUnit();
+            if ( !unitOnCell ) {
                 break;
             }
 
@@ -3537,12 +3537,12 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
 
         case Cursor::WAR_BROKENARROW:
         case Cursor::WAR_ARROW: {
-            const Unit * unitOnCell = cell.GetUnit();
-            if ( !unitOnCell ) {
+            if ( !isConfirmed ) {
                 break;
             }
 
-            if ( !isConfirmed ) {
+            const Unit * unitOnCell = cell.GetUnit();
+            if ( !unitOnCell ) {
                 break;
             }
 
