@@ -254,8 +254,10 @@ namespace
                     return EXIT_FAILURE;
                 }
 
+                // TODO: Add ability to set sprite position and ability to determine colors in original image
+                // that are used for transparency and shadows.
                 if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(),
-                                                 static_cast<fheroes2::Sprite>( image ) ) ) {
+                                                 fheroes2::Sprite{ image } ) ) {
                     std::cerr << "Error adding file " << inputFileName << std::endl;
                     return EXIT_FAILURE;
                 }

@@ -71,7 +71,7 @@ namespace
         const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
         const fheroes2::Sprite & recruitWindowTitle = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
-        fheroes2::Image recruitWindow( 132, 67 );
+        fheroes2::Sprite recruitWindow( 132, 67 );
         // Reset the transparent layer.
         recruitWindow.reset();
 
@@ -90,7 +90,7 @@ namespace
         }
 
         fheroes2::Blit( recruitWindow, output, offset.x, offset.y );
-        fheroes2::addGradientShadow( static_cast<fheroes2::Sprite>( recruitWindow ), output, { offset.x, offset.y }, { -5, 5 } );
+        fheroes2::addGradientShadow( recruitWindow, output, { offset.x, offset.y }, { -5, 5 } );
     }
 
     void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const Funds & paymentMonster, const Funds & paymentCosts, const Funds & funds,
@@ -282,7 +282,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
 
     // Render the recruit count background from original recruit dialog ICN.
-    fheroes2::Image background( 68, 19 );
+    fheroes2::Sprite background( 68, 19 );
     fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, background.width(), background.height() );
 
     const fheroes2::Rect recruitCountInputArea( dialogOffset.x + 118, dialogOffset.y + 147, background.width(), background.height() );
@@ -293,7 +293,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     fheroes2::Point dst_pt( dialogOffset.x + 118, dialogOffset.y + 143 );
     fheroes2::Copy( background, 0, 0, display, dst_pt.x, dst_pt.y, background.width(), background.height() );
-    fheroes2::addGradientShadow( static_cast<fheroes2::Sprite>( background ), display, dst_pt, { -5, 5 } );
+    fheroes2::addGradientShadow( background, display, dst_pt, { -5, 5 } );
 
     dst_pt.x = dialogOffset.x + 132;
     dst_pt.y = dialogOffset.y + 38;

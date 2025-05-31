@@ -2546,8 +2546,8 @@ namespace
                 // Add random town and castle icons for Editor.
                 // A temporary solution: blurred Wizard castle/town in purple palette.
                 _icnVsSprite[id].resize( 27 );
-                _icnVsSprite[id][25] = static_cast<fheroes2::Sprite>( CreateHolyShoutEffect( _icnVsSprite[id][13], 1, 0 ) );
-                _icnVsSprite[id][26] = static_cast<fheroes2::Sprite>( CreateHolyShoutEffect( _icnVsSprite[id][19], 1, 0 ) );
+                _icnVsSprite[id][25] = fheroes2::Sprite{ CreateHolyShoutEffect( _icnVsSprite[id][13], 1, 0 ) };
+                _icnVsSprite[id][26] = fheroes2::Sprite{ CreateHolyShoutEffect( _icnVsSprite[id][19], 1, 0 ) };
                 ApplyPalette( _icnVsSprite[id][25], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
                 ApplyPalette( _icnVsSprite[id][26], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
 
@@ -2657,8 +2657,7 @@ namespace
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( source.height(), source.width() );
                 Transpose( source, out );
-                out = static_cast<fheroes2::Sprite>( Flip( out, false, true ) );
-                out.setPosition( source.y() - static_cast<int32_t>( i ), source.x() );
+                out = fheroes2::Sprite{ Flip( out, false, true ), source.y() - static_cast<int32_t>( i ), source.x() };
             }
             return true;
         case ICN::MONSTER_SWITCH_RIGHT_ARROW:
@@ -2668,8 +2667,7 @@ namespace
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( source.height(), source.width() );
                 Transpose( source, out );
-                out = static_cast<fheroes2::Sprite>( Flip( out, false, true ) );
-                out.setPosition( source.y(), source.x() );
+                out = fheroes2::Sprite{ Flip( out, false, true ), source.y(), source.x() };
             }
             return true;
         case ICN::SURRENDR:
@@ -2746,7 +2744,7 @@ namespace
             }
 
             _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = static_cast<fheroes2::Sprite>( ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? out : Flip( out, true, false ) );
+            _icnVsSprite[id][0] = fheroes2::Sprite{ ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? std::move( out ) : Flip( out, true, false ) };
 
             _icnVsSprite[id][1] = _icnVsSprite[id][0];
             _icnVsSprite[id][1].setPosition( -1, 1 );
@@ -2866,7 +2864,7 @@ namespace
 
             // Make pressed state.
             _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = static_cast<fheroes2::Sprite>( out );
+            _icnVsSprite[id][0] = fheroes2::Sprite{ std::move( out ) };
             _icnVsSprite[id][1] = _icnVsSprite[id][0];
             _icnVsSprite[id][1].setPosition( -1, 1 );
             ApplyPalette( _icnVsSprite[id][1], 4 );
@@ -3356,7 +3354,7 @@ namespace
             digits[3] = createDigit( 6, 7, fivePoints, digitColor );
             digits[4] = createDigit( 6, 7, sixPoints, digitColor );
             digits[5] = createDigit( 6, 7, sevenPoints, digitColor );
-            digits[6] = addDigit( static_cast<fheroes2::Sprite>( digits[5] ), createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
+            digits[6] = addDigit( fheroes2::Sprite{ digits[5] }, createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
 
             _icnVsSprite[id].reserve( 7 * 8 );
 
@@ -3997,7 +3995,7 @@ namespace
                 // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
                 // A temporary solution: apply the blur effect originally used for the Holy Shout spell and the purple palette.
                 fheroes2::Sprite & targetImage = _icnVsSprite[id][83];
-                targetImage = static_cast<fheroes2::Sprite>( CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 ) );
+                targetImage = fheroes2::Sprite{ CreateHolyShoutEffect( _icnVsSprite[id][91], 1, 0 ) };
                 ApplyPalette( targetImage, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
 
                 // The French and German Price of Loyalty assets contain a wrong artifact sprite at index 6. We replace it with the correct sprite from SW assets.
