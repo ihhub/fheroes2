@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,15 +33,11 @@ namespace fheroes2
         HIGHSCORES_CAMPAIGN,
         CREDITS,
         NEW_STANDARD,
-        NEW_CAMPAIGN_SELECTION,
         NEW_SUCCESSION_WARS_CAMPAIGN,
         NEW_PRICE_OF_LOYALTY_CAMPAIGN,
-        NEW_MULTI,
-        NEW_HOT_SEAT,
         NEW_BATTLE_ONLY,
         LOAD_STANDARD,
         LOAD_CAMPAIGN,
-        LOAD_MULTI,
         LOAD_HOT_SEAT,
         // Do NOT change the order of the below 6 entries!
         SELECT_SCENARIO_ONE_HUMAN_PLAYER,
@@ -51,6 +47,7 @@ namespace fheroes2
         SELECT_SCENARIO_FIVE_HUMAN_PLAYERS,
         SELECT_SCENARIO_SIX_HUMAN_PLAYERS,
         START_GAME,
+        START_BATTLE_ONLY_MODE,
         SAVE_GAME,
         END_TURN,
         SELECT_CAMPAIGN_SCENARIO,
