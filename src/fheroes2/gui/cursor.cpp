@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -59,7 +59,11 @@ void Cursor::SetThemes( const int theme, const bool force /* = false */ )
     }
     const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & theme );
     SetOffset( theme, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
-    fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
+
+    fheroes2::Cursor & cursor = fheroes2::cursor();
+    cursor.update( spr, -_offset.x, -_offset.y );
+    // Force the scroll cursor to stay in screen boundaries.
+    cursor.keepInScreenArea( theme >= SCROLL_TOP && theme <= SCROLL_TOPLEFT );
 
     // Apply new offset.
     const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
@@ -70,7 +74,9 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
 {
     _theme = NONE;
 
-    fheroes2::cursor().update( image, -offset.x, -offset.y );
+    fheroes2::Cursor & cursor = fheroes2::cursor();
+    cursor.update( image, -offset.x, -offset.y );
+    cursor.keepInScreenArea( false );
 
     // Immediately apply new mouse offset.
     const fheroes2::Point & currentPos = LocalEvent::Get().getMouseCursorPos();
