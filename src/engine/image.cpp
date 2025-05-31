@@ -462,6 +462,11 @@ namespace fheroes2
         _data = std::move( image._data );
         _singleLayer = image._singleLayer;
 
+        // For safety reset the `image` fields to match the now empty `image._data` field.
+        image._width = 0;
+        image._height = 0;
+        image._singleLayer = false;
+
         return *this;
     }
 
@@ -568,6 +573,10 @@ namespace fheroes2
 
         _x = sprite._x;
         _y = sprite._y;
+
+        // Reset the `sprite` fields for safety.
+        sprite._x = 0;
+        sprite._y = 0;
 
         return *this;
     }
