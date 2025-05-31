@@ -42,17 +42,24 @@ namespace fheroes2
             Image::resize( width, height );
         }
 
-        Image( const Image & image_ )
+        Image( const Image & image )
         {
-            copy( image_ );
+            copy( image );
         }
 
-        Image( Image && image_ ) noexcept;
+        Image( Image && image ) noexcept
+            : _width( image._width )
+            , _height( image._height )
+            , _data( std::move( image._data ) )
+            , _singleLayer( image._singleLayer )
+        {
+            // Do nothing.
+        }
 
         virtual ~Image() = default;
 
-        Image & operator=( const Image & image_ );
-        Image & operator=( Image && image_ ) noexcept;
+        Image & operator=( const Image & image );
+        Image & operator=( Image && image ) noexcept;
 
         virtual void resize( const int32_t width_, const int32_t height_ );
 
@@ -138,8 +145,23 @@ namespace fheroes2
             // Do nothing.
         }
 
+        explicit Sprite( Image && image, const int32_t x = 0, const int32_t y = 0 )
+            : Image( std::move( image ) )
+            , _x( x )
+            , _y( y )
+        {
+            // Do nothing.
+        }
+
         Sprite( const Sprite & sprite ) = default;
-        Sprite( Sprite && sprite ) noexcept;
+
+        Sprite( Sprite && sprite ) noexcept
+            : Image( std::move( sprite ) )
+            , _x( sprite._x )
+            , _y( sprite._y )
+        {
+            // Do nothing.
+        }
 
         ~Sprite() override = default;
 
