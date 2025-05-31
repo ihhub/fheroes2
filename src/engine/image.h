@@ -236,37 +236,14 @@ namespace fheroes2
     // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 
-    // Replace a particular pixel value by transparency value (transform layer value will be 1)
-    void AddTransparency( Image & image, const uint8_t valueToReplace );
-
     // make sure that output image's transform layer doesn't have skipping values (transform == 1)
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alphaValue,
                     const bool flip = false );
 
-    inline void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip = false )
-    {
-        AlphaBlit( in, 0, 0, out, 0, 0, in.width(), in.height(), alphaValue, flip );
-    }
-
-    inline void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, const uint8_t alphaValue, const bool flip = false )
-    {
-        AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
-    }
-
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
 
-    inline void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
-    {
-        ApplyPalette( image, image, palette );
-    }
-
     void ApplyPalette( const Image & in, Image & out, const uint8_t paletteId );
-
-    inline void ApplyPalette( Image & image, const uint8_t paletteId )
-    {
-        ApplyPalette( image, image, paletteId );
-    }
 
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId );
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
@@ -279,31 +256,11 @@ namespace fheroes2
     // draw one image onto another
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 
-    inline void Blit( const Image & in, Image & out, const bool flip = false )
-    {
-        Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );
-    }
-
-    inline void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false )
-    {
-        Blit( in, 0, 0, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height, flip );
-    }
-
-    inline void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false )
-    {
-        Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
-    }
-
     // inPos must contain non-negative values
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
-
-    inline void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
-    {
-        Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
-    }
 
     // Copies transform the layer from in to out. Both images must be of the same size.
     void CopyTransformLayer( const Image & in, Image & out );
@@ -388,4 +345,52 @@ namespace fheroes2
     void Transpose( const Image & in, Image & out );
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId, const bool connectCorners );
+
+    // The next inlined functions are implemented to simplify calls of some functions declared above.
+
+    // Replace a particular pixel value by transparency value (transform layer value will be 1)
+    inline void AddTransparency( Image & image, const uint8_t valueToReplace )
+    {
+        ReplaceColorIdByTransformId( image, valueToReplace, 1 );
+    }
+
+    inline void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip = false )
+    {
+        AlphaBlit( in, 0, 0, out, 0, 0, in.width(), in.height(), alphaValue, flip );
+    }
+
+    inline void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, const uint8_t alphaValue, const bool flip = false )
+    {
+        AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
+    }
+
+    inline void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
+    {
+        ApplyPalette( image, image, palette );
+    }
+
+    inline void ApplyPalette( Image & image, const uint8_t paletteId )
+    {
+        ApplyPalette( image, image, paletteId );
+    }
+
+    inline void Blit( const Image & in, Image & out, const bool flip = false )
+    {
+        Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );
+    }
+
+    inline void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false )
+    {
+        Blit( in, 0, 0, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height, flip );
+    }
+
+    inline void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false )
+    {
+        Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
+    }
+
+    inline void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
+    {
+        Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
+    }
 }

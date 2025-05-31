@@ -878,11 +878,6 @@ namespace fheroes2
         return out;
     }
 
-    void AddTransparency( Image & image, const uint8_t valueToReplace )
-    {
-        ReplaceColorIdByTransformId( image, valueToReplace, 1 );
-    }
-
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alphaValue,
                     const bool flip /* = false */ )
     {
