@@ -357,7 +357,7 @@ namespace fheroes2
 
     void StandardWindow::applyGemDecoratedCorners()
     {
-        fheroes2::Sprite gem;
+        fheroes2::Image gem;
         const int32_t gemSideLength = 9;
         gem.resize( gemSideLength, gemSideLength );
         gem.reset();
