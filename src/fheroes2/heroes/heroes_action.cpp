@@ -767,11 +767,17 @@ namespace
 
                 fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
             }
+            else if ( objectType == MP2::OBJ_BARREL ) {
+                const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( _( "In a barrel floating in the waters, you discover a hidden cache of treasures." ), fheroes2::FontType::normalWhite() );
+
+                fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
+            }
             else {
-                const auto resource = funds.getFirstValidResource();
+                const auto [resourceType, resourceCount] = funds.getFirstValidResource();
 
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
-                I.getStatusPanel().SetResource( resource.first, resource.second );
+                I.getStatusPanel().SetResource( resourceType, resourceCount );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
@@ -3843,6 +3849,7 @@ void Heroes::Action( int tileIndex )
         ActionToSkeleton( *this, objectType, tileIndex );
         break;
 
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:

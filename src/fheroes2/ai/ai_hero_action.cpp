@@ -1958,6 +1958,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToCastle( hero, dst_index );
         break;
 
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:
