@@ -35,21 +35,18 @@
 
 namespace
 {
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size & buttonSize )
+    fheroes2::Sprite resizeButton( const fheroes2::Sprite & original, const fheroes2::Size & buttonSize )
     {
         const int32_t originalWidth = original.width();
         const int32_t originalHeight = original.height();
 
         assert( originalHeight > 0 && originalWidth > 0 );
 
-        fheroes2::Image output;
-
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
-            fheroes2::Copy( original, output );
-            return output;
+            return original;
         }
 
-        output.resize( buttonSize.width, buttonSize.height );
+        fheroes2::Sprite output( buttonSize.width, buttonSize.height, original.x(), original.y() );
         output.reset();
 
         // Buttons that only are wider.
