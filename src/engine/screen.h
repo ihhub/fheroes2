@@ -139,6 +139,17 @@ namespace fheroes2
             return _nearestScaling;
         }
 
+        virtual Point getWindowPos() const
+        {
+            return { -1, -1 };
+        }
+
+        virtual void setWindowPos( Point pos )
+        {
+            (void)( pos );
+            // Do nothing
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -217,6 +228,13 @@ namespace fheroes2
         {
             return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;
         }
+
+        Point getWindowPos() const
+        {
+            return _engine->getWindowPos();
+        }
+
+        void setWindowPos( Point point );
 
         // this function must return true if new palette has been generated
         using PreRenderProcessing = std::function<bool( std::vector<uint8_t> & )>;

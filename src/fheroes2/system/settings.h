@@ -237,6 +237,16 @@ public:
         return _resolutionInfo;
     }
 
+    fheroes2::Point getStarttWindowPos() const
+    {
+        return _windowPos;
+    }
+
+    void setStartWindowPos( fheroes2::Point pos )
+    {
+        _windowPos = pos;
+    }
+
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -379,6 +389,8 @@ private:
     BitModes _editorOptions;
 
     fheroes2::ResolutionInfo _resolutionInfo;
+    fheroes2::Point _windowPos;
+
     int _gameDifficulty;
 
     std::string _programPath;
