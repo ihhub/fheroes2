@@ -3600,9 +3600,8 @@ msgstr "Képességnövelő objektum kiválasztása:"
 msgid "Select Adventure Object:"
 msgstr "Kaland objektum kiválasztása:"
 
-#, fuzzy
 msgid "Select color"
-msgstr "Lény kiválasztása:"
+msgstr "Szín kiválasztása"
 
 msgid "Players Icon"
 msgstr "Játékos ikon"
@@ -4214,7 +4213,7 @@ msgid "The total number of obelisks is %{count}."
 msgstr "Az obeliszkek száma összesen: %{count}."
 
 msgid "There are no players on the map, so no one can own this object."
-msgstr ""
+msgstr "A pályán nincs játékos, ezért ez az objektum senkié sem lehet."
 
 msgid "Roads"
 msgstr "Utak"
@@ -4667,7 +4666,7 @@ msgid "LANGUAGE"
 msgstr "NYELV"
 
 msgid "ABOUT"
-msgstr ""
+msgstr "NÉVJEGY"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4693,7 +4692,7 @@ msgid "Change Map Description"
 msgstr "Térképleírás megváltoztatása"
 
 msgid "About"
-msgstr ""
+msgstr "Névjegy"
 
 msgid "Click to accept the changes made."
 msgstr "Kattints a változtatások elfogadásához."
@@ -4716,7 +4715,7 @@ msgstr "Kattints a térkép nyelvének megváltoztatásához."
 msgid ""
 "Click to edit notes from the map creator. These notes are optional and do "
 "not appear during gameplay."
-msgstr ""
+msgstr "Kattints a pályakészítő jegyzeteinek szerkesztéséhez. Ezek a jegyzetek opcionálisak, és játék közben nem jelennek meg."
 
 msgid "Click to change your map name."
 msgstr "Kattints a térképed nevének megváltoztatásához."
@@ -5822,13 +5821,12 @@ msgstr ""
 "Az ellenfél elfoglalta %{name} várat!\n"
 "Ők győztek."
 
-#, fuzzy
 msgid ""
 "The enemy has found the %{name}.\n"
 "Your quest is a failure."
 msgstr ""
-"Megtaláltad %{name} varázstárgyat.\n"
-"Küldetés teljesítve."
+"Az ellenség megtalálta a %{name} tárgyat.\n"
+"A küldetésed megbukott."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -6432,9 +6430,8 @@ msgstr "szlovák"
 msgid "Vietnamese"
 msgstr "vietnámi"
 
-#, fuzzy
 msgid "Greek"
-msgstr "Zöld"
+msgstr "görög"
 
 msgid "Slow"
 msgstr "Lassú"
@@ -7970,13 +7967,13 @@ msgid ""
 "The sting of your previous encounter still lingers, and you keep your "
 "distance from the intimidating cat until you have regained your courage in "
 "battle."
-msgstr ""
+msgstr "Előző találkozásotok csípése még mindig érezhető, ezért távol tartod magad a félelmetes macskától, amíg vissza nem nyered bátorságodat a harcban."
 
 msgid ""
 "You come upon a great cat, purring as it rubs against your leg. Charmed, you "
 "reach down, but it bites you and flees. At least the laughter at your "
 "misfortune lifts your troops' spirits."
-msgstr ""
+msgstr "Egy hatalmas macskára bukkansz, amely dorombolva dörgölőzik a lábadhoz. Elbűvölten lehajolsz, de megharap és elszalad. A balszerencsédet kísérő nevetés legalább felvidítja a seregedet."
 
 msgid "No spell book is present."
 msgstr "Nincs varázskönyved."
@@ -9386,9 +9383,8 @@ msgstr "Mocsaras tó"
 msgid "Frozen Lake"
 msgstr "Befagyott tó"
 
-#, fuzzy
 msgid "Black Cat"
-msgstr "Fekete gyöngy"
+msgstr "Fekete macska"
 
 msgid "randomRace|level 1 creatures"
 msgstr "1. szintű lények"
