@@ -909,12 +909,12 @@ void World::ClearFog( PlayerColor color ) const
     map_captureobj.ClearFog( colors );
 }
 
-void World::RevealMap( int colors )
+void World::RevealMap( PlayerColor colors )
 {
-    colors = Players::GetPlayerFriends( colors );
+    PlayerColorsSet colors_set = Players::GetPlayerFriends( colors );
 
     for ( Maps::Tile & tile : vec_tiles ) {
-        tile.ClearFog( colors );
+        tile.ClearFog( colors_set );
     }
 }
 

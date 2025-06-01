@@ -49,7 +49,7 @@ namespace GameCheats
         {
             const Settings & conf = Settings::Get();
 
-            if ( buffer.find( "318798" ) != std::string::npos ) {
+            if ( buffer.find( "11111" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: resources" );
                 Kingdom & kingdom = World::Get().GetKingdom( conf.CurrentColor() );
                 kingdom.AddFundsResource( Funds( 0, 0, 0, 0, 0, 0, 999999 ) );
@@ -62,21 +62,21 @@ namespace GameCheats
                 buffer.clear();
             }
 
-            else if ( buffer.find( "8675309" ) != std::string::npos ) {
+            else if ( buffer.find( "22222" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: reveal all fog" );
                 World::Get().RevealMap( conf.CurrentColor() );
                 Interface::GameArea::updateMapFogDirections();
                 buffer.clear();
             }
 
-            else if ( buffer.find( "32167" ) != std::string::npos ) {
+            else if ( buffer.find( "33333" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: black dragons" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     hero->GetArmy().JoinTroop( Monster::BLACK_DRAGON, 5, true );
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "24680" ) != std::string::npos ) {
+            else if ( buffer.find( "44444" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: upgraded army" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     const int race = hero->GetRace();
@@ -107,7 +107,7 @@ namespace GameCheats
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "13579" ) != std::string::npos ) {
+            else if ( buffer.find( "55555" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: random troop" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     const Monster monster = Monster::Rand( Monster::LevelType::LEVEL_ANY );
@@ -115,7 +115,7 @@ namespace GameCheats
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "123456" ) != std::string::npos ) {
+            else if ( buffer.find( "66666" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: max primary skills" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     hero->setAttackBaseValue( 99 );
@@ -125,7 +125,7 @@ namespace GameCheats
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "654321" ) != std::string::npos ) {
+            else if ( buffer.find( "77777" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: max secondary skills" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     for ( int skill = 1; skill <= Skill::Secondary::ESTATES; ++skill ) {
@@ -134,14 +134,14 @@ namespace GameCheats
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "11111" ) != std::string::npos ) {
+            else if ( buffer.find( "88888" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: infinite movement" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     hero->IncreaseMovePoints( hero->GetMaxMovePoints() * 10 );
                 }
                 buffer.clear();
             }
-            else if ( buffer.find( "22222" ) != std::string::npos ) {
+            else if ( buffer.find( "99999" ) != std::string::npos ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Cheat activated: all spells" );
                 if ( Heroes * hero = Interface::GetFocusHeroes() ) {
                     SpellStorage storage;
