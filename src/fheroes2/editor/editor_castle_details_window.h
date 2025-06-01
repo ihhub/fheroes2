@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,8 @@
 
 #include <cstdint>
 
+enum class PlayerColor : uint8_t;
+
 namespace Maps::Map_Format
 {
     struct CastleMetadata;
@@ -34,5 +36,5 @@ namespace fheroes2
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color, const fheroes2::SupportedLanguage language );
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language );
 }

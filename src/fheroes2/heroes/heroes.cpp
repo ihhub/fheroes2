@@ -268,7 +268,7 @@ Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExper
 
 Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
-    , ColorBase( Color::NONE )
+    , ColorBase( PlayerColor::NONE )
     , experience( GetStartingXp() )
     , secondary_skills( rc )
     , army( this )
@@ -321,7 +321,7 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -865,7 +865,7 @@ const std::string & Heroes::GetName() const
     return name;
 }
 
-int Heroes::GetColor() const
+PlayerColor Heroes::GetColor() const
 {
     return ColorBase::GetColor();
 }
@@ -1064,15 +1064,15 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
 
 int Heroes::GetMorale() const
 {
-    return GetMoraleWithModificators( nullptr );
+    return getMoraleWithModifiers( nullptr );
 }
 
-int Heroes::GetMoraleWithModificators( std::string * strs ) const
+int Heroes::getMoraleWithModifiers( std::string * strs ) const
 {
     int result = Morale::NORMAL;
 
     // bonus leadership
-    result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
+    result += Skill::getLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     result += getObjectMoraleModifiers( getAllVisitedObjectTypes(), strs );
 
@@ -1086,9 +1086,11 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
             *strs += maxMoraleArtifact.GetName();
             *strs += _( " gives you maximum morale" );
         }
-        result = Morale::BLOOD;
+
+        return Morale::BLOOD;
     }
-    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+
+    if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
         // Remove the possible empty line at the end of the string.
         strs->pop_back();
     }
@@ -1098,15 +1100,15 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
 int Heroes::GetLuck() const
 {
-    return GetLuckWithModificators( nullptr );
+    return getLuckWithModifiers( nullptr );
 }
 
-int Heroes::GetLuckWithModificators( std::string * strs ) const
+int Heroes::getLuckWithModifiers( std::string * strs ) const
 {
     int result = Luck::NORMAL;
 
     // bonus luck
-    result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
+    result += Skill::getLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
     result += getObjectLuckModifiers( getAllVisitedObjectTypes(), strs );
@@ -1120,9 +1122,11 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
             *strs += maxLuckArtifact.GetName();
             *strs += _( " gives you maximum luck" );
         }
-        result = Luck::IRISH;
+
+        return Luck::IRISH;
     }
-    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+
+    if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
         // Remove the possible empty line at the end of the string.
         strs->pop_back();
     }
@@ -1130,9 +1134,9 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     return Luck::Normalize( result );
 }
 
-bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
+bool Heroes::Recruit( const PlayerColor col, const fheroes2::Point & pt )
 {
-    if ( GetColor() != Color::NONE ) {
+    if ( GetColor() != PlayerColor::NONE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "hero has already been hired by some kingdom" )
 
         return false;
@@ -1277,7 +1281,7 @@ const Castle * Heroes::inCastle() const
 
 Castle * Heroes::inCastleMutable() const
 {
-    if ( GetColor() == Color::NONE ) {
+    if ( GetColor() == PlayerColor::NONE ) {
         return nullptr;
     }
 
@@ -1374,8 +1378,8 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     const uint32_t objectUID = tile.getMainObjectPart()._uid;
 
     // Set visited to all allies as well.
-    const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
-    for ( const int friendColor : friendColors ) {
+    const PlayerColorsVector friendColors( Players::GetPlayerFriends( GetColor() ) );
+    for ( const PlayerColor friendColor : friendColors ) {
         world.GetKingdom( friendColor ).SetVisited( tileIndex, objectType );
     }
 
@@ -1393,7 +1397,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
             continue;
         }
 
-        for ( const int friendColor : friendColors ) {
+        for ( const PlayerColor friendColor : friendColors ) {
             world.GetKingdom( friendColor ).SetVisited( index, objectType );
         }
     }
@@ -1639,7 +1643,7 @@ uint32_t Heroes::getExperienceMaxValue()
 
 bool Heroes::BuySpellBook( const Castle & castle )
 {
-    if ( HaveSpellBook() || Color::NONE == GetColor() || castle.GetLevelMageGuild() < 1 ) {
+    if ( HaveSpellBook() || PlayerColor::NONE == GetColor() || castle.GetLevelMageGuild() < 1 ) {
         return false;
     }
 
@@ -1777,14 +1781,15 @@ int Heroes::GetLevelSkill( int skill ) const
 
 void Heroes::LearnSkill( const Skill::Secondary & skill )
 {
-    if ( skill.isValid() )
+    if ( skill.isValid() ) {
         secondary_skills.AddSkill( skill );
+    }
 }
 
 void Heroes::Scout( const int tileIndex ) const
 {
     // We should not scout for the NONE color player.
-    assert( GetColor() != Color::NONE );
+    assert( GetColor() != PlayerColor::NONE );
 
     Maps::ClearFog( tileIndex, GetScoutingDistance(), GetColor() );
 
@@ -1944,7 +1949,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
         // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
         // We should not try to scout the area around such heroes.
-        if ( selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != Color::NONE ) {
+        if ( selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != PlayerColor::NONE ) {
             Scout( GetIndex() );
             if ( isControlHuman() ) {
                 ScoutRadar();
@@ -1955,10 +1960,12 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
 void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 {
-    if ( move_point >= penalty )
+    if ( move_point >= penalty ) {
         move_point -= penalty;
-    else
+    }
+    else {
         move_point = 0;
+    }
 }
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
@@ -1980,7 +1987,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return isValid() && GetColor() != Color::NONE;
+    return isValid() && GetColor() != PlayerColor::NONE;
 }
 
 bool Heroes::isValid() const
@@ -1990,12 +1997,12 @@ bool Heroes::isValid() const
 
 bool Heroes::isActive() const
 {
-    return isValid() && ( GetColor() & Color::ALL ) && !Modes( JAIL );
+    return isValid() && ( Color::allPlayerColors() & GetColor() ) && !Modes( JAIL );
 }
 
 bool Heroes::isAvailableForHire() const
 {
-    return isValid() && GetColor() == Color::NONE && !Modes( JAIL );
+    return isValid() && GetColor() == PlayerColor::NONE && !Modes( JAIL );
 }
 
 void Heroes::Dismiss( int reason )
@@ -2009,13 +2016,14 @@ void Heroes::Dismiss( int reason )
         army.Reset( true );
     }
 
-    const int heroColor = GetColor();
+    const PlayerColor heroColor = GetColor();
     Kingdom & kingdom = GetKingdom();
 
-    if ( heroColor != Color::NONE ) {
+    if ( heroColor != PlayerColor::NONE ) {
         kingdom.RemoveHero( this );
     }
-    SetColor( Color::NONE );
+
+    SetColor( PlayerColor::NONE );
 
     world.getTile( GetIndex() ).setHero( nullptr );
     SetIndex( -1 );
@@ -2032,7 +2040,7 @@ void Heroes::Dismiss( int reason )
     if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
         SetModes( SAVEMP );
 
-        if ( heroColor != Color::NONE ) {
+        if ( heroColor != PlayerColor::NONE ) {
             kingdom.appendSurrenderedHero( *this );
         }
     }
@@ -2193,6 +2201,7 @@ std::string Heroes::String() const
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
        << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "morale, luck    : " << GetMorale() << ", " << GetLuck() << std ::endl
        << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
        << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl
@@ -2460,12 +2469,12 @@ Heroes * AllHeroes::Get( const fheroes2::Point & center ) const
     return nullptr;
 }
 
-void AllHeroes::Scout( int colors ) const
+void AllHeroes::Scout( PlayerColorsSet colors ) const
 {
     for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );
 
-        if ( !( hero->GetColor() & colors ) ) {
+        if ( ( colors & hero->GetColor() ) == 0 ) {
             continue;
         }
 

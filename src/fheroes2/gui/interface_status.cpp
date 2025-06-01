@@ -120,7 +120,7 @@ void Interface::StatusPanel::_redraw() const
     else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
         _drawDayInfo();
 
-        if ( conf.CurrentColor() & Players::HumanColors() ) {
+        if ( Players::HumanColors() & conf.CurrentColor() ) {
             _drawKingdomInfo( stonHeight + 5 );
 
             if ( _state != StatusType::STATUS_RESOURCE ) {
@@ -350,21 +350,21 @@ void Interface::StatusPanel::_drawAITurns() const
     uint32_t colorIndex = 0;
 
     switch ( Settings::Get().CurrentColor() ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         break;
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         colorIndex = 1;
         break;
-    case Color::RED:
+    case PlayerColor::RED:
         colorIndex = 2;
         break;
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         colorIndex = 3;
         break;
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         colorIndex = 4;
         break;
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         colorIndex = 5;
         break;
     default:

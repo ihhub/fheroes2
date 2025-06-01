@@ -704,11 +704,11 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
-        const int humanColor = Players::HumanColors();
+        const PlayerColorsSet humanColor = Players::HumanColors();
         assert( Color::Count( humanColor ) == 1 );
 
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Kingdom & humanKingdom = world.GetKingdom( humanColor );
+        const Kingdom & humanKingdom = world.GetKingdom( static_cast<PlayerColor>( humanColor ) );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
@@ -1176,10 +1176,10 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const int humanColor = Players::HumanColors();
+            const PlayerColorsSet humanColor = Players::HumanColors();
             assert( Color::Count( humanColor ) == 1 );
 
-            const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( static_cast<PlayerColor>( humanColor ) ).GetHeroes();
 
             // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting
             // hero will count as first if they are still alive since the beginning, but if they are rehired then they take a new place in the queue of heroes.

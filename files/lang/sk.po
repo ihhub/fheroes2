@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 04:50+0000\n"
+"POT-Creation-Date: 2025-05-28 00:46+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8128,6 +8128,18 @@ msgstr ""
 "\"Na svojich cestách som sa naučila veľa z oblasti tajomnej mágie. Moju "
 "schopnosť ma naučil jeden veľký veštec. Mám odpoveď, ktorú hľadáš.\""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 msgid "No spell book is present."
 msgstr "Kniha kúziel nie je k dispozícii."
 
@@ -9571,6 +9583,10 @@ msgstr "Močiar"
 
 msgid "Frozen Lake"
 msgstr ""
+
+#, fuzzy
+msgid "Black Cat"
+msgstr "Čierna perla"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""

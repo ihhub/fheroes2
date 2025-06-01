@@ -102,7 +102,7 @@ namespace AI
                                            const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispelValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
-        SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
+        SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
         SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
 
@@ -124,7 +124,7 @@ namespace AI
 
         // Member variables with a lifetime in one turn
         const HeroBase * _commander{ nullptr };
-        int _myColor{ Color::NONE };
+        PlayerColor _myColor{ PlayerColor::NONE };
         double _myArmyStrength{ 0.0 };
         double _enemyArmyStrength{ 0.0 };
         double _myShootersStrength{ 0.0 };

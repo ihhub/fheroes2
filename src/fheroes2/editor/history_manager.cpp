@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,24 +40,19 @@ namespace
     public:
         explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
             : _mapFormat( mapFormat )
+            , _beforeMapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-            }
-
-            _beforeMapFormat = _mapFormat;
+            // Do nothing.
         }
+
+        // Disable the copy and move (implicitly) constructors and assignment operators.
+        MapAction( const MapAction & ) = delete;
+        MapAction & operator=( const MapAction & ) = delete;
+        ~MapAction() override = default;
 
         bool prepare()
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-                return false;
-            }
-
             _afterMapFormat = _mapFormat;
 
             _latestObjectUIDAfter = Maps::getLastObjectUID();
@@ -96,7 +91,7 @@ namespace
     private:
         Maps::Map_Format::MapFormat & _mapFormat;
 
-        Maps::Map_Format::MapFormat _beforeMapFormat;
+        const Maps::Map_Format::MapFormat _beforeMapFormat;
         Maps::Map_Format::MapFormat _afterMapFormat;
 
         const uint32_t _latestObjectUIDBefore{ 0 };
