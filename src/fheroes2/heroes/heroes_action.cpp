@@ -769,7 +769,8 @@ namespace
             }
             else if ( objectType == MP2::OBJ_BARREL ) {
                 const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
-                const fheroes2::Text body( _( "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash of lost treasure." ), fheroes2::FontType::normalWhite() );
+                const fheroes2::Text body( _( "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash of lost treasure." ),
+                                           fheroes2::FontType::normalWhite() );
 
                 fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
             }
