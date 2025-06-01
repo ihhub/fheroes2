@@ -671,7 +671,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
 fheroes2::LocalizedString World::getCurrentRumor() const
 {
-    const uint32_t standardRumorCount = 10;
+    const uint32_t standardRumorCount = 9;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
@@ -733,8 +733,6 @@ fheroes2::LocalizedString World::getCurrentRumor() const
         return { _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." ), std::nullopt };
     case 8:
         return { _( "An unknown force is being resurrected..." ), std::nullopt };
-    case 9:
-        return { _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ), std::nullopt };
     default:
         break;
     }
