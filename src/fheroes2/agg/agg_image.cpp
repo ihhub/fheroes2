@@ -4958,8 +4958,8 @@ namespace
                     fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
                 }
 
-                // Barrel. Object has only animation images but for the compatibility
-                // we need to have the main image (images[248]) that is empty for this object.
+                // Barrel. Object has only animation images but for compatibility
+                // we need to have the main image (images[248]) be empty for this object.
                 for ( size_t i = 0; i < 6; ++i ) {
                     fheroes2::h2d::readImage( "barrel_animation_" + std::to_string( i ) + ".image", images[249 + i] );
                 }
