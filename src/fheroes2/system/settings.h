@@ -243,12 +243,12 @@ public:
         return _resolutionInfo;
     }
 
-    fheroes2::Point getStarttWindowPos() const
+    fheroes2::Point getStartWindowPos() const
     {
         return _windowPos;
     }
 
-    void setStartWindowPos( fheroes2::Point pos )
+    void setStartWindowPos( const fheroes2::Point pos )
     {
         _windowPos = pos;
     }

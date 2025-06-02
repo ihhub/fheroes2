@@ -976,7 +976,7 @@ namespace
             return result;
         }
 
-        void setWindowPos( fheroes2::Point pos ) override
+        void setWindowPos( const fheroes2::Point pos ) override
         {
             if ( pos == fheroes2::Point{ -1, -1 } ) {
                 _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
@@ -1389,7 +1389,7 @@ namespace fheroes2
         _screenSize = { info.screenWidth, info.screenHeight };
     }
 
-    void Display::setWindowPos( Point point )
+    void Display::setWindowPos( const Point point )
     {
         _engine->setWindowPos( point );
     }

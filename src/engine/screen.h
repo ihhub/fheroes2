@@ -144,7 +144,7 @@ namespace fheroes2
             return { -1, -1 };
         }
 
-        virtual void setWindowPos( Point pos )
+        virtual void setWindowPos( const Point pos )
         {
             (void)( pos );
             // Do nothing
@@ -234,7 +234,7 @@ namespace fheroes2
             return _engine->getWindowPos();
         }
 
-        void setWindowPos( Point point );
+        void setWindowPos( const Point point );
 
         // this function must return true if new palette has been generated
         using PreRenderProcessing = std::function<bool( std::vector<uint8_t> & )>;
