@@ -413,7 +413,7 @@ std::string Settings::String() const
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
-    os << std::endl << "# position of the main window" << std::endl;
+    os << std::endl << "# position of the game's window" << std::endl;
     os << "main window position = [ " << _windowPos.x << ", " << _windowPos.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
