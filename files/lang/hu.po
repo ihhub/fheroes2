@@ -429,7 +429,8 @@ msgid "Move the %{name} "
 msgstr "%{name} ide lép "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Mozgasd vagy jobb gombot nyomj %{name} szétosztásához"
+msgstr ""
+"Mozgasd vagy kattints a jobb gombbal a(z) %{name} szétosztásához."
 
 msgid "Combine %{name} armies"
 msgstr "%{name} seregek egyesítése"
@@ -461,7 +462,7 @@ msgid "%{name} has turned on the auto combat"
 msgstr "%{name} bekapcsolta az automata csata módot"
 
 msgid "Spell failed!"
-msgstr "A varázslat meghiúsult!"
+msgstr "A varázslat nem sikerült!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -475,7 +476,7 @@ msgid "You have already cast a spell this round."
 msgstr "Már varázsoltál ebben a körben."
 
 msgid "That spell will have no effect!"
-msgstr "Ez a varázslat nem hatásos senkire!"
+msgstr "Ennek a varázslatnak nem lesz semmilyen hatása!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Csak egyféle elementált idézhetsz meg egy csatában."
@@ -655,7 +656,7 @@ msgid "Attack"
 msgstr "Támadás"
 
 msgid "Defense"
-msgstr "Védekezés"
+msgstr "Védelem"
 
 msgid "Spell Power"
 msgstr "Varázserő"
@@ -688,7 +689,7 @@ msgid "Hero Screen"
 msgstr "Hős képernyő"
 
 msgid "Captain's Options"
-msgstr "Kapitány beállítások"
+msgstr "Kapitány beállításai"
 
 msgid "Hero's Options"
 msgstr "Hős beállításai"
@@ -2883,7 +2884,7 @@ msgid "Attack Skill"
 msgstr "Támadóerő"
 
 msgid "Defense Skill"
-msgstr "Védőerő"
+msgstr "Védekezőerő"
 
 msgid "Shots"
 msgstr "Lövések"
@@ -3371,7 +3372,7 @@ msgid "Attack:"
 msgstr "Támadóerő:"
 
 msgid "Defense:"
-msgstr "Védőerő:"
+msgstr "Védekezőerő:"
 
 msgid "Spell Power:"
 msgstr "Varázserő:"
