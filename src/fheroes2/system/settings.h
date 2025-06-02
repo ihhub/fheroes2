@@ -243,7 +243,7 @@ public:
         return _resolutionInfo;
     }
 
-    fheroes2::Point getStartWindowPos() const
+    fheroes2::Point getSavedWindowPos() const
     {
         return _windowPos;
     }

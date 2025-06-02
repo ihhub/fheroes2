@@ -177,7 +177,7 @@ namespace
                 }
             }
 
-            display.setWindowPos( conf.getStarttWindowPos() );
+            display.setWindowPos( conf.getSavedWindowPos() );
             display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
@@ -367,7 +367,7 @@ int main( int argc, char ** argv )
 
         try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-            const fheroes2::Point pos = conf.getStarttWindowPos();
+            const fheroes2::Point pos = conf.getSavedWindowPos();
             Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
             const fheroes2::Point currentPos = display.getWindowPos();
             if ( pos != currentPos ) {
