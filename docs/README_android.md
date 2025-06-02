@@ -27,7 +27,7 @@ To simulate a right-click to get info on various items, you need to first touch 
 and then touch anywhere else on the screen. While holding the second finger, you can remove the first one from the screen
 and keep viewing the information on the item.
 
-By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
+By default normal adventure map scrolling on the borders of the screen is disabled. To pan the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.
 
 During combat, actions (such as moving, attacking, or casting a spell) performed using the touchpad/touchscreen must be
