@@ -4667,7 +4667,7 @@ msgid "LANGUAGE"
 msgstr "NYELV"
 
 msgid "ABOUT"
-msgstr "NÉVJEGY"
+msgstr "LEÍRÁS"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4693,7 +4693,7 @@ msgid "Change Map Description"
 msgstr "Térképleírás megváltoztatása"
 
 msgid "About"
-msgstr "Névjegy"
+msgstr "Leírás"
 
 msgid "Click to accept the changes made."
 msgstr "Kattints a változtatások elfogadásához."
