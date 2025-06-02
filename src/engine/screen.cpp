@@ -971,10 +971,9 @@ namespace
             if ( _window == nullptr ) {
                 return { -1, -1 };
             }
-            int x = 0;
-            int y = 0;
-            SDL_GetWindowPosition( _window, &x, &y );
-            return { x, y };
+            fheroes2::Point result;
+            SDL_GetWindowPosition( _window, &result.x, &result.y );
+            return result;
         }
 
         void setWindowPos( fheroes2::Point pos ) override
