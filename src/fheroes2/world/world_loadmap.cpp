@@ -1562,14 +1562,14 @@ void World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-    // update wins, loss conditions
     if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
         const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsWinCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsWinCondition = hero->GetID();
@@ -1582,10 +1582,12 @@ void World::setHeroIdsForMapConditions()
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsLossCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A losing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsLossCondition = hero->GetID();
+
             hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }
