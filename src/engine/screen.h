@@ -144,9 +144,8 @@ namespace fheroes2
             return { -1, -1 };
         }
 
-        virtual void setWindowPos( const Point pos )
+        virtual void setWindowPos( const Point /* pos */ )
         {
-            (void)( pos );
             // Do nothing
         }
 
