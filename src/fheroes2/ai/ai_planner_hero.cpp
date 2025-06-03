@@ -843,7 +843,7 @@ namespace
             return value;
         }
 
-        // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
+        // Some objects do not lose their value drastically over distances. This allows AI heroes to keep focus on important targets.
         double correctedDistance = distance * getDistanceModifier( objectType );
 
         // Distances should be corrected over time as AI heroes should focus on keeping important objects in focus.
