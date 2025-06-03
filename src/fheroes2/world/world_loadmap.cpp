@@ -736,8 +736,6 @@ bool World::loadResurrectionMap( const std::string & filename )
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
     std::set<uint32_t> selectionObjectMetadataUIDs;
-    std::map<uint32_t, size_t> objectsUIDs;
-    std::set<uint32_t> incorrectUIDs;
 #endif
 
     const auto areSpellsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata, const int spellLevel ) {
@@ -758,16 +756,6 @@ bool World::loadResurrectionMap( const std::string & filename )
         const auto & tile = map.tiles[tileId];
 
         for ( const auto & object : tile.objects ) {
-#if defined( WITH_DEBUG )
-            if ( object.group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != Maps::ObjectGroup::LANDSCAPE_FLAGS ) {
-                const auto [iter, inserted] = objectsUIDs.try_emplace( object.id, tileId );
-                if ( !inserted ) {
-                    incorrectUIDs.emplace( object.id );
-                    VERBOSE_LOG( "doubledID: " << object.id << " at " << tileId << ". First at " << iter->second )
-                }
-            }
-#endif
-
             if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
 #if defined( WITH_DEBUG )
                 castleMetadataUIDs.emplace( object.id );
@@ -1210,30 +1198,6 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     for ( const uint32_t uid : selectionObjectMetadataUIDs ) {
         assert( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() );
-    }
-
-    for ( const uint32_t uid : incorrectUIDs ) {
-        if ( map.standardMetadata.find( uid ) != map.standardMetadata.end() ) {
-            VERBOSE_LOG( "`standardMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.castleMetadata.find( uid ) != map.castleMetadata.end() ) {
-            VERBOSE_LOG( "`castleMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.heroMetadata.find( uid ) != map.heroMetadata.end() ) {
-            VERBOSE_LOG( "`heroMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.sphinxMetadata.find( uid ) != map.sphinxMetadata.end() ) {
-            VERBOSE_LOG( "`sphinxMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.signMetadata.find( uid ) != map.signMetadata.end() ) {
-            VERBOSE_LOG( "`signMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() ) {
-            VERBOSE_LOG( "`adventureMapEventMetadata` belongs to many objects with same UID = " << uid )
-        }
-        if ( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() ) {
-            VERBOSE_LOG( "`selectionObjectMetadata` belongs to many objects with same UID = " << uid )
-        }
     }
 #endif
 
