@@ -319,11 +319,11 @@ void Interface::StatusPanel::_drawArmyInfo( const int32_t offsetY ) const
 {
     const Army * armies = nullptr;
 
-    if ( GetFocusHeroes() ) {
-        armies = &GetFocusHeroes()->GetArmy();
+    if ( const Heroes * focusedHero = GetFocusHeroes(); focusedHero != nullptr ) {
+        armies = &focusedHero->GetArmy();
     }
-    else if ( GetFocusCastle() ) {
-        armies = &GetFocusCastle()->GetArmy();
+    else if ( const Castle * focusedCastle = GetFocusCastle(); focusedCastle != nullptr ) {
+        armies = &focusedCastle->GetArmy();
     }
 
     if ( armies ) {
