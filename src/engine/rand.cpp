@@ -32,8 +32,10 @@
 namespace
 {
 
+#if defined( _WIN32 )
 #pragma warning( push )
 #pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
 
     // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
     // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
@@ -57,7 +59,10 @@ namespace
             }
         }
     }
+
+#if defined( _WIN32 )
 #pragma warning( pop )
+#endif
 
 }
 
