@@ -719,8 +719,9 @@ namespace Maps
     Funds getFundsFromTile( const Tile & tile )
     {
         switch ( tile.getMainObjectType( false ) ) {
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
-            // Campfire contains N of non-Gold resources and (N * 100) Gold.
+            // Campfire or barrel contains N of non-Gold resources and (N * 100) Gold.
             return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_FLOTSAM:
@@ -802,6 +803,7 @@ namespace Maps
     {
         switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_RESOURCE:
@@ -1213,6 +1215,7 @@ namespace Maps
             break;
         }
 
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
             assert( isFirstLoad );
 

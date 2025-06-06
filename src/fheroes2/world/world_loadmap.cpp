@@ -1344,6 +1344,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_BOAT:
     case MP2::OBJ_CAMPFIRE:
@@ -1382,11 +1383,11 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_RUINS:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_STONE_LITHS:
     case MP2::OBJ_TRAVELLER_TENT:

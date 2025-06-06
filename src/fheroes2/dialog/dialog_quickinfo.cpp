@@ -575,6 +575,7 @@ namespace
             return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
         // These objects do not have extra text for quick info.
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         default:
             return MP2::StringObject( objectType );
