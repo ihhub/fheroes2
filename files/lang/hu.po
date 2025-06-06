@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-03 11:59+0000\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
 "PO-Revision-Date: 2025-04-23 20:48+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -6662,6 +6662,11 @@ msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Az ellenséges tábor kifosztása közben rálelsz egy elrejtett kicsre."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9389,6 +9394,10 @@ msgstr "Befagyott tó"
 #, fuzzy
 msgid "Black Cat"
 msgstr "Fekete gyöngy"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Mágikus útakadály"
 
 msgid "randomRace|level 1 creatures"
 msgstr "1. szintű lények"
