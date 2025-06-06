@@ -502,7 +502,7 @@ void generate_to_impl(SeedSeq&& generator, DestIter dest,
                         //  this odd code ^^^^^^^^^^^^^^^^^ is work-around for
                         //  a bug: http://llvm.org/bugs/show_bug.cgi?id=21287
 
-    if (FROM_ELEMS <= 1024) {
+    if constexpr (FROM_ELEMS <= 1024) {
         uint32_t buffer[FROM_ELEMS];
         generator.generate(buffer, buffer+FROM_ELEMS);
         uneven_copy(buffer, dest, dest+size);
