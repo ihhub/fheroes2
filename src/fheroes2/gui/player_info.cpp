@@ -333,35 +333,45 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
-    if ( player != nullptr ) {
+    Player * clickedPlayer = GetFromOpponentClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
         const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
         if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
             if ( currentSelectedPlayer == nullptr ) {
-                currentSelectedPlayer = player;
+                currentSelectedPlayer = clickedPlayer;
             }
-            else if ( currentSelectedPlayer == player ) {
+            else if ( currentSelectedPlayer == clickedPlayer ) {
                 currentSelectedPlayer = nullptr;
             }
-            else if ( SwapPlayers( *player, *currentSelectedPlayer ) ) {
+            else if ( SwapPlayers( *clickedPlayer, *currentSelectedPlayer ) ) {
                 currentSelectedPlayer = nullptr;
             }
         }
         else {
-            const PlayerColor playerColor = player->GetColor();
+            // Single-player game.
+            const PlayerColor clickedColor = clickedPlayer->GetColor();
 
-            if ( fi.colorsAvailableForHumans & playerColor ) {
-                const PlayerColorsSet humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+            if ( fi.colorsAvailableForHumans & clickedColor ) {
+                const PlayerColorsSet humanControlledColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
-                if ( ( Color::Count( humans ) != 1 ) && playerColor != static_cast<PlayerColor>( humans ) ) {
-                    Player * currentPlayer = Players::Get( static_cast<PlayerColor>( humans ) );
-                    Player * nextPlayer = Players::Get( playerColor );
+                if ( Color::Count( humanControlledColors ) != 1 ) {
+                    // How could be more than one active human player in the single-player game?
+                    assert( 0 );
+
+                    return false;
+                }
+
+                const PlayerColor currentColor = static_cast<PlayerColor>( humanControlledColors );
+
+                if ( clickedColor != currentColor ) {
+                    Player * currentPlayer = Players::Get( currentColor );
+                    Player * nextPlayer = Players::Get( clickedColor );
                     assert( currentPlayer != nullptr && nextPlayer != nullptr );
                     const Player::HandicapStatus currentHandicapStatus = currentPlayer->getHandicapStatus();
 
-                    Players::SetPlayerControl( static_cast<PlayerColor>( humans ), CONTROL_AI | CONTROL_HUMAN );
-                    Players::SetPlayerControl( playerColor, CONTROL_HUMAN );
+                    Players::SetPlayerControl( currentColor, CONTROL_AI | CONTROL_HUMAN );
+                    Players::SetPlayerControl( clickedColor, CONTROL_HUMAN );
 
                     nextPlayer->setHandicapStatus( currentHandicapStatus );
                     currentPlayer->setHandicapStatus( Player::HandicapStatus::NONE );
@@ -372,38 +382,38 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return true;
     }
 
-    player = GetFromOpponentNameClick( le.getMouseCursorPos() );
-    if ( player != nullptr ) {
+    clickedPlayer = GetFromOpponentNameClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
         std::string str = _( "%{color} player" );
-        StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
+        StringReplace( str, "%{color}", Color::String( clickedPlayer->GetColor() ) );
 
-        std::string res = player->GetName();
+        std::string res = clickedPlayer->GetName();
         if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ str, fheroes2::FontType::normalWhite() }, res, 0, false, {} ) && !res.empty() ) {
-            player->SetName( std::move( res ) );
+            clickedPlayer->SetName( std::move( res ) );
         }
 
         return true;
     }
 
-    player = GetFromClassClick( le.getMouseCursorPos() );
-    if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-        player->SetRace( Race::getNextRace( player->GetRace() ) );
+    clickedPlayer = GetFromClassClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr && conf.getCurrentMapInfo().AllowChangeRace( clickedPlayer->GetColor() ) ) {
+        clickedPlayer->SetRace( Race::getNextRace( clickedPlayer->GetRace() ) );
 
         return true;
     }
 
-    player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
-    if ( player != nullptr ) {
-        if ( !( player->GetControl() & CONTROL_AI ) ) {
-            switch ( player->getHandicapStatus() ) {
+    clickedPlayer = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
+        if ( !( clickedPlayer->GetControl() & CONTROL_AI ) ) {
+            switch ( clickedPlayer->getHandicapStatus() ) {
             case Player::HandicapStatus::NONE:
-                player->setHandicapStatus( Player::HandicapStatus::MILD );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::MILD );
                 break;
             case Player::HandicapStatus::MILD:
-                player->setHandicapStatus( Player::HandicapStatus::SEVERE );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::SEVERE );
                 break;
             case Player::HandicapStatus::SEVERE:
-                player->setHandicapStatus( Player::HandicapStatus::NONE );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::NONE );
                 break;
             default:
                 // Did you add a new handicap status? Add the logic above!

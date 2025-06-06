@@ -253,7 +253,7 @@ namespace
 
     bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
     {
-        if ( objectsUids.empty() ) {
+        if ( objectsUids.empty() || objectGroups.empty() ) {
             return false;
         }
 
@@ -285,6 +285,9 @@ namespace
                     ++objectIter;
                     continue;
                 }
+
+                // Remove the object also from the `world` tiles. It is needed for proper rendering of the map.
+                Maps::removeObjectFromMapByUID( static_cast<int32_t>( mapTileIndex ), objectIter->id );
 
                 const auto & objects = Maps::getObjectsByGroup( objectIter->group );
                 assert( objectIter->index < objects.size() );
@@ -788,7 +791,7 @@ namespace Interface
         return editorInterface;
     }
 
-    fheroes2::GameMode EditorInterface::startEdit( const bool isNewMap )
+    fheroes2::GameMode EditorInterface::startEdit()
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
@@ -803,12 +806,6 @@ namespace Interface
         reset();
 
         _historyManager.reset();
-
-        if ( isNewMap ) {
-            _mapFormat = {};
-            Maps::saveMapInEditor( _mapFormat );
-            _loadedFileName.clear();
-        }
 
         // Stop all sounds and music.
         AudioManager::ResetAudio();
@@ -1059,15 +1056,12 @@ namespace Interface
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
-                        Maps::setTerrainOnTiles( _areaSelectionStartTileId, _tileUnderCursor, groundId );
+                        Maps::setTerrainOnTiles( _mapFormat, _areaSelectionStartTileId, _tileUnderCursor, groundId );
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
 
                         _redraw |= mapUpdateFlags;
-
-                        // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                        Maps::readMapInEditor( _mapFormat );
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
@@ -1077,9 +1071,6 @@ namespace Interface
                                             _editorPanel.getEraseObjectGroups() ) ) {
                             action.commit();
                             _redraw |= mapUpdateFlags;
-
-                            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                            Maps::readMapInEditor( _mapFormat );
                         }
                     }
                 }
@@ -1624,13 +1615,13 @@ namespace Interface
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
-                Maps::setTerrainOnTiles( indices.x, indices.y, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, indices.x, indices.y, groundId );
             }
             else {
                 assert( brushSize.width == 0 );
 
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, tileIndex, tileIndex, groundId );
 
                 _areaSelectionStartTileId = -1;
             }
@@ -1640,9 +1631,6 @@ namespace Interface
             _redraw |= mapUpdateFlags;
 
             action.commit();
-
-            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-            Maps::readMapInEditor( _mapFormat );
         }
         else if ( _editorPanel.isRoadDraw() ) {
             if ( tile.isWater() ) {
@@ -1686,9 +1674,6 @@ namespace Interface
             if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
                 action.commit();
                 _redraw |= mapUpdateFlags;
-
-                // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                Maps::readMapInEditor( _mapFormat );
             }
 
             if ( brushSize.width == 0 ) {
@@ -2004,6 +1989,51 @@ namespace Interface
         return false;
     }
 
+    bool EditorInterface::generateNewMap( const int32_t size )
+    {
+        if ( size <= 0 ) {
+            return false;
+        }
+
+        Settings & conf = Settings::Get();
+
+        if ( !conf.isPriceOfLoyaltySupported() ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat = {};
+
+        world.generateUninitializedMap( size );
+
+        if ( world.w() != size || world.h() != size ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat.size = size;
+
+        const int32_t tilesCount = size * size;
+
+        _mapFormat.tiles.resize( tilesCount );
+
+        for ( int32_t i = 0; i < size; ++i ) {
+            world.getTile( i ).setIndex( i );
+        }
+
+        Maps::setTerrainOnTiles( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
+
+        Maps::resetObjectUID();
+
+        _loadedFileName.clear();
+
+        conf.getCurrentMapInfo().version = GameVersion::RESURRECTION;
+
+        return true;
+    }
+
     bool EditorInterface::loadMap( const std::string & filePath )
     {
         if ( !Maps::Map_Format::loadMap( filePath, _mapFormat ) ) {
@@ -2118,6 +2148,7 @@ namespace Interface
         std::string errorMessage;
 
         std::set<uint32_t> uids;
+        std::set<Maps::ObjectGroup> groups;
 
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
@@ -2140,6 +2171,7 @@ namespace Interface
 
                 if ( !verifyTerrainPlacement( pos, object.group, static_cast<int32_t>( object.index ), errorMessage ) ) {
                     uids.emplace( object.id );
+                    groups.emplace( object.group );
                 }
             }
 
@@ -2149,11 +2181,6 @@ namespace Interface
         }
 
         if ( !uids.empty() ) {
-            std::set<Maps::ObjectGroup> groups;
-            for ( int32_t i = 0; i < static_cast<int32_t>( Maps::ObjectGroup::GROUP_COUNT ); ++i ) {
-                groups.emplace( static_cast<Maps::ObjectGroup>( i ) );
-            }
-
             removeObjects( _mapFormat, uids, groups );
         }
 

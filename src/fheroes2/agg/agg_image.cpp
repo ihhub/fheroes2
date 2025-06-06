@@ -4901,8 +4901,12 @@ namespace
                 // Expand the existing set of Adventure Map objects:
                 // - 2 extra River Delta objects. Each object has 7 image parts.
                 // - 1 new Stone Liths with 3 image parts.
-                // - 3 new variants of Observation Tower object. In total, 6 new image parts.
-                images.resize( 218 + ( 7 * 2 ) + 3 + 6 );
+                // - 3 new variants of Observation Tower object. Each object has 2 image parts.
+                // - 1 new "Black Cat" object that has: 1 main image + 6 animation images.
+                // - 1 new "Barrel" object that has: 1 main (empty) image + 6 animation images.
+                // In total, 8 new objects (37 new images).
+
+                images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) + ( 1 + 6 ) );
 
                 // 2 River Deltas.
                 for ( size_t i = 0; i < 14; ++i ) {
@@ -4945,6 +4949,20 @@ namespace
                 images[240] = images[198];
                 fheroes2::h2d::readImage( "observation_tower_snow_top_part.image", temp );
                 Blit( temp, 0, 0, images[240], 0, 0, temp.width(), temp.height() );
+
+                // Black Cat. Main object image.
+                fheroes2::h2d::readImage( "black_cat.image", images[241] );
+
+                // Black Cat. Tail and eyes animation.
+                for ( size_t i = 0; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
+                }
+
+                // Barrel. Object has only animation images but for compatibility
+                // we need to have the main image (images[248]) be empty for this object.
+                for ( size_t i = 0; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "barrel_animation_" + std::to_string( i ) + ".image", images[249 + i] );
+                }
             }
 
             return true;

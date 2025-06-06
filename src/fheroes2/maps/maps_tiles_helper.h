@@ -172,14 +172,14 @@ namespace Maps
 
     bool removeObjectFromTileByType( const Tile & tile, const MP2::MapObjectType objectType );
 
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID );
+
     bool isClearGround( const Tile & tile );
 
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
     void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColorsSet colors );
 
     // The functions below are used only in the map Editor.
-
-    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
 
     bool setObjectOnTile( Tile & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 

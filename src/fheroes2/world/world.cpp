@@ -350,33 +350,11 @@ void World::generateBattleOnlyMap()
     const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
                                          Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
 
-    Reset();
-
-    width = 2;
-    height = 2;
-
-    Maps::FileInfo fi;
-
-    fi.width = static_cast<uint16_t>( width );
-    fi.height = static_cast<uint16_t>( height );
-
-    Settings & conf = Settings::Get();
-
-    if ( conf.isPriceOfLoyaltySupported() ) {
-        fi.version = GameVersion::PRICE_OF_LOYALTY;
-    }
-
-    conf.setCurrentMapInfo( std::move( fi ) );
-
-    Defaults();
-
-    vec_tiles.resize( static_cast<size_t>( width ) * height );
+    generateUninitializedMap( 2 );
 
     const int groundType = Rand::Get( terrainTypes );
 
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
         vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), 0 );
     }
@@ -397,30 +375,18 @@ void World::generateUninitializedMap( const int32_t size )
     fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
-    assert( conf.isPriceOfLoyaltySupported() );
 
-    fi.version = GameVersion::PRICE_OF_LOYALTY;
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi.version = GameVersion::PRICE_OF_LOYALTY;
+    }
 
     conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
+    // The tiles are cleared and resizing their vector also initializes tiles with the default values.
+    assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
-}
-
-void World::generateMapForEditor( const int32_t size )
-{
-    generateUninitializedMap( size );
-
-    // Initialize all tiles.
-    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
-        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
-
-        const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
-        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag );
-    }
 }
 
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
@@ -705,7 +671,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
 fheroes2::LocalizedString World::getCurrentRumor() const
 {
-    const uint32_t standardRumorCount = 10;
+    const uint32_t standardRumorCount = 9;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
@@ -767,8 +733,6 @@ fheroes2::LocalizedString World::getCurrentRumor() const
         return { _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." ), std::nullopt };
     case 8:
         return { _( "An unknown force is being resurrected..." ), std::nullopt };
-    case 9:
-        return { _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ), std::nullopt };
     default:
         break;
     }

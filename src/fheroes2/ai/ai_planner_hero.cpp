@@ -275,6 +275,7 @@ namespace
 
         // If you add a new object to a group of objects sort them alphabetically.
         switch ( objectType ) {
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
@@ -506,6 +507,10 @@ namespace
 
         case MP2::OBJ_XANADU:
             return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
+
+        case MP2::OBJ_BLACK_CAT:
+            // Visit the Black Cat only if hero can increase his Morale and his Luck is maximum.
+            return !hero.isVisited( tile ) && hero.GetMorale() < Morale::GREAT && hero.GetLuck() >= Luck::IRISH;
 
         // Dwellings with free army.
         case MP2::OBJ_ARCHER_HOUSE:
@@ -810,6 +815,7 @@ namespace
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return 0.9;
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_GENIE_LAMP:
@@ -817,12 +823,13 @@ namespace
         case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST:
             return 0.95;
+        case MP2::OBJ_BLACK_CAT:
         case MP2::OBJ_BUOY:
-        case MP2::OBJ_TEMPLE:
         case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_MERMAID:
+        case MP2::OBJ_TEMPLE:
             // In most situations Luck and Morale modifier objects are useful to be visited when they are very close.
             return 1.1;
         default:
@@ -838,7 +845,7 @@ namespace
             return value;
         }
 
-        // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
+        // Some objects do not lose their value drastically over distances. This allows AI heroes to keep focus on important targets.
         double correctedDistance = distance * getDistanceModifier( objectType );
 
         // Distances should be corrected over time as AI heroes should focus on keeping important objects in focus.
@@ -1228,8 +1235,9 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         // A bottle is useless to AI as it contains only a message but it might block path.
         return 0;
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE: {
-        // A campfire has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
+        // A campfire or barrel has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
         // Since we should not expose the resource type let's assume that it gives 6 resources, 1 each and 400 gold.
         const Funds loot{ 1, 1, 1, 1, 1, 1, 400 };
 
@@ -1438,6 +1446,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
 
         return hero.isPotentSpellcaster() ? 1500 : 0;
     }
+    case MP2::OBJ_BLACK_CAT:
     case MP2::OBJ_BUOY:
     case MP2::OBJ_TEMPLE: {
         if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -1794,6 +1803,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
 
         return ( isFindArtifactVictoryCondition( art ) ? 3000.0 : 1500.0 ) * art.getArtifactValue();
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_LEAN_TO:
@@ -1953,6 +1963,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
         }
         return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? tenTiles : fiveTiles;
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_GENIE_LAMP:
