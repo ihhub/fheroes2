@@ -46,18 +46,25 @@ namespace
         }
 
         const uint32_t range = to - from + 1;
+
+        uint32_t generated = gen();
+        uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
+        uint32_t lowerPart = static_cast<uint32_t>( mult );
+        if ( lowerPart >= range ) {
+            const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+            return from + upperPart;
+        }
+
         // ( -range ) % range is the same as (2**32 - range) % range
         const uint32_t discardBound = ( -range ) % range;
 
-        while ( true ) {
-            const uint32_t generated = gen();
-            const uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
-            const uint32_t lowerPart = static_cast<uint32_t>( mult );
-            if ( lowerPart >= discardBound ) {
-                const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-                return from + upperPart;
-            }
+        while ( lowerPart < discardBound ) {
+            generated = gen();
+            mult = ( static_cast<uint64_t>( generated ) * range );
+            lowerPart = static_cast<uint32_t>( mult );
         }
+        const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+        return from + upperPart;
     }
 
 #if defined( _WIN32 )
