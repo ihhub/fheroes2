@@ -346,12 +346,18 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
 
 bool Troops::isValid() const
 {
-    return std::any_of( begin(), end(), []( const Troop * troop ) { return ( troop != nullptr ) && troop->isValid(); } );
+    return std::any_of( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } );
 }
 
 uint32_t Troops::GetOccupiedSlotCount() const
 {
-    return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Troop * troop ) { return ( troop != nullptr ) && troop->isValid(); } ) );
+    return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } ) );
 }
 
 bool Troops::areAllTroopsUnique() const
