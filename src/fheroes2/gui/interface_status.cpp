@@ -317,18 +317,18 @@ void Interface::StatusPanel::_drawResourceInfo( const int32_t offsetY ) const
 
 void Interface::StatusPanel::_drawArmyInfo( const int32_t offsetY ) const
 {
-    const Army * armies = nullptr;
+    const Army * armyTroops = nullptr;
 
     if ( const Heroes * focusedHero = GetFocusHeroes(); focusedHero != nullptr ) {
-        armies = &focusedHero->GetArmy();
+        armyTroops = &focusedHero->GetArmy();
     }
     else if ( const Castle * focusedCastle = GetFocusCastle(); focusedCastle != nullptr ) {
-        armies = &focusedCastle->GetArmy();
+        armyTroops = &focusedCastle->GetArmy();
     }
 
-    if ( armies ) {
+    if ( armyTroops ) {
         const fheroes2::Rect & pos = GetArea();
-        Army::drawMultipleMonsterLines( *armies, pos.x + 4, pos.y + 1 + offsetY, 138, true, true );
+        Army::drawMultipleMonsterLines( *armyTroops, pos.x + 4, pos.y + 1 + offsetY, 138, true, true );
     }
 }
 
