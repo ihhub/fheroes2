@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-03 11:59+0000\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
 "PO-Revision-Date: 2024-08-23 09:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6688,6 +6688,11 @@ msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Обшукуючи ворожий табір, ви знаходите схованку зі скарбами."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9443,6 +9448,10 @@ msgstr "Замерзле озеро"
 #, fuzzy
 msgid "Black Cat"
 msgstr "Чорна Перлина"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Бар'єр"
 
 msgid "randomRace|level 1 creatures"
 msgstr "істоти 1-го рівня"

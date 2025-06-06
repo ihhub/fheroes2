@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-03 11:59+0000\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
 "PO-Revision-Date: 2025-03-16 22:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -6794,6 +6794,11 @@ msgstr ""
 "Saqueando un campamento enemigo descubres un depósito oculto con tesoros."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9546,6 +9551,10 @@ msgstr ""
 #, fuzzy
 msgid "Black Cat"
 msgstr "La Perla Negra"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Barrera"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-03 11:59+0000\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -6837,6 +6837,11 @@ msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Przetrząsając obóz wroga odnajdujesz ukrytą skrzynię ze skarbami."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9636,6 +9641,10 @@ msgstr ""
 #, fuzzy
 msgid "Black Cat"
 msgstr "Czarna Perła"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Bariera"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
