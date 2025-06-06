@@ -1233,15 +1233,6 @@ namespace fheroes2
         }
     }
 
-    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, const bool flip /* = false */ )
-    {
-        if ( inPos.x < 0 || inPos.y < 0 ) {
-            return;
-        }
-
-        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
-    }
-
     void Copy( const Image & in, Image & out )
     {
         if ( !out.singleLayer() && !in.singleLayer() ) {
