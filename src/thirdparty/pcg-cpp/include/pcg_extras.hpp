@@ -74,6 +74,15 @@
  * direct CPU support.
  *
  */
+
+#ifndef PCG_FORCE_EMULATED_128BIT_MATH
+    #define PCG_FORCE_EMULATED_128BIT_MATH 0
+#endif // !PCG_FORCE_EMULATED_128BIT_MATH
+
+#ifndef __SIZEOF_INT128__
+    #define __SIZEOF_INT128__ 0
+#endif // !__SIZEOF_INT128__
+
 #if __SIZEOF_INT128__ && !PCG_FORCE_EMULATED_128BIT_MATH
     namespace pcg_extras {
         typedef __uint128_t pcg128_t;
@@ -289,6 +298,10 @@ inline itype unxorshift(itype x, bitcount_t bits, bitcount_t shift)
  * (but still crappy) code if you define PCG_USE_ZEROCHECK_ROTATE_IDIOM.
  */
 
+#ifndef PCG_USE_ZEROCHECK_ROTATE_IDIOM
+    #define PCG_USE_ZEROCHECK_ROTATE_IDIOM 0
+#endif // !PCG_USE_ZEROCHECK_ROTATE_IDIOM
+
 template <typename itype>
 inline itype rotl(itype value, bitcount_t rot)
 {
@@ -320,6 +333,11 @@ inline itype rotr(itype value, bitcount_t rot)
  *
  * These overloads will be preferred over the general template code above.
  */
+
+#ifndef PCG_USE_INLINE_ASM 
+    #define PCG_USE_INLINE_ASM 0
+#endif // !PCG_USE_INLINE_ASM 
+
 #if PCG_USE_INLINE_ASM && __GNUC__ && (__x86_64__  || __i386__)
 
 inline uint8_t rotr(uint8_t value, bitcount_t rot)

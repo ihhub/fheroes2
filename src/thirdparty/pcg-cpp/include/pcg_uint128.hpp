@@ -79,6 +79,8 @@
 
 #if INTPTR_MAX == INT64_MAX && !defined(PCG_64BIT_SPECIALIZATIONS)
     #define PCG_64BIT_SPECIALIZATIONS 1
+#else
+    #define PCG_64BIT_SPECIALIZATIONS 0
 #endif
 
 namespace pcg_extras {
@@ -297,6 +299,10 @@ inline UInt subwithcarry(UInt x, UInt y, bool carryin, bool* carryout)
     return result;
 }
 
+#if defined( __GNUC__ ) || defined( __GNUG__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnested-anon-types"
+#endif
 
 template <typename UInt, typename UIntX2>
 class uint_x4 {
@@ -534,6 +540,9 @@ public:
     }
 
 };
+#if defined( __GNUC__ ) || defined( __GNUG__ )
+#pragma GCC diagnostic pop
+#endif
 
 template<typename U, typename V>
 bitcount_t flog2(const uint_x4<U,V>& v)
