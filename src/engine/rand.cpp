@@ -24,11 +24,14 @@
 #include "rand.h"
 
 #include <numeric>
+#include <random>
 
-std::mt19937 & Rand::CurrentThreadRandomDevice()
+#include "pcg_random.hpp"
+
+pcg32 & Rand::CurrentThreadRandomDevice()
 {
-    thread_local std::random_device rd;
-    thread_local std::mt19937 gen( rd() );
+    thread_local pcg_extras::seed_seq_from<std::random_device> seed_source;
+    thread_local pcg32 gen( seed_source );
 
     return gen;
 }
@@ -51,12 +54,12 @@ uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
     }
 
     std::uniform_int_distribution<uint32_t> distrib( from, to );
-    std::mt19937 seededGen( seed );
+    pcg32 seededGen( seed );
 
     return distrib( seededGen );
 }
 
-uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
+uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, pcg32 & gen )
 {
     if ( from > to ) {
         std::swap( from, to );

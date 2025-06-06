@@ -33,9 +33,11 @@
 #include <utility>
 #include <vector>
 
+#include "pcg_random.hpp"
+
 namespace Rand
 {
-    std::mt19937 & CurrentThreadRandomDevice();
+    pcg32 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
 
@@ -53,7 +55,7 @@ namespace Rand
         return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );
     }
 
-    uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
+    uint32_t GetWithGen( uint32_t from, uint32_t to, pcg32 & gen );
 
     template <typename T>
     void Shuffle( std::vector<T> & vec )
@@ -77,7 +79,7 @@ namespace Rand
     }
 
     template <typename T>
-    const T & GetWithGen( const std::vector<T> & vec, std::mt19937 & gen )
+    const T & GetWithGen( const std::vector<T> & vec, pcg32 & gen )
     {
         assert( !vec.empty() );
 
@@ -141,7 +143,7 @@ namespace Rand
         const T & Get( const std::vector<T> & vec )
         {
             ++_currentSeed;
-            std::mt19937 seededGen( _currentSeed );
+            pcg32 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 

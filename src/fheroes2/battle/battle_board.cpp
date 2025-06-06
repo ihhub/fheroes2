@@ -40,13 +40,14 @@
 #include "icn.h"
 #include "maps_tiles.h"
 #include "mp2.h"
+#include "pcg_random.hpp"
 #include "rand.h"
 #include "tools.h"
 #include "translations.h"
 
 namespace
 {
-    uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( pcg32 & gen )
     {
         return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
@@ -378,7 +379,7 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, pcg32 & gen )
 {
     std::vector<int> objs;
 
