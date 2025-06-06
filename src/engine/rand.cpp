@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,6 +25,38 @@
 
 #include <numeric>
 
+namespace
+{
+
+#pragma warning( push )
+#pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
+
+    // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
+    // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
+    uint32_t uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen )
+    {
+        if ( from == to ) {
+            return from;
+        }
+
+        const uint32_t range = to - from + 1;
+        // ( -range ) % range is the same as (2**32 - range) % range
+        const uint32_t discardBound = ( -range ) % range;
+
+        while ( true ) {
+            const uint32_t generated = gen();
+            const uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
+            const uint32_t lowerPart = static_cast<uint32_t>( mult );
+            if ( lowerPart >= discardBound ) {
+                const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+                return from + upperPart;
+            }
+        }
+    }
+#pragma warning( pop )
+
+}
+
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
     thread_local std::random_device rd;
@@ -39,9 +71,7 @@ uint32_t Rand::Get( uint32_t from, uint32_t to /* = 0 */ )
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
-
-    return distrib( CurrentThreadRandomDevice() );
+    return uniformIntDistribution( from, to, CurrentThreadRandomDevice() );
 }
 
 uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
@@ -50,10 +80,8 @@ uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
     std::mt19937 seededGen( seed );
-
-    return distrib( seededGen );
+    return uniformIntDistribution( from, to, seededGen );
 }
 
 uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
@@ -62,9 +90,7 @@ uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
-
-    return distrib( gen );
+    return uniformIntDistribution( from, to, gen );
 }
 
 int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const
