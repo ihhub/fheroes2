@@ -60,13 +60,15 @@ namespace Rand
     template <typename T>
     void Shuffle( std::vector<T> & vec )
     {
-        std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+        // using shuffle from pcg-cpp because std::shuffle yields different results on different platforms
+        shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
     }
 
     template <typename T>
-    void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
+    void ShuffleWithGen( std::vector<T> & vec, pcg32 & gen )
     {
-        std::shuffle( vec.begin(), vec.end(), gen );
+        // using shuffle from pcg-cpp because std::shuffle yields different results on different platforms
+        shuffle( vec.begin(), vec.end(), gen );
     }
 
     template <typename T>
