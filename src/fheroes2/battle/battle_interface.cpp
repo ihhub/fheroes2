@@ -1959,7 +1959,7 @@ void Battle::Interface::RedrawCover()
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
-    const Cell * cell = Board::GetCell( _curentCellIndex );
+    const Cell * cell = Board::GetCell( _currentCellIndex );
     const int cursorType = Cursor::Get().Themes();
 
     if ( cell && _currentUnit && Settings::Get().BattleShowMouseShadow() ) {
@@ -1968,7 +1968,7 @@ void Battle::Interface::RedrawCover()
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
             case Spell::COLDRING: {
-                for ( const int32_t & around : Board::GetAroundIndexes( _curentCellIndex ) ) {
+                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -1979,7 +1979,7 @@ void Battle::Interface::RedrawCover()
             case Spell::FIREBALL:
             case Spell::METEORSHOWER: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetAroundIndexes( _curentCellIndex ) ) {
+                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -1989,7 +1989,7 @@ void Battle::Interface::RedrawCover()
             }
             case Spell::FIREBLAST: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetDistanceIndexes( _curentCellIndex, 2 ) ) {
+                for ( const int32_t & around : Board::GetDistanceIndexes( _currentCellIndex, 2 ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2007,7 +2007,7 @@ void Battle::Interface::RedrawCover()
                         const Unit * unitToTeleport = arena.GetTroopBoard( _teleportSpellSrcIdx );
                         assert( unitToTeleport != nullptr );
 
-                        const Position pos = Position::GetPosition( *unitToTeleport, _curentCellIndex );
+                        const Position pos = Position::GetPosition( *unitToTeleport, _currentCellIndex );
                         assert( pos.GetHead() != nullptr );
 
                         highlightedCells.emplace( pos.GetHead() );
@@ -2037,7 +2037,7 @@ void Battle::Interface::RedrawCover()
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
             highlightedCells.emplace( cell );
-            for ( const int32_t & around : Board::GetAroundIndexes( _curentCellIndex ) ) {
+            for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                 const Cell * nearbyCell = Board::GetCell( around );
                 if ( nearbyCell != nullptr ) {
                     highlightedCells.emplace( nearbyCell );
@@ -2045,7 +2045,7 @@ void Battle::Interface::RedrawCover()
             }
         }
         else if ( _currentUnit->isWide() && ( cursorType == Cursor::WAR_MOVE || cursorType == Cursor::WAR_FLY ) ) {
-            const Position pos = Position::GetReachable( *_currentUnit, _curentCellIndex );
+            const Position pos = Position::GetReachable( *_currentUnit, _currentCellIndex );
 
             assert( pos.GetHead() != nullptr );
             assert( pos.GetTail() != nullptr );
@@ -2080,7 +2080,7 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( _curentCellIndex, direction ) );
+            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( _currentCellIndex, direction ) );
             assert( pos.GetHead() != nullptr );
 
             highlightedCells.emplace( pos.GetHead() );
@@ -2092,7 +2092,7 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
-                const Cell * secondAttackedCell = Board::GetCell( _curentCellIndex, Board::GetReflectDirection( direction ) );
+                const Cell * secondAttackedCell = Board::GetCell( _currentCellIndex, Board::GetReflectDirection( direction ) );
 
                 if ( secondAttackedCell ) {
                     highlightedCells.emplace( secondAttackedCell );
@@ -2101,7 +2101,7 @@ void Battle::Interface::RedrawCover()
             else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
                 for ( const int32_t nearbyIdx : Board::GetAroundIndexes( pos ) ) {
                     // Should already be highlighted
-                    if ( nearbyIdx == _curentCellIndex ) {
+                    if ( nearbyIdx == _currentCellIndex ) {
                         continue;
                     }
 
@@ -2528,7 +2528,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 {
     statusMsg.clear();
 
-    const Cell * cell = Board::GetCell( _curentCellIndex );
+    const Cell * cell = Board::GetCell( _currentCellIndex );
 
     if ( cell && _currentUnit ) {
         const auto formatViewInfoMsg = []( const Unit * unit ) {
@@ -2543,7 +2543,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         const Unit * unit = cell->GetUnit();
 
         if ( unit == nullptr || _currentUnit == unit ) {
-            const Position pos = Position::GetReachable( *_currentUnit, _curentCellIndex );
+            const Position pos = Position::GetReachable( *_currentUnit, _currentCellIndex );
             if ( pos.GetHead() != nullptr ) {
                 assert( pos.isValidForUnit( _currentUnit ) );
 
@@ -2582,8 +2582,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             std::set<int> availableAttackDirection;
 
             for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
-                if ( Board::isValidDirection( _curentCellIndex, direction )
-                     && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( _curentCellIndex, direction ) ) ) {
+                if ( Board::isValidDirection( _currentCellIndex, direction )
+                     && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( _currentCellIndex, direction ) ) ) {
                     availableAttackDirection.emplace( direction );
                 }
             }
@@ -2641,15 +2641,15 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 {
     statusMsg.clear();
 
-    const Cell * cell = Board::GetCell( _curentCellIndex );
+    const Cell * cell = Board::GetCell( _currentCellIndex );
     const Spell & spell = humanturn_spell;
 
     if ( cell && _currentUnit && spell.isValid() ) {
         const Unit * unitOnCell = cell->GetUnit();
 
         // Cursor is over some dead unit that we can resurrect
-        if ( unitOnCell == nullptr && arena.isAbleToResurrectFromGraveyard( _curentCellIndex, spell ) ) {
-            unitOnCell = arena.getLastResurrectableUnitFromGraveyard( _curentCellIndex, spell );
+        if ( unitOnCell == nullptr && arena.isAbleToResurrectFromGraveyard( _currentCellIndex, spell ) ) {
+            unitOnCell = arena.getLastResurrectableUnitFromGraveyard( _currentCellIndex, spell );
             assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
@@ -2704,7 +2704,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
-    _curentCellIndex = -1;
+    _currentCellIndex = -1;
 
     _currentUnit = &unit;
     humanturn_redraw = false;
@@ -2737,8 +2737,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
         if ( le.isMouseCursorPosInArea( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
             indexNew = board->GetIndexAbsPosition( getRelativeMouseCursorPos() );
         }
-        if ( _curentCellIndex != indexNew ) {
-            _curentCellIndex = indexNew;
+        if ( _currentCellIndex != indexNew ) {
+            _currentCellIndex = indexNew;
             humanturn_redraw = true;
         }
 
@@ -2826,7 +2826,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height };
 
     // Swipe attack motion finished, but the destination was outside the arena. We need to clear the swipe attack state.
-    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.srcCellIndex ) && !Board::isValidIndex( _curentCellIndex ) ) {
+    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.srcCellIndex ) && !Board::isValidIndex( _currentCellIndex ) ) {
         _swipeAttack = {};
     }
 
@@ -2994,7 +2994,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
         if ( _swipeAttack.isValid() ) {
             // The swipe attack motion is either in progress or has finished.
-            if ( _curentCellIndex == _swipeAttack.dstCellIndex ) {
+            if ( _currentCellIndex == _swipeAttack.dstCellIndex ) {
                 // The cursor is above the stored destination, we should display the stored attack theme.
                 themes = _swipeAttack.dstTheme;
             }
@@ -3004,12 +3004,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 _boardActionIntent = {};
             }
         }
-        else if ( _swipeAttack.isValidDestination( themes, _curentCellIndex ) ) {
+        else if ( _swipeAttack.isValidDestination( themes, _currentCellIndex ) ) {
             // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
-            themes = GetSwordCursorDirection( Board::GetDirection( _curentCellIndex, _swipeAttack.srcCellIndex ) );
+            themes = GetSwordCursorDirection( Board::GetDirection( _currentCellIndex, _swipeAttack.srcCellIndex ) );
 
             // Remember the swipe destination cell and theme.
-            _swipeAttack.setDst( themes, _curentCellIndex );
+            _swipeAttack.setDst( themes, _currentCellIndex );
 
             // Clear any pending intents. We don't want to confirm previous actions by performing swipe attack motion.
             _boardActionIntent = {};
@@ -3017,7 +3017,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
         cursor.SetThemes( themes );
 
-        const Cell * cell = Board::GetCell( _curentCellIndex );
+        const Cell * cell = Board::GetCell( _currentCellIndex );
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 popup.setAttackInfo( _currentUnit, cell->GetUnit() );
@@ -3026,7 +3026,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 popup.reset();
             }
 
-            boardActionIntentUpdater.setIntent( { themes, _curentCellIndex } );
+            boardActionIntentUpdater.setIntent( { themes, _currentCellIndex } );
 
             if ( le.MouseClickLeft( battleFieldRect ) ) {
                 const bool isConfirmed = boardActionIntentUpdater.isConfirmed();
@@ -3047,7 +3047,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                     // Remember the swipe source cell and theme.
                     _swipeAttack = {};
-                    _swipeAttack.setSrc( themes, _curentCellIndex, _currentUnit );
+                    _swipeAttack.setSrc( themes, _currentCellIndex, _currentUnit );
                 }
             }
         }
@@ -3103,29 +3103,29 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
         const int themes = GetBattleSpellCursor( msg );
         cursor.SetThemes( themes );
 
-        if ( const Cell * cell = Board::GetCell( _curentCellIndex ); cell && _currentUnit && cell->GetUnit() ) {
+        if ( const Cell * cell = Board::GetCell( _currentCellIndex ); cell && _currentUnit && cell->GetUnit() ) {
             popup.setSpellAttackInfo( _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
         }
         else {
             popup.reset();
         }
 
-        boardActionIntentUpdater.setIntent( { themes, _curentCellIndex } );
+        boardActionIntentUpdater.setIntent( { themes, _currentCellIndex } );
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() && boardActionIntentUpdater.isConfirmed() ) {
-            if ( !Board::isValidIndex( _curentCellIndex ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << _curentCellIndex )
+            if ( !Board::isValidIndex( _currentCellIndex ) ) {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << _currentCellIndex )
                 return;
             }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << _curentCellIndex )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << _currentCellIndex )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
                 if ( _teleportSpellSrcIdx < 0 ) {
-                    _teleportSpellSrcIdx = _curentCellIndex;
+                    _teleportSpellSrcIdx = _currentCellIndex;
                 }
                 else {
-                    actions.emplace_back( Command::SPELLCAST, Spell::TELEPORT, _teleportSpellSrcIdx, _curentCellIndex );
+                    actions.emplace_back( Command::SPELLCAST, Spell::TELEPORT, _teleportSpellSrcIdx, _currentCellIndex );
 
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
@@ -3134,13 +3134,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
-                actions.emplace_back( Command::SPELLCAST, Spell::MIRRORIMAGE, _curentCellIndex );
+                actions.emplace_back( Command::SPELLCAST, Spell::MIRRORIMAGE, _currentCellIndex );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
-                actions.emplace_back( Command::SPELLCAST, humanturn_spell.GetID(), _curentCellIndex );
+                actions.emplace_back( Command::SPELLCAST, humanturn_spell.GetID(), _currentCellIndex );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
@@ -5198,7 +5198,7 @@ void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t 
     _currentUnit = &target;
 
     // Don't highlight the cursor position.
-    _curentCellIndex = -1;
+    _currentCellIndex = -1;
 
     // Don't highlight movement area cells while animating teleportation.
     Settings & conf = Settings::Get();
@@ -5548,7 +5548,7 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     // Don't highlight the cursor position.
-    _curentCellIndex = -1;
+    _currentCellIndex = -1;
 
     // Don't highlight movement area cells while animating teleportation.
     Settings & conf = Settings::Get();
@@ -5669,7 +5669,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
     _currentUnit = &target;
 
     // Don't highlight the cursor position.
-    _curentCellIndex = -1;
+    _currentCellIndex = -1;
 
     // Don't highlight movement area cells while animating teleportation.
     Settings & conf = Settings::Get();
@@ -6657,7 +6657,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, statusCallback );
 
                     // Reset battlefield grid cursor position after closing the spell book.
-                    _curentCellIndex = -1;
+                    _currentCellIndex = -1;
 
                     if ( spell.isValid() ) {
                         assert( spell.isCombat() );

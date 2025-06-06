@@ -486,7 +486,7 @@ namespace Battle
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
 
-        int32_t _curentCellIndex{ -1 };
+        int32_t _currentCellIndex{ -1 };
         // Index of the cell selected as the source for the Teleport spell
         int32_t _teleportSpellSrcIdx{ -1 };
         fheroes2::Rect _ballistaTowerRect;

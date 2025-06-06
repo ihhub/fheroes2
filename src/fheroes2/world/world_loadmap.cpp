@@ -1344,6 +1344,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_BOAT:
     case MP2::OBJ_CAMPFIRE:
@@ -1382,11 +1383,11 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_RUINS:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_STONE_LITHS:
     case MP2::OBJ_TRAVELLER_TENT:
@@ -1562,14 +1563,14 @@ void World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-    // update wins, loss conditions
     if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
         const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsWinCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsWinCondition = hero->GetID();
@@ -1582,10 +1583,12 @@ void World::setHeroIdsForMapConditions()
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsLossCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsLossCondition = hero->GetID();
+
             hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }

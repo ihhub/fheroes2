@@ -154,7 +154,7 @@ namespace
                             []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
     }
 
-    bool isStreamToDeltaConnectionNeeded( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
+    bool isStreamToDeltaConnectionNeeded( const Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
     {
         if ( direction != Direction::TOP && direction != Direction::BOTTOM && direction != Direction::RIGHT && direction != Direction::LEFT ) {
             return false;
@@ -1792,6 +1792,19 @@ namespace Maps
         auto capturableIter = map.capturableObjectsMetadata.begin();
         while ( capturableIter != map.capturableObjectsMetadata.end() ) {
             if ( !( map.availablePlayerColors & capturableIter->second.ownerColor ) ) {
+                // Reset the capture state in the `world` instance.
+                for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+                    const auto & tileObjects = map.tiles[tileIndex].objects;
+
+                    if ( std::any_of( tileObjects.cbegin(), tileObjects.cend(),
+                                      [objectUid = capturableIter->first]( const Map_Format::TileObjectInfo & info ) { return info.id == objectUid; } ) ) {
+                        world.CaptureObject( static_cast<int32_t>( tileIndex ), PlayerColor::NONE );
+
+                        break;
+                    }
+                }
+
+                // Remove the ownership metadata from map.
                 capturableIter = map.capturableObjectsMetadata.erase( capturableIter );
             }
             else {

@@ -275,6 +275,7 @@ namespace
 
         // If you add a new object to a group of objects sort them alphabetically.
         switch ( objectType ) {
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
@@ -814,6 +815,7 @@ namespace
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return 0.9;
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_GENIE_LAMP:
@@ -843,7 +845,7 @@ namespace
             return value;
         }
 
-        // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
+        // Some objects do not lose their value drastically over distances. This allows AI heroes to keep focus on important targets.
         double correctedDistance = distance * getDistanceModifier( objectType );
 
         // Distances should be corrected over time as AI heroes should focus on keeping important objects in focus.
@@ -1233,8 +1235,9 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         // A bottle is useless to AI as it contains only a message but it might block path.
         return 0;
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE: {
-        // A campfire has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
+        // A campfire or barrel has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
         // Since we should not expose the resource type let's assume that it gives 6 resources, 1 each and 400 gold.
         const Funds loot{ 1, 1, 1, 1, 1, 1, 400 };
 
@@ -1800,6 +1803,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
 
         return ( isFindArtifactVictoryCondition( art ) ? 3000.0 : 1500.0 ) * art.getArtifactValue();
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_LEAN_TO:
@@ -1959,6 +1963,7 @@ double AI::Planner::getCourierObjectValue( const Heroes & hero, const int32_t in
         }
         return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? tenTiles : fiveTiles;
     }
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_GENIE_LAMP:
