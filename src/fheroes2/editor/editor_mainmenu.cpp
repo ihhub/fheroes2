@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "editor_mainmenu.h"
+
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -29,7 +31,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
-#include "editor.h"
 #include "editor_interface.h"
 #include "game.h"
 #include "game_hotkeys.h"
@@ -47,8 +48,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_tool.h"
-#include "world.h"
-#include "world_object_uid.h"
 
 namespace
 {
@@ -56,7 +55,7 @@ namespace
     const size_t mapSizeCount = 4;
     const std::array<Game::HotKeyEvent, mapSizeCount> mapSizeHotkeys = { Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM,
                                                                          Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE };
-    const std::array<Maps::mapsize_t, mapSizeCount> mapSizes = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
+    const std::array<Maps::MapSize, mapSizeCount> mapSizes = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
 
     void outputEditorMainMenuInTextSupportMode()
     {
@@ -100,10 +99,10 @@ namespace
 
     void showWIPInfo()
     {
-        fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
     }
 
-    Maps::mapsize_t selectMapSize()
+    Maps::MapSize selectMapSize()
     {
         outputEditorMapSizeMenuInTextSupportMode();
 
@@ -121,8 +120,9 @@ namespace
             buttons[i].draw();
         }
 
-        fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-        cancel.draw();
+        fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+
+        buttonCancel.draw();
 
         fheroes2::validateFadeInAndRender();
 
@@ -130,13 +130,13 @@ namespace
 
         while ( le.HandleEvents() ) {
             for ( size_t i = 0; i < mapSizeCount; ++i ) {
-                le.MousePressLeft( buttons[i].area() ) ? buttons[i].drawOnPress() : buttons[i].drawOnRelease();
+                buttons[i].drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttons[i].area() ) );
 
                 if ( le.MouseClickLeft( buttons[i].area() ) || Game::HotKeyPressEvent( mapSizeHotkeys[i] ) ) {
                     return mapSizes[i];
                 }
 
-                if ( le.MousePressRight( buttons[i].area() ) ) {
+                if ( le.isMouseRightButtonPressedInArea( buttons[i].area() ) ) {
                     std::string mapSize = std::to_string( mapSizes[i] );
                     std::string message = _( "Create a map that is %{size} squares wide and %{size} squares high." );
                     StringReplace( message, "%{size}", mapSize );
@@ -145,13 +145,13 @@ namespace
                 }
             }
 
-            le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return Maps::ZERO;
             }
 
-            if ( le.MousePressRight( cancel.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the New Map menu." ), Dialog::ZERO );
             }
         }
@@ -178,40 +178,42 @@ namespace Editor
 
         const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-        fheroes2::Button newMap( buttonPos.x, buttonPos.y, ICN::BTNEMAIN, 0, 1 );
-        fheroes2::Button loadMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNEMAIN, 2, 3 );
-        fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+        fheroes2::Button buttonNewMap( buttonPos.x, buttonPos.y, ICN::BUTTON_NEW_MAP, 0, 1 );
+        fheroes2::Button buttonLoadMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BUTTON_LOAD_MAP, 0, 1 );
+        fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-        newMap.draw();
-        loadMap.draw();
-        cancel.draw();
+        buttonNewMap.draw();
+        buttonLoadMap.draw();
+        buttonCancel.draw();
 
         fheroes2::validateFadeInAndRender();
 
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( newMap.area() ) ? newMap.drawOnPress() : newMap.drawOnRelease();
-            le.MousePressLeft( loadMap.area() ) ? loadMap.drawOnPress() : loadMap.drawOnRelease();
-            le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+            buttonNewMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNewMap.area() ) );
+            buttonLoadMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLoadMap.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( newMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
+            if ( le.MouseClickLeft( buttonNewMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
-            if ( le.MouseClickLeft( loadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU ) ) {
+            if ( le.MouseClickLeft( buttonLoadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU ) ) {
                 return fheroes2::GameMode::EDITOR_LOAD_MAP;
             }
-            if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return fheroes2::GameMode::MAIN_MENU;
             }
 
-            if ( le.MousePressRight( newMap.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
+            if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
+                // TODO: update this text once random map generator is ready.
+                //       The original text should be "Create a new map, either from scratch or using the random map generator."
+                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( loadMap.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoadMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( cancel.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
             }
         }
@@ -229,64 +231,62 @@ namespace Editor
 
         const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-        fheroes2::Button scratchMap( buttonPos.x, buttonPos.y, ICN::BTNENEW, 0, 1 );
-        fheroes2::Button randomMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNENEW, 2, 3 );
-        fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+        fheroes2::Button buttonScratchMap( buttonPos.x, buttonPos.y, ICN::BTNENEW, 0, 1 );
+        fheroes2::Button buttonRandomMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNENEW, 2, 3 );
+        fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
         // TODO: enable it back once random map generator is ready.
-        randomMap.disable();
+        buttonRandomMap.disable();
 
-        scratchMap.draw();
-        randomMap.draw();
-        cancel.draw();
+        buttonScratchMap.draw();
+        buttonRandomMap.draw();
+        buttonCancel.draw();
 
         fheroes2::validateFadeInAndRender();
 
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( scratchMap.area() ) ? scratchMap.drawOnPress() : scratchMap.drawOnRelease();
+            buttonScratchMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonScratchMap.area() ) );
 
-            if ( randomMap.isEnabled() ) {
-                le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+            if ( buttonRandomMap.isEnabled() ) {
+                buttonRandomMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRandomMap.area() ) );
             }
 
-            le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
-                const Maps::mapsize_t mapSize = selectMapSize();
+            if ( le.MouseClickLeft( buttonScratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
+                const Maps::MapSize mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    world.generateForEditor( mapSize );
-
-                    // Reset object UID to keep track of newly added objects.
-                    Maps::resetObjectUID();
-
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::EditorInterface::Get().startEdit( true );
+                    Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+                    if ( editorInterface.generateNewMap( mapSize ) ) {
+                        return editorInterface.startEdit();
+                    }
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
 
-            if ( randomMap.isEnabled() && ( le.MouseClickLeft( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) ) {
+            if ( buttonRandomMap.isEnabled() && ( le.MouseClickLeft( buttonRandomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) ) {
                 if ( selectMapSize() != Maps::ZERO ) {
                     showWIPInfo();
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
 
-            if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
 
-            if ( le.MousePressRight( scratchMap.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonScratchMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( randomMap.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonRandomMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Random" ), _( "Create a randomly generated map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( cancel.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Dialog::ZERO );
             }
         }
@@ -302,13 +302,13 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
+        const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists, true );
         if ( fileInfo == nullptr ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
@@ -321,6 +321,21 @@ namespace Editor
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
 
-        return Interface::EditorInterface::Get().startEdit( false );
+        return Interface::EditorInterface::Get().startEdit();
+    }
+
+    fheroes2::GameMode menuNewFromScratchMap()
+    {
+        const Maps::MapSize mapSize = selectMapSize();
+        if ( mapSize != Maps::ZERO ) {
+            fheroes2::fadeOutDisplay();
+            Game::setDisplayFadeIn();
+
+            Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+            if ( editorInterface.generateNewMap( mapSize ) ) {
+                return editorInterface.startEdit();
+            }
+        }
+        return fheroes2::GameMode::EDITOR_MAIN_MENU;
     }
 }

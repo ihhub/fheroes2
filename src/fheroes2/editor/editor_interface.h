@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
@@ -33,9 +34,9 @@
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
-    enum class ObjectGroup : int32_t;
+    enum class ObjectGroup : uint8_t;
 }
 
 namespace Interface
@@ -51,7 +52,7 @@ namespace Interface
         void reset() override;
 
         // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit( const bool isNewMap );
+        fheroes2::GameMode startEdit();
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
@@ -65,6 +66,11 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+
+        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override
+        {
+            // Do nothing.
+        }
 
         void undoAction()
         {
@@ -87,7 +93,13 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
+        bool generateNewMap( const int32_t size );
+
         bool loadMap( const std::string & filePath );
+
+        void saveMapToFile();
+
+        void openMapSpecificationsDialog();
 
     private:
         class WarningMessage
@@ -99,9 +111,9 @@ namespace Interface
                 // Do nothing.
             }
 
-            void reset( const char * info )
+            void reset( std::string info )
             {
-                _message = info;
+                _message = std::move( info );
 
                 _interface.setRedraw( REDRAW_GAMEAREA );
 
@@ -110,10 +122,10 @@ namespace Interface
 
             bool isValid() const
             {
-                return _timer.getS() < 5 && ( _message != nullptr );
+                return _timer.getS() < 5 && !_message.empty();
             }
 
-            const char * message() const
+            std::string message() const
             {
                 return _message;
             }
@@ -121,7 +133,7 @@ namespace Interface
         private:
             EditorInterface & _interface;
 
-            const char * _message{ nullptr };
+            std::string _message;
 
             fheroes2::Time _timer;
         };
@@ -131,18 +143,29 @@ namespace Interface
             , _editorPanel( *this )
             , _warningMessage( *this )
         {
-            // Do nothing.
+            _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
+                editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
+            } );
         }
 
-        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool _setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        void handleObjectMouseLeftClick( Maps::Tiles & tile );
+        void _handleObjectMouseLeftClick( Maps::Tile & tile );
+
+        void _validateObjectsOnTerrainUpdate();
+
+        // Returns true if an existing object was moved.
+        bool _moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
+
+        void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
+
+        void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
         EditorPanel _editorPanel;
 
-        int32_t _selectedTile{ -1 };
+        int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
         std::function<void( const int32_t )> _cursorUpdater;
@@ -152,5 +175,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }

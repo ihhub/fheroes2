@@ -3,11 +3,13 @@ name: CMake
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   cmake:
     strategy:
       matrix:
-        config:
+        include:
         - name: Linux SDL2
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext ninja-build
@@ -18,8 +20,8 @@ jobs:
           os: macos-latest
           dependencies: sdl2 sdl2_mixer sdl2_image ninja dylibbundler
           options: -DMACOS_APP_BUNDLE=ON
-    name: CMake (${{ matrix.config.name }})
-    runs-on: ${{ matrix.config.os }}
+    name: CMake (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     defaults:
       run:
@@ -27,21 +29,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install dependencies (Linux)
-      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
+      if: ${{ startsWith( matrix.os, 'ubuntu-' ) }}
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install ${{ matrix.config.dependencies }}
+        sudo apt-get -y install ${{ matrix.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
+      if: ${{ startsWith( matrix.os, 'macos-' ) }}
       run: |
-        brew install ${{ matrix.config.dependencies }}
+        brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
     - name: Build
       run: |
-        cmake -B build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON \
-                                -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
+        cmake -B build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
+                                -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.options }}
         cmake --build build
     - name: Install
       run: |
@@ -55,8 +57,13 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v4
+    - name: Update vcpkg
+      run: |
+        cd "$VCPKG_INSTALLATION_ROOT"
+        git.exe pull origin master
+        bootstrap-vcpkg.bat
     - name: Prepare vcpkg cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/AppData/Local/vcpkg/archives
         key: cmake-vcpkg-cache-${{ github.sha }}
@@ -67,8 +74,8 @@ jobs:
         vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
     - name: Build
       run: |
-        cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON \
-                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" \
+        cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON \
+                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT\\scripts\\buildsystems\\vcpkg.cmake" \
                            -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake.exe --build build --config Debug
     - name: Install

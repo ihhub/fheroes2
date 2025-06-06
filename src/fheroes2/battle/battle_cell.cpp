@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,7 @@
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_troop.h"
-#include "tools.h"
+#include "math_tools.h"
 
 namespace
 {
@@ -253,33 +253,30 @@ bool Battle::Position::operator<( const Position & other ) const
     return theseIndexes < otherIndexes;
 }
 
-Battle::Cell::Cell( const int32_t idx )
-    : _index( idx )
-    , _object( 0 )
-    , _unit( nullptr )
-{
-    SetArea( fheroes2::Rect() );
-}
-
 void Battle::Cell::SetArea( const fheroes2::Rect & area )
 {
-    _pos.x = area.x + 89 - ( ( ( _index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + CELLW * ( _index % ARENAW );
-    _pos.y = area.y + 62 + ( ( CELLH - ( CELLH - cellHeightVerSide ) / 2 ) * ( _index / ARENAW ) );
-    _pos.width = CELLW;
-    _pos.height = CELLH;
+    _pos.x = area.x + 89 - ( ( ( _index / Board::widthInCells ) % 2 ) ? widthPx / 2 : 0 ) + widthPx * ( _index % Board::widthInCells );
+    _pos.y = area.y + 62 + ( ( heightPx - ( heightPx - cellHeightVerSide ) / 2 ) * ( _index / Board::widthInCells ) );
+    _pos.width = widthPx;
+    _pos.height = heightPx;
+
+    // Cache some calculations.
+    const int32_t offsetX = infl * _pos.x;
+    const int32_t offsetY = infl * _pos.y;
+    const int32_t extraOffsetY = infl * ( _pos.height - cellHeightVerSide ) / 2;
 
     // center
-    _coord[0] = { infl * _pos.x + infl * _pos.width / 2, infl * _pos.y + infl * _pos.height / 2 };
+    _coord[0] = { offsetX + infl * _pos.width / 2, offsetY + infl * _pos.height / 2 };
     // coordinates
-    _coord[1] = { infl * _pos.x, infl * _pos.y + infl * ( _pos.height - cellHeightVerSide ) / 2 };
-    _coord[2] = { infl * _pos.x + infl * _pos.width / 2, infl * _pos.y };
-    _coord[3] = { infl * _pos.x + infl * _pos.width, infl * _pos.y + infl * ( _pos.height - cellHeightVerSide ) / 2 };
-    _coord[4] = { infl * _pos.x + infl * _pos.width, infl * _pos.y + infl * _pos.height - infl * ( _pos.height - cellHeightVerSide ) / 2 };
-    _coord[5] = { infl * _pos.x + infl * _pos.width / 2, infl * _pos.y + infl * _pos.height };
-    _coord[6] = { infl * _pos.x, infl * _pos.y + infl * _pos.height - infl * ( _pos.height - cellHeightVerSide ) / 2 };
+    _coord[1] = { offsetX, offsetY + extraOffsetY };
+    _coord[2] = { _coord[0].x, offsetY };
+    _coord[3] = { offsetX + infl * _pos.width, _coord[1].y };
+    _coord[5] = { _coord[0].x, offsetY + infl * _pos.height };
+    _coord[4] = { _coord[3].x, _coord[5].y - extraOffsetY };
+    _coord[6] = { offsetX, _coord[4].y };
 }
 
-Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
+Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
@@ -311,41 +308,6 @@ Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & 
 bool Battle::Cell::isPositionIncludePoint( const fheroes2::Point & pt ) const
 {
     return UNKNOWN != GetTriangleDirection( pt );
-}
-
-int32_t Battle::Cell::GetIndex() const
-{
-    return _index;
-}
-
-void Battle::Cell::SetObject( const int object )
-{
-    _object = object;
-}
-
-int Battle::Cell::GetObject() const
-{
-    return _object;
-}
-
-const fheroes2::Rect & Battle::Cell::GetPos() const
-{
-    return _pos;
-}
-
-const Battle::Unit * Battle::Cell::GetUnit() const
-{
-    return _unit;
-}
-
-Battle::Unit * Battle::Cell::GetUnit()
-{
-    return _unit;
-}
-
-void Battle::Cell::SetUnit( Unit * unit )
-{
-    _unit = unit;
 }
 
 bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const
@@ -388,9 +350,4 @@ bool Battle::Cell::isPassableForUnit( const Unit & unit ) const
     assert( unitPos.isValidForUnit( unit ) );
 
     return true;
-}
-
-bool Battle::Cell::isPassable( const bool checkForUnit ) const
-{
-    return _object == 0 && ( !checkForUnit || _unit == nullptr );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,14 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPEED_H
-#define H2SPEED_H
 
-#include <string>
+#pragma once
+
+#include <cstdint>
 
 namespace Speed
 {
-    enum
+    enum : uint32_t
     {
         STANDING = 0,
         CRAWLING = 1,
@@ -41,12 +41,8 @@ namespace Speed
         INSTANT = 9
     };
 
-    std::string String( const int speed );
-    int GetOriginalSlow( const int speed );
-    int GetOriginalFast( const int speed );
+    const char * String( const uint32_t speed );
 
-    int GetSlowSpeedFromSpell( const int currentSpeed );
-    int GetHasteSpeedFromSpell( const int currentSpeed );
+    uint32_t getSlowSpeedFromSpell( const uint32_t currentSpeed );
+    uint32_t getHasteSpeedFromSpell( const uint32_t currentSpeed );
 }
-
-#endif

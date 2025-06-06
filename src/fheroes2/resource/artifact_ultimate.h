@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARTIFACT_ULTIMATE_H
-#define H2ARTIFACT_ULTIMATE_H
+#pragma once
 
 #include <cstdint>
 
@@ -30,7 +29,8 @@
 #include "image.h"
 #include "math_base.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class UltimateArtifact : public Artifact
 {
@@ -54,22 +54,17 @@ public:
         _isFound = true;
     }
 
-    void Set( const int32_t position, const Artifact & );
+    void Set( const int32_t position, const Artifact & artifact );
     void Reset();
 
     fheroes2::Image GetPuzzleMapSurface() const;
     const Artifact & GetArtifact() const;
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
-    friend StreamBase & operator>>( StreamBase &, UltimateArtifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const UltimateArtifact & ultimate );
+    friend IStreamBase & operator>>( IStreamBase & stream, UltimateArtifact & ultimate );
 
     fheroes2::Point _offset;
     int32_t _index;
     bool _isFound;
 };
-
-StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
-StreamBase & operator>>( StreamBase &, UltimateArtifact & );
-
-#endif

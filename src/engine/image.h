@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cassert>
@@ -37,6 +38,7 @@ namespace fheroes2
     public:
         Image() = default;
         Image( const int32_t width_, const int32_t height_ );
+
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -121,6 +123,7 @@ namespace fheroes2
         Sprite() = default;
         Sprite( const int32_t width_, const int32_t height_, const int32_t x_ = 0, const int32_t y_ = 0 );
         Sprite( const Image & image, const int32_t x_ = 0, const int32_t y_ = 0 );
+
         Sprite( const Sprite & sprite ) = default;
         Sprite( Sprite && sprite ) noexcept;
 
@@ -208,6 +211,7 @@ namespace fheroes2
 
     // Apply shadow that gradually reduces strength using 'in' image shape. Shadow is applied to the 'out' image.
     void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset );
+    void addGradientShadowForArea( Image & out, const Point & outPos, const int32_t areaWidth, const int32_t areaHeight, const int32_t shadowOffset );
 
     // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
@@ -237,6 +241,7 @@ namespace fheroes2
 
     // draw one image onto another
     void Blit( const Image & in, Image & out, const bool flip = false );
+    void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 

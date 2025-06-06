@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
 #include <vector>
 
+#include "color.h"
 #include "math_base.h"
-#include "mp2.h"
 
 class Heroes;
 
@@ -38,32 +39,38 @@ namespace Interface
     class GameArea;
 }
 
+namespace MP2
+{
+    enum ObjectIcnType : uint8_t;
+}
+
 namespace Maps
 {
-    class Tiles;
-    struct TilesAddon;
+    class Tile;
+    struct ObjectPart;
 
     void redrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
 
-    void redrawTopLayerExtraObjects( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area );
-    void redrawTopLayerObject( const Tiles & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon );
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor );
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const fheroes2::Point & pos, const Interface::GameArea & area,
+                               const ObjectPart & part );
 
-    void drawFog( const Tiles & tile, fheroes2::Image & dst, const Interface::GameArea & area );
+    void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area );
 
-    void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area );
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor );
 
-    void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
+    void redrawBottomLayerObjects( const Tile & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level );
 
-    void drawByObjectIcnType( const Tiles & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType );
+    void drawByObjectIcnType( const Tile & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType );
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode );
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode );
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tiles & tile );
-    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tiles & tile );
-    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tile & tile, const bool isEditorMode );
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tile & tile, const bool isEditorMode );
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tile & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tile & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tile & tile );
     std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile( const Heroes & hero );
     std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile( const Heroes & hero );
-    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tile & tile );
 
-    const fheroes2::Image & getTileSurface( const Tiles & tile );
+    const fheroes2::Image & getTileSurface( const Tile & tile );
 }

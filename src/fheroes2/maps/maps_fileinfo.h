@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,19 +20,24 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPSFILEINFO_H
-#define H2MAPSFILEINFO_H
+
+#pragma once
 
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <type_traits>
 #include <vector>
 
-#include "gamedefs.h"
+#include "color.h"
+#include "game_language.h"
 #include "math_base.h"
+#include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 enum class GameVersion : int
 {
@@ -43,6 +48,11 @@ enum class GameVersion : int
 
 namespace Maps
 {
+    namespace Map_Format
+    {
+        struct BaseMapFormat;
+    }
+
     struct FileInfo
     {
     public:
@@ -68,24 +78,24 @@ namespace Maps
 
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
-        bool isAllowCountPlayers( int playerCount ) const;
+        bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
-        int AllowCompHumanColors() const
+        PlayerColorsSet AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
         }
 
-        int HumanOnlyColors() const
+        PlayerColorsSet HumanOnlyColors() const
         {
             return colorsAvailableForHumans & ~colorsAvailableForComp;
         }
 
-        int ComputerOnlyColors() const
+        PlayerColorsSet ComputerOnlyColors() const
         {
             return colorsAvailableForComp & ~colorsAvailableForHumans;
         }
 
-        int KingdomRace( int color ) const;
+        int KingdomRace( const PlayerColor color ) const;
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
@@ -122,12 +132,12 @@ namespace Maps
             return lossConditionParams[0];
         }
 
-        void removeHumanColors( const int colors )
+        void removeHumanColors( const PlayerColorsSet colors )
         {
             colorsAvailableForHumans &= ~colors;
         }
 
-        bool AllowChangeRace( const int color ) const
+        bool AllowChangeRace( const PlayerColor color ) const
         {
             return ( colorsOfRandomRaces & color ) != 0;
         }
@@ -137,6 +147,19 @@ namespace Maps
         static bool sortByFileName( const FileInfo & lhs, const FileInfo & rhs );
 
         static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
+
+        // Only Resurrection Maps contain supported language.
+        std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
+        {
+            if ( version == GameVersion::RESURRECTION ) {
+                return mainLanguage;
+            }
+
+            return {};
+        }
+
+        // This method is mostly used for Text Support mode or debug purposes.
+        std::string getSummary() const;
 
         enum VictoryCondition : uint8_t
         {
@@ -164,28 +187,30 @@ namespace Maps
         uint16_t height;
         uint8_t difficulty;
 
-        std::array<uint8_t, KINGDOMMAX> races;
-        std::array<uint8_t, KINGDOMMAX> unions;
+        std::array<uint8_t, maxNumOfPlayers> races;
+        std::array<PlayerColorsSet, maxNumOfPlayers> unions;
 
-        uint8_t kingdomColors;
-        uint8_t colorsAvailableForHumans;
-        uint8_t colorsAvailableForComp;
-        uint8_t colorsOfRandomRaces;
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet kingdomColors{ 0 };
+        PlayerColorsSet colorsAvailableForHumans{ 0 };
+        PlayerColorsSet colorsAvailableForComp{ 0 };
+        PlayerColorsSet colorsOfRandomRaces{ 0 };
 
-        // Refer to the VictoryCondition
+        // Refer to the VictoryCondition enumeration.
         uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
         std::array<uint16_t, 2> victoryConditionParams;
 
-        // Refer to the LossCondition
+        // Refer to the LossCondition enumeration.
         uint8_t lossConditionType;
         std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;
 
-        bool startWithHeroInEachCastle;
+        // Only for maps made by the original Editor.
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 
@@ -194,12 +219,16 @@ namespace Maps
         uint32_t worldWeek;
         uint32_t worldMonth;
 
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
+
     private:
-        void FillUnions( const int side1Colors, const int side2Colors );
+        void FillUnions( const PlayerColorsSet side1Colors, const PlayerColorsSet side2Colors );
     };
 
-    StreamBase & operator<<( StreamBase &, const FileInfo & );
-    StreamBase & operator>>( StreamBase &, FileInfo & );
+    OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );
+    IStreamBase & operator>>( IStreamBase & stream, FileInfo & fi );
 }
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
@@ -207,10 +236,8 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For all map files.
-    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
     // Only for RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 }
-
-#endif

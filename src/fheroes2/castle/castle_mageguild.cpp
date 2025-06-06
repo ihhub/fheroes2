@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "castle.h"
+#include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -38,12 +38,12 @@
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -136,20 +136,20 @@ bool RowSpells::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
+    const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
-    if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
+    if ( 0 <= index && ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) ) {
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
+            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
 
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const Heroes * hero ) const
+void Castle::_openMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -195,7 +195,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     const int level = GetLevelMageGuild();
     // sprite
     int icn = ICN::UNKNOWN;
-    switch ( race ) {
+    switch ( _race ) {
     case Race::KNGT:
         icn = ICN::MAGEGLDK;
         break;
@@ -241,6 +241,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     spells5.Redraw( display );
 
     fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+
     buttonExit.draw();
 
     display.render();
@@ -249,19 +250,17 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
             || spells5.QueueEventProcessing();
 
-        if ( le.MousePressRight( buttonExit.area() ) ) {
-            fheroes2::Text header( _( "Exit" ), fheroes2::FontType::normalYellow() );
-            fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-
-            fheroes2::showMessage( header, body, 0 );
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
     }
 }

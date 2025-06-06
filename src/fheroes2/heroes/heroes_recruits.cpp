@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -115,24 +115,25 @@ void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrende
 
     hero.SetModes( Heroes::RECRUIT );
 
+    // The original game offers to hire only the hero who retreated or surrendered last. fheroes2 offers to hire up to the last two heroes of this kind.
     Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
 
     recruit = Recruit( hero, heroSurrenderDay );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
+OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit )
 {
-    return msg << recruit._id << recruit._surrenderDay;
+    return stream << recruit._id << recruit._surrenderDay;
 }
 
-StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
+IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit )
 {
-    msg >> recruit._id >> recruit._surrenderDay;
+    stream >> recruit._id >> recruit._surrenderDay;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
         ++recruit._id;
     }
 
-    return msg;
+    return stream;
 }

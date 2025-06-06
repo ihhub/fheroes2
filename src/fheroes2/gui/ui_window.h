@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,7 @@ namespace fheroes2
 {
     class Button;
     class ButtonSprite;
+    class ButtonGroup;
 
     // Standard window with shadow.
     class StandardWindow
@@ -54,6 +55,9 @@ namespace fheroes2
         StandardWindow & operator=( const StandardWindow & ) = delete;
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
+        // Renders a dialog with its size adjusted to fit a symmetric button group with the buttons aligned in either a single column or in multiple. Add extra height if
+        // the dialog has extra elements like a text header.
+        StandardWindow( ButtonGroup & buttons, const bool isSingleColumn, const int32_t extraHeight, Image & output = Display::instance() );
         ~StandardWindow()
         {
             Display & display = Display::instance();
@@ -85,14 +89,23 @@ namespace fheroes2
 
         void renderScrollbarBackground( const Rect & roi, const bool isEvilInterface );
 
-        void renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const int32_t buttonWidth, const Point & offset, const bool isEvilInterface,
-                                 const Padding padding );
         void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
-        void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface );
+        void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel );
+        // Renders a button background with shadow which adapts its dimensions according to the width and height of the provided text.
+        void renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding );
+        // Renders a button background with shadow which has specified heights and widths.
+        void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
+                                       const Padding padding );
 
         void applyTextBackgroundShading( const Rect & roi );
+        static void applyTextBackgroundShading( Image & output, const Rect & roi );
 
         static void renderBackgroundImage( fheroes2::Image & output, const Rect & roi, const int32_t borderOffset, const bool isEvilInterface );
+
+        void hideWindow()
+        {
+            _restorer.restore();
+        }
 
     private:
         Image & _output;

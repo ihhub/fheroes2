@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,10 +26,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
-#include <memory>
 #include <set>
 #include <sstream>
-#include <utility>
 
 #include "icn.h"
 #include "m82.h"
@@ -44,79 +42,78 @@ namespace
 {
     std::vector<fheroes2::MonsterData> monsterData;
 
-    bool isAbilityPresent( const std::vector<fheroes2::MonsterAbility> & abilities, const fheroes2::MonsterAbilityType abilityType )
-    {
-        return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
-    }
-
     double getMonsterBaseStrength( const fheroes2::MonsterData & data )
     {
         const fheroes2::MonsterBattleStats & battleStats = data.battleStats;
         const std::vector<fheroes2::MonsterAbility> & abilities = battleStats.abilities;
 
-        const double effectiveHP = battleStats.hp * ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 1.4 : 1 );
+        const double effectiveHP = battleStats.hp * ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 1.4 : 1 );
         const bool isArchers = ( battleStats.shots > 0 );
 
         double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
+            // How can it be that this ability is assigned not to a shooter?
+            assert( isArchers );
+
+            damagePotential *= 2;
+        }
+        else if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) ) {
             // Melee attacker will lose potential on second attack after retaliation
-            damagePotential *= ( isArchers || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ) ? 2 : 1.75;
+            damagePotential *= fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 2 : 1.75;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
             damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double damage.
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
             damagePotential *= 1.2;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
             damagePotential *= 1.25;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK )
-             || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK )
+             || fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
             damagePotential *= 1.3;
         }
 
         double monsterSpecial = 1.0;
 
         if ( isArchers ) {
-            monsterSpecial += isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
+            monsterSpecial += fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::FLYING ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::FLYING ) ) {
             monsterSpecial += 0.3;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALFING ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALVING ) ) {
             monsterSpecial += 1;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
             monsterSpecial += 2;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
             monsterSpecial += 0.3;
         }
 
-        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-
-        if ( foundAbility != abilities.end() ) {
+        if ( const auto abilityIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER ); abilityIter != abilities.end() ) {
             // This is a tricky evaluation. Spell casting ability depends on a type of spell and chance to inflict the spell.
-            switch ( foundAbility->value ) {
+            switch ( abilityIter->value ) {
             case Spell::PARALYZE:
             case Spell::BLIND:
             case Spell::PETRIFY:
-                monsterSpecial += foundAbility->percentage / 100.0;
+                monsterSpecial += abilityIter->percentage / 100.0;
                 break;
             case Spell::DISPEL:
             case Spell::CURSE:
                 // These spell are very weak and do not impact much during battle.
-                monsterSpecial += foundAbility->percentage / 100.0 / 10.0;
+                monsterSpecial += abilityIter->percentage / 100.0 / 10.0;
                 break;
             default:
                 // Did you add a new spell casting ability? Add the logic above!
@@ -466,8 +463,10 @@ namespace
         monsterData[Monster::BOAR].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, 50, Spell::ARMAGEDDON );
 
         monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
+        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, 50, Spell::ARMAGEDDON );
 
         monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::ROC].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
@@ -521,7 +520,7 @@ namespace
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALFING, 20, 0 );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALVING, 10, 0 );
         monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
         monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
@@ -530,28 +529,36 @@ namespace
         monsterData[Monster::NOMAD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::AIR_CREATURE );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
-                                                                               Spell::LIGHTNINGBOLT );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::CHAINLIGHTNING );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                Spell::ELEMENTALSTORM );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
+                                                                               Spell::LIGHTNINGBOLT );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::EARTH_CREATURE );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100,
                                                                                  Spell::METEORSHOWER );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES );
 
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_CREATURE );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES );
 
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::WATER_CREATURE );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
-        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES );
 
         // Calculate base value of monster strength.
         for ( fheroes2::MonsterData & data : monsterData ) {
@@ -601,15 +608,15 @@ namespace fheroes2
         return monsterData[monsterId];
     }
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility )
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbilities )
     {
         switch ( ability.type ) {
         case MonsterAbilityType::NONE:
-            return ignoreBasicAbility ? "" : _( "None" );
+            return ignoreBasicAbilities ? "" : _( "None" );
         case MonsterAbilityType::DOUBLE_SHOOTING:
             return _( "Double shot" );
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return ignoreBasicAbility ? "" : _( "2-hex monster" );
+            return ignoreBasicAbilities ? "" : _( "2-hex monster" );
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
             return _( "Double strike" );
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
@@ -635,6 +642,11 @@ namespace fheroes2
             }
         case MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
             return std::to_string( ability.percentage ) + _( "% damage from Elemental spells" );
+        case MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION: {
+            std::string str = _( "% damage from %{spell} spell" );
+            StringReplace( str, "%{spell}", Spell( ability.value ).GetName() );
+            return std::to_string( ability.percentage ) + str;
+        }
         case MonsterAbilityType::SPELL_CASTER:
             if ( ability.value == Spell::DISPEL ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Dispel beneficial spells" );
@@ -661,7 +673,7 @@ namespace fheroes2
         case MonsterAbilityType::TWO_CELL_MELEE_ATTACK:
             return _( "Two hexes attack" );
         case MonsterAbilityType::FLYING:
-            return ignoreBasicAbility ? "" : _( "Flyer" );
+            return ignoreBasicAbilities ? "" : _( "Flyer" );
         case MonsterAbilityType::ALWAYS_RETALIATE:
             return _( "Always retaliates" );
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
@@ -669,7 +681,7 @@ namespace fheroes2
         case MonsterAbilityType::NO_MELEE_PENALTY:
             return _( "No melee penalty" );
         case MonsterAbilityType::DRAGON:
-            return ignoreBasicAbility ? "" : _( "Dragon" );
+            return ignoreBasicAbilities ? "" : _( "Dragon" );
         case MonsterAbilityType::UNDEAD:
             return _( "Undead" );
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
@@ -680,12 +692,20 @@ namespace fheroes2
             return _( "Cloud attack" );
         case MonsterAbilityType::MORAL_DECREMENT:
             return _( "Decreases enemy's morale by " ) + std::to_string( ability.value );
-        case MonsterAbilityType::ENEMY_HALFING:
+        case MonsterAbilityType::ENEMY_HALVING:
             return std::to_string( ability.percentage ) + _( "% chance to halve enemy" );
         case MonsterAbilityType::SOUL_EATER:
             return _( "Soul Eater" );
         case MonsterAbilityType::ELEMENTAL:
-            return ignoreBasicAbility ? _( "No Morale" ) : _( "Elemental" );
+            return ignoreBasicAbilities ? _( "No Morale" ) : _( "Elemental" );
+        case MonsterAbilityType::EARTH_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Earth creature" );
+        case MonsterAbilityType::AIR_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Air creature" );
+        case MonsterAbilityType::FIRE_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Fire creature" );
+        case MonsterAbilityType::WATER_CREATURE:
+            return ignoreBasicAbilities ? "" : _( "Water creature" );
         default:
             break;
         }
@@ -694,20 +714,28 @@ namespace fheroes2
         return "";
     }
 
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility )
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicWeaknesses )
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return ignoreBasicAbility ? "" : _( "None" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL:
-            return _( "200% damage from Fire spells" );
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL:
-            return _( "200% damage from Cold spells" );
+            return ignoreBasicWeaknesses ? "" : _( "None" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS:
+            return _( "Double damage from Fire spells" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS:
+            return _( "Double damage from Cold spells" );
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL: {
             std::string str = _( "% damage from %{spell} spell" );
             StringReplace( str, "%{spell}", Spell( weakness.value ).GetName() );
             return std::to_string( weakness.percentage + 100 ) + str;
         }
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES:
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Earth creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES:
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Air creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES:
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Fire creatures" );
+        case MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES:
+            return ignoreBasicWeaknesses ? "" : _( "Double damage from Water creatures" );
         default:
             break;
         }
@@ -731,8 +759,8 @@ namespace fheroes2
 
         std::ostringstream os;
         os << "----------" << std::endl;
-        os << "Name: " << monster.generalStats.name << std::endl;
-        os << "Plural name: " << monster.generalStats.pluralName << std::endl;
+        os << "Name: " << monster.generalStats.untranslatedName << std::endl;
+        os << "Plural name: " << monster.generalStats.untranslatedPluralName << std::endl;
         os << "Base growth: " << monster.generalStats.baseGrowth << std::endl;
         os << "Race: " << Race::String( monster.generalStats.race ) << std::endl;
         os << "Level: " << monster.generalStats.level << std::endl;
@@ -768,91 +796,82 @@ namespace fheroes2
     {
         std::vector<std::string> output;
 
+        const auto listSpells = []( const std::vector<int> & sortedSpells ) {
+            std::string result;
+
+            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                if ( i > 0 ) {
+                    result += ", ";
+                }
+
+                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                    result += _( "Lightning" );
+                }
+                else {
+                    result += Spell( sortedSpells[i] ).GetName();
+                }
+            }
+
+            result += '.';
+
+            return result;
+        };
+
         const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
 
-        const std::vector<MonsterAbility> & abilities = battleStats.abilities;
+        {
+            std::map<uint32_t, std::vector<int>> immuneToSpells;
+            std::map<uint32_t, std::vector<int>> reducedDamageFromSpells;
 
-        std::map<uint32_t, std::vector<int>> immuneToSpells;
-        for ( const MonsterAbility & ability : abilities ) {
-            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
-                immuneToSpells[ability.percentage].emplace_back( ability.value );
-                continue;
+            for ( const MonsterAbility & ability : battleStats.abilities ) {
+                if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
+                    immuneToSpells[ability.percentage].emplace_back( ability.value );
+                    continue;
+                }
+
+                if ( ability.type == MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION ) {
+                    reducedDamageFromSpells[ability.percentage].emplace_back( ability.value );
+                    continue;
+                }
+
+                if ( const std::string description = getMonsterAbilityDescription( ability, true ); !description.empty() ) {
+                    output.emplace_back( description + '.' );
+                }
             }
-            const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
-            if ( !abilityDescription.empty() ) {
-                output.emplace_back( abilityDescription + '.' );
+
+            for ( const auto & [percentage, spells] : immuneToSpells ) {
+                assert( !spells.empty() );
+
+                output.emplace_back( ( percentage == 100 ? _( "Immune to " ) : std::to_string( percentage ) + _( "% immunity to " ) )
+                                     + listSpells( replaceMassSpells( spells ) ) );
+            }
+
+            for ( const auto & [percentage, spells] : reducedDamageFromSpells ) {
+                assert( !spells.empty() );
+
+                output.emplace_back( std::to_string( percentage ) + _( "% damage from " ) + listSpells( replaceMassSpells( spells ) ) );
             }
         }
 
-        for ( auto spellInfoIter = immuneToSpells.begin(); spellInfoIter != immuneToSpells.end(); ++spellInfoIter ) {
-            assert( !spellInfoIter->second.empty() );
+        {
+            std::map<uint32_t, std::vector<int>> extraDamageFromSpells;
 
-            std::string temp;
-
-            if ( spellInfoIter->first == 100 ) {
-                temp += _( "Immune to " );
-            }
-            else {
-                temp += std::to_string( spellInfoIter->first ) + _( "% immunity to " );
-            }
-
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
-
-            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                if ( i > 0 ) {
-                    temp += ", ";
+            for ( const MonsterWeakness & weakness : battleStats.weaknesses ) {
+                if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
+                    extraDamageFromSpells[weakness.percentage].emplace_back( weakness.value );
+                    continue;
                 }
 
-                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += _( "Lightning" );
-                }
-                else {
-                    temp += Spell( sortedSpells[i] ).GetName();
+                if ( const std::string description = getMonsterWeaknessDescription( weakness, true ); !description.empty() ) {
+                    output.emplace_back( description + '.' );
                 }
             }
 
-            temp += '.';
-            output.emplace_back( std::move( temp ) );
-        }
+            for ( const auto & [percentage, spells] : extraDamageFromSpells ) {
+                assert( !spells.empty() );
 
-        std::map<uint32_t, std::vector<int>> extraDamageSpells;
-        const std::vector<MonsterWeakness> & weaknesses = battleStats.weaknesses;
-        for ( const MonsterWeakness & weakness : weaknesses ) {
-            if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
-                extraDamageSpells[weakness.percentage].emplace_back( weakness.value );
-                continue;
+                output.emplace_back( std::to_string( percentage + 100 ) + _( "% damage from " ) + listSpells( replaceMassSpells( spells ) ) );
             }
-
-            const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
-            if ( !weaknessDescription.empty() ) {
-                output.emplace_back( weaknessDescription + '.' );
-            }
-        }
-
-        for ( auto spellInfoIter = extraDamageSpells.begin(); spellInfoIter != extraDamageSpells.end(); ++spellInfoIter ) {
-            assert( !spellInfoIter->second.empty() );
-
-            std::string temp;
-
-            temp += std::to_string( spellInfoIter->first + 100 ) + _( "% damage from " );
-
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
-
-            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
-                if ( i > 0 ) {
-                    temp += ", ";
-                }
-
-                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
-                    temp += _( "Lightning" );
-                }
-                else {
-                    temp += Spell( sortedSpells[i] ).GetName();
-                }
-            }
-
-            temp += '.';
-            output.emplace_back( std::move( temp ) );
         }
 
         return output;
@@ -864,72 +883,50 @@ namespace fheroes2
 
         Spell spell( spellId );
 
-        std::vector<MonsterAbility>::const_iterator foundAbility;
-
         if ( spell.isMindInfluence() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MIND_SPELL_IMMUNITY ) );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MIND_SPELL_IMMUNITY ) != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) != abilities.end() ) {
                 return 100;
             }
 
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
-            if ( foundAbility != abilities.end() ) {
+            if ( std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL ) != abilities.end() ) {
                 return 100;
             }
         }
 
-        if ( spell.isAliveOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isAliveOnly() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isUndeadOnly() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
-            if ( foundAbility == abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isUndeadOnly() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::UNDEAD ) == abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isCold() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isCold() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::COLD_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell.isFire() ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::FIRE_SPELL_IMMUNITY ) );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isFire() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::FIRE_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
-        if ( spell == Spell::COLDRAY || spell == Spell::COLDRING || spell == Spell::FIREBALL || spell == Spell::FIREBLAST || spell == Spell::LIGHTNINGBOLT
-             || spell == Spell::CHAINLIGHTNING || spell == Spell::ELEMENTALSTORM ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
+        if ( spell.isElementalSpell() && std::find( abilities.begin(), abilities.end(), MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) != abilities.end() ) {
+            return 100;
         }
 
         uint32_t spellResistance = 0;
 
         // Find magic immunity for every spell.
-        foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::MAGIC_RESISTANCE ) );
-        if ( foundAbility != abilities.end() ) {
-            if ( foundAbility->percentage == 100 ) {
+        if ( const auto abilityIter = std::find( abilities.begin(), abilities.end(), MonsterAbilityType::MAGIC_RESISTANCE ); abilityIter != abilities.end() ) {
+            if ( abilityIter->percentage == 100 ) {
                 // Immune to everything.
                 return 100;
             }
             if ( spell.isDamage() || spell.isApplyToEnemies() ) {
-                spellResistance = foundAbility->percentage;
+                spellResistance = abilityIter->percentage;
             }
         }
 
@@ -940,5 +937,15 @@ namespace fheroes2
         }
 
         return spellResistance;
+    }
+
+    bool isAbilityPresent( const std::vector<MonsterAbility> & abilities, const MonsterAbilityType abilityType )
+    {
+        return std::find( abilities.begin(), abilities.end(), abilityType ) != abilities.end();
+    }
+
+    bool isWeaknessPresent( const std::vector<MonsterWeakness> & weaknesses, const MonsterWeaknessType weaknessType )
+    {
+        return std::find( weaknesses.begin(), weaknesses.end(), weaknessType ) != weaknesses.end();
     }
 }

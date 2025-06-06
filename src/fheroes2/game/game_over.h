@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,19 +21,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMEOVER_H
-#define H2GAMEOVER_H
+#pragma once
 
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 namespace GameOver
 {
-    enum conditions_t : uint32_t
+    enum : uint32_t
     {
         COND_NONE = 0x00000000,
 
@@ -52,10 +53,11 @@ namespace GameOver
         LOSS_TIME = 0x00000800,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
         LOSS_ENEMY_WINS_TOWN = 0x00010000,
-        LOSS_ENEMY_WINS_GOLD = 0x00020000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x00020000,
+        LOSS_ENEMY_WINS_GOLD = 0x00040000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD,
-        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD,
+        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( uint32_t cond );
@@ -82,17 +84,15 @@ namespace GameOver
         fheroes2::GameMode checkGameOver();
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const Result & );
-        friend StreamBase & operator>>( StreamBase &, Result & );
+        friend OStreamBase & operator<<( OStreamBase & stream, const Result & res );
+        friend IStreamBase & operator>>( IStreamBase & stream, Result & res );
 
-        Result();
+        Result() = default;
 
-        int colors;
-        uint32_t result;
+        PlayerColorsSet _colors{ 0 };
+        uint32_t result{ 0 };
     };
 
-    StreamBase & operator<<( StreamBase &, const Result & );
-    StreamBase & operator>>( StreamBase &, Result & );
+    OStreamBase & operator<<( OStreamBase & stream, const Result & res );
+    IStreamBase & operator>>( IStreamBase & stream, Result & res );
 }
-
-#endif

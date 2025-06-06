@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMYBAR_H
-#define H2ARMYBAR_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -41,7 +40,7 @@ public:
     using Interface::ItemsActionBar<ArmyTroop>::RedrawItem;
     using Interface::ItemsActionBar<ArmyTroop>::ActionBarRightMouseHold;
 
-    ArmyBar( Army *, bool mini, bool ro, bool change = false );
+    ArmyBar( Army *, const bool miniSprites, const bool readOnly, const bool isEditMode = false, const bool saveLastTroop = true );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( ArmyTroop &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
@@ -80,13 +79,12 @@ protected:
 private:
     bool AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & troop );
 
-    Army * _army;
+    Army * _army{ nullptr };
     fheroes2::Image backsf;
     bool use_mini_sprite;
     bool read_only;
-    bool can_change;
+    bool can_change{ false };
+    bool _saveLastTroop{ true };
     std::string msg;
-    int32_t _troopWindowOffsetY;
+    int32_t _troopWindowOffsetY{ 0 };
 };
-
-#endif

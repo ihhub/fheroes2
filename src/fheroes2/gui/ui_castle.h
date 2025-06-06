@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include <cstdint>
@@ -24,11 +25,17 @@
 #include "math_base.h"
 
 class Castle;
-class Funds;
+struct Funds;
+
+enum class PlayerColor : uint8_t;
 
 namespace fheroes2
 {
     class Image;
+
+    uint32_t getCastleIcnIndex( const int race, const bool isCastle );
+
+    uint32_t getCastleLeftFlagIcnIndex( const PlayerColor color );
 
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
 

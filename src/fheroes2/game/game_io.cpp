@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,6 +34,7 @@
 #include "campaign_scenariodata.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_language.h"
 #include "game_over.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
@@ -43,6 +44,7 @@
 #include "system.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
 #include "ui_language.h"
 #include "world.h"
 #include "zzlib.h"
@@ -92,14 +94,14 @@ namespace
         int gameType;
     };
 
-    StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
+    OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )
     {
-        return msg << hdr.status << hdr.info << hdr.gameType;
+        return stream << hdr.status << hdr.info << hdr.gameType;
     }
 
-    StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
+    IStreamBase & operator>>( IStreamBase & stream, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info >> hdr.gameType;
+        return stream >> hdr.status >> hdr.info >> hdr.gameType;
     }
 }
 
@@ -114,10 +116,10 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     const Settings & conf = Settings::Get();
 
-    StreamFile fs;
-    fs.setbigendian( true );
+    StreamFile fileStream;
+    fileStream.setBigendian( true );
 
-    if ( !fs.open( filePath, "wb" ) ) {
+    if ( !fileStream.open( filePath, "wb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
         return false;
     }
@@ -127,24 +129,27 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     uint16_t saveFileVersion = CURRENT_FORMAT_VERSION;
 
     // Header
-    fs << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
-       << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
-    fs.close();
+    fileStream << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
+               << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
+    if ( fileStream.fail() ) {
+        return false;
+    }
 
-    ZStreamBuf zb;
-    zb.setbigendian( true );
+    RWStreamBuf dataStream;
+    dataStream.setBigendian( true );
 
-    // Game data in ZIP format
-    zb << World::Get() << Settings::Get() << GameOver::Result::Get();
+    dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
+    if ( dataStream.fail() ) {
+        return false;
+    }
 
     if ( conf.isCampaignGameType() ) {
-        zb << Campaign::CampaignSaveData::Get();
+        dataStream << Campaign::CampaignSaveData::Get();
     }
 
     // End-of-data marker
-    zb << SAV2ID3;
-
-    if ( zb.fail() || !zb.write( filePath, true ) ) {
+    dataStream << SAV2ID3;
+    if ( dataStream.fail() || !Compression::zipStreamBuf( dataStream, fileStream ) ) {
         return false;
     }
 
@@ -161,10 +166,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
-    StreamFile fs;
-    fs.setbigendian( true );
+    StreamFile fileStream;
+    fileStream.setBigendian( true );
 
-    if ( !fs.open( filePath, "rb" ) ) {
+    if ( !fileStream.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
 
         showGenericErrorMessage();
@@ -173,7 +178,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t savId = 0;
-    fs >> savId;
+    fileStream >> savId;
 
     if ( savId != SAV2ID3 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
@@ -186,7 +191,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     std::string saveFileVersionStr;
     uint16_t saveFileVersion = 0;
 
-    fs >> saveFileVersionStr >> saveFileVersion;
+    fileStream >> saveFileVersionStr >> saveFileVersion;
+    if ( fileStream.fail() ) {
+        showGenericErrorMessage();
+        return fheroes2::GameMode::CANCEL;
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "Version of the file " << filePath << ": " << saveFileVersion )
 
@@ -209,10 +218,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     SetVersionOfCurrentSaveFile( saveFileVersion );
 
     HeaderSAV header;
-    fs >> header;
-
-    size_t offset = fs.tell();
-    fs.close();
+    fileStream >> header;
 
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & header.gameType ) == 0 ) {
@@ -221,14 +227,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    ZStreamBuf zb;
-    zb.setbigendian( true );
+    RWStreamBuf dataStream;
+    dataStream.setBigendian( true );
 
-    if ( !zb.read( filePath, offset ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Error uncompressing the file " << filePath )
-
+    if ( !Compression::unzipStream( fileStream, dataStream ) ) {
         showGenericErrorMessage();
-
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -240,13 +243,17 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    zb >> World::Get() >> conf >> GameOver::Result::Get();
+    dataStream >> World::Get() >> conf >> GameOver::Result::Get();
+    if ( dataStream.fail() ) {
+        showGenericErrorMessage();
+        return fheroes2::GameMode::CANCEL;
+    }
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        zb >> saveData;
+        dataStream >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
@@ -255,18 +262,14 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t endOfDataMarker = 0;
-    zb >> endOfDataMarker;
-
-    if ( zb.fail() || endOfDataMarker != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << " is corrupted" )
-
+    dataStream >> endOfDataMarker;
+    if ( dataStream.fail() || endOfDataMarker != SAV2ID3 ) {
         showGenericErrorMessage();
-
         return fheroes2::GameMode::CANCEL;
     }
 
     // Settings should contain the full path to the current map file, if this map is available
-    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapInfo().filename ) );
+    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetFileName( conf.getCurrentMapInfo().filename ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
@@ -281,6 +284,20 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     Game::SetLastSaveName( filePath );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE && header.info.version != GameVersion::RESURRECTION
+         && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+        // Text strings should not contain special ASCII characters. These characters can appear by 2 reasons:
+        // - hacked maps
+        // - using a French version of the original Editor
+        // Therefore, we try to fix them here.
+
+        fheroes2::fixFrenchCharactersForMP2Map( header.info.name );
+        fheroes2::fixFrenchCharactersForMP2Map( header.info.description );
+
+        world.fixFrenchCharactersInStrings();
+    }
+
     return returnValue;
 }
 
@@ -289,7 +306,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
-    fs.setbigendian( true );
+    fs.setBigendian( true );
 
     if ( !fs.open( filePath, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error opening the file " << filePath )
@@ -319,6 +336,10 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
 
     HeaderSAV header;
     fs >> header;
+
+    if ( fs.fail() ) {
+        return false;
+    }
 
     if ( ( Settings::Get().GameType() & header.gameType ) == 0 ) {
         return false;

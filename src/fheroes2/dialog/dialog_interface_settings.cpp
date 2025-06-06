@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,14 +20,13 @@
 
 #include "dialog_interface_settings.h"
 
-#include <cassert>
 #include <cstdint>
 #include <string>
 #include <utility>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -36,6 +35,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 
@@ -59,23 +59,6 @@ namespace
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
-
-        std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
-            value = _( "Good" );
-        }
-
-        fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
         // Interface show/hide state.
@@ -96,58 +79,6 @@ namespace
         fheroes2::drawOption( optionRoi, interfaceStateIcon, _( "Interface" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
-    void drawCursorType( const fheroes2::Rect & optionRoi )
-    {
-        if ( Settings::Get().isMonochromeCursorEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-    }
-
-    void drawScrollSpeed( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & conf = Settings::Get();
-        const int scrollSpeed = conf.ScrollSpeed();
-        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
-        uint32_t scrollSpeedIconId = 0;
-        std::string scrollSpeedName;
-
-        if ( scrollSpeed == SCROLL_SPEED_NONE ) {
-            scrollSpeedName = _( "Off" );
-            scrollSpeedIconIcn = ICN::SPANEL;
-            scrollSpeedIconId = 9;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
-            scrollSpeedName = _( "Slow" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
-            scrollSpeedName = _( "Normal" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
-            scrollSpeedName = _( "Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 1;
-        }
-        else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
-            scrollSpeedName = _( "Very Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 2;
-        }
-
-        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
-
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
-        fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
     SelectedWindow showConfigurationWindow( bool & saveConfiguration )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -158,12 +89,13 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point shadowOffset( dialogOffset.x - fheroes2::borderWidthPx, dialogOffset.y );
 
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + fheroes2::borderWidthPx,
+                                                dialog.height() + fheroes2::borderWidthPx );
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
+        fheroes2::Blit( dialogShadow, display, windowRoi.x - fheroes2::borderWidthPx, windowRoi.y + fheroes2::borderWidthPx );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
@@ -173,24 +105,26 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            drawInterfaceType( windowInterfaceTypeRoi );
+        const auto drawOptions = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
             drawInterfacePresence( windowInterfacePresenceRoi );
-            drawCursorType( windowCursorTypeRoi );
-            drawScrollSpeed( windowScrollSpeedRoi );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 
         drawOptions();
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
+        const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
+        fheroes2::Button buttonOk( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+
+        buttonOk.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &buttonOk, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
+            buttonOk.draw();
             display.render( emptyDialogRestorer.rect() );
         };
-
-        const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        okayButton.draw();
 
         display.render();
 
@@ -198,14 +132,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
@@ -225,14 +154,14 @@ namespace
 
                 continue;
             }
-            if ( le.MouseWheelUp( windowScrollSpeedRoi ) ) {
+            if ( le.isMouseWheelUpInArea( windowScrollSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
                 refreshWindow();
 
                 continue;
             }
-            if ( le.MouseWheelDn( windowScrollSpeedRoi ) ) {
+            if ( le.isMouseWheelDownInArea( windowScrollSpeedRoi ) ) {
                 saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
                 refreshWindow();
@@ -240,19 +169,19 @@ namespace
                 continue;
             }
 
-            if ( le.MousePressRight( windowInterfaceTypeRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowInterfaceTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), 0 );
             }
-            else if ( le.MousePressRight( windowInterfacePresenceRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowInterfacePresenceRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Interface" ), _( "Toggle interface visibility." ), 0 );
             }
-            else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an esthetic choice." ), 0 );
+            else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
             }
-            if ( le.MousePressRight( windowScrollSpeedRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -273,8 +202,10 @@ namespace
 
 namespace fheroes2
 {
-    void openInterfaceSettingsDialog( const std::function<void()> & updateUI )
+    bool openInterfaceSettingsDialog( const std::function<void()> & updateUI )
     {
+        const CursorRestorer cursorRestorer( true, ::Cursor::POINTER );
+
         Settings & conf = Settings::Get();
 
         bool saveConfiguration = false;
@@ -286,7 +217,15 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
+                if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
+                    conf.setInterfaceType( InterfaceType::GOOD );
+                }
+                else if ( conf.getInterfaceType() == InterfaceType::GOOD ) {
+                    conf.setInterfaceType( InterfaceType::EVIL );
+                }
+                else {
+                    conf.setInterfaceType( InterfaceType::DYNAMIC );
+                }
                 updateUI();
                 saveConfiguration = true;
 
@@ -306,12 +245,10 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
-                return;
+                return saveConfiguration;
             }
         }
 
-        if ( saveConfiguration ) {
-            conf.Save( Settings::configFileName );
-        }
+        return saveConfiguration;
     }
 }

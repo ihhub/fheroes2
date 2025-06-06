@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,106 +20,154 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2WORLD_H
-#define H2WORLD_H
 
-#include <algorithm>
+#pragma once
+
 #include <cstddef>
 #include <cstdint>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
+#include "color.h"
+#include "game_string.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class MapObjectSimple;
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
-struct MapEvent;
 struct Week;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Route
 {
     class Step;
 }
 
-struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
+// Number of days in the game week
+inline constexpr int numOfDaysPerWeek{ 7 };
+// Number of weeks in the game month
+inline constexpr int numOfWeeksPerMonth{ 4 };
+
+class MapObjects
 {
+public:
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
     MapObjects( MapObjects && other ) = delete;
 
-    ~MapObjects();
+    ~MapObjects() = default;
 
     MapObjects & operator=( const MapObjects & other ) = delete;
     MapObjects & operator=( MapObjects && other ) = delete;
 
-    void clear();
-    void add( MapObjectSimple * );
-    std::list<MapObjectSimple *> get( const fheroes2::Point & );
-    MapObjectSimple * get( uint32_t uid );
-    void remove( uint32_t uid );
+    void clear()
+    {
+        _objects.clear();
+    }
+
+    template <typename T, std::enable_if_t<std::is_base_of_v<MapBaseObject, T>, bool> = true>
+    void add( std::unique_ptr<T> && obj )
+    {
+        if ( !obj ) {
+            return;
+        }
+
+        if ( const auto [iter, inserted] = _objects.try_emplace( obj->GetUID(), std::move( obj ) ); !inserted ) {
+            iter->second = std::move( obj );
+        }
+    }
+
+    void remove( const uint32_t uid )
+    {
+        _objects.erase( uid );
+    }
+
+    MapBaseObject * get( const uint32_t uid ) const;
+    std::list<MapBaseObject *> get( const fheroes2::Point & pos ) const;
+
+private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapObjects & objs );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs );
+
+    std::map<uint32_t, std::unique_ptr<MapBaseObject>> _objects;
 };
 
 struct CapturedObject
 {
-    ObjectColor objcol;
+    ObjectColor objCol;
     Troop guardians;
 
     CapturedObject() = default;
 
-    int GetColor() const
+    PlayerColor GetColor() const
     {
-        return objcol.second;
+        return objCol.second;
     }
+
     Troop & GetTroop()
     {
         return guardians;
     }
 
-    void Set( int obj, int col )
+    void Set( const MP2::MapObjectType object, const PlayerColor color )
     {
-        objcol = ObjectColor( obj, col );
+        objCol = { object, color };
     }
-    void SetColor( int col )
+
+    void SetColor( const PlayerColor color )
     {
-        objcol.second = col;
+        objCol.second = color;
     }
 };
 
 struct CapturedObjects : std::map<int32_t, CapturedObject>
 {
-    void Set( int32_t, int, int );
-    void SetColor( int32_t, int );
-    void ClearFog( int );
-    void ResetColor( int );
+    CapturedObjects() = default;
 
-    CapturedObject & Get( int32_t );
+    void Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor color );
+    void SetColor( const int32_t index, const PlayerColor color );
+    void ResetColor( const PlayerColor color );
 
-    uint32_t GetCount( int, int ) const;
-    uint32_t GetCountMines( int, int ) const;
-    int GetColor( int32_t ) const;
+    void ClearFog( const PlayerColorsSet colors ) const;
+
+    CapturedObject & Get( const int32_t index )
+    {
+        return operator[]( index );
+    }
+
+    PlayerColor GetColor( const int32_t index ) const;
+
+    uint32_t GetCount( const MP2::MapObjectType objectType, const PlayerColor ownerColor ) const;
+    uint32_t GetCountMines( const int resourceType, const PlayerColor ownerColor ) const;
 };
 
 struct EventDate
 {
     void LoadFromMP2( const std::vector<uint8_t> & data );
 
-    bool isAllow( const int color, const uint32_t date ) const;
+    bool isAllow( const PlayerColor color, const uint32_t date ) const;
 
     bool isDeprecated( const uint32_t date ) const
     {
@@ -129,18 +177,17 @@ struct EventDate
     Funds resource;
     uint32_t firstOccurrenceDay{ 0 };
     uint32_t repeatPeriodInDays{ 0 };
-    int colors{ 0 };
+    PlayerColorsSet colors{ 0 };
     bool isApplicableForAIPlayers{ false };
     std::string message;
 
     std::string title;
 };
 
-StreamBase & operator<<( StreamBase &, const EventDate & );
-StreamBase & operator>>( StreamBase &, EventDate & );
+OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj );
+IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
-using MapsTiles = std::vector<Maps::Tiles>;
 
 class World : protected fheroes2::Size
 {
@@ -163,7 +210,9 @@ public:
     // Generate 2x2 map for Battle Only mode.
     void generateBattleOnlyMap();
 
-    void generateForEditor( const int32_t size );
+    // Generates a map without initializing tiles.
+    // WARNING: call this method only when reading a map from a file
+    void generateUninitializedMap( const int32_t size );
 
     static World & Get();
 
@@ -177,7 +226,7 @@ public:
         return height;
     }
 
-    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const
+    const Maps::Tile & getTile( const int32_t x, const int32_t y ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -186,7 +235,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t x, const int32_t y )
+    Maps::Tile & getTile( const int32_t x, const int32_t y )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( y * width + x );
@@ -195,7 +244,7 @@ public:
 #endif
     }
 
-    const Maps::Tiles & GetTiles( const int32_t tileId ) const
+    const Maps::Tile & getTile( const int32_t tileId ) const
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -204,7 +253,7 @@ public:
 #endif
     }
 
-    Maps::Tiles & GetTiles( const int32_t tileId )
+    Maps::Tile & getTile( const int32_t tileId )
     {
 #ifdef WITH_DEBUG
         return vec_tiles.at( tileId );
@@ -218,14 +267,22 @@ public:
         vec_kingdoms.Init();
     }
 
-    Kingdom & GetKingdom( int color )
+    Kingdom & GetKingdom( PlayerColor color )
     {
         return vec_kingdoms.GetKingdom( color );
     }
 
-    const Kingdom & GetKingdom( int color ) const
+    const Kingdom & GetKingdom( PlayerColor color ) const
     {
         return vec_kingdoms.GetKingdom( color );
+    }
+
+    void addCastle( int32_t index, uint8_t race, PlayerColor color )
+    {
+        auto castle = std::make_unique<Castle>( index % width, index / width, race );
+        castle->SetColor( color );
+
+        vec_castles.AddCastle( std::move( castle ) );
     }
 
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
@@ -243,12 +300,12 @@ public:
     const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
     Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
 
-    const Heroes * GetHeroes( int id ) const
+    const Heroes * GetHeroes( const int id ) const
     {
         return vec_heroes.Get( id );
     }
 
-    Heroes * GetHeroes( int id )
+    Heroes * GetHeroes( const int id )
     {
         return vec_heroes.Get( id );
     }
@@ -263,16 +320,16 @@ public:
         return vec_heroes.Get( center );
     }
 
-    Heroes * FromJailHeroes( int32_t );
+    Heroes * FromJailHeroes( const int32_t tileIndex );
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
 
-    Heroes * GetHero( const Castle & ) const;
+    Heroes * GetHero( const Castle & castle ) const;
 
     const UltimateArtifact & GetUltimateArtifact() const;
-    bool DiggingForUltimateArtifact( const fheroes2::Point & );
+    bool DiggingForUltimateArtifact( const fheroes2::Point & center );
 
     // overall number of cells of the world map: width * height
     size_t getSize() const
@@ -307,11 +364,10 @@ public:
     std::string DateString() const;
 
     void NewDay();
-    void NewDayAI();
     void NewWeek();
     void NewMonth();
 
-    std::string getCurrentRumor() const;
+    fheroes2::LocalizedString getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -319,16 +375,19 @@ public:
     int32_t NextWhirlpool( const int32_t index ) const;
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
-    void CaptureObject( int32_t, int col );
-    uint32_t CountCapturedObject( int obj, int col ) const;
-    uint32_t CountCapturedMines( int type, int col ) const;
-    uint32_t CountObeliskOnMaps();
-    int ColorCapturedObject( int32_t ) const;
-    void ResetCapturedObjects( int );
-    CapturedObject & GetCapturedObject( int32_t );
+    void CaptureObject( const int32_t index, const PlayerColor color );
 
-    void ActionForMagellanMaps( int color );
-    void ClearFog( int color );
+    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const PlayerColor color ) const;
+    uint32_t CountCapturedMines( const int type, const PlayerColor color ) const;
+    uint32_t CountObeliskOnMaps();
+
+    PlayerColor ColorCapturedObject( const int32_t index ) const;
+    void ResetCapturedObjects( const PlayerColor color );
+
+    CapturedObject & GetCapturedObject( const int32_t index );
+
+    void ActionForMagellanMaps( const PlayerColor color );
+    void ClearFog( PlayerColor color ) const;
 
     bool KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const;
     bool KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const;
@@ -336,14 +395,24 @@ public:
     uint32_t CheckKingdomWins( const Kingdom & kingdom ) const;
     uint32_t CheckKingdomLoss( const Kingdom & kingdom ) const;
 
-    void AddEventDate( const EventDate & );
-    EventsDate GetEventsDate( int color ) const;
+    void AddEventDate( const EventDate & event );
+    EventsDate GetEventsDate( const PlayerColor color ) const;
 
-    MapEvent * GetMapEvent( const fheroes2::Point & );
-    MapObjectSimple * GetMapObject( uint32_t uid );
-    void RemoveMapObject( const MapObjectSimple * );
+    MapEvent * GetMapEvent( const fheroes2::Point & pos );
+    MapBaseObject * GetMapObject( uint32_t uid );
+    void RemoveMapObject( const MapBaseObject * obj );
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
+
+    uint8_t getWaterPercentage() const
+    {
+        return _waterPercentage;
+    }
+
+    double getLandRoughness() const
+    {
+        return _landRoughness;
+    }
 
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
@@ -351,35 +420,54 @@ public:
 
     void ComputeStaticAnalysis();
 
-    uint32_t GetMapSeed() const;
+    uint32_t GetMapSeed() const
+    {
+        return _seed;
+    }
+
     uint32_t GetWeekSeed() const;
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
     void updatePassabilities();
 
+    const std::vector<int32_t> & getAllEyeOfMagiPositions() const
+    {
+        return _allEyeOfMagi;
+    }
+
+    // Update French language-specific characters in all strings to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInStrings();
+
 private:
     World() = default;
 
     void Defaults();
     void Reset();
-    void MonthOfMonstersAction( const Monster & );
-    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
-    void PostLoad( const bool setTilePassabilities );
+    void MonthOfMonstersAction( const Monster & mons );
+    bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
+    void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
-    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
+    bool updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
-    friend class Radar;
-    friend StreamBase & operator<<( StreamBase &, const World & );
-    friend StreamBase & operator>>( StreamBase &, World & );
+    void setUltimateArtifact( const int32_t tileId, const int32_t radius );
 
-    MapsTiles vec_tiles;
+    void addDebugHero();
+
+    void setHeroIdsForMapConditions();
+
+    friend class Radar;
+    friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
+    friend IStreamBase & operator>>( IStreamBase & stream, World & w );
+
+    std::vector<Maps::Tile> vec_tiles;
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    std::vector<std::string> _rumors;
+    std::vector<std::string> _customRumors;
     EventsDate vec_eventsday;
 
     // index, object, color
@@ -391,8 +479,8 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    int heroes_cond_wins = Heroes::UNKNOWN;
-    int heroes_cond_loss = Heroes::UNKNOWN;
+    int heroIdAsWinCondition = Heroes::UNKNOWN;
+    int heroIdAsLossCondition = Heroes::UNKNOWN;
 
     MapObjects map_objects;
 
@@ -402,20 +490,15 @@ private:
 
     std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
     std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
+    std::vector<int32_t> _allEyeOfMagi;
 
+    uint8_t _waterPercentage{ 0 };
+    double _landRoughness{ 1.0 };
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };
 
-StreamBase & operator<<( StreamBase &, const CapturedObject & );
-StreamBase & operator>>( StreamBase &, CapturedObject & );
-
-StreamBase & operator<<( StreamBase &, const World & );
-StreamBase & operator>>( StreamBase &, World & );
-
-StreamBase & operator<<( StreamBase &, const MapObjects & );
-StreamBase & operator>>( StreamBase &, MapObjects & );
+OStreamBase & operator<<( OStreamBase & stream, const CapturedObject & obj );
+IStreamBase & operator>>( IStreamBase & stream, CapturedObject & obj );
 
 extern World & world;
-
-#endif

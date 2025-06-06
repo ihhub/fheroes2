@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <memory>
 #include <set>
 #include <utility>
 
@@ -99,15 +98,16 @@ namespace
 
 Battle::Board::Board()
 {
-    reserve( ARENASIZE );
-    for ( uint32_t ii = 0; ii < ARENASIZE; ++ii )
-        push_back( Cell( ii ) );
+    reserve( sizeInCells );
+
+    for ( int i = 0; i < sizeInCells; ++i ) {
+        emplace_back( i );
+    }
 }
 
 void Battle::Board::SetArea( const fheroes2::Rect & area )
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        ( *it ).SetArea( area );
+    std::for_each( begin(), end(), [&area]( Cell & cell ) { cell.SetArea( area ); } );
 }
 
 void Battle::Board::removeDeadUnits()
@@ -127,11 +127,11 @@ uint32_t Battle::Board::GetDistance( const int32_t index1, const int32_t index2 
         return 0;
     }
 
-    const int32_t x1 = index1 % ARENAW;
-    const int32_t y1 = index1 / ARENAW;
+    const int32_t x1 = index1 % widthInCells;
+    const int32_t y1 = index1 / widthInCells;
 
-    const int32_t x2 = index2 % ARENAW;
-    const int32_t y2 = index2 / ARENAW;
+    const int32_t x2 = index2 % widthInCells;
+    const int32_t y2 = index2 / widthInCells;
 
     const int32_t du = y2 - y1;
     const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
@@ -229,18 +229,13 @@ int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
         return CENTER;
     }
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
         if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) ) {
             return dir;
         }
     }
 
     return UNKNOWN;
-}
-
-bool Battle::Board::isNearIndexes( const int32_t index1, const int32_t index2 )
-{
-    return index1 != index2 && UNKNOWN != GetDirection( index1, index2 );
 }
 
 int Battle::Board::GetReflectDirection( const int dir )
@@ -269,9 +264,9 @@ uint32_t Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( const int32_t index,
 {
     assert( isValidIndex( index ) );
 
-    const uint32_t x = index % ARENAW;
+    const uint32_t x = index % widthInCells;
 
-    return ( fromRightEdge ? ARENAW - x : x + 1 );
+    return ( fromRightEdge ? widthInCells - x : x + 1 );
 }
 
 bool Battle::Board::isValidDirection( const int32_t index, const int dir )
@@ -280,24 +275,26 @@ bool Battle::Board::isValidDirection( const int32_t index, const int dir )
         return false;
     }
 
-    const int32_t x = index % ARENAW;
-    const int32_t y = index / ARENAW;
+    if ( dir == CENTER ) {
+        return true;
+    }
+
+    const int32_t x = index % widthInCells;
+    const int32_t y = index / widthInCells;
 
     switch ( dir ) {
-    case CENTER:
-        return true;
     case TOP_LEFT:
         return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
     case TOP_RIGHT:
-        return !( 0 == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
+        return !( 0 == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
     case LEFT:
         return !( 0 == x );
     case RIGHT:
-        return !( ( ARENAW - 1 ) == x );
+        return !( ( widthInCells - 1 ) == x );
     case BOTTOM_LEFT:
-        return !( ( ARENAH - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
+        return !( ( heightInCells - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
     case BOTTOM_RIGHT:
-        return !( ( ARENAH - 1 ) == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
+        return !( ( heightInCells - 1 ) == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
     default:
         break;
     }
@@ -311,23 +308,21 @@ int32_t Battle::Board::GetIndexDirection( const int32_t index, const int dir )
         return -1;
     }
 
-    const int32_t y = index / ARENAW;
-
     switch ( dir ) {
     case CENTER:
         return index;
     case TOP_LEFT:
-        return index - ( ( y % 2 ) ? ARENAW + 1 : ARENAW );
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells + 1 : widthInCells );
     case TOP_RIGHT:
-        return index - ( ( y % 2 ) ? ARENAW : ARENAW - 1 );
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells - 1 );
     case LEFT:
         return index - 1;
     case RIGHT:
         return index + 1;
     case BOTTOM_LEFT:
-        return index + ( ( y % 2 ) ? ARENAW - 1 : ARENAW );
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells - 1 : widthInCells );
     case BOTTOM_RIGHT:
-        return index + ( ( y % 2 ) ? ARENAW : ARENAW + 1 );
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells + 1 );
     default:
         break;
     }
@@ -344,11 +339,6 @@ int32_t Battle::Board::GetIndexAbsPosition( const fheroes2::Point & pt ) const
             break;
 
     return it != end() ? ( *it ).GetIndex() : -1;
-}
-
-bool Battle::Board::isValidIndex( const int32_t index )
-{
-    return 0 <= index && index < ARENASIZE;
 }
 
 bool Battle::Board::isCastleIndex( const int32_t index )
@@ -388,19 +378,17 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen )
 {
-    bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
-    int ground = tile.GetGround();
     std::vector<int> objs;
 
-    if ( grave ) {
+    if ( tile.getMainObjectType( false ) == MP2::OBJ_GRAVEYARD ) {
         objs.push_back( ICN::COBJ0000 );
         objs.push_back( ICN::COBJ0001 );
         objs.push_back( ICN::COBJ0025 );
     }
-    else
-        switch ( ground ) {
+    else {
+        switch ( tile.GetGround() ) {
         case Maps::Ground::DESERT:
             objs.push_back( ICN::COBJ0009 );
             objs.push_back( ICN::COBJ0024 );
@@ -479,6 +467,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         default:
             break;
         }
+    }
 
     Rand::ShuffleWithGen( objs, gen );
 
@@ -529,8 +518,8 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         uint32_t dest;
         do {
             dest = GetRandomObstaclePosition( gen );
-        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % ARENAW ) == 8 ) )
-                  || ( isTallObstacle && dest < ( ARENAW * 2 ) ) );
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % widthInCells ) == 8 ) )
+                  || ( isTallObstacle && dest < ( widthInCells * 2 ) ) );
 
         SetCobjObject( objs[i], dest );
     }
@@ -670,7 +659,23 @@ void Battle::Board::SetCovrObjects( int icn )
     }
 }
 
-Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* = CENTER */ )
+Battle::Cell * Battle::Board::GetCell( const int32_t position )
+{
+    if ( !isValidIndex( position ) ) {
+        return nullptr;
+    }
+
+    Board * board = Arena::GetBoard();
+    assert( board != nullptr );
+
+#ifdef WITH_DEBUG
+    return &board->at( position );
+#else
+    return &board->operator[]( position );
+#endif
+}
+
+Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir )
 {
     if ( !isValidDirection( position, dir ) ) {
         return nullptr;
@@ -682,7 +687,11 @@ Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* 
     const int32_t idx = GetIndexDirection( position, dir );
     assert( isValidIndex( idx ) );
 
+#ifdef WITH_DEBUG
     return &board->at( idx );
+#else
+    return &board->operator[]( idx );
+#endif
 }
 
 Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const bool reflect )
@@ -730,7 +739,7 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const int32_t center )
     Indexes result;
     result.reserve( 6 );
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
         if ( !isValidDirection( center, dir ) ) {
             continue;
         }
@@ -830,8 +839,8 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
         return {};
     }
 
-    const int32_t centerX = center % ARENAW;
-    const int32_t centerY = center / ARENAW;
+    const int32_t centerX = center % widthInCells;
+    const int32_t centerY = center / widthInCells;
 
     // Axial coordinates
     const int32_t centerQ = centerX - ( centerY + ( centerY % 2 ) ) / 2;
@@ -855,11 +864,11 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
             const int32_t x = q + ( r + ( r % 2 ) ) / 2;
             const int32_t y = r;
 
-            if ( x < 0 || x >= ARENAW || y < 0 || y >= ARENAH ) {
+            if ( x < 0 || x >= widthInCells || y < 0 || y >= heightInCells ) {
                 continue;
             }
 
-            const int32_t idx = y * ARENAW + x;
+            const int32_t idx = y * widthInCells + x;
             assert( isValidIndex( idx ) );
 
             result.push_back( idx );
@@ -991,60 +1000,9 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
     return false;
 }
 
-Battle::Indexes Battle::Board::GetAdjacentEnemiesIndexes( const Unit & unit )
-{
-    Indexes result;
-    const bool isWide = unit.isWide();
-    const int armyColor = unit.GetArmyColor();
-    result.reserve( isWide ? 8 : 6 );
-
-    const int leftmostIndex = ( isWide && !unit.isReflect() ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    const int x = leftmostIndex % ARENAW;
-    const int y = leftmostIndex / ARENAW;
-    const int mod = y % 2;
-
-    const auto validateAndInsert = [&result, armyColor]( const int index ) {
-        const Unit * vUnit = GetCell( index )->GetUnit();
-        if ( vUnit && armyColor != vUnit->GetArmyColor() )
-            result.push_back( index );
-    };
-
-    if ( y > 0 ) {
-        const int topRowIndex = ( y - 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( topRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( topRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( topRowIndex + 2 );
-    }
-
-    if ( x > 0 )
-        validateAndInsert( leftmostIndex - 1 );
-
-    if ( x < ARENAW - ( isWide ? 2 : 1 ) )
-        validateAndInsert( leftmostIndex + ( isWide ? 2 : 1 ) );
-
-    if ( y < ARENAH - 1 ) {
-        const int bottomRowIndex = ( y + 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( bottomRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( bottomRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( bottomRowIndex + 2 );
-    }
-
-    return result;
-}
-
 std::string Battle::Board::GetMoatInfo()
 {
-    std::string msg = _( "The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate." );
+    std::string msg = _( "The Moat interrupts any movement through it and reduces the defense skill of troops present in it by %{count}." );
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
 
     return msg;

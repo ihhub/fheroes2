@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "artifact_ultimate.h"
+
 #include "interface_gamearea.h"
 #include "rand.h"
 #include "serialize.h"
@@ -31,10 +32,11 @@ UltimateArtifact::UltimateArtifact()
     , _isFound( false )
 {}
 
-void UltimateArtifact::Set( const int32_t position, const Artifact & a )
+void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 {
-    Artifact & art = *this;
-    art = a.isValid() ? a : Artifact::Rand( Artifact::ART_ULTIMATE );
+    Artifact & thisArt = *this;
+    thisArt = artifact.isValid() ? artifact : Artifact::Rand( Artifact::ART_ULTIMATE );
+
     _index = position;
     _isFound = false;
 
@@ -68,13 +70,13 @@ void UltimateArtifact::Reset()
     _isFound = false;
 }
 
-StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
+OStreamBase & operator<<( OStreamBase & stream, const UltimateArtifact & ultimate )
 {
-    return msg << static_cast<const Artifact &>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
+    return stream << static_cast<const Artifact &>( ultimate ) << ultimate._index << ultimate._isFound << ultimate._offset;
 }
 
-StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
+IStreamBase & operator>>( IStreamBase & stream, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
-    return msg >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
+    return stream >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
 }

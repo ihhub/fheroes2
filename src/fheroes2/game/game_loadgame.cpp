@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game.h" // IWYU pragma: associated
 
 #include <array>
 #include <cstddef>
@@ -29,7 +29,6 @@
 #include <ostream>
 #include <string>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
@@ -94,38 +93,41 @@ fheroes2::GameMode Game::LoadMulti()
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
     fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
-    buttonCancelGame.draw();
+    buttonCancel.draw();
     buttonNetwork.disable();
 
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
-        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
+        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
+        if ( buttonNetwork.isEnabled() ) {
+            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNetwork.area() ) );
+        }
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
-            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ), false ) ) {
+            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ) ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
                 return fheroes2::GameMode::LOAD_HOT_SEAT;
             }
         }
-        else if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
         // right info
-        else if ( le.MousePressRight( buttonHotSeat.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonHotSeat.area() ) ) {
             fheroes2::showStandardTextMessage(
-                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 6 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
                 Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCancelGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
@@ -150,12 +152,11 @@ fheroes2::GameMode Game::LoadGame()
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonStandardGame( 0, 0, ICN::BUTTON_STANDARD_GAME, 0, 1 );
-    fheroes2::ButtonSprite buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
-                                               fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
+    fheroes2::Button buttonCampaignGame( 0, 0, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
     fheroes2::Button buttonMultiplayerGame( 0, 0, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonCancel( 0, 0, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-    std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
+    const std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
     if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampaignGame.disable();
@@ -167,7 +168,7 @@ fheroes2::GameMode Game::LoadGame()
         buttons[i]->draw();
     }
 
-    // following the cancel button in newgame
+    // following the cancel button in new game
     buttonCancel.setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttonCancel.draw();
 
@@ -177,11 +178,11 @@ fheroes2::GameMode Game::LoadGame()
 
     while ( le.HandleEvents() ) {
         for ( fheroes2::ButtonBase * button : buttons ) {
-            le.MousePressLeft( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
+            button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
         }
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
-            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_STANDARD ), false ) ) {
+            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_STANDARD ) ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
@@ -189,7 +190,7 @@ fheroes2::GameMode Game::LoadGame()
             }
         }
         else if ( buttonCampaignGame.isEnabled() && ( le.MouseClickLeft( buttonCampaignGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) ) {
-            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
+            if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ) ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
@@ -199,20 +200,22 @@ fheroes2::GameMode Game::LoadGame()
         else if ( le.MouseClickLeft( buttonMultiplayerGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) ) {
             return fheroes2::GameMode::LOAD_MULTI;
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
+
+        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( le.MousePressRight( buttonStandardGame.area() ) ) {
+
+        if ( le.isMouseRightButtonPressedInArea( buttonStandardGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCampaignGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCampaignGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonMultiplayerGame.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonMultiplayerGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
                                                _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }

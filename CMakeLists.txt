@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 cmake_policy(SET CMP0074 NEW)
 
 file(STRINGS ${CMAKE_SOURCE_DIR}/version.txt FHEROES2_VERSION LIMIT_COUNT 1 REGEX "^[0-9]+\.[0-9]+\.[0-9]+$")
@@ -35,7 +35,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 #
 # Compile-time options
 #
-option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
 option(ENABLE_IMAGE "Enable the use of SDL_image (requires libpng)" OFF)
 option(ENABLE_TOOLS "Enable the build of additional tools" OFF)
 
@@ -59,19 +58,9 @@ find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
 
-# TODO: Modern versions of SDL2* packages provide the CMake config files that define the SDL2::SDL2, SDL2_mixer::SDL2_mixer and SDL2_image::SDL2_image
-# TODO: imported targets, but older versions do not. To solve this problem, we have to use FindSDL2*.cmake modules from the cmake/ subdirectory and
-# TODO: define aliases for imported targets provided by these modules.
-
-# TODO: remove this alias and module from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_mixer
-add_library(${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer ALIAS ${USE_SDL_VERSION}::Mixer)
-
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
-
-	# TODO: remove this alias and module from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_image
-	add_library(${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image ALIAS ${USE_SDL_VERSION}::Image)
 endif(ENABLE_IMAGE)
 
 #
@@ -100,6 +89,14 @@ endif(NOT WIN32)
 #
 if(MACOS_APP_BUNDLE)
 	add_custom_target(
+		app_bundle_fh2m_maps
+		ALL
+		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/maps
+		COMMAND cp *.fh2m ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/maps
+		DEPENDS fheroes2
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/maps
+		)
+	add_custom_target(
 		app_bundle_h2d_files
 		ALL
 		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d
@@ -119,7 +116,7 @@ if(MACOS_APP_BUNDLE)
 		run_dylibbundler
 		ALL
 		COMMAND dylibbundler -od -b -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME} -d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs
-		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_translations
+		DEPENDS fheroes2 app_bundle_fh2m_maps app_bundle_h2d_files app_bundle_translations
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 endif(MACOS_APP_BUNDLE)
@@ -133,6 +130,12 @@ if(NOT MACOS_APP_BUNDLE)
 		DESTINATION ${FHEROES2_DATA}/files/data
 		FILES_MATCHING
 		PATTERN *.h2d
+		)
+	install(
+		DIRECTORY maps/
+		DESTINATION ${FHEROES2_DATA}/maps
+		FILES_MATCHING
+		PATTERN *.fh2m
 		)
 	install(
 		FILES docs/README.txt LICENSE changelog.txt

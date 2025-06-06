@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SYSTEM_H
-#define H2SYSTEM_H
+#pragma once
 
 #include <ctime>
+#include <filesystem>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -33,27 +33,38 @@ namespace System
 {
     bool isHandheldDevice();
 
+    // Returns true if the target platform supports touch input, otherwise returns false.
+    bool isTouchInputAvailable();
+
     bool isVirtualKeyboardSupported();
 
     // Returns true if target platform supports shell-level globbing (Unix-like platforms with POSIX-compatible shells).
     // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
     bool isShellLevelGlobbingSupported();
 
-    bool MakeDirectory( const std::string & path );
+    bool MakeDirectory( const std::string_view path );
+    bool Unlink( const std::string_view path );
+
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
-    std::string GetConfigDirectory( const std::string & prog );
-    std::string GetDataDirectory( const std::string & prog );
 
-    std::string GetDirname( std::string_view path );
-    std::string GetBasename( std::string_view path );
+    // Returns the path to the app settings directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
+    std::string GetConfigDirectory( const std::string_view appName );
 
-    bool IsFile( const std::string & path, bool writable = false );
-    bool IsDirectory( const std::string & path, bool writable = false );
-    bool Unlink( const std::string & path );
+    // Returns the path to the app data directory (usually some user-specific directory). An empty string can be returned,
+    // which should be considered as the current directory.
+    std::string GetDataDirectory( const std::string_view appName );
 
-    bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
+    std::string GetParentDirectory( std::string_view path );
+    std::string GetFileName( std::string_view path );
+    std::string GetStem( const std::string_view path );
+
+    bool IsFile( const std::string_view path );
+    bool IsDirectory( const std::string_view path );
+
+    bool GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath );
 
     // Resolves the wildcard pattern 'glob' and appends matching paths to 'fileNames'. Supported wildcards are '?' and '*'.
     // These wildcards are resolved only if they are in the last element of the path. For example, they will be resolved
@@ -61,9 +72,18 @@ namespace System
     // are no files matching the pattern, it will be appended to the 'fileNames' as is.
     void globFiles( const std::string_view glob, std::vector<std::string> & fileNames );
 
-    std::string FileNameToUTF8( const std::string & name );
+    // Converts the given string from local encoding to UTF-8 encoding (used by SDL). It is used mainly on Windows, because on
+    // Windows this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding
+    // is used, and the original string is simply returned unchanged.
+    std::string encLocalToUTF8( const std::string_view str );
+
+    // Converts the given string from UTF-8 encoding (used by SDL) to local encoding. It is used mainly on Windows, because on
+    // Windows this app works with ANSI code page (CP_ACP). On all other systems, it is currently assumed that UTF-8 encoding
+    // is used, and the original string is simply returned unchanged.
+    std::string encUTF8ToLocal( const std::string_view str );
+
+    // Performs a safe conversion of an std::filesystem::path instance to a string. See the implementation for details.
+    std::string fsPathToString( const std::filesystem::path & path );
 
     tm GetTM( const time_t time );
 }
-
-#endif

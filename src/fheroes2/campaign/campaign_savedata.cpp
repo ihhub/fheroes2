@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,10 +23,14 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <memory>
+#include <map>
+#include <utility>
 
 #include "army.h"
 #include "campaign_data.h"
+#include "difficulty.h"
+#include "game_io.h"
+#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -100,6 +104,7 @@ namespace Campaign
         _currentScenarioBonusId = -1;
         _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
+        _minDifficulty = CampaignDifficulty::Normal;
     }
 
     void CampaignSaveData::setCarryOverTroops( const Troops & troops )
@@ -119,7 +124,7 @@ namespace Campaign
 
     uint32_t CampaignSaveData::getCampaignDifficultyPercent() const
     {
-        switch ( _difficulty ) {
+        switch ( _minDifficulty ) {
         case CampaignDifficulty::Easy:
             return 125;
         case CampaignDifficulty::Normal:
@@ -156,21 +161,32 @@ namespace Campaign
         return obtainedAwards;
     }
 
-    StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
+    OStreamBase & operator<<( OStreamBase & stream, const CampaignSaveData & data )
     {
-        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
-                   << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
+        return stream << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
+                      << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty
+                      << data._minDifficulty;
     }
 
-    StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
+    IStreamBase & operator>>( IStreamBase & stream, CampaignSaveData & data )
     {
-        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonusId >> data._finishedMaps
+        stream >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonusId >> data._finishedMaps
             >> data._bonusesForFinishedMaps;
 
         // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
         data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
 
-        return msg >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1108_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1108_RELEASE ) {
+            data._minDifficulty = data._difficulty;
+        }
+        else {
+            stream >> data._minDifficulty;
+        }
+
+        return stream;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
@@ -201,5 +217,34 @@ namespace Campaign
         }
 
         return ScenarioLossCondition::STANDARD;
+    }
+
+    std::optional<int> getCurrentScenarioDifficultyLevel()
+    {
+        static const std::map<std::pair<int, int>, int> adjustedDifficultyLevels = { // Roland
+                                                                                     { { ROLAND_CAMPAIGN, 1 }, Difficulty::EASY },
+                                                                                     // Archibald
+                                                                                     { { ARCHIBALD_CAMPAIGN, 1 }, Difficulty::EASY },
+                                                                                     // Descendants
+                                                                                     { { DESCENDANTS_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     { { DESCENDANTS_CAMPAIGN, 5 }, Difficulty::HARD },
+                                                                                     // Wizard's Isle
+                                                                                     { { WIZARDS_ISLE_CAMPAIGN, 3 }, Difficulty::HARD },
+                                                                                     // Voyage Home
+                                                                                     { { VOYAGE_HOME_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     // Price of Loyalty
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 5 }, Difficulty::HARD },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 6 }, Difficulty::HARD },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 7 }, Difficulty::EXPERT } };
+
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const auto iter = adjustedDifficultyLevels.find( { campaignData.getCampaignID(), campaignData.getCurrentScenarioID() } );
+        if ( iter == adjustedDifficultyLevels.end() ) {
+            return {};
+        }
+
+        return iter->second;
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,6 +60,8 @@ namespace
         case MP2::OBJ_DUNE:
         case MP2::OBJ_LAVAPOOL:
         case MP2::OBJ_SHRUB:
+        case MP2::OBJ_SWAMPY_LAKE:
+        case MP2::OBJ_FROZEN_LAKE:
             return false;
         default:
             break;
@@ -482,6 +484,14 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
         return _( "Water Summoning Altar" );
+    case OBJ_SWAMPY_LAKE:
+        return _( "Swampy Lake" );
+    case OBJ_FROZEN_LAKE:
+        return _( "Frozen Lake" );
+    case OBJ_NON_ACTION_BLACK_CAT:
+        return _( "Black Cat" );
+    case OBJ_NON_ACTION_BARREL:
+        return _( "Barrel" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -494,43 +504,40 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
 
 bool MP2::isDayLife( const MapObjectType objectType )
 {
-    // Only one object on Adventure Map restores every day and this is Magic Well.
+    // Only one object on the Adventure Map restores every day and this is Magic Well.
     return ( objectType == OBJ_MAGIC_WELL );
 }
 
 bool MP2::isWeekLife( const MapObjectType objectType )
 {
-    // TODO: list week object life
     switch ( objectType ) {
-    case OBJ_STABLES:
+    case OBJ_ARTESIAN_SPRING:
     case OBJ_MAGIC_GARDEN:
+    case OBJ_STABLES:
     case OBJ_WATER_WHEEL:
     case OBJ_WINDMILL:
-    case OBJ_ARTESIAN_SPRING:
-    // join army
-    case OBJ_WATCH_TOWER:
-    case OBJ_EXCAVATION:
-    case OBJ_CAVE:
-    case OBJ_TREE_HOUSE:
+    // Monster dwellings.
+    case OBJ_AIR_ALTAR:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_GOBLIN_HUT:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_GOBLIN_HUT:
     case OBJ_HALFLING_HOLE:
     case OBJ_PEASANT_HUT:
-    // recruit army
     case OBJ_RUINS:
     case OBJ_TREE_CITY:
-    case OBJ_WAGON_CAMP:
-    case OBJ_DESERT_TENT:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_BARROW_MOUNDS:
-    // battle and recruit army
-    case OBJ_DRAGON_CITY:
-    case OBJ_CITY_OF_DEAD:
+    case OBJ_TREE_HOUSE:
     case OBJ_TROLL_BRIDGE:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATCH_TOWER:
+    case OBJ_WATER_ALTAR:
     // for AI
     case OBJ_HERO:
         return true;
@@ -541,28 +548,25 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isMonthLife( const MapObjectType objectType )
-{
-    return objectType == MP2::OBJ_CASTLE;
-}
-
 bool MP2::isBattleLife( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    // luck modificators
-    case OBJ_IDOL:
-    case OBJ_FOUNTAIN:
+    // Luck modifiers.
     case OBJ_FAERIE_RING:
+    case OBJ_FOUNTAIN:
+    case OBJ_IDOL:
     case OBJ_PYRAMID:
-    // morale modificators
+    // Morale modifiers.
     case OBJ_BUOY:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_GRAVEYARD:
+    case OBJ_MERMAID:
     case OBJ_OASIS:
+    case OBJ_SHIPWRECK:
     case OBJ_TEMPLE:
     case OBJ_WATERING_HOLE:
-    case OBJ_GRAVEYARD:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_MERMAID:
+    // Morale and Luck modifiers.
+    case OBJ_BLACK_CAT:
         return true;
     default:
         break;
@@ -571,13 +575,13 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFromWater )
+bool MP2::isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
     if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
 bool MP2::isWaterActionObject( const MapObjectType objectType )
@@ -586,6 +590,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     // These are the types of objects that can be placed on water tiles by the original editor and,
     // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
     case OBJ_COAST:
@@ -612,10 +617,10 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
 
     // Here we would have to return false, but some map editors allow to place arbitrary objects
     // on water tiles, so we have to work with this.
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
-bool MP2::isActionObject( const MapObjectType objectType )
+bool MP2::isInGameActionObject( const MapObjectType objectType )
 {
     if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) != OBJ_ACTION_OBJECT_TYPE ) {
         // It is not an action object.
@@ -628,6 +633,11 @@ bool MP2::isActionObject( const MapObjectType objectType )
     }
 
     return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
+}
+
+bool MP2::isOffGameActionObject( const MapObjectType objectType )
+{
+    return ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE;
 }
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
@@ -648,6 +658,7 @@ bool MP2::isValuableResourceObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
+    case OBJ_BARREL:
     case OBJ_CAMPFIRE:
     case OBJ_DAEMON_CAVE:
     case OBJ_DERELICT_SHIP:
@@ -696,6 +707,7 @@ bool MP2::isPickupObject( const MapObjectType objectType )
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
@@ -763,7 +775,7 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
     // Action objects in general should be avoided for fog discovery purposes, because
     // they may be guarded or may require wasting resources
-    return !isActionObject( objectType );
+    return !isInGameActionObject( objectType );
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
@@ -792,12 +804,15 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BARRIER:
+    case OBJ_BLACK_CAT:
     case OBJ_BOAT:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
     case OBJ_CAMPFIRE:
     case OBJ_COAST:
+    case OBJ_EVENT:
     case OBJ_FLOTSAM:
     case OBJ_GENIE_LAMP:
     case OBJ_HERO:
@@ -813,9 +828,9 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_RANDOM_MONSTER_STRONG:
     case OBJ_RANDOM_MONSTER_VERY_STRONG:
     case OBJ_RANDOM_MONSTER_WEAK:
+    case OBJ_RANDOM_RESOURCE:
     case OBJ_RANDOM_TOWN:
     case OBJ_RANDOM_ULTIMATE_ARTIFACT:
-    case OBJ_RANDOM_RESOURCE:
     case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK_SURVIVOR:

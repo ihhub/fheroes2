@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,30 +35,27 @@ namespace
     // Ideally, we need to store only difference between before and after an action
     // but for simplification purposes we chose this way.
     // TODO: optimize this class (if possible) to store less data.
-    class MapAction : public fheroes2::Action
+    class MapAction final : public fheroes2::Action
     {
     public:
         explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
             : _mapFormat( mapFormat )
+            , _beforeMapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-            }
-
-            _beforeMapFormat = _mapFormat;
+            // Do nothing.
         }
+
+        // Disable the copy and move (implicitly) constructors and assignment operators.
+        MapAction( const MapAction & ) = delete;
+        MapAction & operator=( const MapAction & ) = delete;
+        ~MapAction() override = default;
 
         bool prepare()
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
-                assert( 0 );
-                return false;
-            }
-
             _afterMapFormat = _mapFormat;
+
+            _latestObjectUIDAfter = Maps::getLastObjectUID();
 
             return true;
         }
@@ -94,7 +91,7 @@ namespace
     private:
         Maps::Map_Format::MapFormat & _mapFormat;
 
-        Maps::Map_Format::MapFormat _beforeMapFormat;
+        const Maps::Map_Format::MapFormat _beforeMapFormat;
         Maps::Map_Format::MapFormat _afterMapFormat;
 
         const uint32_t _latestObjectUIDBefore{ 0 };
@@ -110,23 +107,17 @@ namespace fheroes2
         _action = std::make_unique<MapAction>( mapFormat );
     }
 
-    ActionCreator::~ActionCreator()
+    void ActionCreator::commit()
     {
         auto * action = dynamic_cast<MapAction *>( _action.get() );
         if ( action == nullptr ) {
-            // How is it even possible?
+            // How is it even possible? Did you call this method twice?
             assert( 0 );
             return;
         }
 
-        try {
-            if ( action->prepare() ) {
-                _manager.add( std::move( _action ) );
-            }
-        }
-        catch ( ... ) {
-            // If an exception happens here then something is very wrong with the code.
-            assert( 0 );
+        if ( action->prepare() ) {
+            _manager.add( std::move( _action ) );
         }
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_BOARD_H
-#define H2BATTLE_BOARD_H
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -33,26 +32,22 @@
 #include "battle_cell.h"
 #include "math_base.h"
 
-#define ARENAW 11
-#define ARENAH 9
-#define ARENASIZE ARENAW * ARENAH
-
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Battle
 {
     class Unit;
 
-    inline direction_t & operator++( direction_t & d )
+    inline CellDirection & operator++( CellDirection & d )
     {
-        return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );
+        return d = ( CENTER == d ? TOP_LEFT : CellDirection( d << 1 ) );
     }
-    inline direction_t & operator--( direction_t & d )
+    inline CellDirection & operator--( CellDirection & d )
     {
-        return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
+        return d = ( TOP_LEFT == d ? CENTER : CellDirection( d >> 1 ) );
     }
 
     using Indexes = std::vector<int32_t>;
@@ -60,6 +55,13 @@ namespace Battle
     class Board : public std::vector<Cell>
     {
     public:
+        // Width of the battlefield, measured in cells
+        static constexpr int widthInCells{ 11 };
+        // Height of the battlefield, measured in cells
+        static constexpr int heightInCells{ 9 };
+        // Total number of cells on the battlefield
+        static constexpr int sizeInCells{ widthInCells * heightInCells };
+
         Board();
         Board( const Board & ) = delete;
 
@@ -72,15 +74,24 @@ namespace Battle
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
 
-        void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
+        void SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();
 
-        static Cell * GetCell( const int32_t position, const int dir = CENTER );
+        static Cell * GetCell( const int32_t position );
+        static Cell * GetCell( const int32_t position, const int dir );
 
-        static bool isNearIndexes( const int32_t index1, const int32_t index2 );
-        static bool isValidIndex( const int32_t index );
+        static bool isNearIndexes( const int32_t index1, const int32_t index2 )
+        {
+            return ( index1 != index2 ) && ( GetDirection( index1, index2 ) != UNKNOWN );
+        }
+
+        static bool isValidIndex( const int32_t index )
+        {
+            return ( index >= 0 ) && ( index < sizeInCells );
+        }
+
         // Returns true if the given index is considered to be inside the castle from the point of view of castle defense,
         // otherwise returns false. Indexes of destructible walls are considered to be located inside the castle.
         static bool isCastleIndex( const int32_t index );
@@ -128,12 +139,7 @@ namespace Battle
         // to the given index
         static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
-        // Returns the indexes of the cells closest to the given unit occupied by enemies
-        static Indexes GetAdjacentEnemiesIndexes( const Unit & unit );
-
     private:
         void SetCobjObject( const int icn, const uint32_t dst );
     };
 }
-
-#endif

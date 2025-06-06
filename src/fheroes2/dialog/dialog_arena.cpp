@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -115,16 +115,16 @@ int Dialog::SelectSkillFromArena()
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( title.height( BOXAREA_WIDTH ) + textbox.height( BOXAREA_WIDTH ) + 2 * spacer + sprite.height() + 15, true );
+    const Dialog::FrameBox box( title.height( fheroes2::boxAreaWidthPx ) + textbox.height( fheroes2::boxAreaWidthPx ) + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
 
-    title.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
-    dst_pt.y += title.height( BOXAREA_WIDTH ) + spacer;
+    title.draw( dst_pt.x, dst_pt.y + 2, fheroes2::boxAreaWidthPx, display );
+    dst_pt.y += title.height( fheroes2::boxAreaWidthPx ) + spacer;
 
-    textbox.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
-    dst_pt.y += textbox.height( BOXAREA_WIDTH ) + spacer;
+    textbox.draw( dst_pt.x, dst_pt.y + 2, fheroes2::boxAreaWidthPx, display );
+    dst_pt.y += textbox.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     int res = Skill::Primary::ATTACK;
 
@@ -169,7 +169,7 @@ int Dialog::SelectSkillFromArena()
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
@@ -191,13 +191,13 @@ int Dialog::SelectSkillFromArena()
             res = Skill::Primary::POWER;
             redraw = true;
         }
-        else if ( le.MousePressRight( rect1 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect1 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::ATTACK, "" ).showPopup( Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rect2 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect2 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::DEFENSE, "" ).showPopup( Dialog::ZERO );
         }
-        else if ( le.MousePressRight( rect3 ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( rect3 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::POWER, "" ).showPopup( Dialog::ZERO );
         }
 

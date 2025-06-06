@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,33 +20,29 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_OBJECTS_H
-#define H2MAPS_OBJECTS_H
+
+#pragma once
 
 #include <cstdint>
+#include <initializer_list>
 #include <list>
 #include <string>
 #include <vector>
 
 #include "artifact.h"
+#include "color.h"
+#include "game_string.h"
 #include "position.h"
 #include "resource.h"
+#include "skill.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
-class MapObjectSimple : public MapPosition
+class MapBaseObject : public MapPosition
 {
 public:
-    explicit MapObjectSimple( int v = 0 )
-        : uid( 0 )
-        , type( v )
-    {}
-    ~MapObjectSimple() override = default;
-
-    int GetType() const
-    {
-        return type;
-    }
+    MapBaseObject() = default;
 
     uint32_t GetUID() const
     {
@@ -58,68 +54,110 @@ public:
         uid = v;
     }
 
-protected:
-    friend StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-    friend StreamBase & operator>>( StreamBase &, MapObjectSimple & );
+    void setUIDAndIndex( const int32_t mapIndex )
+    {
+        SetUID( mapIndex );
+        SetIndex( mapIndex );
+    }
 
-    uint32_t uid;
-    int type;
+protected:
+    friend OStreamBase & operator<<( OStreamBase & stream, const MapBaseObject & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj );
+
+    uint32_t uid{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-StreamBase & operator>>( StreamBase &, MapObjectSimple & );
-
-struct MapEvent : public MapObjectSimple
+struct MapEvent final : public MapBaseObject
 {
-    MapEvent();
+    MapEvent() = default;
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
-    bool isAllow( int color ) const;
-    void SetVisited( int color );
+    bool isAllow( const PlayerColor color ) const
+    {
+        return ( colors & color ) != 0;
+    }
+
+    void SetVisited()
+    {
+        if ( isSingleTimeEvent ) {
+            colors = 0;
+        }
+    }
 
     Funds resources;
     Artifact artifact;
-    bool computer;
-    bool cancel;
-    int colors;
+    bool isComputerPlayerAllowed{ false };
+    bool isSingleTimeEvent{ true };
+    PlayerColorsSet colors{ 0 };
     std::string message;
+
+    Skill::Secondary secondarySkill;
+    int32_t experience{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const MapEvent & );
-StreamBase & operator>>( StreamBase &, MapEvent & );
-
-using RiddleAnswers = std::list<std::string>;
-
-struct MapSphinx : public MapObjectSimple
+struct MapSphinx final : public MapBaseObject
 {
-    MapSphinx();
+    MapSphinx() = default;
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
-    bool AnswerCorrect( const std::string & answer );
-    void SetQuiet();
+    bool isCorrectAnswer( std::string answer );
+
+    void reset()
+    {
+        riddle = {};
+        answers = {};
+
+        valid = false;
+        artifact = Artifact::UNKNOWN;
+        resources.Reset();
+    }
+
+    void validate()
+    {
+        if ( artifact == Artifact::UNKNOWN && resources.GetValidItemsCount() == 0 ) {
+            // No reward so nothing to ask.
+            valid = false;
+            return;
+        }
+
+        if ( riddle.empty() || answers.empty() ) {
+            // No question or no answers then nothing to do.
+            valid = false;
+            return;
+        }
+
+        valid = true;
+    }
 
     Funds resources;
     Artifact artifact;
-    RiddleAnswers answers;
-    std::string message;
-    bool valid;
+    std::list<std::string> answers;
+    std::string riddle;
+    bool valid{ false };
+
+    // This is the behavior of the original game when each answer was cut only to 4 characters.
+    // This is not the case for new map format.
+    bool isTruncatedAnswer{ true };
 };
 
-StreamBase & operator<<( StreamBase &, const MapSphinx & );
-StreamBase & operator>>( StreamBase &, MapSphinx & );
-
-struct MapSign : public MapObjectSimple
+struct MapSign final : public MapBaseObject
 {
-    MapSign();
+    MapSign() = default;
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
-    std::string message;
+    void setDefaultMessage();
+
+    fheroes2::LocalizedString message;
 };
 
-StreamBase & operator<<( StreamBase &, const MapSign & );
-StreamBase & operator>>( StreamBase &, MapSign & );
+OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj );
 
-#endif
+OStreamBase & operator<<( OStreamBase & stream, const MapSphinx & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapSphinx & obj );
+
+OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj );
+IStreamBase & operator>>( IStreamBase & stream, MapSign & obj );

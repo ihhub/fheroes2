@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,20 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_game_settings.h"
+
 #include <cassert>
 #include <cstdint>
+#include <functional>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_audio.h"
-#include "dialog_game_settings.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "game_mainmenu_ui.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -43,6 +46,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_option_item.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -61,7 +65,7 @@ namespace
 
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
-    const fheroes2::Point optionOffset{ 36, 47 };
+    const fheroes2::Point optionOffset{ 20, 31 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -124,25 +128,18 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        fheroes2::StandardWindow background( 289, 272, true, display );
+
+        const fheroes2::Rect windowRoi = background.activeArea();
+
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const int dialogIcnId = isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG;
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
-        const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
 
-        const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
-
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
-        const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
-
-        fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
-        fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+        fheroes2::Button buttonOk;
+        const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 11 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
-
-        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -162,23 +159,15 @@ namespace
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
-        okayButton.draw();
-
-        display.render();
+        display.render( background.totalArea() );
 
         bool isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
-            }
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -200,26 +189,26 @@ namespace
                 return SelectedWindow::TextSupportMode;
             }
 
-            if ( le.MousePressRight( windowLanguageRoi ) ) {
+            if ( le.isMouseRightButtonPressedInArea( windowLanguageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Language" ), _( "Change the language of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowGraphicsRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowGraphicsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Graphics" ), _( "Change the graphics settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowAudioRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowAudioRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowHotKeyRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowHotKeyRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
-            else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
             }
-            else if ( le.MousePressRight( windowTextSupportModeRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowTextSupportModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
                                                    0 );
             }
-            else if ( le.MousePressRight( okayButton.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
@@ -243,6 +232,7 @@ namespace fheroes2
     void openGameSettings()
     {
         drawMainMenuScreen();
+        fheroes2::Display::instance().render();
 
         Settings & conf = Settings::Get();
 
@@ -258,7 +248,7 @@ namespace fheroes2
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+                    selectLanguage( supportedLanguages, getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
                 }
                 else {
                     assert( supportedLanguages.front() == SupportedLanguage::English );
@@ -273,11 +263,11 @@ namespace fheroes2
                 break;
             }
             case SelectedWindow::Graphics:
-                fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog( false );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::HotKeys:

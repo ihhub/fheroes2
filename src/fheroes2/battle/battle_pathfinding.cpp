@@ -51,7 +51,7 @@ namespace Battle
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::array<bool, ARENASIZE> boardStatus{};
+        std::array<bool, Board::sizeInCells> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
@@ -90,16 +90,13 @@ namespace Battle
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
 
-                const BattleNodeIndex newNodeIdx = { headCellIdx, tailCellIdx };
-                if ( newNodeIdx == _pathStart ) {
-                    continue;
+                if ( const auto [iter, inserted] = _cache.try_emplace( { headCellIdx, tailCellIdx } ); inserted ) {
+                    // Wide units can occupy overlapping positions, the distance between which is actually zero,
+                    // but since the movement takes place, we will consider the distance equal to 1 in this case
+                    const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
+
+                    iter->second.update( _pathStart, 1, distance );
                 }
-
-                // Wide units can occupy overlapping positions, the distance between which is actually zero,
-                // but since the movement takes place, we will consider the distance equal to 1 in this case
-                const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
-
-                _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
 
             return;
@@ -130,8 +127,7 @@ namespace Battle
         }();
 
         std::vector<BattleNodeIndex> nodesToExplore;
-
-        nodesToExplore.reserve( ARENASIZE * 2 );
+        nodesToExplore.reserve( Board::sizeInCells * 2 );
         nodesToExplore.push_back( _pathStart );
 
         for ( size_t nodesToExploreIdx = 0; nodesToExploreIdx < nodesToExplore.size(); ++nodesToExploreIdx ) {
@@ -175,9 +171,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -214,9 +208,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }

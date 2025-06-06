@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_castle.h"
+
 #include <array>
 #include <cassert>
 #include <string>
@@ -33,7 +35,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "ui_castle.h"
 #include "ui_text.h"
 
 namespace
@@ -57,20 +58,20 @@ namespace
         return output;
     }
 
-    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const int playerColor )
+    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const PlayerColor playerColor )
     {
         switch ( playerColor ) {
-        case Color::BLUE:
+        case PlayerColor::BLUE:
             return getModifiedPalette( inputStartId, inputLength, 63, 16 + 6 );
-        case Color::GREEN:
+        case PlayerColor::GREEN:
             return getModifiedPalette( inputStartId, inputLength, 85, 16 + 7 );
-        case Color::RED:
+        case PlayerColor::RED:
             return getModifiedPalette( inputStartId, inputLength, 175, 16 + 7 );
-        case Color::YELLOW:
+        case PlayerColor::YELLOW:
             return getModifiedPalette( inputStartId, inputLength, 108, 16 + 7 );
-        case Color::ORANGE:
+        case PlayerColor::ORANGE:
             return getModifiedPalette( inputStartId, inputLength, 199, 16 );
-        case Color::PURPLE:
+        case PlayerColor::PURPLE:
             return getModifiedPalette( inputStartId, inputLength, 132, 16 + 5 );
         default:
             // Did you add a new color? Please add the logic above.
@@ -132,7 +133,7 @@ namespace
         return {};
     }
 
-    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const int32_t colorId )
+    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const PlayerColor colorId )
     {
         const std::vector<fheroes2::Rect> regions = getColorEffectiveAreas( icnId, icnIndex );
         const std::vector<uint8_t> palette = getModifiedPaletteByPlayerColor( originalCastleFlagStartColorId, originalCastleFlagColorLength, colorId );
@@ -166,44 +167,72 @@ namespace
 
 namespace fheroes2
 {
-    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset )
+    uint32_t getCastleIcnIndex( const int race, const bool isCastle )
     {
-        uint32_t icnIndex = 1;
-
-        switch ( castle.GetRace() ) {
+        switch ( race ) {
         case Race::KNGT:
-            icnIndex = castle.isCastle() ? 9 : 15;
-            break;
+            return isCastle ? 9 : 15;
         case Race::BARB:
-            icnIndex = castle.isCastle() ? 10 : 16;
-            break;
+            return isCastle ? 10 : 16;
         case Race::SORC:
-            icnIndex = castle.isCastle() ? 11 : 17;
-            break;
+            return isCastle ? 11 : 17;
         case Race::WRLK:
-            icnIndex = castle.isCastle() ? 12 : 18;
-            break;
+            return isCastle ? 12 : 18;
         case Race::WZRD:
-            icnIndex = castle.isCastle() ? 13 : 19;
-            break;
+            return isCastle ? 13 : 19;
         case Race::NECR:
-            icnIndex = castle.isCastle() ? 14 : 20;
-            break;
+            return isCastle ? 14 : 20;
+        case Race::RAND:
+            // It is used in Editor to select random castle as a victory/loss special condition.
+            return isCastle ? 25 : 26;
         default:
             assert( 0 );
             DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
         }
 
-        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
-        fheroes2::Blit( castleImage, output, offset.x, offset.y );
+        return 1;
+    }
+
+    uint32_t getCastleLeftFlagIcnIndex( const PlayerColor color )
+    {
+        switch ( color ) {
+        case PlayerColor::BLUE:
+            return 0;
+        case PlayerColor::GREEN:
+            return 2;
+        case PlayerColor::RED:
+            return 4;
+        case PlayerColor::YELLOW:
+            return 6;
+        case PlayerColor::ORANGE:
+            return 8;
+        case PlayerColor::PURPLE:
+            return 10;
+        case PlayerColor::NONE:
+            return 12;
+        default:
+            // Have you added a new player color? Update the logic above.
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
+    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset )
+    {
+        const uint32_t icnIndex = getCastleIcnIndex( castle.GetRace(), castle.isCastle() );
+
+        const Sprite & castleImage = AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
+        Copy( castleImage, 0, 0, output, offset.x, offset.y, castleImage.width(), castleImage.height() );
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
-        case NOT_TODAY:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
+        case BuildingStatus::NOT_TODAY:
+            Blit( AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;
-        case REQUIRES_BUILD:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
+        case BuildingStatus::REQUIRES_BUILD:
+            Blit( AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
         default:
             break;

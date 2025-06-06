@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -40,9 +41,11 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "monster.h"
+#include "pal.h"
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
@@ -59,63 +62,74 @@ namespace
         assert( overallCount > 0 );
 
         if ( overallCount == 1 ) {
-            // prevent cross-army split if we lose the last unit in the hero army
+            // Prevent units from moving between armies if this would result in no units remaining in the hero's army
             if ( saveLastTroop ) {
                 return;
             }
 
-            // it seems that we are just moving a single unit to a free cell
+            // It seems that we are just moving a single unit to an empty slot
             assert( !troopTarget.isValid() );
 
             Army::SwapTroops( troopFrom, troopTarget );
         }
         else if ( !troopTarget.isValid() && troopFrom.GetCount() == 2 ) {
-            // a player splits a slot with two monsters into an empty slot; move one monster into the source slot to the target slot.
+            // Player splits a slot with two monsters into an empty slot; move one monster from the source slot to the target slot
             troopFrom.SetCount( 1 );
             troopTarget.Set( troopFrom.GetMonster(), 1 );
         }
         else if ( isSameTroopType && troopFrom.isValid() && troopFrom.GetCount() == 1 && troopTarget.isValid() && troopTarget.GetCount() == 1 ) {
-            // a player splits the same troop type and both count one; move a monster from the source slot to the target slot.
+            // Prevent units from moving between armies if this would result in no units remaining in the hero's army
+            if ( saveLastTroop ) {
+                return;
+            }
+
+            // Player splits a slot with just one monster into a slot with just one monster of the same type; add a monster from the source slot to the target slot
             troopFrom.Reset();
             troopTarget.SetCount( 2 );
         }
         else {
-            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
-
-            if ( isSameTroopType )
+            int32_t freeSlots = static_cast<int32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
+            if ( isSameTroopType ) {
                 ++freeSlots;
+            }
 
-            const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
-            uint32_t redistributeCount = isSameTroopType ? 1 : troopFrom.GetCount() / 2;
+            const int32_t maxCount = static_cast<int32_t>( saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount() );
+            int32_t redistributeCount = isSameTroopType ? std::min( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
-            const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > overallCount ? overallCount : freeSlots ), maxCount, redistributeCount, useFastSplit );
+            const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),
+                                                          maxCount, redistributeCount, useFastSplit, troopFrom.GetName() );
 
-            if ( slots < 2 || slots > 6 )
+            if ( slots < 2 || slots > 6 ) {
                 return;
+            }
 
             uint32_t totalSplitTroopCount = troopFrom.GetCount();
 
             if ( !useFastSplit && slots == 2 ) {
-                // this logic is used when splitting to a stack with the same unit
-                if ( isSameTroopType )
-                    troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
-                else
-                    troopTarget.Set( troopFrom, redistributeCount );
+                // This logic is used when splitting to a stack with the same unit
+                if ( isSameTroopType ) {
+                    troopTarget.SetCount( troopTarget.GetCount() + static_cast<uint32_t>( redistributeCount ) );
+                }
+                else {
+                    troopTarget.Set( troopFrom, static_cast<uint32_t>( redistributeCount ) );
+                }
 
-                troopFrom.SetCount( totalSplitTroopCount - redistributeCount );
+                troopFrom.SetCount( totalSplitTroopCount - static_cast<uint32_t>( redistributeCount ) );
             }
             else {
-                if ( isSameTroopType )
+                if ( isSameTroopType ) {
                     totalSplitTroopCount += troopTarget.GetCount();
+                }
 
                 const uint32_t troopFromSplitCount = ( totalSplitTroopCount + slots - 1 ) / slots;
                 troopFrom.SetCount( troopFromSplitCount );
 
                 const uint32_t troopTargetSplitCount = ( totalSplitTroopCount + slots - 2 ) / slots;
 
-                if ( !isSameTroopType )
+                if ( !isSameTroopType ) {
                     troopTarget.SetMonster( troopFrom.GetID() );
+                }
 
                 troopTarget.SetCount( troopTargetSplitCount );
 
@@ -172,13 +186,12 @@ namespace
     }
 }
 
-ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
+ArmyBar::ArmyBar( Army * ptr, const bool miniSprites, const bool readOnly, const bool isEditMode /* false */, const bool saveLastTroop /* true */ )
     : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
-    , _army( nullptr )
-    , use_mini_sprite( mini )
-    , read_only( ro )
-    , can_change( change )
-    , _troopWindowOffsetY( 0 )
+    , use_mini_sprite( miniSprites )
+    , read_only( readOnly )
+    , can_change( isEditMode )
+    , _saveLastTroop( saveLastTroop )
 {
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
@@ -224,6 +237,7 @@ void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor 
 
     setSingleItemSize( sz );
 
+    backsf._disableTransformLayer();
     backsf.resize( sz.width, sz.height );
     backsf.fill( fillColor );
 
@@ -236,10 +250,22 @@ void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor 
 
 void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
-    if ( use_mini_sprite )
-        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
-    else
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), dstsf, pos.x, pos.y );
+    if ( use_mini_sprite ) {
+        fheroes2::Copy( backsf, 0, 0, dstsf, pos );
+    }
+    else {
+        if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
+            // If none of army's slot is set within the Editor, then a default army will be applied at the game start.
+            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+            const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
+            text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );
+        }
+        else {
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
+        }
+    }
 }
 
 void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
@@ -343,7 +369,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    bool save_last_troop = ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
+    const bool saveLastTroop = _saveLastTroop && ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
@@ -351,15 +377,17 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
             StringReplaceWithLowercase( msg, "%{name}", destTroop.GetName() );
             StringReplaceWithLowercase( msg, "%{name2}", selectedTroop.GetName() );
         }
-        else if ( save_last_troop )
+        else if ( saveLastTroop ) {
             msg = _( "Cannot move last troop" );
+        }
         else {
             msg = _( "Combine %{name} armies" );
             StringReplaceWithLowercase( msg, "%{name}", destTroop.GetName() );
         }
     }
-    else if ( save_last_troop )
+    else if ( saveLastTroop ) {
         msg = _( "Cannot move last troop" );
+    }
     else {
         if ( selectedTroop.GetCount() == 1 ) {
             msg = _( "Move the %{name}" );
@@ -454,10 +482,15 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
-                uint32_t count = 1;
+                std::string str = _( "Set %{monster} Count" );
+                StringReplace( str, "%{monster}", mons.GetName() );
 
-                if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
-                    troop.Set( mons, count );
+                int32_t count = 1;
+                const fheroes2::MonsterDialogElement monsUi{ mons };
+
+                if ( Dialog::SelectCount( std::move( str ), 1, 500000, count, 1, &monsUi ) ) {
+                    troop.Set( mons, static_cast<uint32_t>( count ) );
+                }
             }
         }
 
@@ -491,7 +524,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
         }
         // destination troop has units and both troops are the same creature type
         else {
-            if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
+            if ( _saveLastTroop && selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
                 // move all but one units to destination
                 destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
                 // leave a single unit behind
@@ -507,7 +540,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     }
     else {
         // destination troop is empty, source army would be emptied by moving all
-        if ( selectedTroop.GetArmy()->SaveLastTroop() ) {
+        if ( _saveLastTroop && selectedTroop.GetArmy()->SaveLastTroop() ) {
             // move all but one units into the empty destination slot
             destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
             selectedTroop.SetCount( 1 );
@@ -535,7 +568,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
         int flags = Dialog::BUTTONS;
 
         if ( !read_only ) {
-            if ( !_army->SaveLastTroop() ) {
+            if ( !_saveLastTroop || !_army->SaveLastTroop() ) {
                 flags |= Dialog::DISMISS;
             }
 
@@ -581,7 +614,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         return true;
     }
 
-    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().GetMousePressLeft() );
+    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().getMouseLeftButtonPressedPos() );
     if ( srcTroop == nullptr || !srcTroop->isValid() ) {
         return true;
     }
@@ -636,7 +669,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
     if ( troop.isValid() ) {
         ResetSelected();
 
-        if ( can_change && !_army->SaveLastTroop() ) {
+        if ( can_change && ( !_saveLastTroop || !_army->SaveLastTroop() ) ) {
             troop.Reset();
         }
         else {

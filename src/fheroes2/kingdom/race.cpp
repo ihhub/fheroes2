@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,6 +126,27 @@ bool Race::isMagicalRace( const int race )
     return false;
 }
 
+bool Race::isEvilRace( const int race )
+{
+    switch ( race ) {
+    case BARB:
+    case WRLK:
+    case NECR:
+        return true;
+    case KNGT:
+    case SORC:
+    case WZRD:
+    case MULT:
+    case RAND:
+        return false;
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return false;
+}
+
 uint8_t Race::IndexToRace( const int index )
 {
     switch ( index ) {
@@ -149,5 +170,83 @@ uint8_t Race::IndexToRace( const int index )
         break;
     }
 
+    return Race::NONE;
+}
+
+uint32_t Race::getRaceIcnIndex( const int race, const bool isActivePlayer )
+{
+    switch ( race ) {
+    case Race::KNGT:
+        return isActivePlayer ? 51 : 70;
+    case Race::BARB:
+        return isActivePlayer ? 52 : 71;
+    case Race::SORC:
+        return isActivePlayer ? 53 : 72;
+    case Race::WRLK:
+        return isActivePlayer ? 54 : 73;
+    case Race::WZRD:
+        return isActivePlayer ? 55 : 74;
+    case Race::NECR:
+        return isActivePlayer ? 56 : 75;
+    case Race::MULT:
+        return isActivePlayer ? 57 : 76;
+    case Race::RAND:
+        return 58;
+    default:
+        // Did you add a new race? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return 58;
+}
+
+int Race::getNextRace( const int race )
+{
+    switch ( race ) {
+    case Race::KNGT:
+        return Race::BARB;
+    case Race::BARB:
+        return Race::SORC;
+    case Race::SORC:
+        return Race::WRLK;
+    case Race::WRLK:
+        return Race::WZRD;
+    case Race::WZRD:
+        return Race::NECR;
+    case Race::NECR:
+        return Race::RAND;
+    case Race::RAND:
+        return Race::KNGT;
+    default:
+        // Did you add a new race? Add the logic above
+        assert( 0 );
+        break;
+    }
+    return Race::NONE;
+}
+
+int Race::getPreviousRace( const int race )
+{
+    switch ( race ) {
+    case Race::KNGT:
+        return Race::RAND;
+    case Race::BARB:
+        return Race::KNGT;
+    case Race::SORC:
+        return Race::BARB;
+    case Race::WRLK:
+        return Race::SORC;
+    case Race::WZRD:
+        return Race::WRLK;
+    case Race::NECR:
+        return Race::WZRD;
+    case Race::RAND:
+        return Race::NECR;
+    default:
+        // Did you add a new race? Add the logic above
+        assert( 0 );
+        break;
+    }
     return Race::NONE;
 }

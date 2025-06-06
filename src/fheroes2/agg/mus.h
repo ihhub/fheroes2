@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MUS_H
-#define H2MUS_H
+#pragma once
 
 #include <string>
 
@@ -80,19 +79,17 @@ namespace MUS
         UNKNOWN
     };
 
-    enum class EXTERNAL_MUSIC_TYPE : int
+    enum class ExternalMusicNamingScheme : int
     {
         MAPPED,
         DOS_VERSION,
         WIN_VERSION
     };
 
-    std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension );
+    std::string getFileName( const int musicTrackId, const ExternalMusicNamingScheme namingScheme, const char * fileExtension );
 
     int FromGround( const int groundType );
     int FromRace( const int race );
 
     int GetBattleRandom();
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,7 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -59,53 +59,56 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
                          fheroes2::FontType::smallWhite() };
 
     const int spacer = 10;
-    FrameBox box( headerText.height( BOXAREA_WIDTH ) + spacer + messageText.height( BOXAREA_WIDTH ) + spacer + sprite_expr.height() + 2 + text.height(), true );
-
-    fheroes2::Point pt;
+    const FrameBox box( headerText.height( fheroes2::boxAreaWidthPx ) + spacer + messageText.height( fheroes2::boxAreaWidthPx ) + spacer + sprite_expr.height() + 2
+                            + text.height(),
+                        true );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
     const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).height();
-    fheroes2::Button button_yes( pt.x, pt.y, buttonYesIcnID, 0, 1 );
+    const fheroes2::Sprite & buttonYesSprite = fheroes2::AGG::GetICN( buttonYesIcnID, 0 );
 
-    pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).height();
-    fheroes2::Button button_no( pt.x, pt.y, buttonNoIcnID, 0, 1 );
+    const int32_t buttonsYPosition = box.GetArea().y + box.GetArea().height - buttonYesSprite.height();
+    const int32_t buttonYesXPosition = box.GetArea().x + box.GetArea().width / 2 - buttonYesSprite.width() - 20;
+
+    fheroes2::Button buttonYes( buttonYesXPosition, buttonsYPosition, buttonYesIcnID, 0, 1 );
+
+    const int32_t buttonNoXPosition = box.GetArea().x + box.GetArea().width / 2 + 20;
+
+    fheroes2::Button buttonNo( buttonNoXPosition, buttonsYPosition, buttonNoIcnID, 0, 1 );
 
     fheroes2::Rect pos = box.GetArea();
 
     if ( !header.empty() ) {
-        headerText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+        headerText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
     }
 
-    pos.y += headerText.height( BOXAREA_WIDTH ) + spacer;
+    pos.y += headerText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     if ( !message.empty() ) {
-        messageText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+        messageText.draw( pos.x, pos.y + 2, fheroes2::boxAreaWidthPx, display );
     }
 
-    pos.y += messageText.height( BOXAREA_WIDTH ) + spacer;
+    pos.y += messageText.height( fheroes2::boxAreaWidthPx ) + spacer;
 
     pos.y += sprite_expr.height();
     // sprite1
-    pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_gold.width() - 30;
+    pos.x = buttonYesXPosition + ( ( buttonYesSprite.width() - sprite_gold.width() ) / 2 );
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
     text.draw( pos.x + sprite_gold.width() / 2 - text.width() / 2, pos.y + 4, display );
 
     // sprite2
-    pos.x = box.GetArea().x + box.GetArea().width / 2 + 30;
+    pos.x = buttonNoXPosition + ( ( fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).width() - sprite_expr.width() ) / 2 );
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
     text.set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
               fheroes2::FontType::smallWhite() );
     text.draw( pos.x + sprite_expr.width() / 2 - text.width() / 2, pos.y + 4, display );
 
-    button_yes.draw();
-    button_no.draw();
+    buttonYes.draw();
+    buttonNo.draw();
 
     display.render();
     LocalEvent & le = LocalEvent::Get();
@@ -113,14 +116,14 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button_yes.area() ) ? button_yes.drawOnPress() : button_yes.drawOnRelease();
-        le.MousePressLeft( button_no.area() ) ? button_no.drawOnPress() : button_no.drawOnRelease();
+        buttonYes.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonYes.area() ) );
+        buttonNo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNo.area() ) );
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button_yes.area() ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonYes.area() ) ) {
             result = true;
             break;
         }
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( button_no.area() ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonNo.area() ) ) {
             result = false;
             break;
         }

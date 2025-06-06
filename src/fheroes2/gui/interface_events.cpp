@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,8 +24,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact.h"
@@ -38,7 +40,7 @@
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
@@ -57,6 +59,7 @@
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "mus.h"
+#include "players.h"
 #include "puzzle.h"
 #include "route.h"
 #include "screen.h"
@@ -67,7 +70,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -89,7 +91,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
         _gameArea.SetRedraw();
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
@@ -106,7 +108,7 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
     }
 
     const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
-    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+    const Maps::Tile & tile = world.getTile( dstIndex );
 
     if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
         return;
@@ -126,6 +128,16 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
     // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
     // when double click is faster than this delay and the second click will also be handled which should not happen.
     Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
+}
+
+void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
+{
+    Heroes * selectedHero = world.getTile( tileIndex ).getHero();
+    if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
+        return;
+    }
+    SetFocus( selectedHero, false );
+    RedrawFocus();
 }
 
 void Interface::AdventureMap::EventNextHero()
@@ -168,14 +180,17 @@ void Interface::AdventureMap::EventNextHero()
 
 fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 {
-    Heroes * hero = GetFocusHeroes();
-
-    if ( hero ) {
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
             _startHeroMove( *hero );
         }
-        else if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+        else if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
+        }
+        else if ( hero->GetPath().isValidForMovement() ) {
+            fheroes2::showStandardTextMessage( "Hero Movement Points",
+                                               "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn.",
+                                               Dialog::OK );
         }
     }
 
@@ -199,7 +214,7 @@ void Interface::AdventureMap::EventKingdomInfo() const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
 
-    iconsPanel.SetRedraw();
+    _iconsPanel.setRedraw();
 }
 
 void Interface::AdventureMap::EventCastSpell()
@@ -213,15 +228,17 @@ void Interface::AdventureMap::EventCastSpell()
     _gameArea.SetCenter( hero->GetCenter() );
     redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
-    if ( spell.isValid() ) {
-        hero->ActionSpellCast( spell );
-
-        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
-        // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES, true );
-        RedrawFocus();
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, {} );
+    if ( !spell.isValid() ) {
+        return;
     }
+
+    hero->ActionSpellCast( spell );
+
+    // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+    // hero to another location, so we may have to update the terrain music theme and environment sounds
+    ResetFocus( GameFocus::HEROES, true );
+    RedrawFocus();
 }
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
@@ -394,7 +411,7 @@ void Interface::AdventureMap::EventSwitchHeroSleeping()
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
 
         setRedraw( REDRAW_HEROES );
-        buttonsArea.SetRedraw();
+        _buttonsPanel.setRedraw();
     }
 }
 
@@ -425,7 +442,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
     // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
     const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
-    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+    if ( world.getTile( hero->GetIndex() ).isSuitableForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
@@ -451,8 +468,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             StringReplace( msg, "%{artifact}", ultimate.GetName() );
 
             const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+            fheroes2::showStandardTextMessage( _( "Congratulations!" ), std::move( msg ), Dialog::OK, { &artifactUI } );
         }
         else {
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
@@ -472,10 +488,8 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
 
 fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 {
-    Heroes * hero = GetFocusHeroes();
-
-    if ( hero ) {
-        if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
+        if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
@@ -492,8 +506,8 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
             }
         }
     }
-    else if ( GetFocusCastle() ) {
-        Game::OpenCastleDialog( *GetFocusCastle() );
+    else if ( Castle * castle = GetFocusCastle(); castle ) {
+        Game::OpenCastleDialog( *castle );
     }
 
     return fheroes2::GameMode::CANCEL;
@@ -501,10 +515,12 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 
 void Interface::AdventureMap::EventOpenFocus() const
 {
-    if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
-    else if ( GetFocusCastle() )
-        Game::OpenCastleDialog( *GetFocusCastle() );
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
+        Game::OpenHeroesDialog( *hero, true, true );
+    }
+    else if ( Castle * castle = GetFocusCastle(); castle ) {
+        Game::OpenCastleDialog( *castle );
+    }
 }
 
 void Interface::AdventureMap::EventSwitchShowRadar() const
@@ -534,7 +550,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
         }
         else {
             conf.SetShowButtons( true );
-            buttonsArea.SetRedraw();
+            _buttonsPanel.setRedraw();
         }
     }
 }
@@ -550,7 +566,7 @@ void Interface::AdventureMap::EventSwitchShowStatus() const
         }
         else {
             conf.SetShowStatus( true );
-            _statusWindow.SetRedraw();
+            _statusPanel.setRedraw();
         }
     }
 }
@@ -566,7 +582,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetRedraw();
+            _iconsPanel.setRedraw();
         }
     }
 }
@@ -581,45 +597,48 @@ void Interface::AdventureMap::EventSwitchShowControlPanel() const
     }
 }
 
-void Interface::AdventureMap::EventKeyArrowPress( int dir )
+void Interface::AdventureMap::EventKeyArrowPress( const int dir )
 {
-    Heroes * hero = GetFocusHeroes();
-
-    // move hero
-    if ( hero )
+    if ( Heroes * hero = GetFocusHeroes(); hero ) {
         MoveHeroFromArrowKeys( *hero, dir );
-    else
-        // scroll map
-        switch ( dir ) {
-        case Direction::TOP_LEFT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::TOP:
-            _gameArea.SetScroll( SCROLL_TOP );
-            break;
-        case Direction::TOP_RIGHT:
-            _gameArea.SetScroll( SCROLL_TOP );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::RIGHT:
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM_RIGHT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_RIGHT );
-            break;
-        case Direction::BOTTOM:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            break;
-        case Direction::BOTTOM_LEFT:
-            _gameArea.SetScroll( SCROLL_BOTTOM );
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        case Direction::LEFT:
-            _gameArea.SetScroll( SCROLL_LEFT );
-            break;
-        default:
-            break;
-        }
+
+        return;
+    }
+
+    if ( _gameArea.isDragScroll() ) {
+        return;
+    }
+
+    switch ( dir ) {
+    case Direction::TOP_LEFT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::TOP:
+        _gameArea.SetScroll( SCROLL_TOP );
+        break;
+    case Direction::TOP_RIGHT:
+        _gameArea.SetScroll( SCROLL_TOP );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::RIGHT:
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM_RIGHT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_RIGHT );
+        break;
+    case Direction::BOTTOM:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        break;
+    case Direction::BOTTOM_LEFT:
+        _gameArea.SetScroll( SCROLL_BOTTOM );
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    case Direction::LEFT:
+        _gameArea.SetScroll( SCROLL_LEFT );
+        break;
+    default:
+        break;
+    }
 }

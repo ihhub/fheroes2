@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "game_delays.h"
+#include "game_video_type.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -48,11 +49,9 @@ namespace
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
-        Mixer::setVolume( -1, 100 * Settings::Get().SoundVolume() / 10 );
-
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
-                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), -1, false );
+                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), false );
             }
         }
     }
@@ -68,7 +67,7 @@ namespace Video
 
                 if ( System::IsDirectory( fullDirPath ) ) {
                     ListFiles videoFiles;
-                    videoFiles.FindFileInDir( fullDirPath, fileName, false );
+                    videoFiles.FindFileInDir( fullDirPath, fileName );
                     if ( videoFiles.empty() ) {
                         continue;
                     }
@@ -123,7 +122,7 @@ namespace Video
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         // Hide mouse cursor.
-        const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+        const CursorRestorer cursorRestorer( false );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
@@ -165,7 +164,7 @@ namespace Video
                 break;
             }
 
-            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 Mixer::Stop();
                 break;
             }

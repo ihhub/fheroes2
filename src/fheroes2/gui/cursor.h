@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,12 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2CURSOR_H
-#define H2CURSOR_H
 
+#pragma once
+
+#include <cassert>
 #include <cstdint>
 
 #include "math_base.h"
+#include "screen.h"
 
 namespace fheroes2
 {
@@ -185,8 +187,13 @@ public:
     static int WithoutDistanceThemes( const int theme );
     static void Refresh();
 
-    int Themes() const;
-    bool SetThemes( int name, bool force = false );
+    int Themes() const
+    {
+        assert( _theme <= CURSOR_HERO_BOAT_ACTION_8 );
+        return _theme;
+    }
+
+    void SetThemes( const int theme, const bool force = false );
 
     void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
 
@@ -200,24 +207,27 @@ public:
     }
 
 private:
-    Cursor();
+    Cursor() = default;
     ~Cursor() = default;
 
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 
-    int theme;
+    int _theme{ Cursor::CursorType::NONE };
 
     fheroes2::Point _offset;
 
-    bool _monochromeCursorThemes;
+    bool _monochromeCursorThemes{ false };
 };
 
 class CursorRestorer
 {
 public:
-    CursorRestorer();
-    CursorRestorer( const bool visible, const int theme ); // For convenience, also sets visibility and theme of the cursor
+    CursorRestorer() = default;
+    // Use only to hide a cursor. Previous cursor visibility and theme will be restored when this object is destroyed.
+    explicit CursorRestorer( const bool visible );
+    // Use to set cursor visibility and theme of the cursor. Previous cursor visibility and theme will be restored when this object is destroyed.
+    CursorRestorer( const bool visible, const int theme );
     CursorRestorer( const CursorRestorer & ) = delete;
 
     ~CursorRestorer();
@@ -225,8 +235,6 @@ public:
     CursorRestorer & operator=( const CursorRestorer & ) = delete;
 
 private:
-    const int _theme;
-    const bool _visible;
+    const int _theme{ Cursor::Get().Themes() };
+    const bool _visible{ fheroes2::cursor().isVisible() };
 };
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ANIMATION_H
-#define H2BATTLE_ANIMATION_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -49,33 +48,35 @@ struct MonsterReturnAnim
     std::vector<int> end;
 };
 
-class AnimationSequence
+class AnimationSequence final
 {
 public:
     explicit AnimationSequence( const std::vector<int> & seq );
-    AnimationSequence( const AnimationSequence & ) = default;
+
+    AnimationSequence( const AnimationSequence & ) = delete;
+
+    ~AnimationSequence() = default;
 
     AnimationSequence & operator=( const AnimationSequence & ) = delete;
+
     AnimationSequence & operator=( const std::vector<int> & rhs );
 
-    virtual ~AnimationSequence();
-
     int playAnimation( bool loop = false );
-    virtual int restartAnimation();
+    int restartAnimation();
 
     int getFrame() const;
     int firstFrame() const;
     size_t animationLength() const;
-    virtual double movementProgress() const;
+    double movementProgress() const;
     bool isLastFrame() const;
-    virtual bool isValid() const;
+    bool isValid() const;
 
-    inline size_t getCurrentFrameId() const
+    size_t getCurrentFrameId() const
     {
         return _currentFrame;
     }
 
-protected:
+private:
     std::vector<int> _seq;
     size_t _currentFrame;
 };
@@ -83,10 +84,15 @@ protected:
 class AnimationReference
 {
 public:
-    AnimationReference();
     explicit AnimationReference( int id );
 
+    AnimationReference( const AnimationReference & ) = delete;
+    AnimationReference( AnimationReference && ) = default;
+
     virtual ~AnimationReference() = default;
+
+    AnimationReference & operator=( const AnimationReference & ) = delete;
+    AnimationReference & operator=( AnimationReference && ) = default;
 
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
@@ -120,11 +126,16 @@ protected:
     bool appendFrames( std::vector<int> & target, int animID );
 };
 
-class AnimationState : public AnimationReference
+class AnimationState final : public AnimationReference
 {
 public:
     explicit AnimationState( int monsterID );
+
+    AnimationState( const AnimationState & ) = delete;
+
     ~AnimationState() override = default;
+
+    AnimationState & operator=( const AnimationState & ) = delete;
 
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -146,4 +157,3 @@ private:
     int _animState;
     AnimationSequence _currentSequence;
 };
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,10 +20,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2KINGDOM_H
-#define H2KINGDOM_H
+
+#pragma once
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <list>
@@ -31,23 +32,28 @@
 
 #include "bitmodes.h"
 #include "castle.h"
-#include "gamedefs.h"
+#include "color.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "players.h"
 #include "puzzle.h"
 #include "resource.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 struct EventDate;
 
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
+
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Kingdom : public BitModes, public Control
@@ -55,7 +61,7 @@ class Kingdom : public BitModes, public Control
 public:
     enum
     {
-        // UNDEF      = 0x0001,
+        // UNUSED = 0x0001,
         IDENTIFYHERO = 0x0002,
         // UNUSED = 0x0004,
         KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
@@ -71,35 +77,44 @@ public:
         INCOME_ALL = 0xFF
     };
 
-    Kingdom();
+    Kingdom() = default;
+
+    Kingdom( const Kingdom & ) = delete;
+    Kingdom( Kingdom && ) = default;
+
     ~Kingdom() override = default;
 
-    void Init( int color );
+    Kingdom & operator=( const Kingdom & ) = delete;
+    Kingdom & operator=( Kingdom && ) = default;
+
+    void Init( const PlayerColor color );
     void clear();
 
     void openOverviewDialog();
 
     bool isPlay() const;
-    bool isLoss() const;
+
+    bool isLoss() const
+    {
+        return castles.empty() && heroes.empty();
+    }
+
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
-    // Return true if this kingdom can recruit heroes, false otherwise. For
-    // example this function will return false when kingdom has one town that
-    // cannot be upgraded to a castle.
+    // Returns true if this kingdom can recruit heroes, false otherwise. For example, this function returns false if there is only one town in the kingdom that cannot be
+    // upgraded to a castle.
     bool canRecruitHeroes() const
     {
-        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+        return std::any_of( castles.begin(), castles.end(),
+                            []( const Castle * castle ) { return ( castle->isCastle() || !castle->isBuildingDisabled( BUILD_CASTLE ) ); } );
     }
 
-    // Return true if this kingdom has any heroes, false otherwise.
+    // Returns true if this kingdom has any heroes, false otherwise.
     bool hasHeroes() const
     {
         return !heroes.empty();
     }
-
-    void SetLastBattleWinHero( const Heroes & hero );
-    Heroes * GetLastBattleWinHero() const;
 
     void appendSurrenderedHero( Heroes & hero );
 
@@ -108,13 +123,19 @@ public:
     Monster GetStrongestMonster() const;
 
     int GetControl() const override;
-    int GetColor() const;
+
+    PlayerColor GetColor() const
+    {
+        return _color;
+    }
+
     int GetRace() const;
 
     const Funds & GetFunds() const
     {
         return resource;
     }
+
     Funds GetIncome( int type = INCOME_ALL ) const;
 
     double GetArmiesStrength() const;
@@ -130,7 +151,12 @@ public:
     uint32_t GetCountCastle() const;
     uint32_t GetCountTown() const;
     uint32_t GetCountMarketplace() const;
-    uint32_t GetLostTownDays() const;
+
+    uint32_t GetLostTownDays() const
+    {
+        return lost_town_days;
+    }
+
     uint32_t GetCountNecromancyShrineBuild() const;
     uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
@@ -140,9 +166,13 @@ public:
     // Returns a reference to the pair of heroes available for recruitment,
     // updating it on the fly if necessary
     const Recruits & GetRecruits();
+
     // Returns a reference to the pair of heroes available for recruitment
     // without making any changes in it
-    Recruits & GetCurrentRecruits();
+    Recruits & GetCurrentRecruits()
+    {
+        return recruits;
+    }
 
     const VecHeroes & GetHeroes() const
     {
@@ -166,32 +196,34 @@ public:
     void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
-    void AddCastle( const Castle * );
+    void AddCastle( Castle * castle );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog );
 
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
-    bool isVisited( const Maps::Tiles & ) const;
+    bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+    bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
 
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;
 
     bool HeroesMayStillMove() const;
 
-    Puzzle & PuzzleMaps();
+    Puzzle & PuzzleMaps()
+    {
+        return puzzle_maps;
+    }
 
-    void SetVisitTravelersTent( int color );
-    bool IsVisitTravelersTent( int ) const;
+    void SetVisitTravelersTent( const int barrierColor );
+    bool IsVisitTravelersTent( const int barrierColor ) const;
 
     void LossPostActions();
 
@@ -202,16 +234,15 @@ public:
     static uint32_t GetMaxHeroes();
 
 private:
-    cost_t _getKingdomStartingResources( const int difficulty ) const;
+    Cost _getKingdomStartingResources( const int difficulty ) const;
 
-    friend StreamBase & operator<<( StreamBase &, const Kingdom & );
-    friend StreamBase & operator>>( StreamBase &, Kingdom & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom );
 
-    int color;
-    int _lastBattleWinHeroID;
+    PlayerColor _color{ 0 };
     Funds resource;
 
-    uint32_t lost_town_days;
+    uint32_t lost_town_days{ 0 };
 
     VecCastles castles;
     VecHeroes heroes;
@@ -221,11 +252,11 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    uint32_t visited_tents_colors;
+    int _visitedTentsColors{ 0 };
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topCastleInKingdomView;
-    int _topHeroInKingdomView;
+    int _topCastleInKingdomView{ -1 };
+    int _topHeroInKingdomView{ -1 };
 };
 
 class Kingdoms
@@ -240,33 +271,23 @@ public:
 
     void NewDay();
     void NewWeek();
-    void NewMonth();
 
-    Kingdom & GetKingdom( int color );
-    const Kingdom & GetKingdom( int color ) const;
+    Kingdom & GetKingdom( const PlayerColor color );
+    const Kingdom & GetKingdom( const PlayerColor color ) const;
 
-    int GetNotLossColors() const;
-    int FindWins( int ) const;
+    PlayerColorsSet GetNotLossColors() const;
+    PlayerColor FindWins( const uint32_t cond ) const;
 
-    void AddHeroes( const AllHeroes & );
-    void AddCastles( const AllCastles & );
+    void AddHeroes( const AllHeroes & heroes );
+    void AddCastles( const AllCastles & castles );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms
     std::set<Heroes *> resetRecruits();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
-    friend StreamBase & operator>>( StreamBase &, Kingdoms & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj );
+    friend IStreamBase & operator>>( IStreamBase & stream, Kingdoms & obj );
 
-    static constexpr uint32_t _size = KINGDOMMAX + 1;
-    Kingdom kingdoms[_size];
+    std::array<Kingdom, maxNumOfPlayers + 1> _kingdoms;
 };
-
-StreamBase & operator<<( StreamBase &, const Kingdom & );
-StreamBase & operator>>( StreamBase &, Kingdom & );
-
-StreamBase & operator<<( StreamBase &, const Kingdoms & );
-StreamBase & operator>>( StreamBase &, Kingdoms & );
-
-#endif

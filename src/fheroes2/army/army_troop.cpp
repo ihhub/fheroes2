@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,8 @@
 
 #include "army_troop.h"
 
+#include <cassert>
+
 #include "army.h"
 #include "color.h"
 #include "heroes_base.h"
@@ -30,111 +32,72 @@
 #include "serialize.h"
 #include "speed.h"
 
-Troop::Troop()
-    : Monster( Monster::UNKNOWN )
-    , count( 0 )
-{}
-
-Troop::Troop( const Monster & m, uint32_t c )
-    : Monster( m )
-    , count( c )
-{}
-
-bool Troop::operator==( const Monster & m ) const
-{
-    return Monster::operator==( m );
-}
-
-bool Troop::isMonster( int mons ) const
+bool Troop::isMonster( const int mons ) const
 {
     return GetID() == mons;
 }
 
-Monster Troop::GetMonster() const
+void Troop::Set( const Troop & troop )
 {
-    return Monster( id );
+    SetMonster( troop.GetMonster() );
+    SetCount( troop.GetCount() );
 }
 
-void Troop::Set( const Troop & t )
+void Troop::Set( const Monster & mons, const uint32_t count )
 {
-    SetMonster( t.GetMonster() );
-    SetCount( t.GetCount() );
+    Set( Troop( mons, count ) );
 }
 
-void Troop::Set( const Monster & m, uint32_t c )
+void Troop::SetMonster( const Monster & mons )
 {
-    Set( Troop( m, c ) );
-}
-
-void Troop::SetMonster( const Monster & m )
-{
-    id = m.GetID();
-}
-
-void Troop::SetCount( uint32_t c )
-{
-    count = c;
-}
-
-void Troop::Reset()
-{
-    id = Monster::UNKNOWN;
-    count = 0;
+    id = mons.GetID();
 }
 
 const char * Troop::GetName() const
 {
-    return Monster::GetPluralName( count );
-}
-
-uint32_t Troop::GetCount() const
-{
-    return count;
+    return Monster::GetPluralName( _count );
 }
 
 uint32_t Troop::GetHitPoints() const
 {
-    return Monster::GetHitPoints() * count;
+    return Monster::GetHitPoints() * _count;
 }
 
 uint32_t Troop::GetDamageMin() const
 {
-    return Monster::GetDamageMin() * count;
+    return Monster::GetDamageMin() * _count;
 }
 
 uint32_t Troop::GetDamageMax() const
 {
-    return Monster::GetDamageMax() * count;
+    return Monster::GetDamageMax() * _count;
 }
 
 double Troop::GetStrength() const
 {
-    return Monster::GetMonsterStrength() * count;
+    return Monster::GetMonsterStrength() * _count;
 }
 
-double Troop::GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const
+double Troop::GetStrengthWithBonus( const int bonusAttack, const int bonusDefense ) const
 {
-    return Monster::GetMonsterStrength( Monster::GetAttack() + bonusAttack, Monster::GetDefense() + bonusDefense ) * count;
+    assert( bonusAttack >= 0 && bonusDefense >= 0 );
+
+    return Monster::GetMonsterStrength( static_cast<int>( Monster::GetAttack() ) + bonusAttack, static_cast<int>( Monster::GetDefense() ) + bonusDefense ) * _count;
 }
 
 bool Troop::isValid() const
 {
-    return Monster::isValid() && count;
-}
-
-bool Troop::isEmpty() const
-{
-    return !isValid();
+    return Monster::isValid() && _count;
 }
 
 Funds Troop::GetTotalCost() const
 {
-    return GetCost() * count;
+    return GetCost() * _count;
 }
 
 Funds Troop::GetTotalUpgradeCost() const
 {
-    return GetUpgradeCost() * count;
+    return GetUpgradeCost() * _count;
 }
 
 bool Troop::isBattle() const
@@ -142,7 +105,7 @@ bool Troop::isBattle() const
     return false;
 }
 
-bool Troop::isModes( uint32_t /* unused */ ) const
+bool Troop::isModes( const uint32_t /* unused */ ) const
 {
     return false;
 }
@@ -167,9 +130,9 @@ std::string Troop::GetSpeedString() const
     return GetSpeedString( GetSpeed() );
 }
 
-std::string Troop::GetSpeedString( uint32_t speed )
+std::string Troop::GetSpeedString( const uint32_t speed )
 {
-    std::string output( Speed::String( static_cast<int>( speed ) ) );
+    std::string output( Speed::String( speed ) );
     output += " (";
     output += std::to_string( speed );
     output += ')';
@@ -192,54 +155,36 @@ uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
     return 0;
 }
 
-ArmyTroop::ArmyTroop( const Army * a )
-    : army( a )
-{}
-
-ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
-    : Troop( t )
-    , army( a )
-{}
-
 uint32_t ArmyTroop::GetAttack() const
 {
-    return Troop::GetAttack() + ( army && army->GetCommander() ? army->GetCommander()->GetAttack() : 0 );
+    return Troop::GetAttack() + ( _army && _army->GetCommander() ? _army->GetCommander()->GetAttack() : 0 );
 }
 
 uint32_t ArmyTroop::GetDefense() const
 {
-    return Troop::GetDefense() + ( army && army->GetCommander() ? army->GetCommander()->GetDefense() : 0 );
+    return Troop::GetDefense() + ( _army && _army->GetCommander() ? _army->GetCommander()->GetDefense() : 0 );
 }
 
-int ArmyTroop::GetColor() const
+PlayerColor ArmyTroop::GetColor() const
 {
-    return army ? army->GetColor() : Color::NONE;
+    return _army ? _army->GetColor() : PlayerColor::NONE;
 }
 
 int ArmyTroop::GetMorale() const
 {
-    return army && isAffectedByMorale() ? army->GetMorale() : Troop::GetMorale();
+    return _army && isAffectedByMorale() ? _army->GetMorale() : Troop::GetMorale();
 }
 
 int ArmyTroop::GetLuck() const
 {
-    return army ? army->GetLuck() : Troop::GetLuck();
-}
-
-void ArmyTroop::SetArmy( const Army & a )
-{
-    army = &a;
-}
-
-const Army * ArmyTroop::GetArmy() const
-{
-    return army;
+    return _army ? _army->GetLuck() : Troop::GetLuck();
 }
 
 std::string ArmyTroop::GetAttackString() const
 {
-    if ( Troop::GetAttack() == GetAttack() )
+    if ( Troop::GetAttack() == GetAttack() ) {
         return std::to_string( Troop::GetAttack() );
+    }
 
     std::string output( std::to_string( Troop::GetAttack() ) );
     output += " (";
@@ -251,8 +196,9 @@ std::string ArmyTroop::GetAttackString() const
 
 std::string ArmyTroop::GetDefenseString() const
 {
-    if ( Troop::GetDefense() == GetDefense() )
+    if ( Troop::GetDefense() == GetDefense() ) {
         return std::to_string( Troop::GetDefense() );
+    }
 
     std::string output( std::to_string( Troop::GetDefense() ) );
     output += " (";
@@ -262,12 +208,12 @@ std::string ArmyTroop::GetDefenseString() const
     return output;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Troop & troop )
+OStreamBase & operator<<( OStreamBase & stream, const Troop & troop )
 {
-    return msg << troop.id << troop.count;
+    return stream << troop.id << troop._count;
 }
 
-StreamBase & operator>>( StreamBase & msg, Troop & troop )
+IStreamBase & operator>>( IStreamBase & stream, Troop & troop )
 {
-    return msg >> troop.id >> troop.count;
+    return stream >> troop.id >> troop._count;
 }

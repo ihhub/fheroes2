@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MP2_H
-#define H2MP2_H
+
+#pragma once
 
 #include <cstdint>
 
@@ -49,7 +49,7 @@ namespace MP2
     };
 
     // Tile structure from the original map format.
-    struct mp2tile_t
+    struct MP2TileInfo
     {
         // Terrain image index used for terrain tile display on Adventure Map.
         uint16_t terrainImageIndex;
@@ -101,7 +101,7 @@ namespace MP2
     };
 
     // Addon structure from the original map format.
-    struct mp2addon_t
+    struct MP2AddonInfo
     {
         // Next add-on index. Zero value means it's the last addon chunk.
         uint16_t nextAddonIndex;
@@ -130,7 +130,7 @@ namespace MP2
     };
 
     // An object type could be action and non-action. If both parts are present the difference between them must be 128.
-    enum MapObjectType : uint8_t
+    enum MapObjectType : uint16_t
     {
         // This section defines all types of NON-action objects which are present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
@@ -396,18 +396,30 @@ namespace MP2
         OBJ_FIRE_ALTAR = OBJ_NON_ACTION_FIRE_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_AIR_ALTAR = OBJ_NON_ACTION_AIR_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_EARTH_ALTAR = OBJ_NON_ACTION_EARTH_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
-        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE // Never set in maps.
+        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
 
         // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries below following the instruction.
+
+        // NEVER use this object type in the Editor!
+        // This object type is used to separate objects from the original game from Resurrection expansion's objects.
+        OBJ_RESURRECTION_OBJECT_TYPE = 256,
 
         // This section defines all types of NON-action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
         // Otherwise, name it with prefix OBJ_.
+        OBJ_SWAMPY_LAKE = 257,
+        OBJ_FROZEN_LAKE = 258,
+        OBJ_NON_ACTION_BLACK_CAT = 259,
+        OBJ_NON_ACTION_BARREL = 260,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
         // Otherwise, name it with prefix OBJ_ACTON_.
         // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
+        OBJ_ACTION_SWAMPY_LAKE = OBJ_SWAMPY_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_FROZEN_LAKE = OBJ_FROZEN_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BLACK_CAT = OBJ_NON_ACTION_BLACK_CAT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BARREL = OBJ_NON_ACTION_BARREL + OBJ_ACTION_OBJECT_TYPE,
     };
 
     enum ObjectIcnType : uint8_t
@@ -487,16 +499,23 @@ namespace MP2
     bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
     // The method checks whether the object is an action object depending on whether it is accessed from water or from land.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
     // For example, castle can't be accessed from water.
     //
     // TODO: make a separate function to determine whether the object is an action object depending on its location and not
     // TODO: on where it is accessed from.
-    bool isActionObject( const MapObjectType objectType, const bool accessedFromWater );
+    bool isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
     // The method checks if the object is an action object regardless of where it is accessed from.
-    bool isActionObject( const MapObjectType objectType );
+    // Use it only during actual gameplay. Event object is not considered as an action object.
+    bool isInGameActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object regardless of where it is accessed from.
+    // Use it only for cases when gameplay is not active, like Editor and map initialization.
+    bool isOffGameActionObject( const MapObjectType objectType );
 
     // The method checks if the object is an action object if it is accessed from water.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
     bool isWaterActionObject( const MapObjectType objectType );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
@@ -515,7 +534,6 @@ namespace MP2
 
     bool isDayLife( const MapObjectType objectType );
     bool isWeekLife( const MapObjectType objectType );
-    bool isMonthLife( const MapObjectType objectType );
     bool isBattleLife( const MapObjectType objectType );
 
     // Make sure that you pass a valid action object.
@@ -531,5 +549,3 @@ namespace MP2
     // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
     bool doesObjectContainMetadata( const MP2::MapObjectType type );
 }
-
-#endif

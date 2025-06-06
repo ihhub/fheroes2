@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,14 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPSGROUND_H
-#define H2MAPSGROUND_H
+
+#pragma once
 
 #include <cstdint>
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 
     namespace Ground
     {
@@ -56,14 +56,14 @@ namespace Maps
 
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
+
+        const uint32_t fastestMovePenalty = roadPenalty;
         const uint32_t slowestMovePenalty = 200;
 
         const char * String( int groundId );
-        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfindingLevel );
+        uint32_t GetPenalty( const Maps::Tile & tile, uint32_t pathfindingLevel );
 
         // Returns the random ground image index (used in GROUND32.TIL) for main (without transition) terrain layout.
         uint16_t getRandomTerrainImageIndex( const int groundId, const bool allowEmbeddedObjectsAppearOnTerrain );
     }
 }
-
-#endif

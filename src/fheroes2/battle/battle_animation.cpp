@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_animation.h"
+
 #include <algorithm>
-#include <memory>
 #include <ostream>
 
-#include "battle_animation.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_anim.h"
@@ -58,12 +58,8 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
     _seq = rhs;
     _currentFrame = 0;
-    return *this;
-}
 
-AnimationSequence::~AnimationSequence()
-{
-    _seq.clear();
+    return *this;
 }
 
 int AnimationSequence::playAnimation( bool loop )
@@ -124,10 +120,6 @@ bool AnimationSequence::isValid() const
 {
     return !_seq.empty();
 }
-
-AnimationReference::AnimationReference()
-    : _monsterID( Monster::UNKNOWN )
-{}
 
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )

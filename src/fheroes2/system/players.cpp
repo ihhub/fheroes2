@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,19 +26,17 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <ostream>
+#include <cstddef>
+#include <sstream>
+#include <type_traits>
 
-#include "ai.h"
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
-#include "normal/ai_normal.h"
-#include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
@@ -47,103 +45,100 @@
 
 namespace
 {
-    const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = { nullptr };
-    int humanColors{ Color::NONE };
+    std::array<Player *, maxNumOfPlayers + 1> playersArray{};
+    PlayerColorsSet humanColors{ 0 };
 
     enum
     {
         ST_INGAME = 0x2000
     };
-}
 
-void PlayerFocusReset( Player * player )
-{
-    if ( player )
+    void resetFocus( Player * player )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
         player->GetFocus().Reset();
-}
+    }
 
-void PlayerFixMultiControl( Player * player )
-{
-    if ( player && player->GetControl() == ( CONTROL_HUMAN | CONTROL_AI ) )
+    void fixMultiControl( Player * player )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
+        if ( player->GetControl() != ( CONTROL_HUMAN | CONTROL_AI ) ) {
+            return;
+        }
+
         player->SetControl( CONTROL_AI );
-}
+    }
 
-void PlayerRemoveAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
-{
-    const int raceToRemove = player->GetRace();
-    availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
-                          availableRaces.end() );
-}
+    void removeAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
+    {
+        const int raceToRemove = player->GetRace();
 
-void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
-{
-    if ( player && player->GetRace() == Race::RAND ) {
+        availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
+                              availableRaces.end() );
+    }
+
+    void fixRandomRace( Player * player, std::vector<int> & availableRaces )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
+        if ( player->GetRace() != Race::RAND ) {
+            return;
+        }
+
         if ( availableRaces.empty() ) {
             player->SetRace( Race::Rand() );
+
+            return;
         }
-        else {
-            const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
-            player->SetRace( availableRaces[raceIndex] );
-            availableRaces.erase( availableRaces.begin() + raceIndex );
-        }
+
+        const size_t raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+
+        player->SetRace( availableRaces[raceIndex] );
+
+        availableRaces.erase( availableRaces.begin() + raceIndex );
     }
 }
 
-bool Control::isControlAI() const
-{
-    return ( CONTROL_AI & GetControl() ) != 0;
-}
-
-bool Control::isControlHuman() const
-{
-    return ( CONTROL_HUMAN & GetControl() ) != 0;
-}
-
-Player::Player( int col )
-    : control( CONTROL_NONE )
-    , color( col )
-    , race( Race::NONE )
-    , friends( col )
-    , _ai( std::make_shared<AI::Normal>() )
-    , _handicapStatus( HandicapStatus::NONE )
-#if defined( WITH_DEBUG )
-    , _isAIAutoControlMode( false )
-    , _isAIAutoControlModePlanned( false )
-#endif
+Player::Player( const PlayerColor color /* = PlayerColor::NONE */ )
+    : _aiPersonality( AI::getRandomPersonality() )
+    , _color( color )
+    , _friendsColors( static_cast<PlayerColorsSet>( color ) )
 {
     // Do nothing.
 }
 
-std::string Player::GetDefaultName() const
-{
-    return Color::String( color );
-}
-
 std::string Player::GetName() const
 {
-    if ( name.empty() ) {
+    if ( _name.empty() ) {
         return GetDefaultName();
     }
 
-    return name;
+    return _name;
 }
 
 int Player::GetControl() const
 {
 #if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
-        assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+        assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
 #endif
 
-    return control;
+    return _control;
 }
 
 std::string Player::GetPersonalityString() const
 {
-    return _ai->GetPersonalityString();
+    return AI::getPersonalityString( _aiPersonality );
 }
 
 bool Player::isPlay() const
@@ -151,22 +146,24 @@ bool Player::isPlay() const
     return Modes( ST_INGAME );
 }
 
-void Player::SetName( const std::string & newName )
+void Player::SetName( std::string newName )
 {
     if ( newName == GetDefaultName() ) {
-        name.clear();
+        _name.clear();
     }
     else {
-        name = newName;
+        _name = std::move( newName );
     }
 }
 
-void Player::SetPlay( bool f )
+void Player::SetPlay( const bool f )
 {
-    if ( f )
+    if ( f ) {
         SetModes( ST_INGAME );
-    else
+    }
+    else {
         ResetModes( ST_INGAME );
+    }
 }
 
 void Player::setHandicapStatus( const HandicapStatus status )
@@ -176,7 +173,7 @@ void Player::setHandicapStatus( const HandicapStatus status )
         return;
     }
 
-    assert( !( control & CONTROL_AI ) );
+    assert( !( _control & CONTROL_AI ) );
 
     _handicapStatus = status;
 }
@@ -184,7 +181,7 @@ void Player::setHandicapStatus( const HandicapStatus status )
 #if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
-    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+    assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
 
     // If this mode should be enabled, then it happens immediately
     if ( enable ) {
@@ -200,7 +197,7 @@ void Player::setAIAutoControlMode( const bool enable )
 
 void Player::commitAIAutoControlMode()
 {
-    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+    assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
 
     // If this method has been called, then this mode should be actually enabled
     assert( _isAIAutoControlMode );
@@ -209,29 +206,29 @@ void Player::commitAIAutoControlMode()
 }
 #endif
 
-StreamBase & operator<<( StreamBase & msg, const Focus & focus )
+OStreamBase & operator<<( OStreamBase & stream, const Focus & focus )
 {
-    msg << focus.first;
+    stream << focus.first;
 
     switch ( focus.first ) {
     case FOCUS_HEROES:
-        msg << static_cast<Heroes *>( focus.second )->GetIndex();
+        stream << static_cast<Heroes *>( focus.second )->GetIndex();
         break;
     case FOCUS_CASTLE:
-        msg << static_cast<Castle *>( focus.second )->GetIndex();
+        stream << static_cast<Castle *>( focus.second )->GetIndex();
         break;
     default:
-        msg << static_cast<int32_t>( -1 );
+        stream << static_cast<int32_t>( -1 );
         break;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Focus & focus )
+IStreamBase & operator>>( IStreamBase & stream, Focus & focus )
 {
     int32_t index;
-    msg >> focus.first >> index;
+    stream >> focus.first >> index;
 
     switch ( focus.first ) {
     case FOCUS_HEROES:
@@ -245,78 +242,69 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
         break;
     }
 
-    return msg;
+    return stream;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Player & player )
+OStreamBase & operator<<( OStreamBase & stream, const Player & player )
 {
     const BitModes & modes = player;
 
-    assert( player._ai != nullptr );
-    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
-        << static_cast<uint8_t>( player._handicapStatus );
-    return msg;
+    return stream << modes << player._control << player._color << player._race << player._friendsColors << player._name << player._focus << player._aiPersonality
+                  << player._handicapStatus;
 }
 
-StreamBase & operator>>( StreamBase & msg, Player & player )
+IStreamBase & operator>>( IStreamBase & stream, Player & player )
 {
     BitModes & modes = player;
 
-    msg >> modes;
+    stream >> modes;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
         uint32_t temp;
-        msg >> temp;
+        stream >> temp;
     }
 
-    msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    stream >> player._control;
 
-    assert( player._ai );
-    msg >> *player._ai;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int playerColor;
+        int friendsColors;
 
-    uint8_t handicapStatusInt;
+        stream >> playerColor >> player._race >> friendsColors;
 
-    msg >> handicapStatusInt;
+        player._color = static_cast<PlayerColor>( playerColor );
+        player._friendsColors = static_cast<uint8_t>( friendsColors );
+    }
+    else {
+        stream >> player._color >> player._race >> player._friendsColors;
+    }
 
-    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
-
-    return msg;
-}
-
-Players::Players()
-{
-    reserve( KINGDOMMAX );
-}
-
-Players::~Players()
-{
-    clear();
+    return stream >> player._name >> player._focus >> player._aiPersonality >> player._handicapStatus;
 }
 
 void Players::clear()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Player * player ) { delete player; } );
 
     std::vector<Player *>::clear();
 
-    for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
-        _players[ii] = nullptr;
+    _currentColor = PlayerColor::NONE;
 
-    _currentColor = Color::NONE;
-    humanColors = Color::NONE;
+    playersArray = {};
+    humanColors = 0;
 }
 
-void Players::Init( int colors )
+void Players::Init( const PlayerColorsSet colors )
 {
     clear();
 
-    const Colors vcolors( colors );
+    const PlayerColorsVector vcolors( colors );
 
-    for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
-        push_back( new Player( *it ) );
-        _players[Color::GetIndex( *it )] = back();
+    for ( const PlayerColor color : vcolors ) {
+        push_back( new Player( color ) );
+        playersArray[Color::GetIndex( color )] = back();
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
@@ -330,92 +318,83 @@ void Players::Init( const Maps::FileInfo & fi )
     }
 
     clear();
-    const Colors vcolors( fi.kingdomColors );
+    const PlayerColorsVector vcolors( fi.kingdomColors );
 
     Player * first = nullptr;
 
-    for ( const int color : vcolors ) {
+    for ( const PlayerColor color : vcolors ) {
         Player * player = new Player( color );
         player->SetRace( fi.KingdomRace( color ) );
         player->SetControl( CONTROL_AI );
-        player->SetFriends( color | fi.unions[Color::GetIndex( color )] );
+        player->SetFriends( fi.unions[Color::GetIndex( color )] | color );
 
-        if ( ( color & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
+        if ( ( fi.HumanOnlyColors() & color ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) ) {
             player->SetControl( CONTROL_HUMAN );
-        else if ( color & fi.colorsAvailableForHumans )
+        }
+        else if ( fi.colorsAvailableForHumans & color ) {
             player->SetControl( player->GetControl() | CONTROL_HUMAN );
+        }
 
-        if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )
+        if ( !first && ( player->GetControl() & CONTROL_HUMAN ) ) {
             first = player;
+        }
 
         push_back( player );
-        _players[Color::GetIndex( color )] = back();
+        playersArray[Color::GetIndex( color )] = back();
     }
 
-    if ( first )
+    if ( first ) {
         first->SetControl( CONTROL_HUMAN );
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
 }
 
-void Players::Set( const int color, Player * player )
+void Players::Set( const PlayerColor color, Player * player )
 {
-    assert( color >= 0 && color < playersSize );
-    _players[color] = player;
+    playersArray[Color::GetIndex( color )] = player;
 }
 
-Player * Players::Get( int color )
+Player * Players::Get( const PlayerColor color )
 {
-    return _players[Color::GetIndex( color )];
+    return playersArray[Color::GetIndex( color )];
 }
 
-bool Players::isFriends( int player, int colors )
+bool Players::isFriends( const PlayerColor playerColor, PlayerColorsSet colors )
 {
-    const Player * ptr = Get( player );
-    return ptr ? ( ptr->GetFriends() & colors ) != 0 : false;
+    const Player * player = Get( playerColor );
+    return player ? ( player->GetFriends() & colors ) : false;
 }
 
-void Players::SetPlayerRace( int color, int race )
+void Players::SetPlayerRace( const PlayerColor color, const int race )
 {
     Player * player = Get( color );
 
-    if ( player )
+    if ( player ) {
         player->SetRace( race );
+    }
 }
 
-void Players::SetPlayerControl( int color, int ctrl )
+void Players::SetPlayerControl( const PlayerColor color, const int control )
 {
     Player * player = Get( color );
 
-    if ( player )
-        player->SetControl( ctrl );
+    if ( player ) {
+        player->SetControl( control );
+    }
 }
 
-int Players::GetColors( int control, bool strong ) const
+PlayerColorsSet Players::GetColors( const int control, const bool strong ) const
 {
-    int res = 0;
+    PlayerColorsSet res = 0;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( control == 0xFF || ( strong && ( *it )->GetControl() == control ) || ( !strong && ( ( *it )->GetControl() & control ) ) )
-            res |= ( *it )->GetColor();
+    for ( const Player * player : *this ) {
+        if ( control == 0xFF || ( strong && player->GetControl() == control ) || ( !strong && ( player->GetControl() & control ) ) ) {
+            res |= player->GetColor();
+        }
+    }
 
     return res;
-}
-
-int Players::GetActualColors() const
-{
-    int res = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isPlay() )
-            res |= ( *it )->GetColor();
-
-    return res;
-}
-
-const std::vector<Player *> & Players::getVector() const
-{
-    return *this;
 }
 
 Player * Players::GetCurrent()
@@ -428,45 +407,58 @@ const Player * Players::GetCurrent() const
     return Get( _currentColor );
 }
 
-int Players::GetPlayerFriends( int color )
+PlayerColorsSet Players::GetActualColors() const
+{
+    PlayerColorsSet res = 0;
+
+    for ( const Player * player : *this ) {
+        if ( player->isPlay() ) {
+            res |= player->GetColor();
+        }
+    }
+
+    return res;
+}
+
+PlayerColorsSet Players::GetPlayerFriends( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetFriends() : 0;
 }
 
-int Players::GetPlayerControl( int color )
+int Players::GetPlayerControl( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetControl() : CONTROL_NONE;
 }
 
-int Players::GetPlayerRace( int color )
+int Players::GetPlayerRace( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player ? player->GetRace() : Race::NONE;
 }
 
-bool Players::GetPlayerInGame( int color )
+bool Players::GetPlayerInGame( const PlayerColor color )
 {
     const Player * player = Get( color );
     return player && player->isPlay();
 }
 
-std::vector<int> Players::getInPlayOpponents( const int color )
+std::vector<PlayerColor> Players::getInPlayOpponents( const PlayerColor color )
 {
-    std::vector<int> opponentColors;
+    std::vector<PlayerColor> opponentColors;
 
     const Player * playerOfColor = Players::Get( color );
     assert( playerOfColor != nullptr );
 
-    const int friends = playerOfColor->GetFriends();
+    const PlayerColorsSet friends = playerOfColor->GetFriends();
 
     for ( const Player * player : Settings::Get().GetPlayers() ) {
         assert( player != nullptr );
 
-        const int currentColor = player->GetColor();
+        const PlayerColor currentColor = player->GetColor();
 
-        if ( player->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
+        if ( player->isPlay() && ( ( friends & currentColor ) == 0 ) ) {
             opponentColors.emplace_back( currentColor );
         }
     }
@@ -474,38 +466,42 @@ std::vector<int> Players::getInPlayOpponents( const int color )
     return opponentColors;
 }
 
-void Players::SetPlayerInGame( int color, bool f )
+void Players::SetPlayerInGame( const PlayerColor color, bool isPlay )
 {
     Player * player = Get( color );
-    if ( player )
-        player->SetPlay( f );
+    if ( player == nullptr ) {
+        return;
+    }
+
+    player->SetPlay( isPlay );
 }
 
 void Players::SetStartGame()
 {
-    vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
-    for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), [&races]( const Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
-    for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
+    std::vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
 
-    _currentColor = Color::NONE;
-    humanColors = Color::NONE;
+    for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
+    for_each( begin(), end(), []( Player * player ) { resetFocus( player ); } );
+    for_each( begin(), end(), [&races]( const Player * player ) { removeAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { fixRandomRace( player, races ); } );
+    for_each( begin(), end(), []( Player * player ) { fixMultiControl( player ); } );
+
+    _currentColor = PlayerColor::NONE;
+    humanColors = 0;
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
-int Players::HumanColors()
+PlayerColorsSet Players::HumanColors()
 {
-    if ( humanColors == Color::NONE ) {
+    if ( humanColors == 0 ) {
         humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
     }
 
     return humanColors;
 }
 
-int Players::FriendColors()
+PlayerColorsSet Players::FriendColors()
 {
     const Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player ) {
@@ -515,10 +511,10 @@ int Players::FriendColors()
     return 0;
 }
 
-void Players::setCurrentColor( const int color )
+void Players::setCurrentColor( const PlayerColor color )
 {
     // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
-    assert( Color::Count( color ) == 1 || color == Color::NONE );
+    assert( Color::Count( static_cast<PlayerColorsSet>( color ) ) == 1 || color == PlayerColor::NONE );
 
     _currentColor = color;
 }
@@ -556,32 +552,52 @@ std::string Players::String() const
     return os.str();
 }
 
-StreamBase & operator<<( StreamBase & msg, const Players & players )
+OStreamBase & operator<<( OStreamBase & stream, const Players & players )
 {
-    msg << players.GetColors() << players.getCurrentColor();
+    static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+    stream << players.GetColors() << players.getCurrentColor();
 
-    for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
-        msg << ( **it );
+    std::for_each( players.begin(), players.end(), [&stream]( const Player * player ) {
+        assert( player != nullptr );
 
-    return msg;
+        stream << *player;
+    } );
+
+    return stream;
 }
 
-StreamBase & operator>>( StreamBase & msg, Players & players )
+IStreamBase & operator>>( IStreamBase & stream, Players & players )
 {
-    int colors;
-    int current;
-    msg >> colors >> current;
+    static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+    PlayerColorsSet colors;
+    PlayerColor current;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int colorsTemp{ 0 };
+        int currentTemp{ 0 };
+
+        stream >> colorsTemp >> currentTemp;
+
+        colors = static_cast<PlayerColorsSet>( colorsTemp );
+        current = static_cast<PlayerColor>( currentTemp );
+    }
+    else {
+        stream >> colors >> current;
+    }
 
     players.clear();
     players.setCurrentColor( current );
-    const Colors vcolors( colors );
 
-    for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
+    const PlayerColorsVector vcolors( colors );
+    std::for_each( vcolors.begin(), vcolors.end(), [&stream, &players]( const PlayerColor /* color */ ) {
         Player * player = new Player();
-        msg >> *player;
-        Players::Set( Color::GetIndex( player->GetColor() ), player );
-        players.push_back( player );
-    }
+        stream >> *player;
 
-    return msg;
+        Players::Set( player->GetColor(), player );
+
+        players.push_back( player );
+    } );
+
+    return stream;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,10 +33,12 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "settings.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -325,51 +327,81 @@ namespace fheroes2
             return -1;
         }
 
-        const int32_t center = hero.GetIndex();
-        const int tilePassability = world.GetTiles( center ).GetPassable();
-        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+        const int32_t heroTileIdx = hero.GetIndex();
+        const int heroTilePassability = world.getTile( heroTileIdx ).GetPassable();
+
         std::vector<int32_t> possibleBoatPositions;
-        for ( const int32_t tileId : tilesAround ) {
-            const int direction = Maps::GetDirection( center, tileId );
-            assert( direction != Direction::UNKNOWN );
+        possibleBoatPositions.reserve( 8 );
 
-            if ( ( tilePassability & direction ) != 0 ) {
-                possibleBoatPositions.emplace_back( tileId );
+        for ( const int32_t tileIdx : Maps::getAroundIndexes( heroTileIdx ) ) {
+            const int direction = Maps::GetDirection( heroTileIdx, tileIdx );
+            assert( direction != Direction::UNKNOWN && direction != Direction::CENTER );
+
+            if ( ( heroTilePassability & direction ) == 0 ) {
+                continue;
             }
+
+            const Maps::Tile & tile = world.getTile( tileIdx );
+            if ( !tile.isWater() || tile.getMainObjectType() != MP2::OBJ_NONE ) {
+                continue;
+            }
+
+            possibleBoatPositions.emplace_back( tileIdx );
         }
 
-        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point & rightPoint = Maps::GetPoint( right );
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+        const auto iter = std::min_element( possibleBoatPositions.begin(), possibleBoatPositions.end(),
+                                            [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
+                                                const fheroes2::Point leftPoint = Maps::GetPoint( left );
+                                                const fheroes2::Point rightPoint = Maps::GetPoint( right );
 
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
+                                                const int32_t leftDiffX = leftPoint.x - heroPoint.x;
+                                                const int32_t leftDiffY = leftPoint.y - heroPoint.y;
+                                                const int32_t rightDiffX = rightPoint.x - heroPoint.x;
+                                                const int32_t rightDiffY = rightPoint.y - heroPoint.y;
 
-        for ( const int32_t tileId : possibleBoatPositions ) {
-            const Maps::Tiles & tile = world.GetTiles( tileId );
-            if ( tile.isWater() ) {
-                return tileId;
-            }
+                                                return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+                                            } );
+        if ( iter == possibleBoatPositions.end() ) {
+            return -1;
         }
 
-        return -1;
+        return *iter;
     }
 
     int32_t getSummonableBoat( const Heroes & hero )
     {
         const int32_t center = hero.GetIndex();
-        const int heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
+
+        const bool isResurrectionMap = ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION );
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+            // In the original game, AI could not use the Summon Boat spell at all, and many of the original maps (including the maps of the original campaign) were
+            // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
+            // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
+            if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
+                     const PlayerColor boatColor = world.getTile( boatSource ).getBoatOwnerColor();
+
+                     // Boats belonging to the hero's kingdom can always be summoned
+                     if ( boatColor == heroColor ) {
+                         return false;
+                     }
+
+                     // Non-neutral boats (belonging to any other kingdom) can never be summoned
+                     if ( boatColor != PlayerColor::NONE ) {
+                         return true;
+                     }
+
+                     // On Resurrection maps, neutral boats can be summoned by both human and AI players
+                     if ( isResurrectionMap ) {
+                         return false;
+                     }
+
+                     // On original HoMM2 maps, neutral boats can only be summoned by human players
+                     return hero.isControlAI();
+                 }() ) {
                 continue;
             }
 
@@ -385,6 +417,6 @@ namespace fheroes2
     bool isHeroNearWater( const Heroes & hero )
     {
         const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
-        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.GetTiles( tileId ).isWater(); } );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.getTile( tileId ).isWater(); } );
     }
 }

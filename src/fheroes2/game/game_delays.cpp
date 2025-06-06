@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,19 +24,17 @@
 #include "game_delays.h"
 
 #include <cassert>
-#include <memory>
 
-#include "gamedefs.h"
 #include "settings.h"
 #include "timing.h"
 
 namespace
 {
-    std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY + 1, fheroes2::TimeDelay( 0 ) );
+    std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY, fheroes2::TimeDelay( 0 ) );
 
-    static_assert( ( DEFAULT_BATTLE_SPEED >= 0 ) && ( DEFAULT_BATTLE_SPEED < 10 ) );
+    static_assert( ( defaultBattleSpeed >= 0 ) && ( defaultBattleSpeed < 10 ) );
 
-    constexpr double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
+    constexpr double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - defaultBattleSpeed );
 
     int humanHeroMultiplier = 1;
     int aiHeroMultiplier = 1;
@@ -110,8 +108,8 @@ void Game::AnimateDelaysInitialize()
     delays[BATTLE_DIALOG_DELAY].setDelay( 75 );
     delays[BATTLE_FRAME_DELAY].setDelay( 120 );
     delays[BATTLE_MISSILE_DELAY].setDelay( 40 );
-    delays[BATTLE_SPELL_DELAY].setDelay( 90 );
-    delays[BATTLE_DISRUPTING_DELAY].setDelay( 20 );
+    delays[BATTLE_SPELL_DELAY].setDelay( 75 );
+    delays[BATTLE_DISRUPTING_DELAY].setDelay( 25 );
     delays[BATTLE_CATAPULT_DELAY].setDelay( 90 );
     delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( 40 );
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( 40 );
@@ -126,11 +124,11 @@ void Game::AnimateDelaysInitialize()
     delays[CURRENT_HERO_DELAY].setDelay( 10 );
     delays[CURRENT_AI_DELAY].setDelay( 10 );
 
+    UpdateGameSpeed();
+
     for ( fheroes2::TimeDelay & delay : delays ) {
         delay.reset();
     }
-
-    UpdateGameSpeed();
 }
 
 void Game::AnimateResetDelay( const DelayType delayType )
@@ -218,7 +216,7 @@ int Game::AIHeroAnimSpeedMultiplier()
     return aiHeroMultiplier;
 }
 
-uint32_t Game::ApplyBattleSpeed( uint32_t delay )
+uint32_t Game::ApplyBattleSpeed( const uint32_t delay )
 {
     const uint32_t battleSpeed = static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
     return battleSpeed == 0 ? 1 : battleSpeed;

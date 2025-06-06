@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_COMMAND_H
-#define H2BATTLE_COMMAND_H
+#pragma once
 
 #include <cassert>
 #include <cstddef>
@@ -47,8 +46,8 @@ namespace Battle
         RETREAT,
         SURRENDER,
         SKIP,
-        AUTO_SWITCH,
-        AUTO_FINISH
+        TOGGLE_AUTO_COMBAT,
+        QUICK_COMBAT
     };
 
     class Command final : public std::vector<int>
@@ -63,8 +62,8 @@ namespace Battle
         static constexpr std::integral_constant<CommandType, CommandType::RETREAT> RETREAT{};
         static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
         static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
-        static constexpr std::integral_constant<CommandType, CommandType::AUTO_SWITCH> AUTO_SWITCH{};
-        static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
+        static constexpr std::integral_constant<CommandType, CommandType::TOGGLE_AUTO_COMBAT> TOGGLE_AUTO_COMBAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::QUICK_COMBAT> QUICK_COMBAT{};
 
         template <CommandType cmd, typename... Types>
         explicit Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
@@ -108,7 +107,7 @@ namespace Battle
                 // UID
                 static_assert( sizeof...( params ) == 1 );
             }
-            else if constexpr ( cmd == CommandType::AUTO_SWITCH ) {
+            else if constexpr ( cmd == CommandType::TOGGLE_AUTO_COMBAT ) {
                 // Color
                 static_assert( sizeof...( params ) == 1 );
             }
@@ -151,13 +150,11 @@ namespace std
     {
         std::size_t operator()( const Battle::CommandType key ) const noexcept
         {
-            using UnderlyingCommandType = typename std::underlying_type<Battle::CommandType>::type;
+            using BattleCommandTypeUnderlyingType = std::underlying_type_t<Battle::CommandType>;
 
-            std::hash<UnderlyingCommandType> hasher;
+            const std::hash<BattleCommandTypeUnderlyingType> hasher;
 
-            return hasher( static_cast<UnderlyingCommandType>( key ) );
+            return hasher( static_cast<BattleCommandTypeUnderlyingType>( key ) );
         }
     };
 }
-
-#endif

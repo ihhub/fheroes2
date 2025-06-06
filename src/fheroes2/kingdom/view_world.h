@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,14 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2VIEWWORLD_H
-#define H2VIEWWORLD_H
+#pragma once
 
-#include <array>
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 
 #include "math_base.h"
 #include "settings.h"
+
+enum class PlayerColor : uint8_t;
 
 namespace Interface
 {
@@ -48,28 +50,43 @@ enum class ViewWorldMode : int32_t
 class ViewWorld
 {
 public:
-    static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface );
+    static void ViewWorldWindow( const PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface );
 
-    struct ZoomROIs
+    class ZoomROIs
     {
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
+    public:
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels, const size_t zoomLevels );
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
         bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
-        const fheroes2::Rect & GetROIinPixels() const;
+        const fheroes2::Rect & GetROIinPixels() const
+        {
+            return _roiForZoomLevels[static_cast<uint8_t>( _zoomLevel )];
+        }
+
         fheroes2::Rect GetROIinTiles() const;
 
-        ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
-        fheroes2::Point _center;
-        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
+        ZoomLevel getZoomLevel() const
+        {
+            return _zoomLevel;
+        }
+
+        const fheroes2::Point & getCenter() const
+        {
+            return _center;
+        }
 
     private:
         void _updateZoomLevels();
+
         bool _updateCenter();
         bool _changeZoom( const ZoomLevel newLevel );
+
+        ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
+        fheroes2::Point _center;
+        std::vector<fheroes2::Rect> _roiForZoomLevels;
+        fheroes2::Rect _visibleROI;
     };
 };
-
-#endif

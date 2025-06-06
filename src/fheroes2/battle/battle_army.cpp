@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,7 +24,6 @@
 #include "battle_army.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstddef>
 
 #include "army_troop.h"
@@ -49,54 +48,24 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    if ( isRemoveInvalidUnits ) {
-        erase( std::remove_if( begin(), end(),
-                               []( const Unit * unit ) {
-                                   assert( unit != nullptr );
-
-                                   return !unit->isValid();
-                               } ),
-               end() );
-    }
-}
-
-Battle::Units::Units( const Units & units, const Unit * unitToRemove )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    erase( std::remove_if( begin(), end(),
-                           [unitToRemove]( const Unit * unit ) {
-                               assert( unit != nullptr );
-
-                               return !unit->isValid() || unit == unitToRemove;
-                           } ),
-           end() );
-}
-
 void Battle::Units::SortFastest()
 {
     // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
+Battle::Unit * Battle::Units::FindUID( const uint32_t uid ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
+    const auto iter = std::find_if( begin(), end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
-Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
+Battle::Unit * Battle::Units::FindMode( const uint32_t mod ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
+    const auto iter = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? nullptr : *it;
+    return iter == end() ? nullptr : *iter;
 }
 
 Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
@@ -158,7 +127,7 @@ const Battle::Units & Battle::Force::getUnits() const
     return *this;
 }
 
-int Battle::Force::GetColor() const
+PlayerColor Battle::Force::GetColor() const
 {
     return army.GetColor();
 }
@@ -337,28 +306,4 @@ void Battle::Force::SyncArmyCount()
 
         troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
-}
-
-double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
-{
-    double result = 0.0;
-
-    // Consider only the state of the original army
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
-        }
-
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr ) {
-            continue;
-        }
-
-        // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
-        // non-true-resurrected units)
-        result += Troop{ unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() }.GetStrength();
-    }
-
-    return result;
 }

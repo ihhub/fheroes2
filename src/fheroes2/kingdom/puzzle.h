@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,33 +21,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2PUZZLE_H
-#define H2PUZZLE_H
+#pragma once
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
-#define PUZZLETILES 48
+class IStreamBase;
+class OStreamBase;
 
-class StreamBase;
+inline constexpr size_t numOfPuzzleTiles{ 48 };
 
-class Puzzle : public std::bitset<PUZZLETILES>
+class Puzzle : public std::bitset<numOfPuzzleTiles>
 {
 public:
     Puzzle();
-    Puzzle & operator=( const char * );
+
+    Puzzle & operator=( const char * str );
 
     void Update( uint32_t open, uint32_t total );
     void ShowMapsDialog() const;
 
-    std::vector<uint8_t> zone1_order;
-    std::vector<uint8_t> zone2_order;
-    std::vector<uint8_t> zone3_order;
-    std::vector<uint8_t> zone4_order;
+private:
+    std::vector<uint8_t> zone1_order{ 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
+    std::vector<uint8_t> zone2_order{ 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };
+    std::vector<uint8_t> zone3_order{ 14, 15, 32, 33 };
+    std::vector<uint8_t> zone4_order{ 20, 21, 26, 27 };
+
+    friend OStreamBase & operator<<( OStreamBase & stream, const Puzzle & pzl );
+    friend IStreamBase & operator>>( IStreamBase & stream, Puzzle & pzl );
 };
-
-StreamBase & operator<<( StreamBase &, const Puzzle & );
-StreamBase & operator>>( StreamBase &, Puzzle & );
-
-#endif
