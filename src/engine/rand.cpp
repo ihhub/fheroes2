@@ -24,7 +24,9 @@
 #include "rand.h"
 
 #include <numeric>
+#include <random>
 
+#include "pcg_extras.hpp"
 #include "pcg_random.hpp"
 
 namespace
