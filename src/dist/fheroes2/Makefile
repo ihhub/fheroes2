@@ -26,6 +26,8 @@ DEPLIBS := $(DEPLIBS) ../thirdparty/libsmacker/libsmacker.a
 CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
 endif
 
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/pcg-cpp/include
+
 SOURCEROOT := ../../fheroes2
 SOURCEDIRS := $(filter %/,$(wildcard $(SOURCEROOT)/*/))
 SOURCES := $(wildcard $(SOURCEROOT)/*/*.cpp)

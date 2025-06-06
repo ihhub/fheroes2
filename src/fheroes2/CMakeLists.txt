@@ -110,5 +110,6 @@ target_include_directories(
 target_link_libraries(
 	fheroes2
 	engine
+	pcg-cpp
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)

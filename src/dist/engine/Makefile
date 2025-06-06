@@ -20,6 +20,7 @@
 
 ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
+CCFLAGS := $(CCFLAGS) -I../../thirdparty/pcg-cpp/include
 endif
 
 SOURCEDIR := ../../engine

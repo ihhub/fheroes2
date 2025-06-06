@@ -30,3 +30,10 @@ target_link_libraries(
 	smacker
 	Threads::Threads # To match the build settings of the main app
 	)
+
+add_library(pcg-cpp INTERFACE)
+target_include_directories(
+	pcg-cpp
+	SYSTEM INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pcg-cpp/include>
+)
