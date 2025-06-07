@@ -2015,7 +2015,7 @@ namespace Interface
 
         _mapFormat.width = mapWidth;
 
-        // The square maps are only supported so map height is the same as width.
+        // Only square maps are supported so map height is the same as width.
         const int32_t tilesCount = mapWidth * mapWidth;
 
         _mapFormat.tiles.resize( tilesCount );
