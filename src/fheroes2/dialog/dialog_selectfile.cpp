@@ -31,7 +31,6 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -282,6 +281,32 @@ namespace
         return mapInfos;
     }
 
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
+    {
+        if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
+            return std::lower_bound( begin, end, lastChoice, CompareByFilename() );
+        }
+
+        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, CompareByTimestamp() );
+        const MapsFileInfoList::const_iterator it
+            = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+        if ( it != endSameTimestamp ) {
+            return it;
+        }
+        return end; // Not found.
+    }
+
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
+    {
+        if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
+            return std::lower_bound( begin, end, lastChoice, CompareByFilename() );
+        }
+
+        return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+    }
+
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
     {
         // setup cursor
@@ -362,13 +387,7 @@ namespace
         if ( !lastfile.empty() ) {
             filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
-            MapsFileInfoList::const_iterator it;
-            if ( settings.GetSaveFileSortingMethod() == SaveFileSortingMethod::FILENAME ) {
-                it = std::lower_bound( lists.cbegin(), lists.cend(), lastfile, CompareByFilename() );
-            }
-            else {
-                it = std::find_if( it, lists.cend(), [&lastfile]( const Maps::FileInfo & info ) { return info.filename == lastfile; } );
-            }
+            const MapsFileInfoList::const_iterator it = findInMapInfos( lists.cbegin(), lists.cend(), lastfile, fileSortingMethod );
 
             if ( it != lists.cend() ) {
                 listbox.SetCurrent( std::distance( lists.cbegin(), it ) );
@@ -519,19 +538,10 @@ namespace
 
                 // re-select the last selected file if any, unless we're typing in the list box
                 if ( !lastChoice.empty() ) {
-                    MapsFileInfoList::const_iterator it = lists.cbegin();
-                    MapsFileInfoList::const_iterator end = lists.cend();
-                    const SaveFileSortingMethod sortingMethod = settings.GetSaveFileSortingMethod();
+                    const MapsFileInfoList::const_iterator it
+                        = findInMapInfos( lists.cbegin(), lists.cend(), lastChoice, lastChoiceTimestamp, settings.GetSaveFileSortingMethod() );
 
-                    if ( sortingMethod == SaveFileSortingMethod::TIMESTAMP ) {
-                        std::tie( it, end ) = std::equal_range( lists.cbegin(), lists.cend(), lastChoiceTimestamp, CompareByTimestamp() );
-                        it = std::find_if( it, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-                    }
-                    else {
-                        it = std::lower_bound( lists.cbegin(), lists.cend(), lastChoice, CompareByFilename() );
-                    }
-
-                    if ( it != end ) {
+                    if ( it != lists.cend() ) {
                         const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
                         if ( newId != currentId ) {
                             listbox.SetCurrent( newId );
