@@ -11037,18 +11037,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#~ msgid ""
-#~ "Check the newest version of the game at\n"
-#~ "https://github.com/ihhub/\n"
-#~ "fheroes2/releases"
-#~ msgstr ""
-#~ "Verificați cea mai nouă versiune a jocului la\n"
-#~ "https://github.com/ihhub/\n"
-#~ "fheroes2/releases"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Activează lupta automată"
-
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "terminați lupta în mod automat"
