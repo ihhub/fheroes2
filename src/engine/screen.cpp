@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstring>
 #include <iterator>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <utility>
@@ -796,6 +797,31 @@ namespace
         }
     };
 #else
+    std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
+    {
+        const int numDisplays = SDL_GetNumVideoDisplays();
+        if ( numDisplays < 1 ) {
+            ERROR_LOG( "Failed to get the number of video displays. The error value: " << numDisplays << ", description: " << SDL_GetError() )
+            return std::nullopt;
+        }
+
+        for ( int displayIndex = 0; displayIndex < numDisplays; ++displayIndex ) {
+            SDL_Rect displayBounds;
+            if ( SDL_GetDisplayBounds( displayIndex, &displayBounds ) != 0 ) {
+                ERROR_LOG( "Failed to get display bounds for display #" << displayIndex << ". The error: " << SDL_GetError() )
+                continue;
+            }
+            const int displayMaxX = displayBounds.x + displayBounds.w;
+            const int displayMaxY = displayBounds.y + displayBounds.h;
+            const int32_t windowMaxX = windowPos.x + resolutionInfo.screenWidth;
+            const int32_t windowMaxY = windowPos.y + resolutionInfo.screenHeight;
+            if ( windowPos.x >= displayBounds.x && windowMaxX < displayMaxX && windowPos.y >= displayBounds.y && windowMaxY < displayMaxY ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
@@ -1110,6 +1136,20 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+            }
+
+            std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
+            if ( !isInDisplay.has_value() ) {
+                ERROR_LOG( "Failed to check if the previous window position is within any display." )
+
+                clear();
+                return false;
+            }
+            const bool isInDisplayValue = *isInDisplay;
+            // check if the previous window position is within display
+            if ( !isInDisplayValue ) {
+                // reset position if it is not within the bounds of any display
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
             }
 
             _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
