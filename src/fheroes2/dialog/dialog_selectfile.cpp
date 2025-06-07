@@ -265,10 +265,18 @@ namespace
                                                      const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
     {
         if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
+#ifdef WITH_DEBUG
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
+#endif
+
             return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
         }
 
-        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp() );
+#ifdef WITH_DEBUG
+        assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByTimestamp{} ) );
+#endif
+
+        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
         const MapsFileInfoList::const_iterator it
             = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
         if ( it != endSameTimestamp ) {
@@ -281,7 +289,11 @@ namespace
                                                      const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
     {
         if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
-            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName() );
+#ifdef WITH_DEBUG
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
+#endif
+
+            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
         }
 
         return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
