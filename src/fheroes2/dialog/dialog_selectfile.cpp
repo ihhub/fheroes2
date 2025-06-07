@@ -131,7 +131,7 @@ namespace
     {
         bool operator()( const Maps::FileInfo & info, const std::string & filename ) const
         {
-            return Maps::CaseInsensitiveCompare( info.filename, filename );
+            return fheroes2::compareStringsCaseInsensitively( info.filename, filename );
         }
     };
 

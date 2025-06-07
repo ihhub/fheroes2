@@ -536,12 +536,12 @@ void Maps::FileInfo::FillUnions( const PlayerColorsSet side1Colors, const Player
 
 bool Maps::FileInfo::sortByFileName( const FileInfo & lhs, const FileInfo & rhs )
 {
-    return CaseInsensitiveCompare( lhs.filename, rhs.filename );
+    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs.filename );
 }
 
 bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
 {
-    return CaseInsensitiveCompare( lhs.name, rhs.name );
+    return fheroes2::compareStringsCaseInsensitively( lhs.name, rhs.name );
 }
 
 int Maps::FileInfo::KingdomRace( const PlayerColor color ) const
