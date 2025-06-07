@@ -115,26 +115,6 @@ namespace
         textInput.drawInRoi( field.x + 4 + ( maxFileNameWidth - textInput.width() ) / 2, field.y + 4, output, field );
     }
 
-    struct CompareByTimestamp
-    {
-        bool operator()( const Maps::FileInfo & info, uint32_t timestamp ) const
-        {
-            return info.timestamp > timestamp;
-        }
-        bool operator()( uint32_t timestamp, const Maps::FileInfo & info ) const
-        {
-            return timestamp > info.timestamp;
-        }
-    };
-
-    struct CompareByFilename
-    {
-        bool operator()( const Maps::FileInfo & info, const std::string & filename ) const
-        {
-            return fheroes2::compareStringsCaseInsensitively( info.filename, filename );
-        }
-    };
-
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
     {
     public:
@@ -252,11 +232,11 @@ namespace
     {
         const SaveFileSortingMethod sortType = Settings::Get().GetSaveFileSortingMethod();
         if ( sortType == SaveFileSortingMethod::FILENAME ) {
-            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::CompareByFileName{} );
         }
         else {
             assert( sortType == SaveFileSortingMethod::TIMESTAMP );
-            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByTimestamp );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::CompareByTimestamp{} );
         }
     }
 
@@ -285,10 +265,10 @@ namespace
                                                      const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
     {
         if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
-            return std::lower_bound( begin, end, lastChoice, CompareByFilename() );
+            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
         }
 
-        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, CompareByTimestamp() );
+        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp() );
         const MapsFileInfoList::const_iterator it
             = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
         if ( it != endSameTimestamp ) {
@@ -301,7 +281,7 @@ namespace
                                                      const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
     {
         if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
-            return std::lower_bound( begin, end, lastChoice, CompareByFilename() );
+            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName() );
         }
 
         return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );

@@ -534,12 +534,12 @@ void Maps::FileInfo::FillUnions( const PlayerColorsSet side1Colors, const Player
     }
 }
 
-bool Maps::FileInfo::sortByFileName( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::CompareByFileName::operator()( const FileInfo & lhs, const std::string & rhs ) const
 {
-    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs.filename );
+    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs );
 }
 
-bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::CompareByMapName::operator()( const FileInfo & lhs, const FileInfo & rhs ) const
 {
     return fheroes2::compareStringsCaseInsensitively( lhs.name, rhs.name );
 }
@@ -709,10 +709,10 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
     }
 
     if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
     }
     else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
     }
 
     return validMaps;
@@ -729,10 +729,10 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, false );
 
     if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
     }
     else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
     }
 
     return validMaps;
