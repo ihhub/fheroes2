@@ -280,33 +280,33 @@ Battle::AttackDirection Battle::Cell::GetTriangleDirection( const fheroes2::Poin
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
-    const fheroes2::Point one_half( ( _coord[1].x + _coord[2].x ) / 2, ( _coord[1].y + _coord[2].y ) / 2 );
-    const fheroes2::Point two_half( ( _coord[2].x + _coord[3].x ) / 2, ( _coord[2].y + _coord[3].y ) / 2 );
-    const fheroes2::Point four_half( ( _coord[4].x + _coord[5].x ) / 2, ( _coord[4].y + _coord[5].y ) / 2 );
-    const fheroes2::Point five_half( ( _coord[5].x + _coord[6].x ) / 2, ( _coord[5].y + _coord[6].y ) / 2 );
+    const fheroes2::Point oneHalf( ( _coord[1].x + _coord[2].x ) / 2, ( _coord[1].y + _coord[2].y ) / 2 );
+    const fheroes2::Point twoHalf( ( _coord[2].x + _coord[3].x ) / 2, ( _coord[2].y + _coord[3].y ) / 2 );
+    const fheroes2::Point fourHalf( ( _coord[4].x + _coord[5].x ) / 2, ( _coord[4].y + _coord[5].y ) / 2 );
+    const fheroes2::Point fiveHalf( ( _coord[5].x + _coord[6].x ) / 2, ( _coord[5].y + _coord[6].y ) / 2 );
 
     if ( pt == _coord[0] ) {
         return AttackDirection::CENTER;
     }
-    if ( inABC( pt, _coord[0], _coord[1], one_half ) ) {
+    if ( inABC( pt, _coord[0], _coord[1], oneHalf ) ) {
         return AttackDirection::TOP_LEFT;
     }
-    if ( inABC( pt, _coord[0], one_half, two_half ) ) {
+    if ( inABC( pt, _coord[0], oneHalf, twoHalf ) ) {
         return AttackDirection::TOP;
     }
-    if ( inABC( pt, _coord[0], two_half, _coord[3] ) ) {
+    if ( inABC( pt, _coord[0], twoHalf, _coord[3] ) ) {
         return AttackDirection::TOP_RIGHT;
     }
     if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) ) {
         return AttackDirection::RIGHT;
     }
-    if ( inABC( pt, _coord[0], _coord[4], four_half ) ) {
+    if ( inABC( pt, _coord[0], _coord[4], fourHalf ) ) {
         return AttackDirection::BOTTOM_RIGHT;
     }
-    if ( inABC( pt, _coord[0], four_half, five_half ) ) {
+    if ( inABC( pt, _coord[0], fourHalf, fiveHalf ) ) {
         return AttackDirection::BOTTOM;
     }
-    if ( inABC( pt, _coord[0], five_half, _coord[6] ) ) {
+    if ( inABC( pt, _coord[0], fiveHalf, _coord[6] ) ) {
         return AttackDirection::BOTTOM_LEFT;
     }
     if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) ) {
