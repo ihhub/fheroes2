@@ -690,7 +690,7 @@ namespace
             , _isNormalVictoryAllowed( mapFormat.allowNormalVictory )
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
             , _isEvilInterface( isEvilInterface )
-            , _mapWidth( mapFormat.size )
+            , _mapWidth( mapFormat.width )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             // Set the initial state for all victory conditions.
@@ -1448,7 +1448,7 @@ namespace
         LossConditionUI( fheroes2::Image & output, const fheroes2::Rect & roi, const Maps::Map_Format::MapFormat & mapFormat, const bool isEvilInterface )
             : _conditionType( mapFormat.lossConditionType )
             , _isEvilInterface( isEvilInterface )
-            , _mapWidth( mapFormat.size )
+            , _mapWidth( mapFormat.width )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             switch ( _conditionType ) {

@@ -433,8 +433,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
 
     difficulty = map.difficulty;
 
-    width = static_cast<uint16_t>( map.size );
-    height = static_cast<uint16_t>( map.size );
+    width = static_cast<uint16_t>( map.width );
+    height = static_cast<uint16_t>( map.width );
 
     name = map.name;
     description = map.description;
@@ -467,8 +467,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         // - tile index of the object
         // - color of the object (the color is needed to modify the game for multi-player)
         assert( map.lossConditionMetadata.size() == 2 );
-        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] % map.size );
-        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[0] / map.size );
+        lossConditionParams[0] = static_cast<uint16_t>( map.lossConditionMetadata[0] % map.width );
+        lossConditionParams[1] = static_cast<uint16_t>( map.lossConditionMetadata[0] / map.width );
         assert( ( map.lossConditionMetadata[1] & static_cast<uint32_t>( map.humanPlayerColors ) ) == map.lossConditionMetadata[1] );
         break;
     case LOSS_OUT_OF_TIME:
@@ -497,8 +497,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         // - tile index of the object
         // - color of the object (the color is needed to modify the game for multi-player mode)
         assert( map.victoryConditionMetadata.size() == 2 );
-        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.size );
-        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.size );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] % map.width );
+        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[0] / map.width );
         assert( ( map.victoryConditionMetadata[1] & static_cast<uint32_t>( map.availablePlayerColors ) ) == map.victoryConditionMetadata[1] );
         break;
     case VICTORY_OBTAIN_ARTIFACT:

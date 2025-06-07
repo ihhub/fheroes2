@@ -699,8 +699,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    width = map.size;
-    height = map.size;
+    width = map.width;
+    height = map.width;
 
     assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
@@ -1248,7 +1248,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
     else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
         const Castle * castle
-            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
+            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.width ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
@@ -1264,7 +1264,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
     else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
         const Castle * castle = vec_castles.Get(
-            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.size ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.size ) } );
+            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.width ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
