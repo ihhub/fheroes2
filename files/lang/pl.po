@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 00:46+0000\n"
-"PO-Revision-Date: 2025-05-28 14:42+0200\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
+"PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -6836,6 +6836,11 @@ msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Przetrząsając obóz wroga odnajdujesz ukrytą skrzynię ze skarbami."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9635,6 +9640,10 @@ msgstr ""
 #, fuzzy
 msgid "Black Cat"
 msgstr "Czarna Perła"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Bariera"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
@@ -12473,70 +12482,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
-
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Możesz pobrać najnowszą wersję gry ze strony:\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-
-#~ msgid ""
-#~ "After spending hours trying to fish the chest out of the sea, you open "
-#~ "it, only to find it empty."
-#~ msgstr ""
-#~ "Spędziwszy wiele godzin na próbach wyłowienia skrzyni wciągasz ją w końcu "
-#~ "na pokład i odkrywasz, iż jest ona kompletnie pusta."
-
-#~ msgid ""
-#~ "After scouring the area, you fall upon a hidden chest, containing the "
-#~ "%{gold} gold pieces."
-#~ msgstr ""
-#~ "Przeszukując okolicę odnajdujesz ukrytą skrzynię zawierającą %{gold} "
-#~ "sztuk złota."
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the campaign difficulty. This can be lowered at any point during "
-#~ "the campaign."
-#~ msgstr ""
-#~ "Wybierz stopień trudności. Tego ustawienia nie będziesz mógł później "
-#~ "zmienić."
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Wybierz ilość %{resource}:"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Automatyczna walka"
-
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "zakończ walkę w automatycznym trybie walki"
-
-#~ msgid "Please Remember"
-#~ msgstr "Pamiętaj"
-
-# Needs extra whitespace to avoid yellow word splitting
-#, fuzzy
-#~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr ""
-#~ "Możesz zawsze zmienić rozdzielczość klikając na\n"
-#~ " "
-
-#~ msgid "door"
-#~ msgstr "drzwi"
-
-#, fuzzy
-#~ msgid "NEW GAME"
-#~ msgstr ""
-#~ "NOWA\n"
-#~ "GRA"
-
-#~ msgid "Warning!"
-#~ msgstr "Uwaga!"
-
-#~ msgid "Dummy 1"
-#~ msgstr "Artefakt 1"

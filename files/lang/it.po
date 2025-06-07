@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 00:46+0000\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -6564,6 +6564,11 @@ msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr ""
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -8936,6 +8941,10 @@ msgstr ""
 #, fuzzy
 msgid "Black Cat"
 msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Barriera"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
@@ -11426,40 +11435,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
-
-#, fuzzy
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Scopri l'ultima versione del gioco su\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Scegli quantità di %{resource}:"
-
-#, fuzzy
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "Sei sicuro di voler congedare queste forze?"
-
-#~ msgid "Please Remember"
-#~ msgstr "Non Dimenticare"
-
-# Needs extra whitespace to avoid yellow word splitting
-#, fuzzy
-#~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr "Puoi sempre modificare la risoluzione cliccando sulla  "
-
-#~ msgid "door"
-#~ msgstr "porta"
-
-#~ msgid "Warning!"
-#~ msgstr "Attenzione!"
-
-#, fuzzy
-#~ msgid "Dummy 1"
-#~ msgstr "Mummia"

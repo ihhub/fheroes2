@@ -304,7 +304,7 @@ namespace Maps::Map_Format
         std::vector<uint32_t> lossConditionMetadata;
 
         // The world width in tiles. It is equal to the world height since currently all maps are square maps.
-        int32_t size{ 0 };
+        int32_t width{ 0 };
 
         // This is the main language of the map. At the moment only one language is being supported.
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };

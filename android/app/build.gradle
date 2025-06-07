@@ -143,8 +143,8 @@ tasks.register('generateAssetsDigest') {
 
             final byte[] itBuf = Files.readAllBytes(itPath)
 
-            sb.append(String.format('%032x % 12d %s\n',
-                    new BigInteger(1, MessageDigest.getInstance('MD5').digest(itBuf)),
+            sb.append(String.format('%0128x % 12d %s\n',
+                    new BigInteger(1, MessageDigest.getInstance('SHA-512').digest(itBuf)),
                     itBuf.length, assetsDirPath.relativize(itPath)))
         }
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 00:46+0000\n"
-"PO-Revision-Date: 2025-04-20 12:45+0300\n"
+"POT-Creation-Date: 2025-06-06 02:30+0000\n"
+"PO-Revision-Date: 2025-06-06 11:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3628,9 +3628,8 @@ msgstr "Выберите объект типа бонус:"
 msgid "Select Adventure Object:"
 msgstr "Выберите интерактивный объект:"
 
-#, fuzzy
 msgid "Select color"
-msgstr "Выберите существо:"
+msgstr "Выберите цвет"
 
 msgid "Players Icon"
 msgstr "Значок игроков"
@@ -4244,7 +4243,7 @@ msgid "The total number of obelisks is %{count}."
 msgstr "Общее количество обелисков на карте: %{count}."
 
 msgid "There are no players on the map, so no one can own this object."
-msgstr ""
+msgstr "На карте нет игроков, поэтому никто не может владеть этим объектом."
 
 msgid "Roads"
 msgstr "Дороги"
@@ -4696,7 +4695,7 @@ msgid "LANGUAGE"
 msgstr "ЯЗЫК"
 
 msgid "ABOUT"
-msgstr ""
+msgstr "О КАРТЕ"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4721,7 +4720,7 @@ msgid "Change Map Description"
 msgstr "Изменить описание карты"
 
 msgid "About"
-msgstr ""
+msgstr "О карте"
 
 msgid "Click to accept the changes made."
 msgstr "Нажмите, чтобы применить внесённые изменения."
@@ -4745,6 +4744,8 @@ msgid ""
 "Click to edit notes from the map creator. These notes are optional and do "
 "not appear during gameplay."
 msgstr ""
+"Нажмите, чтобы изменить примечания создателя карты. Данные примечания "
+"необязательны и не отображаются во время игры."
 
 msgid "Click to change your map name."
 msgstr "Нажмите, чтобы изменить название Вашей карты."
@@ -5844,13 +5845,12 @@ msgstr ""
 "Враг захватил %{name}!\n"
 "Вы проиграли."
 
-#, fuzzy
 msgid ""
 "The enemy has found the %{name}.\n"
 "Your quest is a failure."
 msgstr ""
-"Вы нашли %{name}.\n"
-"Ваше задание выполнено."
+"Враг нашёл %{name}.\n"
+"Ваше задание провалено."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -6467,9 +6467,8 @@ msgstr "Словацкий"
 msgid "Vietnamese"
 msgstr "Вьетнамский"
 
-#, fuzzy
 msgid "Greek"
-msgstr "Зелёный"
+msgstr "Греческий"
 
 msgid "Slow"
 msgstr "Медленная"
@@ -6695,6 +6694,13 @@ msgstr ""
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Обыскав вражеский лагерь, Вы находите спрятанный клад."
+
+msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+"Ваш корабль задевает бочку, плывущую по волнам. Внутри Вы находите тайник с "
+"забытым кладом."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -8021,12 +8027,17 @@ msgid ""
 "distance from the intimidating cat until you have regained your courage in "
 "battle."
 msgstr ""
+"Жгучее воспоминание о прошлой встрече всё ещё сильно, и Вы держитесь на "
+"расстоянии от устрашающего кота, пока вновь не обретёте храбрость в бою."
 
 msgid ""
 "You come upon a great cat, purring as it rubs against your leg. Charmed, you "
 "reach down, but it bites you and flees. At least the laughter at your "
 "misfortune lifts your troops' spirits."
 msgstr ""
+"Вы встречаете крупного кота, он мурлычет и трётся о Вашу ногу. Очарованный, "
+"Вы тянетесь к нему, но кот кусает Вас и удирает. По крайней мере, смех над "
+"Вашей неудачей поднимает боевой дух Вашим воинам."
 
 msgid "No spell book is present."
 msgstr "Книга заклинаний отсутствует."
@@ -9435,9 +9446,11 @@ msgstr "Болотистое озеро"
 msgid "Frozen Lake"
 msgstr "Замёрзшее озеро"
 
-#, fuzzy
 msgid "Black Cat"
-msgstr "Чёрная Жемчужина"
+msgstr "Чёрный кот"
+
+msgid "Barrel"
+msgstr "Бочка"
 
 msgid "randomRace|level 1 creatures"
 msgstr "существа 1 уровня"
@@ -12173,77 +12186,3 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
-
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Новую версию игры можно найти на сайте:\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-
-#~ msgid ""
-#~ "After spending hours trying to fish the chest out of the sea, you open "
-#~ "it, only to find it empty."
-#~ msgstr ""
-#~ "Потратив несколько часов на попытки выловить сундук из воды, Вы наконец "
-#~ "открыли его, но он оказался пуст."
-
-#~ msgid ""
-#~ "After scouring the area, you fall upon a hidden chest, containing the "
-#~ "%{gold} gold pieces."
-#~ msgstr ""
-#~ "Исследуя окрестности, Вы наткнулись на древний ларец в котором лежит "
-#~ "%{gold} золотых."
-
-#~ msgid ""
-#~ "Select the campaign difficulty. This can be lowered at any point during "
-#~ "the campaign."
-#~ msgstr "Выбор сложности кампании. Сложность можно понизить в любой момент."
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Подарить %{resource}:"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Включить автобитву"
-
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "закончить битву в авторежиме"
-
-#~ msgid "Please Remember"
-#~ msgstr "Запомните"
-
-#~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr ""
-#~ "Вы всегда можете изменить язык, разрешение экрана или настройки игры, "
-#~ "нажав на "
-
-#~ msgid "door"
-#~ msgstr "дверь"
-
-#~ msgid " on the left side of the Main Menu, or with the "
-#~ msgstr " в левой части главного меню или с помощью кнопки "
-
-#~ msgid " button from the "
-#~ msgstr ", расположенной в меню "
-
-#~ msgid "NEW GAME"
-#~ msgstr "НОВАЯ ИГРА"
-
-#~ msgid ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ ".\n"
-#~ "\n"
-#~ "Желаем Вам приятной игры!"
-
-#~ msgid "Warning!"
-#~ msgstr "Внимание!"
-
-#~ msgid "Dummy 1"
-#~ msgstr "Болванка 1"
