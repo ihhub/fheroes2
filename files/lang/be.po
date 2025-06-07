@@ -11187,12 +11187,3 @@ msgstr "Ён сказаў ёй: Бэ бэ бэ... а потым яна сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Адраджаецца невядомая сіла..."
-
-#~ msgid ""
-#~ "Check the newest version of the game at\n"
-#~ "https://github.com/ihhub/\n"
-#~ "fheroes2/releases"
-#~ msgstr ""
-#~ "Новую версію гульні можна знайсці на сайце\n"
-#~ "https://github.com/ihhub/\n"
-#~ "fheroes2/releases"

@@ -11025,13 +11025,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "%{resource} sayısını seç:"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Otomatik savacı aç"
-
-#, fuzzy
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
