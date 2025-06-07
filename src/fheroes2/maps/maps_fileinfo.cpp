@@ -28,7 +28,6 @@
 #include <cstring>
 #include <functional>
 #include <list>
-#include <locale>
 #include <map>
 #include <sstream>
 #include <type_traits>
@@ -58,32 +57,6 @@ namespace
 {
     const size_t mapNameLength = 16;
     const size_t mapDescriptionLength = 200;
-
-    template <typename CharType>
-    bool CaseInsensitiveCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
-    {
-        typename std::basic_string<CharType>::const_iterator li = lhs.begin();
-        typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
-
-        while ( li != lhs.end() && ri != rhs.end() ) {
-            const CharType lc = std::tolower( *li, std::locale() );
-            const CharType rc = std::tolower( *ri, std::locale() );
-
-            ++li;
-            ++ri;
-
-            if ( lc < rc ) {
-                return true;
-            }
-            if ( lc > rc ) {
-                return false;
-            }
-            // the chars are "equal", so proceed to check the next pair
-        }
-
-        // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
-        return li == lhs.end() && ri != rhs.end();
-    }
 
     // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isForEditor, const bool isOriginalMapFormat )
@@ -561,14 +534,24 @@ void Maps::FileInfo::FillUnions( const PlayerColorsSet side1Colors, const Player
     }
 }
 
-bool Maps::FileInfo::sortByFileName( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::CompareByFileName::operator()( const FileInfo & lhs, const FileInfo & rhs ) const
 {
-    return CaseInsensitiveCompare( lhs.filename, rhs.filename );
+    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs.filename );
 }
 
-bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::CompareByFileName::operator()( const FileInfo & lhs, const std::string & rhs ) const
 {
-    return CaseInsensitiveCompare( lhs.name, rhs.name );
+    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs );
+}
+
+bool Maps::FileInfo::CompareByFileName::operator()( const std::string & lhs, const FileInfo & rhs ) const
+{
+    return fheroes2::compareStringsCaseInsensitively( lhs, rhs.filename );
+}
+
+bool Maps::FileInfo::CompareByMapName::operator()( const FileInfo & lhs, const FileInfo & rhs ) const
+{
+    return fheroes2::compareStringsCaseInsensitively( lhs.name, rhs.name );
 }
 
 int Maps::FileInfo::KingdomRace( const PlayerColor color ) const
@@ -736,10 +719,10 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
     }
 
     if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
     }
     else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
     }
 
     return validMaps;
@@ -756,10 +739,10 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, false );
 
     if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByFileName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
     }
     else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
     }
 
     return validMaps;
