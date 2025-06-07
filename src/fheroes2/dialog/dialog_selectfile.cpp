@@ -269,7 +269,12 @@ namespace
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
 
-            if ( const auto iter = std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} ); iter != end && iter->filename == lastChoice ) {
+            // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
+            const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+
+            if ( const MapsFileInfoList::const_iterator iter
+                 = std::find_if( beginSameFileName, endSameFileName, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+                 iter != endSameFileName ) {
                 return iter;
             }
 
@@ -281,11 +286,13 @@ namespace
 #endif
 
         const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
-        const MapsFileInfoList::const_iterator it
-            = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-        if ( it != endSameTimestamp ) {
-            return it;
+
+        if ( const MapsFileInfoList::const_iterator iter
+             = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+             iter != endSameTimestamp ) {
+            return iter;
         }
+
         return end; // Not found.
     }
 
@@ -297,7 +304,12 @@ namespace
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
 
-            if ( const auto iter = std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} ); iter != end && iter->filename == lastChoice ) {
+            // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
+            const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+
+            if ( const MapsFileInfoList::const_iterator iter
+                 = std::find_if( beginSameFileName, endSameFileName, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+                 iter != endSameFileName ) {
                 return iter;
             }
 

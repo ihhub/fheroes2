@@ -175,16 +175,15 @@ namespace Maps
             LOSS_OUT_OF_TIME = 3
         };
 
+        // This comparator performs the case-insensitive comparison
         struct CompareByFileName
         {
+            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const;
             bool operator()( const FileInfo & lhs, const std::string & rhs ) const;
-
-            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const
-            {
-                return operator()( lhs, rhs.filename );
-            }
+            bool operator()( const std::string & lhs, const FileInfo & rhs ) const;
         };
 
+        // This comparator performs the case-insensitive comparison
         struct CompareByMapName
         {
             bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const;
@@ -198,12 +197,12 @@ namespace Maps
                 return lhs.timestamp > rhs.timestamp;
             }
 
-            bool operator()( const Maps::FileInfo & lhs, uint32_t rhs ) const
+            bool operator()( const FileInfo & lhs, uint32_t rhs ) const
             {
                 return lhs.timestamp > rhs;
             }
 
-            bool operator()( uint32_t lhs, const Maps::FileInfo & rhs ) const
+            bool operator()( uint32_t lhs, const FileInfo & rhs ) const
             {
                 return lhs > rhs.timestamp;
             }
