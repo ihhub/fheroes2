@@ -229,15 +229,15 @@ msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"KRIGEN\n"
-"OM\n"
-"TRONEN"
+"TRONE-\n"
+"KRIGENE"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"PRISEN FOR\n"
+"PRISEN\n"
+"FOR\n"
 "LOJALITET"
 
 msgid "HOT SEAT"
@@ -2051,9 +2051,8 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-#, fuzzy
 msgid "Price of Loyalty"
-msgstr "Prisen for trofasthet"
+msgstr "Prisen for lojalitet"
 
 msgid "Voyage Home"
 msgstr "Ferden hjem"
@@ -3762,22 +3761,21 @@ msgstr "Størrelsesikon"
 msgid "Map Type"
 msgstr "Kart-type"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
-"\"Prisen for trofasthet\"."
+"Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
+"for lojalitet\"."
 
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
 msgid "The Succession Wars"
-msgstr "Krigen om tronen"
+msgstr "Tronekrigene"
 
 msgid "The Price of Loyalty"
-msgstr "Prisen for trofasthet"
+msgstr "Prisen for lojalitet"
 
 #, fuzzy
 msgid "Resurrection"
@@ -5262,7 +5260,7 @@ msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "Teamet bak Heroes of Might and Magic II"
+msgstr "Teamet bak Heroes of Might and Magic II: Tronekrigene"
 
 msgid "Designed and Directed"
 msgstr "Utforming og ledelse"
@@ -5478,10 +5476,10 @@ msgid "hotkey|battle only game"
 msgstr "Kampparti"
 
 msgid "hotkey|choose the original campaign"
-msgstr "Velg Krigen om tronen"
+msgstr "Velg Tronekrigene"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "Velg Prisen for Lojalitet"
+msgstr "Velg Prisen for lojalitet"
 
 msgid "hotkey|map editor main menu"
 msgstr "Karttegnerens hovedmeny"
@@ -5520,9 +5518,8 @@ msgstr "Rolands felttog"
 msgid "hotkey|archibald campaign"
 msgstr "Archibalds felttog"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
-msgstr "Felttoget Prisen for trofasthet"
+msgstr "Felttoget Prisen for lojalitet"
 
 msgid "hotkey|voyage home campaign"
 msgstr "Felttoget Ferden hjem"
@@ -5795,12 +5792,11 @@ msgstr "Sist støttede utgave: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\", men de "
+"Denne filen ble lagret i spillutgaven \"Prisen for lojalitet\", men de "
 "tilhørende utvidelsesfilene mangler."
 
 msgid "This saved game is localized to '"
@@ -5918,7 +5914,7 @@ msgstr "Utvidelsesfelttog"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
-"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
+"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for lojalitet."
 
 msgid "Loading video. Please wait..."
 msgstr "Laster video. Vennligst vent..."
