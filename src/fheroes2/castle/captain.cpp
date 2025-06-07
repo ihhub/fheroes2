@@ -202,8 +202,9 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
     switch ( type ) {
     case PORT_BIG: {
         const int portraitIcnId = GetPortraitIcnId( GetRace() );
-        if ( portraitIcnId < 0 )
-            return fheroes2::Image();
+        if ( portraitIcnId < 0 ) {
+            return {};
+        }
 
         fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( GetColor() ), 0 );
