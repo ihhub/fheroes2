@@ -365,7 +365,7 @@ public:
         return _saveFileSortType;
     }
 
-    void changeSaveFileSortingMethod()
+    void toggleSaveFileSortingMethod()
     {
         if ( _saveFileSortType == SaveFileSortingMethod::FILENAME ) {
             _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;

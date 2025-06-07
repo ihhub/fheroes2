@@ -532,7 +532,7 @@ namespace
                     lastChoiceTimestamp = lists[currentId].timestamp;
                 }
 
-                settings.changeSaveFileSortingMethod();
+                settings.toggleSaveFileSortingMethod();
                 sortMapInfos( lists );
                 listUpdated = true;
 
