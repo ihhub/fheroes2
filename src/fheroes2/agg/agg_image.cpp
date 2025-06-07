@@ -2681,7 +2681,7 @@ namespace
                     fheroes2::Sprite tmp( out.width(), out.height() );
                     tmp.reset();
                     Copy( out, 0, 1, tmp, 0, 1, tmp.width() - 1, tmp.height() - 1 );
-                    out = tmp;
+                    out = std::move( tmp );
                     setButtonCornersTransparent( out );
                     FillTransform( out, out.width() - 3, 1, 2, 1, 1 );
                     FillTransform( out, out.width() - 2, 2, 1, 1, 1 );
@@ -4996,6 +4996,39 @@ namespace
             fheroes2::Copy( evilTextBox, evilTextBox.width() - ( textWidth - textWidth / 2 ), 0, outputImage, 46 + textWidth / 2, 23, ( textWidth - textWidth / 2 ),
                             evilTextBox.height() );
 
+            return true;
+        }
+        case ICN::TWNZDOCK: {
+            LoadOriginalICN( id );
+            if ( _icnVsSprite[id].size() == 6 && _icnVsSprite[id][4].width() == 285 ) {
+                // Fix dock sprite width: crop the extra transparent right part of the image.
+                const int32_t newWidth = 184;
+                fheroes2::Sprite & original = _icnVsSprite[id][4];
+
+                fheroes2::Sprite fixed( newWidth, original.height(), original.x(), original.y() );
+                fheroes2::Copy( original, 0, 0, fixed, 0, 0, newWidth, original.height() );
+                original = std::move( fixed );
+            }
+            return true;
+        }
+        case ICN::WIZARD_CASTLE_BAY: {
+            const int docksIcnId = ICN::TWNZDOCK;
+            LoadOriginalICN( docksIcnId );
+            auto & baySprites = _icnVsSprite[id];
+            if ( _icnVsSprite[docksIcnId].size() == 6 ) {
+                // Make sprites for Wizard castle bay by updating docks sprites.
+                baySprites = _icnVsSprite[docksIcnId];
+
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "wizard_bay_diff_to_twnzdock.image", temp );
+                fheroes2::Blit( temp, 0, 0, baySprites[0], temp.x() - baySprites[0].x(), temp.y() - baySprites[0].y(), baySprites[0].width(), baySprites[0].height() );
+
+                for ( size_t i = 1; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "wizard_bay_diff_to_twnzdock_animation_" + std::to_string( i - 1 ) + ".image", temp );
+                    fheroes2::Blit( temp, 0, 0, baySprites[i], temp.x() - baySprites[i].x(), temp.y() - baySprites[i].y(), baySprites[i].width(),
+                                    baySprites[i].height() );
+                }
+            }
             return true;
         }
         default:
