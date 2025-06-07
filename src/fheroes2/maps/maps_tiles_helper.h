@@ -172,6 +172,8 @@ namespace Maps
 
     bool removeObjectFromTileByType( const Tile & tile, const MP2::MapObjectType objectType );
 
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID );
+
     bool isClearGround( const Tile & tile );
 
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.

@@ -4903,9 +4903,10 @@ namespace
                 // - 1 new Stone Liths with 3 image parts.
                 // - 3 new variants of Observation Tower object. Each object has 2 image parts.
                 // - 1 new "Black Cat" object that has: 1 main image + 6 animation images.
-                // In total, 7 new objects (30 new images).
+                // - 1 new "Barrel" object that has: 1 main (empty) image + 6 animation images.
+                // In total, 8 new objects (37 new images).
 
-                images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) );
+                images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) + ( 1 + 6 ) );
 
                 // 2 River Deltas.
                 for ( size_t i = 0; i < 14; ++i ) {
@@ -4955,6 +4956,12 @@ namespace
                 // Black Cat. Tail and eyes animation.
                 for ( size_t i = 0; i < 6; ++i ) {
                     fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
+                }
+
+                // Barrel. Object has only animation images but for compatibility
+                // we need to have the main image (images[248]) be empty for this object.
+                for ( size_t i = 0; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "barrel_animation_" + std::to_string( i ) + ".image", images[249 + i] );
                 }
             }
 

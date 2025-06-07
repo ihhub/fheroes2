@@ -2011,7 +2011,7 @@ void Heroes::Dismiss( int reason )
         return;
     }
 
-    // if not surrendering, reset army
+    // Reset army to default state for hero's race if hero did not surrender in battle.
     if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
         army.Reset( true );
     }

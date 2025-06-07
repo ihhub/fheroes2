@@ -6657,6 +6657,11 @@ msgstr ""
 "När du genomsöker ett fiendeläger hittar du ett gömt förråd av skatter."
 
 msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
+
+msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
@@ -9402,6 +9407,10 @@ msgstr "Frusen Sjö"
 msgid "Black Cat"
 msgstr "Svart Katt"
 
+#, fuzzy
+msgid "Barrel"
+msgstr "Barriär"
+
 msgid "randomRace|level 1 creatures"
 msgstr "nivå 1 varelser"
 
@@ -12145,11 +12154,4 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
 
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Den senaste versionen av spelet finns på:\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
+
