@@ -831,7 +831,7 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
-                // update the window position, in case we get queried for it
+                // Update the window position, in case we get queried for it
                 SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
 
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
