@@ -281,8 +281,8 @@ bool Settings::Read( const std::string & filePath )
         _resolutionInfo = config.ResolutionParams( "videomode", { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     }
 
-    if ( config.Exists( "main window position" ) ) {
-        _windowPos = config.PointParams( "main window position", { -1, -1 } );
+    if ( config.Exists( "game window position" ) ) {
+        _windowPos = config.PointParams( "game window position", { -1, -1 } );
     }
 
     if ( config.Exists( "fullscreen" ) ) {
@@ -414,7 +414,7 @@ std::string Settings::String() const
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
     os << std::endl << "# position of the game's window" << std::endl;
-    os << "main window position = [ " << _windowPos.x << ", " << _windowPos.y << " ]" << std::endl;
+    os << "game window position = [ " << _windowPos.x << ", " << _windowPos.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
