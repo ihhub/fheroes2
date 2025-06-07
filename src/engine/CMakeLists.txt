@@ -45,6 +45,7 @@ target_include_directories(
 target_link_libraries(
 	engine
 	smacker
+	pcg-cpp
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}
 	${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer
 	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image>

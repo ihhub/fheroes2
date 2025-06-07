@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,14 +28,15 @@
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <random>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include "pcg_random.hpp"
+
 namespace Rand
 {
-    std::mt19937 & CurrentThreadRandomDevice();
+    pcg32 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
 
@@ -53,18 +54,20 @@ namespace Rand
         return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );
     }
 
-    uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
+    uint32_t GetWithGen( uint32_t from, uint32_t to, pcg32 & gen );
 
     template <typename T>
     void Shuffle( std::vector<T> & vec )
     {
-        std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+        // using shuffle from pcg-cpp because std::shuffle yields different results on different platforms
+        shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
     }
 
     template <typename T>
-    void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
+    void ShuffleWithGen( std::vector<T> & vec, pcg32 & gen )
     {
-        std::shuffle( vec.begin(), vec.end(), gen );
+        // using shuffle from pcg-cpp because std::shuffle yields different results on different platforms
+        shuffle( vec.begin(), vec.end(), gen );
     }
 
     template <typename T>
@@ -77,7 +80,7 @@ namespace Rand
     }
 
     template <typename T>
-    const T & GetWithGen( const std::vector<T> & vec, std::mt19937 & gen )
+    const T & GetWithGen( const std::vector<T> & vec, pcg32 & gen )
     {
         assert( !vec.empty() );
 
@@ -141,7 +144,7 @@ namespace Rand
         const T & Get( const std::vector<T> & vec )
         {
             ++_currentSeed;
-            std::mt19937 seededGen( _currentSeed );
+            pcg32 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 

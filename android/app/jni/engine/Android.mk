@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,7 +26,10 @@ include $(CLEAR_VARS)
 LOCAL_SHORT_COMMANDS := true
 
 ENGINE_SRC_DIR := $(LOCAL_PATH)/../../../../src/engine
+PCG_CPP_INCLUDE_DIR := $(LOCAL_PATH)/../../../../src/thirdparty/pcg-cpp/include
 
+LOCAL_C_INCLUDES := \
+		$(PCG_CPP_INCLUDE_DIR)
 LOCAL_MODULE := engine
 LOCAL_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp)
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer

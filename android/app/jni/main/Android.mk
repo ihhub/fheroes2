@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,12 +26,14 @@ include $(CLEAR_VARS)
 LOCAL_SHORT_COMMANDS := true
 
 MAIN_SRC_DIR := $(LOCAL_PATH)/../../../../src/fheroes2
+PCG_CPP_INCLUDE_DIR := $(LOCAL_PATH)/../../../../src/thirdparty/pcg-cpp/include
 
 # SDL expects libmain.so as the main application module
 LOCAL_MODULE := main
 LOCAL_C_INCLUDES := \
     $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/)) \
-    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/))
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/)) \
+		$(PCG_CPP_INCLUDE_DIR)
 LOCAL_SRC_FILES := \
     $(wildcard $(MAIN_SRC_DIR)/*/*.cpp) \
     $(wildcard $(MAIN_SRC_DIR)/*/*/*.cpp)

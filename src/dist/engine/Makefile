@@ -22,6 +22,8 @@ ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../../thirdparty/libsmacker
 endif
 
+CCFLAGS := $(CCFLAGS) -isystem ../../thirdparty/pcg-cpp/include
+
 SOURCEDIR := ../../engine
 
 .PHONY: all clean

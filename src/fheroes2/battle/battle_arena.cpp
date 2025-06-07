@@ -31,7 +31,6 @@
 #include <map>
 #include <numeric>
 #include <ostream>
-#include <random>
 #include <type_traits>
 #include <utility>
 
@@ -61,6 +60,7 @@
 #include "math_base.h"
 #include "math_tools.h"
 #include "monster.h"
+#include "pcg_random.hpp"
 #include "players.h"
 #include "rand.h"
 #include "skill.h"
@@ -118,7 +118,7 @@ namespace
         return *iter;
     }
 
-    int GetCovr( int ground, std::mt19937 & gen )
+    int GetCovr( int ground, pcg32 & gen )
     {
         std::vector<int> covrs;
         covrs.reserve( 6 );
@@ -425,7 +425,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     else
     // set obstacles
     {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+        pcg32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
         _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 

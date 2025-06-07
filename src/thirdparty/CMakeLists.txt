@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2023                                             #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -30,3 +30,10 @@ target_link_libraries(
 	smacker
 	Threads::Threads # To match the build settings of the main app
 	)
+
+add_library(pcg-cpp INTERFACE)
+target_include_directories(
+	pcg-cpp
+	SYSTEM INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pcg-cpp/include>
+)
