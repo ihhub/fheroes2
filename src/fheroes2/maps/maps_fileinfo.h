@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
-#include <locale>
 #include <optional>
 #include <string>
 #include <type_traits>
