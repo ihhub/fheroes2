@@ -269,7 +269,11 @@ namespace
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
 
-            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+            if ( const auto iter = std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} ); iter != end && iter->filename == lastChoice ) {
+                return iter;
+            }
+
+            return end;
         }
 
 #ifdef WITH_DEBUG
@@ -293,7 +297,11 @@ namespace
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
 
-            return std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+            if ( const auto iter = std::lower_bound( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} ); iter != end && iter->filename == lastChoice ) {
+                return iter;
+            }
+
+            return end;
         }
 
         return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
