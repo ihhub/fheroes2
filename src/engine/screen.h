@@ -181,7 +181,7 @@ namespace fheroes2
         bool _nearestScaling;
     };
 
-    class Display : public Image
+    class Display final : public Image
     {
     public:
         friend class BaseRenderEngine;
@@ -249,10 +249,10 @@ namespace fheroes2
     private:
         std::unique_ptr<BaseRenderEngine> _engine;
         std::unique_ptr<Cursor> _cursor;
-        PreRenderProcessing _preprocessing;
-        PostRenderProcessing _postprocessing;
+        PreRenderProcessing _preprocessing{ nullptr };
+        PostRenderProcessing _postprocessing{ nullptr };
 
-        uint8_t * _renderSurface;
+        uint8_t * _renderSurface{ nullptr };
 
         // Previous area drawn on the screen.
         Rect _prevRoi;
@@ -314,17 +314,19 @@ namespace fheroes2
             _cursorUpdater = cursorUpdater;
         }
 
+        void keepInScreenArea( const bool value )
+        {
+            _keepInScreenArea = value;
+        }
+
     protected:
         Sprite _image;
-        bool _emulation;
-        bool _show;
-        void ( *_cursorUpdater )();
+        void ( *_cursorUpdater )(){ nullptr };
+        bool _emulation{ false };
+        bool _show{ false };
+        bool _keepInScreenArea{ false };
 
-        Cursor()
-            : _emulation( true )
-            , _show( false )
-            , _cursorUpdater( nullptr )
-        {}
+        Cursor() = default;
     };
 
     BaseRenderEngine & engine();
