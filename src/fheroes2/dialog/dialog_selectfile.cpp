@@ -262,6 +262,12 @@ namespace
     }
 
     MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice )
+    {
+        return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+    }
+
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
                                                      const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
     {
         switch ( sortingMethod ) {
@@ -273,9 +279,7 @@ namespace
             // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
             const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
 
-            if ( const MapsFileInfoList::const_iterator iter
-                 = std::find_if( beginSameFileName, endSameFileName, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-                 iter != endSameFileName ) {
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameFileName, endSameFileName, lastChoice ); iter != endSameFileName ) {
                 return iter;
             }
 
@@ -288,9 +292,7 @@ namespace
 
             const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
 
-            if ( const MapsFileInfoList::const_iterator iter
-                 = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-                 iter != endSameTimestamp ) {
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameTimestamp, endSameTimestamp, lastChoice ); iter != endSameTimestamp ) {
                 return iter;
             }
 
@@ -316,16 +318,14 @@ namespace
             // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
             const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
 
-            if ( const MapsFileInfoList::const_iterator iter
-                 = std::find_if( beginSameFileName, endSameFileName, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-                 iter != endSameFileName ) {
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameFileName, endSameFileName, lastChoice ); iter != endSameFileName ) {
                 return iter;
             }
 
             break;
         }
         case SaveFileSortingMethod::TIMESTAMP:
-            return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+            return findInMapInfos( begin, end, lastChoice );
         default:
             assert( 0 );
             break;
