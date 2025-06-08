@@ -11151,11 +11151,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr ""
-#~ "Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
-
-#~ msgid "Warning!"
-#~ msgstr "Įspėjimas!"

@@ -475,14 +475,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     army1.resetInvalidMonsters();
     army2.resetInvalidMonsters();
 
-    // Reset the hero's army to the minimum army if the hero retreated or was defeated
-    if ( commander1 && commander1->isHeroes() && ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) ) ) {
-        army1.Reset( false );
-    }
-    if ( commander2 && commander2->isHeroes() && ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) ) ) {
-        army2.Reset( false );
-    }
-
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;

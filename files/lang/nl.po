@@ -11081,11 +11081,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Automatische gevechten inschakelen"
-
-#, fuzzy
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr ""
-#~ "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"

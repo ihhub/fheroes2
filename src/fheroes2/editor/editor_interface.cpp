@@ -337,7 +337,7 @@ namespace
                     mapFormat.castleMetadata.erase( objectId );
 
                     // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
-                    const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
+                    const size_t bottomTileIndex = mapTileIndex + mapFormat.width;
                     assert( bottomTileIndex < mapFormat.tiles.size() );
 
                     if ( Maps::doesContainRoads( mapFormat.tiles[bottomTileIndex] ) ) {
@@ -1989,9 +1989,9 @@ namespace Interface
         return false;
     }
 
-    bool EditorInterface::generateNewMap( const int32_t size )
+    bool EditorInterface::generateNewMap( const int32_t mapWidth )
     {
-        if ( size <= 0 ) {
+        if ( mapWidth <= 0 ) {
             return false;
         }
 
@@ -2005,21 +2005,22 @@ namespace Interface
 
         _mapFormat = {};
 
-        world.generateUninitializedMap( size );
+        world.generateUninitializedMap( mapWidth );
 
-        if ( world.w() != size || world.h() != size ) {
+        if ( world.w() != mapWidth || world.h() != mapWidth ) {
             assert( 0 );
 
             return false;
         }
 
-        _mapFormat.size = size;
+        _mapFormat.width = mapWidth;
 
-        const int32_t tilesCount = size * size;
+        // Only square maps are supported so map height is the same as width.
+        const int32_t tilesCount = mapWidth * mapWidth;
 
         _mapFormat.tiles.resize( tilesCount );
 
-        for ( int32_t i = 0; i < size; ++i ) {
+        for ( int32_t i = 0; i < tilesCount; ++i ) {
             world.getTile( i ).setIndex( i );
         }
 

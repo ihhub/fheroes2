@@ -102,7 +102,7 @@ namespace
     // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
     void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
     {
-        assert( map.size == world.w() && map.size == world.h() );
+        assert( map.width == world.w() && map.width == world.h() );
 
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
@@ -212,8 +212,8 @@ namespace
             return Direction::UNKNOWN;
         }
 
-        const fheroes2::Point centerTile( centerTileIndex % map.size, centerTileIndex / map.size );
-        const int32_t maxTilePos = map.size - 1;
+        const fheroes2::Point centerTile( centerTileIndex % map.width, centerTileIndex / map.width );
+        const int32_t maxTilePos = map.width - 1;
 
         int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
 
@@ -223,7 +223,7 @@ namespace
             tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );
             tilePosition.y = std::min( maxTilePos, std::max( 0, tilePosition.y ) );
 
-            if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.size + tilePosition.x].terrainIndex ) == groundId ) {
+            if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.width + tilePosition.x].terrainIndex ) == groundId ) {
                 groundDirection |= direction;
             }
         }
@@ -600,8 +600,8 @@ namespace
 
         // This terrain cannot be properly connected with the nearby terrains. There are no such ground images.
         DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                   "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % map.size
-                                                            << ',' << tileId / map.size << " (" << tileId << ").\nDirections: " << Direction::String( groundDirection ) )
+                   "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % map.width
+                                                            << ',' << tileId / map.width << " (" << tileId << ").\nDirections: " << Direction::String( groundDirection ) )
         return false;
     }
 
@@ -671,7 +671,7 @@ namespace
             const int groundOnTile = Maps::Ground::getGroundByImageIndex( map.tiles[tileId].terrainIndex );
 
             DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                       "Ground " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.size << ',' << tileId / map.size << " (" << tileId
+                       "Ground " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
                                  << ") should be replaced by some other one." )
 
             std::vector<int> newGrounds;
@@ -711,7 +711,7 @@ namespace
 
             for ( const int newGround : newGrounds ) {
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                           "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % map.size << ',' << tileId / map.size << " (" << tileId << ")." )
+                           "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId << ")." )
 
                 setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( newGround, true ), false, false );
 
@@ -721,14 +721,14 @@ namespace
                 }
 
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                           "Ground " << Maps::Ground::String( newGround ) << " was properly set to " << tileId % map.size << ',' << tileId / map.size << " (" << tileId
+                           "Ground " << Maps::Ground::String( newGround ) << " was properly set to " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
                                      << ")." )
 
                 // The ground on the tile has been changed, so we need to update the transitions on all the tiles around.
                 for ( const int32_t index : around ) {
                     if ( !updateTerrainTransitionOnTile( map, index ) ) {
                         // TODO: Find a better solution without using recursions. In example, undo the tiles in 1 tile radius.
-                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Recursive call for tile at " << tileId % map.size << ',' << tileId / map.size << " (" << tileId << ")." )
+                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Recursive call for tile at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId << ")." )
 
                         updateTerrainTransitionOnArea( map, newGroundId, index, index, 1 );
                     }
@@ -743,7 +743,7 @@ namespace
             if ( needRevert && !newGrounds.empty() ) {
                 setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( groundOnTile, true ), false, false );
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                           "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.size << ',' << tileId / map.size << " (" << tileId
+                           "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
                                                   << ")." )
             }
         }
@@ -752,8 +752,8 @@ namespace
     void updateTerrainTransitionOnAreaBoundaries( Maps::Map_Format::MapFormat & map, const int groundId, const int32_t startX, const int32_t endX, const int32_t startY,
                                                   const int32_t endY )
     {
-        const int32_t mapWidth = map.size;
-        const int32_t mapHeight = map.size;
+        const int32_t mapWidth = map.width;
+        const int32_t mapHeight = map.width;
 
         // First we update the boundaries inside the filled area.
         updateTerrainTransitionOnArea( map, groundId, startX + mapWidth * startY, endX + mapWidth * startY, 1 );
@@ -938,10 +938,10 @@ namespace
             roadDirection = Direction::CENTER;
         }
 
-        const Maps::Indexes around = Maps::getAroundIndexes( mainTileIndex, map.size, map.size, 1 );
+        const Maps::Indexes around = Maps::getAroundIndexes( mainTileIndex, map.width, map.width, 1 );
 
         for ( const int32_t tileIndex : around ) {
-            assert( tileIndex >= 0 && tileIndex < map.size * map.size );
+            assert( tileIndex >= 0 && tileIndex < map.width * map.width );
 
             if ( Maps::doesContainRoads( map.tiles[tileIndex] ) ) {
                 roadDirection |= Maps::GetDirection( mainTileIndex, tileIndex );
@@ -973,7 +973,7 @@ namespace
         if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 7, 17, 20, 22, 24, 29 } ) ) {
                     return 8U;
                 }
@@ -981,7 +981,7 @@ namespace
 
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 16, 18, 19, 23, 25, 30 } ) ) {
                     return 15U;
                 }
@@ -990,21 +990,21 @@ namespace
                  && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
                       || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
                     return Rand::Get( 1 ) ? 1U : 27U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + map.size;
+                const int32_t lowerTileIndex = tileIndex + map.width;
                 if ( checkRoadIcnIndex( lowerTileIndex, { 8, 9, 18, 20, 30 } ) ) {
                     return Rand::Get( 1 ) ? 22U : 24U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + map.size;
+                const int32_t lowerTileIndex = tileIndex + map.width;
                 if ( checkRoadIcnIndex( lowerTileIndex, { 12, 15, 17, 19, 29 } ) ) {
                     return Rand::Get( 1 ) ? 23U : 25U;
                 }
@@ -1031,8 +1031,8 @@ namespace
         // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
 
         // There might be a castle entrance above. Check for it to properly connect the road to it.
-        if ( tileIndex >= map.size ) {
-            const auto & aboveTile = map.tiles[tileIndex - map.size];
+        if ( tileIndex >= map.width ) {
+            const auto & aboveTile = map.tiles[tileIndex - map.width];
             if ( doesContainCastleEntrance( aboveTile ) ) {
                 return 31U;
             }
@@ -1064,7 +1064,7 @@ namespace
             return 3U;
         }
         if ( hasBits( roadDirection, Direction::TOP )
-             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - map.size, { 2, 28 } ) ) )
+             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - map.width, { 2, 28 } ) ) )
              && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
             // T - cross. Also used for 90 degrees turn from the bottom to the left/right.
             return 4U;
@@ -1136,14 +1136,14 @@ namespace
                                   const bool updateNonRoadTilesFromEdgesToCenter )
     {
         // We should update road sprites step by step starting from the tiles close connected to the center tile.
-        const int32_t centerX = centerTileIndex % map.size;
-        const int32_t centerY = centerTileIndex / map.size;
+        const int32_t centerX = centerTileIndex % map.width;
+        const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
         const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
         const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.size );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.size );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 
@@ -1151,7 +1151,7 @@ namespace
             const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
 
             for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-                const int32_t indexOffsetY = tileY * map.size;
+                const int32_t indexOffsetY = tileY * map.width;
                 const int32_t distanceY = std::abs( tileY - centerY );
 
                 for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
@@ -1183,7 +1183,7 @@ namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
     {
-        world.generateUninitializedMap( map.size );
+        world.generateUninitializedMap( map.width );
 
         if ( !readAllTiles( map ) ) {
             return false;
@@ -1198,7 +1198,7 @@ namespace Maps
 
     bool readAllTiles( const Map_Format::MapFormat & map )
     {
-        assert( map.size == world.w() && map.size == world.h() );
+        assert( map.width == world.w() && map.width == world.h() );
 
         const size_t tilesConut = map.tiles.size();
 
@@ -1256,14 +1256,14 @@ namespace Maps
 
     void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
-        assert( map.size == world.w() && map.size == world.h() );
+        assert( map.width == world.w() && map.width == world.h() );
 
         const int32_t maxTileId = static_cast<int32_t>( map.tiles.size() ) - 1;
         if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
             return;
         }
 
-        const fheroes2::Point startTileOffset( startTileId % map.size, startTileId / map.size );
+        const fheroes2::Point startTileOffset( startTileId % map.width, startTileId / map.width );
 
         if ( startTileId == endTileId ) {
             // In original editor these tiles are never flipped.
@@ -1274,7 +1274,7 @@ namespace Maps
             return;
         }
 
-        const fheroes2::Point endTileOffset( endTileId % map.size, endTileId / map.size );
+        const fheroes2::Point endTileOffset( endTileId % map.width, endTileId / map.width );
 
         const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
         const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
@@ -1282,7 +1282,7 @@ namespace Maps
         const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
 
         for ( int32_t y = startY; y <= endY; ++y ) {
-            const int32_t tileOffset = y * map.size;
+            const int32_t tileOffset = y * map.width;
             for ( int32_t x = startX; x <= endX; ++x ) {
                 // In original editor these tiles are never flipped.
                 setTerrain( map, x + tileOffset, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
