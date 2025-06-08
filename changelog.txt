@@ -20,7 +20,7 @@ version 1.1.9 (08 June 2025)
 - add the ability to set owner color for capturable objects in the Editor
 - add the Danish language to the Virtual keyboard
 - fix troop count display during monster animation in battles
-- make Bad Luck animation to be closer to the original game
+- make Bad Luck animation closer to the original game
 - make Disrupting Ray and Teleport spells animation closer to the original game
 - render frame centered on a hero before rendering action object's events
 - significantly speed up language switching operation
