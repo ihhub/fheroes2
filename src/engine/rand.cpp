@@ -25,8 +25,10 @@
 
 #include <numeric>
 
+#if defined( _WIN32 )
 #pragma warning( push )
 #pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
 
 // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
 // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
@@ -57,7 +59,9 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, s
     const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
     return from + upperPart;
 }
+#if defined( _WIN32 )
 #pragma warning( pop )
+#endif
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
