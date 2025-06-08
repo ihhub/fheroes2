@@ -254,9 +254,7 @@ namespace fheroes2
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette );
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
     void ApplyPalette( Image & image, const uint8_t paletteId );
-
     void ApplyPalette( const Image & in, Image & out, const uint8_t paletteId );
-
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId );
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette );
