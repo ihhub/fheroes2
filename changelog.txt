@@ -30,7 +30,7 @@ version 1.1.9 (08 June 2025)
 - fix a conflict between scrolling by dragging and regular scrolling
 - fix Barbarian castle's Shipyard rendering
 - fix incorrect pixels near the SKIP button when Hero's options are opened
-- fix unit overlap in battles when unit is moving to the row above the other unit
+- fix unit overlap in battles when a unit is moving to the row above another unit
 - make the scouting area match the original game
 
 version 1.1.8 (04 May 2025)
