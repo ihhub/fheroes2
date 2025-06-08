@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,29 @@
 
 namespace Rand
 {
+    uint32_t uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen );
+
+    // Fisher-Yates shuffle AKA Knuth shuffle, probably the same as std::shuffle.
+    // NOTE: we can't use std::shuffle here because it uses std::uniform_int_distribution which behaves differently on different platforms.
+    template <class Iter, class Random>
+    void shuffle( Iter first, Iter last, Random && gen )
+    {
+        if ( first == last ) {
+            return;
+        }
+
+        // change last from once-past-the-end to last element
+        --last;
+        uint32_t remainingSwaps = static_cast<uint32_t>( std::distance( first, last ) );
+        while ( remainingSwaps > 1 ) {
+            using std::swap;
+            const uint32_t index = uniformIntDistribution( 0, remainingSwaps, gen );
+            std::swap( *last, *( first + index ) );
+            --last;
+            --remainingSwaps;
+        }
+    }
+
     std::mt19937 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
@@ -58,13 +81,13 @@ namespace Rand
     template <typename T>
     void Shuffle( std::vector<T> & vec )
     {
-        std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+        Rand::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
     }
 
     template <typename T>
     void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
     {
-        std::shuffle( vec.begin(), vec.end(), gen );
+        Rand::shuffle( vec.begin(), vec.end(), gen );
     }
 
     template <typename T>

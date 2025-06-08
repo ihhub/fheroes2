@@ -25,44 +25,39 @@
 
 #include <numeric>
 
-namespace
-{
-
 #pragma warning( push )
 #pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
 
-    // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
-    // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
-    uint32_t uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen )
-    {
-        if ( from == to ) {
-            return from;
-        }
+// implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
+// NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
+uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen )
+{
+    if ( from == to ) {
+        return from;
+    }
 
-        const uint32_t range = to - from + 1;
+    const uint32_t range = to - from + 1;
 
-        uint32_t generated = gen();
-        uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
-        uint32_t lowerPart = static_cast<uint32_t>( mult );
-        if ( lowerPart >= range ) {
-            const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-            return from + upperPart;
-        }
-
-        // ( -range ) % range is the same as (2**32 - range) % range
-        const uint32_t discardBound = ( -range ) % range;
-
-        while ( lowerPart < discardBound ) {
-            generated = gen();
-            mult = ( static_cast<uint64_t>( generated ) * range );
-            lowerPart = static_cast<uint32_t>( mult );
-        }
+    uint32_t generated = gen();
+    uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
+    uint32_t lowerPart = static_cast<uint32_t>( mult );
+    if ( lowerPart >= range ) {
         const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
         return from + upperPart;
     }
-#pragma warning( pop )
 
+    // ( -range ) % range is the same as (2**32 - range) % range
+    const uint32_t discardBound = ( -range ) % range;
+
+    while ( lowerPart < discardBound ) {
+        generated = gen();
+        mult = ( static_cast<uint64_t>( generated ) * range );
+        lowerPart = static_cast<uint32_t>( mult );
+    }
+    const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+    return from + upperPart;
 }
+#pragma warning( pop )
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
