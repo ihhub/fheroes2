@@ -10,7 +10,7 @@ version 1.1.9 (08 June 2025)
 - add the Black Cat object
 - fix map centering when AI interacts with an action object
 - render hero's Spell Points on two lines if they don't fit on one line
-- fix rendering of high obstacles in battles
+- fix rendering of tall obstacles in battles
 - add Greek translation support
 - fix button behavior when pressing and holding them
 - update the German translation
