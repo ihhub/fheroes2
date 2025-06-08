@@ -5,7 +5,7 @@ version 1.1.9 (08 June 2025)
 - update the Ukrainian translation
 - update the Russian translation
 - add the Barrel object
-- reduce map reloads while erasing objects or placing terrain in the Editor
+- reduce map reloads when erasing objects or placing terrain in the Editor
 - remove the rumor about the latest update
 - add the Black Cat object
 - fix map center positioning when AI interacts with action object
