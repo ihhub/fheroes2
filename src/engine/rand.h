@@ -40,7 +40,7 @@ namespace Rand
     // Fisher-Yates shuffle AKA Knuth shuffle, probably the same as std::shuffle.
     // NOTE: we can't use std::shuffle here because it uses std::uniform_int_distribution which behaves differently on different platforms.
     template <class Iter, class Random>
-    void shuffle( Iter first, Iter last, Random && gen )
+    void shuffle( Iter first, Iter last, Random && gen ) // NOLINT(cppcoreguidelines-missing-std-forward): same signature as std::shuffle
     {
         if ( first == last ) {
             return;
