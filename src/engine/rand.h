@@ -48,7 +48,7 @@ namespace Rand
 
         // change last from once-past-the-end to last element
         --last;
-        uint32_t remainingSwaps = static_cast<uint32_t>( std::distance( first, last ) );
+        uint32_t remainingSwaps = static_cast<uint32_t>( last - first );
         while ( remainingSwaps > 1 ) {
             using std::swap;
             const uint32_t index = uniformIntDistribution( 0, remainingSwaps, gen );
