@@ -38,6 +38,7 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cassert>
 #include <climits>
 #include <utility>
