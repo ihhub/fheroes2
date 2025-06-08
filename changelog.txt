@@ -26,7 +26,6 @@ version 1.1.9 (08 June 2025)
 - significantly speed up language switching operation
 - optimize rendering and timers
 - add UP and DOWN hotkeys support in "Select Count" dialogs
-- update the Ukrainian translation
 - Android: optimize the asset extraction process
 - fix the potential conflict between scrolling by dragging and regular scrolling
 - fix Barbarian castle's Shipyard rendering
