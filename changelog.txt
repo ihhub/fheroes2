@@ -27,7 +27,7 @@ version 1.1.9 (08 June 2025)
 - optimize rendering and timers
 - add UP and DOWN hotkeys support in "Select Count" dialogs
 - Android: optimize the asset extraction process
-- fix the potential conflict between scrolling by dragging and regular scrolling
+- fix a conflict between scrolling by dragging and regular scrolling
 - fix Barbarian castle's Shipyard rendering
 - fix incorrect pixels near the SKIP button when Hero's options are opened
 - fix unit overlap in battles when unit is moving to the row above the other unit
