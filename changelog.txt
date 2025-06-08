@@ -8,7 +8,7 @@ version 1.1.9 (08 June 2025)
 - reduce map reloads when erasing objects or placing terrain in the Editor
 - remove the rumor about the latest update
 - add the Black Cat object
-- fix map center positioning when AI interacts with action object
+- fix map centering when AI interacts with an action object
 - render hero's Spell Points in two lines if they don't fit in one line
 - fix rendering of high obstacles in battles
 - add Greek translation support
