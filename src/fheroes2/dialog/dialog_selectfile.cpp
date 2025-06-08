@@ -264,7 +264,8 @@ namespace
     MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
                                                      const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
     {
-        if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
+        switch ( sortingMethod ) {
+        case SaveFileSortingMethod::FILENAME: {
 #ifdef WITH_DEBUG
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
@@ -278,28 +279,36 @@ namespace
                 return iter;
             }
 
-            return end;
+            break;
         }
-
+        case SaveFileSortingMethod::TIMESTAMP: {
 #ifdef WITH_DEBUG
-        assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByTimestamp{} ) );
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByTimestamp{} ) );
 #endif
 
-        const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
+            const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
 
-        if ( const MapsFileInfoList::const_iterator iter
-             = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
-             iter != endSameTimestamp ) {
-            return iter;
+            if ( const MapsFileInfoList::const_iterator iter
+                 = std::find_if( beginSameTimestamp, endSameTimestamp, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+                 iter != endSameTimestamp ) {
+                return iter;
+            }
+
+            break;
+        }
+        default:
+            assert( 0 );
+            break;
         }
 
-        return end; // Not found.
+        return end;
     }
 
     MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
                                                      const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
     {
-        if ( sortingMethod == SaveFileSortingMethod::FILENAME ) {
+        switch ( sortingMethod ) {
+        case SaveFileSortingMethod::FILENAME: {
 #ifdef WITH_DEBUG
             assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
 #endif
@@ -313,10 +322,16 @@ namespace
                 return iter;
             }
 
-            return end;
+            break;
+        }
+        case SaveFileSortingMethod::TIMESTAMP:
+            return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+        default:
+            assert( 0 );
+            break;
         }
 
-        return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+        return end;
     }
 
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
