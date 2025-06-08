@@ -12,7 +12,7 @@ version 1.1.9 (08 June 2025)
 - render hero's Spell Points on two lines if they don't fit on one line
 - fix rendering of high obstacles in battles
 - add Greek translation support
-- fix behavior of buttons when pressing down on them
+- fix button behavior when pressing and holding them
 - update the German translation
 - allow AI to dig for Ultimate Artifact and win via the "Find a particular artifact" victory condition
 - do not allow units to cause zero damage in case of a bad luck event
