@@ -1,7 +1,7 @@
 version 1.1.9 (08 June 2025)
 - update the Swedish translation
 - fix showing one 1st level troop in hero's army during the hero fade-out animation after losing a battle
-- add several maps to be a part of the fheroes2 bundle
+- bundle several maps with fheroes2
 - update the Ukrainian translation
 - update the Russian translation
 - add the Barrel object
