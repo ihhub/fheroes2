@@ -31,7 +31,7 @@ version 1.1.9 (08 June 2025)
 - fix Barbarian castle's Shipyard rendering
 - fix incorrect pixels near the SKIP button when Hero's options are opened
 - fix unit overlap in battles when unit is moving to the row above the other unit
-- make the scouting area to match the original game
+- make the scouting area match the original game
 
 version 1.1.8 (04 May 2025)
 - add defense penalty to moat building info and adjust wording
