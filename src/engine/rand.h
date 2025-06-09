@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <functional>
 #include <random>
+#include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
