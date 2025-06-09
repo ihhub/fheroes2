@@ -46,6 +46,8 @@ namespace Rand
             return;
         }
 
+        assert( first < last );
+
         // change last from once-past-the-end to last element
         --last;
         uint32_t remainingSwaps = static_cast<uint32_t>( last - first );
