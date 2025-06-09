@@ -25,7 +25,7 @@
 
 #include <numeric>
 
-#if defined( _WIN32 )
+#if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif
@@ -59,7 +59,7 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, s
     const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
     return from + upperPart;
 }
-#if defined( _WIN32 )
+#if defined( _MSC_VER )
 #pragma warning( pop )
 #endif
 
