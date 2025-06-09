@@ -4894,6 +4894,20 @@ namespace
 
             return true;
         }
+        case ICN::NEW_OBJECTS: {
+            auto & images = _icnVsSprite[id];
+            images.resize( 3 );
+            fheroes2::h2d::readImage( "bottom.image", images[0] );
+            fheroes2::h2d::readImage( "top.image", images[1] );
+            fheroes2::h2d::readImage( "shadow.image", images[2] );
+
+            // TODO: This only serves to facilitate importing. Remove this and convert once upon importing when object is ready.
+            fheroes2::ReplaceColorIdByTransformId( images[2], 205, 3U );
+            fheroes2::ReplaceColorIdByTransformId( images[2], 206, 2U );
+            fheroes2::ReplaceColorIdByTransformId( images[0], 205, 3U );
+            fheroes2::ReplaceColorIdByTransformId( images[0], 206, 2U );
+            return true;
+        }
         case ICN::OBJNMUL2: {
             LoadOriginalICN( id );
             auto & images = _icnVsSprite[id];
