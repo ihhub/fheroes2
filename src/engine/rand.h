@@ -50,6 +50,7 @@ namespace Rand
         --last;
         uint32_t remainingSwaps = static_cast<uint32_t>( last - first );
         while ( remainingSwaps > 0 ) {
+            // Allow argument-dependant lookup (ADL) for swap: first try in the namespace of the type, then in the std namespace.
             using std::swap;
             const uint32_t index = uniformIntDistribution( 0, remainingSwaps, gen );
             std::swap( *last, *( first + index ) );
