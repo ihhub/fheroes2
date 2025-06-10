@@ -37,6 +37,47 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-06-10" version="v1.1.9">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.9</url>
+      <description>
+        <p>Changes in v1.1.9 (10 June 2025):</p>
+        <ul>
+          <li>update the Swedish translation</li>
+          <li>fix showing one 1st level troop in hero's army during the hero fade-out animation after losing a battle</li>
+          <li>bundle several maps with fheroes2</li>
+          <li>update the Ukrainian translation</li>
+          <li>update the Russian translation</li>
+          <li>add the Barrel object</li>
+          <li>reduce map reloads when erasing objects or placing terrain in the Editor</li>
+          <li>remove the rumor about the latest update</li>
+          <li>add the Black Cat object</li>
+          <li>fix map centering when AI interacts with an action object</li>
+          <li>render hero's Spell Points on two lines if they don't fit on one line</li>
+          <li>fix rendering of tall obstacles in battles</li>
+          <li>add Greek translation support</li>
+          <li>fix button behavior when pressing and holding them</li>
+          <li>update the German translation</li>
+          <li>allow AI to dig for Ultimate Artifact and win via the "Find a particular artifact" victory condition</li>
+          <li>do not allow units to cause zero damage in case of a bad luck event</li>
+          <li>add an optional field for map creator's notes</li>
+          <li>add the ability to set owner color for capturable objects in the Editor</li>
+          <li>add the Danish language to the Virtual keyboard</li>
+          <li>fix troop count display during monster animation in battles</li>
+          <li>make Bad Luck animation closer to the original game</li>
+          <li>make Disrupting Ray and Teleport spells animation closer to the original game</li>
+          <li>center the map on a hero before rendering action object's event</li>
+          <li>significantly speed up language switching operation</li>
+          <li>optimize rendering and timers</li>
+          <li>add UP and DOWN hotkeys support in "Select Count" dialogs</li>
+          <li>Android: optimize the asset extraction process</li>
+          <li>fix a conflict between scrolling by dragging and regular scrolling</li>
+          <li>fix Barbarian castle's Shipyard rendering</li>
+          <li>fix incorrect pixels near the SKIP button when Hero's options are opened</li>
+          <li>fix unit overlap in battles when a unit is moving to the row above another unit</li>
+          <li>make the scouting area match the original game</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-05-04" version="v1.1.8">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.8</url>
       <description>
