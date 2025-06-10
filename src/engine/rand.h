@@ -99,7 +99,7 @@ namespace Rand
     {
         assert( !vec.empty() );
 
-        const uint32_t id = Rand::Get( static_cast<uint32_t>( vec.size() - 1 ) );
+        const uint32_t id = Get( static_cast<uint32_t>( vec.size() - 1 ) );
         return vec[id];
     }
 
@@ -108,7 +108,7 @@ namespace Rand
     {
         assert( !vec.empty() );
 
-        const uint32_t id = Rand::GetWithGen( 0, static_cast<uint32_t>( vec.size() - 1 ), gen );
+        const uint32_t id = GetWithGen( 0, static_cast<uint32_t>( vec.size() - 1 ), gen );
         return vec[id];
     }
 
