@@ -158,6 +158,8 @@ int MP2::getIcnIdFromObjectIcnType( const ObjectIcnType objectIcnType )
         return ICN::OBJNLAV3;
     case OBJ_ICN_TYPE_OBJNMULT:
         return ICN::OBJNMULT;
+    case OBJ_ICN_TYPE_NEW_OBJECTS:
+        return ICN::NEW_OBJECTS;
     case OBJ_ICN_TYPE_OBJNLAV2:
         return ICN::OBJNLAV2;
     case OBJ_ICN_TYPE_X_LOC1:
@@ -187,7 +189,6 @@ bool MP2::isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIc
 {
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
-    case OBJ_ICN_TYPE_UNUSED_1:
     case OBJ_ICN_TYPE_UNUSED_2:
     case OBJ_ICN_TYPE_UNUSED_3:
     case OBJ_ICN_TYPE_UNUSED_4:
@@ -492,6 +493,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Black Cat" );
     case OBJ_NON_ACTION_BARREL:
         return _( "Barrel" );
+    case OBJ_NON_ACTION_NEW_OBJECT:
+        return _( "New Object" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -904,6 +907,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_TROLL_BRIDGE:
     case OBJ_WAGON:
     case OBJ_WAGON_CAMP:
+    case OBJ_NEW_OBJECT:
     case OBJ_WATCH_TOWER:
     case OBJ_WATER_ALTAR:
     case OBJ_WATER_WHEEL:

@@ -1111,6 +1111,8 @@ namespace ICN
 
         SCENIBKG_EVIL,
 
+        NEW_OBJECTS,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

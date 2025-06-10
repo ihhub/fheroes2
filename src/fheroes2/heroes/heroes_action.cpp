@@ -4075,6 +4075,9 @@ void Heroes::Action( int tileIndex )
         actionToBlackCat( *this, tileIndex );
         break;
 
+    case MP2::OBJ_NEW_OBJECT:
+        break;
+
     default:
         break;
     }
