@@ -25,13 +25,53 @@
 
 #include <numeric>
 
+namespace
+{
 #if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif
 
-// implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
-// NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
+    // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
+    // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
+    uint32_t uniformIntInInterval( const uint32_t range, std::mt19937 & gen )
+    {
+        assert( range > 0 );
+
+        // Our implementation assumes our RNG can use the entire range of uint32_t
+        assert( gen.min() == 0 && gen.max() == std::numeric_limits<uint32_t>::max() );
+
+        uint32_t generated = gen();
+        uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
+        uint32_t lowerPart = static_cast<uint32_t>( mult );
+
+        if ( lowerPart >= range ) {
+            const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+            assert( upperPart >= 0 && upperPart <= range );
+
+            return upperPart;
+        }
+
+        // ( -range ) % range is the same as (2**32 - range) % range
+        const uint32_t discardBound = ( -range ) % range;
+
+        while ( lowerPart < discardBound ) {
+            generated = gen();
+            mult = ( static_cast<uint64_t>( generated ) * range );
+            lowerPart = static_cast<uint32_t>( mult );
+        }
+
+        const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+        assert( upperPart >= 0 && upperPart <= range );
+
+        return upperPart;
+    }
+
+#if defined( _MSC_VER )
+#pragma warning( pop )
+#endif
+}
+
 uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen )
 {
     if ( from == to ) {
@@ -39,40 +79,16 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, s
     }
 
     assert( from < to );
+    const uint32_t rangeExclusive = to - from;
+    // if the range is the entire uint32_t (from 0 to 2**32-1), we can just return a random number
+    if ( rangeExclusive == std::numeric_limits<uint32_t>::max() ) {
+        assert( gen.min() == 0 && gen.max() == std::numeric_limits<uint32_t>::max() );
 
-    const uint32_t range = to - from + 1;
-
-    uint32_t generated = gen();
-    uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
-    uint32_t lowerPart = static_cast<uint32_t>( mult );
-
-    if ( lowerPart >= range ) {
-        const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-        const uint32_t result = from + upperPart;
-        assert( result >= from && result <= to );
-
-        return result;
+        return gen();
     }
 
-    // ( -range ) % range is the same as (2**32 - range) % range
-    const uint32_t discardBound = ( -range ) % range;
-
-    while ( lowerPart < discardBound ) {
-        generated = gen();
-        mult = ( static_cast<uint64_t>( generated ) * range );
-        lowerPart = static_cast<uint32_t>( mult );
-    }
-
-    const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-    const uint32_t result = from + upperPart;
-    assert( result >= from && result <= to );
-
-    return result;
+    return from + uniformIntInInterval( rangeExclusive + 1, gen );
 }
-
-#if defined( _MSC_VER )
-#pragma warning( pop )
-#endif
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {

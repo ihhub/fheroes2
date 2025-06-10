@@ -51,7 +51,12 @@ namespace Rand
 
         // change last from once-past-the-end to last element
         --last;
-        uint32_t remainingSwaps = static_cast<uint32_t>( last - first );
+        const typename std::iterator_traits<Iter>::difference_type interval = last - first;
+
+        // Our implementation doesn't work for intervals bigger than 2**32 - 1
+        assert( interval <= static_cast<typename std::iterator_traits<Iter>::difference_type>( std::numeric_limits<uint32_t>::max() ) );
+
+        uint32_t remainingSwaps = static_cast<uint32_t>( interval );
         while ( remainingSwaps > 0 ) {
             // Allow argument-dependant lookup (ADL) for swap: first try in the namespace of the type, then in the std namespace.
             using std::swap;
