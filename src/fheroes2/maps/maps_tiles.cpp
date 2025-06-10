@@ -1549,6 +1549,11 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
 
 void Maps::Tile::updateObjectType()
 {
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        // Events have no visible parts on the map, so we preserve their type regardless of what part of the object is on the tile.
+        return;
+    }
+
     // After removing an object there could be an object part in the main object part.
     MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
