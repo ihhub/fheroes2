@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <exception>
 #include <functional>
 #include <iterator>
 #include <limits>
