@@ -47,7 +47,7 @@ namespace
             return upperPart;
         }
 
-        // This is the same as (2**32 - range) % range in the two’s complement representation
+        // This is the same as (2**32 - range) % range in the two's complement representation
         const uint32_t discardBound = static_cast<uint32_t>( ~( range - 1 ) ) % range;
 
         while ( lowerPart < discardBound ) {
