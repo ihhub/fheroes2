@@ -39,7 +39,7 @@ namespace
         assert( range > 0 );
 
         // Our implementation assumes our RNG can use the entire range of uint32_t
-        assert( gen.min() == 0 && gen.max() == std::numeric_limits<uint32_t>::max() );
+        static_assert( std::mt19937::min() == 0 && std::mt19937::max() == std::numeric_limits<uint32_t>::max() );
 
         uint32_t generated = gen();
         uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
@@ -82,7 +82,7 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, s
     const uint32_t rangeExclusive = to - from;
     // if the range is the entire uint32_t (from 0 to 2**32-1), we can just return a random number
     if ( rangeExclusive == std::numeric_limits<uint32_t>::max() ) {
-        assert( gen.min() == 0 && gen.max() == std::numeric_limits<uint32_t>::max() );
+        static_assert( std::mt19937::min() == 0 && std::mt19937::max() == std::numeric_limits<uint32_t>::max() );
 
         return gen();
     }
