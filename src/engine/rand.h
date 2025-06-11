@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+// IWYU pragma: no_include <exception>
 #include <functional>
 #include <iterator>
 #include <limits>

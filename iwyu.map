@@ -10,7 +10,5 @@
 
     { include: [ "<ext/alloc_traits.h>",       private, "<memory>",       public ] },
 
-    { include: [ "<begin_code.h>",             private, "<SDL_stdinc.h>", public ] },
-
-    { symbol:  [ "swap",                       private, "<utility>",      public ] }
+    { include: [ "<begin_code.h>",             private, "<SDL_stdinc.h>", public ] }
 ]
