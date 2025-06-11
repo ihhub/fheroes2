@@ -27,11 +27,6 @@
 
 namespace
 {
-#if defined( _MSC_VER )
-#pragma warning( push )
-#pragma warning( disable : 4146 ) // suppress warning C4146: unary minus operator applied to unsigned type, result still unsigned
-#endif
-
     // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
     // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
     uint32_t uniformIntInInterval( const uint32_t range, std::mt19937 & gen )
@@ -52,8 +47,8 @@ namespace
             return upperPart;
         }
 
-        // ( -range ) % range is the same as (2**32 - range) % range
-        const uint32_t discardBound = ( -range ) % range;
+        // This is the same as (2**32 - range) % range in the two’s complement representation
+        const uint32_t discardBound = static_cast<uint32_t>( ~( range - 1 ) ) % range;
 
         while ( lowerPart < discardBound ) {
             generated = gen();
@@ -66,10 +61,6 @@ namespace
 
         return upperPart;
     }
-
-#if defined( _MSC_VER )
-#pragma warning( pop )
-#endif
 }
 
 uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen )
