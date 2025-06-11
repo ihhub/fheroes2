@@ -429,7 +429,8 @@ msgid "Move the %{name} "
 msgstr "%{name} ide lép "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Mozgasd vagy jobb gombot nyomj %{name} szétosztásához"
+msgstr ""
+"Mozgasd vagy kattints a jobb gombbal a(z) %{name} szétosztásához."
 
 msgid "Combine %{name} armies"
 msgstr "%{name} seregek egyesítése"
@@ -461,7 +462,7 @@ msgid "%{name} has turned on the auto combat"
 msgstr "%{name} bekapcsolta az automata csata módot"
 
 msgid "Spell failed!"
-msgstr "A varázslat meghiúsult!"
+msgstr "A varázslat nem sikerült!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -475,7 +476,7 @@ msgid "You have already cast a spell this round."
 msgstr "Már varázsoltál ebben a körben."
 
 msgid "That spell will have no effect!"
-msgstr "Ez a varázslat nem hatásos senkire!"
+msgstr "Ennek a varázslatnak nem lesz semmilyen hatása!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Csak egyféle elementált idézhetsz meg egy csatában."
@@ -511,7 +512,7 @@ msgid "Auto Spell Casting"
 msgstr "Automata varázslás"
 
 msgid "Grid"
-msgstr "Háló"
+msgstr "Rács"
 
 msgid "Shadow Movement"
 msgstr "Mozgás árnyék"
@@ -655,7 +656,7 @@ msgid "Attack"
 msgstr "Támadás"
 
 msgid "Defense"
-msgstr "Védekezés"
+msgstr "Védelem"
 
 msgid "Spell Power"
 msgstr "Varázserő"
@@ -688,7 +689,7 @@ msgid "Hero Screen"
 msgstr "Hős képernyő"
 
 msgid "Captain's Options"
-msgstr "Kapitány beállítások"
+msgstr "Kapitány beállításai"
 
 msgid "Hero's Options"
 msgstr "Hős beállításai"
@@ -2883,7 +2884,7 @@ msgid "Attack Skill"
 msgstr "Támadóerő"
 
 msgid "Defense Skill"
-msgstr "Védőerő"
+msgstr "Védekezőerő"
 
 msgid "Shots"
 msgstr "Lövések"
@@ -3371,7 +3372,7 @@ msgid "Attack:"
 msgstr "Támadóerő:"
 
 msgid "Defense:"
-msgstr "Védőerő:"
+msgstr "Védekezőerő:"
 
 msgid "Spell Power:"
 msgstr "Varázserő:"
@@ -3600,9 +3601,8 @@ msgstr "Képességnövelő objektum kiválasztása:"
 msgid "Select Adventure Object:"
 msgstr "Kaland objektum kiválasztása:"
 
-#, fuzzy
 msgid "Select color"
-msgstr "Lény kiválasztása:"
+msgstr "Szín kiválasztása"
 
 msgid "Players Icon"
 msgstr "Játékos ikon"
@@ -4214,7 +4214,7 @@ msgid "The total number of obelisks is %{count}."
 msgstr "Az obeliszkek száma összesen: %{count}."
 
 msgid "There are no players on the map, so no one can own this object."
-msgstr ""
+msgstr "A pályán nincs játékos, ezért ez az objektum senkié sem lehet."
 
 msgid "Roads"
 msgstr "Utak"
@@ -4667,7 +4667,7 @@ msgid "LANGUAGE"
 msgstr "NYELV"
 
 msgid "ABOUT"
-msgstr ""
+msgstr "LEÍRÁS"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4693,7 +4693,7 @@ msgid "Change Map Description"
 msgstr "Térképleírás megváltoztatása"
 
 msgid "About"
-msgstr ""
+msgstr "Leírás"
 
 msgid "Click to accept the changes made."
 msgstr "Kattints a változtatások elfogadásához."
@@ -4717,6 +4717,8 @@ msgid ""
 "Click to edit notes from the map creator. These notes are optional and do "
 "not appear during gameplay."
 msgstr ""
+"Kattints a pályakészítő jegyzeteinek szerkesztéséhez. "
+"Ezek a jegyzetek opcionálisak, és játék közben nem jelennek meg."
 
 msgid "Click to change your map name."
 msgstr "Kattints a térképed nevének megváltoztatásához."
@@ -5820,15 +5822,14 @@ msgid ""
 "They are triumphant."
 msgstr ""
 "Az ellenfél elfoglalta %{name} várat!\n"
-"Ők győztek."
+"Ővék a győzelem."
 
-#, fuzzy
 msgid ""
 "The enemy has found the %{name}.\n"
 "Your quest is a failure."
 msgstr ""
-"Megtaláltad %{name} varázstárgyat.\n"
-"Küldetés teljesítve."
+"Az ellenség megtalálta a %{name} tárgyat.\n"
+"A küldetést elbuktad."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -5845,7 +5846,7 @@ msgid ""
 "Your quest is over."
 msgstr ""
 "Elveszítetted %{name} hőst.\n"
-"A küldetésed elbukott."
+"A küldetést elbuktad."
 
 msgid ""
 "You have failed to complete your quest in time.\n"
@@ -5871,7 +5872,7 @@ msgstr ""
 "Az ellenfelek összes hősének legyőzése és várainak, városainak elpusztítása."
 
 msgid "Your side defeats the opposing side."
-msgstr "Te vagy szövetségeseid legyőzik az ellenfeleket."
+msgstr "Az ellenfelet vagy te győzöd le, vagy a szövetségeseid."
 
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Az idő lejárt. (Nem sikerült nyernie adott idő alatt.)"
@@ -6432,9 +6433,8 @@ msgstr "szlovák"
 msgid "Vietnamese"
 msgstr "vietnámi"
 
-#, fuzzy
 msgid "Greek"
-msgstr "Zöld"
+msgstr "görög"
 
 msgid "Slow"
 msgstr "Lassú"
@@ -7976,12 +7976,18 @@ msgid ""
 "distance from the intimidating cat until you have regained your courage in "
 "battle."
 msgstr ""
+"Az előző találkozás harapásának fájdalma még mindig benned él, ezért "
+"tisztes távolságot tartasz a félelmetes macskától, amíg vissza nem "
+"nyered a bátorságodat a csatában."
 
 msgid ""
 "You come upon a great cat, purring as it rubs against your leg. Charmed, you "
 "reach down, but it bites you and flees. At least the laughter at your "
 "misfortune lifts your troops' spirits."
 msgstr ""
+"Egy nagy macskára bukkansz, amely dorombolva dörgölőzik a lábadhoz. "
+"Elbűvölten lehajolsz, hogy megsimogasd, de megharap és elszalad. "
+"Katonáid jót nevetnek a balszerencsétlenkedéseden, ami felvidítja őket."
 
 msgid "No spell book is present."
 msgstr "Nincs varázskönyved."
@@ -9391,9 +9397,8 @@ msgstr "Mocsaras tó"
 msgid "Frozen Lake"
 msgstr "Befagyott tó"
 
-#, fuzzy
 msgid "Black Cat"
-msgstr "Fekete gyöngy"
+msgstr "Fekete macska"
 
 #, fuzzy
 msgid "Barrel"
