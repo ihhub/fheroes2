@@ -95,10 +95,10 @@ namespace
 
             const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
 
-            // TODO: Check if the original game allows placing a monster over event and does this event keeps working after monster is killed.
+            // TODO: Check if the original game can spawn a monster over an event and if so whether the event keeps working after the monster is killed.
             if ( objectType == MP2::OBJ_EVENT ) {
-                // Event is not considered as in-game action object to avoid confusion with visible action objects.
-                // We skip the tile with event because there cannot be two action objects (monster and event) on one tile.
+                // The event is not considered as in-game action object to avoid confusion with visible action objects.
+                // We skip the tile with an event because there cannot be two action objects (monster and event) on one tile.
                 // And we don't need to leave space between event and spawned monster so we don't add tile to `excludeTiles`.
 
                 continue;
@@ -560,8 +560,8 @@ void World::_monthOfMonstersAction( const Monster & mons )
 
     std::mt19937 seededGen( _seed + month );
 
-    // First we scan for Heroes, Castles and Monsters to exclude that from tiles and nearby tiles.
-    // We must do it prior to checking ability for monster spawning to properly perform the check on nearby tiles.
+    // First we scan for Heroes, Castles and Monsters to exclude these from tiles and nearby tiles.
+    // We must do this prior to checking the possibility for a monster to spawn in order to properly perform the check on nearby tiles.
     std::for_each( vec_tiles.cbegin(), vec_tiles.cend(), [&excludeTiles]( const Maps::Tile & tile ) {
         const MP2::MapObjectType objectType = tile.getMainObjectType( true );
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
