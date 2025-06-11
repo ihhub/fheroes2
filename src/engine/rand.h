@@ -27,11 +27,11 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <exception>
 #include <functional>
 #include <iterator>
 #include <limits>
 #include <random>
-#include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
