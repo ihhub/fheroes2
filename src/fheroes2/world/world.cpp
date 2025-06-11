@@ -95,6 +95,7 @@ namespace
 
             const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
 
+            // TODO: Check if the original game allows placing a monster over event and does this event keeps working after monster is killed.
             if ( objectType == MP2::OBJ_EVENT ) {
                 // Event is not considered as in-game action object to avoid confusion with visible action objects.
                 // We skip the tile with event because there cannot be two action objects (monster and event) on one tile.
