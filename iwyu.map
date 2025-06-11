@@ -12,5 +12,5 @@
 
     { include: [ "<begin_code.h>",             private, "<SDL_stdinc.h>", public ] },
 
-    { symbol:  [ "std::swap",                  private, "<utility>",      public ] }
+    { symbol:  [ "swap",                       private, "<utility>",      public ] }
 ]
