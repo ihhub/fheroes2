@@ -28,7 +28,6 @@
 #include <initializer_list>
 #include <map>
 #include <numeric>
-#include <random>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -221,7 +220,7 @@ namespace
     }
 
     void fillRandomPixelsFromImage( const fheroes2::Image & original, const fheroes2::Rect & originalRoi, fheroes2::Image & output, const fheroes2::Rect & outputRoi,
-                                    std::mt19937 & seededGen )
+                                    Rand::PCG32 & seededGen )
     {
         for ( int x = outputRoi.x; x < outputRoi.x + outputRoi.width; ++x ) {
             for ( int y = outputRoi.y; y < outputRoi.y + outputRoi.height; ++y ) {
@@ -4126,7 +4125,7 @@ namespace
                 Copy( image, 52, 100, image, 57, 100, 2, 1 );
 
                 // Generate programmatically the left part of the building.
-                std::mt19937 seededGen( 751 ); // 751 is and ID of this sprite. To keep the changes constant we need to hardcode this value.
+                Rand::PCG32 seededGen( 751 ); // 751 is and ID of this sprite. To keep the changes constant we need to hardcode this value.
 
                 fillRandomPixelsFromImage( image, { 33, 105, 4, 7 }, image, { 33, 117, 4, 39 }, seededGen );
                 fillRandomPixelsFromImage( image, { 41, 105, 5, 9 }, image, { 41, 121, 5, 36 }, seededGen );

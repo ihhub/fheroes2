@@ -25,12 +25,12 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <random>
 #include <string>
 #include <vector>
 
 #include "battle_cell.h"
 #include "math_base.h"
+#include <rand.h>
 
 namespace Maps
 {
@@ -74,7 +74,7 @@ namespace Battle
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
 
-        void SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen );
+        void SetCobjObjects( const Maps::Tile & tile, Rand::PCG32 & gen );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();

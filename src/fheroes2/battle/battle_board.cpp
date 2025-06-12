@@ -46,7 +46,7 @@
 
 namespace
 {
-    uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( Rand::PCG32 & gen )
     {
         return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
@@ -378,7 +378,7 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, Rand::PCG32 & gen )
 {
     std::vector<int> objs;
 
