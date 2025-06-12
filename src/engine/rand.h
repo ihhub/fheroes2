@@ -40,7 +40,78 @@
 
 namespace Rand
 {
-    uint32_t uniformIntDistribution( const uint32_t from, const uint32_t to, std::mt19937 & gen );
+    class PCG32
+    {
+        static constexpr uint64_t multiplier = 6364136223846793005ULL;
+        static constexpr uint64_t defaultStream = 54ULL;
+        static constexpr uint64_t defaultSeed = 42ULL;
+
+        static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
+        {
+            return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
+        }
+
+        template <typename Random>
+        static uint64_t generateUInt64( Random & gen )
+        {
+            static_assert( Random::min() == std::numeric_limits<uint32_t>::min() );
+            if constexpr ( Random::max() == std::numeric_limits<uint32_t>::max() ) {
+                return static_cast<uint64_t>( gen() ) << 32 | static_cast<uint64_t>( gen() );
+            }
+            else if constexpr ( Random::max() == std::numeric_limits<uint64_t>::max() ) {
+                return gen();
+            }
+            else {
+                static_assert( false, "Unsupported random generator type" );
+            }
+        }
+
+        constexpr void advanceState()
+        {
+            _state = _state * multiplier + ( _increment | 1 );
+        }
+
+    public:
+        using result_type = uint32_t;
+
+        static constexpr uint32_t min()
+        {
+            return std::numeric_limits<uint32_t>::min();
+        }
+
+        static constexpr uint32_t max()
+        {
+            return std::numeric_limits<uint32_t>::max();
+        }
+
+        template <typename Random, typename = std::enable_if_t<std::is_invocable_v<Random>>>
+        explicit constexpr PCG32( Random & gen )
+            : PCG32( generateUInt64( gen ), generateUInt64( gen ) )
+        {}
+
+        explicit constexpr PCG32( const uint64_t seed = defaultSeed, const uint64_t stream = defaultStream )
+            : _state( 0 )
+            , _increment( ( stream << 1U ) | 1U )
+        {
+            advanceState();
+            _state += seed;
+            advanceState();
+        }
+
+        constexpr uint32_t operator()()
+        {
+            const uint64_t prevState = _state;
+            advanceState();
+
+            const uint32_t xorShifted = static_cast<uint32_t>( ( ( prevState >> 18U ) ^ prevState ) >> 27U );
+            const uint32_t rotations = prevState >> 59U;
+            return rotateRight( xorShifted, rotations );
+        }
+
+    private:
+        uint64_t _state;
+        uint64_t _increment;
+    };
 
     // Fisher-Yates shuffle AKA Knuth shuffle, probably the same as std::shuffle.
     // NOTE: we can't use std::shuffle here because it uses std::uniform_int_distribution which behaves differently on different platforms.
