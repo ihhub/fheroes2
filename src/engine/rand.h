@@ -256,30 +256,4 @@ namespace Rand
     private:
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
-
-    // Specific random generator that keeps and update its state
-    class DeterministicRandomGenerator
-    {
-    public:
-        explicit DeterministicRandomGenerator( const uint32_t initialSeed );
-        DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
-
-        DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
-
-        uint32_t GetSeed() const;
-        void UpdateSeed( const uint32_t seed );
-
-        uint32_t Get( const uint32_t from, const uint32_t to = 0 );
-
-        template <typename T>
-        const T & Get( const std::vector<T> & vec )
-        {
-            ++_currentSeed;
-            PCG32 seededGen( _currentSeed );
-            return Rand::GetWithGen( vec, seededGen );
-        }
-
-    private:
-        uint32_t _currentSeed;
-    };
 }
