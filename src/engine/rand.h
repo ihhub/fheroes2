@@ -113,10 +113,12 @@ namespace Rand
         uint64_t _increment;
     };
 
+    uint32_t uniformIntDistribution( const uint32_t from, const uint32_t to, PCG32 & gen );
+
     // Fisher-Yates shuffle AKA Knuth shuffle, probably the same as std::shuffle.
     // NOTE: we can't use std::shuffle here because it uses std::uniform_int_distribution which behaves differently on different platforms.
     template <class Iter>
-    void shuffle( Iter first, Iter last, std::mt19937 & gen )
+    void shuffle( Iter first, Iter last, PCG32 & gen )
     {
         if ( first == last ) {
             return;
@@ -142,7 +144,7 @@ namespace Rand
         }
     }
 
-    std::mt19937 & CurrentThreadRandomDevice();
+    PCG32 & CurrentThreadRandomDevice();
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
 
@@ -160,7 +162,7 @@ namespace Rand
         return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );
     }
 
-    uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
+    uint32_t GetWithGen( uint32_t from, uint32_t to, PCG32 & gen );
 
     template <typename T>
     void Shuffle( std::vector<T> & vec )
@@ -169,7 +171,7 @@ namespace Rand
     }
 
     template <typename T>
-    void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
+    void ShuffleWithGen( std::vector<T> & vec, PCG32 & gen )
     {
         Rand::shuffle( vec.begin(), vec.end(), gen );
     }
@@ -184,7 +186,7 @@ namespace Rand
     }
 
     template <typename T>
-    const T & GetWithGen( const std::vector<T> & vec, std::mt19937 & gen )
+    const T & GetWithGen( const std::vector<T> & vec, PCG32 & gen )
     {
         assert( !vec.empty() );
 
@@ -248,7 +250,7 @@ namespace Rand
         const T & Get( const std::vector<T> & vec )
         {
             ++_currentSeed;
-            std::mt19937 seededGen( _currentSeed );
+            PCG32 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 

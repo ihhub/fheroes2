@@ -29,7 +29,6 @@
 #include <limits>
 #include <optional>
 #include <ostream>
-#include <random>
 #include <set>
 #include <tuple>
 
@@ -91,7 +90,7 @@ namespace
         return false;
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, Rand::PCG32 & gen )
     {
         std::vector<int32_t> suitableIds;
 
@@ -563,7 +562,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    std::mt19937 seededGen( _seed + month );
+    Rand::PCG32 seededGen( _seed + month );
 
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
