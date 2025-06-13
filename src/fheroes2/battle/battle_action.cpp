@@ -1532,14 +1532,13 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         const HeroBase * commander = GetCurrentCommander();
         assert( commander != nullptr );
 
-        TargetInfo targetInfo;
-        targetInfo.defender = unit;
-
         TargetsInfo targetsInfo;
-        targetsInfo.push_back( targetInfo );
+        targetsInfo.emplace_back( unit );
 
-        _interface->RedrawActionSpellCastStatus( Spell( Spell::TELEPORT ), src, commander->GetName(), targetsInfo );
-        _interface->redrawActionTeleportSpell( *unit, pos.GetHead()->GetIndex() );
+        const Spell spell( Spell::TELEPORT );
+
+        _interface->RedrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
+        _interface->RedrawActionSpellCastPart1( spell, pos.GetHead()->GetIndex(), commander, targetsInfo );
     }
 
     unit->SetPosition( pos );

@@ -4405,8 +4405,6 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         spellTarget.defender->checkIdleDelay();
     }
 
-    Unit * target = !targets.empty() ? targets.front().defender : nullptr;
-
     const bool isMassSpell = spell.isApplyWithoutFocusObject();
     bool isCastDown = false;
     OpponentSprite * opponent = nullptr;
@@ -4494,7 +4492,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     }
 
     // with object
-    if ( target ) {
+    if ( !targets.empty() ) {
+        Unit * target = targets.front().defender;
+
         if ( spell.isResurrect() )
             RedrawActionResurrectSpell( *target, spell );
         else
@@ -4547,27 +4547,31 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
                 break;
 
             // uniq spell animation
-            case Spell::LIGHTNINGBOLT:
-                RedrawActionLightningBoltSpell( *target );
-                break;
-            case Spell::CHAINLIGHTNING:
-                RedrawActionChainLightningSpell( targets );
-                break;
             case Spell::ARROW:
-                RedrawActionArrowSpell( *target );
-                break;
-            case Spell::COLDRAY:
-                RedrawActionColdRaySpell( *target );
-                break;
-            case Spell::DISRUPTINGRAY:
-                _redrawActionDisruptingRaySpell( *target );
+                _redrawActionArrowSpell( *target );
                 break;
             case Spell::BLOODLUST:
                 _redrawActionBloodLustSpell( *target );
                 break;
+            case Spell::CHAINLIGHTNING:
+                _redrawActionChainLightningSpell( targets );
+                break;
+            case Spell::COLDRAY:
+                _redrawActionColdRaySpell( *target );
+                break;
+            case Spell::DISRUPTINGRAY:
+                _redrawActionDisruptingRaySpell( *target );
+                break;
+            case Spell::LIGHTNINGBOLT:
+                _redrawActionLightningBoltSpell( *target );
+                break;
             case Spell::PETRIFY:
                 _redrawActionStoneSpell( *target );
                 break;
+            case Spell::TELEPORT:
+                _redrawActionTeleportSpell( *target, dst );
+                break;
+
             default:
                 break;
             }
@@ -5162,7 +5166,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseStructure 
     catapult_frame = 0;
 }
 
-void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
+void Battle::Interface::_redrawActionArrowSpell( const Unit & target )
 {
     const HeroBase * caster = arena.GetCurrentCommander();
 
@@ -5180,7 +5184,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
     }
 }
 
-void Battle::Interface::redrawActionTeleportSpell( Unit & target, const int32_t dst )
+void Battle::Interface::_redrawActionTeleportSpell( Unit & target, const int32_t dst )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -5461,7 +5465,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
     }
 }
 
-void Battle::Interface::RedrawActionLightningBoltSpell( const Unit & target )
+void Battle::Interface::_redrawActionLightningBoltSpell( const Unit & target )
 {
     _currentUnit = nullptr;
 
@@ -5474,7 +5478,7 @@ void Battle::Interface::RedrawActionLightningBoltSpell( const Unit & target )
     RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
-void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
+void Battle::Interface::_redrawActionChainLightningSpell( const TargetsInfo & targets )
 {
     const fheroes2::Point startingPos = arena.GetCurrentCommander() == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
     std::vector<fheroes2::Point> points;
@@ -5616,7 +5620,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, target.GetHitPoints() == 0 ? RESURRECT : NONE );
 }
 
-void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
+void Battle::Interface::_redrawActionColdRaySpell( Unit & target )
 {
     RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
     RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, NONE );

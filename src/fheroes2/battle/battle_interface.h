@@ -342,7 +342,6 @@ namespace Battle
         void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
         void RedrawActionCatapultPart1( const CastleDefenseStructure catapultTarget, const bool isHit );
         void RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget );
-        void redrawActionTeleportSpell( Unit & target, const int32_t dst );
         void redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets );
         void redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
@@ -388,8 +387,8 @@ namespace Battle
         void RedrawTroopCount( const Unit & unit );
 
         void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
-        void RedrawActionArrowSpell( const Unit & target );
-        void RedrawActionColdRaySpell( Unit & target );
+        void _redrawActionArrowSpell( const Unit & target );
+        void _redrawActionColdRaySpell( Unit & target );
         void _redrawActionDisruptingRaySpell( Unit & target );
         void _redrawActionBloodLustSpell( const Unit & target );
         void _redrawActionStoneSpell( const Unit & target );
@@ -399,8 +398,9 @@ namespace Battle
         void RedrawActionHolyShoutSpell( const uint8_t strength );
         void RedrawActionResurrectSpell( Unit & target, const Spell & spell );
         void RedrawActionDeathWaveSpell( const int32_t strength );
-        void RedrawActionLightningBoltSpell( const Unit & target );
-        void RedrawActionChainLightningSpell( const TargetsInfo & targets );
+        void _redrawActionLightningBoltSpell( const Unit & target );
+        void _redrawActionChainLightningSpell( const TargetsInfo & targets );
+        void _redrawActionTeleportSpell( Unit & target, const int32_t dst );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size );
 
