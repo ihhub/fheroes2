@@ -40,7 +40,7 @@ LOCAL_STATIC_LIBRARIES := engine
 LOCAL_CFLAGS := $(FHEROES2_C_WARN_OPTIONS)
 LOCAL_CPP_FEATURES := exceptions rtti
 LOCAL_CPPFLAGS := \
-    -std=c++17 \
+    -std=c++20 \
     $(FHEROES2_CPP_WARN_OPTIONS)
 
 include $(BUILD_SHARED_LIBRARY)
