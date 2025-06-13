@@ -5111,14 +5111,14 @@ namespace
             resizedIcn._disableTransformLayer();
         }
 
-        const double scaleFactorX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
-        const double scaleFactorY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
+        const double scaleFactorX = static_cast<double>( display.width() ) / static_cast<double>( fheroes2::Display::DEFAULT_WIDTH );
+        const double scaleFactorY = static_cast<double>( display.height() ) / static_cast<double>( fheroes2::Display::DEFAULT_HEIGHT );
 
         const double scaleFactor = std::min( scaleFactorX, scaleFactorY );
         const int32_t resizedWidth = static_cast<int32_t>( std::lround( originalIcn.width() * scaleFactor ) );
         const int32_t resizedHeight = static_cast<int32_t>( std::lround( originalIcn.height() * scaleFactor ) );
-        const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scaleFactor ) ) / 2;
-        const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scaleFactor ) ) / 2;
+        const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - static_cast<double>( fheroes2::Display::DEFAULT_WIDTH ) * scaleFactor ) ) / 2;
+        const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - static_cast<double>( fheroes2::Display::DEFAULT_HEIGHT ) * scaleFactor ) ) / 2;
         assert( offsetX >= 0 && offsetY >= 0 );
 
         // Resize only if needed

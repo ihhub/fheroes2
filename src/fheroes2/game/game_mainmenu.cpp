@@ -289,12 +289,12 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     fheroes2::validateFadeInAndRender();
 
-    const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
-    const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
+    const double scaleX = static_cast<double>( display.width() ) / static_cast<double>( fheroes2::Display::DEFAULT_WIDTH );
+    const double scaleY = static_cast<double>( display.height() ) / static_cast<double>( fheroes2::Display::DEFAULT_HEIGHT );
 
     const double scale = std::min( scaleX, scaleY );
-    const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) ) / 2;
-    const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) ) / 2;
+    const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - static_cast<double>( fheroes2::Display::DEFAULT_WIDTH ) * scale ) ) / 2;
+    const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - static_cast<double>( fheroes2::Display::DEFAULT_HEIGHT ) * scale ) ) / 2;
 
     const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 108 * scale ),
                                        static_cast<int32_t>( 160 * scale ) );

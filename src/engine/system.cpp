@@ -586,11 +586,13 @@ std::string System::encUTF8ToLocal( const std::string_view str )
 std::string System::fsPathToString( const std::filesystem::path & path )
 {
 #if defined( _WIN32 )
+    const std::u8string pathAsU8 = path.u8string();
+    const std::string_view pathAsView( reinterpret_cast<const char *>( pathAsU8.c_str() ), pathAsU8.size() );
     // On Windows, std::filesystem::path::string() can throw an exception if path contains UTF-16 characters that
     // are non-representable in CP_ACP. However, converting a well-formed UTF-16 string to UTF-8 is always safe,
     // so we perform this conversion first, and then convert the resulting UTF-8 to CP_ACP using our conversion
     // function, which can never throw an exception.
-    return encUTF8ToLocal( path.u8string() );
+    return encUTF8ToLocal( pathAsView );
 #else
     return path.string();
 #endif

@@ -907,7 +907,7 @@ int Heroes::getStatsValue() const
 
 double Heroes::getRecruitValue() const
 {
-    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
+    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * static_cast<double>( SKILL_VALUE ) );
 }
 
 double Heroes::getMeetingValue( const Heroes & receivingHero ) const
@@ -924,7 +924,7 @@ double Heroes::getMeetingValue( const Heroes & receivingHero ) const
     }
 
     // TODO: leaving only one monster in an army is very risky. Add logic to find out which part of the army would be useful to get.
-    return receivingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
+    return receivingHero.army.getReinforcementValue( army ) + artifactValue * static_cast<double>( SKILL_VALUE );
 }
 
 int Heroes::GetAttack() const
