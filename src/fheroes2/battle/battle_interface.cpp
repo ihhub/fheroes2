@@ -4411,7 +4411,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
 
     // set spell cast animation
     if ( caster ) {
-        const bool isLeftOpponent = caster->GetColor() == arena.GetArmy1Color();
+        const bool isLeftOpponent = ( caster->GetColor() == arena.GetArmy1Color() );
         opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
         if ( opponent != nullptr ) {
             if ( isMassSpell ) {
@@ -4567,6 +4567,12 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
                 break;
             case Spell::PETRIFY:
                 _redrawActionStoneSpell( *target );
+                break;
+            case Spell::SUMMONEELEMENT:
+            case Spell::SUMMONAELEMENT:
+            case Spell::SUMMONFELEMENT:
+            case Spell::SUMMONWELEMENT:
+                _redrawActionSummonElementalSpell( *target );
                 break;
             case Spell::TELEPORT:
                 _redrawActionTeleportSpell( *target, dst );
@@ -5291,7 +5297,7 @@ void Battle::Interface::_redrawActionTeleportSpell( Unit & target, const int32_t
     }
 }
 
-void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
+void Battle::Interface::_redrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 

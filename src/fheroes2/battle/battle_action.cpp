@@ -475,7 +475,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
     switch ( spell.GetID() ) {
     case Spell::TELEPORT:
-        ApplyActionSpellTeleport( cmd );
+        _applyActionSpellTeleport( cmd );
         break;
 
     case Spell::EARTHQUAKE:
@@ -490,11 +490,11 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
     case Spell::SUMMONAELEMENT:
     case Spell::SUMMONFELEMENT:
     case Spell::SUMMONWELEMENT:
-        ApplyActionSpellSummonElemental( cmd, spell );
+        _applyActionSpellSummonElemental( spell );
         break;
 
     default:
-        ApplyActionSpellDefaults( cmd, spell );
+        _applyActionSpellDefaults( cmd, spell );
         break;
     }
 
@@ -1400,7 +1400,7 @@ void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
     _interface.reset();
 }
 
-void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /* cmd */, const Spell & spell )
+void Battle::Arena::_applyActionSpellSummonElemental( const Spell & spell )
 {
     const auto checkPreconditions = []() {
         const Arena * arena = GetArena();
@@ -1435,12 +1435,15 @@ void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /* cmd */, 
         const HeroBase * commander = GetCurrentCommander();
         assert( commander != nullptr );
 
+        TargetsInfo targetsInfo;
+        targetsInfo.emplace_back( elem );
+
         _interface->RedrawActionSpellCastStatus( spell, -1, commander->GetName(), {} );
-        _interface->RedrawActionSummonElementalSpell( *elem );
+        _interface->RedrawActionSpellCastPart1( spell, elem->GetHeadIndex(), commander, targetsInfo );
     }
 }
 
-void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
+void Battle::Arena::_applyActionSpellDefaults( Command & cmd, const Spell & spell )
 {
     const int32_t dst = cmd.GetNextValue();
 
@@ -1485,7 +1488,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     }
 }
 
-void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
+void Battle::Arena::_applyActionSpellTeleport( Command & cmd )
 {
     const auto checkParameters = []( const Unit * unit, const Cell * cell ) {
         if ( unit == nullptr || !unit->isValid() ) {

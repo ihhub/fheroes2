@@ -344,7 +344,6 @@ namespace Battle
         void RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget );
         void redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets );
         void redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets );
-        void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
@@ -400,6 +399,7 @@ namespace Battle
         void RedrawActionDeathWaveSpell( const int32_t strength );
         void _redrawActionLightningBoltSpell( const Unit & target );
         void _redrawActionChainLightningSpell( const TargetsInfo & targets );
+        void _redrawActionSummonElementalSpell( Unit & target );
         void _redrawActionTeleportSpell( Unit & target, const int32_t dst );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size );
