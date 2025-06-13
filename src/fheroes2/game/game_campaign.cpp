@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <compare>
 #include <cstddef>
 #include <cstdint>
 #include <map>

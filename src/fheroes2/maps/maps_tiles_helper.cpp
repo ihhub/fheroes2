@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <compare>
 #include <cstdint>
 #include <cstdlib>
 #include <limits>

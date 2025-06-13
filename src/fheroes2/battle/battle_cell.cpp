@@ -24,6 +24,7 @@
 #include "battle_cell.h"
 
 #include <cassert>
+#include <compare>
 
 #include "battle_arena.h"
 #include "battle_board.h"

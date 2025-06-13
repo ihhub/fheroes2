@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <compare>
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>

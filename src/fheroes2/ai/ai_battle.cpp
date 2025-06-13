@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <compare>
 #include <cstddef>
 #include <cstdint>
 #include <functional>

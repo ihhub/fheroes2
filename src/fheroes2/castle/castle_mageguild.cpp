@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cstdint>
 #include <iterator>
-#include <string>
 #include <vector>
 
 #include "agg_image.h"

@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <cstdint>
-#include <string>
 
 #include "agg_image.h"
 #include "cursor.h"
