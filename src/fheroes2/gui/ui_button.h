@@ -297,12 +297,12 @@ namespace fheroes2
         void drawShadows( Image & output ) const;
 
         // Disable all the buttons in the button group.
-        void disable();
+        void disable() const;
 
         // Enable all the buttons in the button group.
-        void enable();
+        void enable() const;
 
-        void drawOnState( LocalEvent & le );
+        void drawOnState( const LocalEvent & le ) const;
 
         size_t getButtonsCount() const
         {
