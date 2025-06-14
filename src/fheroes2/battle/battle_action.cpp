@@ -275,8 +275,8 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
             // The built-in dispel should only remove beneficial spells from the target unit
             if ( spell.GetID() != Spell::DISPEL || spellTargetUnit->Modes( IS_GOOD_MAGIC ) ) {
                 if ( _interface ) {
-                    _interface->RedrawActionSpellCastStatus( spell, spellTargetUnit->GetHeadIndex(), attacker.GetName(), spellTargets );
-                    _interface->RedrawActionSpellCastPart1( spell, spellTargetUnit->GetHeadIndex(), nullptr, spellTargets );
+                    _interface->redrawActionSpellCastStatus( spell, spellTargetUnit->GetHeadIndex(), attacker.GetName(), spellTargets );
+                    _interface->redrawActionSpellCastPart1( spell, spellTargetUnit->GetHeadIndex(), nullptr, spellTargets );
                 }
 
                 if ( spell.GetID() == Spell::DISPEL ) {
@@ -288,7 +288,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
                 }
 
                 if ( _interface ) {
-                    _interface->RedrawActionSpellCastPart2( spell, spellTargets );
+                    _interface->redrawActionSpellCastPart2( spell, spellTargets );
                     _interface->RedrawActionMonsterSpellCastStatus( spell, attacker, spellTargets.front() );
                 }
             }
@@ -1431,8 +1431,8 @@ void Battle::Arena::_applyActionSpellSummonElemental( const Spell & spell )
         TargetsInfo targetsInfo;
         targetsInfo.emplace_back( elem );
 
-        _interface->RedrawActionSpellCastStatus( spell, -1, commander->GetName(), {} );
-        _interface->RedrawActionSpellCastPart1( spell, elem->GetHeadIndex(), commander, targetsInfo );
+        _interface->redrawActionSpellCastStatus( spell, -1, commander->GetName(), {} );
+        _interface->redrawActionSpellCastPart1( spell, elem->GetHeadIndex(), commander, targetsInfo );
     }
 }
 
@@ -1456,7 +1456,7 @@ void Battle::Arena::_applyActionSpellDefaults( Command & cmd, const Spell & spel
     TargetsInfo resistTargets;
 
     if ( _interface ) {
-        _interface->RedrawActionSpellCastStatus( spell, dst, commander->GetName(), targets );
+        _interface->redrawActionSpellCastStatus( spell, dst, commander->GetName(), targets );
 
         for ( const auto & target : targets ) {
             if ( target.resist ) {
@@ -1468,7 +1468,7 @@ void Battle::Arena::_applyActionSpellDefaults( Command & cmd, const Spell & spel
     targets.erase( std::remove_if( targets.begin(), targets.end(), []( const TargetInfo & v ) { return v.resist; } ), targets.end() );
 
     if ( _interface ) {
-        _interface->RedrawActionSpellCastPart1( spell, dst, commander, targets );
+        _interface->redrawActionSpellCastPart1( spell, dst, commander, targets );
         for ( const TargetInfo & target : resistTargets ) {
             _interface->RedrawActionResistSpell( *target.defender, playResistSound );
         }
@@ -1477,7 +1477,7 @@ void Battle::Arena::_applyActionSpellDefaults( Command & cmd, const Spell & spel
     TargetsApplySpell( commander, spell, targets );
 
     if ( _interface ) {
-        _interface->RedrawActionSpellCastPart2( spell, targets );
+        _interface->redrawActionSpellCastPart2( spell, targets );
     }
 }
 
@@ -1529,8 +1529,8 @@ void Battle::Arena::_applyActionSpellTeleport( Command & cmd )
 
         const Spell spell( Spell::TELEPORT );
 
-        _interface->RedrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
-        _interface->RedrawActionSpellCastPart1( spell, pos.GetHead()->GetIndex(), commander, targetsInfo );
+        _interface->redrawActionSpellCastStatus( spell, src, commander->GetName(), targetsInfo );
+        _interface->redrawActionSpellCastPart1( spell, pos.GetHead()->GetIndex(), commander, targetsInfo );
     }
 
     unit->SetPosition( pos );
@@ -1595,7 +1595,7 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
             earthquakeTargets.push_back( target );
         }
 
-        _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
+        _interface->redrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
         _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
     }
 
@@ -1664,7 +1664,7 @@ void Battle::Arena::_applyActionSpellMirrorImage( Command & cmd )
         assert( pos.isValidForUnit( *mirrorUnit ) );
 
         if ( _interface ) {
-            _interface->RedrawActionSpellCastStatus( mirrorImageSpell, targetUnitCellIndex, commander->GetName(), targetsInfo );
+            _interface->redrawActionSpellCastStatus( mirrorImageSpell, targetUnitCellIndex, commander->GetName(), targetsInfo );
         }
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
