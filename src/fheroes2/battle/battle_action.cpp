@@ -483,7 +483,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         break;
 
     case Spell::MIRRORIMAGE:
-        ApplyActionSpellMirrorImage( cmd );
+        _applyActionSpellMirrorImage( cmd );
         break;
 
     case Spell::SUMMONEELEMENT:
@@ -1620,7 +1620,7 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
     }
 }
 
-void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
+void Battle::Arena::_applyActionSpellMirrorImage( Command & cmd )
 {
     const auto checkParameters = []( const Unit * unit ) {
         if ( unit == nullptr || !unit->isValid() ) {
@@ -1637,13 +1637,13 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         return true;
     };
 
-    const int32_t who = cmd.GetNextValue();
+    const int32_t targetUnitCellIndex = cmd.GetNextValue();
 
-    Unit * unit = GetTroopBoard( who );
+    Unit * unit = GetTroopBoard( targetUnitCellIndex );
 
     if ( !checkParameters( unit ) ) {
         ERROR_LOG( "Invalid parameters: "
-                   << "who: " << who )
+                   << "cell index with original unit: " << targetUnitCellIndex )
 
 #ifdef WITH_DEBUG
         assert( 0 );
@@ -1659,18 +1659,15 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
     } );
 
-    Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
+    Indexes::const_iterator it = std::find_if( distances.cbegin(), distances.cend(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
     if ( it != distances.end() ) {
         const HeroBase * commander = GetCurrentCommander();
         assert( commander != nullptr );
 
         const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
 
-        TargetInfo targetInfo;
-        targetInfo.defender = unit;
-
         TargetsInfo targetsInfo;
-        targetsInfo.push_back( targetInfo );
+        targetsInfo.emplace_back( unit );
 
         TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
 
@@ -1678,16 +1675,18 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         assert( mirrorUnit != nullptr );
 
         const Position pos = Position::GetPosition( *mirrorUnit, *it );
-        assert( pos.isValidForUnit( mirrorUnit ) );
-
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
+        assert( pos.isValidForUnit( *mirrorUnit ) );
 
         if ( _interface ) {
-            _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
-            _interface->RedrawActionMirrorImageSpell( *unit, pos );
+            _interface->RedrawActionSpellCastStatus( mirrorImageSpell, targetUnitCellIndex, commander->GetName(), targetsInfo );
         }
 
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
         mirrorUnit->SetPosition( pos );
+
+        if ( _interface ) {
+            _interface->redrawActionMirrorImageSpell( *commander, targetUnitCellIndex, *unit, *mirrorUnit );
+        }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )

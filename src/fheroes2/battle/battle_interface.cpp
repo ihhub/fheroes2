@@ -674,6 +674,13 @@ namespace
 
         return Battle::UNKNOWN;
     }
+
+    // The cast down is applied below the 2nd battlefield row (count is started from 0)
+    // and for the (rowNumber - 2) columns starting from the side of the hero.
+    bool isHeroCastDown( const int32_t cellindex, const bool isLeftOpponent )
+    {
+        return isLeftOpponent ? ( ( cellindex % 11 ) < cellindex / 11 - 2 ) : ( ( 10 - ( cellindex % 11 ) ) < cellindex / 11 - 2 );
+    }
 }
 
 namespace Battle
@@ -4418,9 +4425,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
                 opponent->SetAnimation( OP_CAST_MASS );
             }
             else {
-                // The cast down is applied below the 2rd battlefield row (count is started from 0)
-                // and for the (rowNumber - 2) columns starting from the side of the hero.
-                isCastDown = isLeftOpponent ? ( ( dst % 11 ) < dst / 11 - 2 ) : ( ( 10 - ( dst % 11 ) ) < dst / 11 - 2 );
+                isCastDown = isHeroCastDown( dst, isLeftOpponent );
 
                 opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
             }
@@ -5323,36 +5328,81 @@ void Battle::Interface::_redrawActionSummonElementalSpell( Unit & target )
     target.SetCustomAlpha( 255 );
 }
 
-void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const Position & pos )
+void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, const int32_t targetCell, const Unit & originalUnit, Unit & mirrorUnit )
 {
-    LocalEvent & le = LocalEvent::Get();
-
-    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
-    fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
-
-    const fheroes2::Rect & rt1 = target.GetRectPosition();
-    const fheroes2::Rect & rt2 = pos.GetRect();
-
-    const std::vector<fheroes2::Point> points = GetLinePoints( rt1.getPosition(), rt2.getPosition(), 5 );
-    std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
-
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    // Temporary set mirror image as the current unit to animate the spell effect.
+    const Unit * oldCurrent = _currentUnit;
+    mirrorUnit.SetCustomAlpha( 0 );
+    // Hide the counter.
+    mirrorUnit.SwitchAnimation( Monster_Info::STAND_STILL );
+    _currentUnit = &mirrorUnit;
+
+    // Set custom sprite for mirrored unit to hide its contour and to have ability to change sprite position.
+    fheroes2::Sprite mirrorUnitSprite = fheroes2::AGG::GetICN( originalUnit.GetMonsterSprite(), originalUnit.GetFrame() );
+    _spriteInsteadCurrentUnit = &mirrorUnitSprite;
+
+    // Don't highlight the cursor position.
+    _currentCellIndex = -1;
+
+    // Don't highlight movement area cells while animating spell.
+    Settings & conf = Settings::Get();
+    const bool showMoveShadowState = conf.BattleShowMoveShadow();
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( false );
+    }
+
+    // Animate casting.
+    const bool isLeftOpponent = ( caster.GetColor() == arena.GetArmy1Color() );
+    bool isCastDown = isHeroCastDown( targetCell, isLeftOpponent );
+
+    OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+    assert( opponent != nullptr );
+
+    opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
+    AnimateOpponents( opponent );
+
+    const fheroes2::Point & unitPos = originalUnit.GetRectPosition().getPosition();
+    const fheroes2::Point & mirrorPos = mirrorUnit.GetRectPosition().getPosition();
+    const fheroes2::Point spriteOffet( mirrorUnitSprite.x(), mirrorUnitSprite.y() );
+
+    // Get spell animation points.
+    const std::vector<fheroes2::Point> points = GetEuclideanLine( unitPos - mirrorPos + spriteOffet, spriteOffet, 5 );
+    std::vector<fheroes2::Point>::const_iterator pnt = points.cbegin();
+
+    // Make the mirror unit visible.
+    mirrorUnit.SetCustomAlpha( 255 );
+
     AudioManager::PlaySound( M82::MIRRORIM );
+
+    LocalEvent & le = LocalEvent::Get();
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && pnt != points.end() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && pnt != points.cend() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            const fheroes2::Point & sp = GetTroopPosition( target, sprite );
-
+            mirrorUnitSprite.setPosition( pnt->x, pnt->y );
             RedrawPartialStart();
-            fheroes2::Blit( sprite, _mainSurface, sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y, target.isReflect() );
             RedrawPartialFinish();
 
             ++pnt;
         }
+    }
+
+    // Run caster's "cast return" animation.
+    opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
+    AnimateOpponents( opponent );
+    opponent->SetAnimation( OP_STATIC );
+
+    // Restore the initial state.
+    mirrorUnit.SwitchAnimation( Monster_Info::STATIC );
+    _currentUnit = oldCurrent;
+    _spriteInsteadCurrentUnit = nullptr;
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( true );
     }
 
     setStatus( _( "The mirror image is created." ), true );

@@ -344,7 +344,7 @@ namespace Battle
         void RedrawActionCatapultPart2( const CastleDefenseStructure catapultTarget );
         void redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets );
         void redrawActionEarthquakeSpellPart2( const std::vector<CastleDefenseStructure> & targets );
-        void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
+        void redrawActionMirrorImageSpell( const HeroBase & caster, const int32_t targetCell, const Unit & originalUnit, Unit & mirrorUnit );
         void RedrawActionSkipStatus( const Unit & unit );
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
         void RedrawBridgeAnimation( const bool bridgeDownAnimation );

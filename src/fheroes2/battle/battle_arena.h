@@ -300,7 +300,7 @@ namespace Battle
         void ApplyActionQuickCombat( const Command & cmd );
 
         void _applyActionSpellSummonElemental( const Spell & spell );
-        void ApplyActionSpellMirrorImage( Command & cmd );
+        void _applyActionSpellMirrorImage( Command & cmd );
         void _applyActionSpellTeleport( Command & cmd );
         void ApplyActionSpellEarthquake( const Command & cmd );
         void _applyActionSpellDefaults( Command & cmd, const Spell & spell );
