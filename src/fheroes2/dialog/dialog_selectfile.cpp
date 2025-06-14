@@ -484,8 +484,8 @@ namespace
         // Redraw sort radio buttons, sort file list in new method, and return whether to redraw the list.
         auto switchFileSorting
             = [&markBackgroundNameRoi, &markBackgroundDateRoi, &markBackground, &mark, &display, &listbox, &lists, &settings]( const bool doSortByDate ) {
-                  const fheroes2::Rect roiMarkBackground = isSortedByName ? markBackgroundNameRoi : markBackgroundDateRoi;
-                  const fheroes2::Rect roiMark = isSortedByName ? markBackgroundDateRoi : markBackgroundNameRoi;
+                  const fheroes2::Rect roiMarkBackground = doSortByDate ? markBackgroundNameRoi : markBackgroundDateRoi;
+                  const fheroes2::Rect roiMark = doSortByDate ? markBackgroundDateRoi : markBackgroundNameRoi;
                   fheroes2::Blit( markBackground, display, roiMarkBackground );
                   fheroes2::Blit( mark, display, { roiMark.x + 3, roiMark.y + 3, roiMark.width, roiMark.height } );
 
