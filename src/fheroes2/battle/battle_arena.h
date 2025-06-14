@@ -302,7 +302,7 @@ namespace Battle
         void _applyActionSpellSummonElemental( const Spell & spell );
         void _applyActionSpellMirrorImage( Command & cmd );
         void _applyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthquake( const Command & cmd );
+        void _applyActionSpellEarthquake();
         void _applyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,

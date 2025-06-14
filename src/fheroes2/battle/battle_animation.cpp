@@ -49,11 +49,6 @@ bool RandomizedDelay::checkDelay()
     return res;
 }
 
-AnimationSequence::AnimationSequence( const std::vector<int> & seq )
-    : _seq( seq )
-    , _currentFrame( 0 )
-{}
-
 AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
     _seq = rhs;
@@ -88,11 +83,6 @@ int AnimationSequence::getFrame() const
     return isValid() ? _seq[_currentFrame] : 0;
 }
 
-size_t AnimationSequence::animationLength() const
-{
-    return _seq.size();
-}
-
 int AnimationSequence::firstFrame() const
 {
     return isValid() ? _seq.front() : 0;
@@ -109,16 +99,6 @@ double AnimationSequence::movementProgress() const
     // but there is no such position on the cells which creature path through.
     // So to make the movement start and end more smoothly we add 0.5 to the frame number (since it starts from zero).
     return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
-}
-
-bool AnimationSequence::isLastFrame() const
-{
-    return _currentFrame == _seq.size() - 1;
-}
-
-bool AnimationSequence::isValid() const
-{
-    return !_seq.empty();
 }
 
 AnimationReference::AnimationReference( int monsterID )

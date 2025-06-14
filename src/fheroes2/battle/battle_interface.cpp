@@ -3480,7 +3480,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::AnimateOpponents( OpponentSprite * hero )
+void Battle::Interface::_animateOpponents( OpponentSprite * hero )
 {
     if ( hero == nullptr ) {
         return;
@@ -4432,7 +4432,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
                 opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
             }
 
-            AnimateOpponents( opponent );
+            _animateOpponents( opponent );
         }
     }
 
@@ -4597,7 +4597,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
         else {
             opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
         }
-        AnimateOpponents( opponent );
+        _animateOpponents( opponent );
 
         // Return to the static animation of hero.
         opponent->SetAnimation( OP_STATIC );
@@ -5363,7 +5363,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
     assert( opponent != nullptr );
 
     opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
-    AnimateOpponents( opponent );
+    _animateOpponents( opponent );
 
     const fheroes2::Point & unitPos = originalUnit.GetRectPosition().getPosition();
     const fheroes2::Point & mirrorPos = mirrorUnit.GetRectPosition().getPosition();
@@ -5396,7 +5396,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
 
     // Run caster's "cast return" animation.
     opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
-    AnimateOpponents( opponent );
+    _animateOpponents( opponent );
     opponent->SetAnimation( OP_STATIC );
 
     // Restore the initial state.
@@ -6117,9 +6117,17 @@ void Battle::Interface::_redrawActionArmageddonSpell()
     }
 }
 
-void Battle::Interface::redrawActionEarthquakeSpellPart1( const std::vector<CastleDefenseStructure> & targets )
+void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caster, const std::vector<CastleDefenseStructure> & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    // Animate casting.
+    const bool isLeftOpponent = ( caster.GetColor() == arena.GetArmy1Color() );
+    OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+    assert( opponent != nullptr );
+
+    opponent->SetAnimation( OP_CAST_MASS );
+    _animateOpponents( opponent );
 
     fheroes2::Rect area = GetArea();
     area.height -= status.height;
@@ -6170,7 +6178,10 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const std::vector<Cast
         }
     }
 
-    // draw cloud
+    // Set end of casting animation. The animation will be done by `CheckGlobalEvents()`.
+    opponent->SetAnimation( OP_CAST_MASS_RETURN );
+
+    // Draw buildings demolition clouds.
     const int icn = ICN::LICHCLOD;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn ) / 2;
     frame = 0;
@@ -6179,10 +6190,15 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const std::vector<Cast
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < maxFrame ) {
+    // We need to wait this delay before rendering the first frame of hero animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY, Game::BATTLE_OPPONENTS_DELAY } ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        const bool isNeedSpellAnimationUpdate = Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
+        if ( isNeedSpellAnimationUpdate || Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             RedrawPartialStart();
 
             for ( const CastleDefenseStructure target : targets ) {
@@ -6200,7 +6216,9 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const std::vector<Cast
 
             RedrawPartialFinish();
 
-            ++frame;
+            if ( isNeedSpellAnimationUpdate ) {
+                ++frame;
+            }
         }
     }
 }
@@ -6222,10 +6240,12 @@ void Battle::Interface::redrawActionEarthquakeSpellPart2( const std::vector<Cast
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < maxFrame ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY, Game::BATTLE_OPPONENTS_DELAY } ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        const bool isNeedSpellAnimationUpdate = Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
+        if ( isNeedSpellAnimationUpdate || Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             RedrawPartialStart();
 
             for ( const CastleDefenseStructure target : targets ) {
@@ -6243,7 +6263,9 @@ void Battle::Interface::redrawActionEarthquakeSpellPart2( const std::vector<Cast
 
             RedrawPartialFinish();
 
-            ++frame;
+            if ( isNeedSpellAnimationUpdate ) {
+                ++frame;
+            }
         }
     }
 }

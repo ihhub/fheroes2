@@ -51,7 +51,11 @@ struct MonsterReturnAnim
 class AnimationSequence final
 {
 public:
-    explicit AnimationSequence( const std::vector<int> & seq );
+    explicit AnimationSequence( const std::vector<int> & seq )
+        : _seq( seq )
+    {
+        // Do nothing.
+    }
 
     AnimationSequence( const AnimationSequence & ) = delete;
 
@@ -66,10 +70,21 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
-    size_t animationLength() const;
+    size_t animationLength() const
+    {
+        return _seq.size();
+    }
+
     double movementProgress() const;
-    bool isLastFrame() const;
-    bool isValid() const;
+    bool isLastFrame() const
+    {
+        return ( _currentFrame == _seq.size() - 1 );
+    }
+
+    bool isValid() const
+    {
+        return !_seq.empty();
+    }
 
     size_t getCurrentFrameId() const
     {
@@ -78,7 +93,7 @@ public:
 
 private:
     std::vector<int> _seq;
-    size_t _currentFrame;
+    size_t _currentFrame{ 0 };
 };
 
 class AnimationReference

@@ -475,7 +475,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         break;
 
     case Spell::EARTHQUAKE:
-        ApplyActionSpellEarthquake( cmd );
+        _applyActionSpellEarthquake();
         break;
 
     case Spell::MIRRORIMAGE:
@@ -1536,7 +1536,7 @@ void Battle::Arena::_applyActionSpellTeleport( Command & cmd )
     unit->SetPosition( pos );
 }
 
-void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
+void Battle::Arena::_applyActionSpellEarthquake()
 {
     const HeroBase * commander = GetCurrentCommander();
     if ( commander == nullptr ) {
@@ -1596,7 +1596,7 @@ void Battle::Arena::ApplyActionSpellEarthquake( const Command & /* cmd */ )
         }
 
         _interface->redrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
-        _interface->redrawActionEarthquakeSpellPart1( earthquakeTargets );
+        _interface->redrawActionEarthquakeSpellPart1( *commander, earthquakeTargets );
     }
 
     for ( const auto & [target, damage] : earthquakeDamage ) {
