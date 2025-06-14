@@ -50,10 +50,10 @@ namespace
         fheroes2::StandardWindow background( optionButtons, false, 0, display );
         background.renderSymmetricButtons( optionButtons, 0, false );
 
-        fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
-        fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
-        fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
-        fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
+        const fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
+        const fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
+        const fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
+        const fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
 
         fheroes2::Button buttonCancel;
 
