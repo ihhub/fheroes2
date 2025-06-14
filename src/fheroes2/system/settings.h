@@ -365,14 +365,9 @@ public:
         return _saveFileSortType;
     }
 
-    void toggleSaveFileSortingMethod()
+    void setSaveFileSortingMethod( const SaveFileSortingMethod sortType )
     {
-        if ( _saveFileSortType == SaveFileSortingMethod::FILENAME ) {
-            _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
-        }
-        else {
-            _saveFileSortType = SaveFileSortingMethod::FILENAME;
-        }
+        _saveFileSortType = sortType;
     }
 
     void SetProgramPath( const char * path );

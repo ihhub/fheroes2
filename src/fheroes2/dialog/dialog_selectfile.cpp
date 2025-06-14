@@ -497,7 +497,7 @@ namespace
                       lastChoiceTimestamp = lists[currentId].timestamp;
                   }
 
-                  settings.toggleSaveFileSortingMethod();
+                  settings.setSaveFileSortingMethod( doSortByDate ? SaveFileSortingMethod::TIMESTAMP : SaveFileSortingMethod::FILENAME );
                   sortMapInfos( lists );
 
                   bool redrawNeeded = false;
