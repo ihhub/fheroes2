@@ -3723,7 +3723,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
     }
 
     // targets damage animation
-    RedrawActionWincesKills( targets, &attacker, &defender );
+    _redrawActionWincesKills( targets, &attacker, &defender );
     RedrawTroopDefaultDelay( attacker );
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
@@ -3789,7 +3789,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )
+void Battle::Interface::_redrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -4446,7 +4446,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell.GetID() ), 1 );
         break;
     case Spell::COLDRING:
-        RedrawActionColdRingSpell( dst, targets );
+        _redrawActionColdRingSpell( dst, targets );
         break;
 
     case Spell::MASSSHIELD:
@@ -4472,24 +4472,24 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         break;
 
     case Spell::DEATHRIPPLE:
-        RedrawActionDeathWaveSpell( 7 );
+        _redrawActionDeathWaveSpell( 7 );
         break;
     case Spell::DEATHWAVE:
-        RedrawActionDeathWaveSpell( 14 );
+        _redrawActionDeathWaveSpell( 14 );
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( 16 );
+        _redrawActionHolyShoutSpell( 16 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( 24 );
+        _redrawActionHolyShoutSpell( 24 );
         break;
 
     case Spell::ELEMENTALSTORM:
-        RedrawActionElementalStormSpell( targets );
+        _redrawActionElementalStormSpell( targets );
         break;
     case Spell::ARMAGEDDON:
-        RedrawActionArmageddonSpell(); // hit everything
+        _redrawActionArmageddonSpell(); // hit everything
         break;
 
     default:
@@ -4501,7 +4501,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         Unit * target = targets.front().defender;
 
         if ( spell.isResurrect() )
-            RedrawActionResurrectSpell( *target, spell );
+            _redrawActionResurrectSpell( *target, spell );
         else
             switch ( spell.GetID() ) {
             // simple spell animation
@@ -4634,7 +4634,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
             RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
             break;
         default:
-            RedrawActionWincesKills( targets );
+            _redrawActionWincesKills( targets );
             break;
         }
 
@@ -4983,7 +4983,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     const bool isMirror = target.defender->isModes( CAP_MIRRORIMAGE );
 
     // targets damage animation
-    RedrawActionWincesKills( targets );
+    _redrawActionWincesKills( targets );
 
     // draw status for first defender
     std::string msg = _( "%{tower} does %{damage} damage." );
@@ -5408,7 +5408,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
     setStatus( _( "The mirror image is created." ), true );
 }
 
-void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )
+void Battle::Interface::_redrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi )
 {
     if ( points.size() < 2 )
         return;
@@ -5531,7 +5531,7 @@ void Battle::Interface::_redrawActionLightningBoltSpell( const Unit & target )
 
     const std::vector<fheroes2::Point> points{ startingPos, endPos };
 
-    RedrawLightningOnTargets( points, _surfaceInnerArea );
+    _redrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::_redrawActionChainLightningSpell( const TargetsInfo & targets )
@@ -5546,7 +5546,7 @@ void Battle::Interface::_redrawActionChainLightningSpell( const TargetsInfo & ta
         points.emplace_back( pos.x + pos.width / 2, pos.y );
     }
 
-    RedrawLightningOnTargets( points, _surfaceInnerArea );
+    _redrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
@@ -5644,7 +5644,7 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
     }
 }
 
-void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
+void Battle::Interface::_redrawActionResurrectSpell( Unit & target, const Spell & spell )
 {
     if ( !target.isValid() ) {
         // Restore direction of the creature, since it could be killed when it was reflected.
@@ -5678,11 +5678,11 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
 
 void Battle::Interface::_redrawActionColdRaySpell( Unit & target )
 {
-    RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
+    _redrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
     RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, NONE );
 }
 
-void Battle::Interface::RedrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size )
+void Battle::Interface::_redrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5715,7 +5715,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
+    _redrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
     // Hide the counter.
     target.SwitchAnimation( Monster_Info::STAND_STILL );
@@ -5766,7 +5766,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
     }
 }
 
-void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
+void Battle::Interface::_redrawActionDeathWaveSpell( const int32_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5846,7 +5846,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
-void Battle::Interface::RedrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets )
+void Battle::Interface::_redrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -5898,7 +5898,7 @@ void Battle::Interface::RedrawActionColdRingSpell( const int32_t dst, const Targ
     }
 }
 
-void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
+void Battle::Interface::_redrawActionHolyShoutSpell( const uint8_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5981,7 +5981,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     }
 }
 
-void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
+void Battle::Interface::_redrawActionElementalStormSpell( const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -6046,7 +6046,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     }
 }
 
-void Battle::Interface::RedrawActionArmageddonSpell()
+void Battle::Interface::_redrawActionArmageddonSpell()
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();

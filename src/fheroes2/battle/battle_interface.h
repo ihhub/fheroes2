@@ -385,24 +385,24 @@ namespace Battle
 
         void RedrawTroopCount( const Unit & unit );
 
-        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
+        void _redrawActionArmageddonSpell();
         void _redrawActionArrowSpell( const Unit & target );
-        void _redrawActionColdRaySpell( Unit & target );
-        void _redrawActionDisruptingRaySpell( Unit & target );
         void _redrawActionBloodLustSpell( const Unit & target );
-        void _redrawActionStoneSpell( const Unit & target );
-        void RedrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets );
-        void RedrawActionElementalStormSpell( const TargetsInfo & targets );
-        void RedrawActionArmageddonSpell();
-        void RedrawActionHolyShoutSpell( const uint8_t strength );
-        void RedrawActionResurrectSpell( Unit & target, const Spell & spell );
-        void RedrawActionDeathWaveSpell( const int32_t strength );
-        void _redrawActionLightningBoltSpell( const Unit & target );
         void _redrawActionChainLightningSpell( const TargetsInfo & targets );
+        void _redrawActionColdRaySpell( Unit & target );
+        void _redrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets );
+        void _redrawActionDeathWaveSpell( const int32_t strength );
+        void _redrawActionDisruptingRaySpell( Unit & target );
+        void _redrawActionElementalStormSpell( const TargetsInfo & targets );
+        void _redrawActionHolyShoutSpell( const uint8_t strength );
+        void _redrawActionLightningBoltSpell( const Unit & target );
+        void _redrawActionResurrectSpell( Unit & target, const Spell & spell );
+        void _redrawActionStoneSpell( const Unit & target );
         void _redrawActionSummonElementalSpell( Unit & target );
         void _redrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
-        void RedrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size );
+        void _redrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
+        void _redrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
+        void _redrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size );
 
         // Wait for all possible battlefield action delays that could be set in previous functions to pass.
         // Use this if a function may be called from other functions with different render delay types.
