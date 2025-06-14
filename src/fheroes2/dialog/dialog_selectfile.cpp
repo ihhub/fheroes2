@@ -230,7 +230,7 @@ namespace
 
     void sortMapInfos( MapsFileInfoList & mapInfos )
     {
-        const SaveFileSortingMethod sortType = Settings::Get().GetSaveFileSortingMethod();
+        const SaveFileSortingMethod sortType = Settings::Get().getSaveFileSortingMethod();
         if ( sortType == SaveFileSortingMethod::FILENAME ) {
             std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::CompareByFileName{} );
         }
@@ -395,7 +395,7 @@ namespace
 
         Settings & settings = Settings::Get();
         const bool isEvilInterface = settings.isEvilInterfaceEnabled();
-        const SaveFileSortingMethod fileSortingMethod = settings.GetSaveFileSortingMethod();
+        const SaveFileSortingMethod fileSortingMethod = settings.getSaveFileSortingMethod();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -505,7 +505,7 @@ namespace
                   // Re-select the last selected file if any, unless we're typing in the list box
                   if ( !lastChoice.empty() ) {
                       const MapsFileInfoList::const_iterator it
-                          = findInMapInfos( lists.cbegin(), lists.cend(), lastChoice, lastChoiceTimestamp, settings.GetSaveFileSortingMethod() );
+                          = findInMapInfos( lists.cbegin(), lists.cend(), lastChoice, lastChoiceTimestamp, settings.getSaveFileSortingMethod() );
 
                       if ( it != lists.cend() ) {
                           const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
@@ -608,11 +608,11 @@ namespace
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
             }
-            else if ( le.MouseClickLeft( nameHeaderRoi ) && settings.GetSaveFileSortingMethod() != SaveFileSortingMethod::FILENAME ) {
+            else if ( le.MouseClickLeft( nameHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::FILENAME ) {
                 listUpdated = true;
                 needRedraw = switchFileSorting( false );
             }
-            else if ( le.MouseClickLeft( dateHeaderRoi ) && settings.GetSaveFileSortingMethod() != SaveFileSortingMethod::TIMESTAMP ) {
+            else if ( le.MouseClickLeft( dateHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::TIMESTAMP ) {
                 listUpdated = true;
                 needRedraw = switchFileSorting( true );
             }
@@ -733,7 +733,7 @@ namespace
             }
         }
 
-        const SaveFileSortingMethod lastFileSortingMethod = settings.GetSaveFileSortingMethod();
+        const SaveFileSortingMethod lastFileSortingMethod = settings.getSaveFileSortingMethod();
 
         if ( lastFileSortingMethod != fileSortingMethod ) {
             settings.Save( Settings::configFileName );
