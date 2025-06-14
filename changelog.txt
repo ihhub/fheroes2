@@ -1,3 +1,38 @@
+version 1.1.9 (10 June 2025)
+- update the Swedish translation
+- fix showing one 1st level troop in hero's army during the hero fade-out animation after losing a battle
+- bundle several maps with fheroes2
+- update the Ukrainian translation
+- update the Russian translation
+- add the Barrel object
+- reduce map reloads when erasing objects or placing terrain in the Editor
+- remove the rumor about the latest update
+- add the Black Cat object
+- fix map centering when AI interacts with an action object
+- render hero's Spell Points on two lines if they don't fit on one line
+- fix rendering of tall obstacles in battles
+- add Greek translation support
+- fix button behavior when pressing and holding them
+- update the German translation
+- allow AI to dig for Ultimate Artifact and win via the "Find a particular artifact" victory condition
+- do not allow units to cause zero damage in case of a bad luck event
+- add an optional field for map creator's notes
+- add the ability to set owner color for capturable objects in the Editor
+- add the Danish language to the Virtual keyboard
+- fix troop count display during monster animation in battles
+- make Bad Luck animation closer to the original game
+- make Disrupting Ray and Teleport spells animation closer to the original game
+- center the map on a hero before rendering action object's event
+- significantly speed up language switching operation
+- optimize rendering and timers
+- add UP and DOWN hotkeys support in "Select Count" dialogs
+- Android: optimize the asset extraction process
+- fix a conflict between scrolling by dragging and regular scrolling
+- fix Barbarian castle's Shipyard rendering
+- fix incorrect pixels near the SKIP button when Hero's options are opened
+- fix unit overlap in battles when a unit is moving to the row above another unit
+- make the scouting area match the original game
+
 version 1.1.8 (04 May 2025)
 - add defense penalty to moat building info and adjust wording
 - add the translation of buttons in Editor's main menu
