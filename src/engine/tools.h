@@ -121,9 +121,6 @@ namespace fheroes2
             const CharType lc = std::tolower( *li, currentGlobalLocale );
             const CharType rc = std::tolower( *ri, currentGlobalLocale );
 
-            ++li;
-            ++ri;
-
             if ( lc < rc ) {
                 return true;
             }
@@ -131,6 +128,8 @@ namespace fheroes2
                 return false;
             }
             // The characters are "equal", so proceed to checking the next pair
+            ++li;
+            ++ri;
         }
 
         // We have reached the end of one (or both) of the strings, the first parameter is considered "less than" the second if it is shorter
