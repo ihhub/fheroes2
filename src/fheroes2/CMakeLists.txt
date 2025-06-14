@@ -33,6 +33,7 @@ if(MACOS_APP_BUNDLE)
 	target_compile_definitions(
 		fheroes2
 		PRIVATE
+    _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
 		$<$<CONFIG:Debug>:WITH_DEBUG>
 		$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
 		)
@@ -64,6 +65,7 @@ else(MACOS_APP_BUNDLE)
 	target_compile_definitions(
 		fheroes2
 		PRIVATE
+    _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
 		# MSVC: suppress deprecation warnings
 		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 		$<$<CONFIG:Debug>:WITH_DEBUG>

@@ -29,6 +29,7 @@ add_library(engine STATIC ${LIBENGINE_SOURCES})
 target_compile_definitions(
 	engine
 	PRIVATE
+  _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
 	# MSVC: suppress deprecation warnings
 	$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 	$<$<CONFIG:Debug>:WITH_DEBUG>
