@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-06 02:30+0000\n"
+"POT-Creation-Date: 2025-06-14 01:39+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -215,16 +215,19 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid ""
-"STANDARD\n"
-"GAME"
-msgstr "BEŽNÁ HRA"
-
-msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
 "RÝCHLY\n"
 "BOJ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr "BEŽNÁ HRA"
 
 msgid ""
 "CAMPAIGN\n"
@@ -238,23 +241,6 @@ msgid ""
 msgstr ""
 "HRA VIAC\n"
 "HRÁČOV"
-
-msgid "CONFIG"
-msgstr "NASTAV"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"PÔVODNÁ\n"
-"KAMPAŇ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPAŇ\n"
-"EXPANZIE"
 
 msgid "HOT SEAT"
 msgstr ""
@@ -275,6 +261,39 @@ msgstr "5 HRÁČOV"
 
 msgid "6 PLAYERS"
 msgstr "6 HRÁČOV"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"PÔVODNÁ\n"
+"KAMPAŇ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"EXPANZIE"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid "EditorMainMenu|BACK"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -4208,11 +4227,6 @@ msgstr ""
 "Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
 
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "START\n"
@@ -4622,15 +4636,9 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-"Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Zrušenie a návrat do ponuky Nová mapa."
-
-msgid "Cancel back to the main menu."
-msgstr "Zrušiť a späť do hlavného menu."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
 msgid "From Scratch"
 msgstr "Od nuly"
@@ -4644,8 +4652,16 @@ msgstr "Vytvoriť náhodne vygenerovanú mapu."
 msgid "Random"
 msgstr "Náhodná"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
 
 msgid "No maps available!"
 msgstr "Žiadne dostupné mapy!"
@@ -5727,16 +5743,6 @@ msgstr "', ale aktuálny jazyk hry je '"
 msgid "No save files to load."
 msgstr "Žiadne uložené hry."
 
-msgid "Hot Seat"
-msgstr "Horúce kreslo"
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
-"počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
-
 msgid "A single player game playing out a single map."
 msgstr "Hra pre jedného hráča na jednej mape."
 
@@ -5758,6 +5764,19 @@ msgid ""
 msgstr ""
 "Hra pre viacerých hráčov, v ktorej proti sebe na jednej mape nastupuje "
 "niekoľko ľudských hráčov."
+
+msgid "Hot Seat"
+msgstr "Horúce kreslo"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
+"počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
+
+msgid "Cancel back to the main menu."
+msgstr "Zrušiť a späť do hlavného menu."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Tím fheroes2 Resurrection uvádza"
@@ -5817,44 +5836,8 @@ msgstr ""
 "Chýbajú požadované video súbory pre okno výberu kampane. Uisti sa prosím, že "
 "máš v systéme všetky potrebné súbory."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Buď Rolandova, alebo Archibaldova kampaň z pôvodnej hry Heroes of Might and "
-"Magic II."
-
-msgid "Original Campaign"
-msgstr "Pôvodná kampaň"
-
-msgid "Expansion Campaign"
-msgstr "Kampaň expanzie"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
-
 msgid "Loading video. Please wait..."
 msgstr "Načítanie videa. Chvíľku vydrž, prosím..."
-
-msgid "Host"
-msgstr "Hostiteľ"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
-"hostiteľ."
-
-msgid "Guest"
-msgstr "Hosť"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do hry. "
-"Pri hrách cez TCP/IP môže byť viacero hostí."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5876,14 +5859,6 @@ msgstr "Rýchly boj"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Nastaviť a hrať bitku bez načítania mapy."
-
-#, fuzzy
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
-"počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
 
 msgid "2 Players"
 msgstr "2 hráči"
@@ -5925,6 +5900,30 @@ msgstr "6 hráčov"
 
 msgid "Play with 6 human players."
 msgstr "Hraj so 6 hráčmi."
+
+msgid "Original Campaign"
+msgstr "Pôvodná kampaň"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Buď Rolandova, alebo Archibaldova kampaň z pôvodnej hry Heroes of Might and "
+"Magic II."
+
+msgid "Expansion Campaign"
+msgstr "Kampaň expanzie"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
+"počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Dračie mesto padlo! Teraz si Majstrom drakov."
@@ -12356,3 +12355,32 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "CONFIG"
+#~ msgstr "NASTAV"
+
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Zrušenie a návrat do ponuky Nová mapa."
+
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
+
+#~ msgid "Host"
+#~ msgstr "Hostiteľ"
+
+#~ msgid ""
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
+#~ msgstr ""
+#~ "Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
+#~ "hostiteľ."
+
+#~ msgid "Guest"
+#~ msgstr "Hosť"
+
+#~ msgid ""
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
+#~ msgstr ""
+#~ "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do "
+#~ "hry. Pri hrách cez TCP/IP môže byť viacero hostí."
