@@ -101,6 +101,7 @@ std::string Settings::GetVersion()
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _gameDifficulty( Difficulty::NORMAL )
+    , _saveFileSortType( SaveFileSortingMethod::FILENAME )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
@@ -355,6 +356,15 @@ bool Settings::Read( const std::string & filePath )
         setEditorPassability( config.StrParams( "editor passability" ) == "on" );
     }
 
+    if ( config.Exists( "save file sorting" ) ) {
+        if ( config.StrParams( "save file sorting" ) == "date" ) {
+            _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
+        }
+        else {
+            _saveFileSortType = SaveFileSortingMethod::FILENAME;
+        }
+    }
+
     return true;
 }
 
@@ -518,6 +528,9 @@ std::string Settings::String() const
 
     os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
     os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# save files sorting method: name/date" << std::endl;
+    os << "save file sorting = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
 
     return os.str();
 }
