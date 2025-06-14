@@ -483,7 +483,7 @@ namespace
 
         // Redraw sort radio buttons, sort file list in new method, and return whether to redraw the list.
         auto switchFileSorting
-            = [&markBackgroundNameRoi, &markBackgroundDateRoi, &markBackground, &mark, &display, &listbox, &lists, &settings]( const bool isSortedByName ) {
+            = [&markBackgroundNameRoi, &markBackgroundDateRoi, &markBackground, &mark, &display, &listbox, &lists, &settings]( const bool doSortByDate ) {
                   const fheroes2::Rect roiMarkBackground = isSortedByName ? markBackgroundNameRoi : markBackgroundDateRoi;
                   const fheroes2::Rect roiMark = isSortedByName ? markBackgroundDateRoi : markBackgroundNameRoi;
                   fheroes2::Blit( markBackground, display, roiMarkBackground );
@@ -610,11 +610,11 @@ namespace
             }
             else if ( le.MouseClickLeft( nameHeaderRoi ) && settings.GetSaveFileSortingMethod() != SaveFileSortingMethod::FILENAME ) {
                 listUpdated = true;
-                needRedraw = switchFileSorting( settings.GetSaveFileSortingMethod() == SaveFileSortingMethod::FILENAME );
+                needRedraw = switchFileSorting( false );
             }
             else if ( le.MouseClickLeft( dateHeaderRoi ) && settings.GetSaveFileSortingMethod() != SaveFileSortingMethod::TIMESTAMP ) {
                 listUpdated = true;
-                needRedraw = switchFileSorting( settings.GetSaveFileSortingMethod() == SaveFileSortingMethod::FILENAME );
+                needRedraw = switchFileSorting( true );
             }
             else if ( isEditing ) {
                 assert( textInput != nullptr );

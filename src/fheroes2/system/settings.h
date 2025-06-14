@@ -360,7 +360,7 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
-    SaveFileSortingMethod GetSaveFileSortingMethod() const
+    SaveFileSortingMethod getSaveFileSortingMethod() const
     {
         return _saveFileSortType;
     }
