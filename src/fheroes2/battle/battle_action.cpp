@@ -137,11 +137,7 @@ namespace
         assert( pos.isValidForUnit( unit ) );
 
         // Index of the destination cell should correspond to the index of the head cell of the target position and nothing else
-        if ( pos.GetHead()->GetIndex() != dst ) {
-            return false;
-        }
-
-        return true;
+        return pos.GetHead()->GetIndex() == dst;
     }
 
     std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander )
@@ -150,13 +146,13 @@ namespace
         if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
             return { 0, 1 };
         }
-        else if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
+        if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
             return { 0, 2 };
         }
-        else if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
+        if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
             return { 0, 3 };
         }
-        else if ( spellPower >= 10 ) {
+        if ( spellPower >= 10 ) {
             return { 1, 3 };
         }
 
@@ -1047,7 +1043,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     Unit * unit = GetTroopBoard( attackedTroopIndex );
     if ( unit == nullptr ) {
         assert( 0 );
-        return TargetsInfo();
+        return {};
     }
 
     TargetsInfo targets;
@@ -1411,11 +1407,8 @@ void Battle::Arena::_applyActionSpellSummonElemental( const Spell & spell )
         }
 
         const int32_t idx = arena->GetFreePositionNearHero( arena->GetCurrentColor() );
-        if ( !Board::isValidIndex( idx ) ) {
-            return false;
-        }
 
-        return true;
+        return Board::isValidIndex( idx );
     };
 
     if ( !checkPreconditions() ) {
@@ -1502,11 +1495,7 @@ void Battle::Arena::_applyActionSpellTeleport( Command & cmd )
         const Arena * arena = GetArena();
         assert( arena != nullptr );
 
-        if ( arena->GetCurrentCommander() == nullptr ) {
-            return false;
-        }
-
-        return true;
+        return arena->GetCurrentCommander() != nullptr;
     };
 
     const int32_t src = cmd.GetNextValue();
@@ -1630,11 +1619,7 @@ void Battle::Arena::_applyActionSpellMirrorImage( Command & cmd )
         const Arena * arena = GetArena();
         assert( arena != nullptr );
 
-        if ( arena->GetCurrentCommander() == nullptr ) {
-            return false;
-        }
-
-        return true;
+        return arena->GetCurrentCommander() != nullptr;
     };
 
     const int32_t targetUnitCellIndex = cmd.GetNextValue();
@@ -1659,7 +1644,8 @@ void Battle::Arena::_applyActionSpellMirrorImage( Command & cmd )
         return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
     } );
 
-    Indexes::const_iterator it = std::find_if( distances.cbegin(), distances.cend(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
+    const Indexes::const_iterator it
+        = std::find_if( distances.cbegin(), distances.cend(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
     if ( it != distances.end() ) {
         const HeroBase * commander = GetCurrentCommander();
         assert( commander != nullptr );

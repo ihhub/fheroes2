@@ -5357,7 +5357,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
 
     // Animate casting.
     const bool isLeftOpponent = ( caster.GetColor() == arena.GetArmy1Color() );
-    bool isCastDown = isHeroCastDown( targetCell, isLeftOpponent );
+    const bool isCastDown = isHeroCastDown( targetCell, isLeftOpponent );
 
     OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
     assert( opponent != nullptr );
