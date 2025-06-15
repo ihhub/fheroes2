@@ -93,6 +93,8 @@ namespace Rand
             : _state( 0 )
             , _increment( ( stream << 1U ) | 1U )
         {
+            // _increment must be odd
+            assert( _increment % 2 == 1 );
             advanceState();
             _state += seed;
             advanceState();
