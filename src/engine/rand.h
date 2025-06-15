@@ -27,6 +27,8 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+// IWYU issue workaround. When <exception> is included IWYU will remove it and require <string>.
+// When <string> is included it'll remove it and require <exception>
 // IWYU pragma: no_include <exception>
 #include <functional>
 #include <iterator>
