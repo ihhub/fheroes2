@@ -217,40 +217,45 @@ namespace
         return palette.data();
     }
 
+    // Updates `roi` to be only inside {0, 0, width, height} rectangle.
+    // Returns false if `roi` is out of such rectangle.
     bool getActiveArea( fheroes2::Rect & roi, const int32_t width, const int32_t height )
     {
-        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height )
+        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height ) {
             return false;
+        }
 
         if ( roi.x < 0 ) {
-            const int32_t offsetX = -roi.x;
-            if ( offsetX >= roi.width )
+            if ( -roi.x >= roi.width ) {
                 return false;
+            }
 
+            roi.width += roi.x;
             roi.x = 0;
-            roi.width -= offsetX;
         }
 
         if ( roi.y < 0 ) {
-            const int32_t offsetY = -roi.y;
-            if ( offsetY >= roi.height )
+            if ( -roi.y >= roi.height ) {
                 return false;
+            }
 
+            roi.height += roi.y;
             roi.y = 0;
-            roi.height -= offsetY;
         }
 
-        if ( roi.x + roi.width > width ) {
-            const int32_t offsetX = roi.x + roi.width - width;
-            if ( offsetX >= roi.width )
+        if ( const int32_t offsetX = roi.x + roi.width - width; offsetX > 0 ) {
+            if ( offsetX >= roi.width ) {
                 return false;
+            }
+
             roi.width -= offsetX;
         }
 
-        if ( roi.y + roi.height > height ) {
-            const int32_t offsetY = roi.y + roi.height - height;
-            if ( offsetY >= roi.height )
+        if ( const int32_t offsetY = roi.y + roi.height - height; offsetY > 0 ) {
+            if ( offsetY >= roi.height ) {
                 return false;
+            }
+
             roi.height -= offsetY;
         }
 
@@ -448,10 +453,11 @@ namespace
 
         bool isVisible() const override
         {
-            if ( _emulation )
+            if ( _emulation ) {
                 return fheroes2::Cursor::isVisible();
-            else
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            }
+
+            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -1319,9 +1325,6 @@ namespace fheroes2
     Display::Display()
         : _engine( RenderEngine::create() )
         , _cursor( RenderCursor::create() )
-        , _preprocessing( nullptr )
-        , _postprocessing( nullptr )
-        , _renderSurface( nullptr )
     {
         _disableTransformLayer();
     }
@@ -1369,22 +1372,25 @@ namespace fheroes2
     void Display::render( const Rect & roi )
     {
         Rect temp( roi );
-        if ( !getActiveArea( temp, width(), height() ) )
+        if ( !getActiveArea( temp, width(), height() ) ) {
             return;
-
-        getActiveArea( _prevRoi, width(), height() );
+        }
 
         if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
-            const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-            Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
+            Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
-            if ( !backup.empty() ) {
-                // ROI must include cursor's area as well, otherwise cursor won't be rendered.
-                Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-                if ( getActiveArea( cursorROI, width(), height() ) ) {
-                    temp = getBoundaryRect( temp, cursorROI );
-                }
+            if ( _cursor->_keepInScreenArea ) {
+                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+            }
+
+            const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+            Blit( cursorImage, 0, 0, *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+
+            // ROI must include cursor's area as well, otherwise cursor won't be rendered.
+            if ( !backup.empty() && getActiveArea( cursorROI, width(), height() ) ) {
+                temp = getBoundaryRect( temp, cursorROI );
             }
 
             // Previous position of cursor must be updated as well to avoid ghost effect.
@@ -1410,6 +1416,7 @@ namespace fheroes2
     void Display::updateNextRenderRoi( const Rect & roi )
     {
         _prevRoi = getBoundaryRect( _prevRoi, roi );
+        getActiveArea( _prevRoi, width(), height() );
     }
 
     void Display::_renderFrame( const Rect & roi ) const
