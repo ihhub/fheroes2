@@ -1549,6 +1549,19 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
 
 void Maps::Tile::updateObjectType()
 {
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        if ( world.GetMapEvent( Maps::GetPoint( _index ) ) == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
+            DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << _index << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            setMainObjectType( MP2::OBJ_NONE );
+        }
+
+        // Events have no visible parts on the map, so we preserve their type regardless of what part of the object is on the tile.
+        return;
+    }
+
     // After removing an object there could be an object part in the main object part.
     MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
