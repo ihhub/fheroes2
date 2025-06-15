@@ -198,10 +198,6 @@ void Game::Init()
 
     AnimateDelaysInitialize();
 
-    // Update the fonts according to the game language set in the configuration.
-    Settings & conf = Settings::Get();
-    conf.setGameLanguage( conf.getGameLanguage() );
-
     HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
