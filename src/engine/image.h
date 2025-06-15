@@ -154,6 +154,8 @@ namespace fheroes2
         Sprite & operator=( const Sprite & sprite );
         Sprite & operator=( Sprite && sprite ) noexcept;
 
+        Sprite & operator=( Image && image ) noexcept;
+
         int32_t x() const
         {
             return _x;

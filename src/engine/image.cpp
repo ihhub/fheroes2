@@ -587,6 +587,16 @@ namespace fheroes2
         return *this;
     }
 
+    Sprite & Sprite::operator=( Image && image ) noexcept
+    {
+        Image::operator=( std::move( image ) );
+
+        _x = 0;
+        _y = 0;
+
+        return *this;
+    }
+
     void Sprite::setPosition( const int32_t x_, const int32_t y_ )
     {
         _x = x_;

@@ -35,7 +35,7 @@
 
 namespace
 {
-    fheroes2::Sprite resizeButton( const fheroes2::Sprite & original, const fheroes2::Size & buttonSize )
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const fheroes2::Size & buttonSize )
     {
         const int32_t originalWidth = original.width();
         const int32_t originalHeight = original.height();
@@ -46,7 +46,7 @@ namespace
             return original;
         }
 
-        fheroes2::Sprite output( buttonSize.width, buttonSize.height, original.x(), original.y() );
+        fheroes2::Image output( buttonSize.width, buttonSize.height );
         output.reset();
 
         // Buttons that only are wider.
