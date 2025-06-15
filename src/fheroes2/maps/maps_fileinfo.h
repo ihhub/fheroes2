@@ -192,7 +192,7 @@ namespace Maps
         // This comparator will place the newer FileInfo instances (with a bigger timestamp) first
         struct CompareByTimestamp
         {
-            bool operator()( const FileInfo & lhs, const FileInfo & rhs )
+            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const
             {
                 return lhs.timestamp > rhs.timestamp;
             }
