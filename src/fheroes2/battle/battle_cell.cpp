@@ -50,7 +50,7 @@ void Battle::Position::Set( const int32_t head, const bool wide, const bool refl
     first = Board::GetCell( head );
 
     if ( first && wide ) {
-        second = Board::GetCell( first->GetIndex(), reflect ? RIGHT : LEFT );
+        second = Board::GetCell( first->GetIndex(), reflect ? CellDirection::RIGHT : CellDirection::LEFT );
     }
     else {
         second = nullptr;
@@ -97,7 +97,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
             return pos;
         };
 
-        const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+        const CellDirection tailDirection = unit.isReflect() ? CellDirection::RIGHT : CellDirection::LEFT;
 
         if ( Board::isValidDirection( dst, tailDirection ) ) {
             Cell * headCell = Board::GetCell( dst );
@@ -107,7 +107,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
         }
 
         if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
-            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+            const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
@@ -161,7 +161,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
         };
 
         const auto tryHead = [&unit, dst, &checkCells]() -> Position {
-            const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
+            const CellDirection tailDirection = unit.isReflect() ? CellDirection::RIGHT : CellDirection::LEFT;
 
             if ( Board::isValidDirection( dst, tailDirection ) ) {
                 Cell * headCell = Board::GetCell( dst );
@@ -174,7 +174,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
         };
 
         const auto tryTail = [&unit, dst, &checkCells]() -> Position {
-            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
+            const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
@@ -276,68 +276,74 @@ void Battle::Cell::SetArea( const fheroes2::Rect & area )
     _coord[6] = { offsetX, _coord[4].y };
 }
 
-Battle::CellDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
+Battle::AttackDirection Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
+    const fheroes2::Point oneHalf( ( _coord[1].x + _coord[2].x ) / 2, ( _coord[1].y + _coord[2].y ) / 2 );
+    const fheroes2::Point twoHalf( ( _coord[2].x + _coord[3].x ) / 2, ( _coord[2].y + _coord[3].y ) / 2 );
+    const fheroes2::Point fourHalf( ( _coord[4].x + _coord[5].x ) / 2, ( _coord[4].y + _coord[5].y ) / 2 );
+    const fheroes2::Point fiveHalf( ( _coord[5].x + _coord[6].x ) / 2, ( _coord[5].y + _coord[6].y ) / 2 );
+
     if ( pt == _coord[0] ) {
-        return CENTER;
+        return AttackDirection::CENTER;
     }
-    if ( inABC( pt, _coord[0], _coord[1], _coord[2] ) ) {
-        return TOP_LEFT;
+    if ( inABC( pt, _coord[0], _coord[1], oneHalf ) ) {
+        return AttackDirection::TOP_LEFT;
     }
-    if ( inABC( pt, _coord[0], _coord[2], _coord[3] ) ) {
-        return TOP_RIGHT;
+    if ( inABC( pt, _coord[0], oneHalf, twoHalf ) ) {
+        return AttackDirection::TOP;
+    }
+    if ( inABC( pt, _coord[0], twoHalf, _coord[3] ) ) {
+        return AttackDirection::TOP_RIGHT;
     }
     if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) ) {
-        return RIGHT;
+        return AttackDirection::RIGHT;
     }
-    if ( inABC( pt, _coord[0], _coord[4], _coord[5] ) ) {
-        return BOTTOM_RIGHT;
+    if ( inABC( pt, _coord[0], _coord[4], fourHalf ) ) {
+        return AttackDirection::BOTTOM_RIGHT;
     }
-    if ( inABC( pt, _coord[0], _coord[5], _coord[6] ) ) {
-        return BOTTOM_LEFT;
+    if ( inABC( pt, _coord[0], fourHalf, fiveHalf ) ) {
+        return AttackDirection::BOTTOM;
+    }
+    if ( inABC( pt, _coord[0], fiveHalf, _coord[6] ) ) {
+        return AttackDirection::BOTTOM_LEFT;
     }
     if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) ) {
-        return LEFT;
+        return AttackDirection::LEFT;
     }
 
-    return UNKNOWN;
+    return AttackDirection::UNKNOWN;
 }
 
 bool Battle::Cell::isPositionIncludePoint( const fheroes2::Point & pt ) const
 {
-    return UNKNOWN != GetTriangleDirection( pt );
+    return AttackDirection::UNKNOWN != GetTriangleDirection( pt );
 }
 
 bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const
 {
     assert( Board::isNearIndexes( _index, adjacent._index ) );
 
-    if ( unit.isWide() ) {
-        const int dir = Board::GetDirection( adjacent._index, _index );
-
-        switch ( dir ) {
-        case BOTTOM_RIGHT:
-        case TOP_RIGHT:
-        case BOTTOM_LEFT:
-        case TOP_LEFT: {
-            const bool reflect = ( ( BOTTOM_LEFT | TOP_LEFT ) & dir ) != 0;
-            const Cell * tail = Board::GetCell( _index, reflect ? RIGHT : LEFT );
-
-            return tail && tail->isPassable( true ) && isPassable( true );
-        }
-
-        case LEFT:
-        case RIGHT:
-            return isPassable( true ) || _index == unit.GetTailIndex();
-
-        default:
-            break;
-        }
+    if ( !unit.isWide() ) {
+        return isPassable( true );
     }
 
-    return isPassable( true );
+    const CellDirection dir = Board::GetDirection( adjacent._index, _index );
+
+    if ( dir == CellDirection::LEFT || dir == CellDirection::RIGHT ) {
+        return isPassable( true ) || _index == unit.GetTailIndex();
+    }
+
+    // When a wide unit moves diagonally to the left (to the top left or bottom left cell), its tail should be on the right side (because units can't move "tail first"),
+    // and vise versa - when such a unit moves diagonally to the right, its tail should be on the left side.
+    const CellDirection tailDir = ( dir == CellDirection::TOP_LEFT || dir == CellDirection::BOTTOM_LEFT ) ? CellDirection::RIGHT : CellDirection::LEFT;
+    // If 'tailDir' is LEFT, then 'dir' is either TOP_RIGHT or BOTTOM_RIGHT
+    assert( tailDir == CellDirection::RIGHT || dir == CellDirection::TOP_RIGHT || dir == CellDirection::BOTTOM_RIGHT );
+
+    const Cell * tail = Board::GetCell( _index, tailDir );
+
+    return tail && tail->isPassable( true ) && isPassable( true );
 }
 
 bool Battle::Cell::isPassableForUnit( const Unit & unit ) const

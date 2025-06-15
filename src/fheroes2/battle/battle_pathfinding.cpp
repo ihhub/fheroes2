@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -143,7 +143,7 @@ namespace Battle
                 const Cell * currentHeadCell = Board::GetCell( currentHeadCellIdx );
                 assert( currentHeadCell != nullptr );
 
-                const bool isCurrentLeftDirection = ( ( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) & LEFT_SIDE ) != 0 );
+                const bool isCurrentLeftDirection = isLeftSide( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) );
                 // The moat restrictions can be ignored if the wide unit originally occupied a moat cell, and at the current step any part
                 // of this unit occupies the same moat cell
                 const bool isIgnoreMoat = ( currentHeadCellIdx == pathStartMoatCellIdx || currentTailCellIdx == pathStartMoatCellIdx );
@@ -158,7 +158,7 @@ namespace Battle
                         continue;
                     }
 
-                    const int32_t tailCellIdx = ( Board::GetDirection( currentHeadCellIdx, headCellIdx ) & LEFT_SIDE ) ? headCellIdx + 1 : headCellIdx - 1;
+                    const int32_t tailCellIdx = isLeftSide( Board::GetDirection( currentHeadCellIdx, headCellIdx ) ) ? headCellIdx + 1 : headCellIdx - 1;
 
                     const BattleNodeIndex newNodeIdx = { headCellIdx, tailCellIdx };
                     if ( newNodeIdx == _pathStart ) {
