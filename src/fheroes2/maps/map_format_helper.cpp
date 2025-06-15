@@ -1268,7 +1268,7 @@ namespace Maps
                 }
             }
 
-            VERBOSE_LOG( "Non-unique UID " << info.info->id << " at " << info.tileIndex << " (" << info.tileIndex % map.size << ", " << info.tileIndex / map.size
+            VERBOSE_LOG( "Non-unique UID " << info.info->id << " at " << info.tileIndex << " (" << info.tileIndex % map.width << ", " << info.tileIndex / map.width
                                            << ") tile for object type: " << MP2::StringObject( getObjectInfo( info.info->group, info.info->index ).objectType ) )
         }
 #endif
