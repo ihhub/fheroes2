@@ -61,7 +61,8 @@ namespace Rand
                 return gen();
             }
             else {
-                static_assert( false, "Unsupported random generator type" );
+                // Using !sizeof because static_assert( false ) is ill-formed in c++17
+                static_assert( !sizeof( Random ), "Unsupported random generator type" );
             }
         }
 
