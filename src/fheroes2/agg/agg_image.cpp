@@ -514,6 +514,9 @@ namespace
         _icnVsSprite[id][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
     }
 
+    // Use this function only to load ICN before processing data for the specified ICN `id`.
+    // WARNING: Do not use this function when you need to load an ICN while processing data for another ICN `id`.
+    //          Use the `loadICN()` function for this case!
     void LoadOriginalICN( const int id )
     {
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
@@ -5024,7 +5027,7 @@ namespace
         }
         case ICN::WIZARD_CASTLE_BAY: {
             const int docksIcnId = ICN::TWNZDOCK;
-            LoadOriginalICN( docksIcnId );
+            loadICN( docksIcnId );
             auto & baySprites = _icnVsSprite[id];
             if ( _icnVsSprite[docksIcnId].size() == 6 ) {
                 // Make sprites for Wizard castle bay by updating docks sprites.
