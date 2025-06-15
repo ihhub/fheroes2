@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-07 14:31+0000\n"
+"POT-Creation-Date: 2025-06-15 05:10+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -211,16 +211,19 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid ""
-"STANDARD\n"
-"GAME"
-msgstr "SOLOSPEL"
-
-msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
 "ENDAST\n"
 "STRID"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr "SOLOSPEL"
 
 msgid ""
 "CAMPAIGN\n"
@@ -231,31 +234,12 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-"MULTI-\n"
-"SPEL"
-
-msgid "CONFIG"
-msgstr ""
-"INSTÄLL-\n"
-"NINGAR"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORGINAL-\n"
-"KAMPANJ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"EXPANSIONS-\n"
-"KAMPANJ"
+msgstr "MULTISPEL"
 
 msgid "HOT SEAT"
-msgstr "HETA STOLEN"
+msgstr ""
+"HETA\n"
+"STOLEN"
 
 msgid "2 PLAYERS"
 msgstr "2 SPELARE"
@@ -271,6 +255,41 @@ msgstr "5 SPELARE"
 
 msgid "6 PLAYERS"
 msgstr "6 SPELARE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORGINAL-\n"
+"KAMPANJ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"EXPANSIONS-\n"
+"KAMPANJ"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HUVUD-\n"
+"MENY"
+
+msgid "EditorMainMenu|BACK"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
@@ -3474,6 +3493,12 @@ msgstr ""
 "\n"
 "Plats: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
 
@@ -3485,6 +3510,21 @@ msgstr "Klicka för att spara nuvarande spel."
 
 msgid "Click to load a previously saved game."
 msgstr "Klicka för att ladda ett tidigare sparat spel."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Ditt Namn"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Stöd oss på"
 
 msgid "File to Save:"
 msgstr "Fil att Spara:"
@@ -4116,13 +4156,6 @@ msgstr ""
 "nuvarande karta kommer försvinna.)"
 
 msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HUVUD-\n"
-"MENY"
-
-msgid ""
 "START\n"
 "MAP"
 msgstr ""
@@ -4514,14 +4547,9 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Avbryt och gå tillbaka till Ny Karta-menyn."
-
-msgid "Cancel back to the main menu."
-msgstr "Avbryt och gå tillbaka till huvudmenyn."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Återgå till Huvudmenyn."
 
 msgid "From Scratch"
 msgstr "Blank karta"
@@ -4535,8 +4563,15 @@ msgstr "Skapa en slumpmässigt genererad karta."
 msgid "Random"
 msgstr "Slumpad"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Återgå till Huvudmenyn."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -5557,16 +5592,6 @@ msgstr "' men nuvarande spelspråk är "
 msgid "No save files to load."
 msgstr "Inga sparfiler att ladda."
 
-msgid "Hot Seat"
-msgstr "Heta stolen"
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spela Heta stolen, där 2 till 6 spelare spelar på samma dator och sätter sig "
-"i den 'Heta stolen' när det är sin tur."
-
 msgid "A single player game playing out a single map."
 msgstr "En ensam spelare går igenom en karta."
 
@@ -5588,6 +5613,19 @@ msgid ""
 msgstr ""
 "Ett spel med flera spelare, där flera mänskliga spelare som tävlar mot "
 "varandra på en karta."
+
+msgid "Hot Seat"
+msgstr "Heta stolen"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spela Heta stolen, där 2 till 6 spelare spelar på samma dator och sätter sig "
+"i den 'Heta stolen' när det är sin tur."
+
+msgid "Cancel back to the main menu."
+msgstr "Avbryt och gå tillbaka till huvudmenyn."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team presenterar"
@@ -5651,44 +5689,8 @@ msgstr ""
 "Videofilmerna som krävs för kampanjmenyn saknas. Kontrollera att samtliga "
 "nödvändiga filer finns i systemet."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Antingen Rolands eller Archibalds kampanj från original Heroes of Might and "
-"Magic II."
-
-msgid "Original Campaign"
-msgstr "Orginalkampanj"
-
-msgid "Expansion Campaign"
-msgstr "Expansionskampanj"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "En av de fyra nya kampanjer från Lojalitetens Pris expansionen."
-
 msgid "Loading video. Please wait..."
 msgstr "Laddar film. Vänta..."
-
-msgid "Host"
-msgstr "Värd"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Värden anger spelinställningarna. Det kan endast finnas en värd per "
-"nätverksspel."
-
-msgid "Guest"
-msgstr "Gäst"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
-"automatiskt. Det kan finnas flera gäster för TCP/IP-spel."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5713,13 +5715,6 @@ msgstr "Endast Strid"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Konfigurera och spela en strid utan någon karta."
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spela Heta stolen, där 2 till 6 spelare spelar på samma dator och sätter sig "
-"på den 'Heta stolen' när det är dennes tur."
 
 msgid "2 Players"
 msgstr "2 Spelare"
@@ -5762,6 +5757,29 @@ msgstr "6 Spelare"
 
 msgid "Play with 6 human players."
 msgstr "Spela med 6 mänskliga spelare."
+
+msgid "Original Campaign"
+msgstr "Orginalkampanj"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Antingen Rolands eller Archibalds kampanj från original Heroes of Might and "
+"Magic II."
+
+msgid "Expansion Campaign"
+msgstr "Expansionskampanj"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "En av de fyra nya kampanjer från Lojalitetens Pris expansionen."
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spela Heta stolen, där 2 till 6 spelare spelar på samma dator och sätter sig "
+"på den 'Heta stolen' när det är dennes tur."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Drakstaden har fallit! Du är nu Drakmästaren."
@@ -12153,3 +12171,34 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "CONFIG"
+#~ msgstr ""
+#~ "INSTÄLL-\n"
+#~ "NINGAR"
+
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Avbryt och gå tillbaka till Ny Karta-menyn."
+
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
+
+#~ msgid "Host"
+#~ msgstr "Värd"
+
+#~ msgid ""
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
+#~ msgstr ""
+#~ "Värden anger spelinställningarna. Det kan endast finnas en värd per "
+#~ "nätverksspel."
+
+#~ msgid "Guest"
+#~ msgstr "Gäst"
+
+#~ msgid ""
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
+#~ msgstr ""
+#~ "Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
+#~ "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-06 02:30+0000\n"
+"POT-Creation-Date: 2025-06-15 05:10+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -198,16 +198,19 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "KAMP"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
 "ENKELT\n"
 "PARTI"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "KAMP"
 
 msgid ""
 "CAMPAIGN\n"
@@ -221,24 +224,6 @@ msgid ""
 msgstr ""
 "FLER-\n"
 "SPILLER"
-
-msgid "CONFIG"
-msgstr "VALG"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"KRIGEN\n"
-"OM\n"
-"TRONEN"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"PRISEN FOR\n"
-"LOJALITET"
 
 msgid "HOT SEAT"
 msgstr ""
@@ -259,6 +244,40 @@ msgstr "5 SPILLERE"
 
 msgid "6 PLAYERS"
 msgstr "6 SPILLERE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"TRONE-\n"
+"KRIGENE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"PRISEN\n"
+"FOR\n"
+"LOJALITET"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid "EditorMainMenu|BACK"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "FELTTOGSNIVÅ"
@@ -2051,9 +2070,8 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-#, fuzzy
 msgid "Price of Loyalty"
-msgstr "Prisen for trofasthet"
+msgstr "Prisen for lojalitet"
 
 msgid "Voyage Home"
 msgstr "Ferden hjem"
@@ -3580,6 +3598,12 @@ msgstr ""
 "\n"
 "Plassering: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette filen:"
 
@@ -3591,6 +3615,21 @@ msgstr "Klikk for å lagre det nåværende spillet."
 
 msgid "Click to load a previously saved game."
 msgstr "Klikk for å laste inn et tidligere lagret spill."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Ditt navn"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Støtt oss på"
 
 msgid "File to Save:"
 msgstr "Lagringsfil:"
@@ -3762,22 +3801,21 @@ msgstr "Størrelsesikon"
 msgid "Map Type"
 msgstr "Kart-type"
 
-#, fuzzy
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\", \"The Price "
 "of Loyalty\" or \"Resurrection\" version of the game."
 msgstr ""
-"Viser om kartet er laget for spillutgaven \"Krigen om tronen\" eller "
-"\"Prisen for trofasthet\"."
+"Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
+"for lojalitet\"."
 
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
 msgid "The Succession Wars"
-msgstr "Krigen om tronen"
+msgstr "Tronekrigene"
 
 msgid "The Price of Loyalty"
-msgstr "Prisen for trofasthet"
+msgstr "Prisen for lojalitet"
 
 #, fuzzy
 msgid "Resurrection"
@@ -4277,11 +4315,6 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "START\n"
@@ -4697,16 +4730,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-"Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
-"kvadrater."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Avbryt og dra tilbake til menyen for nye kart."
-
-msgid "Cancel back to the main menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 msgid "From Scratch"
 msgstr "Fra bunnen av"
@@ -4720,8 +4746,17 @@ msgstr "Lag et kart automatisk."
 msgid "Random"
 msgstr "Tilfeldig"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Avbryt og dra tilbake til karttegnerens hovedmeny."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
+"kvadrater."
 
 msgid "No maps available!"
 msgstr "Ingen kart er tilgjengelige!"
@@ -5262,7 +5297,7 @@ msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "Teamet bak Heroes of Might and Magic II"
+msgstr "Teamet bak Heroes of Might and Magic II: Tronekrigene"
 
 msgid "Designed and Directed"
 msgstr "Utforming og ledelse"
@@ -5478,10 +5513,10 @@ msgid "hotkey|battle only game"
 msgstr "Kampparti"
 
 msgid "hotkey|choose the original campaign"
-msgstr "Velg Krigen om tronen"
+msgstr "Velg Tronekrigene"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "Velg Prisen for Lojalitet"
+msgstr "Velg Prisen for lojalitet"
 
 msgid "hotkey|map editor main menu"
 msgstr "Karttegnerens hovedmeny"
@@ -5520,9 +5555,8 @@ msgstr "Rolands felttog"
 msgid "hotkey|archibald campaign"
 msgstr "Archibalds felttog"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
-msgstr "Felttoget Prisen for trofasthet"
+msgstr "Felttoget Prisen for lojalitet"
 
 msgid "hotkey|voyage home campaign"
 msgstr "Felttoget Ferden hjem"
@@ -5795,12 +5829,11 @@ msgstr "Sist støttede utgave: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\", men de "
+"Denne filen ble lagret i spillutgaven \"Prisen for lojalitet\", men de "
 "tilhørende utvidelsesfilene mangler."
 
 msgid "This saved game is localized to '"
@@ -5811,16 +5844,6 @@ msgstr "', men det gjeldende språket for spillet er '"
 
 msgid "No save files to load."
 msgstr "Ingen lagrede spill å laste inn."
-
-msgid "Hot Seat"
-msgstr "Byttespilling"
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
-"den samme enheten og bytter plass når det er nestemann sin tur."
 
 msgid "A single player game playing out a single map."
 msgstr "Et enkeltspillerparti som spilles ut på et enkelt kart."
@@ -5843,6 +5866,19 @@ msgid ""
 msgstr ""
 "Et flerspillerparti hvor flere menneskelige spillere konkurrerer mot "
 "hverandre på et enkelt kart."
+
+msgid "Hot Seat"
+msgstr "Byttespilling"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
+"den samme enheten og bytter plass når det er nestemann sin tur."
+
+msgid "Cancel back to the main menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Teamet bak fheroes2 Resurrection presenterer"
@@ -5903,44 +5939,8 @@ msgstr ""
 "De nødvendige filene for felttogets valgvindu mangler. Vennligst forsikre "
 "deg om at alle nødvendige filer er tilstede i systemet."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Velg mellom felttoget til Roland og Archibald fra det originale Heroes of "
-"Might and Magic II."
-
-msgid "Original Campaign"
-msgstr "Originalt felttog"
-
-msgid "Expansion Campaign"
-msgstr "Utvidelsesfelttog"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
-"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
-
 msgid "Loading video. Please wait..."
 msgstr "Laster video. Vennligst vent..."
-
-msgid "Host"
-msgstr "Vert"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Verten fyller ut spillvalgene. Det kan kun være én vert per nettverksspill."
-
-msgid "Guest"
-msgstr "Gjest"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Gjesten venter på at verten setter opp partiet og blir deretter automatisk "
-"lagt til. Det kan være flere gjester for TCP/IP-parti."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5962,14 +5962,6 @@ msgstr "Kampmodus"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Sett opp og spill en kamp uten å laste inn et kart."
-
-#, fuzzy
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
-"den samme enheten og bytter plass når det er nestemann sin tur."
 
 msgid "2 Players"
 msgstr "2 Spillere"
@@ -6016,6 +6008,31 @@ msgstr "6 Spillere"
 
 msgid "Play with 6 human players."
 msgstr "Spill med 6 menneskelige spillere."
+
+msgid "Original Campaign"
+msgstr "Originalt felttog"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Velg mellom felttoget til Roland og Archibald fra det originale Heroes of "
+"Might and Magic II."
+
+msgid "Expansion Campaign"
+msgstr "Utvidelsesfelttog"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for lojalitet."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
+"den samme enheten og bytter plass når det er nestemann sin tur."
 
 #, fuzzy
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
@@ -12668,3 +12685,32 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "CONFIG"
+#~ msgstr "VALG"
+
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Avbryt og dra tilbake til menyen for nye kart."
+
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Avbryt og dra tilbake til karttegnerens hovedmeny."
+
+#~ msgid "Host"
+#~ msgstr "Vert"
+
+#~ msgid ""
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
+#~ msgstr ""
+#~ "Verten fyller ut spillvalgene. Det kan kun være én vert per "
+#~ "nettverksspill."
+
+#~ msgid "Guest"
+#~ msgstr "Gjest"
+
+#~ msgid ""
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
+#~ msgstr ""
+#~ "Gjesten venter på at verten setter opp partiet og blir deretter "
+#~ "automatisk lagt til. Det kan være flere gjester for TCP/IP-parti."
