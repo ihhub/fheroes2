@@ -42,7 +42,7 @@ namespace
 
         if ( lowerPart >= range ) {
             const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-            assert( /* upperPart >= 0 && */ upperPart <= range );
+            assert( upperPart <= range );
 
             return upperPart;
         }
@@ -57,7 +57,7 @@ namespace
         }
 
         const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
-        assert( /* upperPart >= 0 && */ upperPart <= range );
+        assert( upperPart <= range );
 
         return upperPart;
     }
