@@ -1213,14 +1213,65 @@ namespace Maps
         auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
         std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
 
+#if defined( WITH_DEBUG )
+        std::map<uint32_t, IndexedObjectInfo> objectsUIDs;
+        std::multiset<IndexedObjectInfo, decltype( sortObjects )> incorrectObjects( sortObjects );
+#endif
+
         for ( size_t i = 0; i < tilesConut; ++i ) {
             for ( const auto & object : map.tiles[i].objects ) {
                 IndexedObjectInfo info;
                 info.tileIndex = static_cast<int32_t>( i );
                 info.info = &object;
                 sortedObjects.emplace( info );
+
+#if defined( WITH_DEBUG )
+                if ( object.group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != Maps::ObjectGroup::LANDSCAPE_FLAGS ) {
+                    const auto [iter, inserted] = objectsUIDs.try_emplace( object.id, info );
+                    if ( !inserted ) {
+                        incorrectObjects.emplace( iter->second );
+                        incorrectObjects.emplace( info );
+                    }
+                }
+#endif
             }
         }
+
+#if defined( WITH_DEBUG )
+        uint32_t uid = 0;
+        for ( const IndexedObjectInfo & info : incorrectObjects ) {
+            if ( info.info->id != uid ) {
+                uid = info.info->id;
+                if ( map.standardMetadata.find( uid ) != map.standardMetadata.end() ) {
+                    VERBOSE_LOG( "`standardMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.castleMetadata.find( uid ) != map.castleMetadata.end() ) {
+                    VERBOSE_LOG( "`castleMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.heroMetadata.find( uid ) != map.heroMetadata.end() ) {
+                    VERBOSE_LOG( "`heroMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.sphinxMetadata.find( uid ) != map.sphinxMetadata.end() ) {
+                    VERBOSE_LOG( "`sphinxMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.signMetadata.find( uid ) != map.signMetadata.end() ) {
+                    VERBOSE_LOG( "`signMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() ) {
+                    VERBOSE_LOG( "`adventureMapEventMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() ) {
+                    VERBOSE_LOG( "`selectionObjectMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.capturableObjectsMetadata.find( uid ) != map.capturableObjectsMetadata.end() ) {
+                    VERBOSE_LOG( "`capturableObjectsMetadata` belongs to many objects with same UID: " << uid )
+                }
+            }
+
+            VERBOSE_LOG( "Non-unique UID " << info.info->id << " at " << info.tileIndex << " (" << info.tileIndex % map.width << ", " << info.tileIndex / map.width
+                                           << ") tile for object type: " << MP2::StringObject( getObjectInfo( info.info->group, info.info->index ).objectType ) )
+        }
+#endif
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );

@@ -3572,7 +3572,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     }
 
     // Lich/Power lich has projectile speed of 25
-    const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos + endPosShift, isMage ? 50 : std::max( missile.width(), 25 ) );
+    const std::vector<fheroes2::Point> points = getLinePoints( startPos, endPos + endPosShift, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
@@ -4289,7 +4289,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     unit.SwitchAnimation( Monster_Info::MOVING );
     Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
-    const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
+    const std::vector<fheroes2::Point> points = getLinePoints( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
 
     Bridge * bridge = Arena::GetBridge();
@@ -5370,7 +5370,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
     const fheroes2::Point spriteOffet( mirrorUnitSprite.x(), mirrorUnitSprite.y() );
 
     // Get spell animation points.
-    const std::vector<fheroes2::Point> points = GetEuclideanLine( unitPos - mirrorPos + spriteOffet, spriteOffet, 5 );
+    const std::vector<fheroes2::Point> points = getLinePoints( unitPos - mirrorPos + spriteOffet, spriteOffet, 5 );
     std::vector<fheroes2::Point>::const_iterator pnt = points.cbegin();
 
     // Make the mirror unit visible.
@@ -5693,7 +5693,7 @@ void Battle::Interface::_redrawRaySpell( const Unit & target, const int spellICN
     const fheroes2::Point startingPos = arena.GetCurrentCommander() == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
     const fheroes2::Point targetPos = target.GetCenterPoint();
 
-    const std::vector<fheroes2::Point> path = GetEuclideanLine( startingPos, targetPos, size );
+    const std::vector<fheroes2::Point> path = getLinePoints( startingPos, targetPos, size );
     const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
 
     cursor.SetThemes( Cursor::WAR_POINTER );

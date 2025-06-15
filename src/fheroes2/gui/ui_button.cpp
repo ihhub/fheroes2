@@ -656,21 +656,21 @@ namespace fheroes2
         }
     }
 
-    void ButtonGroup::disable()
+    void ButtonGroup::disable() const
     {
         for ( const auto & button : _button ) {
             button->disable();
         }
     }
 
-    void ButtonGroup::enable()
+    void ButtonGroup::enable() const
     {
         for ( const auto & button : _button ) {
             button->enable();
         }
     }
 
-    void ButtonGroup::drawOnState( LocalEvent & le )
+    void ButtonGroup::drawOnState( const LocalEvent & le ) const
     {
         for ( const auto & button : _button ) {
             button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
