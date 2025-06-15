@@ -30,7 +30,7 @@
 
 #include "battle_cell.h"
 #include "math_base.h"
-#include <rand.h>
+#include "rand.h"
 
 namespace Maps
 {
