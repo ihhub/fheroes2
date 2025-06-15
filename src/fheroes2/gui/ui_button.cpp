@@ -42,14 +42,11 @@ namespace
 
         assert( originalHeight > 0 && originalWidth > 0 );
 
-        fheroes2::Image output;
-
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
-            fheroes2::Copy( original, output );
-            return output;
+            return original;
         }
 
-        output.resize( buttonSize.width, buttonSize.height );
+        fheroes2::Image output( buttonSize.width, buttonSize.height );
         output.reset();
 
         // Buttons that only are wider.
