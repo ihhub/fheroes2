@@ -124,22 +124,10 @@ namespace
                                                 ICN::BUTTON_MAPSIZE_ALL,
                                                 ICN::BUTTON_MAP_SELECT_GOOD,
                                                 ICN::BUTTON_MAP_SELECT_EVIL,
-                                                ICN::BUTTON_STANDARD_GAME,
-                                                ICN::BUTTON_CAMPAIGN_GAME,
-                                                ICN::BUTTON_MULTIPLAYER_GAME,
-                                                ICN::BUTTON_LARGE_CANCEL,
-                                                ICN::BUTTON_LARGE_CONFIG,
-                                                ICN::BUTTON_ORIGINAL_CAMPAIGN,
-                                                ICN::BUTTON_EXPANSION_CAMPAIGN,
-                                                ICN::BUTTON_HOT_SEAT,
-                                                ICN::BUTTON_2_PLAYERS,
-                                                ICN::BUTTON_3_PLAYERS,
-                                                ICN::BUTTON_4_PLAYERS,
-                                                ICN::BUTTON_5_PLAYERS,
-                                                ICN::BUTTON_6_PLAYERS,
-                                                ICN::BUTTON_BATTLE_ONLY,
-                                                ICN::BUTTON_NEW_MAP,
-                                                ICN::BUTTON_LOAD_MAP,
+                                                ICN::BUTTONS_NEW_GAME_MENU_GOOD,
+                                                ICN::BUTTONS_NEW_GAME_MENU_EVIL,
+                                                ICN::BUTTONS_EDITOR_MENU_GOOD,
+                                                ICN::BUTTONS_EDITOR_MENU_EVIL,
                                                 ICN::BUTTON_GIFT_GOOD,
                                                 ICN::BUTTON_GIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -383,10 +371,10 @@ namespace
     }
 
     // NOTE: Do not call this with an evil style button's ICN ID.
-    void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId )
+    void convertToEvilButtonBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int goodButtonIcnId, const uint32_t index )
     {
-        released = fheroes2::AGG::GetICN( goodButtonIcnId, 0 );
-        pressed = fheroes2::AGG::GetICN( goodButtonIcnId, 1 );
+        released = fheroes2::AGG::GetICN( goodButtonIcnId, index );
+        pressed = fheroes2::AGG::GetICN( goodButtonIcnId, index + 1 );
 
         const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON );
         fheroes2::ApplyPalette( released, goodToEvilPalette );
@@ -1263,11 +1251,12 @@ namespace
         case ICN::BUTTON_SMALL_MAX_EVIL:
         case ICN::BUTTON_SMALL_MIN_EVIL:
         case ICN::BUTTON_SMALL_RESTART_EVIL:
+        case ICN::BUTTONS_NEW_GAME_MENU_EVIL:
+        case ICN::BUTTONS_EDITOR_MENU_EVIL:
         case ICN::UNIFORM_EVIL_MAX_BUTTON:
         case ICN::UNIFORM_EVIL_MIN_BUTTON: {
-            // We do palette swaps for these due to two reasons: to generate completely new buttons, or to preserve
+            // We do palette swaps for these due to either one of two reasons: to generate completely new buttons, or to preserve
             // language-specific generations from generateLanguageSpecificImages().
-            _icnVsSprite[id].resize( 2 );
 
             int goodButtonIcnID = ICN::UNKNOWN;
             if ( id == ICN::BUTTON_MAP_SELECT_EVIL ) {
@@ -1306,16 +1295,27 @@ namespace
             else if ( id == ICN::BUTTON_LOAD_MAP_EVIL ) {
                 goodButtonIcnID = ICN::BUTTON_LOAD_MAP_GOOD;
             }
+            else if ( id == ICN::BUTTONS_NEW_GAME_MENU_EVIL ) {
+                goodButtonIcnID = ICN::BUTTONS_NEW_GAME_MENU_GOOD;
+            }
+            else if ( id == ICN::BUTTONS_EDITOR_MENU_EVIL ) {
+                goodButtonIcnID = ICN::BUTTONS_EDITOR_MENU_GOOD;
+            }
+            _icnVsSprite[id].resize( fheroes2::AGG::GetICNCount( goodButtonIcnID ) );
+            const size_t icnSize = _icnVsSprite[id].size();
+            for ( size_t i = 0; i < ( icnSize / 2 ); ++i ) {
+                convertToEvilButtonBackground( _icnVsSprite[id][i * 2], _icnVsSprite[id][i * 2 + 1], goodButtonIcnID, static_cast<uint32_t>( i * 2 ) );
+            }
 
-            convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID );
             break;
         }
         case ICN::BUTTONS_FILE_DIALOG_EVIL:
         case ICN::BUTTONS_FILE_DIALOG_GOOD: {
             _icnVsSprite[id].resize( 8 );
 
+            const bool isEvilInterface = ( id == ICN::BUTTONS_FILE_DIALOG_EVIL );
             if ( useOriginalResources() ) {
-                const int buttonIcnID = id == ICN::BUTTONS_FILE_DIALOG_EVIL ? ICN::CPANELE : ICN::CPANEL;
+                const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
                 }
@@ -1328,7 +1328,7 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "LOAD\nGAME" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nGAME" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
-                                                      80 );
+                                                      isEvilInterface, 80 );
 
             break;
         }
@@ -1419,205 +1419,112 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_2_PLAYERS:
-        case ICN::BUTTON_3_PLAYERS:
-        case ICN::BUTTON_4_PLAYERS:
-        case ICN::BUTTON_5_PLAYERS:
-        case ICN::BUTTON_6_PLAYERS:
-        case ICN::BUTTON_BATTLE_ONLY:
-        case ICN::BUTTON_NEW_MAP:
-        case ICN::BUTTON_LOAD_MAP:
-        case ICN::BUTTON_CAMPAIGN_GAME:
-        case ICN::BUTTON_EXPANSION_CAMPAIGN:
-        case ICN::BUTTON_HOT_SEAT:
-        case ICN::BUTTON_LARGE_CANCEL:
-        case ICN::BUTTON_LARGE_CONFIG:
-        case ICN::BUTTON_MULTIPLAYER_GAME:
-        case ICN::BUTTON_ORIGINAL_CAMPAIGN:
-        case ICN::BUTTON_STANDARD_GAME: {
-            _icnVsSprite[id].resize( 2 );
+        case ICN::BUTTONS_NEW_GAME_MENU_GOOD: {
+            // Set the size depending on whether PoL assets are present or not, in which case add 4 more for campaign buttons.
+            const bool isPoLPresent = !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ), false ).empty();
+            if ( isPoLPresent ) {
+                _icnVsSprite[id].resize( 28 );
+            }
+            else {
+                _icnVsSprite[id].resize( 24 );
+            }
 
-            if ( useOriginalResources() && id != ICN::BUTTON_BATTLE_ONLY ) {
-                int buttonIcnID = ICN::UNKNOWN;
-                std::pair<int, int> icnIndex;
-                switch ( id ) {
-                case ICN::BUTTON_CAMPAIGN_GAME: {
-                    buttonIcnID = ICN::BTNNEWGM;
-                    icnIndex = { 2, 3 };
-                    break;
+            if ( useOriginalResources() ) {
+                for ( size_t i = 0; i < 3; ++i ) {
+                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
-                case ICN::BUTTON_MULTIPLAYER_GAME: {
-                    buttonIcnID = ICN::BTNNEWGM;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_LARGE_CANCEL: {
-                    buttonIcnID = ICN::BTNNEWGM;
-                    icnIndex = { 6, 7 };
-                    break;
-                }
-                case ICN::BUTTON_LARGE_CONFIG: {
-                    buttonIcnID = ICN::BTNDCCFG;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
-                    buttonIcnID = ICN::X_LOADCM;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_EXPANSION_CAMPAIGN: {
-                    buttonIcnID = ICN::X_LOADCM;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                case ICN::BUTTON_HOT_SEAT: {
-                    buttonIcnID = ICN::BTNMP;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_2_PLAYERS: {
-                    buttonIcnID = ICN::BTNHOTST;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_3_PLAYERS: {
-                    buttonIcnID = ICN::BTNHOTST;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                case ICN::BUTTON_4_PLAYERS: {
-                    buttonIcnID = ICN::BTNHOTST;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_5_PLAYERS: {
-                    buttonIcnID = ICN::BTNHOTST;
-                    icnIndex = { 6, 7 };
-                    break;
-                }
-                case ICN::BUTTON_6_PLAYERS: {
-                    buttonIcnID = ICN::BTNHOTST;
-                    icnIndex = { 8, 9 };
-                    break;
-                }
-                case ICN::BUTTON_NEW_MAP: {
-                    buttonIcnID = ICN::BTNEMAIN;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_LOAD_MAP: {
-                    buttonIcnID = ICN::BTNEMAIN;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                default:
-                    // All other buttons share the same settings.
-                    buttonIcnID = ICN::BTNNEWGM;
-                    icnIndex = { 0, 1 };
-                    break;
+                // Add generated buttons.
+                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
+                fheroes2::makeButtonSprites( _icnVsSprite[id][6], _icnVsSprite[id][7], fheroes2::getSupportedText( gettext_noop( "BATTLE\nONLY" ), buttonFontType ),
+                                             buttonSize, false, ICN::STONEBAK );
+                fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "SETTINGS" ), buttonFontType ),
+                                             buttonSize, false, ICN::STONEBAK );
+                // Add cancel button.
+                _icnVsSprite[id][10] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
+                _icnVsSprite[id][11] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
+                // Add hot seat button.
+                _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
+                _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
+                // Add player count buttons.
+                for ( size_t i = 0; i < 5; ++i ) {
+                    _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
 
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
-                if ( id == ICN::BUTTON_CAMPAIGN_GAME ) {
-                    // Fix the disabled state.
-                    const fheroes2::Sprite & released = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
-                    const fheroes2::Sprite & pressed = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
-                    fheroes2::Image common = fheroes2::ExtractCommonPattern( { &released, &pressed } );
-                    common = fheroes2::FilterOnePixelNoise( common );
-                    common = fheroes2::FilterOnePixelNoise( common );
-                    common = fheroes2::FilterOnePixelNoise( common );
-                    fheroes2::Blit( common, _icnVsSprite[id][0] );
+                if ( isPoLPresent ) {
+                    _icnVsSprite[id][24] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
+                    _icnVsSprite[id][25] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
+                    _icnVsSprite[id][26] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
+                    _icnVsSprite[id][27] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
+                }
+                break;
+            }
+            const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+            std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "STANDARD\nGAME" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "CAMPAIGN\nGAME" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "MULTI-\nPLAYER\nGAME" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "BATTLE\nONLY" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "SETTINGS" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "CANCEL" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "HOT SEAT" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "2 PLAYERS" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "3 PLAYERS" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "4 PLAYERS" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "5 PLAYERS" ), buttonFontType ),
+                                                fheroes2::getSupportedText( gettext_noop( "6 PLAYERS" ), buttonFontType ) };
+            if ( isPoLPresent ) {
+                texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "ORIGINAL\nCAMPAIGN" ), buttonFontType ) );
+                texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "EXPANSION\nCAMPAIGN" ), buttonFontType ) );
+            }
+
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 80 );
+            break;
+        }
+        case ICN::BUTTONS_EDITOR_MENU_GOOD: {
+            _icnVsSprite[id].resize( 20 );
+
+            if ( useOriginalResources() ) {
+                for ( size_t i = 0; i < 2; ++i ) {
+                    _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
+                }
+                // Add generated Main Menu button.
+                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
+                fheroes2::makeButtonSprites( _icnVsSprite[id][4], _icnVsSprite[id][5], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
+                                             buttonSize, false, ICN::STONEBAK );
+                // Add generated Back button.
+                fheroes2::makeButtonSprites( _icnVsSprite[id][6], _icnVsSprite[id][7],
+                                             fheroes2::getSupportedText( gettext_noop( "EditorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
+
+                // Add From Scratch and Random buttons.
+                for ( size_t i = 0; i < 2; ++i ) {
+                    _icnVsSprite[id][( i + 4 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNENEW, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 4 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNENEW, static_cast<uint32_t>( i * 2 + 1 ) );
+                }
+                // Add map size buttons.
+                for ( size_t i = 0; i < 4; ++i ) {
+                    _icnVsSprite[id][( i + 6 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 ) );
+                    _icnVsSprite[id][( i + 6 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 + 1 ) );
                 }
 
                 break;
             }
-            const char * text = gettext_noop( "STANDARD\nGAME" );
-            switch ( id ) {
-            case ICN::BUTTON_BATTLE_ONLY: {
-                text = gettext_noop( "BATTLE\nONLY" );
-                break;
-            }
-            case ICN::BUTTON_CAMPAIGN_GAME: {
-                text = gettext_noop( "CAMPAIGN\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_MULTIPLAYER_GAME: {
-                text = gettext_noop( "MULTI-\nPLAYER\nGAME" );
-                break;
-            }
-            case ICN::BUTTON_LARGE_CANCEL: {
-                text = gettext_noop( "CANCEL" );
-                break;
-            }
-            case ICN::BUTTON_LARGE_CONFIG: {
-                text = gettext_noop( "CONFIG" );
-                break;
-            }
-            case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
-                text = gettext_noop( "ORIGINAL\nCAMPAIGN" );
-                break;
-            }
-            case ICN::BUTTON_EXPANSION_CAMPAIGN: {
-                text = gettext_noop( "EXPANSION\nCAMPAIGN" );
-                break;
-            }
-            case ICN::BUTTON_HOT_SEAT: {
-                text = gettext_noop( "HOT SEAT" );
-                break;
-            }
-            case ICN::BUTTON_2_PLAYERS: {
-                text = gettext_noop( "2 PLAYERS" );
-                break;
-            }
-            case ICN::BUTTON_3_PLAYERS: {
-                text = gettext_noop( "3 PLAYERS" );
-                break;
-            }
-            case ICN::BUTTON_4_PLAYERS: {
-                text = gettext_noop( "4 PLAYERS" );
-                break;
-            }
-            case ICN::BUTTON_5_PLAYERS: {
-                text = gettext_noop( "5 PLAYERS" );
-                break;
-            }
-            case ICN::BUTTON_6_PLAYERS: {
-                text = gettext_noop( "6 PLAYERS" );
-                break;
-            }
-            case ICN::BUTTON_NEW_MAP: {
-                text = gettext_noop( "NEW\nMAP" );
-                break;
-            }
-            case ICN::BUTTON_LOAD_MAP: {
-                text = gettext_noop( "LOAD\nMAP" );
-                break;
-            }
-            default:
-                break;
-            }
+            const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+            const std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "editorMainMenu|BACK" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "newMap|FROM\nSCRATCH" ), buttonFontType ),
+                                                      fheroes2::getSupportedText( gettext_noop( "newMap|RANDOM" ), buttonFontType ),
+                                                      "36 X 36",
+                                                      "72 X 72",
+                                                      "108 X 108",
+                                                      "144 X 144" };
 
-            text = fheroes2::getSupportedText( text, fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 117, 56 }, false, ICN::STONEBAK );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            // Add original shadow.
-            const fheroes2::Sprite & originalShadow = fheroes2::AGG::GetICN( ICN::BTNCOM, 0 );
-            fheroes2::Image temp( originalShadow.width(), originalShadow.height() );
-
-            Copy( released, 0, 0, temp, 5, 0, released.width(), released.height() );
-            fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
-            fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
-            fheroes2::Copy( temp, released );
-
-            Copy( pressed, 0, 0, temp, 5, 0, released.width(), released.height() );
-            fheroes2::Copy( originalShadow, 0, 0, temp, 0, 0, 5, originalShadow.height() );
-            fheroes2::Copy( originalShadow, 5, originalShadow.height() - 6, temp, 5, originalShadow.height() - 6, originalShadow.width() - 5, 6 );
-            fheroes2::Copy( temp, pressed );
-
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 80 );
             break;
         }
         case ICN::GOOD_CAMPAIGN_BUTTONS:
@@ -1805,26 +1712,6 @@ namespace
     bool generateGermanSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BUTTON_BATTLE_ONLY:
-            _icnVsSprite[id].resize( 2 );
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
-                // Clean the button
-                Fill( out, 26 - i, 23 + i, 84, 11, getButtonFillingColor( i == 0 ) );
-                // Add 'K'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
-                //'Add 'A'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 52 - i, 23, 13, 14 );
-                Copy( out, 20, 20, out, 52 - i + 12, 25, 3, 3 );
-                // Add 'M'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 65 - i, 23, 14, 14 );
-                // Add 'F'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 87 - i, 23, 10, 14 );
-                // Add 'P'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
-            }
-            return true;
         case ICN::BUTTON_SMALL_DECLINE_GOOD:
         case ICN::BUTTON_SMALL_ACCEPT_GOOD: {
             _icnVsSprite[id].resize( 2 );
@@ -1870,40 +1757,72 @@ namespace
     bool generateFrenchSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BUTTON_BATTLE_ONLY: {
-            _icnVsSprite[id].resize( 2 );
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
+        case ICN::BUTTONS_NEW_GAME_MENU_GOOD: {
+            const bool isPoLPresent = !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ), false ).empty();
+            if ( isPoLPresent ) {
+                _icnVsSprite[id].resize( 28 );
+            }
+            else {
+                _icnVsSprite[id].resize( 24 );
+            }
+
+            for ( size_t i = 0; i < 3; ++i ) {
+                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
+            }
+            // Add battle only button.
+            for ( int32_t i = 0; i < 2; ++i ) {
+                fheroes2::Sprite & out = _icnVsSprite[id][6 + i];
                 out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
                 // Clean the button
-                Fill( out, 32 - i, 21 + i, 77, 14, getButtonFillingColor( i == 0 ) );
+                Fill( out, 27 - i, 21 + i, 77, 14, getButtonFillingColor( i == 0 ) );
                 const int32_t secondLine = 28;
                 // Add 'MODE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 45 - i, 13, 50, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 4 + i ), 35 - i, 13, out, 40 - i, 13, 50, 15 );
                 // Clean up 'MODE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 94 - i, 18, 1, 10 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 109 - i, 18, out, 89 - i, 18, 1, 10 );
                 // Add 'BA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 28 - i, secondLine, 22, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 23 - i, secondLine, 22, 15 );
                 // Clean up 'BA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 39 - i, secondLine, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 49 - i, secondLine + 4, 1, 2 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 34 - i, secondLine, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 44 - i, secondLine + 4, 1, 2 );
                 // Add 'T'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 49 - i, secondLine, 12, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 44 - i, secondLine, 12, 15 );
                 // Clean up 'AT'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, secondLine, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 49 - i, secondLine + 4 + i, 1, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 45 - i, secondLine, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 44 - i, secondLine + 4 + i, 1, 3 );
                 // Add 'AI'.
-                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 51 - i, 13, out, 57 - i, secondLine, 18, 15 );
                 // Clean up 'TA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 60 - i, secondLine + 12, 3, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 55 - i, secondLine + 12, 3, 3 );
                 // Add 'LLE'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 80 - i, 13, out, 76 - i, secondLine, 31, 15 );
                 // Clean up "IL"
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 81 - i, secondLine + 7, 1, 1 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 80 - i, secondLine + 4, 2, 2 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 79 - i, secondLine + 12, 3, 3 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
-                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 80 - i, 18, out, 76 - i, secondLine + 7, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 89 - i, 17, out, 75 - i, secondLine + 4, 2, 2 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 88 - i, 25, out, 74 - i, secondLine + 12, 3, 3 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 74 - i, secondLine + 5, 1, 10 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNMP, 6 + i ), 68 - i, 16, out, 74 - i, secondLine + 9, 1, 1 );
+            }
+            // Add config button.
+            _icnVsSprite[id][8] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 );
+            _icnVsSprite[id][9] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 5 );
+            // Add cancel button.
+            _icnVsSprite[id][10] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
+            _icnVsSprite[id][11] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
+            // Add hot seat button.
+            _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
+            _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
+            // Add player count buttons.
+            for ( size_t i = 0; i < 5; ++i ) {
+                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
+            }
+            if ( isPoLPresent ) {
+                _icnVsSprite[id][24] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
+                _icnVsSprite[id][25] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
+                _icnVsSprite[id][26] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
+                _icnVsSprite[id][27] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
             }
             return true;
         }
@@ -2046,7 +1965,7 @@ namespace
             // Doing a palette swap fixes black pixels in the lower right corner of the original button backgrounds.
             _icnVsSprite[id].resize( 2 );
             const int goodButtonIcnID = id == ICN::BUTTON_SMALL_OKAY_EVIL ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALL_CANCEL_GOOD;
-            convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID );
+            convertToEvilButtonBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], goodButtonIcnID, 0 );
             return true;
         }
         default:
@@ -2058,23 +1977,55 @@ namespace
     bool generatePolishSpecificImages( const int id )
     {
         switch ( id ) {
-        case ICN::BUTTON_BATTLE_ONLY: {
-            _icnVsSprite[id].resize( 2 );
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
+        case ICN::BUTTONS_NEW_GAME_MENU_GOOD: {
+            const bool isPoLPresent = !::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::X_TRACK1 ), false ).empty();
+            if ( isPoLPresent ) {
+                _icnVsSprite[id].resize( 28 );
+            }
+            else {
+                _icnVsSprite[id].resize( 24 );
+            }
+
+            for ( size_t i = 0; i < 3; ++i ) {
+                _icnVsSprite[id][i * 2] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][i * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
+            }
+            // Add battle only button.
+            for ( int32_t i = 0; i < 2; ++i ) {
+                fheroes2::Sprite & out = _icnVsSprite[id][6 + i];
                 out = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 + i );
                 // clean the button
-                Fill( out, 41 - i, 23 + i, 57, 11, getButtonFillingColor( i == 0 ) );
-                const int32_t offsetX = 46;
+                Fill( out, 36 - i, 23 + i, 57, 11, getButtonFillingColor( i == 0 ) );
+                const int32_t offsetX = 41;
                 const int32_t offsetY = 23;
                 // Add 'BI'
                 Copy( fheroes2::AGG::GetICN( ICN::BTNMCFG, 2 + i ), 58 - i, 29, out, offsetX - i, offsetY, 14, 11 );
                 // Add 'T'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 24 - i, 29, out, offsetX + 14 - i, offsetY, 9, 11 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 + i ), 19 - i, 29, out, offsetX + 14 - i, offsetY, 9, 11 );
                 // Add 'WA'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 45 - i, 23, out, offsetX + 23 - i, offsetY, 24, 11 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 40 - i, 23, out, offsetX + 23 - i, offsetY, 24, 11 );
                 // Add pixel to 'W'
-                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
+                Copy( fheroes2::AGG::GetICN( ICN::BTNEMAIN, 0 + i ), 42 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
+            }
+            // Add config button.
+            _icnVsSprite[id][8] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 4 );
+            _icnVsSprite[id][9] = fheroes2::AGG::GetICN( ICN::BTNDCCFG, 5 );
+            // Add cancel button.
+            _icnVsSprite[id][10] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 6 );
+            _icnVsSprite[id][11] = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 7 );
+            // Add hot seat button.
+            _icnVsSprite[id][12] = fheroes2::AGG::GetICN( ICN::BTNMP, 0 );
+            _icnVsSprite[id][13] = fheroes2::AGG::GetICN( ICN::BTNMP, 1 );
+            // Add player count buttons.
+            for ( size_t i = 0; i < 5; ++i ) {
+                _icnVsSprite[id][( i + 7 ) * 2] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
+                _icnVsSprite[id][( i + 7 ) * 2 + 1] = fheroes2::AGG::GetICN( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
+            }
+            if ( isPoLPresent ) {
+                _icnVsSprite[id][24] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 );
+                _icnVsSprite[id][25] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 1 );
+                _icnVsSprite[id][26] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 2 );
+                _icnVsSprite[id][27] = fheroes2::AGG::GetICN( ICN::X_LOADCM, 3 );
             }
             return true;
         }
@@ -2498,6 +2449,50 @@ namespace
                 ApplyPalette( out, indexes );
             }
             return true;
+        case ICN::BTNDCCFG:
+        case ICN::BTNEMAIN:
+        case ICN::BTNESIZE:
+        case ICN::BTNHOTST:
+        case ICN::BTNMP:
+        case ICN::BTNNEWGM:
+        case ICN::X_LOADCM: {
+            LoadOriginalICN( id );
+            // Remove embedded shadows and backgrounds because we generate our own. We can safely divide by two because every button has 2 states.
+            for ( size_t i = 0; i < _icnVsSprite[id].size() / 2; ++i ) {
+                fheroes2::Sprite & released = _icnVsSprite[id][i * 2];
+                fheroes2::Sprite & pressed = _icnVsSprite[id][i * 2 + 1];
+
+                fheroes2::Sprite tempReleased;
+                fheroes2::Sprite tempPressed;
+
+                const int32_t removedShadowOffsetWidth = 5;
+                const int32_t removedShadowOffsetHeight = 6;
+
+                tempReleased.resize( released.width() - removedShadowOffsetWidth, released.height() - removedShadowOffsetHeight );
+                tempPressed.resize( pressed.width() - removedShadowOffsetWidth, pressed.height() - removedShadowOffsetHeight );
+                tempReleased.reset();
+                tempPressed.reset();
+
+                fheroes2::Copy( released, removedShadowOffsetWidth, 0, tempReleased, 0, 0, released.width() - removedShadowOffsetWidth,
+                                released.height() - removedShadowOffsetHeight );
+                fheroes2::Copy( pressed, removedShadowOffsetWidth, 0, tempPressed, 0, 0, pressed.width() - removedShadowOffsetWidth,
+                                pressed.height() - removedShadowOffsetHeight );
+                released = tempReleased;
+                pressed = tempPressed;
+
+                setButtonCornersTransparent( released );
+            }
+            if ( id == ICN::BTNNEWGM ) {
+                // Fix the disabled state for campaign button.
+                fheroes2::Image common = fheroes2::ExtractCommonPattern( { &_icnVsSprite[id][2], &_icnVsSprite[id][3] } );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+                fheroes2::Blit( common, _icnVsSprite[id][2] );
+            }
+
+            return true;
+        }
         case ICN::GOLEM:
         case ICN::GOLEM2:
             LoadOriginalICN( id );
@@ -2583,6 +2578,22 @@ namespace
                 }
             }
             return true;
+        case ICN::EVIL_DIALOG_PLAIN_CORNERS: {
+            _icnVsSprite[id].resize( 1 );
+
+            fheroes2::Sprite & cornerSprite = _icnVsSprite[id][0];
+            const int32_t cornerSideLength = 43;
+            cornerSprite.resize( cornerSideLength * 2, cornerSideLength * 2 );
+            const fheroes2::Sprite & originalGoodDialog = fheroes2::AGG::GetICN( ICN::WINLOSE, 0 );
+            Copy( originalGoodDialog, 0, 0, cornerSprite, 0, 0, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, 0, cornerSprite, cornerSideLength, 0, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, 0, originalGoodDialog.height() - cornerSideLength, cornerSprite, 0, cornerSideLength, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, originalGoodDialog.height() - cornerSideLength, cornerSprite, cornerSideLength,
+                  cornerSideLength, cornerSideLength, cornerSideLength );
+            fheroes2::ApplyPalette( cornerSprite, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+
+            return true;
+        }
         case ICN::MONS32:
             LoadOriginalICN( id );
 
