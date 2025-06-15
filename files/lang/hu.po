@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:39+0000\n"
+"POT-Creation-Date: 2025-06-15 05:10+0000\n"
 "PO-Revision-Date: 2025-04-23 20:48+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3494,6 +3494,12 @@ msgstr ""
 "\n"
 "Hely: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Biztosan törlöd ezt a fájlt?:"
 
@@ -3505,6 +3511,21 @@ msgstr "Kattints az aktuális játékállás mentéséhez."
 
 msgid "Click to load a previously saved game."
 msgstr "Kattints a mentett játékállás betöltéséhez."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "A te neved"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Támogass minket itt"
 
 msgid "File to Save:"
 msgstr "Fájl mentése:"
