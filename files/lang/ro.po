@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:39+0000\n"
+"POT-Creation-Date: 2025-06-15 02:08+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3357,6 +3357,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
@@ -3368,6 +3374,20 @@ msgstr ""
 
 msgid "Click to load a previously saved game."
 msgstr ""
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+msgid "Sort by Name"
+msgstr ""
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Sprijiniți-ne pe"
 
 msgid "File to Save:"
 msgstr ""

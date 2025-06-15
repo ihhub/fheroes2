@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:39+0000\n"
+"POT-Creation-Date: 2025-06-15 02:08+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3311,6 +3311,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Ar jūs tikrai norite ištrinti failą:"
 
@@ -3323,6 +3329,19 @@ msgstr ""
 #, fuzzy
 msgid "Click to load a previously saved game."
 msgstr "Atverti prieš tai įrašytą žaidimą"
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+msgid "Sort by Name"
+msgstr ""
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+msgid "Sort by Date"
+msgstr ""
 
 msgid "File to Save:"
 msgstr "Įrašyti į failą:"

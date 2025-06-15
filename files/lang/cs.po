@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:39+0000\n"
+"POT-Creation-Date: 2025-06-15 02:08+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3477,6 +3477,12 @@ msgstr ""
 "\n"
 "Cesta: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Opravdu chceš smazat soubor:"
 
@@ -3488,6 +3494,21 @@ msgstr "Klikni pro uložení aktuální hry."
 
 msgid "Click to load a previously saved game."
 msgstr "Klikni pro načtení dříve uložené hry."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Jméno"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Podpořte nás na"
 
 msgid "File to Save:"
 msgstr "Uložit do souboru:"

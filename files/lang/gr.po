@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:39+0000\n"
+"POT-Creation-Date: 2025-06-15 02:08+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3140,6 +3140,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
@@ -3150,6 +3156,19 @@ msgid "Click to save the current game."
 msgstr ""
 
 msgid "Click to load a previously saved game."
+msgstr ""
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+msgid "Sort by Name"
+msgstr ""
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+msgid "Sort by Date"
 msgstr ""
 
 msgid "File to Save:"
