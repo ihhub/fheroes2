@@ -27,7 +27,7 @@
 
 namespace
 {
-    // implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
+    // Implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
     // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
     uint32_t uniformIntInInterval( const uint32_t range, std::mt19937 & gen )
     {
@@ -71,7 +71,7 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, s
 
     assert( from < to );
     const uint32_t rangeExclusive = to - from;
-    // if the range is the entire uint32_t (from 0 to 2**32-1), we can just return a random number
+    // If the range is the entire uint32_t (from 0 to 2**32-1), we can just return a random number
     if ( rangeExclusive == std::numeric_limits<uint32_t>::max() ) {
         static_assert( std::mt19937::min() == 0 && std::mt19937::max() == std::numeric_limits<uint32_t>::max() );
 

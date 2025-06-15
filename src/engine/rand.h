@@ -51,7 +51,7 @@ namespace Rand
 
         assert( first < last );
 
-        // change last from once-past-the-end to last element
+        // Change last from once-past-the-end to last element
         --last;
         const typename std::iterator_traits<Iter>::difference_type interval = last - first;
 
