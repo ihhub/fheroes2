@@ -73,6 +73,9 @@ jobs:
       run: |
         vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
     - name: Build
+      env:
+        CMAKE_GENERATOR: Visual Studio 17 2022
+        CMAKE_GENERATOR_TOOLSET: v142
       run: |
         cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON \
                            -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT\\scripts\\buildsystems\\vcpkg.cmake" \
