@@ -30,11 +30,15 @@
 
 #include "battle_cell.h"
 #include "math_base.h"
-#include "rand.h"
 
 namespace Maps
 {
     class Tile;
+}
+
+namespace Rand
+{
+    class PCG32;
 }
 
 namespace Battle

@@ -24,6 +24,7 @@
 #include "rand.h"
 
 #include <numeric>
+#include <random>
 
 namespace
 {
