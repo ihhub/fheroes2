@@ -345,10 +345,14 @@ int main( int argc, char ** argv )
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
 
-        // init game data
-        Game::Init();
-
+        // Update the fonts according to the game language set in the configuration.
+        // NOTICE: it must be done before initializing the engine to properly load all
+        // language-specific font characters for the selected language because during
+        // initialization the English language is forced to properly read the configuration files.
         conf.setGameLanguage( conf.getGameLanguage() );
+
+        // Initialize game data.
+        Game::Init();
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
