@@ -888,6 +888,16 @@ namespace fheroes2
         return out;
     }
 
+    void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip /* = false */ )
+    {
+        AlphaBlit( in, 0, 0, out, 0, 0, in.width(), in.height(), alphaValue, flip );
+    }
+
+    void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, const uint8_t alphaValue, const bool flip /* = false */ )
+    {
+        AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
+    }
+
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alphaValue,
                     const bool flip /* = false */ )
     {
@@ -1023,6 +1033,11 @@ namespace fheroes2
         }
     }
 
+    void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
+    {
+        ApplyPalette( image, image, palette );
+    }
+
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette )
     {
         if ( palette.size() != 256 ) {
@@ -1030,6 +1045,11 @@ namespace fheroes2
         }
 
         ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), palette.data() );
+    }
+
+    void ApplyPalette( Image & image, const uint8_t paletteId )
+    {
+        ApplyPalette( image, image, paletteId );
     }
 
     void ApplyPalette( const Image & in, Image & out, const uint8_t paletteId )
@@ -1115,6 +1135,26 @@ namespace fheroes2
                 }
             }
         }
+    }
+
+    void Blit( const Image & in, Image & out, const bool flip /* = false */ )
+    {
+        Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );
+    }
+
+    void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip /* = false */ )
+    {
+        Blit( in, 0, 0, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height, flip );
+    }
+
+    void Blit( const Image & in, Image & out, const int32_t outX, const int32_t outY, const bool flip /* = false */ )
+    {
+        Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
+    }
+
+    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, const bool flip /* = false */ )
+    {
+        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip /* = false */ )
@@ -1268,6 +1308,11 @@ namespace fheroes2
             memcpy( out.image(), in.image(), size );
             memset( out.transform(), static_cast<uint8_t>( 0 ), size );
         }
+    }
+
+    void Copy( const Image & in, const int32_t inX, const int32_t inY, Image & out, const Rect & outRoi )
+    {
+        Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
     }
 
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
