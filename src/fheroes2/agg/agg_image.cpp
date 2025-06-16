@@ -514,7 +514,9 @@ namespace
         _icnVsSprite[id][assetIndex] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
     }
 
-    void LoadOriginalICN( const int id )
+    // This function returns true if sprites were successfully from AGG file.
+    // WARNING: this function must bu called once - only in `loadICN()` function.
+    bool loadIcnFromAgg( const int id )
     {
         // If this assertion blows up then something wrong with your logic and you load resources more than once!
         assert( _icnVsSprite[id].empty() );
@@ -522,7 +524,7 @@ namespace
         const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::getIcnFileName( id ), false );
 
         if ( body.empty() ) {
-            return;
+            return false;
         }
 
         ROStreamBuf imageStream( body );
@@ -530,7 +532,7 @@ namespace
         const uint32_t count = imageStream.getLE16();
         const uint32_t blockSize = imageStream.getLE32();
         if ( count == 0 || blockSize == 0 ) {
-            return;
+            return false;
         }
 
         _icnVsSprite[id].resize( count );
@@ -566,14 +568,16 @@ namespace
 
             _icnVsSprite[id][i] = fheroes2::decodeICNSprite( data, dataEnd, header1 );
         }
+
+        return true;
     }
 
-    // Helper function for LoadModifiedICN
+    // Helper function for modifyOriginalICN
     void CopyICNWithPalette( const int icnId, const int originalIcnId, const PAL::PaletteType paletteType )
     {
         assert( icnId != originalIcnId );
 
-        fheroes2::AGG::GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
+        fheroes2::AGG::GetICN( originalIcnId, 0 ); // always avoid calling loadIcnFromAgg() directly
 
         _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
         const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
@@ -2121,30 +2125,15 @@ namespace
         }
     }
 
-    // This function must return true is resources have been modified, false otherwise.
-    bool LoadModifiedICN( const int id )
+    // This function modifies original assets and should be called after loading ICN from assets.
+    void modifyOriginalICN( const int id )
     {
-        // If this assertion blows up then you are calling this function in a recursion. Check your code!
-        assert( _icnVsSprite[id].empty() );
-
-        // IMPORTANT!!!
-        // Call LoadOriginalICN() function only if you are handling the same ICN.
-        // If you need to load a different ICN use loadICN() function.
-
-        // Some images contain text. This text should be adapted to a chosen language.
-        if ( isLanguageDependentIcnId( id ) ) {
-            generateLanguageSpecificImages( id );
-            return true;
-        }
+        // This function modifies the successfully loaded ICN.
+        assert( !_icnVsSprite[id].empty() );
 
         switch ( id ) {
-        case ICN::ROUTERED:
-            CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
-            return true;
         case ICN::FONT:
         case ICN::SMALFONT: {
-            LoadOriginalICN( id );
-
             auto & imageArray = _icnVsSprite[id];
             if ( imageArray.size() < 96 ) {
                 // 96 symbols is the minimum requirement for English.
@@ -2227,36 +2216,11 @@ namespace
                 imageArray[249 - 32] = imageArray[100];
                 imageArray.erase( imageArray.begin() + 218, imageArray.end() );
             }
-            return true;
+            break;
         }
-        case ICN::YELLOW_FONT:
-            CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_FONT );
-            return true;
-        case ICN::YELLOW_SMALLFONT:
-            CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_FONT );
-            return true;
-        case ICN::GRAY_FONT:
-            CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_FONT );
-            return true;
-        case ICN::GRAY_SMALL_FONT:
-            CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
-            return true;
-        case ICN::GOLDEN_GRADIENT_FONT:
-            generateGradientFont( id, ICN::FONT, 108, 133, 55, 62 );
-            return true;
-        case ICN::GOLDEN_GRADIENT_LARGE_FONT:
-            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 108, 127, 55, 62 );
-            return true;
-        case ICN::SILVER_GRADIENT_FONT:
-            generateGradientFont( id, ICN::FONT, 10, 31, 29, 0 );
-            return true;
-        case ICN::SILVER_GRADIENT_LARGE_FONT:
-            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 10, 26, 29, 0 );
-            return true;
         case ICN::SPELLS:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() != 60 ) {
-                return true;
+                break;
             }
 
             _icnVsSprite[id].resize( 73 );
@@ -2318,37 +2282,22 @@ namespace
                     text.draw( ( imageWidth - text.width() ) / 2, 22, originalImage );
                 }
             }
-            return true;
-        case ICN::CSLMARKER:
-            _icnVsSprite[id].resize( 3 );
-            for ( uint32_t i = 0; i < 3; ++i ) {
-                _icnVsSprite[id][i] = fheroes2::AGG::GetICN( ICN::LOCATORS, 24 );
-                if ( i == 1 ) {
-                    ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xD6 );
-                }
-                else if ( i == 2 ) {
-                    ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
-                }
-            }
-            return true;
+            break;
         case ICN::PHOENIX:
-            LoadOriginalICN( id );
             // First sprite has cropped shadow. We copy missing part from another 'almost' identical frame
             if ( _icnVsSprite[id].size() >= 32 ) {
                 const fheroes2::Sprite & in = _icnVsSprite[id][32];
                 Copy( in, 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
                 Copy( in, 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
             }
-            return true;
+            break;
         case ICN::MONH0028: // phoenix
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 1 ) {
                 const fheroes2::Sprite & correctFrame = fheroes2::AGG::GetICN( ICN::PHOENIX, 32 );
                 Copy( correctFrame, 60, 73, _icnVsSprite[id][0], 58, 70, 14, 13 );
             }
-            return true;
+            break;
         case ICN::CAVALRYR:
-            LoadOriginalICN( id );
             // fheroes2::Sprite 23 has incorrect colors, we need to replace them
             if ( _icnVsSprite[id].size() >= 23 ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][23];
@@ -2371,9 +2320,8 @@ namespace
 
                 ApplyPalette( out, indexes );
             }
-            return true;
+            break;
         case ICN::TITANMSL:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 7 ) {
                 // We need to shift Titan lightning arrow sprite position to correctly render it.
                 _icnVsSprite[id][0].setPosition( _icnVsSprite[id][0].x(), _icnVsSprite[id][0].y() - 5 );
@@ -2384,9 +2332,8 @@ namespace
                 _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 5, _icnVsSprite[id][5].y() - 5 );
                 _icnVsSprite[id][6].setPosition( _icnVsSprite[id][6].x(), _icnVsSprite[id][6].y() - 5 );
             }
-            return true;
+            break;
         case ICN::TROLLMSL:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 1 ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][0];
                 // The original sprite contains 2 pixels which are empty
@@ -2398,57 +2345,7 @@ namespace
                     out.image()[188] = 24;
                 }
             }
-            return true;
-        case ICN::TROLL2MSL:
-            loadICN( ICN::TROLLMSL );
-            if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
-                _icnVsSprite[id].resize( 1 );
-
-                fheroes2::Sprite & out = _icnVsSprite[id][0];
-                out = _icnVsSprite[ICN::TROLLMSL][0];
-
-                // The original sprite contains 2 pixels which are empty
-                if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
-                    out.transform()[147] = 0;
-                    out.image()[147] = 22;
-
-                    out.transform()[188] = 0;
-                    out.image()[188] = 24;
-                }
-
-                std::vector<uint8_t> indexes( 256 );
-                std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
-
-                indexes[10] = 152;
-                indexes[11] = 153;
-                indexes[12] = 154;
-                indexes[13] = 155;
-                indexes[14] = 155;
-                indexes[15] = 156;
-                indexes[16] = 157;
-                indexes[17] = 158;
-                indexes[18] = 159;
-                indexes[19] = 160;
-                indexes[20] = 160;
-                indexes[21] = 161;
-                indexes[22] = 162;
-                indexes[23] = 163;
-                indexes[24] = 164;
-                indexes[25] = 165;
-                indexes[26] = 166;
-                indexes[27] = 166;
-                indexes[28] = 167;
-                indexes[29] = 168;
-                indexes[30] = 169;
-                indexes[31] = 170;
-                indexes[32] = 171;
-                indexes[33] = 172;
-                indexes[34] = 172;
-                indexes[35] = 173;
-
-                ApplyPalette( out, indexes );
-            }
-            return true;
+            break;
         case ICN::BTNDCCFG:
         case ICN::BTNEMAIN:
         case ICN::BTNESIZE:
@@ -2456,7 +2353,6 @@ namespace
         case ICN::BTNMP:
         case ICN::BTNNEWGM:
         case ICN::X_LOADCM: {
-            LoadOriginalICN( id );
             // Remove embedded shadows and backgrounds because we generate our own. We can safely divide by two because every button has 2 states.
             for ( size_t i = 0; i < _icnVsSprite[id].size() / 2; ++i ) {
                 fheroes2::Sprite & released = _icnVsSprite[id][i * 2];
@@ -2491,11 +2387,10 @@ namespace
                 fheroes2::Blit( common, _icnVsSprite[id][2] );
             }
 
-            return true;
+            break;
         }
         case ICN::GOLEM:
         case ICN::GOLEM2:
-            LoadOriginalICN( id );
             // Original Golem ICN contains 40 frames. We make the corrections only for original sprite.
             if ( _icnVsSprite[id].size() == 40 ) {
                 // Movement animation fix for Iron and Steel Golem: its 'MOVE_MAIN' animation is missing 1/4 of animation start.
@@ -2522,10 +2417,9 @@ namespace
                                                            _icnVsSprite[id][frameID].y() );
                 }
             }
-            return true;
+            break;
         case ICN::LOCATORE:
         case ICN::LOCATORS:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 15 ) {
                 if ( _icnVsSprite[id][12].width() == 47 ) {
                     fheroes2::Sprite & out = _icnVsSprite[id][12];
@@ -2551,9 +2445,8 @@ namespace
                 text.draw( ( _icnVsSprite[id][25].width() - text.width() ) / 2, 6, _icnVsSprite[id][25] );
                 text.draw( ( _icnVsSprite[id][26].width() - text.width() ) / 2, 6, _icnVsSprite[id][26] );
             }
-            return true;
+            break;
         case ICN::TOWNBKG2:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 1 ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][0];
                 // The first pixel of the original sprite has incorrect color.
@@ -2562,9 +2455,8 @@ namespace
                     out.image()[0] = 10;
                 }
             }
-            return true;
+            break;
         case ICN::HSICONS:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 7 ) {
                 fheroes2::Sprite & out = _icnVsSprite[id][7];
                 if ( out.width() == 34 && out.height() == 19 ) {
@@ -2577,26 +2469,8 @@ namespace
                     Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                 }
             }
-            return true;
-        case ICN::EVIL_DIALOG_PLAIN_CORNERS: {
-            _icnVsSprite[id].resize( 1 );
-
-            fheroes2::Sprite & cornerSprite = _icnVsSprite[id][0];
-            const int32_t cornerSideLength = 43;
-            cornerSprite.resize( cornerSideLength * 2, cornerSideLength * 2 );
-            const fheroes2::Sprite & originalGoodDialog = fheroes2::AGG::GetICN( ICN::WINLOSE, 0 );
-            Copy( originalGoodDialog, 0, 0, cornerSprite, 0, 0, cornerSideLength, cornerSideLength );
-            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, 0, cornerSprite, cornerSideLength, 0, cornerSideLength, cornerSideLength );
-            Copy( originalGoodDialog, 0, originalGoodDialog.height() - cornerSideLength, cornerSprite, 0, cornerSideLength, cornerSideLength, cornerSideLength );
-            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, originalGoodDialog.height() - cornerSideLength, cornerSprite, cornerSideLength,
-                  cornerSideLength, cornerSideLength, cornerSideLength );
-            fheroes2::ApplyPalette( cornerSprite, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-
-            return true;
-        }
+            break;
         case ICN::MONS32:
-            LoadOriginalICN( id );
-
             if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman
                 fheroes2::Sprite & modified = _icnVsSprite[id][4];
 
@@ -2660,31 +2534,8 @@ namespace
                 modified.transform()[19 * 9 + 9] = modified.transform()[19 * 5 + 11];
             }
 
-            return true;
-        case ICN::MONSTER_SWITCH_LEFT_ARROW:
-            _icnVsSprite[id].resize( 2 );
-            for ( uint32_t i = 0; i < 2; ++i ) {
-                const fheroes2::Sprite & source = fheroes2::AGG::GetICN( ICN::RECRUIT, i );
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( source.height(), source.width() );
-                Transpose( source, out );
-                out = Flip( out, false, true );
-                out.setPosition( source.y() - static_cast<int32_t>( i ), source.x() );
-            }
-            return true;
-        case ICN::MONSTER_SWITCH_RIGHT_ARROW:
-            _icnVsSprite[id].resize( 2 );
-            for ( uint32_t i = 0; i < 2; ++i ) {
-                const fheroes2::Sprite & source = fheroes2::AGG::GetICN( ICN::RECRUIT, i + 2 );
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( source.height(), source.width() );
-                Transpose( source, out );
-                out = Flip( out, false, true );
-                out.setPosition( source.y(), source.x() );
-            }
-            return true;
+            break;
         case ICN::SURRENDR:
-            LoadOriginalICN( id );
             // We fix the pressed button backgrounds here because this also needs to be applied on all localized assets.
             if ( _icnVsSprite[id].size() >= 4 ) {
                 for ( const uint32_t i : { 0, 2 } ) {
@@ -2699,193 +2550,8 @@ namespace
                     fheroes2::makeTransparentBackground( _icnVsSprite[id][i], _icnVsSprite[id][i + 1], ICN::STONEBAK );
                 }
             }
-            return true;
-        case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
-            _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = Crop( fheroes2::AGG::GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
-            _icnVsSprite[id][0].setPosition( 0, 0 );
-
-            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 3 );
-            _icnVsSprite[id][1].setPosition( 0, 0 );
-
-            // fix transparent corners
-            CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
-            return true;
-        case ICN::WHITE_LARGE_FONT: {
-            fheroes2::AGG::GetICN( ICN::FONT, 0 );
-            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
-            _icnVsSprite[id].resize( original.size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                const fheroes2::Sprite & in = original[i];
-                fheroes2::Sprite & out = _icnVsSprite[id][i];
-                out.resize( in.width() * 2, in.height() * 2 );
-                SubpixelResize( in, out );
-                out.setPosition( in.x() * 2, in.y() * 2 );
-            }
-            return true;
-        }
-        case ICN::SWAP_ARROW_LEFT_TO_RIGHT:
-        case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
-            // Since the original game does not have such resources we could generate it from hero meeting sprite.
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-            std::array<fheroes2::Image, 4> input;
-
-            const int32_t width = 45;
-            const int32_t height = 20;
-
-            for ( fheroes2::Image & image : input ) {
-                image.resize( width, height );
-            }
-
-            Copy( original, 295, 270, input[0], 0, 0, width, height );
-            Copy( original, 295, 291, input[1], 0, 0, width, height );
-            Copy( original, 295, 363, input[2], 0, 0, width, height );
-            Copy( original, 295, 384, input[3], 0, 0, width, height );
-
-            input[1] = Flip( input[1], true, false );
-            input[3] = Flip( input[3], true, false );
-
-            fheroes2::Image out = fheroes2::ExtractCommonPattern( { &input[0], &input[1], &input[2], &input[3] } );
-
-            // Here are 2 pixels which should be removed.
-            if ( out.width() == width && out.height() == height ) {
-                out.image()[40] = 0;
-                out.transform()[40] = 1;
-
-                out.image()[30 + 3 * width] = 0;
-                out.transform()[30 + 3 * width] = 1;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? out : Flip( out, true, false );
-
-            _icnVsSprite[id][1] = _icnVsSprite[id][0];
-            _icnVsSprite[id][1].setPosition( -1, 1 );
-            ApplyPalette( _icnVsSprite[id][1], 4 );
-
-            return true;
-        }
-        case ICN::SWAP_ARROWS_CIRCULAR: {
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0 );
-
-            const int32_t width = 47;
-            const int32_t height = 42;
-            fheroes2::Image out;
-            out.resize( width, height );
-            out.reset();
-
-            // Rotate arrow heads.
-            const int32_t arrowTipToShaftLength = 18;
-            const int32_t arrowHeadWidth = 20;
-
-            fheroes2::Image rotatedArrow;
-            rotatedArrow.resize( arrowHeadWidth, arrowTipToShaftLength );
-            rotatedArrow.reset();
-            for ( int x = 0; x < arrowTipToShaftLength; ++x ) {
-                for ( int y = 0; y < arrowHeadWidth; ++y ) {
-                    Copy( original, x + ( original.width() - arrowTipToShaftLength ), y, rotatedArrow, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
-                }
-            }
-
-            fheroes2::Copy( Flip( rotatedArrow, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
-            fheroes2::Copy( Flip( rotatedArrow, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
-
-            // Rotate arrow ends.
-            const int32_t arrowEndHeight = 11;
-            const int32_t arrowEndWidth = 9;
-
-            rotatedArrow.resize( arrowEndWidth, arrowEndHeight );
-            rotatedArrow.reset();
-
-            for ( int x = 0; x < arrowEndHeight; ++x ) {
-                for ( int y = 0; y < arrowEndWidth; ++y ) {
-                    Copy( original, x + 2, y + 5, rotatedArrow, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
-                }
-            }
-
-            // Clean black corner.
-            fheroes2::Copy( original, 0, 0, rotatedArrow, 0, rotatedArrow.height() - 1, 1, 1 );
-
-            fheroes2::Copy( rotatedArrow, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
-            fheroes2::Copy( Flip( rotatedArrow, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
-
-            // Add straight shafts.
-            Copy( original, 5, 5, out, 13, 0, 21, 10 );
-            Copy( original, 5, 5, out, 12, 32, 22, 10 );
-
-            // Lower arrow.
-            // Fix overlaps.
-            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
-            fheroes2::DrawLine( out, { out.width() - 13, out.height() - 6 }, { out.width() - 12, out.height() - 6 }, 109 );
-            fheroes2::SetPixel( out, 12, out.height() - 10, 119 );
-            fheroes2::SetPixel( out, out.width() - 14, out.height() - 10, 119 );
-
-            // Lower right corner.
-            Copy( original, 5, 10, out, out.width() - 13, out.height() - 5, 4, 5 );
-            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 4 }, { out.width() - 9, out.height() - 1 }, 59 );
-            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 5 }, { out.width() - 9, out.height() - 2 }, 59 );
-            fheroes2::DrawLine( out, { out.width() - 7, out.height() - 5 }, { out.width() - 9, out.height() - 3 }, 129 );
-            fheroes2::DrawLine( out, { out.width() - 8, out.height() - 5 }, { out.width() - 9, out.height() - 4 }, 123 );
-            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
-            fheroes2::SetPixel( out, out.width() - 11, out.height() - 6, 112 );
-
-            // Lower left corner.
-            Copy( original, 5, 9, out, 9, out.height() - 6, 3, 6 );
-            Copy( rotatedArrow, 0, 0, out, 5, out.height() - 7, 4, 2 );
-            fheroes2::DrawLine( out, { 5, out.height() - 5 }, { 8, out.height() - 2 }, 129 );
-            fheroes2::DrawLine( out, { 6, out.height() - 5 }, { 8, out.height() - 3 }, 123 );
-            fheroes2::DrawLine( out, { 7, out.height() - 5 }, { 8, out.height() - 4 }, 119 );
-            fheroes2::SetPixel( out, 8, out.height() - 5, 116 );
-            fheroes2::SetPixel( out, 9, out.height() - 6, 112 );
-
-            // Fix shading.
-            fheroes2::DrawLine( out, { 14, out.height() - 15 }, { 14, out.height() - 11 }, 59 );
-
-            // Upper arrow.
-            // Upper left corner.
-            fheroes2::Copy( out, 15, 0, out, 9, 0, 4, 5 );
-            fheroes2::Copy( out, 21, 5, out, 11, 5, 3, 2 );
-            fheroes2::DrawLine( out, { 8, 1 }, { 5, 4 }, 129 );
-            fheroes2::DrawLine( out, { 8, 2 }, { 6, 4 }, 119 );
-            fheroes2::DrawLine( out, { 8, 3 }, { 7, 4 }, 114 );
-            fheroes2::SetPixel( out, 8, 4, 112 );
-            fheroes2::SetPixel( out, 9, 4, 112 );
-
-            // Upper right corner.
-            fheroes2::Copy( out, 21, 0, out, 33, 0, 3, 6 );
-            fheroes2::Copy( out, 36, 7, out, 36, 5, 5, 1 );
-            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
-            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
-            fheroes2::Copy( out, 34, 1, out, 36, 1, 1, 3 );
-            fheroes2::DrawLine( out, { 36, 0 }, { 40, 4 }, 129 );
-            fheroes2::DrawLine( out, { 37, 2 }, { 38, 3 }, 119 );
-            fheroes2::DrawLine( out, { 36, 4 }, { 37, 3 }, 113 );
-
-            // Fix overlap.
-            fheroes2::DrawLine( out, { 33, 8 }, { 33, 9 }, 123 );
-            fheroes2::SetPixel( out, 32, 9, 129 );
-            fheroes2::SetPixel( out, 13, 9, 129 );
-
-            // Fix shading.
-            fheroes2::DrawLine( out, { 10, 22 }, { 18, 14 }, 59 );
-            fheroes2::DrawLine( out, { 11, 22 }, { 19, 14 }, 59 );
-            fheroes2::DrawLine( out, { 34, 17 }, { 40, 17 }, 59 );
-            fheroes2::DrawLine( out, { 41, 5 }, { 41, 16 }, 59 );
-            fheroes2::SetPixel( out, 40, 16, 59 );
-            fheroes2::Copy( original, 0, 0, out, 1, 12, 4, 1 );
-            fheroes2::Copy( original, 0, 0, out, 15, 12, 5, 1 );
-
-            // Make pressed state.
-            _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = out;
-            _icnVsSprite[id][1] = _icnVsSprite[id][0];
-            _icnVsSprite[id][1].setPosition( -1, 1 );
-            ApplyPalette( _icnVsSprite[id][1], 4 );
-
-            return true;
-        }
+            break;
         case ICN::EDITBTNS:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 35 ) {
                 // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
                 _icnVsSprite[id].resize( 45 );
@@ -2939,46 +2605,8 @@ namespace
                 fheroes2::SetPixel( _icnVsSprite[id][42], 31, 20, 53 );
                 fheroes2::DrawLine( _icnVsSprite[id][42], { 32, 21 }, { 32, 22 }, 53 );
             }
-            return true;
-        case ICN::EDITBTNS_EVIL: {
-            loadICN( ICN::EDITBTNS );
-            _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
-            for ( auto & image : _icnVsSprite[id] ) {
-                convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
-            }
-            return true;
-        }
-        case ICN::DROPLISL_EVIL: {
-            loadICN( ICN::DROPLISL );
-            _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
-
-            // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
-            const std::vector<uint8_t> palette
-                = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            for ( auto & image : _icnVsSprite[id] ) {
-                fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
-            }
-            return true;
-        }
-        case ICN::CELLWIN_EVIL: {
-            loadICN( ICN::CELLWIN );
-
-            if ( _icnVsSprite[ICN::CELLWIN].size() > 18 ) {
-                // Convert to Evil only the first 19 images. The rest are not standard buttons and are player color related settings used in original editor.
-                _icnVsSprite[ICN::CELLWIN_EVIL].resize( 19 );
-                std::copy( _icnVsSprite[ICN::CELLWIN].begin(), _icnVsSprite[ICN::CELLWIN].begin() + 19, _icnVsSprite[ICN::CELLWIN_EVIL].begin() );
-
-                // To convert the yellow borders of some items the combination of good-to-evil and gray palettes is used here.
-                const std::vector<uint8_t> palette
-                    = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                for ( fheroes2::Sprite & image : _icnVsSprite[ICN::CELLWIN_EVIL] ) {
-                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
-                }
-            }
-            return true;
-        }
+            break;
         case ICN::EDITPANL:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 6 ) {
                 _icnVsSprite[id].resize( 18 );
 
@@ -3042,9 +2670,8 @@ namespace
                 // Make erase Streams button image.
                 Blit( fheroes2::AGG::GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
             }
-            return true;
+            break;
         case ICN::TEXTBAR:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 9 ) {
                 // Remove the slightly corrupted rightmost column from the text bar background image.
                 for ( size_t i = 8; i < 10; ++i )
@@ -3052,17 +2679,15 @@ namespace
                         _icnVsSprite[id][i] = Crop( _icnVsSprite[id][i], 0, 0, _icnVsSprite[id][i].width() - 1, _icnVsSprite[id][i].height() );
                     }
             }
-            return true;
-        case ICN::TWNWUP_5:
+            break;
         case ICN::EDITOR:
-            LoadOriginalICN( id );
+        case ICN::TWNWUP_5:
             if ( !_icnVsSprite[id].empty() ) {
                 // Fix the cycling colors in original editor main menu background and Red Tower (Warlock castle screen).
                 ApplyPalette( _icnVsSprite[id].front(), PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
             }
-            return true;
+            break;
         case ICN::MINIHERO:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 42 ) {
                 const auto & noCyclePalette = PAL::GetPalette( PAL::PaletteType::NO_CYCLE );
 
@@ -3099,9 +2724,8 @@ namespace
                     kinght = std::move( fixed );
                 }
             }
-            return true;
+            break;
         case ICN::HEROES:
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 // This is the main menu image which shouldn't have any transform layer.
@@ -3120,9 +2744,8 @@ namespace
                     Blit( editorIcon, 0, 0, original, editorIcon.x(), editorIcon.y(), editorIcon.width(), editorIcon.height() );
                 }
             }
-            return true;
+            break;
         case ICN::BTNSHNGL:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 20 ) {
                 _icnVsSprite[id].resize( 23 );
 
@@ -3130,10 +2753,9 @@ namespace
                 fheroes2::h2d::readImage( "main_menu_editor_highlighted_button.image", _icnVsSprite[id][21] );
                 fheroes2::h2d::readImage( "main_menu_editor_pressed_button.image", _icnVsSprite[id][22] );
             }
-            return true;
+            break;
         case ICN::TOWNBKG3:
             // Warlock town background image contains 'empty' pixels leading to appear them as black.
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 640 && original.height() == 256 ) {
@@ -3146,10 +2768,9 @@ namespace
                     imageData[84618] = 19;
                 }
             }
-            return true;
+            break;
         case ICN::MINIPORT:
             // Some heroes portraits have incorrect transparent pixels.
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 60 ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][60];
                 if ( original.width() == 30 && original.height() == 22 ) {
@@ -3190,10 +2811,9 @@ namespace
                     original.image()[42] = 28;
                 }
             }
-            return true;
+            break;
         case ICN::MINICAPT:
             // Barbarian captain mini icon has bad pixel at position 22x2.
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 1 ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][1];
                 if ( original.width() == 30 && original.height() == 22 ) {
@@ -3201,10 +2821,9 @@ namespace
                     original.image()[82] = 244;
                 }
             }
-            return true;
+            break;
         case ICN::PORT0091:
             // Barbarian captain has one bad pixel.
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 101 && original.height() == 93 ) {
@@ -3212,10 +2831,9 @@ namespace
                     original.image()[9084] = 77;
                 }
             }
-            return true;
+            break;
         case ICN::PORT0090:
             // Knight captain has multiple bad pixels.
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 101 && original.height() == 93 ) {
@@ -3227,10 +2845,9 @@ namespace
                     imageData[7474] = 167;
                 }
             }
-            return true;
+            break;
         case ICN::PORT0092:
             // Sorceress captain has two bad transparent pixels (8x20 and 8x66).
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 101 && original.height() == 93 ) {
@@ -3240,10 +2857,9 @@ namespace
                     imageData[6674] = 100;
                 }
             }
-            return true;
+            break;
         case ICN::PORT0095:
             // Necromancer captain have incorrect transparent pixel at position 8x22.
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 101 && original.height() == 93 ) {
@@ -3251,9 +2867,8 @@ namespace
                     original.image()[2230] = 212;
                 }
             }
-            return true;
+            break;
         case ICN::CSTLWZRD:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 8 ) {
                 // Statue image has bad pixels.
                 fheroes2::Sprite & original = _icnVsSprite[id][7];
@@ -3279,10 +2894,9 @@ namespace
                     }
                 }
             }
-            return true;
+            break;
         case ICN::CSTLCAPK:
             // Knight captain has a bad pixel.
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 2 ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][1];
                 if ( original.width() == 84 && original.height() == 81 ) {
@@ -3290,10 +2904,9 @@ namespace
                     original.image()[4934] = 18;
                 }
             }
-            return true;
+            break;
         case ICN::CSTLCAPW:
             // Warlock captain quarters have bad pixels.
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 84 && original.height() == 81 ) {
@@ -3305,9 +2918,8 @@ namespace
                     imageData[2608] = 21;
                 }
             }
-            return true;
+            break;
         case ICN::CSTLSORC:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 14 ) {
                 // Rainbow has bad pixels.
                 fheroes2::Sprite & original = _icnVsSprite[id][13];
@@ -3343,106 +2955,8 @@ namespace
                     imageData[3221] = 69;
                 }
             }
-            return true;
-        case ICN::COLOR_CURSOR_ADVENTURE_MAP:
-        case ICN::MONO_CURSOR_ADVENTURE_MAP: {
-            // Create needed digits.
-            const std::vector<fheroes2::Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
-            const std::vector<fheroes2::Point> threePoints
-                = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
-            const std::vector<fheroes2::Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
-            const std::vector<fheroes2::Point> fivePoints
-                = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
-            const std::vector<fheroes2::Point> sixPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 1, 4 }, { 4, 4 }, { 2, 5 }, { 3, 5 } };
-            const std::vector<fheroes2::Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
-            const std::vector<fheroes2::Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
-
-            const bool isColorCursor = ( id == ICN::COLOR_CURSOR_ADVENTURE_MAP );
-            const uint8_t digitColor = isColorCursor ? 115 : 11;
-
-            std::vector<fheroes2::Image> digits( 7 );
-            digits[0] = createDigit( 6, 7, twoPoints, digitColor );
-            digits[1] = createDigit( 6, 7, threePoints, digitColor );
-            digits[2] = createDigit( 6, 7, fourPoints, digitColor );
-            digits[3] = createDigit( 6, 7, fivePoints, digitColor );
-            digits[4] = createDigit( 6, 7, sixPoints, digitColor );
-            digits[5] = createDigit( 6, 7, sevenPoints, digitColor );
-            digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
-
-            _icnVsSprite[id].reserve( 7 * 8 );
-
-            const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::MONO_CURSOR_ADVMBW;
-
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 4 ), digits,
-                                 isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -4, -6 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 5 ), digits,
-                                 isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -6, -6 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 6 ), digits,
-                                 isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 7 ), digits,
-                                 isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -15, -8 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 8 ), digits,
-                                 isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -16, -11 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 9 ), digits,
-                                 isColorCursor ? fheroes2::Point( -6, 1 ) : fheroes2::Point( -8, -1 ) );
-            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 28 ), digits,
-                                 isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
-
-            return true;
-        }
-        case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            output = fheroes2::AGG::GetICN( ICN::TWNKWEL2, 0 );
-
-            ApplyPalette( output, 28, 21, output, 28, 21, 39, 1, 8 );
-            ApplyPalette( output, 0, 22, output, 0, 22, 69, 1, 8 );
-            ApplyPalette( output, 0, 23, output, 0, 23, 53, 1, 8 );
-            ApplyPalette( output, 0, 24, output, 0, 24, 54, 1, 8 );
-            ApplyPalette( output, 0, 25, output, 0, 25, 62, 1, 8 );
-            return true;
-        }
-        case ICN::KNIGHT_CASTLE_LEFT_FARM:
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
-            return true;
-        case ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
-            return true;
-        case ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::h2d::readImage( "sorceress_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
-            return true;
-        case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::TWNNCAPT, 0 );
-
-            output = Crop( original, 21, 0, original.width() - 21, original.height() );
-            output.setPosition( original.x() + 21, original.y() );
-
-            for ( int32_t y = 47; y < output.height(); ++y ) {
-                SetTransformPixel( output, 0, y, 1 );
-            }
-
-            const fheroes2::Sprite & castle = fheroes2::AGG::GetICN( ICN::TWNNCSTL, 0 );
-            Copy( castle, 402, 123, output, 1, 56, 2, 11 );
-
-            return true;
-        }
-        case ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE: {
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::TWNNCAPT, 0 );
-
-            output = Crop( original, 0, 0, 23, original.height() );
-            output.setPosition( original.x(), original.y() );
-
-            return true;
-        }
+            break;
         case ICN::ESCROLL:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 4 ) {
                 // fix missing black border on the right side of the "up" button
                 fheroes2::Sprite & out = _icnVsSprite[id][4];
@@ -3451,35 +2965,8 @@ namespace
                     Copy( out, 0, 0, out, 15, 0, 1, 16 );
                 }
             }
-            return true;
-        case ICN::MAP_TYPE_ICON: {
-            _icnVsSprite[id].resize( 3 );
-            for ( fheroes2::Sprite & icon : _icnVsSprite[id] ) {
-                icon._disableTransformLayer();
-                icon.resize( 17, 17 );
-                icon.fill( 0 );
-            }
-
-            const fheroes2::Sprite & successionWarsIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 6 );
-            const fheroes2::Sprite & priceOfLoyaltyIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 90 );
-            const fheroes2::Sprite & resurrectionIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 101 );
-
-            if ( !successionWarsIcon.empty() ) {
-                Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
-            }
-
-            if ( !priceOfLoyaltyIcon.empty() ) {
-                Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
-            }
-
-            if ( !resurrectionIcon.empty() ) {
-                Resize( resurrectionIcon, 0, 0, resurrectionIcon.width(), resurrectionIcon.height(), _icnVsSprite[id][2], 1, 1, 15, 15 );
-            }
-
-            return true;
-        }
+            break;
         case ICN::TWNWWEL2: {
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 7 ) {
                 if ( _icnVsSprite[id][0].width() == 122 && _icnVsSprite[id][0].height() == 226 ) {
                     FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
@@ -3492,10 +2979,9 @@ namespace
                     }
                 }
             }
-            return true;
+            break;
         }
         case ICN::TWNWCAPT: {
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 118 && original.height() ) {
@@ -3509,54 +2995,12 @@ namespace
                     FillTransform( original, 57, 108, 51, 2, 1 );
                 }
             }
-            return true;
-        }
-        case ICN::GOOD_ARMY_BUTTON:
-        case ICN::GOOD_MARKET_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-
-            loadICN( ICN::ADVBTNS );
-
-            const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-            Copy( fheroes2::AGG::GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
-            Copy( fheroes2::AGG::GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
-
-            // Make all black pixels transparent.
-            AddTransparency( _icnVsSprite[id][0], 36 );
-            AddTransparency( _icnVsSprite[id][1], 36 );
-            AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
-
-            return true;
-        }
-        case ICN::EVIL_ARMY_BUTTON:
-        case ICN::EVIL_MARKET_BUTTON: {
-            _icnVsSprite[id].resize( 2 );
-
-            loadICN( ICN::ADVEBTNS );
-
-            const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-            Copy( fheroes2::AGG::GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
-            Copy( fheroes2::AGG::GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
-
-            // Make all black pixels transparent.
-            AddTransparency( _icnVsSprite[id][0], 36 );
-            AddTransparency( _icnVsSprite[id][1], 36 );
-
-            // Add the bottom-left dark border.
-            Fill( _icnVsSprite[id][1], 1, 4, 1, 30, 36 );
-            Fill( _icnVsSprite[id][1], 1, 34, 31, 1, 36 );
-
-            // Restore back black pixels in the middle of the image.
-            Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], 9, 6, _icnVsSprite[id][0], 9, 6, 20, 22 );
-            Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], 8, 7, _icnVsSprite[id][1], 8, 7, 20, 22 );
-
-            return true;
+            break;
         }
         case ICN::SPANBTN:
         case ICN::SPANBTNE:
         case ICN::CSPANBTN:
         case ICN::CSPANBTE: {
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() ) {
                 // add missing part of the released button state on the left
                 fheroes2::Sprite & out = _icnVsSprite[id][0];
@@ -3569,10 +3013,9 @@ namespace
 
                 out = std::move( released );
             }
-            return true;
+            break;
         }
         case ICN::TRADPOSE: {
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 19 ) {
                 // fix background for TRADE and EXIT buttons
                 for ( const uint32_t i : { 16, 18 } ) {
@@ -3588,24 +3031,21 @@ namespace
                     Blit( pressed, _icnVsSprite[id][i] );
                 }
             }
-            return true;
+            break;
         }
         case ICN::RECRUIT: {
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 10 ) {
                 // fix transparent corners on released OKAY button
                 CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
             }
-            return true;
+            break;
         }
         case ICN::NGEXTRA: {
-            LoadOriginalICN( id );
-
             std::vector<fheroes2::Sprite> & images = _icnVsSprite[id];
 
             if ( images.size() != 82 ) {
                 // The game assets are wrong, skip modifications.
-                return true;
+                break;
             }
 
             // Fix extra column at the end of AI controlled player.
@@ -3648,157 +3088,10 @@ namespace
                 Blit( temp, humonOrAiImage, 4, 5 );
             }
 
-            return true;
-        }
-        case ICN::DIFFICULTY_ICON_EASY:
-        case ICN::DIFFICULTY_ICON_NORMAL:
-        case ICN::DIFFICULTY_ICON_HARD:
-        case ICN::DIFFICULTY_ICON_EXPERT:
-        case ICN::DIFFICULTY_ICON_IMPOSSIBLE: {
-            const int originalIcnId = ICN::NGHSBKG;
-
-            const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( originalIcnId, 0 );
-
-            if ( !originalBackground.empty() ) {
-                _icnVsSprite[id].resize( 2 );
-
-                int32_t iconOffsetX = 0;
-
-                switch ( id ) {
-                case ICN::DIFFICULTY_ICON_EASY:
-                    iconOffsetX = 24;
-                    break;
-                case ICN::DIFFICULTY_ICON_NORMAL:
-                    iconOffsetX = 101;
-                    break;
-                case ICN::DIFFICULTY_ICON_HARD:
-                    iconOffsetX = 177;
-                    break;
-                case ICN::DIFFICULTY_ICON_EXPERT:
-                    iconOffsetX = 254;
-                    break;
-                case ICN::DIFFICULTY_ICON_IMPOSSIBLE:
-                    iconOffsetX = 331;
-                    break;
-                default:
-                    // Did you add a new difficulty?
-                    assert( 0 );
-                }
-
-                const int32_t iconSideLength = 65;
-                const int32_t iconOffsetY = 94;
-
-                _icnVsSprite[id][0] = Crop( originalBackground, iconOffsetX, iconOffsetY, iconSideLength, iconSideLength );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                // Generate Evil Icons
-                _icnVsSprite[id][1] = _icnVsSprite[id][0];
-
-                const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
-                fheroes2::ApplyPalette( _icnVsSprite[id][0], _icnVsSprite[id][1], goodToEvilPalette );
-            }
-
-            return true;
-        }
-        case ICN::METALLIC_BORDERED_TEXTBOX_GOOD: {
-            const int originalIcnId = ICN::NGHSBKG;
-
-            const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( originalIcnId, 0 );
-
-            if ( !originalBackground.empty() ) {
-                _icnVsSprite[id].resize( 1 );
-
-                const int32_t boxWidth = 371;
-                const int32_t boxHeight = 30;
-                const int32_t goodOriginalBoxOffsetX = 24;
-                const int32_t goodOriginalBoxOffsetY = 40;
-
-                _icnVsSprite[id][0] = Crop( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, boxWidth, boxHeight );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                // Copy red pattern and cover up embedded button.
-                const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
-                Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
-            }
-
-            return true;
-        }
-        case ICN::METALLIC_BORDERED_TEXTBOX_EVIL: {
-            const fheroes2::Sprite & originalEvilBackground = fheroes2::AGG::GetICN( ICN::CAMPBKGE, 0 );
-
-            if ( !originalEvilBackground.empty() ) {
-                _icnVsSprite[id].resize( 1 );
-
-                const int32_t boxWidth = 371;
-                const int32_t boxHeight = 30;
-                _icnVsSprite[id][0].resize( boxWidth, boxHeight );
-                _icnVsSprite[id][0].reset();
-
-                const int32_t evilOriginalBoxOffsetX = 26;
-                const int32_t evilOriginalBoxOffsetY = 27;
-                const int32_t upperPartHeight = 20;
-
-                // The metallic box frame in campbkge is slightly taller than the one in nghsbkg. The width is the same.
-                Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, upperPartHeight );
-
-                Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][0], 0, upperPartHeight, boxWidth,
-                      10 );
-
-                // Copy red central part.
-                const fheroes2::Sprite goodBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
-                Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
-            }
-
-            return true;
-        }
-        case ICN::MONO_CURSOR_ADVMBW: {
-            loadICN( ICN::ADVMCO );
-
-            _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                std::string digit;
-                if ( i < 9 ) {
-                    digit += '0';
-                }
-                digit += std::to_string( i + 1 );
-
-                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "ADVMBW" ) + digit + ".BMP", false ) );
-            }
-            return true;
-        }
-        case ICN::MONO_CURSOR_SPELBW: {
-            loadICN( ICN::SPELCO );
-
-            _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                std::string digit;
-                if ( i < 10 ) {
-                    digit += '0';
-                }
-                digit += std::to_string( i );
-
-                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "SPELBW" ) + digit + ".BMP", false ) );
-            }
-            return true;
-        }
-        case ICN::MONO_CURSOR_CMSSBW: {
-            loadICN( ICN::CMSECO );
-
-            _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
-            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                std::string digit;
-                if ( i < 9 ) {
-                    digit += '0';
-                }
-                digit += std::to_string( i + 1 );
-
-                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "CMSEBW" ) + digit + ".BMP", false ) );
-            }
-            return true;
+            break;
         }
         case ICN::ADVBTNS:
         case ICN::ADVEBTNS:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 16 && _icnVsSprite[id][2].width() == 36 && _icnVsSprite[id][2].height() == 36 && _icnVsSprite[id][3].width() == 36
                  && _icnVsSprite[id][3].height() == 36 ) {
                 // Add hero action button and inactive button released and pressed.
@@ -3974,9 +3267,8 @@ namespace
                     fheroes2::DrawLine( _icnVsSprite[id][19], { 5, 21 }, { 5, 28 }, 44 );
                 }
             }
-            return true;
+            break;
         case ICN::ARTFX:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 82 ) {
                 // Make a sprite for EDITOR_ANY_ULTIMATE_ARTIFACT used only in Editor for the special victory condition.
                 // A temporary solution is below.
@@ -3987,9 +3279,8 @@ namespace
                 // This fixes "Golden Bow" (#63) small artifact icon glowing yellow pixel
                 Copy( _icnVsSprite[id][63], 12, 17, _icnVsSprite[id][63], 16, 12, 1, 1 );
             }
-            return true;
+            break;
         case ICN::ARTIFACT:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 99 ) {
                 // This fixes "Golden Bow" (#64) large artifact icon glowing yellow pixel
                 Copy( _icnVsSprite[id][64], 35, 24, _icnVsSprite[id][64], 56, 12, 1, 1 );
@@ -4017,9 +3308,8 @@ namespace
                     replacePOLAssetWithSW( id, assetIndex );
                 }
             }
-            return true;
+            break;
         case ICN::OBJNARTI:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 206 ) {
                 // These are the Price of Loyalty assets.
 
@@ -4075,9 +3365,8 @@ namespace
                 Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
                 Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
             }
-            return true;
+            break;
         case ICN::TWNSDW_5:
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 140 && _icnVsSprite[id][0].height() == 165 ) {
                 fheroes2::Sprite & image = _icnVsSprite[id][0];
                 // Red Tower has multiple defects.
@@ -4157,9 +3446,8 @@ namespace
                 fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 61, 109, 1, 1 }, seededGen );
                 fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 106, 1, 1 }, seededGen );
             }
-            return true;
+            break;
         case ICN::SCENIBKG:
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 436 && _icnVsSprite[id][0].height() == 476 ) {
                 const fheroes2::Sprite & helper = fheroes2::AGG::GetICN( ICN::CSPANBKE, 1 );
                 if ( !helper.empty() ) {
@@ -4172,19 +3460,17 @@ namespace
                     original = std::move( temp );
                 }
             }
-            return true;
+            break;
         case ICN::CSTLCAPS:
-            LoadOriginalICN( id );
             if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 84 && _icnVsSprite[id][0].height() == 81 ) {
                 const fheroes2::Sprite & castle = fheroes2::AGG::GetICN( ICN::TWNSCSTL, 0 );
                 if ( !castle.empty() ) {
                     Blit( castle, 206, 106, _icnVsSprite[id][0], 2, 2, 33, 67 );
                 }
             }
-            return true;
+            break;
         case ICN::LGNDXTRA:
             // Exit button is too huge due to 1 pixel presence at the bottom of the image.
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 6 ) {
                 auto & original = _icnVsSprite[id];
                 if ( original[4].height() == 142 ) {
@@ -4199,10 +3485,9 @@ namespace
                     original[5].setPosition( offset.x, offset.y );
                 }
             }
-            return true;
+            break;
         case ICN::LGNDXTRE:
             // Exit button is too huge due to 1 pixel presence at the bottom of the image.
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() >= 6 ) {
                 auto & original = _icnVsSprite[id];
                 if ( original[4].height() == 142 ) {
@@ -4211,116 +3496,14 @@ namespace
                     original[4].setPosition( offset.x, offset.y );
                 }
             }
-            return true;
+            break;
         case ICN::OVERBACK: {
-            LoadOriginalICN( id );
             fheroes2::Sprite & background = _icnVsSprite[id][0];
             // Fill button backgrounds. This bug was present in the original game too.
             Fill( background, 540, 361, 99, 83, 57 );
             Fill( background, 540, 454, 99, 24, 57 );
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, background, 540, 402, 99, 5 );
-            return true;
-        }
-        case ICN::ESPANBKG_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const fheroes2::Rect roi{ 28, 28, 265, 206 };
-
-            fheroes2::Sprite & output = _icnVsSprite[id][0];
-            _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
-            Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
-
-            convertToEvilInterface( output, roi );
-
-            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::ESPANBKG, 1 );
-
-            return true;
-        }
-        case ICN::STONEBAK_EVIL: {
-            fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-            _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
-            if ( !_icnVsSprite[id].empty() ) {
-                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                convertToEvilInterface( _icnVsSprite[id][0], roi );
-            }
-
-            return true;
-        }
-        case ICN::STONEBAK_SMALL_POL: {
-            _icnVsSprite[id].resize( 1 );
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::X_CMPBKG, 0 );
-            if ( !original.empty() ) {
-                _icnVsSprite[id][0] = Crop( original, original.width() - 272, original.height() - 52, 244, 28 );
-            }
-            return true;
-        }
-        case ICN::REDBAK_SMALL_VERTICAL: {
-            _icnVsSprite[id].resize( 1 );
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
-            if ( !original.empty() ) {
-                _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
-            }
-            return true;
-        }
-        case ICN::BLACKBAK: {
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::Image & background = _icnVsSprite[id][0];
-            // This is enough to cover the largest buttons.
-            background.resize( 200, 200 );
-            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 9 );
-            return true;
-        }
-        case ICN::BROWNBAK: {
-            _icnVsSprite[id].resize( 1 );
-            fheroes2::Image & background = _icnVsSprite[id][0];
-            // This is enough to cover the largest buttons.
-            background.resize( 200, 200 );
-            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 57 );
-            return true;
-        }
-        case ICN::UNIFORMBAK_GOOD:
-        case ICN::UNIFORMBAK_EVIL: {
-            _icnVsSprite[id].resize( 1 );
-            const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
-            if ( !original.empty() ) {
-                _icnVsSprite[id][0].resize( 246, 45 );
-                _icnVsSprite[id][0].reset();
-                Copy( original, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
-                Copy( original, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
-            }
-
-            return true;
-        }
-        case ICN::WELLBKG_EVIL: {
-            fheroes2::AGG::GetICN( ICN::WELLBKG, 0 );
-            _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
-            if ( !_icnVsSprite[id].empty() ) {
-                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 19 );
-                convertToEvilInterface( _icnVsSprite[id][0], roi );
-            }
-
-            return true;
-        }
-        case ICN::CASLWIND_EVIL: {
-            fheroes2::AGG::GetICN( ICN::CASLWIND, 0 );
-            _icnVsSprite[id] = _icnVsSprite[ICN::CASLWIND];
-            if ( !_icnVsSprite[id].empty() ) {
-                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                convertToEvilInterface( _icnVsSprite[id][0], roi );
-            }
-
-            return true;
-        }
-        case ICN::CASLXTRA_EVIL: {
-            fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 );
-            _icnVsSprite[id] = _icnVsSprite[ICN::CASLXTRA];
-            if ( !_icnVsSprite[id].empty() ) {
-                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                convertToEvilInterface( _icnVsSprite[id][0], roi );
-            }
-
-            return true;
+            break;
         }
         case ICN::STRIP_BACKGROUND_EVIL: {
             _icnVsSprite[id].resize( 1 );
@@ -4329,7 +3512,7 @@ namespace
             const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
             convertToEvilInterface( _icnVsSprite[id][0], roi );
 
-            return true;
+            break;
         }
         case ICN::B_BFLG32:
         case ICN::G_BFLG32:
@@ -4337,7 +3520,6 @@ namespace
         case ICN::Y_BFLG32:
         case ICN::O_BFLG32:
         case ICN::P_BFLG32:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() > 31 && _icnVsSprite[id][31].height() == 248 ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][31];
                 fheroes2::Sprite temp = Crop( original, 0, 0, original.width(), 4 );
@@ -4345,9 +3527,8 @@ namespace
 
                 original = std::move( temp );
             }
-            return true;
+            break;
         case ICN::FLAG32: {
-            LoadOriginalICN( id );
             auto & flagImages = _icnVsSprite[id];
             if ( flagImages.size() == 49 ) {
                 // Shift and crop the Lighthouse flags to properly render them on the Adventure map.
@@ -4362,10 +3543,9 @@ namespace
                     flagImages[i + 7 + 7].setPosition( 0, original.y() );
                 }
             }
-            return true;
+            break;
         }
         case ICN::SHADOW32:
-            LoadOriginalICN( id );
             // The shadow sprite of hero needs to be shifted to match the hero sprite.
             if ( _icnVsSprite[id].size() == 86 ) {
                 // Direction: TOP (0-8), TOP_RIGHT (9-17), RIGHT (18-26), BOTTOM_RIGHT (27-35), BOTTOM (36-44)
@@ -4398,7 +3578,878 @@ namespace
                     }
                 }
             }
-            return true;
+            break;
+        case ICN::HISCORE: {
+            if ( _icnVsSprite[id].size() == 9 ) {
+                // Campaign title bar needs to include rating.
+                const int32_t imageHeight = _icnVsSprite[id][7].height();
+                const fheroes2::Sprite temp = Crop( _icnVsSprite[id][7], 215, 0, 300, imageHeight );
+
+                Copy( temp, 0, 0, _icnVsSprite[id][7], 215 - 57, 0, temp.width(), imageHeight );
+                Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, imageHeight );
+            }
+            break;
+        }
+        case ICN::SPELLINL: {
+            if ( _icnVsSprite[id].size() > 11 ) {
+                // Replace petrification spell mini-icon.
+                fheroes2::h2d::readImage( "petrification_spell_icon_mini.image", _icnVsSprite[id][11] );
+            }
+
+            break;
+        }
+        case ICN::BRCREST: {
+            // First sprite in this ICN has incorrect transparent pixel at position 30x5.
+            if ( !_icnVsSprite[id].empty() ) {
+                fheroes2::Sprite & original = _icnVsSprite[id][0];
+                if ( original.width() == 50 && original.height() == 47 ) {
+                    original._disableTransformLayer();
+                    original.image()[280] = 117;
+                }
+            }
+
+            // An extra image for the neutral color (for Editor).
+            if ( _icnVsSprite[id].size() == 7 ) {
+                fheroes2::Sprite neutralShield( fheroes2::AGG::GetICN( ICN::SPELLS, 15 ) );
+                if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {
+                    // We can not make a new image if there is no original shield image.
+                    break;
+                }
+
+                // Make original shield image contour transparent.
+                ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
+
+                fheroes2::Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                neutralColorSprite.reset();
+                Blit( neutralShield, neutralColorSprite, 8, 4 );
+
+                // Make the background.
+                uint8_t * imageData = neutralColorSprite.image();
+                const uint8_t * transformData = neutralColorSprite.transform();
+                const int32_t imageWidth = neutralColorSprite.width();
+                const int32_t imageHeight = neutralColorSprite.height();
+                const int32_t imageSize = imageWidth * imageHeight;
+                const int32_t startValueX = 12 * imageWidth;
+                const int32_t startValueY = 12 * imageHeight;
+
+                for ( int32_t y = 0; y < imageHeight; ++y ) {
+                    const int32_t offsetY = y * imageWidth;
+                    const int32_t offsetValueY = y * startValueX;
+                    for ( int32_t x = 0; x < imageWidth; ++x ) {
+                        if ( transformData[x + offsetY] == 0U ) {
+                            // Skip pixels with image.
+                            continue;
+                        }
+
+                        const uint8_t colorValue = static_cast<uint8_t>( 10 + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2 );
+                        imageData[x + offsetY] = ( ( imageWidth - x - 1 ) * imageHeight > offsetY ) ? colorValue : 44U - colorValue;
+                    }
+                }
+
+                // Make all image non-transparent.
+                neutralColorSprite._disableTransformLayer();
+                // We add shadow twice to make it more dark.
+                addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+                addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+
+                _icnVsSprite[id].push_back( std::move( neutralColorSprite ) );
+            }
+            break;
+        }
+        case ICN::CBKGWATR: {
+            // Ship battlefield background has incorrect transparent pixel at position 125x36.
+            if ( !_icnVsSprite[id].empty() ) {
+                fheroes2::Sprite & original = _icnVsSprite[id][0];
+                if ( original.width() == 640 && original.height() == 443 ) {
+                    original._disableTransformLayer();
+                    original.image()[23165] = 24;
+                }
+            }
+            break;
+        }
+        case ICN::SWAPWIN:
+        case ICN::WELLBKG: {
+            // Hero Meeting dialog and Castle Well images can be used with disabled transform layer.
+            if ( !_icnVsSprite[id].empty() ) {
+                _icnVsSprite[id][0]._disableTransformLayer();
+            }
+            break;
+        }
+        case ICN::COVR0010:
+        case ICN::COVR0011:
+        case ICN::COVR0012: {
+            // The original image contains some foreign pixels that do not belong to the image.
+            if ( !_icnVsSprite[id].empty() ) {
+                fheroes2::Sprite & sprite = _icnVsSprite[id][0];
+                const uint8_t * image = sprite.image();
+                const uint8_t * imageEnd = image + static_cast<size_t>( sprite.width() ) * sprite.height();
+                uint8_t * transform = sprite.transform();
+
+                for ( ; image != imageEnd; ++image, ++transform ) {
+                    // Mask all non white/black or brown pixels.
+                    if ( *transform == 0 && *image > 36 && ( *image < 108 || *image > 130 ) ) {
+                        *transform = 1;
+                    }
+                }
+            }
+
+            break;
+        }
+        case ICN::OBJNDSRT: {
+            if ( _icnVsSprite[id].size() == 131 ) {
+                _icnVsSprite[id].resize( 132 );
+                fheroes2::h2d::readImage( "missing_sphinx_part.image", _icnVsSprite[id][131] );
+            }
+
+            break;
+        }
+        case ICN::OBJNGRAS: {
+            if ( _icnVsSprite[id].size() == 151 ) {
+                _icnVsSprite[id].resize( 155 );
+
+                loadICN( ICN::OBJNSNOW );
+
+                if ( _icnVsSprite[ICN::OBJNSNOW].size() > 210 ) {
+                    fheroes2::Sprite temp;
+
+                    fheroes2::h2d::readImage( "adventure-map-grass-cave-diff-01.image", temp );
+                    _icnVsSprite[id][151] = _icnVsSprite[ICN::OBJNSNOW][2];
+                    Blit( temp, _icnVsSprite[id][151] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][151], 255, 1 );
+
+                    fheroes2::h2d::readImage( "adventure-map-grass-cave-diff-02.image", temp );
+                    _icnVsSprite[id][152] = _icnVsSprite[ICN::OBJNSNOW][3];
+                    Blit( temp, _icnVsSprite[id][152] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part1.image", temp );
+                    _icnVsSprite[id][153] = _icnVsSprite[ICN::OBJNSNOW][12];
+                    Blit( temp, _icnVsSprite[id][153] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 255, 3 );
+
+                    fheroes2::h2d::readImage( "lean-to-diff-part2.image", temp );
+                    _icnVsSprite[id][154] = _icnVsSprite[ICN::OBJNSNOW][13];
+                    Blit( temp, _icnVsSprite[id][154] );
+
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 253, 1 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 254, 2 );
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 255, 3 );
+                }
+            }
+
+            break;
+        }
+        case ICN::OBJNMUL2: {
+            auto & images = _icnVsSprite[id];
+            if ( images.size() == 218 ) {
+                // Expand the existing set of Adventure Map objects:
+                // - 2 extra River Delta objects. Each object has 7 image parts.
+                // - 1 new Stone Liths with 3 image parts.
+                // - 3 new variants of Observation Tower object. Each object has 2 image parts.
+                // - 1 new "Black Cat" object that has: 1 main image + 6 animation images.
+                // - 1 new "Barrel" object that has: 1 main (empty) image + 6 animation images.
+                // In total, 8 new objects (37 new images).
+
+                images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) + ( 1 + 6 ) );
+
+                // 2 River Deltas.
+                for ( size_t i = 0; i < 14; ++i ) {
+                    images[218 + i].resize( images[i].height(), images[i].width() );
+                    fheroes2::Transpose( images[i], images[218 + i] );
+                    images[218 + i].setPosition( images[i].y(), images[i].x() );
+                }
+
+                // 1 Stone Liths.
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "circular_stone_liths_center.image", temp );
+
+                images[232].resize( 32, 32 );
+                images[232].reset();
+                Copy( temp, 0, 0, images[232], 0, 0, temp.width(), temp.height() );
+                Copy( images[116], 0, temp.height(), images[232], 0, temp.height(), images[116].width(), images[116].height() - temp.height() );
+
+                fheroes2::h2d::readImage( "circular_stone_liths_left.image", images[233] );
+                fheroes2::h2d::readImage( "circular_stone_liths_top.image", images[234] );
+
+                // Generic Observation Tower.
+                images[235] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_generic_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[235], 0, temp.y() - images[235].y(), temp.width(), temp.height() );
+
+                // Desert Observation Tower.
+                images[236] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_desert_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[236], 0, temp.y() - images[236].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_desert_right_part.image", images[237] );
+
+                // Snow Observation Tower.
+                images[238] = images[201];
+                fheroes2::h2d::readImage( "observation_tower_snow_bottom_part.image", temp );
+                Blit( temp, 0, 0, images[238], 0, temp.y() - images[238].y(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "observation_tower_snow_right_part.image", images[239] );
+
+                images[240] = images[198];
+                fheroes2::h2d::readImage( "observation_tower_snow_top_part.image", temp );
+                Blit( temp, 0, 0, images[240], 0, 0, temp.width(), temp.height() );
+
+                // Black Cat. Main object image.
+                fheroes2::h2d::readImage( "black_cat.image", images[241] );
+
+                // Black Cat. Tail and eyes animation.
+                for ( size_t i = 0; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
+                }
+
+                // Barrel. Object has only animation images but for compatibility
+                // we need to have the main image (images[248]) be empty for this object.
+                for ( size_t i = 0; i < 6; ++i ) {
+                    fheroes2::h2d::readImage( "barrel_animation_" + std::to_string( i ) + ".image", images[249 + i] );
+                }
+            }
+
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    // This function generates fheroes2 (new) ICNs, not present in the original assets.
+    void generateICN( const int id )
+    {
+        // This function should be called only for new ICNs.
+        assert( id > ICN::LAST_VALID_FILE_ICN );
+
+        // If this assertion blows up then you are calling this function in a recursion. Check your code!
+        assert( _icnVsSprite[id].empty() );
+
+        switch ( id ) {
+        case ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+            break;
+        case ICN::BLACKBAK: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Image & background = _icnVsSprite[id][0];
+            // This is enough to cover the largest buttons.
+            background.resize( 200, 200 );
+            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 9 );
+            break;
+        }
+        case ICN::BROWNBAK: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Image & background = _icnVsSprite[id][0];
+            // This is enough to cover the largest buttons.
+            background.resize( 200, 200 );
+            fheroes2::Fill( background, 0, 0, background.width(), background.height(), 57 );
+            break;
+        }
+        case ICN::BUTTON_EVIL_FONT_PRESSED:
+        case ICN::BUTTON_EVIL_FONT_RELEASED:
+        case ICN::BUTTON_GOOD_FONT_PRESSED:
+        case ICN::BUTTON_GOOD_FONT_RELEASED: {
+            generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
+                                    _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+            break;
+        }
+        case ICN::CASLWIND_EVIL: {
+            fheroes2::AGG::GetICN( ICN::CASLWIND, 0 );
+            _icnVsSprite[id] = _icnVsSprite[ICN::CASLWIND];
+            if ( !_icnVsSprite[id].empty() ) {
+                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+            }
+
+            break;
+        }
+        case ICN::CASLXTRA_EVIL: {
+            fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 );
+            _icnVsSprite[id] = _icnVsSprite[ICN::CASLXTRA];
+            if ( !_icnVsSprite[id].empty() ) {
+                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+            }
+
+            break;
+        }
+        case ICN::CELLWIN_EVIL: {
+            loadICN( ICN::CELLWIN );
+
+            if ( _icnVsSprite[ICN::CELLWIN].size() > 18 ) {
+                // Convert to Evil only the first 19 images. The rest are not standard buttons and are player color related settings used in original editor.
+                _icnVsSprite[ICN::CELLWIN_EVIL].resize( 19 );
+                std::copy( _icnVsSprite[ICN::CELLWIN].begin(), _icnVsSprite[ICN::CELLWIN].begin() + 19, _icnVsSprite[ICN::CELLWIN_EVIL].begin() );
+
+                // To convert the yellow borders of some items the combination of good-to-evil and gray palettes is used here.
+                const std::vector<uint8_t> palette
+                    = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                for ( fheroes2::Sprite & image : _icnVsSprite[ICN::CELLWIN_EVIL] ) {
+                    fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+                }
+            }
+            break;
+        }
+        case ICN::COLOR_CURSOR_ADVENTURE_MAP:
+        case ICN::MONO_CURSOR_ADVENTURE_MAP: {
+            // Create needed digits.
+            const std::vector<fheroes2::Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
+            const std::vector<fheroes2::Point> threePoints
+                = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+            const std::vector<fheroes2::Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
+            const std::vector<fheroes2::Point> fivePoints
+                = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+            const std::vector<fheroes2::Point> sixPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 1, 4 }, { 4, 4 }, { 2, 5 }, { 3, 5 } };
+            const std::vector<fheroes2::Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
+            const std::vector<fheroes2::Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
+
+            const bool isColorCursor = ( id == ICN::COLOR_CURSOR_ADVENTURE_MAP );
+            const uint8_t digitColor = isColorCursor ? 115 : 11;
+
+            std::vector<fheroes2::Image> digits( 7 );
+            digits[0] = createDigit( 6, 7, twoPoints, digitColor );
+            digits[1] = createDigit( 6, 7, threePoints, digitColor );
+            digits[2] = createDigit( 6, 7, fourPoints, digitColor );
+            digits[3] = createDigit( 6, 7, fivePoints, digitColor );
+            digits[4] = createDigit( 6, 7, sixPoints, digitColor );
+            digits[5] = createDigit( 6, 7, sevenPoints, digitColor );
+            digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
+
+            _icnVsSprite[id].reserve( 7 * 8 );
+
+            const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::MONO_CURSOR_ADVMBW;
+
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 4 ), digits,
+                                 isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -4, -6 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 5 ), digits,
+                                 isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -6, -6 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 6 ), digits,
+                                 isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 7 ), digits,
+                                 isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -15, -8 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 8 ), digits,
+                                 isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -16, -11 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 9 ), digits,
+                                 isColorCursor ? fheroes2::Point( -6, 1 ) : fheroes2::Point( -8, -1 ) );
+            populateCursorIcons( _icnVsSprite[id], fheroes2::AGG::GetICN( originalCursorId, 28 ), digits,
+                                 isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
+
+            break;
+        }
+        case ICN::CSLMARKER:
+            _icnVsSprite[id].resize( 3 );
+            for ( uint32_t i = 0; i < 3; ++i ) {
+                _icnVsSprite[id][i] = fheroes2::AGG::GetICN( ICN::LOCATORS, 24 );
+                if ( i == 1 ) {
+                    ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xD6 );
+                }
+                else if ( i == 2 ) {
+                    ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
+                }
+            }
+            break;
+        case ICN::DIFFICULTY_ICON_EASY:
+        case ICN::DIFFICULTY_ICON_NORMAL:
+        case ICN::DIFFICULTY_ICON_HARD:
+        case ICN::DIFFICULTY_ICON_EXPERT:
+        case ICN::DIFFICULTY_ICON_IMPOSSIBLE: {
+            const int originalIcnId = ICN::NGHSBKG;
+
+            const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( originalIcnId, 0 );
+
+            if ( !originalBackground.empty() ) {
+                _icnVsSprite[id].resize( 2 );
+
+                int32_t iconOffsetX = 0;
+
+                switch ( id ) {
+                case ICN::DIFFICULTY_ICON_EASY:
+                    iconOffsetX = 24;
+                    break;
+                case ICN::DIFFICULTY_ICON_NORMAL:
+                    iconOffsetX = 101;
+                    break;
+                case ICN::DIFFICULTY_ICON_HARD:
+                    iconOffsetX = 177;
+                    break;
+                case ICN::DIFFICULTY_ICON_EXPERT:
+                    iconOffsetX = 254;
+                    break;
+                case ICN::DIFFICULTY_ICON_IMPOSSIBLE:
+                    iconOffsetX = 331;
+                    break;
+                default:
+                    // Did you add a new difficulty?
+                    assert( 0 );
+                }
+
+                const int32_t iconSideLength = 65;
+                const int32_t iconOffsetY = 94;
+
+                _icnVsSprite[id][0] = Crop( originalBackground, iconOffsetX, iconOffsetY, iconSideLength, iconSideLength );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Generate Evil Icons
+                _icnVsSprite[id][1] = _icnVsSprite[id][0];
+
+                const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                fheroes2::ApplyPalette( _icnVsSprite[id][0], _icnVsSprite[id][1], goodToEvilPalette );
+            }
+
+            break;
+        }
+        case ICN::DROPLISL_EVIL: {
+            loadICN( ICN::DROPLISL );
+            _icnVsSprite[id] = _icnVsSprite[ICN::DROPLISL];
+
+            // To convert the yellow borders of the drop list the combination of good-to-evil and gray palettes is used here.
+            const std::vector<uint8_t> palette
+                = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ), PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            for ( auto & image : _icnVsSprite[id] ) {
+                fheroes2::ApplyPalette( image, 0, 0, image, 0, 0, image.width(), image.height(), palette );
+            }
+            break;
+        }
+        case ICN::EDITBTNS_EVIL: {
+            loadICN( ICN::EDITBTNS );
+            _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
+            for ( auto & image : _icnVsSprite[id] ) {
+                convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
+            }
+            break;
+        }
+        case ICN::EMPTY_EVIL_BUTTON:
+        case ICN::EMPTY_GOOD_BUTTON: {
+            const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
+            const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 13 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+            released = _icnVsSprite[originalId][11];
+
+            Fill( released, 8, 7, 1, 1, getButtonFillingColor( true, isGoodInterface ) );
+
+            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalId, 12 );
+
+            if ( originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                pressed.resize( originalPressed.width(), originalPressed.height() );
+                // Copy the original pressed button but add the missing darker left side border from the released state
+                Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
+                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
+
+                // Make the background transparent.
+                FillTransform( pressed, 1, 0, pressed.width() - 1, 1, 1 );
+                FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
+
+                FillTransform( pressed, 1, 1, 2, 1, 1 );
+                FillTransform( pressed, 1, 2, 1, 1, 1 );
+
+                FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
+
+                FillTransform( pressed, pressed.width() - 4, pressed.height() - 1, 3, 1, 1 );
+                FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
+                FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
+            }
+
+            Fill( pressed, 90, 5, 1, 1, getButtonFillingColor( false, isGoodInterface ) );
+
+            break;
+        }
+        case ICN::EMPTY_GUILDWELL_BUTTON: {
+            const int originalID = ICN::WELLXTRA;
+            loadICN( originalID );
+
+            if ( _icnVsSprite[originalID].size() < 3 ) {
+                break;
+            }
+            _icnVsSprite[id].resize( 2 );
+
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalID, 0 + i );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                // The empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result.
+                out.resize( original.width() - 1, original.height() );
+
+                Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
+                Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
+                // We do some extra cleaning because some localized assets, like Russian, have texts which go outside of the normal button borders.
+                Fill( out, 3 - i, 2 + i, 55, 14, getButtonFillingColor( i == 0 ) );
+                const uint8_t borderColor = i == 0 ? 38 : 41;
+                fheroes2::DrawLine( out, { 3 - i, 3 + i }, { 4 - i, 2 + i }, borderColor );
+                fheroes2::SetPixel( out, 5 - 3 * i, 2 + i, borderColor );
+                fheroes2::SetPixel( out, 57 - i, 2 + i, borderColor );
+                fheroes2::DrawLine( out, { 26, 1 + i }, { 42, 1 + i }, borderColor );
+                const uint8_t secondBorderColor = i == 0 ? 42 : 46;
+                fheroes2::DrawLine( out, { 26, 0 + i }, { 42, 0 + i }, secondBorderColor );
+            }
+
+            break;
+        }
+        case ICN::EMPTY_MAP_SELECT_BUTTON: {
+            const int32_t originalId = ICN::NGEXTRA;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 80 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalId, 64 + i );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will
+                // give an integer result
+                out.resize( original.width() + 1, original.height() );
+
+                Copy( original, 0, 0, out, 0, 0, original.width() - 5, original.height() );
+                Copy( original, original.width() - 6, 0, out, original.width() - 5, 0, 6, original.height() );
+
+                Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
+            }
+
+            break;
+        }
+        case ICN::EMPTY_INTERFACE_BUTTON_EVIL:
+        case ICN::EMPTY_INTERFACE_BUTTON_GOOD: {
+            const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
+            loadICN( originalId );
+            _icnVsSprite[id].resize( 2 );
+
+            Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
+            Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
+
+            // Get the button's icon colors.
+            const uint8_t backgroundReleasedColor = _icnVsSprite[originalId][2].image()[1 * 36 + 5];
+            const uint8_t backgroundPressedColor = _icnVsSprite[originalId][3].image()[5 * 36 + 6];
+
+            // Clean-up the buttons' background
+            Fill( _icnVsSprite[id][0], 23, 5, 8, 5, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 8, 10, 24, 8, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][0], 6, 18, 24, 10, backgroundReleasedColor );
+            Fill( _icnVsSprite[id][1], 22, 6, 8, 5, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 7, 11, 24, 8, backgroundPressedColor );
+            Fill( _icnVsSprite[id][1], 5, 19, 24, 10, backgroundPressedColor );
+
+            break;
+        }
+        case ICN::EMPTY_POL_BUTTON: {
+            const int originalID = ICN::X_CMPBTN;
+            loadICN( originalID );
+
+            if ( _icnVsSprite[originalID].size() < 8 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+            // Move dark border to new released state from original pressed state button
+            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalID, 4 );
+            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalID, 5 );
+            if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
+                break;
+            }
+            fheroes2::Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
+            releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
+            releasedWithDarkBorder.reset();
+
+            Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
+            Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
+            Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
+            Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
+            Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
+            Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
+
+            // Pressed state
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+            // Make sure the released and pressed states have the same size, because the original Czech's pressed state is 1 px less in height than the other versions'.
+            pressed.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
+            pressed.reset();
+            Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
+
+            // This fills the 1 px vertical gap in the Czech pressed state button.
+            if ( originalPressed.height() < 23 ) {
+                Copy( originalPressed, 0, originalPressed.height() - 10, pressed, 0, pressed.height() - 10, originalPressed.width(), 10 );
+            }
+
+            // The empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp.
+            Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
+            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalReleased.height() );
+
+            const int32_t pixelPosition = 4 * 94 + 6;
+            Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
+            Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
+
+            break;
+        }
+        case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
+            const int32_t originalId = ICN::HSBTNS;
+            loadICN( originalId );
+
+            if ( _icnVsSprite[originalId].size() < 9 ) {
+                break;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalId, 2 );
+            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalId, 3 );
+
+            fheroes2::Sprite & released = _icnVsSprite[id][0];
+            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
+
+            if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                released.resize( originalReleased.width() + 1, originalReleased.height() );
+                pressed.resize( originalPressed.width() + 1, originalPressed.height() );
+                released.reset();
+                pressed.reset();
+
+                // Shorten the button by 1 pixel in the height so that it is evenly divided by 5 in resizeButton() in ui_button.cpp
+                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 7 );
+                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() - 7 );
+                Copy( originalReleased, 0, originalReleased.height() - 7, released, 1, originalReleased.height() - 8, originalReleased.width(),
+                      originalReleased.height() - 7 );
+                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(), originalPressed.height() - 7 );
+
+                FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
+
+                // Fix the carried over broken transform layer of the original vertical button that is being used.
+                fheroes2::Image exitCommonMask = fheroes2::ExtractCommonPattern( { &released, &pressed } );
+                // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
+                FillTransform( exitCommonMask, 4, 2, 1, 114, 1 );
+                FillTransform( exitCommonMask, 5, 115, 1, 2, 1 );
+                FillTransform( exitCommonMask, 6, 116, 17, 1, 1 );
+                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 113, 1, 2, 1 );
+
+                invertTransparency( exitCommonMask );
+                // Make the extended width and height lines transparent.
+                FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
+                FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
+
+                CopyTransformLayer( exitCommonMask, released );
+                CopyTransformLayer( exitCommonMask, pressed );
+
+                // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
+                const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
+
+                Copy( originalReleased, 0, 4, released, 1, 4, 1, originalReleased.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, originalReleased.height() - 1, 22, 1 );
+                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, originalPressed.height() - 4 );
+                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, originalPressed.height() - 1, 22, 1 );
+
+                // Clean the button states' text areas.
+                Fill( released, 6, 4, 18, 110, getButtonFillingColor( true ) );
+                Fill( pressed, 5, 5, 18, 110, getButtonFillingColor( false ) );
+
+                // Make the pressed background transparent by removing remaining red parts.
+                FillTransform( pressed, 5, 0, 21, 1, 1 );
+                FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
+                FillTransform( pressed, pressed.width() - 1, 3, 1, originalPressed.height() - 5, 1 );
+            }
+
+            break;
+        }
+        case ICN::ESPANBKG_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const fheroes2::Rect roi{ 28, 28, 265, 206 };
+
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            _icnVsSprite[id][0] = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
+            Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
+
+            convertToEvilInterface( output, roi );
+
+            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::ESPANBKG, 1 );
+
+            break;
+        }
+        case ICN::EVIL_ARMY_BUTTON:
+        case ICN::EVIL_MARKET_BUTTON: {
+            _icnVsSprite[id].resize( 2 );
+
+            loadICN( ICN::ADVEBTNS );
+
+            const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
+            Copy( fheroes2::AGG::GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
+            Copy( fheroes2::AGG::GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
+
+            // Make all black pixels transparent.
+            AddTransparency( _icnVsSprite[id][0], 36 );
+            AddTransparency( _icnVsSprite[id][1], 36 );
+
+            // Add the bottom-left dark border.
+            Fill( _icnVsSprite[id][1], 1, 4, 1, 30, 36 );
+            Fill( _icnVsSprite[id][1], 1, 34, 31, 1, 36 );
+
+            // Restore back black pixels in the middle of the image.
+            Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], 9, 6, _icnVsSprite[id][0], 9, 6, 20, 22 );
+            Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], 8, 7, _icnVsSprite[id][1], 8, 7, 20, 22 );
+
+            break;
+        }
+        case ICN::EVIL_DIALOG_PLAIN_CORNERS: {
+            _icnVsSprite[id].resize( 1 );
+
+            fheroes2::Sprite & cornerSprite = _icnVsSprite[id][0];
+            const int32_t cornerSideLength = 43;
+            cornerSprite.resize( cornerSideLength * 2, cornerSideLength * 2 );
+            const fheroes2::Sprite & originalGoodDialog = fheroes2::AGG::GetICN( ICN::WINLOSE, 0 );
+            Copy( originalGoodDialog, 0, 0, cornerSprite, 0, 0, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, 0, cornerSprite, cornerSideLength, 0, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, 0, originalGoodDialog.height() - cornerSideLength, cornerSprite, 0, cornerSideLength, cornerSideLength, cornerSideLength );
+            Copy( originalGoodDialog, originalGoodDialog.width() - cornerSideLength, originalGoodDialog.height() - cornerSideLength, cornerSprite, cornerSideLength,
+                  cornerSideLength, cornerSideLength, cornerSideLength );
+            fheroes2::ApplyPalette( cornerSprite, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+
+            break;
+        }
+        case ICN::GAME_OPTION_ICON: {
+            _icnVsSprite[id].resize( 2 );
+
+            fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+
+            break;
+        }
+        case ICN::GOLDEN_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 108, 133, 55, 62 );
+            break;
+        case ICN::GOLDEN_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 108, 127, 55, 62 );
+            break;
+        case ICN::GOOD_ARMY_BUTTON:
+        case ICN::GOOD_MARKET_BUTTON: {
+            _icnVsSprite[id].resize( 2 );
+
+            loadICN( ICN::ADVBTNS );
+
+            const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
+            Copy( fheroes2::AGG::GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
+            Copy( fheroes2::AGG::GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
+
+            // Make all black pixels transparent.
+            AddTransparency( _icnVsSprite[id][0], 36 );
+            AddTransparency( _icnVsSprite[id][1], 36 );
+            AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
+
+            break;
+        }
+        case ICN::GRAY_FONT:
+            CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_FONT );
+            break;
+        case ICN::GRAY_SMALL_FONT:
+            CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
+            break;
+        case ICN::KNIGHT_CASTLE_LEFT_FARM:
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::h2d::readImage( "knight_castle_left_farm.image", _icnVsSprite[id][0] );
+            break;
+        case ICN::KNIGHT_CASTLE_RIGHT_FARM: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            output = fheroes2::AGG::GetICN( ICN::TWNKWEL2, 0 );
+
+            ApplyPalette( output, 28, 21, output, 28, 21, 39, 1, 8 );
+            ApplyPalette( output, 0, 22, output, 0, 22, 69, 1, 8 );
+            ApplyPalette( output, 0, 23, output, 0, 23, 53, 1, 8 );
+            ApplyPalette( output, 0, 24, output, 0, 24, 54, 1, 8 );
+            ApplyPalette( output, 0, 25, output, 0, 25, 62, 1, 8 );
+            break;
+        }
+        case ICN::MAP_TYPE_ICON: {
+            _icnVsSprite[id].resize( 3 );
+            for ( fheroes2::Sprite & icon : _icnVsSprite[id] ) {
+                icon._disableTransformLayer();
+                icon.resize( 17, 17 );
+                icon.fill( 0 );
+            }
+
+            const fheroes2::Sprite & successionWarsIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 6 );
+            const fheroes2::Sprite & priceOfLoyaltyIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 90 );
+            const fheroes2::Sprite & resurrectionIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 101 );
+
+            if ( !successionWarsIcon.empty() ) {
+                Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
+            }
+
+            if ( !priceOfLoyaltyIcon.empty() ) {
+                Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+            }
+
+            if ( !resurrectionIcon.empty() ) {
+                Resize( resurrectionIcon, 0, 0, resurrectionIcon.width(), resurrectionIcon.height(), _icnVsSprite[id][2], 1, 1, 15, 15 );
+            }
+
+            break;
+        }
+        case ICN::METALLIC_BORDERED_TEXTBOX_EVIL: {
+            const fheroes2::Sprite & originalEvilBackground = fheroes2::AGG::GetICN( ICN::CAMPBKGE, 0 );
+
+            if ( !originalEvilBackground.empty() ) {
+                _icnVsSprite[id].resize( 1 );
+
+                const int32_t boxWidth = 371;
+                const int32_t boxHeight = 30;
+                _icnVsSprite[id][0].resize( boxWidth, boxHeight );
+                _icnVsSprite[id][0].reset();
+
+                const int32_t evilOriginalBoxOffsetX = 26;
+                const int32_t evilOriginalBoxOffsetY = 27;
+                const int32_t upperPartHeight = 20;
+
+                // The metallic box frame in campbkge is slightly taller than the one in nghsbkg. The width is the same.
+                Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, upperPartHeight );
+
+                Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][0], 0, upperPartHeight, boxWidth,
+                      10 );
+
+                // Copy red central part.
+                const fheroes2::Sprite goodBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+                Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
+            }
+
+            break;
+        }
+        case ICN::METALLIC_BORDERED_TEXTBOX_GOOD: {
+            const int originalIcnId = ICN::NGHSBKG;
+
+            const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( originalIcnId, 0 );
+
+            if ( !originalBackground.empty() ) {
+                _icnVsSprite[id].resize( 1 );
+
+                const int32_t boxWidth = 371;
+                const int32_t boxHeight = 30;
+                const int32_t goodOriginalBoxOffsetX = 24;
+                const int32_t goodOriginalBoxOffsetY = 40;
+
+                _icnVsSprite[id][0] = Crop( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, boxWidth, boxHeight );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Copy red pattern and cover up embedded button.
+                const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
+                Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
+            }
+
+            break;
+        }
         case ICN::MINI_MONSTER_IMAGE:
         case ICN::MINI_MONSTER_SHADOW: {
             // It doesn't matter which image is being called. We are generating both of them at the same time.
@@ -4471,519 +4522,130 @@ namespace
                 }
             }
 
-            return true;
+            break;
         }
-        case ICN::BUTTON_GOOD_FONT_RELEASED:
-        case ICN::BUTTON_GOOD_FONT_PRESSED:
-        case ICN::BUTTON_EVIL_FONT_RELEASED:
-        case ICN::BUTTON_EVIL_FONT_PRESSED: {
-            generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
-                                    _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
-            return true;
-        }
-        case ICN::HISCORE: {
-            LoadOriginalICN( id );
-            if ( _icnVsSprite[id].size() == 9 ) {
-                // Campaign title bar needs to include rating.
-                const int32_t imageHeight = _icnVsSprite[id][7].height();
-                const fheroes2::Sprite temp = Crop( _icnVsSprite[id][7], 215, 0, 300, imageHeight );
+        case ICN::MONO_CURSOR_ADVMBW: {
+            loadICN( ICN::ADVMCO );
 
-                Copy( temp, 0, 0, _icnVsSprite[id][7], 215 - 57, 0, temp.width(), imageHeight );
-                Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, imageHeight );
+            _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
+            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                std::string digit;
+                if ( i < 9 ) {
+                    digit += '0';
+                }
+                digit += std::to_string( i + 1 );
+
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "ADVMBW" ) + digit + ".BMP", false ) );
             }
-            return true;
+            break;
         }
-        case ICN::SPELLINL: {
-            LoadOriginalICN( id );
+        case ICN::MONO_CURSOR_CMSSBW: {
+            loadICN( ICN::CMSECO );
 
-            if ( _icnVsSprite[id].size() > 11 ) {
-                // Replace petrification spell mini-icon.
-                fheroes2::h2d::readImage( "petrification_spell_icon_mini.image", _icnVsSprite[id][11] );
+            _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
+            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                std::string digit;
+                if ( i < 9 ) {
+                    digit += '0';
+                }
+                digit += std::to_string( i + 1 );
+
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "CMSEBW" ) + digit + ".BMP", false ) );
             }
-
-            return true;
+            break;
         }
-        case ICN::EMPTY_GOOD_BUTTON:
-        case ICN::EMPTY_EVIL_BUTTON: {
-            const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
-            const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
-            loadICN( originalId );
+        case ICN::MONO_CURSOR_SPELBW: {
+            loadICN( ICN::SPELCO );
 
-            if ( _icnVsSprite[originalId].size() < 13 ) {
-                return true;
+            _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
+            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                std::string digit;
+                if ( i < 10 ) {
+                    digit += '0';
+                }
+                digit += std::to_string( i );
+
+                _icnVsSprite[id][i] = fheroes2::decodeBMPFile( AGG::getDataFromAggFile( std::string( "SPELBW" ) + digit + ".BMP", false ) );
             }
-
+            break;
+        }
+        case ICN::MONSTER_SWITCH_LEFT_ARROW:
             _icnVsSprite[id].resize( 2 );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-            released = _icnVsSprite[originalId][11];
-
-            Fill( released, 8, 7, 1, 1, getButtonFillingColor( true, isGoodInterface ) );
-
-            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalId, 12 );
-
-            if ( originalPressed.width() > 2 && originalPressed.height() > 2 ) {
-                pressed.resize( originalPressed.width(), originalPressed.height() );
-                // Copy the original pressed button but add the missing darker left side border from the released state
-                Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
-                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
-
-                // Make the background transparent.
-                FillTransform( pressed, 1, 0, pressed.width() - 1, 1, 1 );
-                FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
-
-                FillTransform( pressed, 1, 1, 2, 1, 1 );
-                FillTransform( pressed, 1, 2, 1, 1, 1 );
-
-                FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
-
-                FillTransform( pressed, pressed.width() - 4, pressed.height() - 1, 3, 1, 1 );
-                FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
-            }
-
-            Fill( pressed, 90, 5, 1, 1, getButtonFillingColor( false, isGoodInterface ) );
-
-            return true;
-        }
-        case ICN::EMPTY_POL_BUTTON: {
-            const int originalID = ICN::X_CMPBTN;
-            loadICN( originalID );
-
-            if ( _icnVsSprite[originalID].size() < 8 ) {
-                return true;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-            // Move dark border to new released state from original pressed state button
-            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalID, 4 );
-            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalID, 5 );
-            if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
-                return true;
-            }
-            fheroes2::Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
-            releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
-            releasedWithDarkBorder.reset();
-
-            Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
-            Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
-            Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
-            Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
-            Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
-            Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
-
-            // Pressed state
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-            // Make sure the released and pressed states have the same size, because the original Czech's pressed state is 1 px less in height than the other versions'.
-            pressed.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
-            pressed.reset();
-            Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
-
-            // This fills the 1 px vertical gap in the Czech pressed state button.
-            if ( originalPressed.height() < 23 ) {
-                Copy( originalPressed, 0, originalPressed.height() - 10, pressed, 0, pressed.height() - 10, originalPressed.width(), 10 );
-            }
-
-            // The empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp.
-            Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
-            Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalReleased.height() );
-
-            const int32_t pixelPosition = 4 * 94 + 6;
-            Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
-            Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
-
-            return true;
-        }
-        case ICN::EMPTY_GUILDWELL_BUTTON: {
-            const int originalID = ICN::WELLXTRA;
-            loadICN( originalID );
-
-            if ( _icnVsSprite[originalID].size() < 3 ) {
-                return true;
-            }
-            _icnVsSprite[id].resize( 2 );
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalID, 0 + i );
-
+            for ( uint32_t i = 0; i < 2; ++i ) {
+                const fheroes2::Sprite & source = fheroes2::AGG::GetICN( ICN::RECRUIT, i );
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                // The empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result.
-                out.resize( original.width() - 1, original.height() );
-
-                Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
-                Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
-                // We do some extra cleaning because some localized assets, like Russian, have texts which go outside of the normal button borders.
-                Fill( out, 3 - i, 2 + i, 55, 14, getButtonFillingColor( i == 0 ) );
-                const uint8_t borderColor = i == 0 ? 38 : 41;
-                fheroes2::DrawLine( out, { 3 - i, 3 + i }, { 4 - i, 2 + i }, borderColor );
-                fheroes2::SetPixel( out, 5 - 3 * i, 2 + i, borderColor );
-                fheroes2::SetPixel( out, 57 - i, 2 + i, borderColor );
-                fheroes2::DrawLine( out, { 26, 1 + i }, { 42, 1 + i }, borderColor );
-                const uint8_t secondBorderColor = i == 0 ? 42 : 46;
-                fheroes2::DrawLine( out, { 26, 0 + i }, { 42, 0 + i }, secondBorderColor );
+                out.resize( source.height(), source.width() );
+                Transpose( source, out );
+                out = Flip( out, false, true );
+                out.setPosition( source.y() - static_cast<int32_t>( i ), source.x() );
             }
-
-            return true;
-        }
-        case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
-            const int32_t originalId = ICN::HSBTNS;
-            loadICN( originalId );
-
-            if ( _icnVsSprite[originalId].size() < 9 ) {
-                return true;
-            }
-
+            break;
+        case ICN::MONSTER_SWITCH_RIGHT_ARROW:
             _icnVsSprite[id].resize( 2 );
-            const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( originalId, 2 );
-            const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( originalId, 3 );
-
-            fheroes2::Sprite & released = _icnVsSprite[id][0];
-            fheroes2::Sprite & pressed = _icnVsSprite[id][1];
-
-            if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
-                released.resize( originalReleased.width() + 1, originalReleased.height() );
-                pressed.resize( originalPressed.width() + 1, originalPressed.height() );
-                released.reset();
-                pressed.reset();
-
-                // Shorten the button by 1 pixel in the height so that it is evenly divided by 5 in resizeButton() in ui_button.cpp
-                Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 7 );
-                Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() - 7 );
-                Copy( originalReleased, 0, originalReleased.height() - 7, released, 1, originalReleased.height() - 8, originalReleased.width(),
-                      originalReleased.height() - 7 );
-                Copy( originalPressed, 0, originalPressed.height() - 7, pressed, 1, originalPressed.height() - 8, originalPressed.width(), originalPressed.height() - 7 );
-
-                FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
-
-                // Fix the carried over broken transform layer of the original vertical button that is being used.
-                fheroes2::Image exitCommonMask = fheroes2::ExtractCommonPattern( { &released, &pressed } );
-                // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
-                FillTransform( exitCommonMask, 4, 2, 1, 114, 1 );
-                FillTransform( exitCommonMask, 5, 115, 1, 2, 1 );
-                FillTransform( exitCommonMask, 6, 116, 17, 1, 1 );
-                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 113, 1, 2, 1 );
-
-                invertTransparency( exitCommonMask );
-                // Make the extended width and height lines transparent.
-                FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
-                FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
-
-                CopyTransformLayer( exitCommonMask, released );
-                CopyTransformLayer( exitCommonMask, pressed );
-
-                // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
-                const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
-
-                Copy( originalReleased, 0, 4, released, 1, 4, 1, originalReleased.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, originalReleased.height() - 1, 22, 1 );
-                Copy( originalPressed, 0, 4, pressed, 1, 4, 1, originalPressed.height() - 4 );
-                Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, originalPressed.height() - 1, 22, 1 );
-
-                // Clean the button states' text areas.
-                Fill( released, 6, 4, 18, 110, getButtonFillingColor( true ) );
-                Fill( pressed, 5, 5, 18, 110, getButtonFillingColor( false ) );
-
-                // Make the pressed background transparent by removing remaining red parts.
-                FillTransform( pressed, 5, 0, 21, 1, 1 );
-                FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
-                FillTransform( pressed, pressed.width() - 1, 3, 1, originalPressed.height() - 5, 1 );
-            }
-
-            return true;
-        }
-        case ICN::EMPTY_MAP_SELECT_BUTTON: {
-            const int32_t originalId = ICN::NGEXTRA;
-            loadICN( originalId );
-
-            if ( _icnVsSprite[originalId].size() < 80 ) {
-                return true;
-            }
-
-            _icnVsSprite[id].resize( 2 );
-
-            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                const fheroes2::Sprite & original = fheroes2::AGG::GetICN( originalId, 64 + i );
-
+            for ( uint32_t i = 0; i < 2; ++i ) {
+                const fheroes2::Sprite & source = fheroes2::AGG::GetICN( ICN::RECRUIT, i + 2 );
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
-                // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will
-                // give an integer result
-                out.resize( original.width() + 1, original.height() );
+                out.resize( source.height(), source.width() );
+                Transpose( source, out );
+                out = Flip( out, false, true );
+                out.setPosition( source.y(), source.x() );
+            }
+            break;
+        case ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::TWNNCAPT, 0 );
 
-                Copy( original, 0, 0, out, 0, 0, original.width() - 5, original.height() );
-                Copy( original, original.width() - 6, 0, out, original.width() - 5, 0, 6, original.height() );
+            output = Crop( original, 0, 0, 23, original.height() );
+            output.setPosition( original.x(), original.y() );
 
-                Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
+            break;
+        }
+        case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::Sprite & output = _icnVsSprite[id][0];
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::TWNNCAPT, 0 );
+
+            output = Crop( original, 21, 0, original.width() - 21, original.height() );
+            output.setPosition( original.x() + 21, original.y() );
+
+            for ( int32_t y = 47; y < output.height(); ++y ) {
+                SetTransformPixel( output, 0, y, 1 );
             }
 
-            return true;
+            const fheroes2::Sprite & castle = fheroes2::AGG::GetICN( ICN::TWNNCSTL, 0 );
+            Copy( castle, 402, 123, output, 1, 56, 2, 11 );
+
+            break;
         }
-        case ICN::EMPTY_INTERFACE_BUTTON_GOOD:
-        case ICN::EMPTY_INTERFACE_BUTTON_EVIL: {
-            const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
-            loadICN( originalId );
+        case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
             _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = Crop( fheroes2::AGG::GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
+            _icnVsSprite[id][0].setPosition( 0, 0 );
 
-            Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
-            Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
+            _icnVsSprite[id][1] = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 3 );
+            _icnVsSprite[id][1].setPosition( 0, 0 );
 
-            // Get the button's icon colors.
-            const uint8_t backgroundReleasedColor = _icnVsSprite[originalId][2].image()[1 * 36 + 5];
-            const uint8_t backgroundPressedColor = _icnVsSprite[originalId][3].image()[5 * 36 + 6];
-
-            // Clean-up the buttons' background
-            Fill( _icnVsSprite[id][0], 23, 5, 8, 5, backgroundReleasedColor );
-            Fill( _icnVsSprite[id][0], 8, 10, 24, 8, backgroundReleasedColor );
-            Fill( _icnVsSprite[id][0], 6, 18, 24, 10, backgroundReleasedColor );
-            Fill( _icnVsSprite[id][1], 22, 6, 8, 5, backgroundPressedColor );
-            Fill( _icnVsSprite[id][1], 7, 11, 24, 8, backgroundPressedColor );
-            Fill( _icnVsSprite[id][1], 5, 19, 24, 10, backgroundPressedColor );
-
-            return true;
-        }
-        case ICN::BRCREST: {
-            LoadOriginalICN( id );
-            // First sprite in this ICN has incorrect transparent pixel at position 30x5.
-            if ( !_icnVsSprite[id].empty() ) {
-                fheroes2::Sprite & original = _icnVsSprite[id][0];
-                if ( original.width() == 50 && original.height() == 47 ) {
-                    original._disableTransformLayer();
-                    original.image()[280] = 117;
-                }
+            // fix transparent corners
+            CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
+            break;
+        case ICN::REDBAK_SMALL_VERTICAL: {
+            _icnVsSprite[id].resize( 1 );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+            if ( !original.empty() ) {
+                _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
             }
-
-            // An extra image for the neutral color (for Editor).
-            if ( _icnVsSprite[id].size() == 7 ) {
-                fheroes2::Sprite neutralShield( fheroes2::AGG::GetICN( ICN::SPELLS, 15 ) );
-                if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {
-                    // We can not make a new image if there is no original shield image.
-                    return true;
-                }
-
-                // Make original shield image contour transparent.
-                ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
-
-                fheroes2::Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
-                neutralColorSprite.reset();
-                Blit( neutralShield, neutralColorSprite, 8, 4 );
-
-                // Make the background.
-                uint8_t * imageData = neutralColorSprite.image();
-                const uint8_t * transformData = neutralColorSprite.transform();
-                const int32_t imageWidth = neutralColorSprite.width();
-                const int32_t imageHeight = neutralColorSprite.height();
-                const int32_t imageSize = imageWidth * imageHeight;
-                const int32_t startValueX = 12 * imageWidth;
-                const int32_t startValueY = 12 * imageHeight;
-
-                for ( int32_t y = 0; y < imageHeight; ++y ) {
-                    const int32_t offsetY = y * imageWidth;
-                    const int32_t offsetValueY = y * startValueX;
-                    for ( int32_t x = 0; x < imageWidth; ++x ) {
-                        if ( transformData[x + offsetY] == 0U ) {
-                            // Skip pixels with image.
-                            continue;
-                        }
-
-                        const uint8_t colorValue = static_cast<uint8_t>( 10 + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2 );
-                        imageData[x + offsetY] = ( ( imageWidth - x - 1 ) * imageHeight > offsetY ) ? colorValue : 44U - colorValue;
-                    }
-                }
-
-                // Make all image non-transparent.
-                neutralColorSprite._disableTransformLayer();
-                // We add shadow twice to make it more dark.
-                addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
-                addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
-
-                _icnVsSprite[id].push_back( std::move( neutralColorSprite ) );
-            }
-            return true;
+            break;
         }
-        case ICN::CBKGWATR: {
-            // Ship battlefield background has incorrect transparent pixel at position 125x36.
-            LoadOriginalICN( id );
-            if ( !_icnVsSprite[id].empty() ) {
-                fheroes2::Sprite & original = _icnVsSprite[id][0];
-                if ( original.width() == 640 && original.height() == 443 ) {
-                    original._disableTransformLayer();
-                    original.image()[23165] = 24;
-                }
-            }
-            return true;
-        }
-        case ICN::SWAPWIN:
-        case ICN::WELLBKG: {
-            // Hero Meeting dialog and Castle Well images can be used with disabled transform layer.
-            LoadOriginalICN( id );
-            if ( !_icnVsSprite[id].empty() ) {
-                _icnVsSprite[id][0]._disableTransformLayer();
-            }
-            return true;
-        }
-        case ICN::GAME_OPTION_ICON: {
-            _icnVsSprite[id].resize( 2 );
-
-            fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
-            fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
-
-            return true;
-        }
-        case ICN::COVR0010:
-        case ICN::COVR0011:
-        case ICN::COVR0012: {
-            // The original image contains some foreign pixels that do not belong to the image.
-            LoadOriginalICN( id );
-
-            if ( !_icnVsSprite[id].empty() ) {
-                fheroes2::Sprite & sprite = _icnVsSprite[id][0];
-                const uint8_t * image = sprite.image();
-                const uint8_t * imageEnd = image + static_cast<size_t>( sprite.width() ) * sprite.height();
-                uint8_t * transform = sprite.transform();
-
-                for ( ; image != imageEnd; ++image, ++transform ) {
-                    // Mask all non white/black or brown pixels.
-                    if ( *transform == 0 && *image > 36 && ( *image < 108 || *image > 130 ) ) {
-                        *transform = 1;
-                    }
-                }
-            }
-
-            return true;
-        }
-        case ICN::OBJNDSRT: {
-            LoadOriginalICN( id );
-            if ( _icnVsSprite[id].size() == 131 ) {
-                _icnVsSprite[id].resize( 132 );
-                fheroes2::h2d::readImage( "missing_sphinx_part.image", _icnVsSprite[id][131] );
-            }
-
-            return true;
-        }
-        case ICN::OBJNGRAS: {
-            LoadOriginalICN( id );
-            if ( _icnVsSprite[id].size() == 151 ) {
-                _icnVsSprite[id].resize( 155 );
-
-                loadICN( ICN::OBJNSNOW );
-
-                if ( _icnVsSprite[ICN::OBJNSNOW].size() > 210 ) {
-                    fheroes2::Sprite temp;
-
-                    fheroes2::h2d::readImage( "adventure-map-grass-cave-diff-01.image", temp );
-                    _icnVsSprite[id][151] = _icnVsSprite[ICN::OBJNSNOW][2];
-                    Blit( temp, _icnVsSprite[id][151] );
-
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][151], 255, 1 );
-
-                    fheroes2::h2d::readImage( "adventure-map-grass-cave-diff-02.image", temp );
-                    _icnVsSprite[id][152] = _icnVsSprite[ICN::OBJNSNOW][3];
-                    Blit( temp, _icnVsSprite[id][152] );
-
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][152], 255, 1 );
-
-                    fheroes2::h2d::readImage( "lean-to-diff-part1.image", temp );
-                    _icnVsSprite[id][153] = _icnVsSprite[ICN::OBJNSNOW][12];
-                    Blit( temp, _icnVsSprite[id][153] );
-
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 253, 1 );
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 254, 2 );
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][153], 255, 3 );
-
-                    fheroes2::h2d::readImage( "lean-to-diff-part2.image", temp );
-                    _icnVsSprite[id][154] = _icnVsSprite[ICN::OBJNSNOW][13];
-                    Blit( temp, _icnVsSprite[id][154] );
-
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 253, 1 );
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 254, 2 );
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][154], 255, 3 );
-                }
-            }
-
-            return true;
-        }
-        case ICN::OBJNMUL2: {
-            LoadOriginalICN( id );
-            auto & images = _icnVsSprite[id];
-            if ( images.size() == 218 ) {
-                // Expand the existing set of Adventure Map objects:
-                // - 2 extra River Delta objects. Each object has 7 image parts.
-                // - 1 new Stone Liths with 3 image parts.
-                // - 3 new variants of Observation Tower object. Each object has 2 image parts.
-                // - 1 new "Black Cat" object that has: 1 main image + 6 animation images.
-                // - 1 new "Barrel" object that has: 1 main (empty) image + 6 animation images.
-                // In total, 8 new objects (37 new images).
-
-                images.resize( 218 + ( 7 * 2 ) + 3 + ( 2 * 3 ) + ( 1 + 6 ) + ( 1 + 6 ) );
-
-                // 2 River Deltas.
-                for ( size_t i = 0; i < 14; ++i ) {
-                    images[218 + i].resize( images[i].height(), images[i].width() );
-                    fheroes2::Transpose( images[i], images[218 + i] );
-                    images[218 + i].setPosition( images[i].y(), images[i].x() );
-                }
-
-                // 1 Stone Liths.
-                fheroes2::Sprite temp;
-                fheroes2::h2d::readImage( "circular_stone_liths_center.image", temp );
-
-                images[232].resize( 32, 32 );
-                images[232].reset();
-                Copy( temp, 0, 0, images[232], 0, 0, temp.width(), temp.height() );
-                Copy( images[116], 0, temp.height(), images[232], 0, temp.height(), images[116].width(), images[116].height() - temp.height() );
-
-                fheroes2::h2d::readImage( "circular_stone_liths_left.image", images[233] );
-                fheroes2::h2d::readImage( "circular_stone_liths_top.image", images[234] );
-
-                // Generic Observation Tower.
-                images[235] = images[201];
-                fheroes2::h2d::readImage( "observation_tower_generic_bottom_part.image", temp );
-                Blit( temp, 0, 0, images[235], 0, temp.y() - images[235].y(), temp.width(), temp.height() );
-
-                // Desert Observation Tower.
-                images[236] = images[201];
-                fheroes2::h2d::readImage( "observation_tower_desert_bottom_part.image", temp );
-                Blit( temp, 0, 0, images[236], 0, temp.y() - images[236].y(), temp.width(), temp.height() );
-
-                fheroes2::h2d::readImage( "observation_tower_desert_right_part.image", images[237] );
-
-                // Snow Observation Tower.
-                images[238] = images[201];
-                fheroes2::h2d::readImage( "observation_tower_snow_bottom_part.image", temp );
-                Blit( temp, 0, 0, images[238], 0, temp.y() - images[238].y(), temp.width(), temp.height() );
-
-                fheroes2::h2d::readImage( "observation_tower_snow_right_part.image", images[239] );
-
-                images[240] = images[198];
-                fheroes2::h2d::readImage( "observation_tower_snow_top_part.image", temp );
-                Blit( temp, 0, 0, images[240], 0, 0, temp.width(), temp.height() );
-
-                // Black Cat. Main object image.
-                fheroes2::h2d::readImage( "black_cat.image", images[241] );
-
-                // Black Cat. Tail and eyes animation.
-                for ( size_t i = 0; i < 6; ++i ) {
-                    fheroes2::h2d::readImage( "black_cat_animation_" + std::to_string( i ) + ".image", images[242 + i] );
-                }
-
-                // Barrel. Object has only animation images but for compatibility
-                // we need to have the main image (images[248]) be empty for this object.
-                for ( size_t i = 0; i < 6; ++i ) {
-                    fheroes2::h2d::readImage( "barrel_animation_" + std::to_string( i ) + ".image", images[249 + i] );
-                }
-            }
-
-            return true;
-        }
+        case ICN::ROUTERED:
+            CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
+            break;
         case ICN::SCENIBKG_EVIL: {
             const int32_t originalId = ICN::SCENIBKG;
             loadICN( originalId );
 
             if ( _icnVsSprite[originalId].size() != 1 ) {
-                return true;
+                break;
             }
 
             _icnVsSprite[id].resize( 1 );
@@ -4996,7 +4658,7 @@ namespace
 
             loadICN( ICN::METALLIC_BORDERED_TEXTBOX_EVIL );
             if ( _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL].empty() ) {
-                return true;
+                break;
             }
 
             const auto & evilTextBox = _icnVsSprite[ICN::METALLIC_BORDERED_TEXTBOX_EVIL][0];
@@ -5007,13 +4669,292 @@ namespace
             fheroes2::Copy( evilTextBox, evilTextBox.width() - ( textWidth - textWidth / 2 ), 0, outputImage, 46 + textWidth / 2, 23, ( textWidth - textWidth / 2 ),
                             evilTextBox.height() );
 
-            return true;
+            break;
         }
+        case ICN::SILVER_GRADIENT_FONT:
+            generateGradientFont( id, ICN::FONT, 10, 31, 29, 0 );
+            break;
+        case ICN::SILVER_GRADIENT_LARGE_FONT:
+            generateGradientFont( id, ICN::WHITE_LARGE_FONT, 10, 26, 29, 0 );
+            break;
+        case ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+            _icnVsSprite[id].resize( 1 );
+            fheroes2::h2d::readImage( "sorceress_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+            break;
+        case ICN::STONEBAK_EVIL: {
+            fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+            _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
+            if ( !_icnVsSprite[id].empty() ) {
+                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+            }
+
+            break;
+        }
+        case ICN::STONEBAK_SMALL_POL: {
+            _icnVsSprite[id].resize( 1 );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::X_CMPBKG, 0 );
+            if ( !original.empty() ) {
+                _icnVsSprite[id][0] = Crop( original, original.width() - 272, original.height() - 52, 244, 28 );
+            }
+            break;
+        }
+        case ICN::SWAP_ARROW_LEFT_TO_RIGHT:
+        case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
+            // Since the original game does not have such resources we could generate it from hero meeting sprite.
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+            std::array<fheroes2::Image, 4> input;
+
+            const int32_t width = 45;
+            const int32_t height = 20;
+
+            for ( fheroes2::Image & image : input ) {
+                image.resize( width, height );
+            }
+
+            Copy( original, 295, 270, input[0], 0, 0, width, height );
+            Copy( original, 295, 291, input[1], 0, 0, width, height );
+            Copy( original, 295, 363, input[2], 0, 0, width, height );
+            Copy( original, 295, 384, input[3], 0, 0, width, height );
+
+            input[1] = Flip( input[1], true, false );
+            input[3] = Flip( input[3], true, false );
+
+            fheroes2::Image out = fheroes2::ExtractCommonPattern( { &input[0], &input[1], &input[2], &input[3] } );
+
+            // Here are 2 pixels which should be removed.
+            if ( out.width() == width && out.height() == height ) {
+                out.image()[40] = 0;
+                out.transform()[40] = 1;
+
+                out.image()[30 + 3 * width] = 0;
+                out.transform()[30 + 3 * width] = 1;
+            }
+
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? out : Flip( out, true, false );
+
+            _icnVsSprite[id][1] = _icnVsSprite[id][0];
+            _icnVsSprite[id][1].setPosition( -1, 1 );
+            ApplyPalette( _icnVsSprite[id][1], 4 );
+
+            break;
+        }
+        case ICN::SWAP_ARROWS_CIRCULAR: {
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0 );
+
+            const int32_t width = 47;
+            const int32_t height = 42;
+            fheroes2::Image out;
+            out.resize( width, height );
+            out.reset();
+
+            // Rotate arrow heads.
+            const int32_t arrowTipToShaftLength = 18;
+            const int32_t arrowHeadWidth = 20;
+
+            fheroes2::Image rotatedArrow;
+            rotatedArrow.resize( arrowHeadWidth, arrowTipToShaftLength );
+            rotatedArrow.reset();
+            for ( int x = 0; x < arrowTipToShaftLength; ++x ) {
+                for ( int y = 0; y < arrowHeadWidth; ++y ) {
+                    Copy( original, x + ( original.width() - arrowTipToShaftLength ), y, rotatedArrow, arrowHeadWidth - y - 1, arrowTipToShaftLength - x - 1, 1, 1 );
+                }
+            }
+
+            fheroes2::Copy( Flip( rotatedArrow, true, true ), 0, 0, out, 0, 5, arrowHeadWidth, arrowTipToShaftLength );
+            fheroes2::Copy( Flip( rotatedArrow, true, false ), 0, 0, out, 27, 19, arrowHeadWidth, arrowTipToShaftLength );
+
+            // Rotate arrow ends.
+            const int32_t arrowEndHeight = 11;
+            const int32_t arrowEndWidth = 9;
+
+            rotatedArrow.resize( arrowEndWidth, arrowEndHeight );
+            rotatedArrow.reset();
+
+            for ( int x = 0; x < arrowEndHeight; ++x ) {
+                for ( int y = 0; y < arrowEndWidth; ++y ) {
+                    Copy( original, x + 2, y + 5, rotatedArrow, arrowEndWidth - y - 1, arrowEndHeight - x - 1, 1, 1 );
+                }
+            }
+
+            // Clean black corner.
+            fheroes2::Copy( original, 0, 0, rotatedArrow, 0, rotatedArrow.height() - 1, 1, 1 );
+
+            fheroes2::Copy( rotatedArrow, 0, 0, out, 32, 6, arrowEndWidth, arrowEndHeight );
+            fheroes2::Copy( Flip( rotatedArrow, false, true ), 0, 0, out, 5, 25, arrowEndWidth, arrowEndHeight );
+
+            // Add straight shafts.
+            Copy( original, 5, 5, out, 13, 0, 21, 10 );
+            Copy( original, 5, 5, out, 12, 32, 22, 10 );
+
+            // Lower arrow.
+            // Fix overlaps.
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::DrawLine( out, { out.width() - 13, out.height() - 6 }, { out.width() - 12, out.height() - 6 }, 109 );
+            fheroes2::SetPixel( out, 12, out.height() - 10, 119 );
+            fheroes2::SetPixel( out, out.width() - 14, out.height() - 10, 119 );
+
+            // Lower right corner.
+            Copy( original, 5, 10, out, out.width() - 13, out.height() - 5, 4, 5 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 4 }, { out.width() - 9, out.height() - 1 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 6, out.height() - 5 }, { out.width() - 9, out.height() - 2 }, 59 );
+            fheroes2::DrawLine( out, { out.width() - 7, out.height() - 5 }, { out.width() - 9, out.height() - 3 }, 129 );
+            fheroes2::DrawLine( out, { out.width() - 8, out.height() - 5 }, { out.width() - 9, out.height() - 4 }, 123 );
+            fheroes2::SetPixel( out, out.width() - 9, out.height() - 5, 119 );
+            fheroes2::SetPixel( out, out.width() - 11, out.height() - 6, 112 );
+
+            // Lower left corner.
+            Copy( original, 5, 9, out, 9, out.height() - 6, 3, 6 );
+            Copy( rotatedArrow, 0, 0, out, 5, out.height() - 7, 4, 2 );
+            fheroes2::DrawLine( out, { 5, out.height() - 5 }, { 8, out.height() - 2 }, 129 );
+            fheroes2::DrawLine( out, { 6, out.height() - 5 }, { 8, out.height() - 3 }, 123 );
+            fheroes2::DrawLine( out, { 7, out.height() - 5 }, { 8, out.height() - 4 }, 119 );
+            fheroes2::SetPixel( out, 8, out.height() - 5, 116 );
+            fheroes2::SetPixel( out, 9, out.height() - 6, 112 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 14, out.height() - 15 }, { 14, out.height() - 11 }, 59 );
+
+            // Upper arrow.
+            // Upper left corner.
+            fheroes2::Copy( out, 15, 0, out, 9, 0, 4, 5 );
+            fheroes2::Copy( out, 21, 5, out, 11, 5, 3, 2 );
+            fheroes2::DrawLine( out, { 8, 1 }, { 5, 4 }, 129 );
+            fheroes2::DrawLine( out, { 8, 2 }, { 6, 4 }, 119 );
+            fheroes2::DrawLine( out, { 8, 3 }, { 7, 4 }, 114 );
+            fheroes2::SetPixel( out, 8, 4, 112 );
+            fheroes2::SetPixel( out, 9, 4, 112 );
+
+            // Upper right corner.
+            fheroes2::Copy( out, 21, 0, out, 33, 0, 3, 6 );
+            fheroes2::Copy( out, 36, 7, out, 36, 5, 5, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 37, 6, out, 37, 4, 3, 1 );
+            fheroes2::Copy( out, 34, 1, out, 36, 1, 1, 3 );
+            fheroes2::DrawLine( out, { 36, 0 }, { 40, 4 }, 129 );
+            fheroes2::DrawLine( out, { 37, 2 }, { 38, 3 }, 119 );
+            fheroes2::DrawLine( out, { 36, 4 }, { 37, 3 }, 113 );
+
+            // Fix overlap.
+            fheroes2::DrawLine( out, { 33, 8 }, { 33, 9 }, 123 );
+            fheroes2::SetPixel( out, 32, 9, 129 );
+            fheroes2::SetPixel( out, 13, 9, 129 );
+
+            // Fix shading.
+            fheroes2::DrawLine( out, { 10, 22 }, { 18, 14 }, 59 );
+            fheroes2::DrawLine( out, { 11, 22 }, { 19, 14 }, 59 );
+            fheroes2::DrawLine( out, { 34, 17 }, { 40, 17 }, 59 );
+            fheroes2::DrawLine( out, { 41, 5 }, { 41, 16 }, 59 );
+            fheroes2::SetPixel( out, 40, 16, 59 );
+            fheroes2::Copy( original, 0, 0, out, 1, 12, 4, 1 );
+            fheroes2::Copy( original, 0, 0, out, 15, 12, 5, 1 );
+
+            // Make pressed state.
+            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id][0] = out;
+            _icnVsSprite[id][1] = _icnVsSprite[id][0];
+            _icnVsSprite[id][1].setPosition( -1, 1 );
+            ApplyPalette( _icnVsSprite[id][1], 4 );
+
+            break;
+        }
+        case ICN::TROLL2MSL:
+            loadICN( ICN::TROLLMSL );
+            if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
+                _icnVsSprite[id].resize( 1 );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][0];
+                out = _icnVsSprite[ICN::TROLLMSL][0];
+
+                // The original sprite contains 2 pixels which are empty
+                if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
+                    out.transform()[147] = 0;
+                    out.image()[147] = 22;
+
+                    out.transform()[188] = 0;
+                    out.image()[188] = 24;
+                }
+
+                std::vector<uint8_t> indexes( 256 );
+                std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
+
+                indexes[10] = 152;
+                indexes[11] = 153;
+                indexes[12] = 154;
+                indexes[13] = 155;
+                indexes[14] = 155;
+                indexes[15] = 156;
+                indexes[16] = 157;
+                indexes[17] = 158;
+                indexes[18] = 159;
+                indexes[19] = 160;
+                indexes[20] = 160;
+                indexes[21] = 161;
+                indexes[22] = 162;
+                indexes[23] = 163;
+                indexes[24] = 164;
+                indexes[25] = 165;
+                indexes[26] = 166;
+                indexes[27] = 166;
+                indexes[28] = 167;
+                indexes[29] = 168;
+                indexes[30] = 169;
+                indexes[31] = 170;
+                indexes[32] = 171;
+                indexes[33] = 172;
+                indexes[34] = 172;
+                indexes[35] = 173;
+
+                ApplyPalette( out, indexes );
+            }
+            break;
+        case ICN::UNIFORMBAK_EVIL:
+        case ICN::UNIFORMBAK_GOOD: {
+            _icnVsSprite[id].resize( 1 );
+            const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
+            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
+            if ( !original.empty() ) {
+                _icnVsSprite[id][0].resize( 246, 45 );
+                _icnVsSprite[id][0].reset();
+                Copy( original, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
+                Copy( original, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
+            }
+
+            break;
+        }
+        case ICN::WELLBKG_EVIL: {
+            fheroes2::AGG::GetICN( ICN::WELLBKG, 0 );
+            _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
+            if ( !_icnVsSprite[id].empty() ) {
+                const fheroes2::Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 19 );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+            }
+
+            break;
+        }
+        case ICN::WHITE_LARGE_FONT: {
+            fheroes2::AGG::GetICN( ICN::FONT, 0 );
+            const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
+            _icnVsSprite[id].resize( original.size() );
+            for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                const fheroes2::Sprite & in = original[i];
+                fheroes2::Sprite & out = _icnVsSprite[id][i];
+                out.resize( in.width() * 2, in.height() * 2 );
+                SubpixelResize( in, out );
+                out.setPosition( in.x() * 2, in.y() * 2 );
+            }
+            break;
+        }
+        case ICN::YELLOW_FONT:
+            CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_FONT );
+            break;
+        case ICN::YELLOW_SMALLFONT:
+            CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_FONT );
+            break;
         default:
             break;
         }
-
-        return false;
     }
 
     void loadICN( const int id )
@@ -5023,8 +4964,19 @@ namespace
             return;
         }
 
-        if ( !LoadModifiedICN( id ) ) {
-            LoadOriginalICN( id );
+        // Some images contain text. This text should be adapted to a chosen language.
+        if ( isLanguageDependentIcnId( id ) ) {
+            generateLanguageSpecificImages( id );
+            return;
+        }
+
+        if ( id < ICN::LAST_VALID_FILE_ICN ) {
+            if ( loadIcnFromAgg( id ) ) {
+                modifyOriginalICN( id );
+            }
+        }
+        else {
+            generateICN( id );
         }
 
         if ( _icnVsSprite[id].empty() ) {
