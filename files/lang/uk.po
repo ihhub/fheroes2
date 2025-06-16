@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-15 05:10+0000\n"
-"PO-Revision-Date: 2025-06-06 11:26+0300\n"
+"PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -223,7 +223,7 @@ msgstr ""
 "БИТВА"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "НАЛАШТУВАННЯ"
 
 msgid ""
 "STANDARD\n"
@@ -287,18 +287,20 @@ msgstr ""
 "МЕНЮ"
 
 msgid "EditorMainMenu|BACK"
-msgstr ""
+msgstr "НАЗАД"
 
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "НАЗАД"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
 msgstr ""
+"ЧИСТИЙ\n"
+"АРКУШ"
 
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "ВИПАДКОВО"
 
 msgid "DIFFICULTY"
 msgstr "СКЛАДНІСТЬ"
@@ -3508,10 +3510,10 @@ msgstr ""
 "Розташування: "
 
 msgid "saveLoadDialog|Name"
-msgstr ""
+msgstr "Ім'я"
 
 msgid "saveLoadDialog|Date"
-msgstr ""
+msgstr "Дата"
 
 msgid "Are you sure you want to delete file:"
 msgstr "Ви впевнені, що хочете видалити файл:"
@@ -3526,19 +3528,19 @@ msgid "Click to load a previously saved game."
 msgstr "Натисніть, щоб завантажити збережену гру."
 
 msgid "Click here if you wish to sort save files by their name."
-msgstr ""
+msgstr "Тицьніть тут, якщо хочете відсортувати збережені файли за іменами."
 
-#, fuzzy
 msgid "Sort by Name"
-msgstr "Ваше Ім'я"
+msgstr "Сортувати по імені"
 
 msgid ""
 "Click here if you you wish to sort save files by their last modified date."
 msgstr ""
+"Тицьніть тут, якщо хочете відсортувати збережені файли за датою їхньої "
+"останньої зміни."
 
-#, fuzzy
 msgid "Sort by Date"
-msgstr "Підтримайте нас нас "
+msgstr "Сортувати за датою"
 
 msgid "File to Save:"
 msgstr "Зберегти файли:"
@@ -3941,7 +3943,7 @@ msgid "Random Town Name"
 msgstr "Випадкова назва міста"
 
 msgid "Allow Castle build"
-msgstr "Дозволити будівництво замку"
+msgstr "Дозволити замок"
 
 msgid "Default Buildings"
 msgstr "Наявні споруди"
@@ -4408,13 +4410,13 @@ msgstr ""
 "зоні розміром %{size} на %{size}"
 
 msgid "Small Brush"
-msgstr "Маленька кисть"
+msgstr "Маленький пензлик"
 
 msgid "Medium Brush"
-msgstr "Середня кисть"
+msgstr "Середній пензлик"
 
 msgid "Large Brush"
-msgstr "Велика кисть"
+msgstr "Великий пензлик"
 
 msgid "Area Fill"
 msgstr "Заповнити зону"
@@ -4565,9 +4567,8 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
-#, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
-msgstr "Повернутися до головного меню."
+msgstr "Вийти з редактора та повернутися до головного меню."
 
 msgid "From Scratch"
 msgstr "З чистого аркуша"
@@ -4582,11 +4583,10 @@ msgid "Random"
 msgstr "Випадково"
 
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
-#, fuzzy
 msgid "Return to the Editor's main menu options."
-msgstr "Повернутися до головного меню."
+msgstr "Повернутися до головного меню редактора."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
@@ -4720,7 +4720,7 @@ msgid "LANGUAGE"
 msgstr "МОВА"
 
 msgid "ABOUT"
-msgstr "ОПИС"
+msgstr "ПРО МАПУ"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -8798,7 +8798,7 @@ msgid "Towns/Castles"
 msgstr "Міста/Замки"
 
 msgid "View Towns and Castles."
-msgstr "Переглянути міста і замки"
+msgstr "Переглянути міста і замки."
 
 msgid "luck|Cursed"
 msgstr "Проклята"
