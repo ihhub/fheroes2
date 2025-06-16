@@ -268,14 +268,14 @@ namespace fheroes2
     // Draw one image on another taking into account the transparency and shadows data in the transform layer.
     void Blit( const Image & in, Image & out, const bool flip = false );
     void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false );
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
+    void Blit( const Image & in, Image & out, const int32_t outX, const int32_t outY, const bool flip = false );
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 
     // inPos must contain non-negative values
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
-    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi );
+    void Copy( const Image & in, const int32_t inX, const int32_t inY, Image & out, const Rect & outRoi );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // Copies transform the layer from in to out. Both images must be of the same size.
