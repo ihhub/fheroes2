@@ -198,7 +198,7 @@ namespace
         return digit;
     }
 
-    fheroes2::Image addDigit( const fheroes2::Sprite & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
+    fheroes2::Image addDigit( const fheroes2::Image & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
     {
         fheroes2::Image combined( original.width() + digit.width() + offset.x, original.height() + ( offset.y < 0 ? 0 : offset.y ) );
         combined.reset();
@@ -342,6 +342,12 @@ namespace
         std::vector<int32_t> _originalXOffsets;
     };
 
+    // Replace a particular pixel value by transparency value (transform layer value will be 1)
+    void addTransparency( fheroes2::Image & image, const uint8_t valueToReplace )
+    {
+        fheroes2::ReplaceColorIdByTransformId( image, valueToReplace, 1 );
+    }
+
     void invertTransparency( fheroes2::Image & image )
     {
         if ( image.singleLayer() ) {
@@ -446,10 +452,10 @@ namespace
 
     void fillTransparentButtonText( fheroes2::Sprite & released )
     {
-        fheroes2::Image background( released.width(), released.height() );
+        fheroes2::Sprite background( released.width(), released.height(), released.x(), released.y() );
         background.fill( 10 );
         Blit( released, background );
-        released = background;
+        released = std::move( background );
         setButtonCornersTransparent( released );
     }
 
@@ -2296,7 +2302,7 @@ namespace
                 AlphaBlit( originalImage, image, 4, 4, 192 );
                 Blit( originalImage, image, 8, 8 );
 
-                AddTransparency( image, 1 );
+                addTransparency( image, 1 );
             }
 
             // The Petrification spell does not have its own icon in the original game.
@@ -2757,7 +2763,7 @@ namespace
             }
 
             _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? out : Flip( out, true, false );
+            _icnVsSprite[id][0] = ( id == ICN::SWAP_ARROW_LEFT_TO_RIGHT ) ? std::move( out ) : Flip( out, true, false );
 
             _icnVsSprite[id][1] = _icnVsSprite[id][0];
             _icnVsSprite[id][1].setPosition( -1, 1 );
@@ -2877,7 +2883,7 @@ namespace
 
             // Make pressed state.
             _icnVsSprite[id].resize( 2 );
-            _icnVsSprite[id][0] = out;
+            _icnVsSprite[id][0] = std::move( out );
             _icnVsSprite[id][1] = _icnVsSprite[id][0];
             _icnVsSprite[id][1].setPosition( -1, 1 );
             ApplyPalette( _icnVsSprite[id][1], 4 );
@@ -3522,9 +3528,9 @@ namespace
             Copy( fheroes2::AGG::GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
             // Make all black pixels transparent.
-            AddTransparency( _icnVsSprite[id][0], 36 );
-            AddTransparency( _icnVsSprite[id][1], 36 );
-            AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
+            addTransparency( _icnVsSprite[id][0], 36 );
+            addTransparency( _icnVsSprite[id][1], 36 );
+            addTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
 
             return true;
         }
@@ -3539,8 +3545,8 @@ namespace
             Copy( fheroes2::AGG::GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
             // Make all black pixels transparent.
-            AddTransparency( _icnVsSprite[id][0], 36 );
-            AddTransparency( _icnVsSprite[id][1], 36 );
+            addTransparency( _icnVsSprite[id][0], 36 );
+            addTransparency( _icnVsSprite[id][1], 36 );
 
             // Add the bottom-left dark border.
             Fill( _icnVsSprite[id][1], 1, 4, 1, 30, 36 );
@@ -3578,7 +3584,7 @@ namespace
                 for ( const uint32_t i : { 16, 18 } ) {
                     fheroes2::Sprite pressed;
                     std::swap( pressed, _icnVsSprite[id][i] );
-                    AddTransparency( pressed, 25 ); // remove too dark background
+                    addTransparency( pressed, 25 ); // remove too dark background
 
                     // take background from the empty system button
                     _icnVsSprite[id][i] = fheroes2::AGG::GetICN( ICN::SYSTEME, 12 );
@@ -3717,7 +3723,7 @@ namespace
                 _icnVsSprite[id][0].setPosition( 0, 0 );
 
                 // Copy red pattern and cover up embedded button.
-                const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
+                const fheroes2::Image & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
                 Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
             }
 
