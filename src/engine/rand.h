@@ -41,6 +41,7 @@ namespace Rand
 {
     class PCG32
     {
+    private:
         static constexpr uint64_t multiplier = 6364136223846793005ULL;
         static constexpr uint64_t defaultStream = 54ULL;
         static constexpr uint64_t defaultSeed = 42ULL;
