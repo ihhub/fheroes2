@@ -6864,9 +6864,9 @@ void Battle::PopupDamageInfo::_makeDamageImage()
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+
     _damageImage = fheroes2::Stretch( backgroundImage, 0, 0, backgroundImage.width(), backgroundImage.height(), borderRect.width, borderRect.height );
     _damageImage.setPosition( borderRect.x, borderRect.y );
-    _damageImage._disableTransformLayer();
 
     damageText.draw( borderWidth, borderWidth + 2, _damageImage );
     killedText.draw( borderWidth, borderRect.height / 2 + 2, _damageImage );
