@@ -58,7 +58,9 @@ namespace Rand
         const typename std::iterator_traits<Iter>::difference_type interval = last - first;
 
         // Our implementation doesn't work for intervals bigger than 2**32 - 1
-        assert( interval <= static_cast<typename std::iterator_traits<Iter>::difference_type>( std::numeric_limits<uint32_t>::max() ) );
+        if constexpr (sizeof(interval) > sizeof(uint32_t)) {
+            assert( interval <= static_cast<typename std::iterator_traits<Iter>::difference_type>( std::numeric_limits<uint32_t>::max() ) );
+        }
 
         uint32_t remainingSwaps = static_cast<uint32_t>( interval );
         while ( remainingSwaps > 0 ) {
