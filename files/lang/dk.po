@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 04:50+0000\n"
+"POT-Creation-Date: 2025-06-15 05:10+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -206,18 +206,21 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ENKELT\n"
-"SPILLER"
-
-msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
 "KUN\n"
 "KAMP"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"ENKELT\n"
+"SPILLER"
 
 msgid ""
 "CAMPAIGN\n"
@@ -231,23 +234,6 @@ msgid ""
 msgstr ""
 "FLER-\n"
 "SPILLER"
-
-msgid "CONFIG"
-msgstr "INDSTIL"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORIGINALT\n"
-"FELTTOG"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"UDVIDELSE\n"
-"FELTTOG"
 
 msgid "HOT SEAT"
 msgstr "LOKALT"
@@ -266,6 +252,41 @@ msgstr "5 SPILLERE"
 
 msgid "6 PLAYERS"
 msgstr "6 SPILLERE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORIGINALT\n"
+"FELTTOG"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"UDVIDELSE\n"
+"FELTTOG"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HOVED-\n"
+"MENU"
+
+msgid "EditorMainMenu|BACK"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
@@ -3536,6 +3557,12 @@ msgstr ""
 "\n"
 "Placering: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
 
@@ -3547,6 +3574,21 @@ msgstr "Klik for at gemme igangværende spil."
 
 msgid "Click to load a previously saved game."
 msgstr "Klik for at indlæse et tidligere gemt spil."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Dit navn"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Støt os på"
 
 msgid "File to Save:"
 msgstr "Fil som skal gemmes:"
@@ -4181,13 +4223,6 @@ msgstr ""
 "af det nuværende kort, vil gå tabt.)"
 
 msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HOVED-\n"
-"MENU"
-
-msgid ""
 "START\n"
 "MAP"
 msgstr ""
@@ -4584,14 +4619,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
-
-msgid "Cancel back to the main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Vend tilbage til spillets hovedmenu."
 
 msgid "From Scratch"
 msgstr "Fra bunden"
@@ -4605,8 +4635,15 @@ msgstr "Opret et kort automatisk."
 msgid "Random"
 msgstr "Tilfældigt"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Vend tilbage til spillets hovedmenu."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
 
 msgid "No maps available!"
 msgstr "Intet kort tilgængelig!"
@@ -5625,16 +5662,6 @@ msgstr "' sprog, men spillets nuværende sprog er '"
 msgid "No save files to load."
 msgstr "Ingen gemte filer at indlæse."
 
-msgid "Hot Seat"
-msgstr "Lokalt spil"
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spil et lokalt spil, hvor 2-6 spillere skiftes til at spille sin tur på den "
-"samme enhed."
-
 msgid "A single player game playing out a single map."
 msgstr "Et enkeltspillerspil, der gennemspilles på ét enkelt kort."
 
@@ -5656,6 +5683,19 @@ msgid ""
 msgstr ""
 "Et flerspillerspil, hvor flere menneskelige spillere konkurrerer mod "
 "hinanden på ét enkelt kort."
+
+msgid "Hot Seat"
+msgstr "Lokalt spil"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spil et lokalt spil, hvor 2-6 spillere skiftes til at spille sin tur på den "
+"samme enhed."
+
+msgid "Cancel back to the main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Teamet bag fheroes2 Resurrection præsenterer"
@@ -5721,43 +5761,8 @@ msgstr ""
 "De nødvendige videofiler til felttogsvalgsvinduet mangler. Sørg venligst for "
 "at alle nødvendige filer er til stede blandt systemfilerne."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Enten Rolands eller Archibalds felttog fra den originale Heroes of Might and "
-"Magic II."
-
-msgid "Original Campaign"
-msgstr "Originalt felttog"
-
-msgid "Expansion Campaign"
-msgstr "Udvidelse-felttog"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "En af de fire nye felttog fra Prisen for loyalitet-udvidelsessættet."
-
 msgid "Loading video. Please wait..."
 msgstr "Indlæser video. Vent venligst..."
-
-msgid "Host"
-msgstr "Vært"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Værten opsætter spilmulighederne. Der kan kun være én vært per netværksspil."
-
-msgid "Guest"
-msgstr "Gæst"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
-"automatisk. Der kan være flere gæster til TCP/IP-spil."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5782,13 +5787,6 @@ msgstr "Kun kamp"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Opsæt og spil en kamp uden at indlæse et kort."
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Spil et lokalt spil, hvor 2-6 spillere spiller sin tur på den samme enhed, "
-"mens de skiftes til at sidde i \"det varme sæde\"."
 
 msgid "2 Players"
 msgstr "2 spillere"
@@ -5834,6 +5832,29 @@ msgstr "6 spillere"
 
 msgid "Play with 6 human players."
 msgstr "Spil med 2 menneskelige spillere."
+
+msgid "Original Campaign"
+msgstr "Originalt felttog"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Enten Rolands eller Archibalds felttog fra den originale Heroes of Might and "
+"Magic II."
+
+msgid "Expansion Campaign"
+msgstr "Udvidelse-felttog"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "En af de fire nye felttog fra Prisen for loyalitet-udvidelsessættet."
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Spil et lokalt spil, hvor 2-6 spillere spiller sin tur på den samme enhed, "
+"mens de skiftes til at sidde i \"det varme sæde\"."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Dragebyen er faldet! Du er nu dragernes mester!"
@@ -6732,6 +6753,11 @@ msgstr ""
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Idet du ransager en fjendelejr, opdager du en skjult skat."
+
+msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -8072,6 +8098,18 @@ msgstr ""
 "Hun kigger op og siger:\n"
 "\"På mine rejser har jeg lært meget om mystisk magi. Et stort orakel lærte "
 "mig sine færdigheder. Jeg har svaret, du søger.\""
+
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
 
 msgid "No spell book is present."
 msgstr "Der er ingen magibog at finde."
@@ -9471,6 +9509,14 @@ msgstr "Sumpsø"
 
 msgid "Frozen Lake"
 msgstr "Frossen sø"
+
+#, fuzzy
+msgid "Black Cat"
+msgstr "Den Sorte Perle"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Barriere"
 
 msgid "randomRace|level 1 creatures"
 msgstr "niveau 1 væsener"
@@ -12259,77 +12305,31 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
 
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Check den nyeste version af spillet på\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
+#~ msgid "CONFIG"
+#~ msgstr "INDSTIL"
+
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
+
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
+
+#~ msgid "Host"
+#~ msgstr "Vært"
 
 #~ msgid ""
-#~ "After spending hours trying to fish the chest out of the sea, you open "
-#~ "it, only to find it empty."
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
 #~ msgstr ""
-#~ "Efter at have brugt timer på at prøve at fiske kisten op af havet, åbner "
-#~ "du den, kun for at finde den tom."
+#~ "Værten opsætter spilmulighederne. Der kan kun være én vært per "
+#~ "netværksspil."
+
+#~ msgid "Guest"
+#~ msgstr "Gæst"
 
 #~ msgid ""
-#~ "After scouring the area, you fall upon a hidden chest, containing the "
-#~ "%{gold} gold pieces."
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
 #~ msgstr ""
-#~ "Efter at have gennemsøgt området, falder du over en skjult kiste, der "
-#~ "indeholder %{gold} guldstykker."
-
-#~ msgid ""
-#~ "Select the campaign difficulty. This can be lowered at any point during "
-#~ "the campaign."
-#~ msgstr ""
-#~ "Vælg felttogets niveau. Dette kan sænkes når som helst under felttoget."
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Vælg antal %{resource}:"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Aktiver Autokamp"
-
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "Færdiggør kampen automatisk"
-
-#~ msgid "Please Remember"
-#~ msgstr "Husk venligst"
-
-#~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr ""
-#~ "Du kan altid ændre sprog, spilopløsning eller -indstillinger ved at "
-#~ "klikke på "
-
-#~ msgid "door"
-#~ msgstr "døren"
-
-#~ msgid " on the left side of the Main Menu, or with the "
-#~ msgstr " på venstre side a hovedmenuen, eller med denne "
-
-#~ msgid " button from the "
-#~ msgstr " knap fra "
-
-#~ msgid "NEW GAME"
-#~ msgstr "NYT SPIL"
-
-#~ msgid ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Nyd spillet!"
-
-#~ msgid "Warning!"
-#~ msgstr "Advarsel!"
-
-#~ msgid "Dummy 1"
-#~ msgstr "Pladsholder 1"
+#~ "Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
+#~ "automatisk. Der kan være flere gæster til TCP/IP-spil."

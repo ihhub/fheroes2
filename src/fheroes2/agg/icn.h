@@ -25,6 +25,8 @@
 
 #include <cstdint>
 
+enum class PlayerColor : uint8_t;
+
 namespace ICN
 {
     enum : int
@@ -909,7 +911,6 @@ namespace ICN
         YELLOW_FONT,
         YELLOW_SMALLFONT,
         BUTTON_WELL_MAX,
-        BUTTON_BATTLE_ONLY,
         BUTTON_GIFT_GOOD,
         BUTTON_GIFT_EVIL,
         CSLMARKER,
@@ -959,6 +960,8 @@ namespace ICN
         BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
         SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
 
+        WIZARD_CASTLE_BAY,
+
         GOOD_ARMY_BUTTON,
         GOOD_MARKET_BUTTON,
         EVIL_ARMY_BUTTON,
@@ -1005,22 +1008,10 @@ namespace ICN
         EMPTY_INTERFACE_BUTTON_GOOD,
         EMPTY_INTERFACE_BUTTON_EVIL,
 
-        BUTTON_STANDARD_GAME,
-        BUTTON_CAMPAIGN_GAME,
-        BUTTON_MULTIPLAYER_GAME,
-        BUTTON_LARGE_CANCEL,
-        BUTTON_LARGE_CONFIG,
-        BUTTON_ORIGINAL_CAMPAIGN,
-        BUTTON_EXPANSION_CAMPAIGN,
-        BUTTON_HOT_SEAT,
-        BUTTON_2_PLAYERS,
-        BUTTON_3_PLAYERS,
-        BUTTON_4_PLAYERS,
-        BUTTON_5_PLAYERS,
-        BUTTON_6_PLAYERS,
-
-        BUTTON_NEW_MAP,
-        BUTTON_LOAD_MAP,
+        BUTTONS_NEW_GAME_MENU_GOOD,
+        BUTTONS_NEW_GAME_MENU_EVIL,
+        BUTTONS_EDITOR_MENU_GOOD,
+        BUTTONS_EDITOR_MENU_EVIL,
 
         BUTTONS_FILE_DIALOG_GOOD,
         BUTTONS_FILE_DIALOG_EVIL,
@@ -1109,6 +1100,8 @@ namespace ICN
 
         SCENIBKG_EVIL,
 
+        EVIL_DIALOG_PLAIN_CORNERS,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
@@ -1121,5 +1114,5 @@ namespace ICN
     int getBuildingIcnId( const int race );
     int getCastleIcnId( const int race );
 
-    int getFlagIcnId( const int color );
+    int getFlagIcnId( const PlayerColor color );
 }

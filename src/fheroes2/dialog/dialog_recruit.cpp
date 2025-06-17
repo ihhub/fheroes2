@@ -71,7 +71,7 @@ namespace
         const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
         const fheroes2::Sprite & recruitWindowTitle = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
-        fheroes2::Image recruitWindow( 132, 67 );
+        fheroes2::Sprite recruitWindow( 132, 67 );
         // Reset the transparent layer.
         recruitWindow.reset();
 
@@ -282,7 +282,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
 
     // Render the recruit count background from original recruit dialog ICN.
-    fheroes2::Image background( 68, 19 );
+    fheroes2::Sprite background( 68, 19 );
     fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, background.width(), background.height() );
 
     const fheroes2::Rect recruitCountInputArea( dialogOffset.x + 118, dialogOffset.y + 147, background.width(), background.height() );

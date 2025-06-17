@@ -18,7 +18,7 @@ You will need a copy of the official game to run this port.
 
 fheroes2 root directory is hardcoded as `/switch/fheroes2`. Put the game files there (specifically `ANIM`, `DATA`, `MAPS`
 and `MUSIC` folders), then copy over the `files` directory, as well as `fheroes2.nro`. If you have a Russian version from
-Buka Enternainment, you'll likely have `Anim2` folder instead. Rename it to `ANIM` if you wish use the Buka game data with
+Buka Entertainment, you'll likely have `Anim2` folder instead. Rename it to `ANIM` if you wish to use the Buka game data with
 this port.
 
 At the end you should have the following directory tree on your SD card:

@@ -26,6 +26,7 @@
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "color.h"
 #include "math_base.h"
 #include "resource.h"
 #include "skill.h"
@@ -132,8 +133,13 @@ namespace Maps
 
     Troop getTroopFromTile( const Tile & tile );
 
-    int getColorFromTile( const Tile & tile );
-    void setColorOnTile( Tile & tile, const int color );
+    PlayerColor getColorFromTile( const Tile & tile );
+
+    int getBarrierColorFromTile( const Tile & tile );
+
+    void setColorOnTile( const Tile & tile, const PlayerColor color );
+
+    void setBarrierColorOnTile( Tile & tile, const int barrierColor );
 
     bool doesTileContainValuableItems( const Tile & tile );
 
@@ -150,7 +156,7 @@ namespace Maps
 
     void setMonsterOnTile( Tile & tile, const Monster & mons, const uint32_t count );
 
-    std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
+    std::pair<PlayerColor, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
 
     // Checks whether the object to be captured is guarded by its own forces
     // (castle has a hero or garrison, dwelling has creatures, etc)
@@ -166,14 +172,14 @@ namespace Maps
 
     bool removeObjectFromTileByType( const Tile & tile, const MP2::MapObjectType objectType );
 
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID );
+
     bool isClearGround( const Tile & tile );
 
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
-    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const PlayerColorsSet colors );
 
     // The functions below are used only in the map Editor.
-
-    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
 
     bool setObjectOnTile( Tile & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 

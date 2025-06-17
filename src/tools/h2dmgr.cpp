@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -241,7 +241,7 @@ namespace
 
             // Image files need special processing
             if ( isImageFile( inputFileName ) ) {
-                fheroes2::Image image;
+                fheroes2::Sprite image;
 
                 if ( !fheroes2::Load( inputFileName, image ) ) {
                     std::cerr << "Cannot open file " << inputFileName << std::endl;
@@ -254,6 +254,8 @@ namespace
                     return EXIT_FAILURE;
                 }
 
+                // TODO: Add ability to set sprite position and ability to determine colors in original image
+                // that are used for transparency and shadows.
                 if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(), image ) ) {
                     std::cerr << "Error adding file " << inputFileName << std::endl;
                     return EXIT_FAILURE;

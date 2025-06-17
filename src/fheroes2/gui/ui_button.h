@@ -33,6 +33,8 @@
 #include "screen.h"
 #include "ui_base.h"
 
+class LocalEvent;
+
 namespace fheroes2
 {
     enum class FontColor : uint8_t;
@@ -294,6 +296,14 @@ namespace fheroes2
         // Draws shadows for all the buttons in the group according to their coordinates.
         void drawShadows( Image & output ) const;
 
+        // Disable all the buttons in the button group.
+        void disable() const;
+
+        // Enable all the buttons in the button group.
+        void enable() const;
+
+        void drawOnState( const LocalEvent & le ) const;
+
         size_t getButtonsCount() const
         {
             return _button.size();
@@ -383,7 +393,8 @@ namespace fheroes2
 
     // Generates multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
     // backgroundSprites will be resized according to the number of button texts.
-    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const int32_t minWidth );
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const bool isEvilInterface,
+                                         const int32_t minWidth );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
                              const Size & buttonSize, const FontColor fontColor );

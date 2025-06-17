@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,6 @@
 
 #include "agg_image.h"
 #include "castle.h"
-#include "color.h"
 #include "dialog.h"
 #include "ground.h"
 #include "heroes.h"
@@ -106,20 +105,20 @@ namespace
         return COLOR_BLACK;
     }
 
-    uint8_t GetPaletteIndexFromColor( int color )
+    uint8_t GetPaletteIndexFromColor( PlayerColor color )
     {
         switch ( color ) {
-        case Color::BLUE:
+        case PlayerColor::BLUE:
             return COLOR_BLUE;
-        case Color::GREEN:
+        case PlayerColor::GREEN:
             return COLOR_GREEN;
-        case Color::RED:
+        case PlayerColor::RED:
             return COLOR_RED;
-        case Color::YELLOW:
+        case PlayerColor::YELLOW:
             return COLOR_YELLOW;
-        case Color::ORANGE:
+        case PlayerColor::ORANGE:
             return COLOR_ORANGE;
-        case Color::PURPLE:
+        case PlayerColor::PURPLE:
             return COLOR_PURPLE;
         default:
             break;
@@ -281,7 +280,7 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     RedrawCursor();
 }
 
-void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorldMode flags )
+void Interface::Radar::RedrawObjects( const PlayerColorsSet playerColor, const ViewWorldMode flags )
 {
 #ifdef WITH_DEBUG
     const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();

@@ -68,27 +68,11 @@
 
 namespace
 {
-    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    bool isTileBlockedForSettingMonster( const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
 
-        for ( const int32_t indexId : indexes ) {
-            if ( excludeTiles.count( indexId ) > 0 ) {
-                return true;
-            }
-
-            const Maps::Tile & indexedTile = mapTiles[indexId];
-            if ( indexedTile.isWater() ) {
-                continue;
-            }
-
-            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
-            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
-                return true;
-            }
-        }
-
-        return false;
+        return std::any_of( indexes.cbegin(), indexes.cend(), [&excludeTiles]( const int32_t indexId ) { return excludeTiles.count( indexId ) > 0; } );
     }
 
     int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
@@ -109,8 +93,19 @@ namespace
                 continue;
             }
 
+            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
+
+            // TODO: Check if the original game can spawn a monster over an event and if so whether the event keeps working after the monster is killed.
+            if ( objectType == MP2::OBJ_EVENT ) {
+                // The event is not considered as in-game action object to avoid confusion with visible action objects.
+                // We skip the tile with an event because there cannot be two action objects (monster and event) on one tile.
+                // And we don't need to leave space between event and spawned monster so we don't add tile to `excludeTiles`.
+
+                continue;
+            }
+
             // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
-            if ( indexedTile.getMainObjectType( false ) == MP2::OBJ_COAST ) {
+            if ( objectType == MP2::OBJ_COAST ) {
                 const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
 
                 if ( coastTiles.empty() ) {
@@ -173,37 +168,27 @@ std::list<MapBaseObject *> MapObjects::get( const fheroes2::Point & pos ) const
     return result;
 }
 
-void MapObjects::remove( const uint32_t uid )
+void CapturedObjects::SetColor( const int32_t index, const PlayerColor color )
 {
-    _objects.erase( uid );
+    Get( index ).SetColor( color );
 }
 
-CapturedObject & CapturedObjects::Get( const int32_t index )
-{
-    return operator[]( index );
-}
-
-void CapturedObjects::SetColor( const int32_t index, const int col )
-{
-    Get( index ).SetColor( col );
-}
-
-void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const int col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor color )
 {
     CapturedObject & capturedObj = Get( index );
 
-    if ( capturedObj.GetColor() != col && capturedObj.guardians.isValid() ) {
+    if ( capturedObj.GetColor() != color && capturedObj.guardians.isValid() ) {
         capturedObj.guardians.Reset();
     }
 
-    capturedObj.Set( obj, col );
+    capturedObj.Set( obj, color );
 }
 
-uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col ) const
+uint32_t CapturedObjects::GetCount( const MP2::MapObjectType objectType, const PlayerColor ownerColor ) const
 {
     uint32_t result = 0;
 
-    const ObjectColor objCol( obj, col );
+    const ObjectColor objCol( objectType, ownerColor );
 
     for ( const auto & [idx, capturedObj] : *this ) {
         if ( capturedObj.objCol != objCol ) {
@@ -216,7 +201,7 @@ uint32_t CapturedObjects::GetCount( const MP2::MapObjectType obj, const int col 
     return result;
 }
 
-uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
+uint32_t CapturedObjects::GetCountMines( const int resourceType, const PlayerColor ownerColor ) const
 {
     uint32_t count = 0;
 
@@ -237,17 +222,17 @@ uint32_t CapturedObjects::GetCountMines( const int resourceType, const int owner
     return count;
 }
 
-int CapturedObjects::GetColor( const int32_t index ) const
+PlayerColor CapturedObjects::GetColor( const int32_t index ) const
 {
     const auto iter = find( index );
     if ( iter == end() ) {
-        return Color::NONE;
+        return PlayerColor::NONE;
     }
 
     return iter->second.GetColor();
 }
 
-void CapturedObjects::ClearFog( const int colors ) const
+void CapturedObjects::ClearFog( const PlayerColorsSet colors ) const
 {
     for ( const auto & [idx, capturedObj] : *this ) {
         const auto [objectType, objectColor] = capturedObj.objCol;
@@ -278,19 +263,17 @@ void CapturedObjects::ClearFog( const int colors ) const
     }
 }
 
-void CapturedObjects::ResetColor( const int color )
+void CapturedObjects::ResetColor( const PlayerColor color )
 {
-    for ( auto & [idx, capturedObj] : *this ) {
-        ObjectColor & objCol = capturedObj.objCol;
+    for ( auto & [tileIndex, capturedObj] : *this ) {
+        auto & [objectType, objectColor] = capturedObj.objCol;
 
-        if ( !objCol.isColor( color ) ) {
+        if ( objectColor != color ) {
             continue;
         }
 
-        auto & [objectType, col] = objCol;
-
-        col = Color::NONE;
-        world.getTile( idx ).setOwnershipFlag( objectType, col );
+        objectColor = PlayerColor::NONE;
+        world.getTile( tileIndex ).setOwnershipFlag( objectType, objectColor );
     }
 }
 
@@ -362,33 +345,11 @@ void World::generateBattleOnlyMap()
     const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
                                          Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
 
-    Reset();
-
-    width = 2;
-    height = 2;
-
-    Maps::FileInfo fi;
-
-    fi.width = static_cast<uint16_t>( width );
-    fi.height = static_cast<uint16_t>( height );
-
-    Settings & conf = Settings::Get();
-
-    if ( conf.isPriceOfLoyaltySupported() ) {
-        fi.version = GameVersion::PRICE_OF_LOYALTY;
-    }
-
-    conf.setCurrentMapInfo( std::move( fi ) );
-
-    Defaults();
-
-    vec_tiles.resize( static_cast<size_t>( width ) * height );
+    generateUninitializedMap( 2 );
 
     const int groundType = Rand::Get( terrainTypes );
 
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
         vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), 0 );
     }
@@ -409,30 +370,18 @@ void World::generateUninitializedMap( const int32_t size )
     fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
-    assert( conf.isPriceOfLoyaltySupported() );
 
-    fi.version = GameVersion::PRICE_OF_LOYALTY;
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi.version = GameVersion::PRICE_OF_LOYALTY;
+    }
 
     conf.setCurrentMapInfo( std::move( fi ) );
 
     Defaults();
 
+    // The tiles are cleared and resizing their vector also initializes tiles with the default values.
+    assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
-}
-
-void World::generateMapForEditor( const int32_t size )
-{
-    generateUninitializedMap( size );
-
-    // Initialize all tiles.
-    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i] = {};
-
-        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
-
-        const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
-        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag );
-    }
 }
 
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
@@ -463,9 +412,9 @@ Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = He
     return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
 }
 
-Heroes * World::FromJailHeroes( int32_t index )
+Heroes * World::FromJailHeroes( const int32_t tileIndex )
 {
-    return vec_heroes.FromJail( index );
+    return vec_heroes.FromJail( tileIndex );
 }
 
 Heroes * World::GetHero( const Castle & castle ) const
@@ -588,11 +537,11 @@ void World::NewWeek()
 void World::NewMonth()
 {
     if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
+        _monthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
-void World::MonthOfMonstersAction( const Monster & mons )
+void World::_monthOfMonstersAction( const Monster & mons )
 {
     if ( !mons.isValid() ) {
         return;
@@ -611,6 +560,15 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::mt19937 seededGen( _seed + month );
 
+    // First we scan for Heroes, Castles and Monsters to exclude these from tiles and nearby tiles.
+    // We must do this prior to checking the possibility for a monster to spawn in order to properly perform the check on nearby tiles.
+    std::for_each( vec_tiles.cbegin(), vec_tiles.cend(), [&excludeTiles]( const Maps::Tile & tile ) {
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
+            excludeTiles.emplace( tile.GetIndex() );
+        }
+    } );
+
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             // Monsters are not placed on water.
@@ -618,15 +576,15 @@ void World::MonthOfMonstersAction( const Monster & mons )
         }
 
         const int32_t tileId = tile.GetIndex();
-        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
 
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
-            excludeTiles.emplace( tileId );
+        if ( excludeTiles.count( tileId ) > 0 ) {
             continue;
         }
 
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
+
         if ( MP2::isInGameActionObject( objectType ) ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 3, excludeTiles ) ) {
                 continue;
             }
 
@@ -637,7 +595,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             }
         }
         else if ( tile.isRoad() ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 4, excludeTiles ) ) {
                 continue;
             }
 
@@ -652,7 +610,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             }
         }
         else if ( isClearGround( tile ) ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 4, excludeTiles ) ) {
                 continue;
             }
 
@@ -717,7 +675,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
 fheroes2::LocalizedString World::getCurrentRumor() const
 {
-    const uint32_t standardRumorCount = 10;
+    const uint32_t standardRumorCount = 9;
     const uint32_t totalRumorCount = static_cast<uint32_t>( _customRumors.size() ) + standardRumorCount;
     const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
@@ -779,8 +737,6 @@ fheroes2::LocalizedString World::getCurrentRumor() const
         return { _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." ), std::nullopt };
     case 8:
         return { _( "An unknown force is being resurrected..." ), std::nullopt };
-    case 9:
-        return { _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" ), std::nullopt };
     default:
         break;
     }
@@ -886,12 +842,12 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const int color ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const PlayerColor color ) const
 {
     return map_captureobj.GetCount( obj, color );
 }
 
-uint32_t World::CountCapturedMines( const int type, const int color ) const
+uint32_t World::CountCapturedMines( const int type, const PlayerColor color ) const
 {
     switch ( type ) {
     case Resource::WOOD:
@@ -905,9 +861,9 @@ uint32_t World::CountCapturedMines( const int type, const int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-void World::CaptureObject( const int32_t index, const int color )
+void World::CaptureObject( const int32_t index, const PlayerColor color )
 {
-    assert( CountBits( color ) <= 1 );
+    assert( Color::Count( static_cast<PlayerColorsSet>( color ) ) <= 1 );
 
     const MP2::MapObjectType objectType = getTile( index ).getMainObjectType( false );
 
@@ -915,7 +871,7 @@ void World::CaptureObject( const int32_t index, const int color )
     // In example, dwellings can also marked by the player's color.
     map_captureobj.Set( index, objectType, color );
 
-    if ( color != Color::NONE && !( color & Color::ALL ) ) {
+    if ( color != PlayerColor::NONE && !( Color::allPlayerColors() & color ) ) {
         return;
     }
 
@@ -927,7 +883,7 @@ void World::CaptureObject( const int32_t index, const int color )
     getTile( index ).setOwnershipFlag( objectType, color );
 }
 
-int World::ColorCapturedObject( const int32_t index ) const
+PlayerColor World::ColorCapturedObject( const int32_t index ) const
 {
     return map_captureobj.GetColor( index );
 }
@@ -937,14 +893,14 @@ CapturedObject & World::GetCapturedObject( const int32_t index )
     return map_captureobj.Get( index );
 }
 
-void World::ResetCapturedObjects( const int color )
+void World::ResetCapturedObjects( const PlayerColor color )
 {
     map_captureobj.ResetColor( color );
 }
 
-void World::ClearFog( int colors ) const
+void World::ClearFog( PlayerColor color ) const
 {
-    colors = Players::GetPlayerFriends( colors );
+    const PlayerColorsSet colors = Players::GetPlayerFriends( color );
 
     // clear abroad castles
     vec_castles.Scout( colors );
@@ -990,13 +946,15 @@ void World::AddEventDate( const EventDate & event )
     vec_eventsday.push_back( event );
 }
 
-EventsDate World::GetEventsDate( int color ) const
+EventsDate World::GetEventsDate( const PlayerColor color ) const
 {
     EventsDate res;
 
-    for ( EventsDate::const_iterator it = vec_eventsday.begin(); it != vec_eventsday.end(); ++it )
-        if ( ( *it ).isAllow( color, day ) )
-            res.push_back( *it );
+    for ( const EventDate & event : vec_eventsday ) {
+        if ( event.isAllow( color, day ) ) {
+            res.push_back( event );
+        }
+    }
 
     return res;
 }
@@ -1019,12 +977,12 @@ uint32_t World::CountObeliskOnMaps()
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 
-void World::ActionForMagellanMaps( int color )
+void World::ActionForMagellanMaps( const PlayerColor color )
 {
     const Kingdom & kingdom = world.GetKingdom( color );
     const bool isAIPlayer = kingdom.isControlAI();
 
-    const int alliedColors = Players::GetPlayerFriends( color );
+    const PlayerColorsSet alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
@@ -1054,8 +1012,9 @@ MapBaseObject * World::GetMapObject( uint32_t uid )
 
 void World::RemoveMapObject( const MapBaseObject * obj )
 {
-    if ( obj )
+    if ( obj ) {
         map_objects.remove( obj->GetUID() );
+    }
 }
 
 const Heroes * World::GetHeroesCondWins() const
@@ -1088,7 +1047,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
+        return static_cast<PlayerColorsSet>( kingdom.GetColor() ) == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
         const Castle * town = getCastleEntrance( mapInfo.WinsMapsPositionObject() );
@@ -1125,7 +1084,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
+        return ( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) ) == 0;
 
     case GameOver::WINS_GOLD:
         return ( ( kingdom.isControlHuman() || mapInfo.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
@@ -1190,7 +1149,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         // .. or be hired by an AI-controlled kingdom
         if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
-            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
+            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), static_cast<PlayerColorsSet>( hero->GetColor() ) ) ) {
                 return false;
             }
 
@@ -1274,9 +1233,9 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     for ( const auto & [victoryCond, defeatCond] : enemyVictoryConditions ) {
         if ( conf.getCurrentMapInfo().ConditionWins() & victoryCond ) {
-            const int color = vec_kingdoms.FindWins( victoryCond );
+            const PlayerColor color = vec_kingdoms.FindWins( victoryCond );
 
-            if ( color && color != kingdom.GetColor() ) {
+            if ( color != PlayerColor::NONE && color != kingdom.GetColor() ) {
                 return defeatCond;
             }
         }
@@ -1406,11 +1365,6 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
     }
 }
 
-uint32_t World::GetMapSeed() const
-{
-    return _seed;
-}
-
 uint32_t World::GetWeekSeed() const
 {
     uint32_t weekSeed = _seed;
@@ -1422,14 +1376,9 @@ uint32_t World::GetWeekSeed() const
 
 bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
 {
-    const Colors colors( Game::GetKingdomColors() );
-    for ( const int color : colors ) {
-        const Kingdom & kingdom = GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, objectType ) ) {
-            return true;
-        }
-    }
-    return false;
+    const PlayerColorsVector colors( Game::GetKingdomColors() );
+    return std::any_of( colors.cbegin(), colors.cend(),
+                        [this, objectType, dstIndex]( const PlayerColor color ) { return GetKingdom( color ).isVisited( dstIndex, objectType ); } );
 }
 
 void World::fixFrenchCharactersInStrings()
@@ -1635,7 +1584,7 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PPRE1_1106_RELEASE ) {
         // Update flags for Mine and Lighthouse captured objects.
         for ( const auto & [tileIndex, object] : w.map_captureobj ) {
-            if ( object.GetColor() == Color::NONE ) {
+            if ( object.GetColor() == PlayerColor::NONE ) {
                 // This object is not owned by anyone.
                 continue;
             }
@@ -1772,27 +1721,27 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     colors = 0;
 
     if ( dataStream.get() ) {
-        colors |= Color::BLUE;
+        colors |= PlayerColor::BLUE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::GREEN;
+        colors |= PlayerColor::GREEN;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::RED;
+        colors |= PlayerColor::RED;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::YELLOW;
+        colors |= PlayerColor::YELLOW;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::ORANGE;
+        colors |= PlayerColor::ORANGE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PURPLE;
+        colors |= PlayerColor::PURPLE;
     }
 
     message = dataStream.getString();
@@ -1800,9 +1749,9 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
 
-bool EventDate::isAllow( const int col, const uint32_t date ) const
+bool EventDate::isAllow( const PlayerColor color, const uint32_t date ) const
 {
-    if ( ( col & colors ) == 0 ) {
+    if ( ( colors & color ) == 0 ) {
         // This player color is not allowed for the event.
         return false;
     }
@@ -1831,5 +1780,17 @@ OStreamBase & operator<<( OStreamBase & stream, const EventDate & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 {
-    return stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
+    stream >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        obj.colors = static_cast<PlayerColorsSet>( temp );
+    }
+    else {
+        stream >> obj.colors;
+    }
+
+    return stream >> obj.message >> obj.title;
 }

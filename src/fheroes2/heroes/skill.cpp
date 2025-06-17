@@ -849,30 +849,34 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
+int Skill::getLeadershipModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
+int Skill::getLuckModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )

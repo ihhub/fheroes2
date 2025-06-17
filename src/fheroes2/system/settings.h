@@ -38,6 +38,8 @@
 class IStreamBase;
 class OStreamBase;
 
+enum class PlayerColor : uint8_t;
+
 inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
@@ -69,6 +71,12 @@ enum class InterfaceType : uint8_t
     GOOD = 0,
     EVIL = 1,
     DYNAMIC = 2
+};
+
+enum class SaveFileSortingMethod : uint8_t
+{
+    FILENAME,
+    TIMESTAMP,
 };
 
 class Settings
@@ -326,13 +334,13 @@ public:
         return players;
     }
 
-    int CurrentColor() const
+    PlayerColor CurrentColor() const
     {
         return players.getCurrentColor();
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( const int color )
+    void SetCurrentColor( const PlayerColor color )
     {
         players.setCurrentColor( color );
     }
@@ -350,6 +358,16 @@ public:
     void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
+    }
+
+    SaveFileSortingMethod getSaveFileSortingMethod() const
+    {
+        return _saveFileSortType;
+    }
+
+    void setSaveFileSortingMethod( const SaveFileSortingMethod sortType )
+    {
+        _saveFileSortType = sortType;
     }
 
     void SetProgramPath( const char * path );
@@ -386,6 +404,8 @@ private:
     std::string _loadedFileLanguage;
 
     Maps::FileInfo _currentMapInfo;
+
+    SaveFileSortingMethod _saveFileSortType;
 
     int sound_volume;
     int music_volume;

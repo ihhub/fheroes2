@@ -353,7 +353,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
 
         // Add the castle to the list of objects which can be captured.
-        map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_CASTLE, Color::NONE );
+        map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_CASTLE, PlayerColor::NONE );
     }
 
     // If this assertion blows up it means that we are not reading the data properly from the file.
@@ -379,10 +379,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         switch ( objectType ) {
         case 0x00:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_SAWMILL, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_SAWMILL, PlayerColor::NONE );
             break;
         case 0x01:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ALCHEMIST_LAB, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ALCHEMIST_LAB, PlayerColor::NONE );
             break;
         case 0x02: // Ore mine.
         case 0x03: // Sulfur mine.
@@ -390,16 +390,16 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x05: // Gems mine.
         case 0x06: // Gold mine.
             // TODO: should we verify the mine type by something?
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, PlayerColor::NONE );
             break;
         case 0x64:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, PlayerColor::NONE );
             break;
         case 0x65:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_DRAGON_CITY, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_DRAGON_CITY, PlayerColor::NONE );
             break;
         case 0x67:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ABANDONED_MINE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ABANDONED_MINE, PlayerColor::NONE );
             break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -553,7 +553,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock );
+                        hero->LoadFromMP2( objectTileId, PlayerColor::NONE, raceType, true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -567,10 +567,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
+                    std::pair<PlayerColor, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
-                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
+                    if ( colorRace.second == Race::RAND && colorRace.first != PlayerColor::NONE ) {
                         colorRace.second = kingdom.GetRace();
                     }
 
@@ -699,9 +699,10 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    width = map.size;
-    height = map.size;
+    width = map.width;
+    height = map.width;
 
+    assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     if ( !Maps::readAllTiles( map ) ) {
@@ -762,7 +763,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( map.castleMetadata.find( object.id ) != map.castleMetadata.end() );
                 auto & castleInfo = map.castleMetadata[object.id];
 
-                const int color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
 
                 int race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
                 const bool isRandom = ( race == Race::RAND );
@@ -770,7 +771,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 if ( isRandom ) {
                     assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
 
-                    if ( ( color & Color::ALL ) == 0 ) {
+                    if ( ( Color::allPlayerColors() & color ) == 0 ) {
                         // This is a neutral town.
                         race = Race::Rand();
                     }
@@ -818,13 +819,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
                 auto & heroInfo = map.heroMetadata[object.id];
 
-                const int color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+                const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
 
                 // Check the race correctness.
                 assert( heroInfo.race == Race::IndexToRace( metadata[1] ) );
 
                 // Heroes can not be neutral.
-                assert( color != Color::NONE );
+                assert( color != PlayerColor::NONE );
 
                 const Kingdom & kingdom = GetKingdom( color );
 
@@ -881,8 +882,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
-                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+                    const PlayerColorsSet humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
                     if ( humanColors == 0 && computerColors == 0 ) {
                         // This event is not being executed for anyone. Skip it.
@@ -918,7 +919,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     auto & heroInfo = map.heroMetadata[object.id];
 
-                    const int color = Color::NONE;
+                    const PlayerColor color = PlayerColor::NONE;
 
                     if ( heroInfo.race == Race::RAND ) {
                         heroInfo.race = static_cast<uint8_t>( Race::Rand() );
@@ -1210,8 +1211,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        const int humanColors = Players::HumanColors() & event.humanPlayerColors;
-        const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+        const PlayerColorsSet humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
 
         if ( humanColors == 0 && computerColors == 0 ) {
             // This event is not being executed for anyone. Skip it.
@@ -1247,7 +1248,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
     else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
         const Castle * castle
-            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
+            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.width ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
@@ -1263,7 +1264,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
     else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
         const Castle * castle = vec_castles.Get(
-            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.size ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.size ) } );
+            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.width ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
@@ -1343,6 +1344,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_BOAT:
     case MP2::OBJ_CAMPFIRE:
@@ -1381,11 +1383,11 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_RUINS:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_STONE_LITHS:
     case MP2::OBJ_TRAVELLER_TENT:
@@ -1539,8 +1541,8 @@ void World::addDebugHero()
     }
 
     // If we are in developer mode, then add the DEBUG_HERO
-    const int color = Color::GetFirst( Players::HumanColors() );
-    assert( color != Color::NONE );
+    const PlayerColor color = Color::GetFirst( Players::HumanColors() );
+    assert( color != PlayerColor::NONE );
 
     Kingdom & kingdom = GetKingdom( color );
     if ( kingdom.GetCastles().empty() ) {
@@ -1561,14 +1563,14 @@ void World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-    // update wins, loss conditions
     if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
         const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsWinCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsWinCondition = hero->GetID();
@@ -1581,10 +1583,12 @@ void World::setHeroIdsForMapConditions()
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
             heroIdAsLossCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+
+            ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
         }
         else {
             heroIdAsLossCondition = hero->GetID();
+
             hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }

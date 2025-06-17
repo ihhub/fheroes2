@@ -43,6 +43,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
@@ -81,31 +82,37 @@
 
 namespace
 {
-    uint32_t AIGetAllianceColors()
+    PlayerColorsSet AIGetAllianceColors()
     {
         // accumulate colors
-        uint32_t colors = 0;
+        PlayerColorsSet colors = 0;
 
         if ( Settings::Get().GameType() & Game::TYPE_HOTSEAT ) {
-            const Colors vcolors( Players::HumanColors() );
+            const PlayerColorsVector vcolors( Players::HumanColors() );
 
-            for ( const int color : vcolors ) {
+            for ( const PlayerColor color : vcolors ) {
                 const Player * player = Players::Get( color );
-                if ( player )
+                if ( player ) {
                     colors |= player->GetFriends();
+                }
             }
         }
         else {
-            const Player * player = Players::Get( Players::HumanColors() );
-            if ( player )
+            const PlayerColorsSet humanColor = Players::HumanColors();
+
+            assert( Color::Count( humanColor ) == 1 );
+
+            const Player * player = Players::Get( static_cast<PlayerColor>( humanColor ) );
+            if ( player ) {
                 colors = player->GetFriends();
+            }
         }
 
         return colors;
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIIsShowAnimationForHero( const Heroes & hero, const uint32_t colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColorsSet colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -134,7 +141,7 @@ namespace
         return false;
     }
 
-    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const uint32_t colors )
+    bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColorsSet colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -237,6 +244,37 @@ namespace
         }
 
         return true;
+    }
+
+    void castGuardianSpellOnCapturedObject( Heroes & hero )
+    {
+        if ( !hero.HaveSpellBook() ) {
+            // The hero doesn't have a spell book.
+            return;
+        }
+
+        const MP2::MapObjectType objectType = hero.getObjectTypeUnderHero();
+        assert( world.getTile( hero.GetIndex() ).getMainObjectType( false ) == objectType );
+
+        // Guardian spells can only be cast on mines.
+        if ( objectType != MP2::OBJ_MINE ) {
+            return;
+        }
+
+        std::vector<Spell> spells = { Spell::SETAGUARDIAN, Spell::SETEGUARDIAN, Spell::SETFGUARDIAN, Spell::SETWGUARDIAN };
+        // Shuffle spells as all of them seem to be equal in power.
+        Rand::Shuffle( spells );
+
+        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+
+        for ( const Spell spell : spells ) {
+            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
+                // Looks like this hero knows the spell and casting it won't take too many spell points.
+                // So, let's do it!
+                hero.ActionSpellCast( spell );
+                return;
+            }
+        }
     }
 
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
@@ -770,7 +808,7 @@ namespace
 
                 setColorOnTile( tile, hero.GetColor() );
 
-                AI::Planner::castAdventureSpellOnCapturedObject( hero );
+                castGuardianSpellOnCapturedObject( hero );
             };
 
             if ( isCaptureObjectProtected( tile ) ) {
@@ -1199,7 +1237,12 @@ namespace
 
         MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
         if ( mapEvent == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
             DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+
             return;
         }
 
@@ -1543,10 +1586,10 @@ namespace
             return;
         }
 
-        Maps::Tile & tile = world.getTile( tileIndex );
+        const Maps::Tile & tile = world.getTile( tileIndex );
         bool recruitmentAllowed = true;
 
-        if ( getColorFromTile( tile ) == Color::NONE ) {
+        if ( getColorFromTile( tile ) == PlayerColor::NONE ) {
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
@@ -1554,7 +1597,7 @@ namespace
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
-                setColorOnTile( tile, Color::UNUSED );
+                setColorOnTile( tile, PlayerColor::UNUSED );
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1613,7 +1656,7 @@ namespace
             hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
             setColorOnTile( tile, hero.GetColor() );
 
-            AI::Planner::castAdventureSpellOnCapturedObject( hero );
+            castGuardianSpellOnCapturedObject( hero );
         }
         else {
             AIBattleLose( hero, result, true );
@@ -1627,7 +1670,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
+        if ( kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) ) ) {
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
@@ -1640,7 +1683,7 @@ namespace
         const Maps::Tile & tile = world.getTile( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getColorFromTile( tile ) );
+        kingdom.SetVisitTravelersTent( getBarrierColorFromTile( tile ) );
     }
 
     void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -1873,6 +1916,15 @@ namespace
         (void)hero;
 #endif
     }
+
+    void AIToBlackCatObject( Heroes & hero, int32_t dst_index )
+    {
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
+
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_BLACK_CAT ) ) {
+            hero.SetVisited( dst_index );
+        }
+    }
 }
 
 void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
@@ -1885,6 +1937,11 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
     if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
+
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+            // Most likely there will be some action, center the map on the hero to avoid subsequent minor screen movements.
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+        }
     }
 
     switch ( objectType ) {
@@ -1906,6 +1963,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToCastle( hero, dst_index );
         break;
 
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:
@@ -2113,6 +2171,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         // AI must have some action even if it goes on this object by mistake.
         AIToSirens( hero, objectType, dst_index );
         break;
+    case MP2::OBJ_BLACK_CAT:
+        AIToBlackCatObject( hero, dst_index );
+        break;
     default:
         // AI should know what to do with this type of action object! Please add logic for it.
         assert( !isActionObject );
@@ -2158,7 +2219,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     const Settings & conf = Settings::Get();
 
-    const uint32_t colors = AIGetAllianceColors();
+    const PlayerColorsSet colors = AIGetAllianceColors();
     bool recenterNeeded = true;
 
     int heroAnimationFrameCount = 0;
@@ -2224,14 +2285,17 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
                 gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                 gameArea.SetRedraw();
+
                 heroAnimationFrameCount -= heroMovementSkipValue;
                 if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                     hero.SetSpriteIndex( heroAnimationSpriteId );
 
-                    if ( heroAnimationFrameCount == 0 )
+                    if ( heroAnimationFrameCount == 0 ) {
                         resetHeroSprite = true;
-                    else
+                    }
+                    else {
                         ++heroAnimationSpriteId;
+                    }
                 }
                 const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
                 hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
@@ -2254,6 +2318,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
                         heroAnimationOffset = movement;
                         gameArea.ShiftCenter( movement );
+
                         heroAnimationFrameCount = 32 - heroMovementSkipValue;
                         heroAnimationSpriteId = hero.GetSpriteIndex();
                         if ( heroMovementSkipValue < 4 ) {
@@ -2346,7 +2411,7 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
 
     hero.SpellCasted( summonBoat );
 
-    const int heroColor = hero.GetColor();
+    const PlayerColor heroColor = hero.GetColor();
 
     Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
 

@@ -416,10 +416,10 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     _tilePassabilityDirections = DIRECTION_ALL;
 
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
-    _fogColors = Color::ALL;
+    _fogColors = Color::allPlayerColors();
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
-    _boatOwnerColor = Color::NONE;
+    _boatOwnerColor = PlayerColor::NONE;
     _index = index;
 
     setMainObjectType( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
@@ -463,22 +463,6 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         // TODO: remove layer type for top layer objects.
         _topObjectPart.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
     }
-}
-
-void Maps::Tile::setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
-{
-    _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
-
-    const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
-
-    if ( ( _isTileMarkedAsRoad || isStream() ) && ( newGround != Ground::WATER ) && Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
-        // There cannot be extra objects under the roads and streams.
-        _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
-
-        return;
-    }
-
-    _terrainImageIndex = terrainImageIndex;
 }
 
 Heroes * Maps::Tile::getHero() const
@@ -536,7 +520,7 @@ void Maps::Tile::setMainObjectType( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tile::setBoat( const int direction, const int color )
+void Maps::Tile::setBoat( const int direction, const PlayerColor color )
 {
     if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
@@ -592,12 +576,7 @@ void Maps::Tile::setBoat( const int direction, const int color )
     _mainObjectPart._uid = getNewObjectUID();
 #endif // WITH_DEBUG
 
-    using BoatOwnerColorType = decltype( _boatOwnerColor );
-    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t> );
-
-    assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
-
-    _boatOwnerColor = static_cast<BoatOwnerColorType>( color );
+    _boatOwnerColor = color;
 }
 
 int Maps::Tile::getBoatDirection() const
@@ -1064,7 +1043,7 @@ std::string Maps::Tile::String() const
 
 bool Maps::Tile::isSuitableForUltimateArtifact() const
 {
-    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, 0 ) ) {
+    if ( isWater() || !isPassableFrom( Direction::CENTER, false, true, PlayerColor::NONE ) ) {
         return false;
     }
 
@@ -1094,7 +1073,7 @@ bool Maps::Tile::isPassabilityTransparent() const
     return _mainObjectPart.isPassabilityTransparent();
 }
 
-bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const
+bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const
 {
     if ( !ignoreFog && isFog( heroColor ) ) {
         return false;
@@ -1171,35 +1150,35 @@ Maps::ObjectPart * Maps::Tile::getObjectPartWithFlag( const uint32_t uid )
     return nullptr;
 }
 
-void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, int color )
+void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, PlayerColor color )
 {
     // All flags in FLAG32.ICN are actually the same except the fact of having different offset.
     // Set the default value for the UNUSED color.
     uint8_t objectSpriteIndex = 6;
 
     switch ( color ) {
-    case Color::NONE:
+    case PlayerColor::NONE:
         // No flag. Just ignore it.
         break;
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         objectSpriteIndex = 0;
         break;
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         objectSpriteIndex = 1;
         break;
-    case Color::RED:
+    case PlayerColor::RED:
         objectSpriteIndex = 2;
         break;
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         objectSpriteIndex = 3;
         break;
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         objectSpriteIndex = 4;
         break;
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         objectSpriteIndex = 5;
         break;
-    case Color::UNUSED:
+    case PlayerColor::UNUSED:
         // Should never be called using this color as an argument.
         assert( 0 );
         break;
@@ -1246,8 +1225,8 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, int colo
 
     case MP2::OBJ_CASTLE:
         // Neutral castles always have flags on both sides of the gate, they should not be completely removed.
-        if ( color == Color::NONE ) {
-            color = Color::UNUSED;
+        if ( color == PlayerColor::NONE ) {
+            color = PlayerColor::UNUSED;
         }
 
         objectSpriteIndex *= 2;
@@ -1268,10 +1247,10 @@ void Maps::Tile::setOwnershipFlag( const MP2::MapObjectType objectType, int colo
     }
 }
 
-void Maps::Tile::updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )
+void Maps::Tile::updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )
 {
     // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
-    if ( color == Color::NONE ) {
+    if ( color == PlayerColor::NONE ) {
         const auto isFlag = [uid]( const auto & part ) { return part._uid == uid && part.icnType == MP2::OBJ_ICN_TYPE_FLAG32; };
         _groundObjectPart.remove_if( isFlag );
         _topObjectPart.remove_if( isFlag );
@@ -1545,7 +1524,7 @@ void Maps::Tile::updateObjectImageIndex( const uint32_t objectUid, const MP2::Ob
     }
 }
 
-void Maps::Tile::ClearFog( const int colors )
+void Maps::Tile::ClearFog( const PlayerColorsSet colors )
 {
     _fogColors &= ~colors;
 
@@ -1570,6 +1549,19 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
 
 void Maps::Tile::updateObjectType()
 {
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        if ( world.GetMapEvent( Maps::GetPoint( _index ) ) == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
+            DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << _index << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            setMainObjectType( MP2::OBJ_NONE );
+        }
+
+        // Events have no visible parts on the map, so we preserve their type regardless of what part of the object is on the tile.
+        return;
+    }
+
     // After removing an object there could be an object part in the main object part.
     MP2::MapObjectType objectType = getObjectTypeByIcn( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
     if ( MP2::isOffGameActionObject( objectType ) ) {
