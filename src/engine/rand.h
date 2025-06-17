@@ -50,6 +50,11 @@ namespace Rand
             return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
         }
 
+        // Defines a new templated false value to be used in static_assert
+        // See https://devblogs.microsoft.com/oldnewthing/20200311-00/?p=103553
+        template <typename T>
+        static constexpr bool alwaysFalseValue = false;
+
         template <typename Random>
         static uint64_t generateUInt64( Random & gen )
         {
@@ -61,8 +66,8 @@ namespace Rand
                 return gen();
             }
             else {
-                // Using !sizeof because static_assert( false ) is ill-formed in c++17
-                static_assert( !sizeof( Random ), "Unsupported random generator type" );
+                // Using alwaysFalseValue because static_assert( false ) is ill-formed in c++17
+                static_assert( alwaysFalseValue<Random>, "Unsupported random generator type" );
             }
         }
 
