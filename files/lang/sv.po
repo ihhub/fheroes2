@@ -3514,10 +3514,10 @@ msgid "Click to load a previously saved game."
 msgstr "Klicka för att ladda ett tidigare sparat spel."
 
 msgid "Click here if you wish to sort save files by their name."
-msgstr "Klicka här om du vill sortera sparfiler via dess namn."
+msgstr "Klicka här om du vill  sparfiler via dess namn."
 
 msgid "Sort by Name"
-msgstr "Sortera via namn"
+msgstr "Sortera via Namn"
 
 msgid ""
 "Click here if you you wish to sort save files by their last modified date."
