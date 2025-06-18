@@ -4566,7 +4566,7 @@ msgid "Back"
 msgstr "Tillbaka"
 
 msgid "Return to the Editor's main menu options."
-msgstr "Återgå till Kartredigerarens huvudmenys alternativ."
+msgstr "Återgå till Kartredigerarens huvudmeny."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
