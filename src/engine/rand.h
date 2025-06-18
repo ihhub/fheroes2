@@ -57,8 +57,10 @@ namespace Rand
         --last;
         const typename std::iterator_traits<Iter>::difference_type interval = last - first;
 
+#ifndef __EMSCRIPTEN__ // todo: fixme! cause no type named 'difference_type' in 'std::iterator_traits<std::vector<T>>'
         // Our implementation doesn't work for intervals bigger than 2**32 - 1
         assert( interval <= static_cast<typename std::iterator_traits<Iter>::difference_type>( std::numeric_limits<uint32_t>::max() ) );
+#endif
 
         uint32_t remainingSwaps = static_cast<uint32_t>( interval );
         while ( remainingSwaps > 0 ) {
