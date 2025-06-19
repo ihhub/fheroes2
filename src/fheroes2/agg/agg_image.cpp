@@ -2564,12 +2564,23 @@ namespace
         case ICN::TOWNBKG2:
             LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 1 ) {
+                fheroes2::Sprite fix;
+                fheroes2::h2d::readImage( "townbkg2_fix.image", fix );
+
                 fheroes2::Sprite & out = _icnVsSprite[id][0];
-                // The first pixel of the original sprite has incorrect color.
-                if ( !out.empty() ) {
-                    out._disableTransformLayer();
-                    out.image()[0] = 10;
-                }
+                // The original sprite has incorrect transparent pixel. Make the image single-layer before applying the fix.
+                out._disableTransformLayer();
+                Blit( fix, 0, 0, out, fix.x(), fix.y(), fix.width(), fix.height() );
+            }
+            return true;
+        case ICN::TWNSSPEC:
+            LoadOriginalICN( id );
+            if ( _icnVsSprite[id].size() == 1 ) {
+                fheroes2::Sprite fix;
+                fheroes2::h2d::readImage( "twnsspec_fix.image", fix );
+
+                fheroes2::Sprite & out = _icnVsSprite[id][0];
+                Blit( fix, 0, 0, out, fix.x(), fix.y(), fix.width(), fix.height() );
             }
             return true;
         case ICN::HSICONS:
