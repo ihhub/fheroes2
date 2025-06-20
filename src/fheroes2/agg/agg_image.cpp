@@ -5062,6 +5062,16 @@ namespace
             }
             return true;
         }
+        case ICN::BOOK: {
+            LoadOriginalICN( id );
+            if ( _icnVsSprite[id].size() == 7 ) {
+                // Add straight spell book corner to indicate first and last page.
+                fheroes2::Sprite & corner = _icnVsSprite[id].emplace_back();
+                fheroes2::h2d::readImage( "book_corner.image", corner );
+            }
+            return true;
+        }
+
         default:
             break;
         }
