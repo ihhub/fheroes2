@@ -21,7 +21,6 @@
 #include "image.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -496,7 +495,10 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), value, totalSize );
-            memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
+
+            if ( !_singleLayer ) {
+                memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
+            }
         }
     }
 
@@ -525,8 +527,11 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), static_cast<uint8_t>( 0 ), totalSize );
-            // Set the transform layer to skip all data.
-            memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
+
+            if ( !_singleLayer ) {
+                // Set the transform layer to skip all data.
+                memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
+            }
         }
     }
 
@@ -538,18 +543,18 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = static_cast<size_t>( image._width ) * image._height * 2;
+        const size_t imageSize = static_cast<size_t>( image._width ) * image._height;
 
         _singleLayer = image._singleLayer;
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[size] );
+            _data.reset( new uint8_t[imageSize * 2] );
 
             _width = image._width;
             _height = image._height;
         }
 
-        memcpy( _data.get(), image._data.get(), size );
+        memcpy( _data.get(), image._data.get(), _singleLayer ? imageSize : imageSize * 2 );
     }
 
     Sprite::Sprite( Sprite && sprite ) noexcept
