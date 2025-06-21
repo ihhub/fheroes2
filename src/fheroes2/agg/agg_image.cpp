@@ -2552,9 +2552,8 @@ namespace
                 out._disableTransformLayer();
                 Blit( fix, 0, 0, out, fix.x(), fix.y(), fix.width(), fix.height() );
             }
-            return true;
+            break;
         case ICN::TWNSSPEC:
-            LoadOriginalICN( id );
             if ( _icnVsSprite[id].size() == 1 ) {
                 fheroes2::Sprite fix;
                 fheroes2::h2d::readImage( "twnsspec_fix.image", fix );
