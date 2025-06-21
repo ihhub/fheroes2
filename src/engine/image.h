@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -73,11 +74,23 @@ namespace fheroes2
 
         uint8_t * transform()
         {
+            if ( _singleLayer ) {
+                // Why do you want to get transform layer from the single-layer image?
+                assert( 0 );
+                return nullptr;
+            }
+
             return _data.get() + width() * height();
         }
 
         const uint8_t * transform() const
         {
+            if ( _singleLayer ) {
+                // Why do you want to get transform layer from the single-layer image?
+                assert( 0 );
+                return nullptr;
+            }
+
             return _data.get() + width() * height();
         }
 
@@ -86,15 +99,17 @@ namespace fheroes2
             return !_data;
         }
 
-        void reset(); // makes image fully transparent (transform layer is set to 1)
+        // Set all data in the image layer to 0 and make double-layer images fully transparent (transform layer is set to 1).
+        void reset();
 
-        void clear(); // makes the image empty
+        // Make the image empty.
+        void clear();
 
-        // Fill 'image' layer with given value, setting 'transform' layer to 0.
+        // Fill 'image' layer with given value, setting the double-layer images 'transform' layer to 0.
         void fill( const uint8_t value );
 
-        // This is an optional indicator for image processing functions.
-        // The whole image still consists of 2 layers but transform layer might be ignored in computations
+        // This is an indicator for image processing functions.
+        // The single-layer image can not contain transform layer so this layer is never accessed for such images.
         bool singleLayer() const
         {
             return _singleLayer;
