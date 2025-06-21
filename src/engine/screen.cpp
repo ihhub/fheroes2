@@ -1139,15 +1139,9 @@ namespace
             }
 
             std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
-            if ( !isInDisplay.has_value() ) {
-                ERROR_LOG( "Failed to check if the previous window position is within any display." )
 
-                clear();
-                return false;
-            }
-            const bool isInDisplayValue = *isInDisplay;
-            // check if the previous window position is within display
-            if ( !isInDisplayValue ) {
+            // check if the previous window position is within display or error occured
+            if ( !isInDisplay || !*isInDisplay ) {
                 // reset position if it is not within the bounds of any display
                 _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
             }
