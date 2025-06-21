@@ -2678,8 +2678,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     if ( !Board::isValidDirection( _currentCellIndex, leftDirection ) || !Board::isValidDirection( _currentCellIndex, rightDirection ) ) {
                         return false;
                     }
-                    Position position = Position::GetReachable( *_currentUnit, dst );
-                    Cell * head = position.GetHead();
+                    const Position position = Position::GetReachable( *_currentUnit, dst );
+                    const Cell * head = position.GetHead();
                     // Position must be both reachable and not "fixed" to be a tail attack. Tail attacks are covered above.
                     return head != nullptr && head->GetIndex() == dst;
                 };
