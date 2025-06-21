@@ -41,42 +41,6 @@ namespace Rand
 {
     class PCG32
     {
-    private:
-        static constexpr uint64_t multiplier = 6364136223846793005ULL;
-        static constexpr uint64_t defaultStream = 54ULL;
-        static constexpr uint64_t defaultSeed = 42ULL;
-
-        static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
-        {
-            return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
-        }
-
-        // Defines a new templated false value to be used in static_assert
-        // See https://devblogs.microsoft.com/oldnewthing/20200311-00/?p=103553
-        template <typename T>
-        static constexpr bool alwaysFalseValue = false;
-
-        template <typename Random>
-        static uint64_t generateUInt64( Random & gen )
-        {
-            static_assert( Random::min() == std::numeric_limits<uint32_t>::min() );
-            if constexpr ( Random::max() == std::numeric_limits<uint32_t>::max() ) {
-                return static_cast<uint64_t>( gen() ) << 32 | static_cast<uint64_t>( gen() );
-            }
-            else if constexpr ( Random::max() == std::numeric_limits<uint64_t>::max() ) {
-                return gen();
-            }
-            else {
-                // Using alwaysFalseValue because static_assert( false ) is ill-formed in c++17
-                static_assert( alwaysFalseValue<Random>, "Unsupported random generator type" );
-            }
-        }
-
-        constexpr void advanceState()
-        {
-            _state = _state * multiplier + ( _increment | 1 );
-        }
-
     public:
         using result_type = uint32_t;
 
@@ -117,6 +81,41 @@ namespace Rand
         }
 
     private:
+        static constexpr uint64_t multiplier = 6364136223846793005ULL;
+        static constexpr uint64_t defaultStream = 54ULL;
+        static constexpr uint64_t defaultSeed = 42ULL;
+
+        static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
+        {
+            return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
+        }
+
+        // Defines a new templated false value to be used in static_assert
+        // See https://devblogs.microsoft.com/oldnewthing/20200311-00/?p=103553
+        template <typename T>
+        static constexpr bool alwaysFalseValue = false;
+
+        template <typename Random>
+        static uint64_t generateUInt64( Random & gen )
+        {
+            static_assert( Random::min() == std::numeric_limits<uint32_t>::min() );
+            if constexpr ( Random::max() == std::numeric_limits<uint32_t>::max() ) {
+                return static_cast<uint64_t>( gen() ) << 32 | static_cast<uint64_t>( gen() );
+            }
+            else if constexpr ( Random::max() == std::numeric_limits<uint64_t>::max() ) {
+                return gen();
+            }
+            else {
+                // Using alwaysFalseValue because static_assert( false ) is ill-formed in c++17
+                static_assert( alwaysFalseValue<Random>, "Unsupported random generator type" );
+            }
+        }
+
+        constexpr void advanceState()
+        {
+            _state = _state * multiplier + ( _increment | 1 );
+        }
+
         uint64_t _state;
         uint64_t _increment;
     };
