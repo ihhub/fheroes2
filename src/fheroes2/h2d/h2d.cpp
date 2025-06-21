@@ -48,6 +48,7 @@ namespace
         "black_cat_animation_3.image",
         "black_cat_animation_4.image",
         "black_cat_animation_5.image",
+        "book_corner.image",
         "circular_stone_liths_center.image",
         "circular_stone_liths_left.image",
         "circular_stone_liths_top.image",
