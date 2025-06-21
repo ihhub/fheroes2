@@ -1488,7 +1488,7 @@ namespace
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "EXPANSION\nCAMPAIGN" ), buttonFontType ) );
             }
 
-            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 80 );
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 117 );
             break;
         }
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
@@ -1533,7 +1533,7 @@ namespace
                                                       "108 X 108",
                                                       "144 X 144" };
 
-            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 80 );
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 117 );
             break;
         }
         case ICN::GOOD_CAMPAIGN_BUTTONS:
