@@ -1332,7 +1332,6 @@ namespace
 
             break;
         }
-        
         case ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD: {
             _icnVsSprite[id].resize( 12 );
 

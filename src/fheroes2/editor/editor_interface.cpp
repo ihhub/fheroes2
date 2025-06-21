@@ -1166,7 +1166,7 @@ namespace Interface
         const fheroes2::ButtonBase & buttonSaveMap = optionButtons.button( 3 );
         const fheroes2::ButtonBase & buttonMainMenu = optionButtons.button( 4 );
         const fheroes2::ButtonBase & buttonQuit = optionButtons.button( 5 );
-        
+
         fheroes2::Button buttonCancel;
 
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
