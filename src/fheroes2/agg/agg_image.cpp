@@ -1506,7 +1506,7 @@ namespace
                                              buttonSize, false, ICN::STONEBAK );
                 // Add generated Back button.
                 fheroes2::makeButtonSprites( _icnVsSprite[id][6], _icnVsSprite[id][7],
-                                             fheroes2::getSupportedText( gettext_noop( "EditorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
+                                             fheroes2::getSupportedText( gettext_noop( "editorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
 
                 // Add From Scratch and Random buttons.
                 for ( size_t i = 0; i < 2; ++i ) {
