@@ -894,6 +894,18 @@ void Maps::Tile::sortObjectParts()
 
     if ( !_groundObjectPart.empty() ) {
         ObjectPart & highestPriorityPart = _groundObjectPart.back();
+
+        if ( highestPriorityPart.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            // Flags are not allowed to be the main object because they belong to other object.
+            if ( _groundObjectPart.size() == 1 ) {
+                return;
+            }
+
+            // Replace the last object (Flag) with the previous one.
+            ObjectPart & prevHighestPriorityPart = *std::next( _groundObjectPart.rbegin() );
+            std::swap( highestPriorityPart, prevHighestPriorityPart );
+        }
+
         std::swap( highestPriorityPart, _mainObjectPart );
 
         // If this assertion blows up then you are not storing correct values for layer type!
