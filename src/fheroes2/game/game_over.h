@@ -25,9 +25,11 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "color.h"
 #include "game_mode.h"
+#include "game_string.h"
 
 class IStreamBase;
 class OStreamBase;
@@ -61,7 +63,7 @@ namespace GameOver
     };
 
     const char * GetString( uint32_t cond );
-    std::string GetActualDescription( uint32_t cond );
+    std::vector<fheroes2::LocalizedString> GetActualDescription( uint32_t cond );
 
     class Result
     {

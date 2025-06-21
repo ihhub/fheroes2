@@ -859,4 +859,45 @@ namespace fheroes2
         }
         fheroes2::Copy( racePortrait, 0, 0, output, portPos );
     }
+
+    std::vector<LocalizedString> getLocalizedStrings( std::string text, const SupportedLanguage currentLanguage, const std::string_view toReplace,
+                                                      std::string_view replacement, const SupportedLanguage replacementLanguage )
+    {
+        if ( currentLanguage == replacementLanguage ) {
+            StringReplace( text, toReplace.data(), replacement );
+            return { { std::move( text ), currentLanguage } };
+        }
+
+        // Check whether the replacement text even exists.
+        const std::string::size_type pos = text.find( toReplace );
+        if ( pos == std::string::npos ) {
+            return { { std::move( text ), currentLanguage } };
+        }
+
+        std::vector<LocalizedString> strings;
+
+        strings.emplace_back( text.substr( 0, pos ), currentLanguage );
+        strings.emplace_back( std::string( replacement ), replacementLanguage );
+        strings.emplace_back( text.substr( pos + toReplace.size() ), currentLanguage );
+
+        return strings;
+    }
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font )
+    {
+        if ( texts.empty() ) {
+            return {};
+        }
+
+        if ( texts.size() == 1 ) {
+            return std::make_unique<Text>( std::move( texts.front().text ), font, texts.front().language );
+        }
+
+        auto multiFontText = std::make_unique<MultiFontText>();
+        for ( auto & text : texts ) {
+            multiFontText->add( Text( std::move( text.text ), font, text.language ) );
+        }
+
+        return multiFontText;
+    }
 }

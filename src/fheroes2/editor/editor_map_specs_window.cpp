@@ -99,6 +99,7 @@ namespace
         int32_t tileIndex{ -1 };
         PlayerColor color{ PlayerColor::NONE };
         const Maps::Map_Format::HeroMetadata * heroMetadata{ nullptr };
+        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
     };
 
     struct TownInfo
@@ -107,6 +108,7 @@ namespace
         PlayerColor color{ PlayerColor::NONE };
         int32_t race{ Race::NONE };
         const Maps::Map_Format::CastleMetadata * castleMetadata{ nullptr };
+        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
     };
 
     fheroes2::Sprite getHeroIcon( const int32_t heroPortait, const int32_t race, const PlayerColor color, const int townIcnId )
@@ -210,19 +212,22 @@ namespace
         return title;
     }
 
-    std::string getTownTitle( const std::string & name, const int race, const bool isTown, const int32_t tileIndex, const int32_t mapWidth )
+    std::vector<fheroes2::LocalizedString> getTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
+                                                         const int32_t tileIndex, const int32_t mapWidth )
     {
-        std::string title;
+        std::vector<fheroes2::LocalizedString> strings;
+        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
             if ( isTown ) {
-                title = _( "[%{pos}]: %{race} town" );
+                strings.emplace_back( _( "[%{pos}]: %{race} town" ), gameLanguage );
             }
             else {
-                title = _( "[%{pos}]: %{race} castle" );
+                strings.emplace_back( _( "[%{pos}]: %{race} castle" ), gameLanguage );
             }
         }
         else {
+            std::string title;
             if ( isTown ) {
                 title = _( "[%{pos}]: %{name}, %{race} town" );
             }
@@ -230,14 +235,16 @@ namespace
                 title = _( "[%{pos}]: %{name}, %{race} castle" );
             }
 
-            StringReplace( title, "%{name}", name );
+            strings = fheroes2::getLocalizedStrings( title, gameLanguage, "%{name}", name, language );
         }
 
-        StringReplace( title, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
+        assert( !strings.empty() );
 
-        StringReplace( title, "%{race}", Race::String( race ) );
+        StringReplace( strings.front().text, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
 
-        return title;
+        StringReplace( strings.front().text, "%{race}", Race::String( race ) );
+
+        return strings;
     }
 
     class SelectMapHero final : public Dialog::ItemSelectionWindow
@@ -335,7 +342,7 @@ namespace
         const std::vector<TownInfo> & _townInfos;
     };
 
-    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors )
+    std::vector<HeroInfo> getMapHeroes( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors, const fheroes2::SupportedLanguage language )
     {
         if ( allowedColors == 0 ) {
             // Nothing to do.
@@ -371,6 +378,7 @@ namespace
 
                 heroInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 heroInfo.color = color;
+                heroInfo.language = language;
 
                 auto heroMetadataIter = map.heroMetadata.find( object.id );
                 assert( heroMetadataIter != map.heroMetadata.end() );
@@ -382,7 +390,8 @@ namespace
         return heroInfos;
     }
 
-    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors, const bool excludeNeutralTowns )
+    std::vector<TownInfo> getMapTowns( const Maps::Map_Format::MapFormat & map, const PlayerColorsSet allowedColors, const bool excludeNeutralTowns,
+                                       const fheroes2::SupportedLanguage language )
     {
         if ( excludeNeutralTowns && allowedColors == 0 ) {
             // Nothing to do.
@@ -416,6 +425,7 @@ namespace
                 townInfo.tileIndex = static_cast<int32_t>( tileIndex );
                 townInfo.color = color;
                 townInfo.race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+                townInfo.language = language;
 
                 const auto castleMetadataIter = map.castleMetadata.find( object.id );
                 assert( castleMetadataIter != map.castleMetadata.end() );
@@ -691,6 +701,7 @@ namespace
             , _isVictoryConditionApplicableForAI( mapFormat.isVictoryConditionApplicableForAI )
             , _isEvilInterface( isEvilInterface )
             , _mapWidth( mapFormat.width )
+            , _language( mapFormat.mainLanguage )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             // Set the initial state for all victory conditions.
@@ -705,7 +716,7 @@ namespace
                     _townToCapture.second = static_cast<PlayerColor>( mapFormat.victoryConditionMetadata[1] );
 
                     // Verify that this is a valid computer-only town.
-                    _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false );
+                    _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false, _language );
 
                     bool townFound = false;
                     for ( const auto & town : _mapTownInfos ) {
@@ -734,7 +745,7 @@ namespace
                     _heroToKill.second = static_cast<PlayerColor>( mapFormat.victoryConditionMetadata[1] );
 
                     // Verify that this is a valid computer-only hero.
-                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), _language );
 
                     bool heroFound = false;
                     for ( const auto & hero : _mapHeroInfos ) {
@@ -809,7 +820,7 @@ namespace
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::VICTORY_CAPTURE_TOWN: {
-                _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false );
+                _mapTownInfos = getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false, _language );
                 if ( _mapTownInfos.empty() ) {
                     // No towns exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
@@ -835,7 +846,7 @@ namespace
                 return false;
             }
             case Maps::FileInfo::VICTORY_KILL_HERO: {
-                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) );
+                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), _language );
                 if ( _mapHeroInfos.empty() ) {
                     // No heroes exist for computer-only players.
                     _conditionType = Maps::FileInfo::VICTORY_DEFEAT_EVERYONE;
@@ -1423,6 +1434,7 @@ namespace
         const bool _isEvilInterface{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         const int32_t _mapWidth{ 0 };
+        const fheroes2::SupportedLanguage _language{ fheroes2::SupportedLanguage::English };
         // Town or hero loss metadata include tile ID and color.
         std::pair<int32_t, PlayerColor> _heroToKill{ 0, PlayerColor::NONE };
         std::pair<int32_t, PlayerColor> _townToCapture{ 0, PlayerColor::NONE };
@@ -1449,6 +1461,7 @@ namespace
             : _conditionType( mapFormat.lossConditionType )
             , _isEvilInterface( isEvilInterface )
             , _mapWidth( mapFormat.width )
+            , _language( mapFormat.mainLanguage )
             , _restorer( output, roi.x, roi.y, roi.width, roi.height )
         {
             switch ( _conditionType ) {
@@ -1461,7 +1474,7 @@ namespace
                     std::copy( mapFormat.lossConditionMetadata.begin(), mapFormat.lossConditionMetadata.end(), _townToLose.begin() );
 
                     // Verify that this is a valid human-only town.
-                    _mapTownInfos = getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true );
+                    _mapTownInfos = getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true, _language );
                     const int32_t townTileIndex = static_cast<int32_t>( _townToLose[0] );
 
                     bool townFound = false;
@@ -1490,7 +1503,7 @@ namespace
                     std::copy( mapFormat.lossConditionMetadata.begin(), mapFormat.lossConditionMetadata.end(), _heroToLose.begin() );
 
                     // Verify that this is a valid human-only hero.
-                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ) );
+                    _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), _language );
                     const int32_t heroTileIndex = static_cast<int32_t>( _heroToLose[0] );
                     bool heroFound = false;
                     for ( const auto & hero : _mapHeroInfos ) {
@@ -1536,7 +1549,7 @@ namespace
         {
             switch ( _conditionType ) {
             case Maps::FileInfo::LOSS_TOWN: {
-                _mapTownInfos = getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true );
+                _mapTownInfos = getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true, _language );
                 if ( _mapTownInfos.empty() ) {
                     // No towns exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
@@ -1565,7 +1578,7 @@ namespace
                 break;
             }
             case Maps::FileInfo::LOSS_HERO: {
-                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ) );
+                _mapHeroInfos = getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), _language );
                 if ( _mapHeroInfos.empty() ) {
                     // No heroes exist for human-only players.
                     _conditionType = Maps::FileInfo::LOSS_EVERYTHING;
@@ -1896,6 +1909,7 @@ namespace
         uint8_t _conditionType{ Maps::FileInfo::LOSS_EVERYTHING };
         const bool _isEvilInterface{ false };
         const int32_t _mapWidth{ 0 };
+        const fheroes2::SupportedLanguage _language{ fheroes2::SupportedLanguage::English };
         std::array<uint32_t, 2> _heroToLose{ 0 };
         std::array<uint32_t, 2> _townToLose{ 0 };
         std::vector<TownInfo> _mapTownInfos;
@@ -1916,13 +1930,13 @@ namespace
 
         if ( isLossList ) {
             // Remove the conditions that have no selection among objects.
-            if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ) ).empty() ) {
+            if ( getMapHeroes( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), mapFormat.mainLanguage ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::LOSS_HERO; } ),
                                   conditions.end() );
             }
 
-            if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true ).empty() ) {
+            if ( getMapTowns( mapFormat, mapFormat.humanPlayerColors & ( ~mapFormat.computerPlayerColors ), true, mapFormat.mainLanguage ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::LOSS_TOWN; } ),
                                   conditions.end() );
@@ -1930,13 +1944,13 @@ namespace
         }
         else {
             // Remove the conditions that have no selection among objects.
-            if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ) ).empty() ) {
+            if ( getMapHeroes( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), mapFormat.mainLanguage ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_KILL_HERO; } ),
                                   conditions.end() );
             }
 
-            if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false ).empty() ) {
+            if ( getMapTowns( mapFormat, mapFormat.computerPlayerColors & ( ~mapFormat.humanPlayerColors ), false, mapFormat.mainLanguage ).empty() ) {
                 conditions.erase( std::remove_if( conditions.begin(), conditions.end(),
                                                   []( const uint8_t condition ) { return condition == Maps::FileInfo::VICTORY_CAPTURE_TOWN; } ),
                                   conditions.end() );

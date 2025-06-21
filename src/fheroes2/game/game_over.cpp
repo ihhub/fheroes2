@@ -53,166 +53,180 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
 {
-    void DialogWins( uint32_t cond )
+    void DialogWins( const uint32_t cond )
     {
-        std::string body;
-
         const Settings & conf = Settings::Get();
+        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+
+        std::vector<fheroes2::LocalizedString> strings;
+
         if ( conf.isCampaignGameType() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
             if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-                body = _( "Dragon city has fallen! You are now the Master of the Dragons." );
+                strings.emplace_back( _( "Dragon city has fallen! You are now the Master of the Dragons." ), gameLanguage );
             }
         }
 
-        if ( body.empty() ) {
+        if ( strings.empty() ) {
             switch ( cond ) {
             case GameOver::WINS_ALL:
                 break;
 
             case GameOver::WINS_TOWN: {
-                body = _( "You captured %{name}!\nYou are victorious." );
-
                 const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
                 assert( town != nullptr );
-
                 if ( town ) {
-                    StringReplace( body, "%{name}", town->GetName() );
+                    strings = fheroes2::getLocalizedStrings( _( "You captured %{name}!\nYou are victorious." ), gameLanguage, "%{name}", town->GetName(), gameLanguage );
                 }
-
                 break;
             }
 
             case GameOver::WINS_HERO: {
-                body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
-
                 const Heroes * hero = world.GetHeroesCondWins();
                 assert( hero != nullptr );
 
                 if ( hero ) {
-                    StringReplace( body, "%{name}", hero->GetName() );
+                    strings = fheroes2::getLocalizedStrings( _( "You have captured the enemy hero %{name}!\nYour quest is complete." ), gameLanguage, "%{name}",
+                                                             hero->GetName(), gameLanguage );
                 }
 
                 break;
             }
 
-            case GameOver::WINS_ARTIFACT:
-                body = _( "You have found the %{name}.\nYour quest is complete." );
+            case GameOver::WINS_ARTIFACT: {
+                std::string tempText = _( "You have found the %{name}.\nYour quest is complete." );
 
                 if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
-                    StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+                    StringReplace( tempText, "%{name}", _( "Ultimate Artifact" ) );
                 }
                 else {
                     const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
-                    StringReplace( body, "%{name}", art.GetName() );
+                    StringReplace( tempText, "%{name}", art.GetName() );
                 }
 
-                break;
+                strings.emplace_back( std::move( tempText ), gameLanguage );
 
-            case GameOver::WINS_SIDE:
-                body = _( "The enemy is beaten.\nYour side has triumphed!" );
                 break;
+            }
 
-            case GameOver::WINS_GOLD:
-                body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-                StringReplace( body, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+            case GameOver::WINS_SIDE: {
+                strings.emplace_back( _( "The enemy is beaten.\nYour side has triumphed!" ), gameLanguage );
                 break;
+            }
+
+            case GameOver::WINS_GOLD: {
+                std::string tempText = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
+                StringReplace( tempText, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+
+                strings.emplace_back( std::move( tempText ), gameLanguage );
+                break;
+            }
 
             default:
                 break;
             }
         }
 
-        if ( !body.empty() ) {
+        if ( !strings.empty() ) {
             AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
-            fheroes2::showStandardTextMessage( _( "Victory!" ), body, Dialog::OK );
+            const fheroes2::Text header( _( "Victory!" ), fheroes2::FontType::normalYellow() );
+            const auto body = fheroes2::getLocalizedText( strings, fheroes2::FontType::normalWhite() );
+            fheroes2::showMessage( header, *body, Dialog::OK );
         }
     }
 
-    void DialogLoss( uint32_t cond )
+    void DialogLoss( const uint32_t cond )
     {
         const Settings & conf = Settings::Get();
-        std::string body;
+        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+
+        std::vector<fheroes2::LocalizedString> strings;
 
         switch ( cond ) {
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
-            body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-
             const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
-                StringReplace( body, "%{name}", town->GetName() );
+                strings = fheroes2::getLocalizedStrings( _( "The enemy has captured %{name}!\nThey are triumphant." ), gameLanguage, "%{name}", town->GetName(),
+                                                         gameLanguage );
             }
 
             break;
         }
 
-        case GameOver::LOSS_ENEMY_WINS_ARTIFACT:
-            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
+        case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
+            std::string tempText = _( "The enemy has found the %{name}.\nYour quest is a failure." );
 
             if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
-                StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+                StringReplace( tempText, "%{name}", _( "Ultimate Artifact" ) );
             }
             else {
                 const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
-                StringReplace( body, "%{name}", art.GetName() );
+                StringReplace( tempText, "%{name}", art.GetName() );
             }
 
-            break;
+            strings.emplace_back( std::move( tempText ), gameLanguage );
 
-        case GameOver::LOSS_ENEMY_WINS_GOLD:
-            body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-            StringReplace( body, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
             break;
+        }
+
+        case GameOver::LOSS_ENEMY_WINS_GOLD: {
+            std::string tempText = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
+            StringReplace( tempText, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+
+            strings.emplace_back( std::move( tempText ), gameLanguage );
+            break;
+        }
 
         case GameOver::LOSS_ALL:
-            body = _( "You have been eliminated from the game!!!" );
+            strings.emplace_back( _( "You have been eliminated from the game!!!" ), gameLanguage );
             break;
 
         case GameOver::LOSS_TOWN: {
-            body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-
             const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
-                StringReplace( body, "%{name}", town->GetName() );
+                strings = fheroes2::getLocalizedStrings( _( "The enemy has captured %{name}!\nThey are triumphant." ), gameLanguage, "%{name}", town->GetName(),
+                                                         gameLanguage );
             }
 
             break;
         }
 
         case GameOver::LOSS_HERO: {
-            body = _( "You have lost the hero %{name}.\nYour quest is over." );
-
             const Heroes * hero = world.GetHeroesCondLoss();
             assert( hero != nullptr );
 
             if ( hero ) {
-                StringReplace( body, "%{name}", hero->GetName() );
+                strings = fheroes2::getLocalizedStrings( _( "You have lost the hero %{name}.\nYour quest is over." ), gameLanguage, "%{name}", hero->GetName(),
+                                                         gameLanguage );
             }
 
             break;
         }
 
         case GameOver::LOSS_TIME:
-            body = _( "You have failed to complete your quest in time.\nAll is lost." );
+            strings.emplace_back( _( "You have failed to complete your quest in time.\nAll is lost." ), gameLanguage );
             break;
 
         default:
             break;
         }
 
-        if ( !body.empty() ) {
+        if ( !strings.empty() ) {
             AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
-            fheroes2::showStandardTextMessage( _( "Defeat!" ), body, Dialog::OK );
+            const fheroes2::Text header( _( "Defeat!" ), fheroes2::FontType::normalYellow() );
+            const auto body = fheroes2::getLocalizedText( strings, fheroes2::FontType::normalWhite() );
+            fheroes2::showMessage( header, *body, Dialog::OK );
         }
     }
 
@@ -276,9 +290,14 @@ const char * GameOver::GetString( uint32_t cond )
     return "None";
 }
 
-std::string GameOver::GetActualDescription( uint32_t cond )
+std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t cond )
 {
+    // This should be populated only for strings that are set for objects within the Editor.
+    std::optional<std::pair<std::string, fheroes2::LocalizedString>> translationReplacement;
+
+
     const Settings & conf = Settings::Get();
+    const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
     std::string msg;
 
     if ( WINS_ALL == cond ) {
@@ -332,7 +351,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
 
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
-            StringReplace( msg, "%{name}", town->GetName() );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), gameLanguage ) );
         }
     }
     else if ( WINS_HERO & cond ) {
@@ -341,7 +360,8 @@ std::string GameOver::GetActualDescription( uint32_t cond )
 
         if ( hero ) {
             msg = _( "Defeat the hero '%{name}'." );
-            StringReplace( msg, "%{name}", hero->GetName() );
+
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), gameLanguage ) );
         }
     }
     else if ( WINS_ARTIFACT & cond ) {
@@ -373,7 +393,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
 
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
-            StringReplace( msg, "%{name}", town->GetName() );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), gameLanguage ) );
         }
     }
     else if ( LOSS_HERO & cond ) {
@@ -382,7 +402,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
 
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
-            StringReplace( msg, "%{name}", hero->GetName() );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), gameLanguage ) );
         }
     }
     else if ( LOSS_TIME & cond ) {
@@ -397,7 +417,12 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{month}", month + 1 );
     }
 
-    return msg;
+    if ( translationReplacement.has_value() ) {
+        return fheroes2::getLocalizedStrings( std::move( msg ), gameLanguage, translationReplacement->first, translationReplacement->second.text,
+                                              *( translationReplacement->second.language ) );
+    }
+
+    return { fheroes2::LocalizedString( std::move( msg ), gameLanguage ) };
 }
 
 GameOver::Result & GameOver::Result::Get()

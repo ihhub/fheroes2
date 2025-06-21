@@ -330,8 +330,8 @@ namespace Editor
         const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Castle name text.
-        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
-            // TODO: use language for castle name. At the moment it is disabled.
+        auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown, language]() {
+            const fheroes2::LanguageSwitcher switcher( language );
             fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
             if ( castleMetadata.customName.empty() ) {
                 text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
@@ -488,11 +488,8 @@ namespace Editor
                 if ( le.MouseClickLeft( nameArea ) ) {
                     std::string res = castleMetadata.customName;
 
-                    // TODO: use the provided language to set the castle's name.
-                    (void)language;
-
                     const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
-                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, fheroes2::SupportedLanguage::English ) && !res.empty() ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, language ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
