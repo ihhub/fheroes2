@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string>
 
@@ -59,16 +60,12 @@ namespace Game
     fheroes2::GameMode LoadGame();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
-    fheroes2::GameMode CampaignSelection();
+    fheroes2::GameMode NewHotSeat( const size_t playerCount );
     fheroes2::GameMode NewSuccessionWarsCampaign();
     fheroes2::GameMode NewPriceOfLoyaltyCampaign();
-    fheroes2::GameMode NewMulti();
-    fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
-    fheroes2::GameMode NewNetwork(); // To be utilized in future.
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
-    fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
     fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario( const uint8_t humanPlayerCount );
@@ -105,7 +102,6 @@ namespace Game
     uint32_t getGameOverScoreFactor();
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
-    uint8_t SelectCountPlayers();
 
     void PlayPickupSound();
 

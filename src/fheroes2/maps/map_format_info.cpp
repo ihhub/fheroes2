@@ -222,7 +222,7 @@ namespace
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.width << map.mainLanguage << map.name << map.description
                << map.creatorNotes;
 
         return !stream.fail();
@@ -237,9 +237,9 @@ namespace
 
         stream >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
-            >> map.lossConditionMetadata >> map.size;
+            >> map.lossConditionMetadata >> map.width;
 
-        if ( map.size <= 0 ) {
+        if ( map.width <= 0 ) {
             // This is not a correct map size.
             return false;
         }
@@ -311,7 +311,7 @@ namespace
 
         decompressed >> map.additionalInfo >> map.tiles;
 
-        if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+        if ( map.tiles.size() != static_cast<size_t>( map.width ) * map.width ) {
             map = {};
             return false;
         }

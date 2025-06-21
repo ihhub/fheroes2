@@ -31,7 +31,6 @@
 #include <map>
 #include <numeric>
 #include <ostream>
-#include <random>
 #include <type_traits>
 #include <utility>
 
@@ -118,7 +117,7 @@ namespace
         return *iter;
     }
 
-    int GetCovr( int ground, std::mt19937 & gen )
+    int GetCovr( int ground, Rand::PCG32 & gen )
     {
         std::vector<int> covrs;
         covrs.reserve( 6 );
@@ -425,7 +424,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     else
     // set obstacles
     {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+        Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
         _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.getTile( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
@@ -1388,7 +1387,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     }
 
     // penalty does not apply if the target unit is exposed due to the broken castle wall
-    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), Cell::widthPx / 3 );
+    const std::vector<fheroes2::Point> points = getLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), Cell::widthPx / 3 );
 
     for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( ( 0 == board[CASTLE_FIRST_TOP_WALL_POS].GetObject() && ( board[CASTLE_FIRST_TOP_WALL_POS].GetPos() & *it ) )

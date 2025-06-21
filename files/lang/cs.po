@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-28 00:46+0000\n"
+"POT-Creation-Date: 2025-06-15 05:10+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid "SELECT"
 msgstr "ZVOLIT"
@@ -211,18 +211,19 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "VOLNÝ BOJ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
 "STANDARDNÍ\n"
 "HRA"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"VOLNÝ\n"
-"BOJ"
 
 msgid ""
 "CAMPAIGN\n"
@@ -236,29 +237,13 @@ msgid ""
 "PLAYER\n"
 "GAME"
 msgstr ""
-"HRA\n"
-"VÍCE\n"
-"HRÁČŮ"
-
-msgid "CONFIG"
-msgstr "CONFIG"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORIGINÁLNÍ\n"
-"KAMPAŇ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPAŇ\n"
-"DATADISKU"
+"HRA PRO\n"
+"VÍCE HRÁČŮ"
 
 msgid "HOT SEAT"
-msgstr "HORKÉ KŘESLO"
+msgstr ""
+"HORKÉ\n"
+"KŘESLO"
 
 msgid "2 PLAYERS"
 msgstr "2 HRÁČI"
@@ -274,6 +259,41 @@ msgstr "5 HRÁČŮ"
 
 msgid "6 PLAYERS"
 msgstr "6 HRÁČŮ"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORIGINÁLNÍ\n"
+"KAMPAŇ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"DATADISKU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HLAVNÍ\n"
+"MENU"
+
+msgid "EditorMainMenu|BACK"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
@@ -3457,6 +3477,12 @@ msgstr ""
 "\n"
 "Cesta: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Opravdu chceš smazat soubor:"
 
@@ -3468,6 +3494,21 @@ msgstr "Klikni pro uložení aktuální hry."
 
 msgid "Click to load a previously saved game."
 msgstr "Klikni pro načtení dříve uložené hry."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Jméno"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Podpořte nás na"
 
 msgid "File to Save:"
 msgstr "Uložit do souboru:"
@@ -4096,13 +4137,6 @@ msgstr ""
 "mapě budou ztraceny.)"
 
 msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HLAVNÍ\n"
-"MENU"
-
-msgid ""
 "START\n"
 "MAP"
 msgstr ""
@@ -4494,15 +4528,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-"Vytvořte mapu, která je %{size} čtverců široká a %{size} čtverců vysoká."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Zrušit a vrátit se do nabídky Nová mapa."
-
-msgid "Cancel back to the main menu."
-msgstr "Zrušit a vrátit se do hlavní nabídky."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Vrátit se do hlavního menu hry."
 
 msgid "From Scratch"
 msgstr "Od začátku"
@@ -4516,8 +4544,16 @@ msgstr "Vytvořit náhodně generovanou mapu."
 msgid "Random"
 msgstr "Náhodně"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Zrušit a vrátit se do hlavního menu editoru map."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Vrátit se do hlavního menu hry."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Vytvořte mapu, která je %{size} čtverců široká a %{size} čtverců vysoká."
 
 msgid "No maps available!"
 msgstr "Žádné mapy k dispozici!"
@@ -5533,16 +5569,6 @@ msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 msgid "No save files to load."
 msgstr "Žádné uložené hry k načtení."
 
-msgid "Hot Seat"
-msgstr "Horké křeslo"
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Hrajte hru na jednom zařízení, kde se 2 až 6 hráčů střídá na svém tahu v "
-"režimu 'Horké křeslo'."
-
 msgid "A single player game playing out a single map."
 msgstr "Hra pro jednoho hráče."
 
@@ -5563,6 +5589,19 @@ msgid ""
 "other on a single map."
 msgstr ""
 "Hra pro více hráčů, kde několik hráčů soutěží proti sobě na jedné mapě."
+
+msgid "Hot Seat"
+msgstr "Horké křeslo"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Hrajte hru na jednom zařízení, kde se 2 až 6 hráčů střídá na svém tahu v "
+"režimu 'Horké křeslo'."
+
+msgid "Cancel back to the main menu."
+msgstr "Zrušit a vrátit se do hlavní nabídky."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Tým fheroes2 Resurrection uvádí"
@@ -5625,44 +5664,8 @@ msgstr ""
 "Požadované video soubory pro okno výběru kampaně chybí. Ujistěte se, že jsou "
 "všechny potřebné soubory v systému přítomny."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Rolandova nebo Archibaldova kampaň z původní hry Heroes of Might and Magic "
-"II."
-
-msgid "Original Campaign"
-msgstr "Originální kampaň"
-
-msgid "Expansion Campaign"
-msgstr "Kampaň datadisku"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "Jedna ze čtyř nových kampaní z datadisku Cena za věrnost."
-
 msgid "Loading video. Please wait..."
 msgstr "Načítání videa. Prosím, čekej..."
-
-msgid "Host"
-msgstr "Hostitel"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Hostitel nastavuje herní možnosti. Může být pouze jeden hostitel na každé "
-"síťové hře."
-
-msgid "Guest"
-msgstr "Host"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Host čeká, až hostitel nastaví hru, poté je automaticky přidán. Pro hry TCP/"
-"IP může být více hostů."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5686,13 +5689,6 @@ msgstr "Pouze bitva"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Nastavte a zahrajte si bitvu bez načítání jakékoli mapy."
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Hrajte hru na jednom zařízení, kde se 2 až 6 hráčů střídá na svém tahu v "
-"režimu 'Horkého křesla'."
 
 msgid "2 Players"
 msgstr "2 hráči"
@@ -5731,6 +5727,29 @@ msgstr "6 hráčů"
 
 msgid "Play with 6 human players."
 msgstr "Hraje 6 hráčů."
+
+msgid "Original Campaign"
+msgstr "Originální kampaň"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Rolandova nebo Archibaldova kampaň z původní hry Heroes of Might and Magic "
+"II."
+
+msgid "Expansion Campaign"
+msgstr "Kampaň datadisku"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "Jedna ze čtyř nových kampaní z datadisku Cena za věrnost."
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Hrajte hru na jednom zařízení, kde se 2 až 6 hráčů střídá na svém tahu v "
+"režimu 'Horkého křesla'."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Dračí město padlo! Stal ses Pánem Draků."
@@ -6619,6 +6638,11 @@ msgstr ""
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Po vyplenění nepřátelského tábora objevuješ skrytou skrýš s poklady."
+
+msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -9344,6 +9368,10 @@ msgstr "Zamrzlé jezero"
 msgid "Black Cat"
 msgstr "Černá perla"
 
+#, fuzzy
+msgid "Barrel"
+msgstr "Bariéra"
+
 msgid "randomRace|level 1 creatures"
 msgstr "Jednotky 1. úrovně"
 
@@ -12048,71 +12076,31 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
 
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Nejnovější verzi hry nalezneš na\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
+#~ msgid "CONFIG"
+#~ msgstr "CONFIG"
+
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Zrušit a vrátit se do nabídky Nová mapa."
+
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Zrušit a vrátit se do hlavního menu editoru map."
+
+#~ msgid "Host"
+#~ msgstr "Hostitel"
 
 #~ msgid ""
-#~ "After spending hours trying to fish the chest out of the sea, you open "
-#~ "it, only to find it empty."
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
 #~ msgstr ""
-#~ "Po hodinách snahy vytáhnout truhlu z moře ji konečně otevřeš, jen abys "
-#~ "zjistil, že je prázdná."
+#~ "Hostitel nastavuje herní možnosti. Může být pouze jeden hostitel na každé "
+#~ "síťové hře."
+
+#~ msgid "Guest"
+#~ msgstr "Host"
 
 #~ msgid ""
-#~ "After scouring the area, you fall upon a hidden chest, containing the "
-#~ "%{gold} gold pieces."
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
 #~ msgstr ""
-#~ "Po důkladném prozkoumání oblasti narazíš na skrytou truhlu, která "
-#~ "obsahuje %{gold} zlata."
-
-#~ msgid ""
-#~ "Select the campaign difficulty. This can be lowered at any point during "
-#~ "the campaign."
-#~ msgstr "Vyberte obtížnost kampaně. Tu lze snížit kdykoli během kampaně."
-
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Vyberte množství %{resource}:"
-
-#~ msgid "Enable auto combat"
-#~ msgstr "Zapnout automatický boj"
-
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "Dokončit boj v automatickém režimu"
-
-#~ msgid "Please Remember"
-#~ msgstr "Prosím pamatujte"
-
-#~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr "Vždy můžete změnit jazyk, rozlišení a nastavení hry kliknutím na "
-
-#~ msgid "door"
-#~ msgstr "dveře"
-
-#~ msgid " on the left side of the Main Menu, or with the "
-#~ msgstr " na levé straně hlavního menu, nebo pomocí "
-
-#~ msgid " button from the "
-#~ msgstr " tlačítka z "
-
-#~ msgid "NEW GAME"
-#~ msgstr "NOVÁ HRA"
-
-#~ msgid ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Užijte si hru!"
-
-#~ msgid "Warning!"
-#~ msgstr "Varování!"
+#~ "Host čeká, až hostitel nastaví hru, poté je automaticky přidán. Pro hry "
+#~ "TCP/IP může být více hostů."

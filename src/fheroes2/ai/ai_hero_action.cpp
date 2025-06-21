@@ -1237,7 +1237,12 @@ namespace
 
         MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
         if ( mapEvent == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
             DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+
             return;
         }
 
@@ -1958,6 +1963,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToCastle( hero, dst_index );
         break;
 
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:

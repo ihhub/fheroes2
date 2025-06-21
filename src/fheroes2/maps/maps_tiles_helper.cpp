@@ -326,44 +326,6 @@ namespace
 
         return true;
     }
-
-    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
-    {
-        assert( startTileIndex >= 0 && startTileIndex < world.w() * world.h() );
-
-        assert( objectUID > 0 );
-
-        std::vector<int32_t> tiles;
-        tiles.push_back( startTileIndex );
-
-        std::set<int32_t> processedTileIndicies;
-
-        for ( size_t currentId = 0; currentId < tiles.size(); ++currentId ) {
-            if ( processedTileIndicies.count( tiles[currentId] ) == 1 ) {
-                // This tile is already processed, skip it.
-                continue;
-            }
-
-            if ( world.getTile( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
-                // This tile has the object. Get neighboring tiles to see if they have the same.
-                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
-                for ( const int tileIndex : tileIndices ) {
-                    if ( tileIndex < 0 ) {
-                        // Invalid tile index.
-                        continue;
-                    }
-
-                    if ( processedTileIndicies.count( tileIndex ) == 0 ) {
-                        tiles.push_back( tileIndex );
-                    }
-                }
-            }
-
-            processedTileIndicies.emplace( tiles[currentId] );
-        }
-
-        return !processedTileIndicies.empty();
-    }
 }
 
 namespace Maps
@@ -757,8 +719,9 @@ namespace Maps
     Funds getFundsFromTile( const Tile & tile )
     {
         switch ( tile.getMainObjectType( false ) ) {
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
-            // Campfire contains N of non-Gold resources and (N * 100) Gold.
+            // Campfire or barrel contains N of non-Gold resources and (N * 100) Gold.
             return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_FLOTSAM:
@@ -840,6 +803,7 @@ namespace Maps
     {
         switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_RESOURCE:
@@ -1251,6 +1215,7 @@ namespace Maps
             break;
         }
 
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
             assert( isFirstLoad );
 
@@ -2055,6 +2020,44 @@ namespace Maps
         }
 
         return removeObjectFromMapByUID( tile.GetIndex(), objectUID );
+    }
+
+    bool removeObjectFromMapByUID( const int32_t startTileIndex, const uint32_t objectUID )
+    {
+        assert( startTileIndex >= 0 && startTileIndex < world.w() * world.h() );
+
+        assert( objectUID > 0 );
+
+        std::vector<int32_t> tiles;
+        tiles.push_back( startTileIndex );
+
+        std::set<int32_t> processedTileIndicies;
+
+        for ( size_t currentId = 0; currentId < tiles.size(); ++currentId ) {
+            if ( processedTileIndicies.count( tiles[currentId] ) == 1 ) {
+                // This tile is already processed, skip it.
+                continue;
+            }
+
+            if ( world.getTile( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
+                // This tile has the object. Get neighboring tiles to see if they have the same.
+                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
+                for ( const int32_t tileIndex : tileIndices ) {
+                    if ( tileIndex < 0 ) {
+                        // Invalid tile index.
+                        continue;
+                    }
+
+                    if ( processedTileIndicies.count( tileIndex ) == 0 ) {
+                        tiles.push_back( tileIndex );
+                    }
+                }
+            }
+
+            processedTileIndicies.emplace( tiles[currentId] );
+        }
+
+        return !processedTileIndicies.empty();
     }
 
     bool isClearGround( const Tile & tile )

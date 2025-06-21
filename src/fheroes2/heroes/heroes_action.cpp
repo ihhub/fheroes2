@@ -767,11 +767,18 @@ namespace
 
                 fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
             }
+            else if ( objectType == MP2::OBJ_BARREL ) {
+                const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( _( "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash of lost treasure." ),
+                                           fheroes2::FontType::normalWhite() );
+
+                fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
+            }
             else {
-                const auto resource = funds.getFirstValidResource();
+                const auto [resourceType, resourceCount] = funds.getFirstValidResource();
 
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
-                I.getStatusPanel().SetResource( resource.first, resource.second );
+                I.getStatusPanel().SetResource( resourceType, resourceCount );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
@@ -2803,7 +2810,12 @@ namespace
 
         MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
         if ( mapEvent == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
             DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+
             return;
         }
 
@@ -3843,6 +3855,7 @@ void Heroes::Action( int tileIndex )
         ActionToSkeleton( *this, objectType, tileIndex );
         break;
 
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_RESOURCE:

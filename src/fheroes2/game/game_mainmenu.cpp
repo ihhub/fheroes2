@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -136,20 +136,11 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
         case fheroes2::GameMode::NEW_STANDARD:
             result = Game::NewStandard();
             break;
-        case fheroes2::GameMode::NEW_CAMPAIGN_SELECTION:
-            result = Game::CampaignSelection();
-            break;
         case fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN:
             result = Game::NewSuccessionWarsCampaign();
             break;
         case fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN:
             result = Game::NewPriceOfLoyaltyCampaign();
-            break;
-        case fheroes2::GameMode::NEW_MULTI:
-            result = Game::NewMulti();
-            break;
-        case fheroes2::GameMode::NEW_HOT_SEAT:
-            result = Game::NewHotSeat();
             break;
         case fheroes2::GameMode::NEW_BATTLE_ONLY:
             result = Game::NewBattleOnly();
@@ -159,9 +150,6 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
             break;
         case fheroes2::GameMode::LOAD_CAMPAIGN:
             result = Game::LoadCampaign();
-            break;
-        case fheroes2::GameMode::LOAD_MULTI:
-            result = Game::LoadMulti();
             break;
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
@@ -193,11 +181,14 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+        case fheroes2::GameMode::START_BATTLE_ONLY_MODE:
+            result = Game::StartBattleOnly();
+            break;
         case fheroes2::GameMode::EDITOR_MAIN_MENU:
-            result = Editor::menuMain();
+            result = Editor::menuMain( false );
             break;
         case fheroes2::GameMode::EDITOR_NEW_MAP:
-            result = Editor::menuNewFromScratchMap();
+            result = Editor::menuMain( true );
             break;
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();

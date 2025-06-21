@@ -490,6 +490,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Frozen Lake" );
     case OBJ_NON_ACTION_BLACK_CAT:
         return _( "Black Cat" );
+    case OBJ_NON_ACTION_BARREL:
+        return _( "Barrel" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -588,6 +590,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     // These are the types of objects that can be placed on water tiles by the original editor and,
     // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
     case OBJ_COAST:
@@ -655,6 +658,7 @@ bool MP2::isValuableResourceObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
+    case OBJ_BARREL:
     case OBJ_CAMPFIRE:
     case OBJ_DAEMON_CAVE:
     case OBJ_DERELICT_SHIP:
@@ -703,6 +707,7 @@ bool MP2::isPickupObject( const MapObjectType objectType )
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
@@ -799,6 +804,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BARRIER:
     case OBJ_BLACK_CAT:
     case OBJ_BOAT:
@@ -822,9 +828,9 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_RANDOM_MONSTER_STRONG:
     case OBJ_RANDOM_MONSTER_VERY_STRONG:
     case OBJ_RANDOM_MONSTER_WEAK:
+    case OBJ_RANDOM_RESOURCE:
     case OBJ_RANDOM_TOWN:
     case OBJ_RANDOM_ULTIMATE_ARTIFACT:
-    case OBJ_RANDOM_RESOURCE:
     case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK_SURVIVOR:

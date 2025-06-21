@@ -28,7 +28,6 @@
 #include <cmath>
 #include <map>
 #include <numeric>
-#include <random>
 #include <set>
 #include <sstream>
 #include <utility>
@@ -346,21 +345,18 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
 
 bool Troops::isValid() const
 {
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            return true;
-    }
-    return false;
+    return std::any_of( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } );
 }
 
 uint32_t Troops::GetOccupiedSlotCount() const
 {
-    uint32_t total = 0;
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            ++total;
-    }
-    return total;
+    return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } ) );
 }
 
 bool Troops::areAllTroopsUnique() const
@@ -1588,19 +1584,25 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
                                      const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
+
+    if ( count == 0 ) {
+        // There are no valid troops to render.
+        return;
+    }
+
     const int offsetX = lineWidth / 6;
     const int offsetY = isCompact ? 31 : 49;
 
-    fheroes2::Image & output = fheroes2::Display::instance();
-
     if ( count < 3 ) {
         fheroes2::drawMiniMonsters( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, isCompact, isDetailedView, isGarrisonView,
-                                    thievesGuildsCount, output );
+                                    thievesGuildsCount, fheroes2::Display::instance() );
     }
     else {
-        const int firstLineTroopCount = 2;
-        const int secondLineTroopCount = count - firstLineTroopCount;
-        const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
+        const uint32_t firstLineTroopCount = 2;
+        const uint32_t secondLineTroopCount = count - firstLineTroopCount;
+        const int32_t secondLineWidth = ( secondLineTroopCount == 2 ) ? lineWidth * 2 / 3 : lineWidth;
+
+        fheroes2::Image & output = fheroes2::Display::instance();
 
         fheroes2::drawMiniMonsters( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, isCompact, isDetailedView, isGarrisonView,
                                     thievesGuildsCount, output );
@@ -1920,7 +1922,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         stacksCount = maximumTroopCount;
     }
     else {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+        Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
         stacksCount = Rand::GetWithGen( 3, 5, seededGen );
     }
@@ -1935,7 +1937,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         assert( troopToUpgrade != nullptr );
 
         if ( troopToUpgrade->isValid() && troopToUpgrade->isAllowUpgrade() ) {
-            std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
+            Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
 
             // 50% chance to get an upgraded stack
             if ( Rand::GetWithGen( 0, 1, seededGen ) == 1 ) {
