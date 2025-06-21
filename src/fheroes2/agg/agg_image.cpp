@@ -1369,7 +1369,7 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nMAP" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
-                                                      isEvilInterface, 80 );
+                                                      isEvilInterface, 86 );
 
             break;
         }
