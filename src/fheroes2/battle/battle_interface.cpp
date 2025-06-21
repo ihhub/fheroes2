@@ -2150,7 +2150,7 @@ void Battle::Interface::RedrawCover()
 
                 // If the intended attack direction means tail attack, we might need to move the highlighted cells by one
                 const auto tryHighlightTailAttack = [this, &highlightedCells, direction, dst]( const CellDirection moveDirection, const AttackDirection directionTop,
-                                                                                               const AttackDirection directionBottom ) -> bool {
+                                                                                               const AttackDirection directionBottom ) {
                     if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
                         if ( const Position position = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( dst, moveDirection ) );
                              position.GetHead() != nullptr ) {
