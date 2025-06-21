@@ -1153,38 +1153,22 @@ namespace Interface
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
-
-        fheroes2::Button buttonNew;
-        fheroes2::Button buttonLoad;
-        fheroes2::Button buttonSave;
-        fheroes2::Button buttonQuit;
-        fheroes2::ButtonSprite buttonMainMenu;
-        fheroes2::ButtonSprite buttonPlayMap;
-        fheroes2::Button buttonCancel;
-
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+        const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL : ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD;
+        fheroes2::ButtonGroup optionButtons( bigButtonsICN );
+        fheroes2::StandardWindow background( optionButtons, false, 0, display );
+        background.renderSymmetricButtons( optionButtons, 0, false );
 
-        const fheroes2::Point buttonOffsets = { 30, 15 };
-        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
-                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 0, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::TOP_CENTER );
-        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
-        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        const fheroes2::ButtonBase & buttonNewMap = optionButtons.button( 0 );
+        const fheroes2::ButtonBase & buttonLoadMap = optionButtons.button( 1 );
+        const fheroes2::ButtonBase & buttonStartMap = optionButtons.button( 2 );
+        const fheroes2::ButtonBase & buttonSaveMap = optionButtons.button( 3 );
+        const fheroes2::ButtonBase & buttonMainMenu = optionButtons.button( 4 );
+        const fheroes2::ButtonBase & buttonQuit = optionButtons.button( 5 );
 
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+        fheroes2::Button buttonCancel;
 
-        background.renderCustomButtonSprite( buttonMainMenu, fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), releasedButtonFont ),
-                                             { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y },
-                                             fheroes2::StandardWindow::Padding::CENTER_CENTER );
-        background.renderCustomButtonSprite( buttonPlayMap, fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), releasedButtonFont ),
-                                             { buttonSave.area().width - 10, buttonSave.area().height }, { buttonOffsets.x, buttonOffsets.y },
-                                             fheroes2::StandardWindow::Padding::TOP_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
@@ -1193,27 +1177,23 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            buttonNew.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNew.area() ) );
-            buttonLoad.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLoad.area() ) );
-            buttonSave.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSave.area() ) );
-            buttonQuit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonQuit.area() ) );
-            buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMainMenu.area() ) );
-            buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPlayMap.area() ) );
+            optionButtons.drawOnState( le );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
+            if ( le.MouseClickLeft( buttonNewMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     return fheroes2::GameMode::EDITOR_NEW_MAP;
                 }
             }
-            if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( buttonLoadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
                     return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
             }
-            if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            if ( le.MouseClickLeft( buttonSaveMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
+                display.render( background.totalArea() );
                 Get().saveMapToFile();
                 return fheroes2::GameMode::CANCEL;
             }
@@ -1231,7 +1211,7 @@ namespace Interface
                     return fheroes2::GameMode::MAIN_MENU;
                 }
             }
-            else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+            else if ( le.MouseClickLeft( buttonStartMap.area() ) ) {
                 bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty
                      && fheroes2::showStandardTextMessage(
@@ -1268,15 +1248,15 @@ namespace Interface
                 return fheroes2::GameMode::CANCEL;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoadMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonSaveMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Map" ), _( "Save the current map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
@@ -1285,7 +1265,7 @@ namespace Interface
             else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonStartMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and play the map in the Standard Game mode." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {

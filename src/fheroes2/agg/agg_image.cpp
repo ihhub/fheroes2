@@ -75,16 +75,12 @@ namespace
     const std::set<int> languageDependentIcnId{ ICN::BUTTON_WELL_MAX,
                                                 ICN::BUTTONS_FILE_DIALOG_GOOD,
                                                 ICN::BUTTONS_FILE_DIALOG_EVIL,
+                                                ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD,
+                                                ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL,
                                                 ICN::BUTTON_INFO_GOOD,
                                                 ICN::BUTTON_INFO_EVIL,
                                                 ICN::BUTTON_QUIT_GOOD,
                                                 ICN::BUTTON_QUIT_EVIL,
-                                                ICN::BUTTON_NEW_MAP_EVIL,
-                                                ICN::BUTTON_NEW_MAP_GOOD,
-                                                ICN::BUTTON_SAVE_MAP_EVIL,
-                                                ICN::BUTTON_SAVE_MAP_GOOD,
-                                                ICN::BUTTON_LOAD_MAP_EVIL,
-                                                ICN::BUTTON_LOAD_MAP_GOOD,
                                                 ICN::BUTTON_SMALL_CANCEL_GOOD,
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_SMALL_OKAY_GOOD,
@@ -1251,16 +1247,14 @@ namespace
             break;
         }
         case ICN::BUTTON_GIFT_EVIL:
-        case ICN::BUTTON_LOAD_MAP_EVIL:
         case ICN::BUTTON_MAP_SELECT_EVIL:
-        case ICN::BUTTON_NEW_MAP_EVIL:
-        case ICN::BUTTON_SAVE_MAP_EVIL:
         case ICN::BUTTON_SMALL_ACCEPT_EVIL:
         case ICN::BUTTON_SMALL_DECLINE_EVIL:
         case ICN::BUTTON_SMALL_MAX_EVIL:
         case ICN::BUTTON_SMALL_MIN_EVIL:
         case ICN::BUTTON_SMALL_RESTART_EVIL:
         case ICN::BUTTONS_NEW_GAME_MENU_EVIL:
+        case ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL:
         case ICN::BUTTONS_EDITOR_MENU_EVIL:
         case ICN::UNIFORM_EVIL_MAX_BUTTON:
         case ICN::UNIFORM_EVIL_MIN_BUTTON: {
@@ -1295,21 +1289,18 @@ namespace
             else if ( id == ICN::UNIFORM_EVIL_MAX_BUTTON ) {
                 goodButtonIcnID = ICN::UNIFORM_GOOD_MAX_BUTTON;
             }
-            else if ( id == ICN::BUTTON_NEW_MAP_EVIL ) {
-                goodButtonIcnID = ICN::BUTTON_NEW_MAP_GOOD;
-            }
-            else if ( id == ICN::BUTTON_SAVE_MAP_EVIL ) {
-                goodButtonIcnID = ICN::BUTTON_SAVE_MAP_GOOD;
-            }
-            else if ( id == ICN::BUTTON_LOAD_MAP_EVIL ) {
-                goodButtonIcnID = ICN::BUTTON_LOAD_MAP_GOOD;
-            }
             else if ( id == ICN::BUTTONS_NEW_GAME_MENU_EVIL ) {
                 goodButtonIcnID = ICN::BUTTONS_NEW_GAME_MENU_GOOD;
+            }
+            else if ( id == ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL ) {
+                goodButtonIcnID = ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD;
             }
             else if ( id == ICN::BUTTONS_EDITOR_MENU_EVIL ) {
                 goodButtonIcnID = ICN::BUTTONS_EDITOR_MENU_GOOD;
             }
+            // Did you add new buttons?
+            assert( goodButtonIcnID != ICN::UNKNOWN );
+
             _icnVsSprite[id].resize( fheroes2::AGG::GetICNCount( goodButtonIcnID ) );
             const size_t icnSize = _icnVsSprite[id].size();
             for ( size_t i = 0; i < ( icnSize / 2 ); ++i ) {
@@ -1341,52 +1332,66 @@ namespace
 
             break;
         }
+        case ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD: {
+            _icnVsSprite[id].resize( 12 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL );
+            if ( useOriginalResources() ) {
+                const int buttonIcnID = ICN::ECPANEL;
+                // We don't add all the ICN buttons in original order because when we render the buttons we want a different order.
+                for ( size_t i = 0; i < 4; ++i ) {
+                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
+                }
+                // Save Map
+                _icnVsSprite[id][6] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 4 ) );
+                _icnVsSprite[id][7] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 5 ) );
+                // Add generated buttons.
+                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
+                fheroes2::makeButtonSprites( _icnVsSprite[id][4], _icnVsSprite[id][5], fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), buttonFontType ),
+                                             buttonSize, isEvilInterface, ICN::STONEBAK );
+                fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
+                                             buttonSize, isEvilInterface, ICN::STONEBAK );
+
+                // Quit
+                _icnVsSprite[id][10] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 6 ) );
+                _icnVsSprite[id][11] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 7 ) );
+
+                break;
+            }
+
+            const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
+            fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
+                                                      { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "SAVE\nMAP" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
+                                                      isEvilInterface, 86 );
+
+            break;
+        }
         case ICN::BUTTON_INFO_EVIL:
         case ICN::BUTTON_INFO_GOOD:
-        case ICN::BUTTON_LOAD_MAP_GOOD:
-        case ICN::BUTTON_NEW_MAP_GOOD:
         case ICN::BUTTON_QUIT_EVIL:
-        case ICN::BUTTON_QUIT_GOOD:
-        case ICN::BUTTON_SAVE_MAP_GOOD: {
+        case ICN::BUTTON_QUIT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
             const bool isEvilInterface = ( id == ICN::BUTTON_QUIT_EVIL || id == ICN::BUTTON_INFO_EVIL );
+            const bool isInfoButton = ( id == ICN::BUTTON_INFO_GOOD || id == ICN::BUTTON_INFO_EVIL );
 
             if ( useOriginalResources() ) {
                 int buttonIcnID = ICN::UNKNOWN;
                 std::pair<int, int> icnIndex;
-                switch ( id ) {
-                case ICN::BUTTON_NEW_MAP_GOOD: {
-                    buttonIcnID = ICN::ECPANEL;
-                    icnIndex = { 0, 1 };
-                    break;
-                }
-                case ICN::BUTTON_LOAD_MAP_GOOD: {
-                    buttonIcnID = ICN::ECPANEL;
-                    icnIndex = { 2, 3 };
-                    break;
-                }
-                case ICN::BUTTON_SAVE_MAP_GOOD: {
-                    buttonIcnID = ICN::ECPANEL;
-                    icnIndex = { 4, 5 };
-                    break;
-                }
-                case ICN::BUTTON_QUIT_EVIL:
-                case ICN::BUTTON_QUIT_GOOD: {
-                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                    icnIndex = { 6, 7 };
-                    break;
-                }
-                case ICN::BUTTON_INFO_EVIL:
-                case ICN::BUTTON_INFO_GOOD: {
+
+                if ( isInfoButton ) {
                     buttonIcnID = isEvilInterface ? ICN::APANELE : ICN::APANEL;
                     icnIndex = { 4, 5 };
-                    break;
                 }
-                default:
-                    buttonIcnID = ICN::CPANEL;
-                    icnIndex = { 0, 1 };
-                    break;
+                else {
+                    buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
+                    icnIndex = { 6, 7 };
                 }
 
                 _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
@@ -1394,33 +1399,7 @@ namespace
                 break;
             }
 
-            const char * text = gettext_noop( "LOAD\nMAP" );
-            switch ( id ) {
-            case ICN::BUTTON_NEW_MAP_GOOD: {
-                text = gettext_noop( "NEW\nMAP" );
-                break;
-            }
-            case ICN::BUTTON_LOAD_MAP_GOOD: {
-                text = gettext_noop( "LOAD\nMAP" );
-                break;
-            }
-            case ICN::BUTTON_SAVE_MAP_GOOD: {
-                text = gettext_noop( "SAVE\nMAP" );
-                break;
-            }
-            case ICN::BUTTON_QUIT_EVIL:
-            case ICN::BUTTON_QUIT_GOOD: {
-                text = gettext_noop( "QUIT" );
-                break;
-            }
-            case ICN::BUTTON_INFO_EVIL:
-            case ICN::BUTTON_INFO_GOOD: {
-                text = gettext_noop( "INFO" );
-                break;
-            }
-            default:
-                break;
-            }
+            const char * text = isInfoButton ? gettext_noop( "INFO" ) : gettext_noop( "QUIT" );
 
             text = fheroes2::getSupportedText( text, fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 86, 56 }, isEvilInterface,
