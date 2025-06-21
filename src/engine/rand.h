@@ -42,8 +42,6 @@ namespace Rand
     class PCG32
     {
     public:
-        using result_type = uint32_t;
-
         static constexpr uint32_t min()
         {
             return std::numeric_limits<uint32_t>::min();
