@@ -29,6 +29,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <iterator>
 #include <limits>
 #include <set>
 #include <sstream>
@@ -903,6 +904,10 @@ void Maps::Tile::sortObjectParts()
 
             // Replace the last object (Flag) with the previous one.
             ObjectPart & prevHighestPriorityPart = *std::next( _groundObjectPart.rbegin() );
+
+            // There cannot be two flags on one tile.
+            assert( prevHighestPriorityPart.icnType != MP2::OBJ_ICN_TYPE_FLAG32 );
+
             std::swap( highestPriorityPart, prevHighestPriorityPart );
         }
 
