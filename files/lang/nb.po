@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-06-21 16:18+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -171,12 +171,14 @@ msgstr "AVSLUTT"
 
 #, fuzzy
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
+msgstr "OMSTART"
+
+msgid ""
+"MAIN\n"
+"MENU"
 msgstr ""
-"LAST\n"
-"INN\n"
-"PARTI"
 
 #, fuzzy
 msgid ""
@@ -184,6 +186,15 @@ msgid ""
 "MAP"
 msgstr ""
 "NYTT\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LAST\n"
+"INN\n"
 "PARTI"
 
 #, fuzzy
@@ -259,14 +270,6 @@ msgstr ""
 "PRISEN\n"
 "FOR\n"
 "LOJALITET"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
 
 msgid "editorMainMenu|BACK"
 msgstr ""
@@ -4314,12 +4317,6 @@ msgid ""
 msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "OMSTART"
 
 msgid "Main Menu"
 msgstr ""

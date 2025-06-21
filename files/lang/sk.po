@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-06-21 16:18+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -188,12 +188,14 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
+msgstr "REŠTART"
+
+msgid ""
+"MAIN\n"
+"MENU"
 msgstr ""
-"NA-\n"
-"HRAŤ\n"
-"HRU"
 
 #, fuzzy
 msgid ""
@@ -202,6 +204,15 @@ msgid ""
 msgstr ""
 "NOVÁ\n"
 "HRA"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NA-\n"
+"HRAŤ\n"
+"HRU"
 
 #, fuzzy
 msgid ""
@@ -275,14 +286,6 @@ msgid ""
 msgstr ""
 "KAMPAŇ\n"
 "EXPANZIE"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
 
 msgid "editorMainMenu|BACK"
 msgstr ""
@@ -4247,12 +4250,6 @@ msgid ""
 msgstr ""
 "Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "REŠTART"
 
 msgid "Main Menu"
 msgstr ""

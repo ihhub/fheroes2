@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-06-21 16:18+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -191,17 +191,28 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
+msgstr "НАНОВА"
+
+msgid ""
+"MAIN\n"
+"MENU"
 msgstr ""
-"ЗАГРУ-\n"
-"ЗІЦЬ"
 
 #, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr "НОВАЯ"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАГРУ-\n"
+"ЗІЦЬ"
 
 #, fuzzy
 msgid ""
@@ -278,14 +289,6 @@ msgid ""
 msgstr ""
 "КАМНАНІЯ\n"
 "ДАПАЎНЕННЯ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
 
 msgid "editorMainMenu|BACK"
 msgstr ""
@@ -4090,12 +4093,6 @@ msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "НАНОВА"
 
 msgid "Main Menu"
 msgstr ""
