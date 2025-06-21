@@ -99,7 +99,7 @@ namespace
         return defendingUnit.GetHeadIndex();
     }
 
-    int calculateAttackDirection( const Battle::Unit & attackingUnit, const Battle::Position & attackPosition, const int32_t attackTargetIdx )
+    Battle::CellDirection calculateAttackDirection( const Battle::Unit & attackingUnit, const Battle::Position & attackPosition, const int32_t attackTargetIdx )
     {
         const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
         const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
@@ -117,7 +117,7 @@ namespace
         }
 
         // Attack position is not near the defender, this is most likely a shot
-        return Battle::UNKNOWN;
+        return Battle::CellDirection::UNKNOWN;
     }
 
     bool checkMoveParams( const Battle::Unit * unit, const int32_t dst )
@@ -167,16 +167,14 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
         tgt = calculateAttackTarget( attacker, attacker.GetPosition(), defender );
     }
 
-    if ( dir < 0 ) {
-        dir = calculateAttackDirection( attacker, attacker.GetPosition(), tgt );
-    }
+    const CellDirection cellDir = dir < 0 ? calculateAttackDirection( attacker, attacker.GetPosition(), tgt ) : static_cast<CellDirection>( dir );
 
     // UNKNOWN attack direction is only allowed for archers
-    assert( Unit::isHandFighting( attacker, defender ) ? dir > UNKNOWN : dir == UNKNOWN );
+    assert( Unit::isHandFighting( attacker, defender ) ? cellDir > Battle::CellDirection::UNKNOWN : cellDir == Battle::CellDirection::UNKNOWN );
 
     // This is a direct attack, update the direction for both the attacker and the defender
-    if ( dir ) {
-        const auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackTgt, const int attackDir ) {
+    if ( cellDir != Battle::CellDirection::UNKNOWN ) {
+        const auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackTgt, const Battle::CellDirection attackDir ) {
             assert( attackingUnit.isWide() );
 
             const int32_t attackSrc = Board::GetIndexDirection( attackTgt, Board::GetReflectDirection( attackDir ) );
@@ -187,7 +185,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
         };
 
         if ( attacker.isWide() ) {
-            if ( !directionIsValidForAttack( attacker, tgt, dir ) ) {
+            if ( !directionIsValidForAttack( attacker, tgt, cellDir ) ) {
                 attacker.SetReflection( !attacker.isReflect() );
             }
         }
@@ -197,7 +195,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
 
         if ( !attacker.isIgnoringRetaliation() && defender.AllowResponse() ) {
             const int32_t responseTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
-            const int responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
+            const Battle::CellDirection responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
 
             if ( defender.isWide() ) {
                 if ( !directionIsValidForAttack( defender, responseTgt, responseDir ) ) {
@@ -219,7 +217,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
     attacker.SetRandomLuck( _randomGenerator );
 
     // Do damage first
-    TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, tgt, dir );
+    TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, tgt, cellDir );
 
     if ( _interface ) {
         _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
@@ -376,7 +374,7 @@ void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
             const int32_t dstHead = path.back();
             const int32_t dstTail = path.size() > 1 ? path[path.size() - 2] : initialHead;
 
-            finalPos.Set( dstHead, true, ( Board::GetDirection( dstHead, dstTail ) & RIGHT_SIDE ) != 0 );
+            finalPos.Set( dstHead, true, isRightSide( Board::GetDirection( dstHead, dstTail ) ) );
         }
         else {
             finalPos.Set( path.back(), false, unit->isReflect() );
@@ -535,16 +533,14 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 tgt = calculateAttackTarget( *attacker, attacker->GetPosition(), *defender );
             }
 
-            if ( dir < 0 ) {
-                dir = calculateAttackDirection( *attacker, attacker->GetPosition(), tgt );
-            }
+            const CellDirection cellDir = dir < 0 ? calculateAttackDirection( *attacker, attacker->GetPosition(), tgt ) : static_cast<CellDirection>( dir );
 
             if ( !defender->GetPosition().contains( tgt ) ) {
                 return false;
             }
 
             // Non-blocked archers cannot attack "from a direction"
-            if ( dir != UNKNOWN ) {
+            if ( cellDir != CellDirection::UNKNOWN ) {
                 return false;
             }
 
@@ -562,21 +558,19 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             tgt = calculateAttackTarget( *attacker, attackPos, *defender );
         }
 
-        if ( dir < 0 ) {
-            dir = calculateAttackDirection( *attacker, attackPos, tgt );
-        }
+        const CellDirection cellDir = dir < 0 ? calculateAttackDirection( *attacker, attackPos, tgt ) : static_cast<CellDirection>( dir );
 
         if ( !defender->GetPosition().contains( tgt ) ) {
             return false;
         }
 
         // Melee attacks are only possible from a certain direction
-        if ( dir == UNKNOWN ) {
+        if ( cellDir == CellDirection::UNKNOWN ) {
             return false;
         }
 
-        const int32_t attackIdx
-            = ( Board::isValidDirection( tgt, Board::GetReflectDirection( dir ) ) ? Board::GetIndexDirection( tgt, Board::GetReflectDirection( dir ) ) : -1 );
+        const CellDirection reflectDir = Board::GetReflectDirection( cellDir );
+        const int32_t attackIdx = ( Board::isValidDirection( tgt, reflectDir ) ? Board::GetIndexDirection( tgt, reflectDir ) : -1 );
 
         if ( !attackPos.contains( attackIdx ) ) {
             return false;
@@ -893,7 +887,7 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, 
     }
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const
+Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const Battle::CellDirection dir ) const
 {
     // The attacked unit should be located on the attacked cell
     assert( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst );
