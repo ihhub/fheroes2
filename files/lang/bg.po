@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-06-21 16:35+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -188,11 +188,14 @@ msgstr "ИЗХОД"
 
 #, fuzzy
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"MAIN\n"
+"MENU"
 msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
 
 #, fuzzy
 msgid ""
@@ -200,6 +203,14 @@ msgid ""
 "MAP"
 msgstr ""
 "НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
 "ИГРА"
 
 #, fuzzy
@@ -275,14 +286,6 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr "ЕКСПАНЗИЯ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
 
 msgid "editorMainMenu|BACK"
 msgstr ""
@@ -4272,12 +4275,6 @@ msgid ""
 msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "РЕСТАРТ"
 
 msgid "Main Menu"
 msgstr ""

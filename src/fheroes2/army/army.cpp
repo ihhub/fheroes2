@@ -28,7 +28,6 @@
 #include <cmath>
 #include <map>
 #include <numeric>
-#include <random>
 #include <set>
 #include <sstream>
 #include <utility>
@@ -1923,7 +1922,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         stacksCount = maximumTroopCount;
     }
     else {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+        Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
         stacksCount = Rand::GetWithGen( 3, 5, seededGen );
     }
@@ -1938,7 +1937,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         assert( troopToUpgrade != nullptr );
 
         if ( troopToUpgrade->isValid() && troopToUpgrade->isAllowUpgrade() ) {
-            std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
+            Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
 
             // 50% chance to get an upgraded stack
             if ( Rand::GetWithGen( 0, 1, seededGen ) == 1 ) {

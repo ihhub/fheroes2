@@ -32,7 +32,7 @@
 
 class HeroBase;
 
-class SpellBook : public SpellStorage
+class SpellBook final : public SpellStorage
 {
 public:
     enum class Filter : int

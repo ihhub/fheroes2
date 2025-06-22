@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-06-21 16:35+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -185,11 +185,14 @@ msgstr "RỜI KHỎI"
 
 #, fuzzy
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
+msgstr "LÀM LẠI"
+
+msgid ""
+"MAIN\n"
+"MENU"
 msgstr ""
-"TẢI\n"
-"GAME"
 
 #, fuzzy
 msgid ""
@@ -197,6 +200,14 @@ msgid ""
 "MAP"
 msgstr ""
 "TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
 "GAME"
 
 #, fuzzy
@@ -274,14 +285,6 @@ msgid ""
 msgstr ""
 "CHIẾN DỊCH\n"
 "MỞ RỘNG"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
 
 msgid "editorMainMenu|BACK"
 msgstr ""
@@ -4246,12 +4249,6 @@ msgid ""
 msgstr ""
 "Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "LÀM LẠI"
 
 msgid "Main Menu"
 msgstr "Trình đơn Chính"

@@ -29,7 +29,6 @@
 #include <limits>
 #include <optional>
 #include <ostream>
-#include <random>
 #include <set>
 #include <tuple>
 
@@ -75,7 +74,7 @@ namespace
         return std::any_of( indexes.cbegin(), indexes.cend(), [&excludeTiles]( const int32_t indexId ) { return excludeTiles.count( indexId ) > 0; } );
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, Rand::PCG32 & gen )
     {
         std::vector<int32_t> suitableIds;
 
@@ -558,7 +557,7 @@ void World::_monthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    std::mt19937 seededGen( _seed + month );
+    Rand::PCG32 seededGen( _seed + month );
 
     // First we scan for Heroes, Castles and Monsters to exclude these from tiles and nearby tiles.
     // We must do this prior to checking the possibility for a monster to spawn in order to properly perform the check on nearby tiles.
