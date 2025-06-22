@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <optional>
 #include <ostream>
 #include <vector>
 
@@ -35,8 +36,10 @@
 #include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
+#include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_language.h"
 
 void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )
 {
@@ -130,27 +133,27 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     colors = 0;
 
     if ( dataStream.get() ) {
-        colors |= Color::BLUE;
+        colors |= PlayerColor::BLUE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::GREEN;
+        colors |= PlayerColor::GREEN;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::RED;
+        colors |= PlayerColor::RED;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::YELLOW;
+        colors |= PlayerColor::YELLOW;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::ORANGE;
+        colors |= PlayerColor::ORANGE;
     }
 
     if ( dataStream.get() ) {
-        colors |= Color::PURPLE;
+        colors |= PlayerColor::PURPLE;
     }
 
     message = dataStream.getString();
@@ -298,21 +301,24 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
 
     ROStreamBuf dataStream( data );
     dataStream.skip( 9 );
-    message = dataStream.getString();
+    message.text = dataStream.getString();
 
-    if ( message.empty() ) {
+    if ( message.text.empty() ) {
         setDefaultMessage();
     }
 
     setUIDAndIndex( mapIndex );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message.text )
 }
 
 void MapSign::setDefaultMessage()
 {
+    message.language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+
+    // This container must not be static as it depends on an in-game language.
     const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
-    message = Rand::Get( randomMessage );
+    message.text = Rand::Get( randomMessage );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const MapBaseObject & obj )
@@ -343,7 +349,19 @@ OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 {
-    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent >> obj.colors >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj ) >> obj.resources >> obj.artifact >> obj.isComputerPlayerAllowed >> obj.isSingleTimeEvent;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int colors;
+        stream >> colors;
+        obj.colors = static_cast<PlayerColorsSet>( colors );
+    }
+    else {
+        stream >> obj.colors;
+    }
+
+    stream >> obj.message;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1106_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1106_RELEASE ) {
@@ -384,5 +402,16 @@ OStreamBase & operator<<( OStreamBase & stream, const MapSign & obj )
 
 IStreamBase & operator>>( IStreamBase & stream, MapSign & obj )
 {
-    return stream >> static_cast<MapBaseObject &>( obj ) >> obj.message;
+    stream >> static_cast<MapBaseObject &>( obj );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1107_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1107_RELEASE ) {
+        stream >> obj.message.text;
+        obj.message.language = {};
+    }
+    else {
+        stream >> obj.message;
+    }
+
+    return stream;
 }

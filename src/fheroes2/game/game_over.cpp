@@ -34,9 +34,9 @@
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
 #include "castle.h"
-#include "color.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "heroes.h"
@@ -46,6 +46,7 @@
 #include "monster.h"
 #include "mus.h"
 #include "players.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -151,6 +152,19 @@ namespace
 
             break;
         }
+
+        case GameOver::LOSS_ENEMY_WINS_ARTIFACT:
+            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
+
+            if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
+                StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+            }
+            else {
+                const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
+                StringReplace( body, "%{name}", art.GetName() );
+            }
+
+            break;
 
         case GameOver::LOSS_ENEMY_WINS_GOLD:
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
@@ -274,13 +288,13 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         const Player * currentPlayer = Settings::Get().GetPlayers().GetCurrent();
         assert( currentPlayer != nullptr );
 
-        const int currentColor = currentPlayer->GetColor();
-        const int friendColors = currentPlayer->GetFriends();
+        const PlayerColor currentColor = currentPlayer->GetColor();
+        const PlayerColorsSet friendColors = currentPlayer->GetFriends();
 
-        const auto makeListOfPlayers = []( const int colors ) {
+        const auto makeListOfPlayers = []( const PlayerColorsSet colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
-            for ( const int col : Colors( colors ) ) {
+            for ( const PlayerColor col : PlayerColorsVector( colors ) ) {
                 const Player * player = Players::Get( col );
                 assert( player != nullptr );
 
@@ -296,7 +310,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
             return result;
         };
 
-        const auto [alliesList, alliesCount] = makeListOfPlayers( friendColors & ~currentColor );
+        const auto [alliesList, alliesCount] = makeListOfPlayers( friendColors & ( ~currentColor ) );
         const auto [enemiesList, enemiesCount] = makeListOfPlayers( Game::GetKingdomColors() & ~friendColors );
 
         assert( enemiesCount > 0 );
@@ -392,41 +406,36 @@ GameOver::Result & GameOver::Result::Get()
     return gresult;
 }
 
-GameOver::Result::Result()
-    : colors( 0 )
-    , result( 0 )
-{}
-
 void GameOver::Result::Reset()
 {
-    colors = Game::GetKingdomColors();
+    _colors = Game::GetKingdomColors();
     result = GameOver::COND_NONE;
 }
 
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
-    const int humanColors = Players::HumanColors();
+    const PlayerColorsSet humanColors = Players::HumanColors();
     const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const Settings & conf = Settings::Get();
-    const int currentColor = conf.CurrentColor();
+    const PlayerColor currentColor = conf.CurrentColor();
 
     // Remembers whether the current player was considered active at the time of calling this function
-    const bool isCurrentPlayerWasActive = ( currentColor & colors );
+    const bool isCurrentPlayerWasActive = ( _colors & currentColor );
 
     int activeHumanColors = 0;
 
-    for ( const int color : Colors( colors ) ) {
+    for ( const PlayerColor color : PlayerColorsVector( _colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
             // This notification should always be displayed for the AI players. For human players, this should only be displayed in a multiplayer game for a
             // human player who is not currently active - in all other cases, the "you have been eliminated" dialog should be displayed.
-            if ( !( color & humanColors ) || ( !isSinglePlayer && color != currentColor ) ) {
+            if ( !( humanColors & color ) || ( !isSinglePlayer && color != currentColor ) ) {
                 Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
 
-            colors &= ( ~color );
+            _colors &= ~color;
         }
-        else if ( color & humanColors ) {
+        else if ( humanColors & color ) {
             ++activeHumanColors;
         }
     }
@@ -434,10 +443,10 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     if ( isSinglePlayer ) {
         assert( activeHumanColors <= 1 );
 
-        const Kingdom & kingdom = world.GetKingdom( humanColors );
+        const Kingdom & kingdom = world.GetKingdom( static_cast<PlayerColor>( humanColors ) );
 
 #if defined( WITH_DEBUG )
-        const Player * player = Players::Get( humanColors );
+        const Player * player = Players::Get( static_cast<PlayerColor>( humanColors ) );
         assert( player != nullptr );
 
         const bool isAIAutoControlMode = player->isAIAutoControlMode();
@@ -496,7 +505,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }
 
             // Do not perform other checks if there is no active kingdom at the moment
-            if ( !( currentColor & Color::ALL ) ) {
+            if ( !( Color::allPlayerColors() & currentColor ) ) {
                 return GameOver::COND_NONE;
             }
 
@@ -540,7 +549,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         if ( result & GameOver::LOSS ) {
             const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
-                if ( !( currentColor & Color::ALL ) ) {
+                if ( !( Color::allPlayerColors() & currentColor ) ) {
                     return false;
                 }
 
@@ -604,10 +613,20 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
 OStreamBase & GameOver::operator<<( OStreamBase & stream, const Result & res )
 {
-    return stream << res.colors << res.result;
+    return stream << res._colors << res.result;
 }
 
 IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
-    return stream >> res.colors >> res.result;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        res._colors = static_cast<PlayerColorsSet>( temp );
+    }
+    else {
+        stream >> res._colors;
+    }
+
+    return stream >> res.result;
 }

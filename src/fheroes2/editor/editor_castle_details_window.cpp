@@ -295,14 +295,14 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color, const fheroes2::SupportedLanguage language )
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         const fheroes2::Rect dialogRoi = background.activeArea();
         const fheroes2::Rect dialogWithShadowRoi = background.totalArea();
 
@@ -363,13 +363,13 @@ namespace Editor
             = drawCheckboxWithText( defaultBuildingsSign, _( "Default Buildings" ), display, dstPt.x, dstPt.y, isEvilInterface, rightPartWidth - 10 );
         castleMetadata.customBuildings ? defaultBuildingsSign.hide() : defaultBuildingsSign.show();
 
-        // Build restrict mode button.
-        fheroes2::Button buttonRestrictBuilding( 0, 0, isEvilInterface ? ICN::BUTTON_RESTRICT_EVIL : ICN::BUTTON_RESTRICT_GOOD, 0, 1 );
-        buttonRestrictBuilding.setPosition( dialogRoi.x + rightPartOffsetX + ( rightPartWidth - buttonRestrictBuilding.area().width ) / 2, dialogRoi.y + 195 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuilding.area().getPosition(), { -5, 5 } );
-        buttonRestrictBuilding.draw();
+        // Build restrict mode button. We use center_center padding to make sure localized variable-width buttons are centered too.
+        fheroes2::ButtonSprite buttonRestrictBuilding;
 
-        const bool isNeutral = ( color == Color::NONE );
+        const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RESTRICT" ), fheroes2::FontType::buttonReleasedWhite() );
+        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+
+        const bool isNeutral = ( color == PlayerColor::NONE );
 
         // Castle army.
         dstPt.y = dialogRoi.y + 311;
@@ -449,10 +449,9 @@ namespace Editor
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
         // Exit button.
-        fheroes2::Button buttonExit( dialogRoi.x + rightPartOffsetX + 50, dialogRoi.y + 430, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD,
-                                     0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -2, 2 } );
-        buttonExit.draw();
+        fheroes2::Button buttonExit;
+        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 24 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         // Status bar.
         const int32_t statusBarWidth = statusBarSprite.width();
@@ -460,7 +459,7 @@ namespace Editor
         dstPt.y = dialogRoi.y + dialogRoi.height - statusBarheight;
         fheroes2::Copy( statusBarSprite, 0, 0, display, dialogRoi.x, dstPt.y, statusBarWidth, statusBarheight );
         StatusBar statusBar;
-        statusBar.setRoi( { dialogRoi.x, dstPt.y + 3, statusBarWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x, dstPt.y, statusBarWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 
@@ -470,7 +469,7 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -480,7 +479,7 @@ namespace Editor
                 buildingRestriction = !buildingRestriction;
             }
 
-            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedInArea( buttonRestrictBuilding.area() ) );
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedAndHeldInArea( buttonRestrictBuilding.area() ) );
 
             if ( le.isMouseCursorPosInArea( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );

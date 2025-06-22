@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -95,14 +95,14 @@ namespace
 
     // Get colors value of players to use in fog directions update.
     // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
-    int32_t hotSeatAIFogColors( const Player * player )
+    PlayerColorsSet hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
 
         // This function should be called when AI makes a move.
         assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
 
-        const int32_t humanColors = Players::HumanColors();
+        const PlayerColorsSet humanColors = Players::HumanColors();
         // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
@@ -119,9 +119,9 @@ namespace
         // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
         // discovered fog.
 
-        int32_t friendColors = 0;
+        PlayerColorsSet friendColors = 0;
 
-        for ( const int32_t color : Colors( humanColors ) ) {
+        for ( const PlayerColor color : PlayerColorsVector( humanColors ) ) {
             const Player * humanPlayer = Players::Get( color );
             if ( humanPlayer ) {
                 friendColors |= humanPlayer->GetFriends();
@@ -228,7 +228,7 @@ fheroes2::GameMode Game::StartGame()
     return Interface::AdventureMap::Get().StartGame();
 }
 
-void Game::DialogPlayers( int color, std::string title, std::string message )
+void Game::DialogPlayers( const PlayerColor color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
@@ -237,22 +237,22 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     fheroes2::Sprite sign = border;
 
     switch ( color ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
-    case Color::RED:
+    case PlayerColor::RED:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
@@ -311,21 +311,23 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     if ( renderBackgroundDialog ) {
         Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
+        if ( heroCountBefore != myKingdom.GetHeroes().size() ) {
+            // A hero could be recruited in the castle or a hero could be dismissed by opening hero's dialog
+            // and switching to the other hero and dismissing this hero. We need to update the hero list scrollbar.
+            // NOTICE: we can update the scrollbar only here - after exiting the castle screen not to interfere with castle screen image.
+            adventureMapInterface.GetIconsPanel().resetIcons( ICON_HEROES );
+        }
+
         if ( updateFocus ) {
-            if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-                adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
-            }
-            else if ( it != myCastles.end() ) {
-                Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
-                if ( heroInCastle == nullptr ) {
-                    adventureMapInterface.SetFocus( *it );
-                }
-                else {
-                    adventureMapInterface.SetFocus( heroInCastle, false );
-                }
+            assert( it != myCastles.end() );
+
+            // When exiting the castle, we must focus on it or on the hero visiting this castle.
+            Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
+            if ( heroInCastle == nullptr ) {
+                adventureMapInterface.SetFocus( *it );
             }
             else {
-                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.SetFocus( heroInCastle, false );
             }
         }
         else {
@@ -335,7 +337,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
-        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -699,6 +700,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+    if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( static_cast<PlayerColor>( Players::HumanColors() ) );
+    }
+
     reset();
 
     _radar.Build();
@@ -720,7 +727,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
-
     if ( !isLoadedFromSave || world.CountDay() == 1 ) {
         // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
@@ -728,11 +734,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
     }
 
-    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
-        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
-        conf.SetCurrentColor( Players::HumanColors() );
-
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
@@ -770,7 +772,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             // Player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
             skipTurns = false;
 
-            const int playerColor = player->GetColor();
+            const PlayerColor playerColor = player->GetColor();
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
@@ -784,15 +786,21 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
+                    conf.SetCurrentColor( playerColor );
+
                     if ( isHotSeatGame ) {
+                        if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
+                            reset();
+                        }
+
                         _iconsPanel.hideIcons( ICON_ANY );
                         _statusPanel.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, 0 );
 
-                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
                         validateFadeInAndRender();
 
@@ -803,8 +811,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
-
-                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 
@@ -862,7 +868,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Planner::Get().KingdomTurn( kingdom );
+                    res = AI::Planner::Get().KingdomTurn( kingdom );
+                    // This function must return only game state related values.
+                    assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
                     if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -908,7 +916,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
 
         // Don't carry the current player color to the next turn.
-        conf.SetCurrentColor( Color::NONE );
+        conf.SetCurrentColor( PlayerColor::NONE );
     }
 
     // If we are here, the res value should never be fheroes2::GameMode::END_TURN
@@ -1156,16 +1164,24 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 // Adventure map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    _gameArea.SetScroll( SCROLL_LEFT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_LEFT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    _gameArea.SetScroll( SCROLL_RIGHT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_RIGHT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    _gameArea.SetScroll( SCROLL_TOP );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_TOP );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    _gameArea.SetScroll( SCROLL_BOTTOM );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_BOTTOM );
+                    }
                 }
                 // Default action
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {

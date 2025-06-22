@@ -32,6 +32,8 @@
 
 class Heroes;
 
+enum class PlayerColor : uint8_t;
+
 namespace MP2
 {
     enum MapObjectType : uint16_t;
@@ -73,6 +75,7 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t width, const int32_t height, const int32_t maxDistanceFromTile );
 
     MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
@@ -99,8 +102,8 @@ namespace Maps
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
+    void ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
 
     // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
     // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to

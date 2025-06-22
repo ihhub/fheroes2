@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -192,13 +192,13 @@ bool Game::validateDisplayFadeIn()
 void Game::Init()
 {
     // set global events
-    LocalEvent & le = LocalEvent::Get();
-    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
-    le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
+    LocalEvent & eventHandler = LocalEvent::Get();
+    eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
+    eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
 
-    Game::AnimateDelaysInitialize();
+    AnimateDelaysInitialize();
 
-    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
+    HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 uint32_t Game::getAdventureMapAnimationIndex()
@@ -468,12 +468,12 @@ uint32_t Game::GetWhirlpoolPercent()
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-int Game::GetKingdomColors()
+PlayerColorsSet Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors()
+PlayerColorsSet Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }

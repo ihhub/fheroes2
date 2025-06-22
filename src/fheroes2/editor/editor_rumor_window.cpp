@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -171,12 +171,12 @@ namespace Editor
         const fheroes2::Rect rumorsRoi{ windowArea.x + elementOffset, offsetY, rumorArea.width, rumorArea.height };
         background.applyTextBackgroundShading( rumorsRoi );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         RumorListBox rumorList( rumorsRoi.getPosition(), language );
         rumorList.initListBackgroundRestorer( rumorsRoi );
 
         rumorList.SetAreaItems( { rumorsRoi.x, rumorsRoi.y, rumorsRoi.width, rumorsRoi.height - listAreaHeightDeduction } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         int32_t scrollbarOffsetX = rumorsRoi.x + rumorsRoi.width + 5;
         background.renderScrollbarBackground( { scrollbarOffsetX, rumorsRoi.y, rumorsRoi.width, rumorsRoi.height }, isEvilInterface );
@@ -214,7 +214,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
@@ -222,11 +222,11 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-            buttonAdd.drawOnState( le.isMouseLeftButtonPressedInArea( buttonAdd.area() ) );
-            buttonEdit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonEdit.area() ) );
-            buttonDelete.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDelete.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonAdd.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonAdd.area() ) );
+            buttonEdit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonEdit.area() ) );
+            buttonDelete.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDelete.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 break;

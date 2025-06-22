@@ -109,7 +109,7 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle text support mode" ), fheroes2::Key::KEY_F10 };
 
 #if defined( WITH_DEBUG )
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )]
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_DEVELOPER_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
 
@@ -503,7 +503,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.Save( Settings::configFileName );
     }
 #if defined( WITH_DEBUG )
-    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )].key ) {
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_DEVELOPER_MODE )].key ) {
         Logging::setDebugLevel( DBG_DEVEL ^ Logging::getDebugLevel() );
     }
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {

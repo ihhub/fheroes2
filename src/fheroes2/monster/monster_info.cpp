@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -759,8 +759,8 @@ namespace fheroes2
 
         std::ostringstream os;
         os << "----------" << std::endl;
-        os << "Name: " << monster.generalStats.name << std::endl;
-        os << "Plural name: " << monster.generalStats.pluralName << std::endl;
+        os << "Name: " << monster.generalStats.untranslatedName << std::endl;
+        os << "Plural name: " << monster.generalStats.untranslatedPluralName << std::endl;
         os << "Base growth: " << monster.generalStats.baseGrowth << std::endl;
         os << "Race: " << Race::String( monster.generalStats.race ) << std::endl;
         os << "Level: " << monster.generalStats.level << std::endl;

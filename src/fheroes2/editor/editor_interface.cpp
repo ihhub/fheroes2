@@ -253,7 +253,7 @@ namespace
 
     bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
     {
-        if ( objectsUids.empty() ) {
+        if ( objectsUids.empty() || objectGroups.empty() ) {
             return false;
         }
 
@@ -284,6 +284,18 @@ namespace
 
                     ++objectIter;
                     continue;
+                }
+
+                // Remove the object also from the `world` tiles. It is needed for proper rendering of the map.
+                Maps::removeObjectFromMapByUID( static_cast<int32_t>( mapTileIndex ), objectIter->id );
+
+                const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+                assert( objectIter->index < objects.size() );
+                const auto objectType = objects[objectIter->index].objectType;
+
+                // Remove ownership data for capturable objects.
+                if ( Maps::isCapturableObject( objectType ) ) {
+                    mapFormat.capturableObjectsMetadata.erase( static_cast<int32_t>( objectIter->id ) );
                 }
 
                 if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -325,16 +337,11 @@ namespace
                     mapFormat.castleMetadata.erase( objectId );
 
                     // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
-                    const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
+                    const size_t bottomTileIndex = mapTileIndex + mapFormat.width;
                     assert( bottomTileIndex < mapFormat.tiles.size() );
-                    auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
-                    const bool isRoadAtBottom
-                        = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
-                                        []( const Maps::Map_Format::TileObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
-                          != bottomTileObjects.end();
-                    if ( isRoadAtBottom ) {
-                        // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
-                        Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( bottomTileIndex ) ), false );
+
+                    if ( Maps::doesContainRoads( mapFormat.tiles[bottomTileIndex] ) ) {
+                        Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( bottomTileIndex ), false );
                     }
 
                     needRedraw = true;
@@ -343,9 +350,15 @@ namespace
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
 
-                    needRedraw |= Maps::updateRoadOnTile( world.getTile( static_cast<int32_t>( mapTileIndex ) ), false );
+                    if ( Maps::doesContainRoads( mapTile ) ) {
+                        needRedraw |= Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
 
-                    ++objectIter;
+                        // Current 'objectIter'is deleted. Update it to the begin.
+                        objectIter = mapTile.objects.begin();
+                    }
+                    else {
+                        ++objectIter;
+                    }
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     objectIter = mapTile.objects.erase( objectIter );
@@ -371,10 +384,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     switch ( objectType ) {
                     case MP2::OBJ_EVENT:
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
@@ -402,10 +411,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     if ( objectType == MP2::OBJ_BOTTLE ) {
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
@@ -422,10 +427,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     if ( objectType == MP2::OBJ_RESOURCE ) {
                         mapFormat.standardMetadata.erase( objectIter->id );
                     }
@@ -447,10 +448,6 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
-                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
-
-                    assert( objectIter->index < objects.size() );
-                    const auto objectType = objects[objectIter->index].objectType;
                     switch ( objectType ) {
                     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
                     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -508,7 +505,7 @@ namespace
                          return true;
                      }
 
-                     return tileToCheck.GoodForUltimateArtifact();
+                     return tileToCheck.isSuitableForUltimateArtifact();
                  } ) ) {
                 errorMessage = _( "The Ultimate Artifact can only be placed on terrain where digging is possible." );
                 return false;
@@ -794,7 +791,7 @@ namespace Interface
         return editorInterface;
     }
 
-    fheroes2::GameMode EditorInterface::startEdit( const bool isNewMap )
+    fheroes2::GameMode EditorInterface::startEdit()
     {
         // The Editor has a special option to disable animation. This affects cycling animation as well.
         // First, we disable it to make sure to enable it back while exiting this function.
@@ -809,12 +806,6 @@ namespace Interface
         reset();
 
         _historyManager.reset();
-
-        if ( isNewMap ) {
-            _mapFormat = {};
-            Maps::saveMapInEditor( _mapFormat );
-            _loadedFileName.clear();
-        }
 
         // Stop all sounds and music.
         AudioManager::ResetAudio();
@@ -880,16 +871,24 @@ namespace Interface
                     eventViewWorld();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    _gameArea.SetScroll( SCROLL_LEFT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_LEFT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    _gameArea.SetScroll( SCROLL_RIGHT );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_RIGHT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    _gameArea.SetScroll( SCROLL_TOP );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_TOP );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    _gameArea.SetScroll( SCROLL_BOTTOM );
+                    if ( !_gameArea.isDragScroll() ) {
+                        _gameArea.SetScroll( SCROLL_BOTTOM );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
                     undoAction();
@@ -1057,15 +1056,12 @@ namespace Interface
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
-                        Maps::setTerrainOnTiles( _areaSelectionStartTileId, _tileUnderCursor, groundId );
+                        Maps::setTerrainOnTiles( _mapFormat, _areaSelectionStartTileId, _tileUnderCursor, groundId );
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
 
                         _redraw |= mapUpdateFlags;
-
-                        // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                        Maps::readMapInEditor( _mapFormat );
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
@@ -1075,9 +1071,6 @@ namespace Interface
                                             _editorPanel.getEraseObjectGroups() ) ) {
                             action.commit();
                             _redraw |= mapUpdateFlags;
-
-                            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                            Maps::readMapInEditor( _mapFormat );
                         }
                     }
                 }
@@ -1160,38 +1153,22 @@ namespace Interface
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::StandardWindow background( 418 - fheroes2::borderWidthPx * 2, 236 - fheroes2::borderWidthPx * 2, true, display );
-
-        fheroes2::Button buttonNew;
-        fheroes2::Button buttonLoad;
-        fheroes2::Button buttonSave;
-        fheroes2::Button buttonQuit;
-        fheroes2::ButtonSprite buttonMainMenu;
-        fheroes2::ButtonSprite buttonPlayMap;
-        fheroes2::Button buttonCancel;
-
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+        const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_EDITOR_FILE_DIALOG_EVIL : ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD;
+        fheroes2::ButtonGroup optionButtons( bigButtonsICN );
+        fheroes2::StandardWindow background( optionButtons, false, 0, display );
+        background.renderSymmetricButtons( optionButtons, 0, false );
 
-        const fheroes2::Point buttonOffsets = { 30, 15 };
-        background.renderButton( buttonNew, isEvilInterface ? ICN::BUTTON_NEW_MAP_EVIL : ICN::BUTTON_NEW_MAP_GOOD, 0, 1, buttonOffsets,
-                                 fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonLoad, isEvilInterface ? ICN::BUTTON_LOAD_MAP_EVIL : ICN::BUTTON_LOAD_MAP_GOOD, 0, 1, { 0, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::TOP_CENTER );
-        background.renderButton( buttonSave, isEvilInterface ? ICN::BUTTON_SAVE_MAP_EVIL : ICN::BUTTON_SAVE_MAP_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
-        background.renderButton( buttonQuit, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1, { buttonOffsets.x, buttonOffsets.y },
-                                 fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        const fheroes2::ButtonBase & buttonNewMap = optionButtons.button( 0 );
+        const fheroes2::ButtonBase & buttonLoadMap = optionButtons.button( 1 );
+        const fheroes2::ButtonBase & buttonStartMap = optionButtons.button( 2 );
+        const fheroes2::ButtonBase & buttonSaveMap = optionButtons.button( 3 );
+        const fheroes2::ButtonBase & buttonMainMenu = optionButtons.button( 4 );
+        const fheroes2::ButtonBase & buttonQuit = optionButtons.button( 5 );
 
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+        fheroes2::Button buttonCancel;
 
-        background.renderButtonSprite( buttonMainMenu, fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), releasedButtonFont ),
-                                       { buttonSave.area().width - 10, buttonSave.area().height }, { 0, buttonOffsets.y }, isEvilInterface,
-                                       fheroes2::StandardWindow::Padding::CENTER_CENTER );
-        background.renderButtonSprite( buttonPlayMap, fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), releasedButtonFont ),
-                                       { buttonSave.area().width - 10, buttonSave.area().height }, { buttonOffsets.x, buttonOffsets.y }, isEvilInterface,
-                                       fheroes2::StandardWindow::Padding::TOP_RIGHT );
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
@@ -1200,27 +1177,23 @@ namespace Interface
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNew.area() ) );
-            buttonLoad.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLoad.area() ) );
-            buttonSave.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSave.area() ) );
-            buttonQuit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonQuit.area() ) );
-            buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMainMenu.area() ) );
-            buttonPlayMap.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPlayMap.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            optionButtons.drawOnState( le );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
+            if ( le.MouseClickLeft( buttonNewMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     return fheroes2::GameMode::EDITOR_NEW_MAP;
                 }
             }
-            if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( buttonLoadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 if ( eventLoadMap() == fheroes2::GameMode::EDITOR_LOAD_MAP ) {
                     return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
             }
-            if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            if ( le.MouseClickLeft( buttonSaveMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
+                display.render( background.totalArea() );
                 Get().saveMapToFile();
                 return fheroes2::GameMode::CANCEL;
             }
@@ -1238,7 +1211,7 @@ namespace Interface
                     return fheroes2::GameMode::MAIN_MENU;
                 }
             }
-            else if ( le.MouseClickLeft( buttonPlayMap.area() ) ) {
+            else if ( le.MouseClickLeft( buttonStartMap.area() ) ) {
                 bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
                 if ( isNameEmpty
                      && fheroes2::showStandardTextMessage(
@@ -1275,15 +1248,15 @@ namespace Interface
                 return fheroes2::GameMode::CANCEL;
             }
 
-            if ( le.isMouseRightButtonPressedInArea( buttonNew.area() ) ) {
+            if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
                 // TODO: update this text once random map generator is ready.
                 //       The original text should be "Create a new map, either from scratch or using the random map generator."
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonLoad.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonLoadMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonSave.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonSaveMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Map" ), _( "Save the current map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
@@ -1292,7 +1265,7 @@ namespace Interface
             else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonPlayMap.area() ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( buttonStartMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Start Map" ), _( "Leave the Editor and play the map in the Standard Game mode." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
@@ -1305,7 +1278,7 @@ namespace Interface
     void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
-        ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
+        ViewWorld::ViewWorldWindow( PlayerColor::NONE, ViewWorldMode::ViewAll, *this );
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
@@ -1336,7 +1309,7 @@ namespace Interface
                 if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
-                    const int color = ( objectType == MP2::OBJ_JAIL ) ? Color::NONE : ( 1 << objectInfo.metadata[0] );
+                    const PlayerColor color = ( objectType == MP2::OBJ_JAIL ) ? PlayerColor::NONE : static_cast<PlayerColor>( 1 << objectInfo.metadata[0] );
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;
@@ -1355,7 +1328,7 @@ namespace Interface
                     assert( _mapFormat.castleMetadata.find( object.id ) != _mapFormat.castleMetadata.end() );
 
                     const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
-                    const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
 
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
@@ -1573,6 +1546,37 @@ namespace Interface
 
                     fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), std::move( str ), Dialog::OK );
                 }
+                else if ( Maps::isCapturableObject( objectType ) ) {
+                    if ( Color::Count( _mapFormat.availablePlayerColors ) == 0 ) {
+                        _warningMessage.reset( _( "There are no players on the map, so no one can own this object." ) );
+                        return;
+                    }
+
+                    auto ownershipMetadata = _mapFormat.capturableObjectsMetadata.find( object.id );
+                    const bool hasOwnershipMetadata = ( ownershipMetadata != _mapFormat.capturableObjectsMetadata.end() );
+                    const PlayerColor ownerColor = hasOwnershipMetadata ? ownershipMetadata->second.ownerColor : PlayerColor::NONE;
+
+                    const PlayerColor newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
+
+                    if ( newColor != ownerColor ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                        if ( newColor == PlayerColor::NONE ) {
+                            _mapFormat.capturableObjectsMetadata.erase( object.id );
+                        }
+                        else if ( hasOwnershipMetadata ) {
+                            ownershipMetadata->second.ownerColor = newColor;
+                        }
+                        else {
+                            _mapFormat.capturableObjectsMetadata[object.id].ownerColor = newColor;
+                        }
+
+                        world.CaptureObject( tileIndex, newColor );
+                        setRedraw( mapUpdateFlags );
+
+                        action.commit();
+                    }
+                }
                 else {
                     std::string msg = _( "%{object} has no properties to change." );
                     StringReplace( msg, "%{object}", MP2::StringObject( objectType ) );
@@ -1591,13 +1595,13 @@ namespace Interface
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
-                Maps::setTerrainOnTiles( indices.x, indices.y, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, indices.x, indices.y, groundId );
             }
             else {
                 assert( brushSize.width == 0 );
 
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+                Maps::setTerrainOnTiles( _mapFormat, tileIndex, tileIndex, groundId );
 
                 _areaSelectionStartTileId = -1;
             }
@@ -1607,9 +1611,6 @@ namespace Interface
             _redraw |= mapUpdateFlags;
 
             action.commit();
-
-            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-            Maps::readMapInEditor( _mapFormat );
         }
         else if ( _editorPanel.isRoadDraw() ) {
             if ( tile.isWater() ) {
@@ -1621,7 +1622,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( Maps::updateRoadOnTile( tile, true ) ) {
+            if ( Maps::updateRoadOnTile( _mapFormat, tile.GetIndex(), true ) ) {
                 _redraw |= mapUpdateFlags;
 
                 action.commit();
@@ -1653,9 +1654,6 @@ namespace Interface
             if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
                 action.commit();
                 _redraw |= mapUpdateFlags;
-
-                // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
-                Maps::readMapInEditor( _mapFormat );
             }
 
             if ( brushSize.width == 0 ) {
@@ -1821,8 +1819,15 @@ namespace Interface
                 return;
             }
 
+            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
+                // Update road if there is one in front of the town/castle entrance.
+                Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
+            }
+
             // By default use random (default) army for the neutral race town/castle.
-            if ( Color::IndexToColor( color ) == Color::NONE ) {
+            if ( Color::IndexToColor( color ) == PlayerColor::NONE ) {
                 Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
             }
 
@@ -1849,28 +1854,23 @@ namespace Interface
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            int32_t type = -1;
-            int32_t color = -1;
-
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            if ( objectType < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return;
             }
 
-            if ( !verifyObjectPlacement( tilePos, groupType, type, errorMessage ) ) {
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
                 return;
             }
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( !_setObjectOnTile( tile, groupType, type ) ) {
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
                 return;
             }
 
-            // TODO: Place owner flag according to the color state.
             action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
@@ -1967,6 +1967,52 @@ namespace Interface
         }
 
         return false;
+    }
+
+    bool EditorInterface::generateNewMap( const int32_t mapWidth )
+    {
+        if ( mapWidth <= 0 ) {
+            return false;
+        }
+
+        Settings & conf = Settings::Get();
+
+        if ( !conf.isPriceOfLoyaltySupported() ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat = {};
+
+        world.generateUninitializedMap( mapWidth );
+
+        if ( world.w() != mapWidth || world.h() != mapWidth ) {
+            assert( 0 );
+
+            return false;
+        }
+
+        _mapFormat.width = mapWidth;
+
+        // Only square maps are supported so map height is the same as width.
+        const int32_t tilesCount = mapWidth * mapWidth;
+
+        _mapFormat.tiles.resize( tilesCount );
+
+        for ( int32_t i = 0; i < tilesCount; ++i ) {
+            world.getTile( i ).setIndex( i );
+        }
+
+        Maps::setTerrainOnTiles( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
+
+        Maps::resetObjectUID();
+
+        _loadedFileName.clear();
+
+        conf.getCurrentMapInfo().version = GameVersion::RESURRECTION;
+
+        return true;
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )
@@ -2083,6 +2129,7 @@ namespace Interface
         std::string errorMessage;
 
         std::set<uint32_t> uids;
+        std::set<Maps::ObjectGroup> groups;
 
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             const fheroes2::Point pos{ static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() };
@@ -2105,22 +2152,16 @@ namespace Interface
 
                 if ( !verifyTerrainPlacement( pos, object.group, static_cast<int32_t>( object.index ), errorMessage ) ) {
                     uids.emplace( object.id );
+                    groups.emplace( object.group );
                 }
             }
 
             if ( removeRoad ) {
-                auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-
-                Maps::updateRoadOnTile( worldTile, false );
+                Maps::updateRoadOnTile( _mapFormat, static_cast<int32_t>( i ), false );
             }
         }
 
         if ( !uids.empty() ) {
-            std::set<Maps::ObjectGroup> groups;
-            for ( int32_t i = 0; i < static_cast<int32_t>( Maps::ObjectGroup::GROUP_COUNT ); ++i ) {
-                groups.emplace( static_cast<Maps::ObjectGroup>( i ) );
-            }
-
             removeObjects( _mapFormat, uids, groups );
         }
 
@@ -2154,11 +2195,9 @@ namespace Interface
             objectIndex = type;
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            int32_t type = -1;
-            int32_t color = -1;
+            const int32_t type = _editorPanel.getSelectedObjectType();
 
-            _editorPanel.getMineObjectProperties( type, color );
-            if ( type < 0 || color < 0 ) {
+            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return false;

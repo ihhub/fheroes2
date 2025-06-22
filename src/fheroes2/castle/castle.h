@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -145,7 +145,12 @@ public:
     };
 
     Castle() = default;
-    Castle( const int32_t posX, const int32_t posY, int race );
+    Castle( const int32_t posX, const int32_t posY, const int race )
+        : MapPosition( { posX, posY } )
+        , _race( race )
+    {
+        // Do nothing.
+    }
 
     Castle( const Castle & ) = delete;
 
@@ -222,9 +227,9 @@ public:
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
-    void MageGuildEducateHero( HeroBase & hero ) const
+    void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
     }
 
     bool isFortificationBuilt() const
@@ -272,14 +277,10 @@ public:
     double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
-    void ChangeColor( const int newColor );
+    void ChangeColor( const PlayerColor newColor );
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth() const
-    {
-        // Do nothing.
-    }
 
     void ActionPreBattle();
     void ActionAfterBattle( const bool attackerWins );
@@ -374,6 +375,10 @@ public:
         return ( _disabledBuildings & buildingType ) != 0;
     }
 
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
+
 private:
     enum class ConstructionDialogResult : int
     {
@@ -389,7 +394,7 @@ private:
     bool _isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
     uint32_t * _getDwelling( const uint32_t buildingType );
-    void _educateHeroes();
+    void _trainGuestHeroAndCaptainInMageGuild();
 
     ConstructionDialogResult _openConstructionDialog( uint32_t & dwellingTobuild );
 
@@ -555,11 +560,10 @@ public:
 
     Castle * Get( const fheroes2::Point & position ) const;
 
-    void Scout( const int colors ) const;
+    void Scout( const PlayerColorsSet colors ) const;
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator

@@ -95,19 +95,29 @@ namespace fheroes2
         fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi, const bool isEvilInterface )
+    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType )
     {
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
-
+        uint32_t icnInx = 15;
         std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
+        switch ( interfaceType ) {
+        case InterfaceType::DYNAMIC:
+            value = _( "Dynamic" );
+            break;
+        case InterfaceType::GOOD:
+            icnInx = 16;
             value = _( "Good" );
+            break;
+        case InterfaceType::EVIL:
+            icnInx = 17;
+            value = _( "Evil" );
+            break;
+        default:
+            assert( 0 );
+            break;
         }
 
-        fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor )

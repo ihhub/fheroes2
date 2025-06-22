@@ -29,6 +29,7 @@
 #include <exception>
 #include <list>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -305,7 +306,7 @@ public:
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
+    void LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
     void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor );
     // Updates data in heroMetadata and returns true if it has changes.
@@ -313,7 +314,7 @@ public:
 
     int GetRace() const override;
     const std::string & GetName() const override;
-    int GetColor() const override;
+    PlayerColor GetColor() const override;
     int GetType() const override;
     int GetControl() const override;
 
@@ -387,8 +388,8 @@ public:
 
     int GetMorale() const override;
     int GetLuck() const override;
-    int GetMoraleWithModificators( std::string * str = nullptr ) const;
-    int GetLuckWithModificators( std::string * str = nullptr ) const;
+    int getMoraleWithModifiers( std::string * str = nullptr ) const;
+    int getLuckWithModifiers( std::string * str = nullptr ) const;
 
     int GetLevel() const
     {
@@ -481,16 +482,15 @@ public:
                     const fheroes2::SupportedLanguage language );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( const int col, const fheroes2::Point & pt );
+    bool Recruit( const PlayerColor col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    bool BuySpellBook( const Castle * castle );
+    bool BuySpellBook( const Castle & castle );
 
     const Route::Path & GetPath() const
     {
@@ -529,15 +529,16 @@ public:
         }
     }
 
-    // set visited cell
-    void SetVisited( int32_t, Visit::Type = Visit::LOCAL );
+    // Set the visited state for the tile with the given index
+    void SetVisited( const int32_t tileIndex, const Visit::Type type = Visit::LOCAL );
 
-    // Set global visited state for itself and for allies.
+    // Set the global visited state for the tile with the given index both for this hero's kingdom and its allies
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( int32_t, const MP2::MapObjectType objectType, Visit::Type = Visit::LOCAL );
     bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
+
+    std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
 
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
@@ -602,7 +603,7 @@ public:
     }
 
     void Scout( const int tileIndex ) const;
-    int GetScoutingDistance() const;
+    int32_t GetScoutingDistance() const;
 
     // Returns the area in map tiles around hero's position in his scout range.
     fheroes2::Rect GetScoutRoi() const;
@@ -698,6 +699,10 @@ public:
     }
 
     void resetHeroSprite();
+
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
 
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );
@@ -809,13 +814,12 @@ public:
     Heroes * Get( const int hid ) const;
     Heroes * Get( const fheroes2::Point & center ) const;
 
-    void Scout( const int colors ) const;
+    void Scout( const PlayerColorsSet colors ) const;
 
     void ResetModes( const uint32_t modes ) const;
 
     void NewDay() const;
     void NewWeek() const;
-    void NewMonth() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t index ) const;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -62,7 +62,7 @@
 
 namespace
 {
-    const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
+    const std::array<PlayerColor, 2> playerColor{ PlayerColor::BLUE, PlayerColor::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
@@ -195,11 +195,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     fheroes2::Button buttonReset( cur_pt.x + 30, cur_pt.y + 428, ICN::BUTTON_RESET_GOOD, 0, 1 );
     fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
-    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_EXIT_GOOD, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1 );
 
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     buttonStart.draw();
     buttonExit.draw();
@@ -216,13 +216,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawControlInfo = false;
 
         if ( buttonStart.isEnabled() ) {
-            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStart.area() ) );
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonStart.area() ) );
         }
         if ( buttonExit.isEnabled() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
         }
         if ( buttonReset.isEnabled() ) {
-            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonReset.area() ) );
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
         if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
@@ -505,7 +505,7 @@ void Battle::Only::StartBattle()
     Battle::Loader( ( armyInfo[0].hero ? armyInfo[0].hero->GetArmy() : armyInfo[0].monster ), ( armyInfo[1].hero ? armyInfo[1].hero->GetArmy() : armyInfo[1].monster ),
                     1 );
 
-    conf.SetCurrentColor( Color::NONE );
+    conf.SetCurrentColor( PlayerColor::NONE );
 }
 
 void Battle::Only::reset()

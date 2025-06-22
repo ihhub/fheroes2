@@ -986,15 +986,15 @@ namespace fheroes2
     {
         LocalEvent & le = LocalEvent::Get();
 
-        _buttonUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonUp.area() ) );
-        _buttonDown.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonDown.area() ) );
+        _buttonUp.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonUp.area() ) );
+        _buttonDown.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonDown.area() ) );
 
-        if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isMouseWheelUpEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
+        if ( _value + _step <= _maximum && ( le.MouseClickLeft( _buttonUp.area() ) || _isIncreaseValueEvent( le ) || _timedButtonUp.isDelayPassed() ) ) {
             _value += _step;
             return true;
         }
 
-        if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isMouseWheelDownEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
+        if ( _value - _step >= _minimum && ( le.MouseClickLeft( _buttonDown.area() ) || _isDecreaseValueEvent( le ) || _timedButtonDown.isDelayPassed() ) ) {
             _value -= _step;
             return true;
         }
@@ -1022,22 +1022,16 @@ namespace fheroes2
         _value = std::clamp( value, _minimum, _maximum );
     }
 
-    bool ValueSelectionDialogElement::_isMouseWheelUpEvent( const LocalEvent & eventHandler ) const
+    bool ValueSelectionDialogElement::_isIncreaseValueEvent( const LocalEvent & eventHandler ) const
     {
-        if ( _isIgnoreMouseWheelEventRoiCheck ) {
-            return eventHandler.isMouseWheelUp();
-        }
-
-        return eventHandler.isMouseWheelUpInArea( _editBox );
+        return ( _isIgnoreMouseWheelEventRoiCheck || eventHandler.isMouseCursorPosInArea( _editBox ) )
+               && ( eventHandler.isMouseWheelUp() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_UP ) );
     }
 
-    bool ValueSelectionDialogElement::_isMouseWheelDownEvent( const LocalEvent & eventHandler ) const
+    bool ValueSelectionDialogElement::_isDecreaseValueEvent( const LocalEvent & eventHandler ) const
     {
-        if ( _isIgnoreMouseWheelEventRoiCheck ) {
-            return eventHandler.isMouseWheelDown();
-        }
-
-        return eventHandler.isMouseWheelDownInArea( _editBox );
+        return ( _isIgnoreMouseWheelEventRoiCheck || eventHandler.isMouseCursorPosInArea( _editBox ) )
+               && ( eventHandler.isMouseWheelDown() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DOWN ) );
     }
 
     Size ValueSelectionDialogElement::getArea()

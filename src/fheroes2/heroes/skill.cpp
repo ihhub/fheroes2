@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -195,6 +195,23 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
     }
 
     return ( skill == POWER || skill == KNOWLEDGE ) ? 1 : 0;
+}
+
+std::pair<int, int> Skill::Primary::getSkillValueRange( const int skill )
+{
+    switch ( skill ) {
+    case ATTACK:
+    case DEFENSE:
+        return { 0, 99 };
+    case POWER:
+    case KNOWLEDGE:
+        return { 1, 99 };
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return { 0, 0 };
 }
 
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
@@ -832,30 +849,34 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
+int Skill::getLeadershipModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
+int Skill::getLuckModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )

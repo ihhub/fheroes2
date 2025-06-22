@@ -37,6 +37,184 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-06-10" version="v1.1.9">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.9</url>
+      <description>
+        <p>Changes in v1.1.9 (10 June 2025):</p>
+        <ul>
+          <li>update the Swedish translation</li>
+          <li>fix showing one 1st level troop in hero's army during the hero fade-out animation after losing a battle</li>
+          <li>bundle several maps with fheroes2</li>
+          <li>update the Ukrainian translation</li>
+          <li>update the Russian translation</li>
+          <li>add the Barrel object</li>
+          <li>reduce map reloads when erasing objects or placing terrain in the Editor</li>
+          <li>remove the rumor about the latest update</li>
+          <li>add the Black Cat object</li>
+          <li>fix map centering when AI interacts with an action object</li>
+          <li>render hero's Spell Points on two lines if they don't fit on one line</li>
+          <li>fix rendering of tall obstacles in battles</li>
+          <li>add Greek translation support</li>
+          <li>fix button behavior when pressing and holding them</li>
+          <li>update the German translation</li>
+          <li>allow AI to dig for Ultimate Artifact and win via the "Find a particular artifact" victory condition</li>
+          <li>do not allow units to cause zero damage in case of a bad luck event</li>
+          <li>add an optional field for map creator's notes</li>
+          <li>add the ability to set owner color for capturable objects in the Editor</li>
+          <li>add the Danish language to the Virtual keyboard</li>
+          <li>fix troop count display during monster animation in battles</li>
+          <li>make Bad Luck animation closer to the original game</li>
+          <li>make Disrupting Ray and Teleport spells animation closer to the original game</li>
+          <li>center the map on a hero before rendering action object's event</li>
+          <li>significantly speed up language switching operation</li>
+          <li>optimize rendering and timers</li>
+          <li>add UP and DOWN hotkeys support in "Select Count" dialogs</li>
+          <li>Android: optimize the asset extraction process</li>
+          <li>fix a conflict between scrolling by dragging and regular scrolling</li>
+          <li>fix Barbarian castle's Shipyard rendering</li>
+          <li>fix incorrect pixels near the SKIP button when Hero's options are opened</li>
+          <li>fix unit overlap in battles when a unit is moving to the row above another unit</li>
+          <li>make the scouting area match the original game</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2025-05-04" version="v1.1.8">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.8</url>
+      <description>
+        <p>Changes in v1.1.8 (04 May 2025):</p>
+        <ul>
+          <li>add defense penalty to moat building info and adjust wording</li>
+          <li>add the translation of buttons in Editor's main menu</li>
+          <li>implement scrollable text input</li>
+          <li>allow to navigate item lists using keyboard keys</li>
+          <li>allow to close a dialog with a single OK or CANCEL button in a button group using OK and CANCEL hotkeys</li>
+          <li>if a hero was moved to a castle when loading the map, train him in the Mage Guild</li>
+          <li>fix cursor positioning for the Virtual Keyboard</li>
+          <li>add a shadow for the Heroes Meeting dialog</li>
+          <li>add color name to Traveler Tent's popup message</li>
+          <li>allow the use of a hardware keyboard when Virtual Numpad is opened</li>
+          <li>fix the scroll bar behavior after visiting a castle</li>
+          <li>do not ask for additional confirmation if Auto Combat or Quick Combat have been started from the GUI dialog</li>
+          <li>add stat bonus values to Battle Garb of Anduran information</li>
+          <li>update the Swedish translation</li>
+          <li>improve the input of numbers from the hardware keyboard</li>
+          <li>fix status bar offset to prevent text from overlapping the status bar bottom border</li>
+          <li>fix missing height values in Czech assets</li>
+          <li>allow to move the Virtual Keyboard cursor using the hardware keyboard buttons</li>
+          <li>add German language support for Virtual Keyboard</li>
+          <li>update the Czech translation</li>
+          <li>update the Russian translation</li>
+          <li>fix clearing diacritic signs in the status bar</li>
+          <li>update the Hungarian translation</li>
+          <li>update the German translations related to artifacts</li>
+          <li>fix multiple sound issues while playing MIDI on Windows OS</li>
+          <li>change text input cursor from '_' to '|'</li>
+          <li>update the Danish translation</li>
+          <li>replace "gold only" chest dialog with "gold or exp" one in case when a hero has no space for an artifact</li>
+          <li>update the Belarusian translation</li>
+          <li>end game immediately during AI turn if there are changes in the game results</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2025-03-23" version="v1.1.7">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.7</url>
+      <description>
+        <p>Changes in v1.1.7 (23 March 2025):</p>
+        <ul>
+          <li>add French virtual keyboard</li>
+          <li>fix broken tiles with mines at the time of loading maps</li>
+          <li>update the Russian translation</li>
+          <li>campaign: allow to raise the game difficulty during the campaign</li>
+          <li>add shadow to Damage Popup Info dialog during battles</li>
+          <li>make an effort to retain the artifact position when swapping artifacts between heroes</li>
+          <li>AI heroes should buy spellbook if there isn't one</li>
+          <li>add disable/enable logic for Editor's undo/redo buttons</li>
+          <li>fix resetting heroes icons focus after opening Castle</li>
+          <li>fix an assertion crash for hacked mines on old saves</li>
+          <li>fix creature info dialog shadow draw on right click</li>
+          <li>implement Dragon Slayer spell casting for the AI</li>
+          <li>make the AI share visit info about some objects on the Adventure Map</li>
+          <li>fix a delay during battle after having displayed the monster info dialog by right clicking</li>
+          <li>make the AI use Guardian spells on Mines and Abandoned Mines</li>
+          <li>fix Golden bow sprite's glowing pixels</li>
+          <li>fix object visiting marking logic</li>
+          <li>fix visited status for certain Adventure Map objects for the AI</li>
+          <li>fix rendering of tall objects and extra objects (ghosts and flags) over the top map edge</li>
+          <li>update the Hungarian translation</li>
+          <li>add proper translation support for Sign objects</li>
+          <li>allow to activate Czech virtual keyboard</li>
+          <li>do not center on the defeated hero after an instant movement</li>
+          <li>update the Portuguese translation</li>
+          <li>fix the logic of transferring artifacts after battle</li>
+          <li>check the contents of the resurrection.h2d file for correctness</li>
+          <li>add dynamic interface option</li>
+          <li>fix several button issues and do more button code cleanup</li>
+          <li>avoid stacking units when defending archers for the AI</li>
+          <li>update the Swedish translation</li>
+          <li>fix the operation of MIN/MAX buttons in various dialogs</li>
+          <li>clean up Russian empty guild/well button</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2025-02-16" version="v1.1.6">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.6</url>
+      <description>
+        <p>Changes in v1.1.6 (16 February 2025):</p>
+        <ul>
+          <li>fix Ultimate Artifact being erased for any action done on a map</li>
+          <li>fix Editor buttons not being translated</li>
+          <li>fix an assertion regarding maximum spell points</li>
+          <li>update the French translation</li>
+          <li>update the Czech translation</li>
+          <li>add return to the Main Menu and Play Map buttons to the Editor</li>
+          <li>replace "max" text with MIN and MAX buttons for integer input dialog</li>
+          <li>check Loss conditions before Victory conditions</li>
+          <li>expand the functionality of the Adventure map event</li>
+          <li>update the Swedish translation</li>
+          <li>show a proper icon for music and audio settings when they are off</li>
+          <li>rework rendering of experience indicator</li>
+          <li>increase the maximum allowed map name length from the original 17 characters to 50</li>
+          <li>show a range of available values in the input dialog</li>
+          <li>fix the interface not being updated in time in the Editor</li>
+          <li>show the total obelisk number while clicking on the Adventure Map object</li>
+          <li>update the Spanish translation</li>
+          <li>add a script to extract resources from CD images</li>
+          <li>fix rendering of text for several checkboxes</li>
+          <li>display monster count for the Monster object for the Editor</li>
+          <li>update the Hungarian translation</li>
+          <li>add more game options for the Editor</li>
+          <li>use a single button to switch between castle and town in the Editor dialog</li>
+          <li>make the "Week of Monster" deterministic</li>
+          <li>fix text rendering for the level-up dialog</li>
+          <li>display the chosen resource amount in the right-click popup info in the Editor</li>
+          <li>fix the Main Menu rendering after calling the Settings dialog</li>
+          <li>add a dialog pop-up when pressing standing horse</li>
+          <li>add button shine to engine-generated buttons</li>
+          <li>shorten hero name if name plus level is too long</li>
+          <li>add Undo and Redo icons in the Editor</li>
+          <li>show the Artifact description window when clicking on it in the Editor</li>
+          <li>add info about 50% retaliation damage to the Blind spell description</li>
+          <li>update Hero Movement button</li>
+          <li>fix Mine flag rendering on the Adventure Map</li>
+          <li>fix a crash in the View World mode for the Editor</li>
+          <li>add dialog to choose between Auto Combat and Quick Combat</li>
+          <li>fix the project version not being properly displayed in the PSV port of the engine</li>
+          <li>fix overlap of the FPS info and popup message in the Editor</li>
+          <li>fix selected Ore mine resetting in the Mine placement dialog</li>
+          <li>fix the Hideous Mask behavior causing neutral units to never flee</li>
+          <li>fix issues with pressed button states on the battle screen</li>
+          <li>improve morale UI for the undead army</li>
+          <li>update the background image for the PSV port of the engine</li>
+          <li>display spell name in the dialog for spell casting error</li>
+          <li>remove additional passability marks on the bottom part of tiles</li>
+          <li>improve side tile passability logic</li>
+          <li>modify Button layout to be similar to the original game</li>
+          <li>Android: gracefully handle errors when the system chooser does not start for some reason</li>
+          <li>add swap army and swap artifacts to the heroes meeting screen</li>
+          <li>expand Text Support mode for New Map selection dialogs</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-12-30" version="v1.1.5">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.5</url>
       <description>
@@ -3264,15 +3442,15 @@
   </releases>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_world_map.png?raw=true</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_world_map.webp?raw=true</image>
       <caption>Map-Screen</caption>
     </screenshot>
     <screenshot type="default">
-      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_castle.png?raw=true</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_castle.webp?raw=true</image>
       <caption>Castle-Screen</caption>
     </screenshot>
     <screenshot type="default">
-      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_battle.png?raw=true</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_battle.webp?raw=true</image>
       <caption>Battle-Screen</caption>
     </screenshot>
   </screenshots>

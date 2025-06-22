@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -273,16 +273,16 @@ namespace Interface
         fheroes2::Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)
 
         // boundaries for World Map
-        int32_t _minLeftOffset;
-        int32_t _maxLeftOffset;
-        int32_t _minTopOffset;
-        int32_t _maxTopOffset;
+        int32_t _minLeftOffset{ 0 };
+        int32_t _maxLeftOffset{ 0 };
+        int32_t _minTopOffset{ 0 };
+        int32_t _maxTopOffset{ 0 };
 
         fheroes2::Size _visibleTileCount; // number of tiles to be drawn on screen
 
-        int32_t _prevIndexPos;
-        int scrollDirection;
-        bool updateCursor;
+        int32_t _prevIndexPos{ 0 };
+        int scrollDirection{ 0 };
+        bool updateCursor{ false };
 
         fheroes2::Time scrollTime;
 
@@ -291,11 +291,11 @@ namespace Interface
 
         fheroes2::Point _lastMouseDragPosition;
         fheroes2::Point _mousePositionForFastScroll;
-        bool _mouseDraggingInitiated;
-        bool _mouseDraggingMovement;
-        bool _needRedrawByMouseDragging;
-        bool _isFastScrollEnabled;
-        bool _resetMousePositionForFastScroll;
+        bool _mouseDraggingInitiated{ false };
+        bool _mouseDraggingMovement{ false };
+        bool _needRedrawByMouseDragging{ false };
+        bool _isFastScrollEnabled{ false };
+        bool _resetMousePositionForFastScroll{ false };
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

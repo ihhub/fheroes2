@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "editor_ui_helper.h"
@@ -42,7 +41,6 @@
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -65,7 +63,7 @@ namespace
 
 namespace Editor
 {
-    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
+    bool editDailyEvent( Maps::Map_Format::DailyEvent & eventMetadata, const PlayerColorsSet humanPlayerColors, const PlayerColorsSet computerPlayerColors,
                          const fheroes2::SupportedLanguage language )
     {
         // An event can be outdated in terms of players since we don't update players while placing or removing heroes and castles.
@@ -80,7 +78,6 @@ namespace Editor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH - fheroes2::borderWidthPx * 2, messageArea.height + 220, true, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
@@ -208,7 +205,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
@@ -216,8 +213,8 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( firstDaySelection.processEvents() ) {
                 firstDaySelection.draw( display );
@@ -252,7 +249,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = humanCheckbox->getColor();
+                    const PlayerColor color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
@@ -281,7 +278,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = computerCheckbox->getColor();
+                    const PlayerColor color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }

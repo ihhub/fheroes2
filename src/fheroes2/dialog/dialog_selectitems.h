@@ -28,6 +28,7 @@
 #include <string>
 
 #include "artifact.h"
+#include "color.h"
 #include "heroes.h"
 #include "image.h"
 #include "interface_list.h"
@@ -138,7 +139,7 @@ namespace Dialog
 
     int selectLandscapeMiscellaneousObjectType( const int objectType );
 
-    void selectMineType( int32_t & type, int32_t & color );
+    int32_t selectMineType( const int32_t type );
 
     int selectMountainType( const int mountainType );
 
@@ -149,4 +150,6 @@ namespace Dialog
     int selectPowerUpObjectType( const int powerUpObjectType );
 
     int selectAdventureMiscellaneousObjectType( const int objectType );
+
+    PlayerColor selectPlayerColor( const PlayerColor color, const uint8_t availableColors );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -127,7 +127,7 @@ const Battle::Units & Battle::Force::getUnits() const
     return *this;
 }
 
-int Battle::Force::GetColor() const
+PlayerColor Battle::Force::GetColor() const
 {
     return army.GetColor();
 }

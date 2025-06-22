@@ -25,8 +25,10 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <type_traits>
 #include <vector>
 
+#include "color.h"
 #include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
@@ -45,7 +47,7 @@ namespace Maps::Map_Format
     struct TileInfo
     {
         uint16_t terrainIndex{ 0 };
-        uint8_t terrainFlag{ 0 };
+        uint8_t terrainFlags{ 0 };
 
         std::vector<TileObjectInfo> objects;
     };
@@ -203,9 +205,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        uint8_t humanPlayerColors{ 0 };
-
-        uint8_t computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         // Does this event occur more than once?
         bool isRecurringEvent{ false };
@@ -253,13 +255,18 @@ namespace Maps::Map_Format
         std::vector<int32_t> selectedItems;
     };
 
+    struct CapturableObjectMetadata
+    {
+        PlayerColor ownerColor{ 0 };
+    };
+
     struct DailyEvent
     {
         std::string message;
 
-        uint8_t humanPlayerColors{ 0 };
-
-        uint8_t computerPlayerColors{ 0 };
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
 
         uint32_t firstOccurrenceDay{ 1 };
 
@@ -279,10 +286,11 @@ namespace Maps::Map_Format
         // Normal difficulty.
         uint8_t difficulty{ 1 };
 
-        uint8_t availablePlayerColors{ 0 };
-        uint8_t humanPlayerColors{ 0 };
-        uint8_t computerPlayerColors{ 0 };
-        std::vector<uint8_t> alliances;
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet availablePlayerColors{ 0 };
+        PlayerColorsSet humanPlayerColors{ 0 };
+        PlayerColorsSet computerPlayerColors{ 0 };
+        std::vector<PlayerColorsSet> alliances;
 
         // Only 6 players are allowed per map.
         std::array<uint8_t, 6> playerRace{ 0 };
@@ -296,13 +304,18 @@ namespace Maps::Map_Format
         std::vector<uint32_t> lossConditionMetadata;
 
         // The world width in tiles. It is equal to the world height since currently all maps are square maps.
-        int32_t size{ 0 };
+        int32_t width{ 0 };
 
         // This is the main language of the map. At the moment only one language is being supported.
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;
+
+        // This is an optional parameter where a map maker can leave their contact details.
+        // This parameter is only visible within the Editor, it doesn't affect the gameplay in any way.
+        // The parameter is mandatory to fill out by map makers who want to have their creations bundled with the engine.
+        std::string creatorNotes;
     };
 
     struct MapFormat : public BaseMapFormat
@@ -330,6 +343,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, AdventureMapEventMetadata> adventureMapEventMetadata;
 
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
+
+        std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

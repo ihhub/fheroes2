@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,6 @@
 
 #include "maps_tiles_render.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -40,6 +39,7 @@
 #include "image.h"
 #include "interface_gamearea.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -120,30 +120,39 @@ namespace
 
         area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-        const uint32_t animationIndex = ICN::getAnimatedIcnIndex( icn, part.icnIndex, Game::getAdventureMapAnimationIndex() );
-        if ( animationIndex > 0 ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
-
-            area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
+        const auto * objectInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectInfo == nullptr ) {
+            return;
         }
+
+        if ( objectInfo->animationFrames == 0 ) {
+            return;
+        }
+
+        const uint32_t secondaryFrameIndex = part.icnIndex + ( Game::getAdventureMapAnimationIndex() % objectInfo->animationFrames ) + 1;
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, secondaryFrameIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
+
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
     }
 
     void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const Maps::Tile & tile )
     {
-        assert( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getMainObjectPart().icnIndex != 255 );
+        const auto & part = tile.getMainObjectPart();
 
-        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getMainObjectPart().icnType );
+        assert( part.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && part.icnIndex != 255 );
+
+        const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( part.icnType );
         if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.getMainObjectType() ) ) {
             return;
         }
 
-        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
+        const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( part._uid );
 
-        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, tile.getMainObjectPart().icnIndex );
+        const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, part.icnIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= fheroes2::tileWidthPx && mainObjectSprite.y() >= 0
@@ -151,19 +160,29 @@ namespace
 
         area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
 
-        // Render possible animation image.
-        // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-        const uint32_t mainObjectAnimationIndex
-            = ICN::getAnimatedIcnIndex( mainObjectIcn, tile.getMainObjectPart().icnIndex, Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
-        if ( mainObjectAnimationIndex > 0 ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
-
-            area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
+        const auto * objectInfo = Maps::getObjectPartByIcn( part.icnType, part.icnIndex );
+        if ( objectInfo == nullptr ) {
+            return;
         }
+
+        if ( objectInfo->animationFrames == 0 ) {
+            return;
+        }
+
+        uint32_t secondaryFrameIndex = part.icnIndex + ( Game::getAdventureMapAnimationIndex() % objectInfo->animationFrames ) + 1;
+
+        if ( objectInfo->objectType == MP2::OBJ_MAGIC_GARDEN && tile.metadata()[1] == 0 ) {
+            // This is a special case only for Magic Garden object.
+            secondaryFrameIndex = part.icnIndex + objectInfo->animationFrames + 1;
+        }
+
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, secondaryFrameIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= fheroes2::tileWidthPx && animationSprite.y() >= 0
+                && animationSprite.height() + animationSprite.y() <= fheroes2::tileWidthPx );
+
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
     }
 
     const fheroes2::Image & PassableViewSurface( const int passable, const bool isActionObject )
@@ -413,29 +432,29 @@ namespace
     {
         icnId = ICN::UNKNOWN;
 
-        const int heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
         switch ( heroColor ) {
-        case Color::BLUE:
+        case PlayerColor::BLUE:
             icnId = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
             break;
-        case Color::GREEN:
+        case PlayerColor::GREEN:
             icnId = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
             break;
-        case Color::RED:
+        case PlayerColor::RED:
             icnId = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
             break;
-        case Color::YELLOW:
+        case PlayerColor::YELLOW:
             icnId = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
             break;
-        case Color::ORANGE:
+        case PlayerColor::ORANGE:
             icnId = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
             break;
-        case Color::PURPLE:
+        case PlayerColor::PURPLE:
             icnId = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << heroColor )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << static_cast<int>( heroColor ) )
             break;
         }
 
@@ -632,60 +651,48 @@ namespace Maps
         }
     }
 
-    void redrawTopLayerExtraObjects( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area )
+    void redrawFlyingGhostsOnMap( fheroes2::Image & dst, const fheroes2::Point & pos, const Interface::GameArea & area, const bool isEditor )
     {
-        if ( isPuzzleDraw ) {
-            // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
-            return;
+        // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
+        // TODO: consider adding this sprite as a part of an object part.
+
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
+
+        // We should not render ghosts over the map top border if the tile near this border is not revealed.
+        if ( !isEditor && ( pos.y == 1 ) && ( image.y() < -32 ) && ( world.getTile( pos.x, pos.y - 1 ).getFogDirection() & Direction::TOP ) == Direction::TOP ) {
+            const int32_t cutY = 32 + image.y();
+            const fheroes2::Rect roi( 0, -cutY, image.width(), image.height() + cutY );
+
+            area.BlitOnTile( dst, image, roi, image.x(), -32, pos, false, 255 );
         }
-
-        // Ghost animation is unique and can be rendered in multiple cases.
-        bool renderFlyingGhosts = false;
-
-        const MP2::MapObjectType objectType = tile.getMainObjectType( false );
-        if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-            renderFlyingGhosts = true;
-        }
-        else if ( objectType == MP2::OBJ_MINE ) {
-            const int32_t spellID = Maps::getMineSpellIdFromTile( tile );
-
-            switch ( spellID ) {
-            case Spell::NONE:
-                // No spell exists. Nothing we need to render.
-            case Spell::SETEGUARDIAN:
-            case Spell::SETAGUARDIAN:
-            case Spell::SETFGUARDIAN:
-            case Spell::SETWGUARDIAN:
-                // The logic for these spells is done while rendering the bottom layer. Nothing should be done here.
-                break;
-            case Spell::HAUNT:
-                renderFlyingGhosts = true;
-                break;
-            default:
-                // Did you add a new spell for mines? Add the rendering for it above!
-                assert( 0 );
-                break;
-            }
-        }
-
-        if ( renderFlyingGhosts ) {
-            // This sprite is bigger than tileWidthPx but rendering is correct for heroes and boats.
-            // TODO: consider adding this sprite as a part of an object part.
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
-
-            const uint8_t alphaValue = area.getObjectAlphaValue( tile.getMainObjectPart()._uid );
-
-            area.BlitOnTile( dst, image, image.x(), image.y(), Maps::GetPoint( tile.GetIndex() ), false, alphaValue );
+        else {
+            area.BlitOnTile( dst, image, image.x(), image.y(), pos, false, 255 );
         }
     }
 
-    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const ObjectPart & part )
+    void redrawTopLayerObject( const Tile & tile, fheroes2::Image & dst, const bool isPuzzleDraw, const fheroes2::Point & pos, const Interface::GameArea & area,
+                               const ObjectPart & part )
     {
         if ( isPuzzleDraw && MP2::isHiddenForPuzzle( tile.GetGround(), part.icnType, part.icnIndex ) ) {
             return;
         }
 
-        renderObjectPart( dst, area, Maps::GetPoint( tile.GetIndex() ), part );
+        // We should not render flags over the map top border if the tile near this border is not revealed.
+        if ( ( pos.y == 0 ) && ( part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) && ( tile.getFogDirection() & Direction::TOP ) == Direction::TOP ) {
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( MP2::getIcnIdFromObjectIcnType( part.icnType ), part.icnIndex );
+
+            if ( image.y() < 0 ) {
+                const fheroes2::Rect roi( 0, -image.y(), image.width(), image.height() + image.y() );
+
+                area.BlitOnTile( dst, image, roi, image.x(), 0, pos, false, 255 );
+            }
+            else {
+                area.BlitOnTile( dst, image, image.x(), image.y(), pos, false, 255 );
+            }
+        }
+        else {
+            renderObjectPart( dst, area, pos, part );
+        }
     }
 
     void drawFog( const Tile & tile, fheroes2::Image & dst, const Interface::GameArea & area )
@@ -912,7 +919,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
