@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstring>
 #include <iterator>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <utility>
@@ -796,6 +797,31 @@ namespace
         }
     };
 #else
+    std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
+    {
+        const int numDisplays = SDL_GetNumVideoDisplays();
+        if ( numDisplays < 1 ) {
+            ERROR_LOG( "Failed to get the number of video displays. The error value: " << numDisplays << ", description: " << SDL_GetError() )
+            return std::nullopt;
+        }
+
+        for ( int displayIndex = 0; displayIndex < numDisplays; ++displayIndex ) {
+            SDL_Rect displayBounds;
+            if ( SDL_GetDisplayBounds( displayIndex, &displayBounds ) != 0 ) {
+                ERROR_LOG( "Failed to get display bounds for display #" << displayIndex << ". The error: " << SDL_GetError() )
+                continue;
+            }
+            const int displayMaxX = displayBounds.x + displayBounds.w;
+            const int displayMaxY = displayBounds.y + displayBounds.h;
+            const int32_t windowMaxX = windowPos.x + resolutionInfo.screenWidth;
+            const int32_t windowMaxY = windowPos.y + resolutionInfo.screenHeight;
+            if ( windowPos.x >= displayBounds.x && windowMaxX < displayMaxX && windowPos.y >= displayBounds.y && windowMaxY < displayMaxY ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
@@ -830,6 +856,9 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+
+                // Update the window position, in case we get queried for it
+                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
 
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
                 // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
@@ -960,6 +989,29 @@ namespace
             _toggleVSync();
         }
 
+        fheroes2::Point getWindowPos() const override
+        {
+            if ( isFullScreen() ) {
+                return _prevWindowPos;
+            }
+            if ( _window == nullptr ) {
+                return { -1, -1 };
+            }
+            fheroes2::Point result;
+            SDL_GetWindowPosition( _window, &result.x, &result.y );
+            return result;
+        }
+
+        void setWindowPos( const fheroes2::Point pos ) override
+        {
+            if ( pos == fheroes2::Point{ -1, -1 } ) {
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+            }
+            else {
+                _prevWindowPos = pos;
+            }
+        }
+
     private:
         SDL_Window * _window{ nullptr };
         SDL_Surface * _surface{ nullptr };
@@ -1084,6 +1136,14 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+            }
+
+            std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
+
+            // check if the previous window position is within display or error occured
+            if ( !isInDisplay || !*isInDisplay ) {
+                // reset position if it is not within the bounds of any display
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
             }
 
             _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
@@ -1361,6 +1421,11 @@ namespace fheroes2
         Image::reset();
 
         _screenSize = { info.screenWidth, info.screenHeight };
+    }
+
+    void Display::setWindowPos( const Point point )
+    {
+        _engine->setWindowPos( point );
     }
 
     Display & Display::instance()
