@@ -295,16 +295,15 @@ namespace
 
 namespace Editor
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language )
+    bool castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language )
     {
-        // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
-        const fheroes2::Rect dialogRoi = background.activeArea();
-        const fheroes2::Rect dialogWithShadowRoi = background.totalArea();
+        fheroes2::StandardWindow window( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+        const fheroes2::Rect dialogRoi = window.activeArea();
+        const fheroes2::Rect dialogWithShadowRoi = window.totalArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -367,7 +366,7 @@ namespace Editor
         fheroes2::ButtonSprite buttonRestrictBuilding;
 
         const char * translatedText = fheroes2::getSupportedText( gettext_noop( "RESTRICT" ), fheroes2::FontType::buttonReleasedWhite() );
-        background.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
+        window.renderTextAdaptedButtonSprite( buttonRestrictBuilding, translatedText, { 219, -32 }, fheroes2::StandardWindow::Padding::CENTER_CENTER );
 
         const bool isNeutral = ( color == PlayerColor::NONE );
 
@@ -448,10 +447,15 @@ namespace Editor
         buildings.back().setPosition( dstPt.x, dstPt.y );
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
-        // Exit button.
-        fheroes2::Button buttonExit;
-        background.renderButton( buttonExit, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1, { 56, 24 },
-                                 fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+        // Okay button.
+        fheroes2::Button buttonOkay;
+        window.renderButton( buttonOkay, isEvilInterface ? ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL : ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD, 0, 1, { 438 + 4, 24 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+
+        // Cancel button.
+        fheroes2::Button buttonCancel;
+        window.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL : ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD, 0, 1, { 4, 24 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         // Status bar.
         const int32_t statusBarWidth = statusBarSprite.width();
@@ -469,10 +473,15 @@ namespace Editor
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 break;
+            }
+
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                return false;
             }
 
             if ( le.MouseClickLeft( buttonRestrictBuilding.area() ) ) {
@@ -588,11 +597,18 @@ namespace Editor
                     message = _( "Set custom Castle Army. Right-click to reset unit." );
                 }
             }
-            else if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
-                message = _( "Exit Castle Options" );
+            else if ( le.isMouseCursorPosInArea( buttonOkay.area() ) ) {
+                message = _( "Click to accept the changes made." );
 
-                if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-                    fheroes2::showStandardTextMessage( _( "Exit" ), message, Dialog::ZERO );
+                if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Okay" ), message, Dialog::ZERO );
+                }
+            }
+            else if ( le.isMouseCursorPosInArea( buttonCancel.area() ) ) {
+                message = _( "Exit this menu without doing anything." );
+
+                if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Cancel" ), message, Dialog::ZERO );
                 }
             }
             else {
@@ -623,7 +639,7 @@ namespace Editor
             }
 
             if ( message.empty() ) {
-                statusBar.ShowMessage( _( "Castle Options" ) );
+                statusBar.ShowMessage( _( "Castle Settings" ) );
             }
             else {
                 statusBar.ShowMessage( std::move( message ) );
@@ -662,5 +678,7 @@ namespace Editor
                 }
             }
         }
+
+        return true;
     }
 }

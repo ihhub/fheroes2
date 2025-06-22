@@ -101,6 +101,10 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD,
+                                                ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL,
+                                                ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD,
+                                                ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
@@ -700,6 +704,30 @@ namespace
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 25 }, false, ICN::BLACKBAK );
+
+            break;
+        }
+        case ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD:
+        case ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "townSettings|OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 85, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD:
+        case ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "townSettings|CANCEL" ), fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 85, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
