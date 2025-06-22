@@ -74,8 +74,10 @@ namespace
             dialogHeight += buttonArea.height;
         }
         else {
-            dialogWidth += ( buttonCount / 2 ) * buttonArea.width + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
-            dialogHeight += buttonArea.height * 2 + ( buttonsVerticalGap + 10 );
+            const int32_t buttonGaps = 2 * buttonsVerticalGap;
+            dialogWidth += ( buttonCount / 2 ) * buttonArea.width + ( ( buttonCount / 2 - 1 ) * buttonGaps );
+            // We apply equal gaps between buttons vertically and horizontally.
+            dialogHeight += buttonArea.height * 2 + buttonGaps;
         }
         fheroes2::Point placement;
         if ( isSingleColumn ) {
@@ -493,6 +495,7 @@ namespace fheroes2
         Point buttonsOffset;
 
         const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
+        int32_t horizontalGapBetweenButtons = buttonsHorizontalGap;
         // An odd number of buttons will be arranged on a single column.
         if ( isSingleColumn || buttonCount % 2 != 0 ) {
             rows = buttonCount;
@@ -508,6 +511,8 @@ namespace fheroes2
             rows = 2;
             columns = buttonCount / 2;
             buttonsOffset = { 30, 15 };
+            // We apply equal gaps between buttons vertically and horizontally.
+            horizontalGapBetweenButtons = 2 * buttonsVerticalGap;
         }
         // This assumes that the extra height always gets added above the buttons.
         buttonsOffset.y += offsetY;
@@ -518,7 +523,7 @@ namespace fheroes2
         for ( int32_t row = 0; row < rows; ++row ) {
             for ( int32_t column = 0; column < columns; ++column ) {
                 buttons.button( buttonId )
-                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * horizontalGapBetweenButtons,
                                   _activeArea.y + ( row * ( buttonsHeight + verticalGapOffset ) ) + buttonsOffset.y );
                 ++buttonId;
             }
