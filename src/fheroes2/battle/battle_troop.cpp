@@ -305,11 +305,8 @@ void Battle::Unit::SetRandomMorale( Rand::PCG32 & randomGenerator )
         SetModes( MORALE_GOOD );
     }
     else if ( morale < 0 && static_cast<int>( Rand::GetWithGen( 1, 12, randomGenerator ) ) <= -morale ) {
-        if ( isControlHuman() ) {
-            SetModes( MORALE_BAD );
-        }
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( Rand::GetWithGen( 1, 4, randomGenerator ) != 1 ) {
+        if ( isControlHuman() || ( Rand::GetWithGen( 1, 4, randomGenerator ) != 1 ) ) {
             SetModes( MORALE_BAD );
         }
     }
