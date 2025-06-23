@@ -37,6 +37,14 @@
 #include <utility>
 #include <vector>
 
+namespace
+{
+    constexpr uint64_t makeOdd( const uint64_t value )
+    {
+        return ( value << 1U ) | 1U;
+    }
+}
+
 namespace Rand
 {
     class PCG32
@@ -59,7 +67,7 @@ namespace Rand
 
         explicit constexpr PCG32( const uint64_t seed = defaultSeed, const uint64_t stream = defaultStream )
             : _state( 0 )
-            , _increment( ( stream << 1U ) | 1U )
+            , _increment( makeOdd( stream ) )
         {
             // _increment must be odd
             assert( _increment % 2 == 1 );
@@ -76,6 +84,16 @@ namespace Rand
             const uint32_t xorShifted = static_cast<uint32_t>( ( ( prevState >> 18U ) ^ prevState ) >> 27U );
             const uint32_t rotations = prevState >> 59U;
             return rotateRight( xorShifted, rotations );
+        }
+
+        constexpr uint64_t getStream() const
+        {
+            return _increment;
+        }
+
+        constexpr void setStream( const uint64_t stream )
+        {
+            _increment = makeOdd( stream );
         }
 
     private:
