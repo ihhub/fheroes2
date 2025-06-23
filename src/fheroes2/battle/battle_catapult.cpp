@@ -176,5 +176,5 @@ Battle::CastleDefenseStructure Battle::Catapult::GetTarget( const std::map<Castl
 bool Battle::Catapult::IsNextShotHit( Rand::PCG32 & randomGenerator ) const
 {
     // Miss chance is 25%
-    return !( canMiss && Rand::GetWithGen( 1, 20, randomGenerator ) < 6 );
+    return !canMiss || Rand::GetWithGen( 1, 20, randomGenerator ) >= 6;
 }
