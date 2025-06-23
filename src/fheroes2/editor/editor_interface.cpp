@@ -481,6 +481,11 @@ namespace
             assert( 0 );
         }
 
+        if ( needRedraw ) {
+            // Some object(s) is removed. Update the map passabilities.
+            world.updatePassabilities();
+        }
+
         return needRedraw;
     }
 
