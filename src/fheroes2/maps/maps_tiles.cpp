@@ -1444,7 +1444,7 @@ bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
         updatePassability();
 
         // The remove of the object part may also affect on the passability on the tiles around.
-        for ( int32_t tileIndex : getAroundIndexes( _index, 1 ) ) {
+        for ( const int32_t tileIndex : getAroundIndexes( _index, 1 ) ) {
             Tile & tile = world.getTile( tileIndex );
             tile.setInitialPassability();
             tile.updatePassability();
