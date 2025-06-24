@@ -628,8 +628,8 @@ int Maps::Tile::getTileIndependentPassability() const
     int passability = DIRECTION_ALL;
 
     const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
-        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            // Rivers and stream are completely passable.
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            // Rivers, streams and flags are completely passable.
             return DIRECTION_ALL;
         }
 
@@ -781,13 +781,13 @@ void Maps::Tile::updatePassability()
         return;
     }
 
-    // Count how many objects are there excluding shadows, roads and river streams.
+    // Count how many objects are there excluding shadows, roads, river streams and flags.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
         if ( isObjectPartShadow( part ) ) {
             return false;
         }
 
-        return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
+        return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32;
     } );
 
     const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
