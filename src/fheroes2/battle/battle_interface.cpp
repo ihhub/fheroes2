@@ -725,10 +725,15 @@ namespace
         return isLeftOpponent ? ( ( cellindex % 11 ) < cellindex / 11 - 2 ) : ( ( 10 - ( cellindex % 11 ) ) < cellindex / 11 - 2 );
     }
 
-    Battle::Position calculateAttackPosition( const Battle::Unit & unit, const int32_t moveCellIndex, const int32_t attackedCellIndex,
-                                              const Battle::AttackDirection attackDir )
+    Battle::Position calculateAttackPosition( const Battle::Unit & unit, const int32_t attackedCellIndex, const Battle::AttackDirection attackDir )
     {
-        const Battle::Position pos = Battle::Position::GetReachable( unit, moveCellIndex );
+        const Battle::CellDirection attackingCellDir = getAttackingCellDirectionForAttackDirection( unit, attackDir );
+        assert( Battle::Board::isValidDirection( attackedCellIndex, attackingCellDir ) );
+
+        const int32_t attackingCellIndex = Battle::Board::GetIndexDirection( attackedCellIndex, attackingCellDir );
+        assert( Battle::Board::isValidIndex( attackingCellIndex ) );
+
+        const Battle::Position pos = Battle::Position::GetReachable( unit, attackingCellIndex );
         assert( pos.isValidForUnit( unit ) );
 
         if ( !unit.isWide() ) {
@@ -741,12 +746,6 @@ namespace
             return pos;
         }
 
-        const Battle::CellDirection attackingCellDir = getAttackingCellDirectionForAttackDirection( unit, attackDir );
-        assert( Battle::Board::isValidDirection( attackedCellIndex, attackingCellDir ) );
-
-        const int32_t attackingCellIndex = Battle::Board::GetIndexDirection( attackedCellIndex, attackingCellDir );
-        assert( Battle::Board::isValidIndex( attackingCellIndex ) );
-
         if ( pos.GetTail()->GetIndex() == attackingCellIndex ) {
             // The attacking unit will already be in the correct position, there is no need for further adjustments
             return pos;
@@ -754,11 +753,11 @@ namespace
 
         const Battle::CellDirection adjustmentDirection = unit.isReflect() ? Battle::CellDirection::LEFT : Battle::CellDirection::RIGHT;
 
-        if ( !Battle::Board::isValidDirection( moveCellIndex, adjustmentDirection ) ) {
+        if ( !Battle::Board::isValidDirection( attackingCellIndex, adjustmentDirection ) ) {
             return pos;
         }
 
-        if ( const Battle::Position adjustedPos = Battle::Position::GetReachable( unit, Battle::Board::GetIndexDirection( moveCellIndex, adjustmentDirection ) );
+        if ( const Battle::Position adjustedPos = Battle::Position::GetReachable( unit, Battle::Board::GetIndexDirection( attackingCellIndex, adjustmentDirection ) );
              adjustedPos.isValidForUnit( unit ) && adjustedPos.GetTail()->GetIndex() == attackingCellIndex ) {
             return adjustedPos;
         }
@@ -2180,8 +2179,7 @@ void Battle::Interface::RedrawCover()
 
             // Wide creatures can attack from top/bottom, we need to get the actual attack direction
             const CellDirection attackingCellDirection = getAttackingCellDirectionForAttackDirection( *_currentUnit, direction );
-            const Position pos
-                = calculateAttackPosition( *_currentUnit, Board::GetIndexDirection( _currentCellIndex, attackingCellDirection ), _currentCellIndex, direction );
+            const Position pos = calculateAttackPosition( *_currentUnit, _currentCellIndex, direction );
             assert( pos.GetHead() != nullptr );
 
             highlightedCells.emplace( pos.GetHead() );
@@ -3522,7 +3520,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 break;
             }
 
-            const Position pos = calculateAttackPosition( *_currentUnit, Board::GetIndexDirection( index, attackingCellDir ), index, dir );
+            const Position pos = calculateAttackPosition( *_currentUnit, index, dir );
             assert( pos.isValidForUnit( _currentUnit ) );
 
             actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(),
