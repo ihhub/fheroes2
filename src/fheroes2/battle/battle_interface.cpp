@@ -3454,8 +3454,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         }
 
         const Position pos = Position::GetReachable( unit, dst );
-
-        assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
+        assert( pos.isValidForUnit( unit ) );
 
         return pos.GetHead()->GetIndex();
     };
@@ -3517,18 +3516,38 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             if ( dir != AttackDirection::TOP && dir != AttackDirection::BOTTOM ) {
                 move = fixupDestinationCell( *_currentUnit, move );
             }
-            // If the intended attack direction means tail attack, we might need to move the attack position by one cell
-            const auto adjustForTailAttack
-                = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
-                      if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
-                          const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
-                          if ( const Position position = Position::GetReachable( *_currentUnit, moveCandidate ); position.GetHead() != nullptr ) {
-                              assert( position.GetTail() != nullptr );
 
-                              move = moveCandidate;
-                          }
-                      }
-                  };
+            // If the intended attack direction means tail attack, we might need to move the attack position by one cell
+            const auto adjustForTailAttack = [this, index, dir, attackingCellDir, &move]( const CellDirection adjustmentDirection, const AttackDirection topDirection,
+                                                                                          const AttackDirection bottomDirection ) {
+                if ( dir != topDirection && dir != bottomDirection ) {
+                    // There is no tail attack, so there is no need to adjust anything
+                    return;
+                }
+
+                {
+                    const Position pos = Position::GetReachable( *_currentUnit, move );
+                    assert( pos.GetTail() != nullptr );
+
+                    if ( pos.GetTail()->GetIndex() == Board::GetIndexDirection( index, attackingCellDir ) ) {
+                        // The attacking unit will already be in the correct position, there is nothing to adjust
+                        return;
+                    }
+                }
+
+                if ( !Board::isValidDirection( move, adjustmentDirection ) ) {
+                    return;
+                }
+
+                const int32_t moveCandidate = Board::GetIndexDirection( move, adjustmentDirection );
+
+                if ( const Position pos = Position::GetReachable( *_currentUnit, moveCandidate ); pos.GetHead() != nullptr ) {
+                    assert( pos.GetTail() != nullptr && pos.GetTail()->GetIndex() == Board::GetIndexDirection( index, attackingCellDir ) );
+
+                    move = moveCandidate;
+                }
+            };
+
             if ( _currentUnit->isReflect() ) {
                 adjustForTailAttack( CellDirection::LEFT, AttackDirection::TOP_LEFT, AttackDirection::BOTTOM_LEFT );
             }
