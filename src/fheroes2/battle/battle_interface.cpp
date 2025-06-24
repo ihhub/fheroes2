@@ -3483,7 +3483,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 }
 
                 const Position pos = Position::GetReachable( *_currentUnit, index );
-                assert( pos.isValidForUnit( _currentUnit ) );
+                assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
 
                 return pos.GetHead()->GetIndex();
             }();
