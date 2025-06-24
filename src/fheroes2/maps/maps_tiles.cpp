@@ -894,29 +894,23 @@ void Maps::Tile::sortObjectParts()
     _groundObjectPart.sort( []( const auto & left, const auto & right ) { return ( left.layerType > right.layerType ); } );
 
     if ( !_groundObjectPart.empty() ) {
-        ObjectPart & highestPriorityPart = _groundObjectPart.back();
+        auto highestPriorityPartIter = _groundObjectPart.end();
 
-        if ( highestPriorityPart.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
-            // Flags are not allowed to be the main object because they belong to other object.
-            if ( _groundObjectPart.size() == 1 ) {
-                return;
+        while ( highestPriorityPartIter != _groundObjectPart.begin() ) {
+            --highestPriorityPartIter;
+
+            // Flags might be on the same layer as other objects but they cannot be the main object because they are a part of another object.
+            if ( highestPriorityPartIter->icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
+                std::swap( *highestPriorityPartIter, _mainObjectPart );
+
+                // If this assertion blows up then you are not storing correct values for layer type!
+                assert( _mainObjectPart.layerType <= TERRAIN_LAYER );
+
+                _groundObjectPart.erase( highestPriorityPartIter );
+
+                break;
             }
-
-            // Replace the last object (Flag) with the previous one.
-            ObjectPart & prevHighestPriorityPart = *std::next( _groundObjectPart.rbegin() );
-
-            // There cannot be two flags on one tile.
-            assert( prevHighestPriorityPart.icnType != MP2::OBJ_ICN_TYPE_FLAG32 );
-
-            std::swap( highestPriorityPart, prevHighestPriorityPart );
         }
-
-        std::swap( highestPriorityPart, _mainObjectPart );
-
-        // If this assertion blows up then you are not storing correct values for layer type!
-        assert( _mainObjectPart.layerType <= TERRAIN_LAYER );
-
-        _groundObjectPart.pop_back();
     }
 
     // Top layer objects don't have any rendering priorities so they should be rendered first in queue first to render.
