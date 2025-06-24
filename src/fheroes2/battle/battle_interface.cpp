@@ -764,7 +764,7 @@ namespace
         }
 
         return pos;
-    };
+    }
 }
 
 namespace Battle
