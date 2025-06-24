@@ -232,7 +232,7 @@ msgstr ""
 "STRID"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "INSTÄLLNINGAR"
 
 msgid ""
 "STANDARD\n"
@@ -285,15 +285,17 @@ msgstr ""
 "KAMPANJ"
 
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "TILLBAKA"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
 msgstr ""
+"BLANK\n"
+"KARTA"
 
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "SLUMPAD"
 
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
@@ -3498,10 +3500,10 @@ msgstr ""
 "Plats: "
 
 msgid "saveLoadDialog|Name"
-msgstr ""
+msgstr "NAMN"
 
 msgid "saveLoadDialog|Date"
-msgstr ""
+msgstr "DATUM"
 
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
@@ -3516,19 +3518,17 @@ msgid "Click to load a previously saved game."
 msgstr "Klicka för att ladda ett tidigare sparat spel."
 
 msgid "Click here if you wish to sort save files by their name."
-msgstr ""
+msgstr "Klicka här om du vill sortera sparfiler via dess namn."
 
-#, fuzzy
 msgid "Sort by Name"
-msgstr "Ditt Namn"
+msgstr "Sortera via Namn"
 
 msgid ""
 "Click here if you you wish to sort save files by their last modified date."
-msgstr ""
+msgstr "Klicka här om du vill sortera sparfiler via senaste ändringsdatum."
 
-#, fuzzy
 msgid "Sort by Date"
-msgstr "Stöd oss på"
+msgstr "Sortera via Datum"
 
 msgid "File to Save:"
 msgstr "Fil att Spara:"
@@ -4544,9 +4544,8 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-#, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
-msgstr "Återgå till Huvudmenyn."
+msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
 
 msgid "From Scratch"
 msgstr "Blank karta"
@@ -4561,11 +4560,10 @@ msgid "Random"
 msgstr "Slumpad"
 
 msgid "Back"
-msgstr ""
+msgstr "Tillbaka"
 
-#, fuzzy
 msgid "Return to the Editor's main menu options."
-msgstr "Återgå till Huvudmenyn."
+msgstr "Återgå till Kartredigerarens huvudmeny."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
@@ -6675,6 +6673,8 @@ msgid ""
 "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
 "of lost treasure."
 msgstr ""
+"Ditt fartyg stöter till en tunna som driver på sjön. Inuti upptäcker du en "
+"gömma med skatter."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -9422,9 +9422,8 @@ msgstr "Frusen Sjö"
 msgid "Black Cat"
 msgstr "Svart Katt"
 
-#, fuzzy
 msgid "Barrel"
-msgstr "Barriär"
+msgstr "Tunna"
 
 msgid "randomRace|level 1 creatures"
 msgstr "nivå 1 varelser"
