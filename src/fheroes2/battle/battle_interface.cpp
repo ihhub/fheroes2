@@ -3474,10 +3474,18 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 break;
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, index );
-            assert( pos.isValidForUnit( _currentUnit ) );
+            const int32_t targetCellIdx = [this, index]() {
+                if ( !_currentUnit->isWide() ) {
+                    return index;
+                }
 
-            actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), pos.GetHead()->GetIndex() );
+                const Position pos = Position::GetReachable( *_currentUnit, index );
+                assert( pos.isValidForUnit( _currentUnit ) );
+
+                return pos.GetHead()->GetIndex();
+            }();
+
+            actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), targetCellIdx );
 
             humanturn_exit = true;
 
