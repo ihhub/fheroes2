@@ -758,6 +758,9 @@ namespace
         }
 
         if ( const Battle::Position adjustedPos = Battle::Position::GetReachable( unit, Battle::Board::GetIndexDirection( attackingCellIndex, adjustmentDirection ) );
+             // Shifting a unit's position to the left or right can sometimes change its actual position by more than 1 cell. For instance, in a situation where a unit
+             // can occupy either position [1, 2] or [3, 4], but not the position [2, 3] (due to limitations caused by the terrain or the location of other units), its
+             // shift to the right from position [1, 2] will mean taking position [3, 4], and not [2, 3], as one might expect.
              adjustedPos.isValidForUnit( unit ) && adjustedPos.GetTail()->GetIndex() == attackingCellIndex ) {
             return adjustedPos;
         }
