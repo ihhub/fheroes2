@@ -1441,7 +1441,19 @@ bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
         updateObjectType();
 
         setInitialPassability();
+
+        // The remove of the object part may also affect on the passability on the tiles around.
+        // First set the initial passability for tiles.
+        const Indexes tilesAround = getAroundIndexes( _index, 1 );
+        for ( const int32_t tileIndex : tilesAround ) {
+            world.getTile( tileIndex ).setInitialPassability();
+        }
+
+        // Update passability based on initial passability.
         updatePassability();
+        for ( const int32_t tileIndex : tilesAround ) {
+            world.getTile( tileIndex ).updatePassability();
+        }
 
         if ( Heroes::isValidId( _occupantHeroId ) ) {
             Heroes * hero = world.GetHeroes( _occupantHeroId );
