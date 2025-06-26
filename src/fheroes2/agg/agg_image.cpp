@@ -4991,11 +4991,11 @@ namespace
                 // Read keyboard images and put them on the button sprites.
                 fheroes2::Sprite temp;
                 fheroes2::h2d::readImage( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image", temp );
-                fheroes2::Blit( temp, 0, 0, released, ( released.width() - temp.width() ) / 2, ( released.height() - temp.height() ) / 2, temp.width(), temp.height() );
+                fheroes2::Blit( temp, 0, 0, released, ( released.width() - temp.width() ) / 2 + 1, ( released.height() - temp.height() ) / 2, temp.width(),
+                                temp.height() );
 
                 fheroes2::h2d::readImage( isEvil ? "keyboard_button_pressed_evil.image" : "keyboard_button_pressed_good.image", temp );
-                fheroes2::Blit( temp, 0, 0, pressed, ( pressed.width() - temp.width() ) / 2 - 1, ( pressed.height() - temp.height() ) / 2 + 1, temp.width(),
-                                temp.height() );
+                fheroes2::Blit( temp, 0, 0, pressed, ( pressed.width() - temp.width() ) / 2, ( pressed.height() - temp.height() ) / 2 + 1, temp.width(), temp.height() );
 
                 // Make a button pressed sprite for the "uniform" dialog background.
                 fheroes2::Sprite & pressedUniform = _icnVsSprite[id].emplace_back( pressed );
