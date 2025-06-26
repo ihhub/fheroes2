@@ -260,6 +260,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
 
     dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBIcn.width() ) / 2;
     dst_pt.y -= 30;
+    // This dialog uses the "uniform" background so the pressed button sprite ID is 2.
     fheroes2::Button buttonVirtualKB( dst_pt.x, dst_pt.y, buttonVirtualKBIcnID, 0, 2 );
 
     if ( result.empty() ) {

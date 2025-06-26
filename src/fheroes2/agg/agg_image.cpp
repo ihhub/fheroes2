@@ -4978,7 +4978,7 @@ namespace
             const int emptyButtonIcn = isEvil ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
             loadICN( emptyButtonIcn );
             if ( _icnVsSprite[emptyButtonIcn].size() == 2 ) {
-                // There will be thee sprites for button:
+                // There will be thee sprites for the Virtual Keyboard button:
                 // 0 - pressed;
                 // 1 - released on "standard" background;
                 // 2 - released on "uniform" background.
@@ -4988,6 +4988,7 @@ namespace
                 fheroes2::Sprite & released = _icnVsSprite[id].emplace_back( _icnVsSprite[emptyButtonIcn][0] );
                 fheroes2::Sprite & pressed = _icnVsSprite[id].emplace_back( _icnVsSprite[emptyButtonIcn][1] );
 
+                // Read keyboard images and put them on the button sprites.
                 fheroes2::Sprite temp;
                 fheroes2::h2d::readImage( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image", temp );
                 fheroes2::Blit( temp, 0, 0, released, ( released.width() - temp.width() ) / 2, ( released.height() - temp.height() ) / 2, temp.width(), temp.height() );
@@ -4996,13 +4997,13 @@ namespace
                 fheroes2::Blit( temp, 0, 0, pressed, ( pressed.width() - temp.width() ) / 2 - 1, ( pressed.height() - temp.height() ) / 2 + 1, temp.width(),
                                 temp.height() );
 
-                // Make a button pressed sprite for "uniform" background.
+                // Make a button pressed sprite for the "uniform" dialog background.
                 fheroes2::Sprite & pressedUniform = _icnVsSprite[id].emplace_back( pressed );
                 const int uniformBackgroundIcn = isEvil ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD;
                 loadICN( uniformBackgroundIcn );
                 fheroes2::makeTransparentBackground( released, pressedUniform, uniformBackgroundIcn );
 
-                // Add the "standard" background part to pressed
+                // Make a button pressed sprite for the "standard" dialog background.
                 const int standardDialogBackgroundIcn = isEvil ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
                 loadICN( standardDialogBackgroundIcn );
                 fheroes2::makeTransparentBackground( released, pressed, standardDialogBackgroundIcn );
