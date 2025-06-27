@@ -4988,7 +4988,7 @@ namespace
                 fheroes2::Sprite temp;
                 fheroes2::h2d::readImage( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image", temp );
 
-                // Copy empty buttons.
+                // Generate empty buttons.
                 fheroes2::Sprite & released = _icnVsSprite[id].emplace_back();
                 fheroes2::Sprite & pressed = _icnVsSprite[id].emplace_back();
 
