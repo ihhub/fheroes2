@@ -13,21 +13,22 @@
       <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist data (
-    if not exist "$(OutDir)data" (
-        xcopy /Y /S /Q data "$(OutDir)data\"
-    )
+      <Command>if exist anim (
+    xcopy /D /Y /S /Q anim "$(OutDir)anim\"
 )
-
+if exist data (
+    xcopy /D /Y /S /Q data "$(OutDir)data\"
+)
 if exist maps (
-    if not exist "$(OutDir)maps" (
-        xcopy /Y /S /Q maps "$(OutDir)maps\"
-    )
+    xcopy /D /Y /S /Q maps "$(OutDir)maps\"
+)
+if exist music (
+    xcopy /D /Y /S /Q music "$(OutDir)music\"
 )
 
-xcopy /Y /S /Q files\data "$(OutDir)files\data\"
-xcopy /Y /Q files\lang\*.mo "$(OutDir)files\lang\"
-xcopy /Y /S /Q files\timidity "$(OutDir)files\timidity\"
+xcopy /D /Y /S /Q files\data "$(OutDir)files\data\"
+xcopy /D /Y /Q files\lang\*.mo "$(OutDir)files\lang\"
+xcopy /D /Y /S /Q files\timidity "$(OutDir)files\timidity\"
 
 %(Command)</Command>
     </PostBuildEvent>
