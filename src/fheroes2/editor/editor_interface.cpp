@@ -2103,7 +2103,7 @@ namespace Interface
                 conf.setCurrentMapInfo( std::move( fi ) );
 
                 // Reset saved players parameters (including alliances) for starting a new game because they may have changed in editor.
-                Game::SavePlayers( "", Players{} );
+                Game::SavePlayers( "", {} );
             }
             else {
                 assert( 0 );
