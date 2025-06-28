@@ -2314,7 +2314,7 @@ namespace Maps
                 }
 
                 for ( const auto & part : currentTile.getGroundObjectParts() ) {
-                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) ) {
+                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
                         objectsUids.insert( part._uid );
                     }
                 }
