@@ -1410,7 +1410,7 @@ namespace fheroes2
 
         const uint8_t * transformInY = in.transform() + offsetInY;
         uint8_t * transformOutY = out.transform() + offsetOutY;
-        const uint8_t * transformInYEnd = transformInY + height * widthIn;
+        const uint8_t * transformInYEnd = transformInY + static_cast<ptrdiff_t>( height ) * widthIn;
 
         for ( ; transformInY != transformInYEnd; transformInY += widthIn, transformOutY += widthOut ) {
             memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );

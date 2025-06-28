@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,8 +109,8 @@ namespace Bin_Info
 
         // Idle animations data
         idleAnimationCount = data[117];
-        if ( idleAnimationCount > 5u ) {
-            idleAnimationCount = 5u; // here we need to reset our object
+        if ( idleAnimationCount > 5U ) {
+            idleAnimationCount = 5U; // here we need to reset our object
         }
 
         for ( uint32_t i = 0; i < idleAnimationCount; ++i ) {
@@ -220,8 +220,8 @@ namespace Bin_Info
         }
 
         uint8_t projectileCount = data[186];
-        if ( projectileCount > 12u ) {
-            projectileCount = 12u; // here we need to reset our object
+        if ( projectileCount > 12U ) {
+            projectileCount = 12U; // here we need to reset our object
         }
 
         for ( uint8_t i = 0; i < projectileCount; ++i ) {
@@ -478,7 +478,7 @@ namespace Bin_Info
             }
 
             // Add extra movement frame to make the animation more smooth.
-            if ( animationFrames[MOVE_MAIN].size() == 7 && frameXOffset[MOVE_MAIN].size() ) {
+            if ( animationFrames[MOVE_MAIN].size() == 7 && frameXOffset[MOVE_MAIN].size() == 7 ) {
                 animationFrames[MOVE_MAIN].insert( animationFrames[MOVE_MAIN].begin(), 45 );
                 frameXOffset[MOVE_MAIN].insert( frameXOffset[MOVE_MAIN].begin(), 8 );
             }
@@ -492,7 +492,7 @@ namespace Bin_Info
         }
 
         // Check absolute minimal set of animations.
-        for ( size_t i : { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 } ) {
+        for ( const size_t i : { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 } ) {
             if ( animationFrames[i].empty() ) {
                 return false;
             }
