@@ -724,6 +724,49 @@ namespace
     {
         return isLeftOpponent ? ( ( cellindex % 11 ) < cellindex / 11 - 2 ) : ( ( 10 - ( cellindex % 11 ) ) < cellindex / 11 - 2 );
     }
+
+    Battle::Position calculateAttackPosition( const Battle::Unit & unit, const int32_t attackedCellIndex, const Battle::AttackDirection attackDir )
+    {
+        const Battle::CellDirection attackingCellDir = getAttackingCellDirectionForAttackDirection( unit, attackDir );
+        assert( Battle::Board::isValidDirection( attackedCellIndex, attackingCellDir ) );
+
+        const int32_t attackingCellIndex = Battle::Board::GetIndexDirection( attackedCellIndex, attackingCellDir );
+        assert( Battle::Board::isValidIndex( attackingCellIndex ) );
+
+        const Battle::Position pos = Battle::Position::GetReachable( unit, attackingCellIndex );
+        assert( pos.isValidForUnit( unit ) );
+
+        if ( !unit.isWide() ) {
+            return pos;
+        }
+
+        if ( unit.isReflect() ? ( attackDir != Battle::AttackDirection::TOP_LEFT && attackDir != Battle::AttackDirection::BOTTOM_LEFT )
+                              : ( attackDir != Battle::AttackDirection::TOP_RIGHT && attackDir != Battle::AttackDirection::BOTTOM_RIGHT ) ) {
+            // There is no tail attack, so there is no need for further adjustments
+            return pos;
+        }
+
+        if ( pos.GetTail()->GetIndex() == attackingCellIndex ) {
+            // The attacking unit will already be in the correct position, there is no need for further adjustments
+            return pos;
+        }
+
+        const Battle::CellDirection adjustmentDirection = unit.isReflect() ? Battle::CellDirection::LEFT : Battle::CellDirection::RIGHT;
+
+        if ( !Battle::Board::isValidDirection( attackingCellIndex, adjustmentDirection ) ) {
+            return pos;
+        }
+
+        if ( const Battle::Position adjustedPos = Battle::Position::GetReachable( unit, Battle::Board::GetIndexDirection( attackingCellIndex, adjustmentDirection ) );
+             // Shifting a unit's position to the left or right can sometimes change its actual position by more than 1 cell. For instance, in a situation where a unit
+             // can occupy either position [1, 2] or [3, 4], but not the position [2, 3] (due to limitations caused by the terrain or the location of other units), its
+             // shift to the right from position [1, 2] will mean taking position [3, 4], and not [2, 3], as one might expect.
+             adjustedPos.isValidForUnit( unit ) && adjustedPos.GetTail()->GetIndex() == attackingCellIndex ) {
+            return adjustedPos;
+        }
+
+        return pos;
+    }
 }
 
 namespace Battle
@@ -2139,8 +2182,7 @@ void Battle::Interface::RedrawCover()
 
             // Wide creatures can attack from top/bottom, we need to get the actual attack direction
             const CellDirection attackingCellDirection = getAttackingCellDirectionForAttackDirection( *_currentUnit, direction );
-            const int32_t dst = Board::GetIndexDirection( _currentCellIndex, attackingCellDirection );
-            const Position pos = Position::GetReachable( *_currentUnit, dst );
+            const Position pos = calculateAttackPosition( *_currentUnit, _currentCellIndex, direction );
             assert( pos.GetHead() != nullptr );
 
             highlightedCells.emplace( pos.GetHead() );
@@ -2148,29 +2190,7 @@ void Battle::Interface::RedrawCover()
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                // If the intended attack direction means tail attack, we might need to move the highlighted cells by one
-                const auto tryHighlightTailAttack = [this, &highlightedCells, direction, dst]( const CellDirection moveDirection, const AttackDirection directionTop,
-                                                                                               const AttackDirection directionBottom ) {
-                    if ( ( direction == directionTop || direction == directionBottom ) && Board::isValidDirection( dst, moveDirection ) ) {
-                        if ( const Position position = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( dst, moveDirection ) );
-                             position.GetHead() != nullptr ) {
-                            assert( position.GetTail() != nullptr );
-
-                            highlightedCells.emplace( position.GetHead() );
-                            highlightedCells.emplace( position.GetTail() );
-
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-                const bool wasMoved = _currentUnit->isReflect()
-                                          ? tryHighlightTailAttack( CellDirection::LEFT, AttackDirection::TOP_LEFT, AttackDirection::BOTTOM_LEFT )
-                                          : tryHighlightTailAttack( CellDirection::RIGHT, AttackDirection::TOP_RIGHT, AttackDirection::BOTTOM_RIGHT );
-
-                if ( !wasMoved ) {
-                    highlightedCells.emplace( pos.GetTail() );
-                }
+                highlightedCells.emplace( pos.GetTail() );
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
@@ -3447,34 +3467,33 @@ bool Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 
 void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions )
 {
-    const auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
-        // Only wide units may need this fixup
-        if ( !unit.isWide() ) {
-            return dst;
-        }
-
-        const Position pos = Position::GetReachable( unit, dst );
-
-        assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
-
-        return pos.GetHead()->GetIndex();
-    };
-
     const int32_t index = cell.GetIndex();
 
     if ( _currentUnit ) {
         switch ( themes ) {
         case Cursor::WAR_FLY:
-        case Cursor::WAR_MOVE:
+        case Cursor::WAR_MOVE: {
             if ( !isConfirmed ) {
                 break;
             }
 
-            actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
+            const int32_t targetCellIdx = [this, index]() {
+                if ( !_currentUnit->isWide() ) {
+                    return index;
+                }
+
+                const Position pos = Position::GetReachable( *_currentUnit, index );
+                assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
+
+                return pos.GetHead()->GetIndex();
+            }();
+
+            actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), targetCellIdx );
 
             humanturn_exit = true;
 
             break;
+        }
 
         case Cursor::SWORD_TOPLEFT:
         case Cursor::SWORD_TOP:
@@ -3512,31 +3531,11 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 break;
             }
 
-            int32_t move = Board::GetIndexDirection( index, attackingCellDir );
-            // Some attacks may require a small nudge, but not top/bottom attacks
-            if ( dir != AttackDirection::TOP && dir != AttackDirection::BOTTOM ) {
-                move = fixupDestinationCell( *_currentUnit, move );
-            }
-            // If the intended attack direction means tail attack, we might need to move the attack position by one cell
-            const auto adjustForTailAttack
-                = [this, dir, &move]( const CellDirection moveDirection, const AttackDirection topDirection, const AttackDirection bottomDirection ) {
-                      if ( ( dir == topDirection || dir == bottomDirection ) && Board::isValidDirection( move, moveDirection ) ) {
-                          const int32_t moveCandidate = Board::GetIndexDirection( move, moveDirection );
-                          if ( const Position position = Position::GetReachable( *_currentUnit, moveCandidate ); position.GetHead() != nullptr ) {
-                              assert( position.GetTail() != nullptr );
+            const Position pos = calculateAttackPosition( *_currentUnit, index, dir );
+            assert( pos.isValidForUnit( _currentUnit ) );
 
-                              move = moveCandidate;
-                          }
-                      }
-                  };
-            if ( _currentUnit->isReflect() ) {
-                adjustForTailAttack( CellDirection::LEFT, AttackDirection::TOP_LEFT, AttackDirection::BOTTOM_LEFT );
-            }
-            else {
-                adjustForTailAttack( CellDirection::RIGHT, AttackDirection::TOP_RIGHT, AttackDirection::BOTTOM_RIGHT );
-            }
-
-            actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
+            actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(),
+                                  ( _currentUnit->GetHeadIndex() == pos.GetHead()->GetIndex() ? -1 : pos.GetHead()->GetIndex() ), index,
                                   static_cast<int>( Board::GetReflectDirection( attackingCellDir ) ) );
 
             humanturn_exit = true;
