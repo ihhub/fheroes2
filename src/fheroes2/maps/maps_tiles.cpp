@@ -627,8 +627,8 @@ int Maps::Tile::getTileIndependentPassability() const
     int passability = DIRECTION_ALL;
 
     const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
-        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-            // Rivers and stream are completely passable.
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            // Rivers, streams and flags are completely passable.
             return DIRECTION_ALL;
         }
 
@@ -780,13 +780,13 @@ void Maps::Tile::updatePassability()
         return;
     }
 
-    // Count how many objects are there excluding shadows, roads and river streams.
+    // Count how many objects are there excluding shadows, roads, river streams and flags.
     const std::ptrdiff_t validBottomLayerObjects = std::count_if( _groundObjectPart.begin(), _groundObjectPart.end(), []( const auto & part ) {
         if ( isObjectPartShadow( part ) ) {
             return false;
         }
 
-        return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM;
+        return part.icnType != MP2::OBJ_ICN_TYPE_ROAD && part.icnType != MP2::OBJ_ICN_TYPE_STREAM && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32;
     } );
 
     const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _topObjectPart.empty() && ( bottomTile._mainObjectPart.icnType != _mainObjectPart.icnType );
@@ -893,13 +893,23 @@ void Maps::Tile::sortObjectParts()
     _groundObjectPart.sort( []( const auto & left, const auto & right ) { return ( left.layerType > right.layerType ); } );
 
     if ( !_groundObjectPart.empty() ) {
-        ObjectPart & highestPriorityPart = _groundObjectPart.back();
-        std::swap( highestPriorityPart, _mainObjectPart );
+        auto highestPriorityPartIter = _groundObjectPart.end();
 
-        // If this assertion blows up then you are not storing correct values for layer type!
-        assert( _mainObjectPart.layerType <= TERRAIN_LAYER );
+        while ( highestPriorityPartIter != _groundObjectPart.begin() ) {
+            --highestPriorityPartIter;
 
-        _groundObjectPart.pop_back();
+            // Flags might be on the same layer as other objects but they cannot be the main object because they are a part of another object.
+            if ( highestPriorityPartIter->icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
+                std::swap( *highestPriorityPartIter, _mainObjectPart );
+
+                // If this assertion blows up then you are not storing correct values for layer type!
+                assert( _mainObjectPart.layerType <= TERRAIN_LAYER );
+
+                _groundObjectPart.erase( highestPriorityPartIter );
+
+                break;
+            }
+        }
     }
 
     // Top layer objects don't have any rendering priorities so they should be rendered first in queue first to render.
