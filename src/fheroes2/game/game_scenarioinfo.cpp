@@ -151,7 +151,7 @@ namespace
                 normalSpecificOffset = 1;
             }
 
-            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
@@ -204,7 +204,7 @@ namespace
         const int32_t difficultyCursorWidth = difficultyCursor.width();
         const int32_t difficultyCursorHeight = difficultyCursor.height();
 
-        // vector coord difficulty
+        // Difficulty selection areas vector.
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
@@ -231,8 +231,9 @@ namespace
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
-        const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
-            const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
+        Maps::FileInfo & currentMapInfo = conf.getCurrentMapInfo();
+
+        const Maps::FileInfo & mapInfo = [&lists, &currentMapinfo = std::as_const( currentMapInfo )]() {
             if ( currentMapinfo.filename.empty() ) {
                 return lists.front();
             }
@@ -253,6 +254,8 @@ namespace
         showCurrentlySelectedMapInfoInTextSupportMode( mapInfo );
         conf.setCurrentMapInfo( mapInfo );
         updatePlayers( players, humanPlayerCount );
+
+        // Load players parameters saved from the previous call of the scenario info dialog.
         Game::LoadPlayers( mapInfo.filename, players );
 
         Interface::PlayersInfo playersInfo;
@@ -322,6 +325,7 @@ namespace
             assert( 0 );
             break;
         }
+
         levelCursor.redraw();
 
         fheroes2::validateFadeInAndRender();
@@ -355,16 +359,14 @@ namespace
                 // The previous dialog might still have a pressed button event. We have to clean the state.
                 le.reset();
 
-                const std::string currentMapName = conf.getCurrentMapInfo().filename;
-
-                if ( fi && fi->filename != currentMapName ) {
+                if ( fi && fi->filename != currentMapInfo.filename ) {
                     showCurrentlySelectedMapInfoInTextSupportMode( *fi );
-                    Game::SavePlayers( currentMapName, conf.GetPlayers() );
+
+                    // The map is changed. Update the map data and do default initialization of players.
                     conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
                     RedrawMapTitle( conf, maxTextRoi, centeredTextRoi );
-                    Game::LoadPlayers( fi->filename, players );
 
                     opponentsArea.restore();
                     classArea.restore();
@@ -391,7 +393,7 @@ namespace
             }
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << currentMapInfo.filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
                 // Fade-out screen before starting a scenario.
@@ -460,7 +462,8 @@ namespace
             }
         }
 
-        Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
+        // Save the changes players parameters before closing this dialog.
+        Game::SavePlayers( currentMapInfo.filename, players );
 
         return result;
     }
