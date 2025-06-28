@@ -231,9 +231,9 @@ namespace
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
-        Maps::FileInfo & currentMapInfo = conf.getCurrentMapInfo();
+        const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
+            const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
 
-        const Maps::FileInfo & mapInfo = [&lists, &currentMapinfo = std::as_const( currentMapInfo )]() {
             if ( currentMapinfo.filename.empty() ) {
                 return lists.front();
             }
@@ -359,7 +359,7 @@ namespace
                 // The previous dialog might still have a pressed button event. We have to clean the state.
                 le.reset();
 
-                if ( fi && fi->filename != currentMapInfo.filename ) {
+                if ( fi && fi->filename != conf.getCurrentMapInfo().filename ) {
                     showCurrentlySelectedMapInfoInTextSupportMode( *fi );
 
                     // The map is changed. Update the map data and do default initialization of players.
@@ -393,7 +393,7 @@ namespace
             }
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << currentMapInfo.filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
                 // Fade-out screen before starting a scenario.
@@ -463,7 +463,7 @@ namespace
         }
 
         // Save the changes players parameters before closing this dialog.
-        Game::SavePlayers( currentMapInfo.filename, players );
+        Game::SavePlayers( conf.getCurrentMapInfo().filename, players );
 
         return result;
     }
