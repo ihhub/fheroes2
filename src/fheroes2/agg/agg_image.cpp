@@ -4979,14 +4979,15 @@ namespace
             loadICN( emptyButtonIcn );
             if ( _icnVsSprite[emptyButtonIcn].size() == 2 ) {
                 // There will be three sprites for the Virtual Keyboard button:
-                // 0 - pressed;
-                // 1 - released on "standard" background;
-                // 2 - released on "uniform" background.
+                // 0 - released;
+                // 1 - pressed on "standard" background;
+                // 2 - pressed on "uniform" background.
                 _icnVsSprite[id].reserve( 3 );
 
                 // Read keyboard images and put them on the button sprites.
                 fheroes2::Sprite temp;
-                fheroes2::h2d::readImage( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image", temp );
+                const char * const releasedImageName = ( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image" );
+                fheroes2::h2d::readImage( releasedImageName, temp );
 
                 // Generate empty buttons.
                 fheroes2::Sprite & released = _icnVsSprite[id].emplace_back();
@@ -5002,7 +5003,8 @@ namespace
                 // We subtract 1 from `releasedOffset.y` argument because the  loaded released image from `h2d` file is shifted 1 pixel down.
                 fheroes2::Blit( temp, 0, 0, released, extraWidth / 2 + releasedOffset.x, releasedOffset.y - 1, temp.width(), temp.height() );
 
-                fheroes2::h2d::readImage( isEvil ? "keyboard_button_pressed_evil.image" : "keyboard_button_pressed_good.image", temp );
+                const char * const pressedImageName = ( isEvil ? "keyboard_button_pressed_evil.image" : "keyboard_button_pressed_good.image" );
+                fheroes2::h2d::readImage( pressedImageName, temp );
                 fheroes2::Blit( temp, 0, 0, pressed, extraWidth / 2 + pressedOffset.x, pressedOffset.y, temp.width(), temp.height() );
 
                 // Make a button pressed sprite for the "uniform" dialog background.
