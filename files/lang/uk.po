@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-21 16:35+0000\n"
-"PO-Revision-Date: 2025-06-15 12:00+0300\n"
+"PO-Revision-Date: 2025-06-28 13:56+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -283,8 +283,8 @@ msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"ВІЙНИ ЗА\n"
-"СПАДЩИНУ"
+"ОРИГІНАЛЬНА\n"
+"КАМПАНІЯ"
 
 msgid ""
 "EXPANSION\n"
@@ -476,7 +476,7 @@ msgid "Cannot move last troop"
 msgstr "Не вдалось перемістити останній загін"
 
 msgid "Move the %{name}"
-msgstr "Перемістити: %{name}"
+msgstr "Перемістити %{name}"
 
 msgid "Set %{monster} Count"
 msgstr "Задати кількість %{monster}"
@@ -790,7 +790,7 @@ msgid "View %{monster} info"
 msgstr "Переглянути інформацію про %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr "%{monster}: перелетіти сюди"
+msgstr "%{monster} перелетіти сюди"
 
 msgid "Move %{monster} here"
 msgstr "%{monster} перемістяться сюди"
@@ -880,7 +880,7 @@ msgid "Hide logs"
 msgstr "Сховати журнал"
 
 msgid "Show logs"
-msgstr "Дивитися журнал"
+msgstr "Показати журнал"
 
 msgid "Message Bar"
 msgstr "Табло повідомлень"
@@ -1148,9 +1148,9 @@ msgstr "%{name} знищено."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} піднято з мертвих!"
-msgstr[1] "%{count} %{name} піднято з мертвих!"
-msgstr[2] "%{count} %{name} піднято з мертвих!"
+msgstr[0] "%{count} %{name} повстає з мертвих!"
+msgstr[1] "%{count} %{name} повстає з мертвих!"
+msgstr[2] "%{count} %{name} повстають з мертвих!"
 
 msgid "Dwarven Alliance"
 msgstr "Альянс Гномів"
@@ -1845,13 +1845,13 @@ msgstr "Мерзенна Маска"
 # Mage's Ring - перстень мага
 # Magical Ring - магічний перстень
 msgid "campaignBonus|Mage's Ring"
-msgstr "Перстень мага"
+msgstr "Перстень Мага"
 
 msgid "campaignBonus|Major Scroll"
 msgstr "Великий Сувій"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Медаль пошани"
+msgstr "Медаль Пошани"
 
 msgid "campaignBonus|Medal of Valor"
 msgstr "Медаль за Відвагу"
@@ -3984,7 +3984,7 @@ msgid "Toggle building construction restriction mode."
 msgstr "Режим обмеження будівництва споруд."
 
 msgid "Restrict Building Construction"
-msgstr "Обмежити будівництво споруд."
+msgstr "Обмежити будівництво споруд"
 
 msgid "Use default defenders army."
 msgstr "Використовувати армію захисників за налаштуванням."
@@ -4102,7 +4102,7 @@ msgid "No artifact will be given by the event."
 msgstr "Жоден артефакт не буде виданий у події."
 
 msgid "Delete Artifact"
-msgstr "Видалити артефакт:"
+msgstr "Видалити артефакт"
 
 msgid "Delete an artifact from the event."
 msgstr "Видалити артефакт з події."
@@ -4111,7 +4111,7 @@ msgid "No Secondary Skill will be given by the event."
 msgstr "Жодне Вторинне вміння не буде надано подією."
 
 msgid "Secondary Skill"
-msgstr "Вторинне вміння:"
+msgstr "Вторинне вміння"
 
 msgid "Delete Secondary Skill"
 msgstr "Видалити вторинне вміння"
@@ -4694,7 +4694,7 @@ msgid "Click here to change the town whose loss would mean defeat."
 msgstr "Тицьніть тут для зміни місто, втрата якого означатиме поразку."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr "Виберіть героя, втрата якого означатиме поразку."
+msgstr "Виберіть героя, втрата якого означатиме поразку"
 
 msgid "Click here to change the hero whose loss would mean defeat."
 msgstr "Тицьніть сюди, щоб змінити героя, втрата якого означатиме поразку."
@@ -8219,8 +8219,8 @@ msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
-"Розосереджений бойовий стрій розставляє військо  героя згори донизу поля "
-"бою, залишаючи між кожним воїном принаймні одне вільне місце."
+"Розосереджений бойовий стрій розставляє військо героя згори донизу поля бою, "
+"залишаючи між кожним воїном принаймні одне вільне місце."
 
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
@@ -8267,7 +8267,7 @@ msgid "Set hero's Army. Right-click to reset unit."
 msgstr ""
 "Встановити армію героя. Тицьніть правою кнопкою миші, щоб скинути юніта."
 
-# By default - перекладають як "За замовчуванням", але це калька з ... мови.
+# By default - перекладають як "За замовчуванням", але це калька
 # Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Set hero's portrait. Right-click to reset to default."
 msgstr ""
@@ -9037,7 +9037,7 @@ msgid "week|PLAGUE"
 msgstr "ЧУМИ"
 
 msgid "week|Unnamed"
-msgstr "Безіменний"
+msgstr "Безіменного"
 
 msgid "Desert"
 msgstr "Пустеля"
@@ -9202,13 +9202,13 @@ msgid "Shrine of the First Circle"
 msgstr "Cвятиня 1-го Кола"
 
 msgid "Shipwreck"
-msgstr "Уламки Корабля"
+msgstr "Уламки корабля"
 
 msgid "Sea Chest"
-msgstr "Морський Сундук"
+msgstr "Морська скриня"
 
 msgid "Desert Tent"
-msgstr "Пустельний Намет"
+msgstr "Пустельний намет"
 
 msgid "Stone Liths"
 msgstr "Моноліт"
@@ -9235,7 +9235,7 @@ msgid "Boat"
 msgstr "Човен"
 
 msgid "Random Ultimate Artifact"
-msgstr "Випадковий Унікальний Артефакт"
+msgstr "Випадковий Абсолютний Артефакт"
 
 msgid "Random Artifact"
 msgstr "Випадковий Артефакт"
@@ -12155,10 +12155,10 @@ msgstr ""
 "%{hp} ОЗ."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Унікальний Артефакт це справді %{name}."
+msgstr "Абсолютний артефакт це справді %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "Унікальний Артефакт можна знайти там, де %{name}."
+msgstr "Абсолютний артефакт можна знайти там, де %{name}."
 
 msgid "north-west"
 msgstr "північний захід"
