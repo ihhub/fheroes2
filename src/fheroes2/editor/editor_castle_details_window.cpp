@@ -323,8 +323,9 @@ namespace Editor
 
         // Castle name background.
         const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
-        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartWidth, statusBarSprite.height() - 2 );
-        fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarSprite.height() );
+        const int32_t statusBarHeight = statusBarSprite.height();
+        const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartWidth, statusBarHeight - 2 );
+        fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarHeight );
 
         const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
@@ -447,23 +448,28 @@ namespace Editor
         buildings.back().setPosition( dstPt.x, dstPt.y );
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
-        // Okay button.
-        fheroes2::Button buttonOkay;
-        window.renderButton( buttonOkay, isEvilInterface ? ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL : ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD, 0, 1, { 438 + 4, 24 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+        // OKAY button.
+        const fheroes2::Point statusBarOffset{ dialogRoi.x, dialogRoi.y + dialogRoi.height - statusBarHeight };
 
-        // Cancel button.
-        fheroes2::Button buttonCancel;
-        window.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL : ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD, 0, 1, { 4, 24 },
-                             fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+        fheroes2::Button buttonOkay( statusBarOffset.x, statusBarOffset.y, ICN::BUTTON_OKAY_TOWN, 0, 1 );
+        buttonOkay.draw();
 
-        // Status bar.
-        const int32_t statusBarWidth = statusBarSprite.width();
-        const int32_t statusBarheight = statusBarSprite.height();
-        dstPt.y = dialogRoi.y + dialogRoi.height - statusBarheight;
-        fheroes2::Copy( statusBarSprite, 0, 0, display, dialogRoi.x, dstPt.y, statusBarWidth, statusBarheight );
+        // EXIT button.
+        const int32_t buttonExitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+        fheroes2::Button buttonExit( statusBarOffset.x + dialogRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+        buttonExit.draw();
+
+        // The original status bar image is much longer.
+        // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
+        const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
+        const int32_t statusBarWidth = dialogRoi.width - buttonExitWidth - buttonOkayWidth;
+        fheroes2::Copy( statusBarSprite, 0, 0, display, statusBarOffset.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth / 2, statusBarHeight );
+        const int32_t statusBarSecondPart = statusBarWidth - statusBarWidth / 2;
+        fheroes2::Copy( statusBarSprite, statusBarSprite.width() - statusBarSecondPart, 0, display, statusBarOffset.x + buttonOkayWidth + statusBarWidth / 2,
+                        statusBarOffset.y, statusBarSecondPart, statusBarHeight );
+
         StatusBar statusBar;
-        statusBar.setRoi( { dialogRoi.x, dstPt.y, statusBarWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 
@@ -474,13 +480,13 @@ namespace Editor
 
         while ( le.HandleEvents() ) {
             buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 break;
             }
 
-            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
             }
 
@@ -604,11 +610,11 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Okay" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.isMouseCursorPosInArea( buttonCancel.area() ) ) {
-                message = _( "Exit this menu without doing anything." );
+            else if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+                message = _( "Exit this dialog, discarding the changes made." );
 
-                if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-                    fheroes2::showStandardTextMessage( _( "Cancel" ), message, Dialog::ZERO );
+                if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Exit" ), message, Dialog::ZERO );
                 }
             }
             else {

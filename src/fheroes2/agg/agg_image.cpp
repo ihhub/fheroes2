@@ -101,10 +101,7 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
-                                                ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD,
-                                                ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL,
-                                                ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD,
-                                                ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL,
+                                                ICN::BUTTON_OKAY_TOWN,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
@@ -707,27 +704,11 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_TOWN_SETTINGS_OKAY_GOOD:
-        case ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL: {
+        case ICN::BUTTON_OKAY_TOWN: {
             _icnVsSprite[id].resize( 2 );
 
-            const bool isEvilInterface = ( id == ICN::BUTTON_TOWN_SETTINGS_OKAY_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "townSettings|OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 85, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-            break;
-        }
-        case ICN::BUTTON_TOWN_SETTINGS_CANCEL_GOOD:
-        case ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL: {
-            _icnVsSprite[id].resize( 2 );
-
-            const bool isEvilInterface = ( id == ICN::BUTTON_TOWN_SETTINGS_CANCEL_EVIL );
-
-            const char * text = fheroes2::getSupportedText( gettext_noop( "townSettings|CANCEL" ), fheroes2::FontType::buttonReleasedWhite() );
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 85, 25 }, isEvilInterface,
-                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+            const char * text = fheroes2::getSupportedText( gettext_noop( "OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
