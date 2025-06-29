@@ -469,7 +469,10 @@ namespace Editor
                         statusBarOffset.y, statusBarSecondPart, statusBarHeight );
 
         StatusBar statusBar;
-        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth, 0 } );
+        // The status bar has decorations on both sides.
+        // It is important not to render text over them.
+        constexpr int32_t decorationsWidth{ 16 };
+        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth + decorationsWidth, statusBarOffset.y, statusBarWidth - 2 * decorationsWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 
