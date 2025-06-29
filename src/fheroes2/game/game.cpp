@@ -61,6 +61,8 @@
 namespace
 {
     std::string lastMapFileName;
+
+    // A vector to store player including their parameters to restore them in scenario info dialog when starting a new game.
     std::vector<Player> savedPlayers;
 
     bool updateSoundsOnFocusUpdate = true;
@@ -100,6 +102,7 @@ int Game::getDifficulty()
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
     if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
+        // The map or human players count is changed - ignore previously set players parameters.
         return;
     }
 
@@ -141,15 +144,13 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     for ( const Player * p : players ) {
         assert( p != nullptr );
 
-        Player player( p->GetColor() );
+        Player & player = savedPlayers.emplace_back( p->GetColor() );
 
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
         player.SetName( p->GetName() );
         player.setHandicapStatus( p->getHandicapStatus() );
-
-        savedPlayers.push_back( player );
     }
 }
 
