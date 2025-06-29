@@ -482,6 +482,11 @@ namespace Bin_Info
                 animationFrames[MOVE_MAIN].insert( animationFrames[MOVE_MAIN].begin(), 45 );
                 frameXOffset[MOVE_MAIN].insert( frameXOffset[MOVE_MAIN].begin(), 8 );
             }
+            // Also update the once-cell move animation.
+            if ( animationFrames[MOVE_ONE].size() == 10 && frameXOffset[MOVE_ONE].size() == 10 ) {
+                animationFrames[MOVE_ONE].insert( animationFrames[MOVE_ONE].begin() + 2, 45 );
+                frameXOffset[MOVE_ONE].insert( frameXOffset[MOVE_ONE].begin() + 2, 8 );
+            }
         }
     }
 
