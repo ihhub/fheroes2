@@ -291,6 +291,15 @@ namespace
         fheroes2::Rect _buildArea{ 0, 0, 69, 70 };
         fheroes2::Rect _banArea{ 0, 0, 68, 70 };
     };
+
+    std::string getCastleName( const std::string & customName, const bool isTown )
+    {
+        if ( !customName.empty() ) {
+            return customName;
+        }
+
+        return isTown ? _( "Random Town Name" ) : _( "Random Castle Name" );
+    }
 }
 
 namespace Editor
@@ -332,10 +341,7 @@ namespace Editor
         // Castle name text.
         auto drawCastleName = [&castleMetadata, &display, &nameArea, isTown]() {
             // TODO: use language for castle name. At the moment it is disabled.
-            fheroes2::Text text( castleMetadata.customName, fheroes2::FontType::normalWhite() );
-            if ( castleMetadata.customName.empty() ) {
-                text.set( isTown ? _( "Random Town Name" ) : _( "Random Castle Name" ), fheroes2::FontType::normalWhite() );
-            }
+            fheroes2::Text text( getCastleName( castleMetadata.customName, isTown ), fheroes2::FontType::normalWhite() );
 
             text.fitToOneRow( nameArea.width );
             text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, display, nameArea );
@@ -448,6 +454,16 @@ namespace Editor
         buildings.back().setPosition( dstPt.x, dstPt.y );
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
 
+        // Reset castle's name button.
+        fheroes2::Button buttonResetCastleName;
+        window.renderButton( buttonResetCastleName, isEvilInterface ? ICN::BUTTON_RESET_EVIL : ICN::BUTTON_RESET_GOOD, 0, 1, { 56, 24 },
+                             fheroes2::StandardWindow::Padding::TOP_RIGHT );
+
+        // Reset army button.
+        fheroes2::Button buttonResetArmy;
+        window.renderButton( buttonResetArmy, isEvilInterface ? ICN::BUTTON_RESET_EVIL : ICN::BUTTON_RESET_GOOD, 0, 1, { 56, 24 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+
         // OKAY button.
         const fheroes2::Point statusBarOffset{ dialogRoi.x, dialogRoi.y + dialogRoi.height - statusBarHeight };
 
@@ -484,6 +500,8 @@ namespace Editor
         while ( le.HandleEvents() ) {
             buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+            buttonResetCastleName.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonResetCastleName.area() ) );
+            buttonResetArmy.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonResetArmy.area() ) );
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 break;
@@ -500,7 +518,7 @@ namespace Editor
             buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedAndHeldInArea( buttonRestrictBuilding.area() ) );
 
             if ( le.isMouseCursorPosInArea( nameArea ) ) {
-                message = _( "Click to change the Castle name. Right-click to reset to default." );
+                message = _( "Click to change the Castle name." );
 
                 bool redrawName = false;
                 if ( le.MouseClickLeft( nameArea ) ) {
@@ -515,9 +533,8 @@ namespace Editor
                         redrawName = true;
                     }
                 }
-                else if ( le.MouseClickRight( nameArea ) ) {
-                    castleMetadata.customName.clear();
-                    redrawName = true;
+                else if ( le.isMouseRightButtonPressedInArea( nameArea ) ) {
+                    fheroes2::showStandardTextMessage( getCastleName( castleMetadata.customName, isTown ), {}, Dialog::ZERO );
                 }
 
                 if ( redrawName ) {
@@ -525,6 +542,20 @@ namespace Editor
                     fheroes2::Copy( statusBarSprite, 17, 1, display, nameArea );
                     drawCastleName();
                     display.render( nameArea );
+                }
+            }
+            else if ( le.isMouseCursorPosInArea( buttonResetCastleName.area() ) ) {
+                message = _( "Reset the Castle name." );
+
+                if ( le.MouseClickLeft( buttonResetCastleName.area() ) ) {
+                    castleMetadata.customName.clear();
+
+                    fheroes2::Copy( statusBarSprite, 17, 1, display, nameArea );
+                    drawCastleName();
+                    display.render( nameArea );
+                }
+                else if ( le.isMouseRightButtonPressedInArea( buttonResetCastleName.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Reset" ), message, Dialog::ZERO );
                 }
             }
             else if ( isTown && le.isMouseCursorPosInArea( allowCastleArea ) ) {
@@ -566,7 +597,6 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Default Buildings" ), message, Dialog::ZERO );
                 }
             }
-
             else if ( le.isMouseCursorPosInArea( buttonRestrictBuilding.area() ) ) {
                 message = _( "Toggle building construction restriction mode." );
 
@@ -574,7 +604,6 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
-
             else if ( isNeutral && le.isMouseCursorPosInArea( defaultArmyArea ) ) {
                 message = _( "Use default defenders army." );
 
@@ -594,6 +623,17 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
                 }
             }
+            else if ( le.isMouseCursorPosInArea(  buttonResetArmy.area() ) ) {
+                message = _( "Reset the army." );
+                if ( le.MouseClickLeft( buttonResetArmy.area() ) ) {
+                    castleArmy.Reset( false );
+                    armyBar.Redraw( display );
+                    display.render( dialogRoi );
+                }
+                else if ( le.isMouseRightButtonPressedInArea( buttonResetArmy.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Reset" ), message, Dialog::ZERO );
+                }
+            }
             else if ( le.isMouseCursorPosInArea( armyBar.GetArea() ) ) {
                 if ( armyBar.QueueEventProcessing( &message ) ) {
                     armyBar.Redraw( display );
@@ -603,7 +643,7 @@ namespace Editor
                 }
 
                 if ( message.empty() ) {
-                    message = _( "Set custom Castle Army. Right-click to reset unit." );
+                    message = _( "Set custom Castle Army." );
                 }
             }
             else if ( le.isMouseCursorPosInArea( buttonOkay.area() ) ) {
