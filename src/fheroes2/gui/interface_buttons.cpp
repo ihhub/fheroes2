@@ -251,7 +251,7 @@ void Interface::ButtonsPanel::_setButtonStatus()
         _buttonHeroMovement.setICNIndexes( 2, 3 );
         _buttonHeroMovement.enable();
     }
-    else if ( currentHero && MP2::isInGameActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+    else if ( currentHero && MP2::isRevisitAllowedForObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
         // Action button: to visit the action object hero is standing on.
         _buttonHeroMovement.setICNIndexes( 16, 17 );
         _buttonHeroMovement.enable();
