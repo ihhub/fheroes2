@@ -623,7 +623,7 @@ namespace Editor
                     fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
                 }
             }
-            else if ( le.isMouseCursorPosInArea(  buttonResetArmy.area() ) ) {
+            else if ( le.isMouseCursorPosInArea( buttonResetArmy.area() ) ) {
                 message = _( "Reset the army." );
                 if ( le.MouseClickLeft( buttonResetArmy.area() ) ) {
                     castleArmy.Reset( false );
