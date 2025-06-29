@@ -628,7 +628,7 @@ namespace Editor
                 if ( le.MouseClickLeft( buttonResetArmy.area() ) ) {
                     castleArmy.Reset( false );
                     armyBar.Redraw( display );
-                    display.render( dialogRoi );
+                    display.render( armyBar.GetArea() );
                 }
                 else if ( le.isMouseRightButtonPressedInArea( buttonResetArmy.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Reset" ), message, Dialog::ZERO );
