@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <iterator>
 #include <limits>
 #include <map>
@@ -343,7 +344,7 @@ bool Battle::Arena::isAnyTowerPresent()
     return std::any_of( arena->_towers.begin(), arena->_towers.end(), []( const auto & twr ) { return twr && twr->isValid(); } );
 }
 
-Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::PCG32 & randomGenerator )
     : castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
     , _isTown( castle != nullptr )
     , _randomGenerator( randomGenerator )
@@ -514,9 +515,9 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
             }
         }
 
-        const uint32_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.GetSeed(),
+        const uint32_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), static_cast<uint32_t>( _randomGenerator.getStream() ),
                                                   []( const uint32_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
-        _randomGenerator.UpdateSeed( newSeed );
+        _randomGenerator.setStream( newSeed );
 
         while ( !actions.empty() ) {
             ApplyAction( actions.front() );

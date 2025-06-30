@@ -48,7 +48,7 @@ class HeroBase;
 
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
@@ -93,7 +93,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::PCG32 & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 
@@ -363,7 +363,7 @@ namespace Battle
         // places (for example, in code that performs situation assessment or AI decision-making) because in this
         // case the battles performed by AI will not be reproducible by a human player when performing exactly the
         // same actions.
-        Rand::DeterministicRandomGenerator & _randomGenerator;
+        Rand::PCG32 & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;
 

@@ -258,7 +258,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
             // The built-in spell can only be applied to one target. If there are multiple
             // targets eligible for this spell, then we should randomly select only one.
             if ( spellTargets.size() > 1 ) {
-                const Unit * selectedUnit = _randomGenerator.Get( spellTargets ).defender;
+                const Unit * selectedUnit = Rand::GetWithGen( spellTargets, _randomGenerator ).defender;
 
                 spellTargets.erase( std::remove_if( spellTargets.begin(), spellTargets.end(),
                                                     [selectedUnit]( const TargetInfo & v ) { return v.defender != selectedUnit; } ),
@@ -908,7 +908,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::ENEMY_HALVING );
              abilityIter != attackerAbilities.end() ) {
             const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
-            if ( halvingDamage > res.damage && _randomGenerator.Get( 1, 100 ) <= abilityIter->percentage ) {
+            if ( halvingDamage > res.damage && Rand::GetWithGen( 1, 100, _randomGenerator ) <= abilityIter->percentage ) {
                 // Replaces damage, not adds extra damage
                 res.damage = std::min( defender.GetHitPoints(), halvingDamage );
 
@@ -1008,7 +1008,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
             const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero );
             assert( resist < 100 );
 
-            if ( !applyRandomMagicResistance || resist < _randomGenerator.Get( 1, 100 ) ) {
+            if ( !applyRandomMagicResistance || resist < Rand::GetWithGen( 1, 100, _randomGenerator ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
@@ -1044,7 +1044,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, hero );
 
-    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) ) {
+    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= Rand::GetWithGen( 1, 100, _randomGenerator ) ) ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
         res.defender = unit;
@@ -1190,7 +1190,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
         const uint32_t resist = tgt.defender->GetMagicResist( spell, hero );
         assert( resist < 100 );
 
-        if ( applyRandomMagicResistance && resist >= _randomGenerator.Get( 1, 100 ) ) {
+        if ( applyRandomMagicResistance && resist >= Rand::GetWithGen( 1, 100, _randomGenerator ) ) {
             tgt.resist = true;
         }
     }
@@ -1561,11 +1561,11 @@ void Battle::Arena::_applyActionSpellEarthquake()
             // Reduce the chance of bridge demolition by an extra 50% chance to "miss" it by the Earthquake spell.
             // It is done to be closer to the original game behavior where bridge demolition by this spell
             // is more rare than the demolition of the other structures.
-            if ( target == CastleDefenseStructure::BRIDGE && _randomGenerator.Get( 0, 1 ) == 0 ) {
+            if ( target == CastleDefenseStructure::BRIDGE && Rand::GetWithGen( 0, 1, _randomGenerator ) == 0 ) {
                 return 0;
             }
 
-            return static_cast<int>( _randomGenerator.Get( minDmg, maxDmg ) );
+            return static_cast<int>( Rand::GetWithGen( minDmg, maxDmg, _randomGenerator ) );
         }();
         assert( damage >= 0 );
 

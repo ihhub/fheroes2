@@ -297,28 +297,25 @@ int32_t Battle::Unit::GetTailIndex() const
     return _position.GetTail() ? _position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomMorale( Rand::PCG32 & randomGenerator )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int>( Rand::GetWithGen( 1, 24, randomGenerator ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
-        if ( isControlHuman() ) {
-            SetModes( MORALE_BAD );
-        }
+    else if ( morale < 0 && static_cast<int>( Rand::GetWithGen( 1, 12, randomGenerator ) ) <= -morale ) {
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( randomGenerator.Get( 1, 4 ) != 1 ) {
+        if ( isControlHuman() || ( Rand::GetWithGen( 1, 4, randomGenerator ) != 1 ) ) {
             SetModes( MORALE_BAD );
         }
     }
 }
 
-void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomLuck( Rand::PCG32 & randomGenerator )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( Rand::GetWithGen( 1, 24, randomGenerator ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -576,7 +573,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     return std::max( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
 }
 
-uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
+uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::PCG32 & randomGenerator ) const
 {
     uint32_t res = 0;
 
@@ -587,7 +584,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomG
         res = CalculateMinDamage( enemy );
     }
     else {
-        res = randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = Rand::GetWithGen( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ), randomGenerator );
     }
 
     if ( Modes( LUCK_GOOD ) ) {
@@ -1533,7 +1530,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
+Spell Battle::Unit::GetSpellMagic( Rand::PCG32 & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
 
@@ -1543,7 +1540,7 @@ Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGe
         return Spell::NONE;
     }
 
-    if ( randomGenerator.Get( 1, 100 ) > abilityIter->percentage ) {
+    if ( Rand::GetWithGen( 1, 100, randomGenerator ) > abilityIter->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
