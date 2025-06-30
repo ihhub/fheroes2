@@ -142,23 +142,3 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
 
     return 0;
 }
-
-Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )
-    : _currentSeed( initialSeed )
-{}
-
-uint32_t Rand::DeterministicRandomGenerator::GetSeed() const
-{
-    return _currentSeed;
-}
-
-void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
-{
-    _currentSeed = seed;
-}
-
-uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /* = 0 */ )
-{
-    ++_currentSeed;
-    return Rand::GetWithSeed( from, to, _currentSeed );
-}
