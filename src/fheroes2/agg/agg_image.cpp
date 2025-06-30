@@ -803,7 +803,7 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -825,7 +825,7 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -847,7 +847,7 @@ namespace
                 ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -868,7 +868,7 @@ namespace
                 ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
                 setButtonCornersTransparent( _icnVsSprite[id][1] );
 
                 break;
@@ -2696,7 +2696,7 @@ namespace
             _icnVsSprite[id][1].setPosition( 0, 0 );
 
             // fix transparent corners
-            CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
+            copyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
             break;
         case ICN::WHITE_LARGE_FONT: {
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
@@ -3557,7 +3557,7 @@ namespace
         case ICN::RECRUIT: {
             if ( _icnVsSprite[id].size() >= 10 ) {
                 // fix transparent corners on released OKAY button
-                CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
+                copyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
             }
             break;
         }
@@ -3583,8 +3583,8 @@ namespace
             }
 
             // fix transparent corners on pressed OKAY and CANCEL buttons
-            CopyTransformLayer( images[66], images[67] );
-            CopyTransformLayer( images[68], images[69] );
+            copyTransformLayer( images[66], images[67] );
+            copyTransformLayer( images[68], images[69] );
 
             // Add 6 special icons for the Editor.
             images.resize( 82 + 6 );
@@ -4616,8 +4616,8 @@ namespace
                 FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
                 FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
 
-                CopyTransformLayer( exitCommonMask, released );
-                CopyTransformLayer( exitCommonMask, pressed );
+                copyTransformLayer( exitCommonMask, released );
+                copyTransformLayer( exitCommonMask, pressed );
 
                 // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
                 const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
@@ -5031,6 +5031,24 @@ namespace
                 const int standardDialogBackgroundIcn = isEvil ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
                 loadICN( standardDialogBackgroundIcn );
                 fheroes2::makeTransparentBackground( released, pressed, standardDialogBackgroundIcn );
+            }
+            break;
+        }
+        case ICN::SWORDSM2:
+        case ICN::SWORDSMN: {
+            if ( _icnVsSprite[id].size() == 45 && _icnVsSprite[id][3].width() == 38 && _icnVsSprite[id][3].height() > 69 ) {
+                // Add extra frame to make the movement animation more smooth.
+                // It is based on the frame 3 with updated legs drawing.
+                fheroes2::Sprite & newFrame = _icnVsSprite[id].emplace_back( _icnVsSprite[id][3] );
+
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "swordsman_walking_frame_extra_part_mask.image", temp );
+                fheroes2::copyTransformLayer( temp, 0, 0, newFrame, temp.x(), newFrame.height() - temp.height(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "swordsman_walking_frame_extra_part.image", temp );
+                fheroes2::Blit( temp, 0, 0, newFrame, temp.x(), newFrame.height() - temp.height(), temp.width(), temp.height() );
+
+                newFrame.setPosition( newFrame.x() + 6, newFrame.y() );
             }
             break;
         }
