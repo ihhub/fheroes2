@@ -461,7 +461,15 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
     if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
         // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
         // TODO: remove layer type for top layer objects.
-        _topObjectPart.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+
+        // One object part for a crack object has invalid layer.
+        // This causes a rendering bug which is also present in the original game.
+        if ( topObjectIcnType == MP2::OBJ_ICN_TYPE_OBJNCRCK && mp2.topIcnImageIndex == 226 ) {
+            _groundObjectPart.emplace_back( ObjectLayerType::TERRAIN_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+        }
+        else {
+            _topObjectPart.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+        }
     }
 }
 
