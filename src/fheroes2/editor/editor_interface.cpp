@@ -1334,8 +1334,7 @@ namespace Interface
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
-                    Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage );
-                    if ( castleMetadata != newCastleMetadata ) {
+                    if ( Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage ) && ( castleMetadata != newCastleMetadata ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         castleMetadata = std::move( newCastleMetadata );
                         action.commit();

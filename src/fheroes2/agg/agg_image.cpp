@@ -101,6 +101,7 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_OKAY_TOWN,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
@@ -140,6 +141,7 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_RESET_EVIL,
                                                 ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
@@ -700,6 +702,14 @@ namespace
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "smallerButton|EXIT" ), fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 70, 25 }, false, ICN::BLACKBAK );
+
+            break;
+        }
+        case ICN::BUTTON_OKAY_TOWN: {
+            _icnVsSprite[id].resize( 2 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
             break;
         }
@@ -1629,11 +1639,15 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_RESET_GOOD: {
+        case ICN::BUTTON_RESET_GOOD:
+        case ICN::BUTTON_RESET_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_RESET_EVIL );
+
             _icnVsSprite[id].resize( 2 );
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "RESET" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
