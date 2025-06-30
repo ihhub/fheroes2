@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -42,6 +42,9 @@ msgstr "PRYČ"
 msgid "smallerButton|EXIT"
 msgstr "ZPĚT"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HRDINOVÉ"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ZRUŠIT"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PŘIJMI"
@@ -3931,13 +3931,16 @@ msgstr "Armáda hradu"
 msgid "Town Army"
 msgstr "Armáda města"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Klikněte pro změnu názvu hradu. Pravým tlačítkem myši obnovte výchozí "
-"nastavení."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klikněte pro změnu názvu mapy."
 
 msgid "Enter Castle name"
 msgstr "Zadejte název hradu"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Ztratit hrad '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Povolit stavbu hradu v tomto městě."
@@ -3954,10 +3957,24 @@ msgstr "Omezení výstavby budov"
 msgid "Use default defenders army."
 msgstr "Použít armádu výchozích obránců."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
-"Nastavte vlastní armádu hradu. Klikněte pravým tlačítkem pro obnovení "
-"jednotky."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Propustit tuto armádu."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Armáda hradu"
+
+msgid "Click to accept the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Nastavení Hry"
 
 msgid "Message Text:"
 msgstr "Text zprávy:"
@@ -4702,9 +4719,6 @@ msgstr "Změnit popis mapy"
 
 msgid "About"
 msgstr ""
-
-msgid "Click to accept the changes made."
-msgstr "Klikněte pro potvrzení provedených změn."
 
 msgid "Click to edit custom rumors."
 msgstr "Klikněte pro úpravu vlastních pověstí."
@@ -12072,6 +12086,16 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Klikněte pro změnu názvu hradu. Pravým tlačítkem myši obnovte výchozí "
+#~ "nastavení."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr ""
+#~ "Nastavte vlastní armádu hradu. Klikněte pravým tlačítkem pro obnovení "
+#~ "jednotky."
 
 #~ msgid "CONFIG"
 #~ msgstr "CONFIG"

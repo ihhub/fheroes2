@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -42,6 +42,9 @@ msgstr "PREČ"
 msgid "smallerButton|EXIT"
 msgstr "ODÍĎ"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr ""
 "HRDI-\n"
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PRIJAŤ"
@@ -4027,12 +4027,17 @@ msgstr "Hrad"
 msgid "Town Army"
 msgstr "Mesto"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Stratíš hrdinu '%{name}'."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Stratíš hrad '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4049,8 +4054,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Prepusti túto armádu."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Hrad"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Nastavenie hry"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4856,10 +4878,6 @@ msgstr "Zvolený opis"
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
 msgid "Click to edit custom rumors."
