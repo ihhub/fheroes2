@@ -176,7 +176,7 @@ protected:
     std::vector<std::vector<int>> _idle;
     std::vector<std::vector<int>> _offsetX;
 
-    bool appendFrames( std::vector<int> & target, int animID );
+    bool appendFrames( std::vector<int> & target, const size_t animID );
 };
 
 class AnimationState final : public AnimationReference

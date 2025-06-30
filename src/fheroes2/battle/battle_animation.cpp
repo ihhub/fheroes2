@@ -189,10 +189,10 @@ AnimationReference::AnimationReference( const int monsterID )
     }
 }
 
-bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
+bool AnimationReference::appendFrames( std::vector<int> & target, const size_t animID )
 {
     if ( _monsterInfo.hasAnim( animID ) ) {
-        target.insert( target.end(), _monsterInfo.animationFrames.at( animID ).begin(), _monsterInfo.animationFrames.at( animID ).end() );
+        target.insert( target.end(), _monsterInfo.animationFrames[animID].begin(), _monsterInfo.animationFrames[animID].end() );
         return true;
     }
 

@@ -75,6 +75,8 @@ namespace
         "petrification_spell_icon.image",
         "petrification_spell_icon_mini.image",
         "sorceress_castle_captain_quarter_left_side.image",
+        "swordsman_walking_frame_extra_part.image",
+        "swordsman_walking_frame_extra_part_mask.image",
         "townbkg2_fix.image",
         "twnsspec_fix.image",
         "wizard_bay_diff_to_twnzdock.image",
