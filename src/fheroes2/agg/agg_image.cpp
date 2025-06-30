@@ -166,12 +166,23 @@ namespace
     {
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
         const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
-        return ( currentLanguage == fheroes2::SupportedLanguage::English && resourceLanguage == fheroes2::SupportedLanguage::English )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Czech && resourceLanguage == fheroes2::SupportedLanguage::Czech )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
-               || ( currentLanguage == fheroes2::SupportedLanguage::French && resourceLanguage == fheroes2::SupportedLanguage::French )
-               || ( currentLanguage == fheroes2::SupportedLanguage::German && resourceLanguage == fheroes2::SupportedLanguage::German )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
+
+        if ( currentLanguage != resourceLanguage ) {
+            return false;
+        }
+
+        // We return false for the Russian assets to use engine-generated buttons.
+        // It is done to fix some issues in Russian assets and for consistency in CP1251 fonts for all assets.
+        switch ( currentLanguage ) {
+        case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Polish:
+            return true;
+        default:
+            return false;
+        }
     }
 
     bool IsValidICNId( int id )
