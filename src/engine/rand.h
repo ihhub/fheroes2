@@ -37,14 +37,6 @@
 #include <utility>
 #include <vector>
 
-namespace
-{
-    constexpr uint64_t makeOdd( const uint64_t value )
-    {
-        return ( value << 1U ) | 1U;
-    }
-}
-
 namespace Rand
 {
     class PCG32
@@ -104,6 +96,11 @@ namespace Rand
         static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
         {
             return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
+        }
+
+        static constexpr uint64_t makeOdd( const uint64_t value )
+        {
+            return ( value << 1U ) | 1U;
         }
 
         // Defines a new templated false value to be used in static_assert
