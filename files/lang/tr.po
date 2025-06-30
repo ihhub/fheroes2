@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "ÇIKIŞ"
 msgid "smallerButton|EXIT"
 msgstr "ÇIKIŞ"
 
+msgid "OKAY"
+msgstr "TAMAM"
+
 msgid "HEROES"
 msgstr "KAHRAMANLAR"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "İPTAL"
-
-msgid "OKAY"
-msgstr "TAMAM"
 
 msgid "ACCEPT"
 msgstr "KABUL"
@@ -3835,11 +3835,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Kahraman Ekranı"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Enter Castle name"
 msgstr ""
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Savaşa geri dön."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3856,8 +3861,23 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Ayarlar"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4577,10 +4597,6 @@ msgstr ""
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 #, fuzzy
 msgid "Click to edit custom rumors."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "SAIR"
 msgid "smallerButton|EXIT"
 msgstr "SAIR"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HERÓIS"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "CANCELAR"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "ACEITAR"
@@ -3975,12 +3975,16 @@ msgstr "Exército do Castelo"
 msgid "Town Army"
 msgstr "Exército da Cidade"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Clique para alterar o nome do castelo. Botão direito restaura o padrão."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Clique para alterar o nome do mapa."
 
 msgid "Enter Castle name"
 msgstr "Insira o nome do Castelo"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Perda o castelo '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Permitir a construção de um castelo nessa cidade."
@@ -3999,8 +4003,24 @@ msgstr "Restringir Construção de Estruturas"
 msgid "Use default defenders army."
 msgstr "Usar exército de defensores padrão."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Definir Exército personalizado. Botão direito para redefinir."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Dispensar esse exército."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Exército do Castelo"
+
+msgid "Click to accept the changes made."
+msgstr "Clique para aceitar as alterações feitas."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Clique para aceitar as alterações feitas."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Configurações do Jogo"
 
 msgid "Message Text:"
 msgstr "Texto da Mensagem:"
@@ -4754,9 +4774,6 @@ msgstr "Alterar Descrição do Mapa"
 
 msgid "About"
 msgstr ""
-
-msgid "Click to accept the changes made."
-msgstr "Clique para aceitar as alterações feitas."
 
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."
@@ -12286,6 +12303,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Definir Exército personalizado. Botão direito para redefinir."
 
 #~ msgid "CONFIG"
 #~ msgstr "AJUSTES"

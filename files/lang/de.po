@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -41,6 +41,9 @@ msgstr "ENDE"
 msgid "smallerButton|EXIT"
 msgstr "ENDE"
 
+msgid "OKAY"
+msgstr "OKAY"
+
 msgid "HEROES"
 msgstr "HELDEN"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ABBRUCH"
-
-msgid "OKAY"
-msgstr "OKAY"
 
 msgid "ACCEPT"
 msgstr "AKZEPT."
@@ -3991,12 +3991,17 @@ msgstr "Burg"
 msgid "Town Army"
 msgstr "Stadt"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Den Helden verlieren: %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Die Burg '%{name}' verlieren."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4013,8 +4018,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Entlassen der Armee."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Burg"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Spieleinstellungen"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4808,10 +4830,6 @@ msgstr "Ausgewählte Beschreibung"
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Klicken um die nächste Stadt anzuzeigen."
 
 #, fuzzy
 msgid "Click to edit custom rumors."

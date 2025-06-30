@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -41,6 +41,9 @@ msgstr "UT"
 msgid "smallerButton|EXIT"
 msgstr "UT"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HELTER"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTA"
@@ -4094,12 +4094,17 @@ msgstr "Borg"
 msgid "Town Army"
 msgstr "By"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klikk for å vise neste by."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Mist helten kalt %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Mist borgen kalt %{name}."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4116,8 +4121,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Bortvis denne troppen."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Borg"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Spillinnstillinger"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4930,10 +4952,6 @@ msgstr "Kartbeskrivelse"
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Klikk for å vise neste by."
 
 #, fuzzy
 msgid "Click to edit custom rumors."
