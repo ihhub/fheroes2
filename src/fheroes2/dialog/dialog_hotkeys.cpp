@@ -257,10 +257,13 @@ namespace fheroes2
         fheroes2::StandardWindow background( keyDescriptionLength + hotKeyLength + 8 + 75, std::min( display.height() - 100, 520 ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 90, keyDescriptionLength + hotKeyLength + 8, roi.height - 128 );
+        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 100, keyDescriptionLength + hotKeyLength + 8, roi.height - 135 );
 
         const fheroes2::Text title( _( "Hot Keys:" ), fheroes2::FontType::normalYellow() );
-        title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
+        title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 10, display );
+
+        const fheroes2::Text titleCategories(_("Category:"), fheroes2::FontType::normalWhite());
+        titleCategories.draw(roi.x + (roi.width - titleCategories.width()) / 2, roi.y + 30, display);
 
         const int categoryAreaHeight = 2 * fheroes2::getFontHeight(fheroes2::FontSize::NORMAL) + 12;
         const fheroes2::Rect categoryArea(listRoi.x, listRoi.y - categoryAreaHeight - 6, listRoi.width, categoryAreaHeight);
@@ -300,12 +303,10 @@ namespace fheroes2
 
         std::vector<fheroes2::Rect> categoryClickAreas;
 
-        int selectedCategoryIndex = -1;  // Default selected category (e.g., "Global")
+        int selectedCategoryIndex = -1;  
 
         const int lineHeight = fheroes2::getFontHeight(fheroes2::FontSize::NORMAL);
-        const int rows = 2;
         const int cols = 4;
-        const int rowHeight = categoryArea.height / 2;
         const int cellWidth = categoryArea.width / cols;
 
         for (size_t i = 0; i < hotkeyCategories.size(); ++i) {
