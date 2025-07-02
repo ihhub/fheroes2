@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -41,6 +41,9 @@ msgstr "ИЗХОД"
 msgid "smallerButton|EXIT"
 msgstr "ИЗХОД"
 
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
 msgid "HEROES"
 msgstr "ГЕРОЙ"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ОТКАЗ"
-
-msgid "OKAY"
-msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
 msgstr "ПРИЕМАМ"
@@ -4052,12 +4052,17 @@ msgstr "Замък"
 msgid "Town Army"
 msgstr "Град"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Губиш героя: %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Губиш замъка '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4074,8 +4079,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Разпусни тази войска."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Замък"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Игрови настройки"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4893,10 +4915,6 @@ msgstr "Избрано описание"
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
 msgid "Click to edit custom rumors."

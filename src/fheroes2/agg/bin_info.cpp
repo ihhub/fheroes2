@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,14 +85,7 @@ namespace Bin_Info
     const double SHOOT_SPEED_UPGRADE = 0.08;
     const double RANGER_SHOOT_SPEED = 0.78;
 
-    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
-        : moveSpeed( 450 )
-        , shootSpeed( 0 )
-        , flightSpeed( 0 )
-        , troopCountOffsetLeft( 0 )
-        , troopCountOffsetRight( 0 )
-        , idleAnimationCount( 0 )
-        , idleAnimationDelay( 0 )
+    MonsterAnimInfo::MonsterAnimInfo( const int monsterID /* = 0 */, const std::vector<uint8_t> & bytes /* = std::vector<uint8_t>() */ )
     {
         if ( bytes.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
             return;
@@ -116,13 +109,17 @@ namespace Bin_Info
 
         // Idle animations data
         idleAnimationCount = data[117];
-        if ( idleAnimationCount > 5u )
-            idleAnimationCount = 5u; // here we need to reset our object
-        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
-            idlePriority.push_back( getValue<float>( data, 118, i ) );
+        if ( idleAnimationCount > 5U ) {
+            idleAnimationCount = 5U; // here we need to reset our object
+        }
 
-        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i ) {
+            idlePriority.push_back( getValue<float>( data, 118, i ) );
+        }
+
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i ) {
             unusedIdleDelays.push_back( getValue<uint32_t>( data, 138, i ) );
+        }
 
         idleAnimationDelay = getValue<uint32_t>( data, 158 );
 
@@ -223,10 +220,13 @@ namespace Bin_Info
         }
 
         uint8_t projectileCount = data[186];
-        if ( projectileCount > 12u )
-            projectileCount = 12u; // here we need to reset our object
-        for ( uint8_t i = 0; i < projectileCount; ++i )
+        if ( projectileCount > 12U ) {
+            projectileCount = 12U; // here we need to reset our object
+        }
+
+        for ( uint8_t i = 0; i < projectileCount; ++i ) {
             projectileAngles.push_back( getValue<float>( data, 187, i ) );
+        }
 
         // Positional offsets for sprites & drawing
         troopCountOffsetLeft = getValue<int32_t>( data, 235 );
@@ -236,8 +236,10 @@ namespace Bin_Info
         for ( int idx = MOVE_START; idx <= SHOOT3_END; ++idx ) {
             std::vector<int> anim;
             uint8_t count = data[243 + idx];
-            if ( count > 16 )
+            if ( count > 16 ) {
                 count = 16; // here we need to reset our object
+            }
+
             for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
@@ -254,14 +256,12 @@ namespace Bin_Info
             }
         }
 
-        if ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) {
+        if ( ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) && animationFrames[DEATH].size() == 8 ) {
             // Dwarves and Battle Dwarves have incorrect death animation.
-            if ( animationFrames[DEATH].size() == 8 ) {
-                animationFrames[DEATH].clear();
+            animationFrames[DEATH].clear();
 
-                for ( int frameId = 49; frameId <= 55; ++frameId ) {
-                    animationFrames[DEATH].push_back( frameId );
-                }
+            for ( int frameId = 49; frameId <= 55; ++frameId ) {
+                animationFrames[DEATH].push_back( frameId );
             }
         }
 
@@ -308,19 +308,24 @@ namespace Bin_Info
             }
         }
 
-        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 )
+        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 ) {
             frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+        }
 
-        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx )
+        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx ) {
             frameXOffset[idx].resize( animationFrames[idx].size(), 0 );
+        }
 
         if ( frameXOffset[MOVE_STOP].size() == 1 && frameXOffset[MOVE_STOP][0] == 0 ) {
-            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 )
+            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 ) {
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
-            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 )
+            }
+            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 ) {
                 frameXOffset[MOVE_STOP][0] = 44 + frameXOffset[MOVE_TILE_START][0];
-            else
+            }
+            else {
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
+            }
         }
 
         // Movement animation fix for Iron and Steel Golem. Also check that the data sizes are correct.
@@ -460,57 +465,64 @@ namespace Bin_Info
             }
         }
 
-        // X offset fix for Swordsman.
-        if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
-             && frameXOffset[MOVE_STOP].size() == 1 ) {
-            frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
-            for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
-                xOffset += Battle::Cell::widthPx / 4 + 3;
+        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
+            // X offset fix for Swordsman.
+            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) {
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
+                for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
+                    xOffset += Battle::Cell::widthPx / 4 + 3;
+                }
+
+                frameXOffset[MOVE_STOP][0] = Battle::Cell::widthPx;
             }
 
-            frameXOffset[MOVE_STOP][0] = Battle::Cell::widthPx;
+            // Add extra movement frame to make the animation more smooth.
+            if ( animationFrames[MOVE_MAIN].size() == 7 && frameXOffset[MOVE_MAIN].size() == 7 ) {
+                animationFrames[MOVE_MAIN].insert( animationFrames[MOVE_MAIN].begin(), 45 );
+                frameXOffset[MOVE_MAIN].insert( frameXOffset[MOVE_MAIN].begin(), 8 );
+            }
+            // Also update the once-cell move animation.
+            if ( animationFrames[MOVE_ONE].size() == 10 && frameXOffset[MOVE_ONE].size() == 10 ) {
+                animationFrames[MOVE_ONE].insert( animationFrames[MOVE_ONE].begin() + 2, 45 );
+                frameXOffset[MOVE_ONE].insert( frameXOffset[MOVE_ONE].begin() + 2, 8 );
+            }
         }
     }
 
     bool MonsterAnimInfo::isValid() const
     {
-        if ( animationFrames.size() != SHOOT3_END + 1 )
+        if ( animationFrames.size() != SHOOT3_END + 1 ) {
             return false;
-
-        // Absolute minimal set up
-        const int essentialAnimations[7] = { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 };
-
-        for ( int i = 0; i < 7; ++i ) {
-            if ( animationFrames.at( essentialAnimations[i] ).empty() )
-                return false;
         }
 
-        if ( idlePriority.size() != static_cast<size_t>( idleAnimationCount ) )
-            return false;
+        // Check absolute minimal set of animations.
+        for ( const size_t i : { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 } ) {
+            if ( animationFrames[i].empty() ) {
+                return false;
+            }
+        }
 
-        return true;
-    }
-
-    bool MonsterAnimInfo::hasAnim( int animID ) const
-    {
-        return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
+        return idlePriority.size() == static_cast<size_t>( idleAnimationCount );
     }
 
     size_t MonsterAnimInfo::getProjectileID( const double angle ) const
     {
         const std::vector<float> & angles = projectileAngles;
-        if ( angles.empty() )
+        if ( angles.empty() ) {
             return 0;
+        }
 
         for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
-            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 )
+            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 ) {
                 return id;
+            }
         }
+
         return angles.size() - 1;
     }
 
-    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
+    MonsterAnimInfo GetMonsterInfo( const uint32_t monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
     }

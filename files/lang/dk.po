@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -44,6 +44,9 @@ msgstr "UD"
 msgid "smallerButton|EXIT"
 msgstr "UD"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HELTE"
 
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AFBRYD"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTAG"
@@ -4017,11 +4017,16 @@ msgstr "Borghær"
 msgid "Town Army"
 msgstr "Byhær"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klik for at ændre kortnavn."
 
 msgid "Enter Castle name"
 msgstr "Skriv borgnavn"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Mist borgen '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillad borgbyggeri i denne by."
@@ -4040,8 +4045,24 @@ msgstr "Begræns bygningskonstruktion"
 msgid "Use default defenders army."
 msgstr "Brug standard forsvarshær."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Bortvis denne hær."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Borghær"
+
+msgid "Click to accept the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Spilindstillinger"
 
 msgid "Message Text:"
 msgstr "Tekstbesked:"
@@ -4791,9 +4812,6 @@ msgstr "Skift kortbeskrivelse"
 
 msgid "About"
 msgstr ""
-
-msgid "Click to accept the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
 
 msgid "Click to edit custom rumors."
 msgstr "Klik for at redigere tilpassede rygter."
@@ -12301,6 +12319,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 
 #~ msgid "CONFIG"
 #~ msgstr "INDSTIL"

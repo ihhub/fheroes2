@@ -296,8 +296,9 @@ namespace Editor
         textInput.draw( fileName + mapFileExtension, static_cast<int32_t>( charInsertPos ) );
 
         // Render a button to open the Virtual Keyboard window.
-        fheroes2::ButtonSprite buttonVirtualKB;
-        background.renderCustomButtonSprite( buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        const int buttonVirtualKBIcnID = isEvilInterface ? ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL : ICN::BUTTON_VIRTUAL_KEYBOARD_GOOD;
+        fheroes2::Button buttonVirtualKB;
+        background.renderButton( buttonVirtualKB, buttonVirtualKBIcnID, 0, 1, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         display.render( background.totalArea() );
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "LÄMNA"
 msgid "smallerButton|EXIT"
 msgstr "LÄMN."
 
+msgid "OKAY"
+msgstr "OKEJ"
+
 msgid "HEROES"
 msgstr ""
 "HJÄLT-\n"
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
-
-msgid "OKAY"
-msgstr "OKEJ"
 
 msgid "ACCEPT"
 msgstr "ACCEPTERA"
@@ -3951,12 +3951,16 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Klicka för att ändra Borgnamn. Högerklicka för att återställa till standard."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klicka för att ändra kartans namn."
 
 msgid "Enter Castle name"
 msgstr "Skriv Borgnamn"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Förlora borgen '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillåt att en borg byggs i denna stad."
@@ -3975,8 +3979,24 @@ msgstr "Begränsa Byggnadskonstruktion"
 msgid "Use default defenders army."
 msgstr "Använd försvararnas standardarmé."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Avskeda armén."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Borgarmé"
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Spelinställningar"
 
 msgid "Message Text:"
 msgstr "Meddelandetext:"
@@ -4716,9 +4736,6 @@ msgstr "Ändra Kartbeskrivning"
 
 msgid "About"
 msgstr "Om"
-
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
 
 msgid "Click to edit custom rumors."
 msgstr "Klicka för att redigera anpassade rykten."
@@ -12167,6 +12184,14 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Klicka för att ändra Borgnamn. Högerklicka för att återställa till "
+#~ "standard."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
 
 #~ msgid "CONFIG"
 #~ msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -41,6 +41,9 @@ msgstr ""
 msgid "smallerButton|EXIT"
 msgstr ""
 
+msgid "OKAY"
+msgstr "ΕΝΤΑΞΕΙ"
+
 msgid "HEROES"
 msgstr "ΗΡΩΕΣ"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ΑΚΥΡΩΣΗ"
-
-msgid "OKAY"
-msgstr "ΕΝΤΑΞΕΙ"
 
 msgid "ACCEPT"
 msgstr "ΑΠΟΔΟΧΗ"
@@ -3573,10 +3573,13 @@ msgstr ""
 msgid "Town Army"
 msgstr ""
 
-msgid "Click to change the Castle name. Right-click to reset to default."
+msgid "Click to change the Castle name."
 msgstr ""
 
 msgid "Enter Castle name"
+msgstr ""
+
+msgid "Reset the Castle name."
 msgstr ""
 
 msgid "Allow to build a castle in this town."
@@ -3594,7 +3597,19 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
+msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr ""
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr ""
+
+msgid "Castle Settings"
 msgstr ""
 
 msgid "Message Text:"
@@ -4281,9 +4296,6 @@ msgid "Change Map Description"
 msgstr ""
 
 msgid "About"
-msgstr ""
-
-msgid "Click to accept the changes made."
 msgstr ""
 
 msgid "Click to edit custom rumors."

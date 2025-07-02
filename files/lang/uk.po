@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
-"PO-Revision-Date: 2025-06-28 17:00+0300\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -42,6 +42,10 @@ msgstr "ВИХІД"
 msgid "smallerButton|EXIT"
 msgstr "ВИХІД"
 
+# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
+msgid "OKAY"
+msgstr "ГАРАЗД"
+
 msgid "HEROES"
 msgstr "ГЕРОЇ"
 
@@ -56,10 +60,6 @@ msgstr ""
 # Відміна - відміняють лише дієслова як частину мови.
 msgid "CANCEL"
 msgstr "СКАСУВАТИ"
-
-# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
-msgid "OKAY"
-msgstr "ГАРАЗД"
 
 msgid "ACCEPT"
 msgstr "ПРИЙНЯТИ"
@@ -3964,13 +3964,16 @@ msgstr "Гарнізон замку"
 msgid "Town Army"
 msgstr "Гарнізон міста"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Тицьніть, щоб змінити назву замку. Тицьніть правою кнопкою миші, щоб "
-"відновити значення за налаштуванням."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Тицьніть, щоб змінити назву вашої мапи."
 
 msgid "Enter Castle name"
 msgstr "Ввести назву замку"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Втрата замку '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Дозволити будувати замок у цьому місті."
@@ -3989,10 +3992,24 @@ msgstr "Обмежити будівництво споруд"
 msgid "Use default defenders army."
 msgstr "Використовувати армію захисників за налаштуванням."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
-"Встановити власну замкову армію. Тицьніть правою кнопкою миші, щоб скинути "
-"кількість."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Звільнити цю армію."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Гарнізон замку"
+
+msgid "Click to accept the changes made."
+msgstr "Тицьніть, щоб прийняти внесені зміни."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Тицьніть, щоб прийняти внесені зміни."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Налаштування гри"
 
 msgid "Message Text:"
 msgstr "Текст повідомлення:"
@@ -4742,9 +4759,6 @@ msgstr "Змінити опис мапи"
 
 msgid "About"
 msgstr "Опис"
-
-msgid "Click to accept the changes made."
-msgstr "Тицьніть, щоб прийняти внесені зміни."
 
 msgid "Click to edit custom rumors."
 msgstr "Тицьніть, щоб редагувати власні чутки."
@@ -12211,6 +12225,16 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Тицьніть, щоб змінити назву замку. Тицьніть правою кнопкою миші, щоб "
+#~ "відновити значення за налаштуванням."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr ""
+#~ "Встановити власну замкову армію. Тицьніть правою кнопкою миші, щоб "
+#~ "скинути кількість."
 
 #~ msgid "EditorMainMenu|BACK"
 #~ msgstr "НАЗАД"

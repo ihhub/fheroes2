@@ -59,7 +59,7 @@ namespace Rand
 
         explicit constexpr PCG32( const uint64_t seed = defaultSeed, const uint64_t stream = defaultStream )
             : _state( 0 )
-            , _increment( ( stream << 1U ) | 1U )
+            , _increment( makeOdd( stream ) )
         {
             // _increment must be odd
             assert( _increment % 2 == 1 );
@@ -78,6 +78,16 @@ namespace Rand
             return rotateRight( xorShifted, rotations );
         }
 
+        constexpr uint64_t getStream() const
+        {
+            return _increment;
+        }
+
+        constexpr void setStream( const uint64_t stream )
+        {
+            _increment = makeOdd( stream );
+        }
+
     private:
         static constexpr uint64_t multiplier = 6364136223846793005ULL;
         static constexpr uint64_t defaultStream = 54ULL;
@@ -86,6 +96,11 @@ namespace Rand
         static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
         {
             return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
+        }
+
+        static constexpr uint64_t makeOdd( const uint64_t value )
+        {
+            return ( value << 1U ) | 1U;
         }
 
         // Defines a new templated false value to be used in static_assert
@@ -237,31 +252,5 @@ namespace Rand
 
     private:
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
-    };
-
-    // Specific random generator that keeps and update its state
-    class DeterministicRandomGenerator
-    {
-    public:
-        explicit DeterministicRandomGenerator( const uint32_t initialSeed );
-        DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
-
-        DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
-
-        uint32_t GetSeed() const;
-        void UpdateSeed( const uint32_t seed );
-
-        uint32_t Get( const uint32_t from, const uint32_t to = 0 );
-
-        template <typename T>
-        const T & Get( const std::vector<T> & vec )
-        {
-            ++_currentSeed;
-            PCG32 seededGen( _currentSeed );
-            return Rand::GetWithGen( vec, seededGen );
-        }
-
-    private:
-        uint32_t _currentSeed;
     };
 }
