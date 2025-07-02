@@ -262,39 +262,31 @@ namespace fheroes2
         const fheroes2::Text title( _( "Hot Keys:" ), fheroes2::FontType::normalYellow() );
         title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 10, display );
 
-        const fheroes2::Text titleCategories(_("Category:"), fheroes2::FontType::normalWhite());
-        titleCategories.draw(roi.x + (roi.width - titleCategories.width()) / 2, roi.y + 30, display);
+        const fheroes2::Text titleCategories( _( "Category:" ), fheroes2::FontType::normalWhite() );
+        titleCategories.draw( roi.x + ( roi.width - titleCategories.width() ) / 2, roi.y + 30, display );
 
-        const int categoryAreaHeight = 2 * fheroes2::getFontHeight(fheroes2::FontSize::NORMAL) + 12;
-        const fheroes2::Rect categoryArea(listRoi.x, listRoi.y - categoryAreaHeight - 6, listRoi.width, categoryAreaHeight);
+        const int categoryAreaHeight = 2 * fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) + 12;
+        const fheroes2::Rect categoryArea( listRoi.x, listRoi.y - categoryAreaHeight - 6, listRoi.width, categoryAreaHeight );
 
         // Apply same background shading as the hotkey list
-        background.applyTextBackgroundShading(categoryArea);
+        background.applyTextBackgroundShading( categoryArea );
 
-        fheroes2::ImageRestorer categoryRestorer(
-            fheroes2::Display::instance(),
-            categoryArea.x,
-            categoryArea.y,
-            categoryArea.width,
-            categoryArea.height
-        );
+        fheroes2::ImageRestorer categoryRestorer( fheroes2::Display::instance(), categoryArea.x, categoryArea.y, categoryArea.width, categoryArea.height );
 
-        std::vector<std::string> hotkeyCategories = {
-            "Global", "Main Menu", "Editor", "Campaign", "World", "Battle", "Town", "Army"
-        };
+        std::vector<std::string> hotkeyCategories = { "Global", "Main Menu", "Editor", "Campaign", "World", "Battle", "Town", "Army" };
         std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> hotKeyEvents = Game::getAllHotKeyEvents();
 
-        auto getFilteredHotKeys = [&](int selectedIndex) {
+        auto getFilteredHotKeys = [&]( int selectedIndex ) {
             std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> filtered;
 
-            if (selectedIndex == -1) {
-                return hotKeyEvents;  // Show all hotkeys when no category is selected
+            if ( selectedIndex == -1 ) {
+                return hotKeyEvents; // Show all hotkeys when no category is selected
             }
 
-            const Game::HotKeyCategory selectedCategory = static_cast<Game::HotKeyCategory>(selectedIndex);
-            for (const auto& entry : hotKeyEvents) {
-                if (entry.second == selectedCategory) {
-                    filtered.push_back(entry);
+            const Game::HotKeyCategory selectedCategory = static_cast<Game::HotKeyCategory>( selectedIndex );
+            for ( const auto & entry : hotKeyEvents ) {
+                if ( entry.second == selectedCategory ) {
+                    filtered.push_back( entry );
                 }
             }
 
@@ -303,26 +295,24 @@ namespace fheroes2
 
         std::vector<fheroes2::Rect> categoryClickAreas;
 
-        int selectedCategoryIndex = -1;  
+        int selectedCategoryIndex = -1;
 
-        const int lineHeight = fheroes2::getFontHeight(fheroes2::FontSize::NORMAL);
+        const int lineHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL );
         const int cols = 4;
         const int cellWidth = categoryArea.width / cols;
 
-        for (size_t i = 0; i < hotkeyCategories.size(); ++i) {
-            const std::string& label = hotkeyCategories[i];
-            const auto font = (static_cast<int>(i) == selectedCategoryIndex)
-                ? fheroes2::FontType::normalYellow()
-                : fheroes2::FontType::normalWhite();
-            const fheroes2::Text textLabel(label, font);
+        for ( size_t i = 0; i < hotkeyCategories.size(); ++i ) {
+            const std::string & label = hotkeyCategories[i];
+            const auto font = ( static_cast<int>( i ) == selectedCategoryIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+            const fheroes2::Text textLabel( label, font );
 
-            const int row = static_cast<int>(i / cols);
-            const int col = static_cast<int>(i % cols);
-            const int x = categoryArea.x + col * cellWidth + (cellWidth - textLabel.width()) / 2;
-            const int y = categoryArea.y + row * (lineHeight + 3);  // 3 px spacing between lines
+            const int row = static_cast<int>( i / cols );
+            const int col = static_cast<int>( i % cols );
+            const int x = categoryArea.x + col * cellWidth + ( cellWidth - textLabel.width() ) / 2;
+            const int y = categoryArea.y + row * ( lineHeight + 3 ); // 3 px spacing between lines
 
-            textLabel.draw(x, y + 7, display);
-            categoryClickAreas.emplace_back(x, y, textLabel.width(), textLabel.height());
+            textLabel.draw( x, y + 7, display );
+            categoryClickAreas.emplace_back( x, y, textLabel.width(), textLabel.height() );
         }
 
         // We divide the list: action description and binded hot-key.
@@ -353,9 +343,9 @@ namespace fheroes2
         listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
 
-        auto filtered = getFilteredHotKeys(selectedCategoryIndex);
-        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> filteredHotkeys = getFilteredHotKeys(selectedCategoryIndex);
-        listbox.SetListContent(filtered);
+        auto filtered = getFilteredHotKeys( selectedCategoryIndex );
+        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> filteredHotkeys = getFilteredHotKeys( selectedCategoryIndex );
+        listbox.SetListContent( filtered );
         listbox.updateScrollBarImage();
         listbox.Redraw();
 
@@ -372,36 +362,34 @@ namespace fheroes2
             }
 
             // 🔁 Check if user clicked any category
-            for (size_t i = 0; i < categoryClickAreas.size(); ++i) {
-                if (le.MouseClickLeft(categoryClickAreas[i])) {
-                    selectedCategoryIndex = static_cast<int>(i);
+            for ( size_t i = 0; i < categoryClickAreas.size(); ++i ) {
+                if ( le.MouseClickLeft( categoryClickAreas[i] ) ) {
+                    selectedCategoryIndex = static_cast<int>( i );
 
                     categoryRestorer.restore();
 
                     // Redraw only the category area
-                    for (size_t j = 0; j < hotkeyCategories.size(); ++j) {
-                        const std::string& label = hotkeyCategories[j];
+                    for ( size_t j = 0; j < hotkeyCategories.size(); ++j ) {
+                        const std::string & label = hotkeyCategories[j];
 
-                        const auto font = (static_cast<int>(j) == selectedCategoryIndex)
-                            ? fheroes2::FontType::normalYellow()
-                            : fheroes2::FontType::normalWhite();
-                        const fheroes2::Text textLabel(label, font);
+                        const auto font = ( static_cast<int>( j ) == selectedCategoryIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+                        const fheroes2::Text textLabel( label, font );
 
-                        const int row = static_cast<int>(j / cols);
-                        const int col = static_cast<int>(j % cols);
-                        const int x = categoryArea.x + col * cellWidth + (cellWidth - textLabel.width()) / 2;
-                        const int y = categoryArea.y + row * (lineHeight + 3);  
+                        const int row = static_cast<int>( j / cols );
+                        const int col = static_cast<int>( j % cols );
+                        const int x = categoryArea.x + col * cellWidth + ( cellWidth - textLabel.width() ) / 2;
+                        const int y = categoryArea.y + row * ( lineHeight + 3 );
 
-                        textLabel.draw(x, y + 7, display);
+                        textLabel.draw( x, y + 7, display );
                     }
 
-                    display.render(categoryArea);
+                    display.render( categoryArea );
 
-                    filteredHotkeys = getFilteredHotKeys(selectedCategoryIndex);
-                    listbox.SetListContent(filteredHotkeys);
-                    listbox.updateScrollBarImage();  
+                    filteredHotkeys = getFilteredHotKeys( selectedCategoryIndex );
+                    listbox.SetListContent( filteredHotkeys );
+                    listbox.updateScrollBarImage();
                     listbox.Redraw();
-                    display.render(listRoi);  // Refresh hotkey list area
+                    display.render( listRoi ); // Refresh hotkey list area
                     break;
                 }
             }
