@@ -59,6 +59,7 @@ namespace Battle
     class Actions;
     class Arena;
     class Cell;
+    class Interface;
     class Position;
     class StatusListBox;
     class Tower;
@@ -96,6 +97,18 @@ namespace Battle
         WIZARD,
         NECROMANCER,
         CAPTAIN
+    };
+
+    enum ArmyColor : uint8_t
+    {
+        ARMY_COLOR_BLACK = 0x00,
+        ARMY_COLOR_BLUE = 0x47,
+        ARMY_COLOR_GREEN = 0x67,
+        ARMY_COLOR_RED = 0xbd,
+        ARMY_COLOR_YELLOW = 0x70,
+        ARMY_COLOR_ORANGE = 0xcd,
+        ARMY_COLOR_PURPLE = 0x87,
+        ARMY_COLOR_GRAY = 0x10
     };
 
     // Sprite data to render over the unit (spell effect animation)
@@ -221,38 +234,35 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor )
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor, Interface * interface )
         {
             _area = roi;
             _orderOfUnits = units;
             _opponentColor = opponentColor;
+            _interface = interface;
         }
 
-        void redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
+        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output );
         bool queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
-        enum ArmyColor : uint8_t
-        {
-            ARMY_COLOR_BLACK = 0x00,
-            ARMY_COLOR_BLUE = 0x47,
-            ARMY_COLOR_GREEN = 0x67,
-            ARMY_COLOR_RED = 0xbd,
-            ARMY_COLOR_YELLOW = 0x70,
-            ARMY_COLOR_ORANGE = 0xcd,
-            ARMY_COLOR_PURPLE = 0x87,
-            ARMY_COLOR_GRAY = 0x10
-        };
-
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                          fheroes2::Image & output ) const;
+        enum class TypeUnitForDrawing : uint8_t
+        {
+            DEFAULT,
+            CURRENT,
+            UNDER_CURSOR,
+        };
+
+        static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, TypeUnitForDrawing typeUnitForDrawing,
+                                 const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
         PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
+        Interface * _interface = nullptr;
     };
 
     class PopupDamageInfo : public Dialog::FrameBorder
@@ -323,6 +333,8 @@ namespace Battle
         fheroes2::Point getRelativeMouseCursorPos() const;
 
         void setStatus( const std::string & message, const bool top );
+        void SetUnitForContourDrawing( const Unit * unit );
+
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
         void FadeArena( const bool clearMessageLog );
 
@@ -482,6 +494,7 @@ namespace Battle
         const Unit * _currentUnit{ nullptr };
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
+        const Unit * _unitForContourDrawing{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
