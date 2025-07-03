@@ -1124,7 +1124,7 @@ bool Maps::Tile::isCoast() const
         // Tiles with events are blocked for disembarkation (for now).
         return false;
     }
-    
+
     if ( getTileIndependentPassability() != DIRECTION_ALL ) {
         // The tile has something on it.
         return false;
@@ -1147,7 +1147,7 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
             // Another boat is not passable for us.
             return false;
         }
-    
+
         if ( !tileIsWater && !isCoast() ) {
             return false;
         }
