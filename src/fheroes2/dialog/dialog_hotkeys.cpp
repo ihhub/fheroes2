@@ -264,7 +264,7 @@ namespace fheroes2
         title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
 
         std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> hotKeyEvents = Game::getAllHotKeyEvents();
-        std::vector<Game::HotKeyCategory> uniqueCategories;
+        std::vector<Game::HotKeyCategory> uniqueCategories = { Game::HotKeyCategory::ALL };
 
         std::set<Game::HotKeyCategory> seen;
         for ( const auto & pair : hotKeyEvents ) {
@@ -286,7 +286,7 @@ namespace fheroes2
 
         int categoryOffsetY = categoryRoi.y + 4;
 
-        Game::HotKeyCategory selectedCategory = static_cast<Game::HotKeyCategory>( -1 );
+        Game::HotKeyCategory selectedCategory = Game::HotKeyCategory::ALL;
 
         for ( const Game::HotKeyCategory category : uniqueCategories ) {
             const bool isSelected = ( category == selectedCategory );
@@ -343,7 +343,7 @@ namespace fheroes2
                     // ? DO NOT re-declare 'filtered' here
                     filtered.clear();
                     for ( const auto & item : hotKeyEvents ) {
-                        if ( item.second == selectedCategory )
+                        if ( selectedCategory == Game::HotKeyCategory::ALL || item.second == selectedCategory )
                             filtered.push_back( item );
                     }
 
