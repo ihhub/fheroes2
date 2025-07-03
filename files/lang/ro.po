@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -42,6 +42,9 @@ msgstr "EXIT"
 msgid "smallerButton|EXIT"
 msgstr "EXIT"
 
+msgid "OKAY"
+msgstr "OKAY"
+
 msgid "HEROES"
 msgstr "EROI"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "RENUNȚĂ"
-
-msgid "OKAY"
-msgstr "OKAY"
 
 msgid "ACCEPT"
 msgstr "ACCEPTĂ"
@@ -3809,11 +3809,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Oraș"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Enter Castle name"
 msgstr ""
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Întoarce-te la luptă."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3830,8 +3835,23 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Setări"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4558,10 +4578,6 @@ msgstr ""
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 #, fuzzy
 msgid "Click to edit custom rumors."
