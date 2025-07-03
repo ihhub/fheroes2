@@ -167,6 +167,8 @@ namespace Maps
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
         bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const;
 
+        bool isCoast() const;
+
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const
         {

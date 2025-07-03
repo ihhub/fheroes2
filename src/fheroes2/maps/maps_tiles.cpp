@@ -1091,6 +1091,48 @@ bool Maps::Tile::isPassabilityTransparent() const
     return _mainObjectPart.isPassabilityTransparent();
 }
 
+bool Maps::Tile::isCoast() const
+{
+    if ( _mainObjectType == MP2::OBJ_COAST ) {
+        return true;
+    }
+
+    if ( isWater() ) {
+        return false;
+    }
+
+    // Let's verify that this tile is near water.
+    const Indexes tileIndices = getAroundIndexes( _index, 1 );
+    bool isPossibleCoast = false;
+    for ( const int tileIndex : tileIndices ) {
+        if ( tileIndex < 0 ) {
+            // Invalid tile index.
+            continue;
+        }
+
+        if ( world.getTile( tileIndex ).isWater() ) {
+            isPossibleCoast = true;
+            break;
+        }
+    }
+
+    if ( !isPossibleCoast ) {
+        return false;
+    }
+
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        // Tiles with events are blocked for disembarkation (for now).
+        return false;
+    }
+    
+    if ( getTileIndependentPassability() != DIRECTION_ALL ) {
+        // The tile has something on it.
+        return false;
+    }
+
+    return true;
+}
+
 bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const
 {
     if ( !ignoreFog && isFog( heroColor ) ) {
@@ -1099,9 +1141,16 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
 
     const bool tileIsWater = isWater();
 
-    // From the water we can get either to the coast tile or to the water tile (provided there is no boat on this tile).
-    if ( fromWater && _mainObjectType != MP2::OBJ_COAST && ( !tileIsWater || _mainObjectType == MP2::OBJ_BOAT ) ) {
-        return false;
+    // From water we can disembark only on empty tiles or coast, or to move to other water tile (provided there is no boat on this tile).
+    if ( fromWater && _mainObjectType != MP2::OBJ_COAST ) {
+        if ( _mainObjectType == MP2::OBJ_BOAT ) {
+            // Another boat is not passable for us.
+            return false;
+        }
+    
+        if ( !tileIsWater && !isCoast() ) {
+            return false;
+        }
     }
 
     // From the ground we can get to the water tile only if this tile contains a certain object.
