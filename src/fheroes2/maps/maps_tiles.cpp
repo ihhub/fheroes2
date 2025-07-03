@@ -1125,9 +1125,23 @@ bool Maps::Tile::isCoast() const
         return false;
     }
 
-    if ( getTileIndependentPassability() != DIRECTION_ALL ) {
-        // The tile has something on it.
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            // Rivers, streams and flags are completely passable.
+            return true;
+        }
+
+        return part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
+
+    if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !isObjectPartPassable( _mainObjectPart ) ) {
         return false;
+    }
+
+    for ( const auto & part : _groundObjectPart ) {
+        if ( !isObjectPartPassable( part ) ) {
+            return false;
+        }
     }
 
     return true;
