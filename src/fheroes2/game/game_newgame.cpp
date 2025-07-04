@@ -165,15 +165,15 @@ fheroes2::GameMode Game::NewBattleOnly()
     return fheroes2::GameMode::START_BATTLE_ONLY_MODE;
 }
 
-fheroes2::GameMode Game::NewHotSeat( const size_t playerCountOption )
+fheroes2::GameMode Game::NewHotSeat( const size_t playerCountOptionIndex )
 {
-    assert( playerCountOption < playerCountModes.size() );
+    assert( playerCountOptionIndex < playerCountModes.size() );
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() ) {
         conf.setCurrentMapInfo( {} );
     }
     conf.SetGameType( Game::TYPE_HOTSEAT );
-    return playerCountModes[playerCountOption];
+    return playerCountModes[playerCountOptionIndex];
 }
 
 fheroes2::GameMode Game::NewSuccessionWarsCampaign()
