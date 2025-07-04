@@ -38,6 +38,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "settings.h"
 #include "spell.h"
 #include "tools.h"
