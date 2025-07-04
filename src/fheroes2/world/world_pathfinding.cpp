@@ -219,14 +219,13 @@ namespace
         const Maps::Tile & fromTile = world.getTile( from );
         const bool fromWater = fromTile.isWater();
 
-        // check corner water/coast
         if ( fromWater ) {
             const int mapWidth = world.w();
             switch ( direction ) {
             case Direction::TOP_LEFT: {
                 assert( from >= mapWidth + 1 );
                 if ( world.getTile( from - mapWidth - 1 ).isWater() && ( !world.getTile( from - 1 ).isWater() || !world.getTile( from - mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -235,7 +234,7 @@ namespace
             case Direction::TOP_RIGHT: {
                 assert( from >= mapWidth && from + 1 < mapWidth * world.h() );
                 if ( world.getTile( from - mapWidth + 1 ).isWater() && ( !world.getTile( from + 1 ).isWater() || !world.getTile( from - mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -244,7 +243,7 @@ namespace
             case Direction::BOTTOM_RIGHT: {
                 assert( from + mapWidth + 1 < mapWidth * world.h() );
                 if ( world.getTile( from + mapWidth + 1 ).isWater() && ( !world.getTile( from + 1 ).isWater() || !world.getTile( from + mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -253,7 +252,7 @@ namespace
             case Direction::BOTTOM_LEFT: {
                 assert( from >= 1 && from + mapWidth - 1 < mapWidth * world.h() );
                 if ( world.getTile( from + mapWidth - 1 ).isWater() && ( !world.getTile( from - 1 ).isWater() || !world.getTile( from + mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
