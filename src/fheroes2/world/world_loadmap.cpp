@@ -293,9 +293,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( objectInfo.objectNameN2 >> 2 );
 
             if ( groundObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-                tile.pushGroundObjectPart(
-                    { static_cast<Maps::ObjectLayerType>( objectInfo.quantityN & 0x03 ), objectInfo.level1ObjectUID, groundObjectIcnType,
-                      objectInfo.bottomIcnImageIndex } );
+                tile.pushGroundObjectPart( { static_cast<Maps::ObjectLayerType>( objectInfo.quantityN & 0x03 ), objectInfo.level1ObjectUID, groundObjectIcnType,
+                                             objectInfo.bottomIcnImageIndex } );
             }
 
             if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
