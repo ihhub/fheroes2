@@ -2177,6 +2177,11 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     default:
         // AI should know what to do with this type of action object! Please add logic for it.
         assert( !isActionObject );
+
+        if ( world.getTile( dst_index ).isCoast() ) {
+            AIToCoast( hero, dst_index );
+        }
+
         break;
     }
 

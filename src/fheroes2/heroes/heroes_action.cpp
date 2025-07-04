@@ -4081,6 +4081,9 @@ void Heroes::Action( int tileIndex )
         break;
 
     default:
+        if ( world.getTile( tileIndex ).isCoast() ) {
+            ActionToCoast( *this, tileIndex );
+        }
         break;
     }
 }

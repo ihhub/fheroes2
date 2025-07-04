@@ -535,6 +535,9 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
         }
+        else if ( tile.isCoast() ) {
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
+        }
 
         break;
     }
