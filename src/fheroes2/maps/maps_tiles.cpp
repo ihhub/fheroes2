@@ -411,16 +411,9 @@ namespace
     }
 }
 
-void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
+void Maps::Tile::Init( const MP2::MP2TileInfo & mp2 )
 {
-    _tilePassabilityDirections = DIRECTION_ALL;
-
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
-    _fogColors = Color::allPlayerColors();
-    _terrainImageIndex = mp2.terrainImageIndex;
-    _terrainFlags = mp2.terrainFlags;
-    _boatOwnerColor = PlayerColor::NONE;
-    _index = index;
 
     setMainObjectType( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
@@ -431,30 +424,12 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
                    "Metadata present for non action object " << MP2::StringObject( _mainObjectType ) << " at tile " << _index << ". Metadata value " << _metadata[0] )
     }
 
-    _groundObjectPart.clear();
-    _topObjectPart.clear();
-
-    const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
-
-    const ObjectLayerType layerType = static_cast<ObjectLayerType>( mp2.quantity1 & 0x03 );
-
     // In the original Editor the road bit is set even if no road exist.
     // It is important to verify the existence of a road without relying on this bit.
-    if ( isSpriteRoad( bottomObjectIcnType, mp2.bottomIcnImageIndex ) ) {
-        _isTileMarkedAsRoad = true;
-    }
 
-    if ( _mainObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
-        // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
-        if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-            _groundObjectPart.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
-        }
-    }
-    else {
-        _mainObjectPart.layerType = layerType;
-        _mainObjectPart._uid = mp2.level1ObjectUID;
-        _mainObjectPart.icnType = bottomObjectIcnType;
-        _mainObjectPart.icnIndex = mp2.bottomIcnImageIndex;
+    const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
+    if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+        pushGroundObjectPart( { static_cast<ObjectLayerType>( mp2.quantity1 & 0x03 ), mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex } );
     }
 
     const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName2 >> 2 );
@@ -465,10 +440,10 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         // One object part for a crack object has invalid layer.
         // This causes a rendering bug which is also present in the original game.
         if ( topObjectIcnType == MP2::OBJ_ICN_TYPE_OBJNCRCK && mp2.topIcnImageIndex == 226 ) {
-            _groundObjectPart.emplace_back( ObjectLayerType::TERRAIN_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+            pushGroundObjectPart( { ObjectLayerType::TERRAIN_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex } );
         }
         else {
-            _topObjectPart.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+            pushTopObjectPart( { OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex } );
         }
     }
 }
@@ -846,43 +821,13 @@ void Maps::Tile::UpdateRegion( uint32_t newRegionID )
     }
 }
 
-void Maps::Tile::pushGroundObjectPart( const MP2::MP2AddonInfo & ma )
+void Maps::Tile::pushGroundObjectPart( ObjectPart part )
 {
-    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );
-    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-        // No object exist.
-        return;
-    }
-
-    // In the original Editor the road bit is set even if no road exist.
-    // It is important to verify the existence of a road without relying on this bit.
-    if ( isSpriteRoad( objectIcnType, ma.bottomIcnImageIndex ) ) {
+    if ( isSpriteRoad( part.icnType, part.icnIndex ) ) {
         _isTileMarkedAsRoad = true;
     }
 
-    _groundObjectPart.emplace_back( static_cast<ObjectLayerType>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
-}
-
-void Maps::Tile::pushTopObjectPart( const MP2::MP2AddonInfo & ma )
-{
-    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 );
-    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-        // No object exist.
-        return;
-    }
-
-    // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
-    // TODO: remove layer type for top layer objects.
-    _topObjectPart.emplace_back( OBJECT_LAYER, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
-}
-
-void Maps::Tile::pushGroundObjectPart( ObjectPart ta )
-{
-    if ( isSpriteRoad( ta.icnType, ta.icnIndex ) ) {
-        _isTileMarkedAsRoad = true;
-    }
-
-    _groundObjectPart.emplace_back( ta );
+    _groundObjectPart.emplace_back( part );
 }
 
 void Maps::Tile::sortObjectParts()
