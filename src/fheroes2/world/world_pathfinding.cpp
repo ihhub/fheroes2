@@ -56,7 +56,6 @@ namespace
     bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )
     {
         const Maps::Tile & tile = world.getTile( tileIndex );
-        const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
@@ -67,17 +66,7 @@ namespace
             return false;
         }
 
-        if ( fromWater && !toWater && objectType == MP2::OBJ_COAST ) {
-            return false;
-        }
-
-        // In general, direct movement from a shore tile to a water tile is not possible, but AI can use this movement for transparent Summon Boat
-        // spellcasting. In this case, it may be necessary to cut the resulting path on a water tile.
-        if ( !fromWater && toWater && objectType == MP2::OBJ_NONE ) {
-            return false;
-        }
-
-        return true;
+        return fromWater == tile.isWater();
     }
 
     bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const PlayerColor color, const bool isArtifactsBagFull,
@@ -880,7 +869,7 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
         // AI-controlled hero may get from the shore to an empty water tile using the Summon Boat spell
         const bool isEmptyWaterTile = ( toTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_NONE );
         const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || isEmptyWaterTile ) );
-        const bool isDisembarks = ( fromTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_COAST );
+        const bool isDisembarks = ( fromTile.isWater() && toTile.isSuitableForDisembarkation() );
 
         // When the hero gets into a boat or disembarks, he spends all remaining movement points.
         if ( isComesOnBoard || isDisembarks ) {

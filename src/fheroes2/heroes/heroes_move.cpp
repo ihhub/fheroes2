@@ -172,7 +172,7 @@ namespace
 
             return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
-        if ( hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_COAST ) {
+        if ( hero.isShipMaster() && next.isSuitableForDisembarkation() ) {
             return true;
         }
         if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
