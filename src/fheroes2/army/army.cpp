@@ -158,7 +158,7 @@ std::string Army::TroopSizeString( const Troop & troop )
 
     // Numeric estimates
     if ( Settings::Get().isArmyEstimationViewNumeric() ) {
-        str = _( "%{range}\n%{monster}" );
+        str = _( "%{monster}\n%{range}" );
         StringReplace( str, "%{range}", troopSizeNumbers.at( armySize ) );
     }
     // Verbal estimates
