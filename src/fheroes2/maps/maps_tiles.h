@@ -225,7 +225,7 @@ namespace Maps
 
         void UpdateRegion( const uint32_t newRegionID )
         {
-            _region = _tilePassabilityDirections ? newRegionID : REGION_NODE_BLOCKED;
+            _region = ( _tilePassabilityDirections != Direction::UNKNOWN ) ? newRegionID : static_cast<uint32_t>( REGION_NODE_BLOCKED );
         }
 
         // Set initial passability based on information read from mp2 and addon structures.
