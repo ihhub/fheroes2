@@ -563,6 +563,8 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 const char * Game::getHotKeyCategoryName( const HotKeyCategory category )
 {
     switch ( category ) {
+    case HotKeyCategory::ALL:
+        return gettext_noop( "All" );
     case HotKeyCategory::DEFAULT:
         return gettext_noop( "Default Actions" );
     case HotKeyCategory::GLOBAL:
