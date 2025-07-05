@@ -607,6 +607,12 @@ int Maps::Tile::getTileIndependentPassability() const
     // In other words, we have to go through object parts in the reverse order as they are being rendered.
     //
     // Top object parts do not affect passability.
+
+    if ( _mainObjectType == MP2::OBJ_NON_ACTION_BOAT ) {
+        // On some hacked MP2 maps boats can present on the land. We make then non-action and unpassable.
+        return 0;
+    }
+
     int passability = DIRECTION_ALL;
 
     const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
