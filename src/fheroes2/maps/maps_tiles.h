@@ -181,6 +181,11 @@ namespace Maps
         bool isStream() const;
         bool isSuitableForUltimateArtifact() const;
 
+        // Checks whether it is possible to disembark on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the water. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForDisembarkation() const;
+
         ObjectPart * getGroundObjectPart( const uint32_t uid );
         ObjectPart * getTopObjectPart( const uint32_t uid );
 
