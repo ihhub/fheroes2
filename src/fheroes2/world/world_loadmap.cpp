@@ -1312,6 +1312,27 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
             // You are trying to load a PoL map named as a MP2 file.
             return false;
         }
+
+        // On some hacked MP2 maps boats can present on the land.
+        if ( tile.getMainObjectType() == MP2::OBJ_BOAT && !tile.isWater() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: boat at tile index " << tile.GetIndex() << " is placed on the land! It is removed to avoid bugs." )
+
+            // Remove the "hacked" boat from the map.
+            removeMainObjectFromTile( tile );
+
+            // Search for the water around and move the boat there.
+            const Maps::Indexes tileIndices = Maps::getAroundIndexes( tile.GetIndex(), 1 );
+            for ( const int32_t tileIndex : tileIndices ) {
+                Maps::Tile & nearTile = world.getTile( tileIndex );
+                if ( nearTile.isWater() && nearTile.getMainObjectType() == MP2::OBJ_NONE ) {
+                    nearTile.setBoat( Direction::RIGHT, PlayerColor::NONE );
+
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "The boat is placed on water on the nearby tile index " << nearTile.GetIndex() << "." )
+
+                    break;
+                }
+            }
+        }
     }
 
     // add heroes to kingdoms
