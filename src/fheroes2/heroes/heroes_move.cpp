@@ -175,9 +175,6 @@ namespace
         if ( hero.isShipMaster() && next.isSuitableForDisembarkation() ) {
             return true;
         }
-        if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
-            return true;
-        }
 
         return MP2::isNeedStayFront( next.getMainObjectType() );
     }
