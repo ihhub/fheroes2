@@ -552,6 +552,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 continue;
             }
 
+            case MP2::OBJ_NON_ACTION_BOAT:
             case MP2::OBJ_BOAT: {
                 // Boats are 2 tiles high so we have to populate info for boat one tile lower than the fog.
                 const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.getTile( tileIndex - worldWidth ).getFogDirection() == DIRECTION_ALL ) : true;
@@ -561,7 +562,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_BOAT );
+                const uint8_t alphaValue = getObjectAlphaValue( tileIndex, objectType );
 
                 auto spriteInfo = getBoatSpritesPerTile( tile );
                 auto spriteShadowInfo = getBoatShadowSpritesPerTile( tile );

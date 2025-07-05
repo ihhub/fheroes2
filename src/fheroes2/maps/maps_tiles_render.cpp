@@ -1094,7 +1094,7 @@ namespace Maps
     std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tile & tile )
     {
         // TODO: combine both boat image generation for heroes and empty boats.
-        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT || tile.getMainObjectType() == MP2::OBJ_NON_ACTION_BOAT );
 
         const uint32_t spriteIndex = ( tile.getMainObjectPart().icnIndex == 255 ) ? 18 : tile.getMainObjectPart().icnIndex;
 
@@ -1124,7 +1124,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tile & tile )
     {
-        assert( tile.getMainObjectType() == MP2::OBJ_BOAT );
+        assert( tile.getMainObjectType() == MP2::OBJ_BOAT || tile.getMainObjectType() == MP2::OBJ_NON_ACTION_BOAT );
 
         // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
         const uint32_t spriteIndex = ( tile.getMainObjectPart().icnIndex == 255 ) ? 18 : tile.getMainObjectPart().icnIndex;
