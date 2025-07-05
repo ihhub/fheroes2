@@ -33,6 +33,7 @@
 #include "direction.h"
 #include "ground.h"
 #include "heroes.h"
+#include "maps.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
@@ -126,9 +127,20 @@ namespace Maps
             return _index;
         }
 
-        fheroes2::Point GetCenter() const;
+        fheroes2::Point GetCenter() const
+        {
+            return GetPoint( _index );
+        }
 
-        MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType getMainObjectType() const
+        {
+            return _mainObjectType;
+        }
+
+        constexpr MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero ) const
+        {
+            return ignoreObjectUnderHero ? _mainObjectType : _getMainObjectTypeUnderHero();
+        }
 
         const ObjectPart & getMainObjectPart() const
         {
@@ -211,7 +223,10 @@ namespace Maps
             return _region;
         }
 
-        void UpdateRegion( uint32_t newRegionID );
+        void UpdateRegion( const uint32_t newRegionID )
+        {
+            _region = _tilePassabilityDirections ? newRegionID : REGION_NODE_BLOCKED;
+        }
 
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
@@ -358,6 +373,8 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
+
+        MP2::MapObjectType _getMainObjectTypeUnderHero() const;
 
         friend OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
         friend IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
