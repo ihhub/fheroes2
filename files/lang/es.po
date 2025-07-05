@@ -850,10 +850,10 @@ msgstr "Combate Automático"
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
-msgstr " "
+msgstr "Elige entre continuar el combate en modo de combate automático o en modo de combate rápido."
 
 msgid "Customize system options"
-msgstr "Personalizar opciones de sistema"
+msgstr "Personalizar opciones del sistema"
 
 msgid "Allows you to customize the combat screen."
 msgstr "Te permite personalizar la pantalla de combate."
@@ -918,22 +918,22 @@ msgid ""
 msgstr " "
 
 msgid "The computer continues the combat for you."
-msgstr " "
+msgstr "El ordenador continúa el combate por ti."
 
 msgid ""
 "autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
-msgstr " "
+msgstr "Esto se puede interrumpir en cualquier momento pulsando la tecla rápida de Combate Automático, la tecla predeterminada de Cancelar, o haciendo clic izquierdo o derecho en cualquier parte de la pantalla del juego."
 
 msgid "Auto Combat"
 msgstr "Combate Automático"
 
 msgid "The combat is resolved from the current state."
-msgstr " "
+msgstr "El combate se resuelve desde el estado actual."
 
 msgid "quickCombat|This cannot be undone."
-msgstr " "
+msgstr "Esto no se puede deshacer."
 
 #, fuzzy
 msgid "Quick Combat"
@@ -1763,10 +1763,10 @@ msgstr "Pergamino Menor de Conocimiento"
 
 #, fuzzy
 msgid "campaignBonus|Nomad Boots"
-msgstr "Nómadas"
+msgstr "Botas del nómada"
 
 msgid "campaignBonus|Power Axe"
-msgstr " "
+msgstr "Hacha de poder"
 
 msgid "campaignBonus|Spiked Shield"
 msgstr "Escudo Picudo"
@@ -1940,12 +1940,12 @@ msgstr "Escudo Picudo"
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr " "
+msgstr "El héroe principal comenzará el escenario con el artefacto \"%{artifact}\"."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
-msgstr " "
+msgstr "El reino recibirá %{amount} adicional de %{resource} al comienzo del escenario."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
@@ -2012,7 +2012,7 @@ msgstr ""
 "No se puede construir %{name}. El castillo está demasiado lejos del agua."
 
 msgid "This building has been disabled."
-msgstr " "
+msgstr "Este edificio ha sido deshabilitado."
 
 msgid "Cannot afford the %{name}."
 msgstr "Recursos insuficientes para construir %{name}."
@@ -3287,7 +3287,7 @@ msgstr ""
 "%{skill2}"
 
 msgid "Learn %{secondary-skill}"
-msgstr " "
+msgstr "Aprender %(secondary-skill)"
 
 msgid "n/a"
 msgstr "n/d"
@@ -5059,16 +5059,16 @@ msgstr "Dificultad de la campaña"
 msgid ""
 "Choose this difficulty to experience the game's story with less challenge. "
 "The AI will be weaker than at Normal difficulty."
-msgstr " "
+msgstr "Elige esta dificultad para experimentar la historia del juego con menos desafío. La IA será más débil que en la dificultad Normal."
 
 msgid ""
 "Choose this difficulty to experience the campaign as per the original design."
-msgstr " "
+msgstr "Elige esta dificultad para experimentar la campaña según el diseño original."
 
 msgid ""
 "Choose this difficulty if you want more challenge. The AI will be stronger "
 "than at Normal difficulty."
-msgstr " "
+msgstr "Elige esta dificultad si deseas un mayor desafío. La IA será más fuerte que en la dificultad Normal."
 
 msgid ""
 "Congratulations!\n"
@@ -5100,10 +5100,10 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr " "
+msgstr "Iniciar el escenario seleccionado."
 
 msgid "View Intro"
-msgstr "Ver Intro"
+msgstr "Ver introducción"
 
 msgid "View the intro video for the current state of the campaign."
 msgstr "Vea el vídeo de introducción para el escenario actual de la campaña."
@@ -5112,7 +5112,7 @@ msgid ""
 "Select the campaign difficulty. This can be changed at any point during the "
 "campaign. However, the final score will be calculated based solely on the "
 "lowest difficulty of a completed scenario during the campaign."
-msgstr " "
+msgstr "Selecciona la dificultad de la campaña. Esta se puede cambiar en cualquier momento durante la campaña. Sin embargo, la puntuación final se calculará únicamente en base a la dificultad más baja con la que se haya completado un escenario durante la campaña."
 
 #, fuzzy
 msgid "Restart the current scenario."
@@ -5125,25 +5125,25 @@ msgid ""
 "You have changed the campaign difficulty. The final high score will be "
 "calculated based solely on the lowest difficulty level for a completed "
 "scenario during the campaign. Do you want to proceed?"
-msgstr " "
+msgstr "Has cambiado la dificultad de la campaña. La puntuación final se calculará únicamente en base a la dificultad más baja con la que se haya completado un escenario durante la campaña. ¿Deseas continuar?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "¿Estás seguro de que quieres reiniciar este escenario?"
 
 msgid "Campaign Scenario loading failure"
-msgstr " "
+msgstr "Error al cargar el escenario de la campaña"
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr " "
+msgstr "Por favor, asegúrate de que los archivos de la campaña sean correctos y estén presentes."
 
 msgid "Days spent"
-msgstr " "
+msgstr "Días transcurridos"
 
 msgid "The number of days spent on this campaign."
-msgstr " "
+msgstr "El número de días transcurridos en esta campaña."
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Coordinación del proyecto y desarrollo central"
 
 msgid "Development"
 msgstr ""
@@ -5854,7 +5854,7 @@ msgid "Battle Only"
 msgstr "Enano de Combate"
 
 msgid "Setup and play a battle without loading any map."
-msgstr " "
+msgstr "Configurar y jugar una batalla sin cargar ningún mapa."
 
 msgid "2 Players"
 msgstr "2 jugadores"
@@ -5903,18 +5903,18 @@ msgid "Play with 6 human players."
 msgstr "Jugar con 6 jugadores humanos."
 
 msgid "Original Campaign"
-msgstr " "
+msgstr "Campaña original"
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
-msgstr " "
+msgstr "Ya sea la campaña de Roland o la de Archibald del Heroes of Might and Magic II original."
 
 msgid "Expansion Campaign"
-msgstr " "
+msgstr "Campaña de expansión"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr " "
+msgstr "Una de las cuatro nuevas campañas del paquete de expansión Price of Loyalty."
 
 msgid ""
 "Play a Hot Seat game, where 2 to 6 players play on the same device, "
@@ -6040,8 +6040,8 @@ msgid ""
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
-msgstr[0] " "
-msgstr[1] " "
+msgstr[0] "La alianza formada por %{allies} y tú debe derrotar al enemigo %{enemies}."
+msgstr[1] "La alianza formada por %{allies} y tú debe derrotar a la alianza enemiga de %{enemies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Captura el castillo de '%{name}'."
@@ -6281,7 +6281,7 @@ msgstr "Continuar movimento"
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
-msgstr " "
+msgstr "Inicia el movimiento del héroe a lo largo del camino actual o vuelve a visitar el objeto ocupado por el héroe. Mantén presionado este botón para reiniciar la ruta del héroe."
 
 msgid "Kingdom Summary"
 msgstr "Resumen del reino"
@@ -6336,7 +6336,7 @@ msgid "Game saved successfully."
 msgstr "Partida guardada con éxito."
 
 msgid "There was an issue during saving."
-msgstr " "
+msgstr "Hubo un problema durante el guardado."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6350,10 +6350,10 @@ msgstr ""
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
-msgstr " "
+msgstr "Buscar el Artefacto Definitivo es inútil. Tu héroe no podría llevarlo aunque lo encontrara, ya que todos sus espacios para artefactos están llenos."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
+msgstr "Excavar en busca de artefactos requiere un día entero, inténtalo de nuevo mañana."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -6433,41 +6433,41 @@ msgid "%{color} player"
 msgstr "%{color} jugador"
 
 msgid "No Handicap"
-msgstr " "
+msgstr "Sin desventaja"
 
 msgid ""
 "No special restrictions on starting resources and resource income per turn."
-msgstr " "
+msgstr "No hay restricciones especiales en los recursos iniciales ni en los ingresos de recursos por turno."
 
 msgid "Mild Handicap"
-msgstr " "
+msgstr "Desventaja leve"
 
 #
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
-msgstr " "
+msgstr "Los jugadores con desventaja leve comienzan con menos recursos y obtienen un 15% menos de recursos por turno."
 
 msgid "Severe Handicap"
-msgstr " "
+msgstr "Desventaja severa"
 
 #
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
-msgstr " "
+msgstr "Los jugadores con desventaja severa comienzan con menos recursos y obtienen un 30% menos de recursos por turno."
 
 msgid ""
 "Default\n"
 "value"
-msgstr " "
+msgstr "Valor\n"
+"predeterminado"
 
-#, fuzzy
 msgid "Set %{skill} Skill"
-msgstr "Ataque"
+msgstr "Establecer habilidad %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
-msgstr " "
+msgstr "Establecer valor base de %{skill}. Haz clic derecho para restablecer todas las habilidades a su valor predeterminado."
 
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
@@ -6491,12 +6491,12 @@ msgid "Keyboard|ABC"
 msgstr "ABC"
 
 msgid "The entered value is invalid."
-msgstr " "
+msgstr "El valor ingresado no es válido."
 
 msgid ""
 "The entered value is out of range.\n"
 "It should be not less than %{minValue} and not more than %{maxValue}."
-msgstr " "
+msgstr "El valor ingresado está fuera de rango. No debe ser menor que %{minValue} ni mayor que %{maxValue}."
 
 msgid "Kingdom Income"
 msgstr "Ingresos del reino"
@@ -6581,7 +6581,7 @@ msgid "Slow"
 msgstr "Lento"
 
 msgid "Fast"
-msgstr " "
+msgstr "Rápido"
 
 msgid "Very Fast"
 msgstr "Muy rápido"
@@ -6755,10 +6755,10 @@ msgid "Martine"
 msgstr "Martine"
 
 msgid " gives you maximum morale"
-msgstr " "
+msgstr " te da la máxima moral"
 
 msgid " gives you maximum luck"
-msgstr " "
+msgstr " te da la máxima suerte"
 
 #, fuzzy
 msgid "You cannot have multiple spell books."
@@ -8396,7 +8396,7 @@ msgstr ""
 "Siguiente nivel a: %{exp2}."
 
 msgid "million|M"
-msgstr " "
+msgstr "M"
 
 msgid "Level %{level}"
 msgstr "Nivel %{level}"
@@ -12144,7 +12144,7 @@ msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Una fuerza desconocida está siendo resucitada..."
 
 #, fuzzy
 #~ msgid "Cancel back to the New Map menu."
