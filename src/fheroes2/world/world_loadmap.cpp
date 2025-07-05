@@ -42,6 +42,7 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "direction.h"
 #include "game_language.h"
 #include "game_over.h"
 #include "game_static.h"
