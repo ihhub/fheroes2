@@ -151,7 +151,7 @@ namespace
                 normalSpecificOffset = 1;
             }
 
-            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
@@ -204,7 +204,7 @@ namespace
         const int32_t difficultyCursorWidth = difficultyCursor.width();
         const int32_t difficultyCursorHeight = difficultyCursor.height();
 
-        // vector coord difficulty
+        // Difficulty selection areas vector.
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
@@ -233,6 +233,7 @@ namespace
 
         const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
             const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
+
             if ( currentMapinfo.filename.empty() ) {
                 return lists.front();
             }
@@ -253,6 +254,8 @@ namespace
         showCurrentlySelectedMapInfoInTextSupportMode( mapInfo );
         conf.setCurrentMapInfo( mapInfo );
         updatePlayers( players, humanPlayerCount );
+
+        // Load players parameters saved from the previous call of the scenario info dialog.
         Game::LoadPlayers( mapInfo.filename, players );
 
         Interface::PlayersInfo playersInfo;
@@ -322,6 +325,7 @@ namespace
             assert( 0 );
             break;
         }
+
         levelCursor.redraw();
 
         fheroes2::validateFadeInAndRender();
@@ -355,16 +359,14 @@ namespace
                 // The previous dialog might still have a pressed button event. We have to clean the state.
                 le.reset();
 
-                const std::string currentMapName = conf.getCurrentMapInfo().filename;
-
-                if ( fi && fi->filename != currentMapName ) {
+                if ( fi && fi->filename != conf.getCurrentMapInfo().filename ) {
                     showCurrentlySelectedMapInfoInTextSupportMode( *fi );
-                    Game::SavePlayers( currentMapName, conf.GetPlayers() );
+
+                    // The map is changed. Update the map data and do default initialization of players.
                     conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
                     RedrawMapTitle( conf, maxTextRoi, centeredTextRoi );
-                    Game::LoadPlayers( fi->filename, players );
 
                     opponentsArea.restore();
                     classArea.restore();
@@ -460,7 +462,8 @@ namespace
             }
         }
 
-        Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
+        // Save the changes players parameters before closing this dialog.
+        Game::SavePlayers( conf.getCurrentMapInfo().filename, players );
 
         return result;
     }

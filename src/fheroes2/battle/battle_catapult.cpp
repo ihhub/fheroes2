@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -66,9 +66,9 @@ Battle::Catapult::Catapult( const HeroBase & hero )
     catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
-int Battle::Catapult::GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const
+int Battle::Catapult::GetDamage( Rand::PCG32 & randomGenerator ) const
 {
-    if ( doubleDamageChance == 100 || doubleDamageChance >= randomGenerator.Get( 1, 100 ) ) {
+    if ( doubleDamageChance == 100 || doubleDamageChance >= Rand::GetWithGen( 1, 100, randomGenerator ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
         return 2;
     }
@@ -114,8 +114,7 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( const CastleDefenseStructur
     return {};
 }
 
-Battle::CastleDefenseStructure Battle::Catapult::GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets,
-                                                            Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::CastleDefenseStructure Battle::Catapult::GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets, Rand::PCG32 & randomGenerator )
 {
     const auto checkTargetState = [&stateOfCatapultTargets]( const CastleDefenseStructure target ) {
         const auto iter = stateOfCatapultTargets.find( target );
@@ -166,7 +165,7 @@ Battle::CastleDefenseStructure Battle::Catapult::GetTarget( const std::map<Castl
     }
 
     if ( !targets.empty() ) {
-        return randomGenerator.Get( targets );
+        return Rand::GetWithGen( targets, randomGenerator );
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "no target was found" )
@@ -174,8 +173,8 @@ Battle::CastleDefenseStructure Battle::Catapult::GetTarget( const std::map<Castl
     return CastleDefenseStructure::NONE;
 }
 
-bool Battle::Catapult::IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const
+bool Battle::Catapult::IsNextShotHit( Rand::PCG32 & randomGenerator ) const
 {
     // Miss chance is 25%
-    return !( canMiss && randomGenerator.Get( 1, 20 ) < 6 );
+    return !canMiss || Rand::GetWithGen( 1, 20, randomGenerator ) >= 6;
 }

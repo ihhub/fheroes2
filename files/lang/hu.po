@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2025-04-23 20:48+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -42,6 +42,9 @@ msgstr "KILÉP"
 msgid "smallerButton|EXIT"
 msgstr "EXIT"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HŐSÖK"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "MÉGSEM"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "ELFOGAD"
@@ -3949,13 +3949,16 @@ msgstr "Várvédők"
 msgid "Town Army"
 msgstr "Városvédők"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Kattints a vár nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
-"áll."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Kattints a térképed nevének megváltoztatásához."
 
 msgid "Enter Castle name"
 msgstr "Vár nevének megadása"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "'%{name}' vár elvesztése."
 
 msgid "Allow to build a castle in this town."
 msgstr "Lehetővé teszi vár építését a városban."
@@ -3973,10 +3976,24 @@ msgstr "Épület építésének korlátozása"
 msgid "Use default defenders army."
 msgstr "Alapértelmezett védősereg használata."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
-"Várvédők egyéni beállítása. Jobb kattintásra az egységek alaphelyzetbe "
-"állnak."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Sereg feloszlatása."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Várvédők"
+
+msgid "Click to accept the changes made."
+msgstr "Kattints a változtatások elfogadásához."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kattints a változtatások elfogadásához."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Játékbeállítások"
 
 msgid "Message Text:"
 msgstr "Üzenet szövege:"
@@ -4727,9 +4744,6 @@ msgstr "Térképleírás megváltoztatása"
 
 msgid "About"
 msgstr "Leírás"
-
-msgid "Click to accept the changes made."
-msgstr "Kattints a változtatások elfogadásához."
 
 msgid "Click to edit custom rumors."
 msgstr "Kattints egyéni szóbeszéd szerkesztéséhez."
@@ -12153,6 +12167,16 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Kattints a vár nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
+#~ "áll."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr ""
+#~ "Várvédők egyéni beállítása. Jobb kattintásra az egységek alaphelyzetbe "
+#~ "állnak."
 
 #~ msgid "CONFIG"
 #~ msgstr "OPCIÓK"

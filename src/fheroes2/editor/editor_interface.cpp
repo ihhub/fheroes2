@@ -68,6 +68,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
@@ -1333,8 +1334,7 @@ namespace Interface
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
-                    Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage );
-                    if ( castleMetadata != newCastleMetadata ) {
+                    if ( Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage ) && ( castleMetadata != newCastleMetadata ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         castleMetadata = std::move( newCastleMetadata );
                         action.commit();
@@ -2097,7 +2097,12 @@ namespace Interface
             // Set the saved map as a default map for the new Standard Game.
             Maps::FileInfo fi;
             if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
-                Settings::Get().setCurrentMapInfo( std::move( fi ) );
+                // Update the default map info to allow to start this map without the need to select it from the all maps list.
+                Settings & conf = Settings::Get();
+                conf.setCurrentMapInfo( std::move( fi ) );
+
+                // Reset saved players parameters (including alliances) for starting a new game because they may have changed in editor.
+                Game::SavePlayers( "", {} );
             }
             else {
                 assert( 0 );

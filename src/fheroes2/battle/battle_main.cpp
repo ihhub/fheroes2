@@ -174,7 +174,7 @@ namespace
         return 0;
     }
 
-    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
+    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, Rand::PCG32 & randomGenerator )
     {
         if ( spells.empty() || !hero.HaveSpellBook() )
             return;
@@ -193,17 +193,17 @@ namespace
             switch ( eagleeye.Level() ) {
             case Skill::Level::BASIC:
                 // 20%
-                if ( 3 > sp.Level() && eagleeye.GetValue() >= randomGenerator.Get( 1, 100 ) )
+                if ( 3 > sp.Level() && eagleeye.GetValue() >= Rand::GetWithGen( 1, 100, randomGenerator ) )
                     new_spells.push_back( sp );
                 break;
             case Skill::Level::ADVANCED:
                 // 30%
-                if ( 4 > sp.Level() && eagleeye.GetValue() >= randomGenerator.Get( 1, 100 ) )
+                if ( 4 > sp.Level() && eagleeye.GetValue() >= Rand::GetWithGen( 1, 100, randomGenerator ) )
                     new_spells.push_back( sp );
                 break;
             case Skill::Level::EXPERT:
                 // 40%
-                if ( 5 > sp.Level() && eagleeye.GetValue() >= randomGenerator.Get( 1, 100 ) )
+                if ( 5 > sp.Level() && eagleeye.GetValue() >= Rand::GetWithGen( 1, 100, randomGenerator ) )
                     new_spells.push_back( sp );
                 break;
             default:
@@ -380,7 +380,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
     while ( true ) {
-        Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
+        Rand::PCG32 randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )

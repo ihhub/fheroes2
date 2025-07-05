@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-06-30 00:14+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -44,6 +44,9 @@ msgstr ""
 msgid "smallerButton|EXIT"
 msgstr ""
 
+msgid "OKAY"
+msgstr ""
+
 msgid "HEROES"
 msgstr ""
 
@@ -53,9 +56,6 @@ msgid ""
 msgstr ""
 
 msgid "CANCEL"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -3780,12 +3780,17 @@ msgstr "Pilis"
 msgid "Town Army"
 msgstr "Miestelis"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Išeiti iš pilies"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Prarasti pilį '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3802,8 +3807,24 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Pilis"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Išeiti iš pilies"
 
 msgid "Message Text:"
 msgstr ""
@@ -4555,10 +4576,6 @@ msgstr ""
 
 msgid "About"
 msgstr ""
-
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "Click to edit custom rumors."

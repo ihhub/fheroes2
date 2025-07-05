@@ -296,8 +296,10 @@ namespace fheroes2
         }
         else {
             // To generate CP1252 alphabet for French assets we must assume that these assets are not original.
+            // Also we force generation of Cyrillic symbols for Russian assets - it is done for consistency of fonts with different assets.
             const bool isOriginalResourceLanguage
-                = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French );
+                = ( language == SupportedLanguage::English )
+                  || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French && resourceLanguage != SupportedLanguage::Russian );
 
             AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
         }
