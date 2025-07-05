@@ -283,7 +283,7 @@ bool Maps::isValidDirection( int32_t from, int vector )
 
 fheroes2::Point Maps::GetPoint( const int32_t index )
 {
-    return fheroes2::Point( index % world.w(), index / world.w() );
+    return { index % world.w(), index / world.w() };
 }
 
 bool Maps::isValidAbsIndex( const int32_t index )

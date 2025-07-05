@@ -450,7 +450,7 @@ void Maps::Tile::Init( const MP2::MP2TileInfo & mp2 )
 
 Heroes * Maps::Tile::getHero() const
 {
-    return MP2::OBJ_HERO == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
+    return ( MP2::OBJ_HERO == _mainObjectType ) && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tile::setHero( Heroes * hero )
@@ -481,19 +481,14 @@ void Maps::Tile::setHero( Heroes * hero )
     }
 }
 
-fheroes2::Point Maps::Tile::GetCenter() const
+MP2::MapObjectType Maps::Tile::_getMainObjectTypeUnderHero() const
 {
-    return GetPoint( _index );
-}
-
-MP2::MapObjectType Maps::Tile::getMainObjectType( const bool ignoreObjectUnderHero /* true */ ) const
-{
-    if ( !ignoreObjectUnderHero && MP2::OBJ_HERO == _mainObjectType ) {
-        const Heroes * hero = getHero();
-        return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
+    if ( _mainObjectType != MP2::OBJ_HERO ) {
+        return _mainObjectType;
     }
 
-    return _mainObjectType;
+    const Heroes * hero = getHero();
+    return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
 }
 
 void Maps::Tile::setMainObjectType( const MP2::MapObjectType objectType )
@@ -809,16 +804,6 @@ bool Maps::Tile::doesObjectExist( const uint32_t uid ) const
 
     return std::any_of( _groundObjectPart.cbegin(), _groundObjectPart.cend(),
                         [uid]( const auto & part ) { return part._uid == uid && !part.isPassabilityTransparent(); } );
-}
-
-void Maps::Tile::UpdateRegion( uint32_t newRegionID )
-{
-    if ( _tilePassabilityDirections ) {
-        _region = newRegionID;
-    }
-    else {
-        _region = REGION_NODE_BLOCKED;
-    }
 }
 
 void Maps::Tile::pushGroundObjectPart( ObjectPart part )
