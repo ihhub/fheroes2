@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
