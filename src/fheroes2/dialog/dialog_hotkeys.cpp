@@ -259,7 +259,7 @@ namespace fheroes2
         fheroes2::StandardWindow background( categoryWidth + keyDescriptionLength + hotKeyLength + 8 + 95, std::min( display.height() - 100, 520 ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        const fheroes2::Rect listRoi( roi.x + categoryWidth + 50, roi.y + 37, keyDescriptionLength + hotKeyLength + 8, roi.height - 75 );
+        const fheroes2::Rect listRoi( roi.x + categoryWidth + 50, roi.y + 50, keyDescriptionLength + hotKeyLength + 8, roi.height - 92 );
 
         const fheroes2::Text title( _( "Hot Keys:" ), fheroes2::FontType::normalYellow() );
         title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
@@ -288,6 +288,9 @@ namespace fheroes2
         int categoryOffsetY = categoryRoi.y + 4;
 
         Game::HotKeyCategory selectedCategory = Game::HotKeyCategory::ALL;
+        
+        const fheroes2::Text categoryHeader( _( "Category:" ), fheroes2::FontType::normalWhite() );
+        categoryHeader.draw( roi.x + 45, roi.y + 32, display );
 
         for ( const Game::HotKeyCategory category : uniqueCategories ) {
             const bool isSelected = ( category == selectedCategory );
@@ -295,7 +298,7 @@ namespace fheroes2
             const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( category ) ), fontType );
             categoryText.draw( categoryRoi.x + 4, categoryOffsetY, display );
 
-            const fheroes2::Rect textRect( categoryRoi.x + 4, categoryOffsetY, categoryText.width(), categoryText.height() );
+            const fheroes2::Rect textRect( categoryRoi.x, categoryOffsetY, categoryRoi.width, categoryText.height() + 4 );
             categoryRects.emplace_back( category, textRect );
 
             categoryOffsetY += categoryText.height() + 4;
@@ -355,7 +358,7 @@ namespace fheroes2
                         const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( categoryPair.first ) ), fontType );
                         categoryText.draw( categoryRoi.x + 4, categoryOffsetY, display );
 
-                        categoryPair.second = { categoryRoi.x + 4, categoryOffsetY, categoryText.width(), categoryText.height() };
+                        categoryPair.second = { categoryRoi.x, categoryOffsetY, categoryRoi.width, categoryText.height() + 4 };
                         categoryOffsetY += categoryText.height() + 4;
                     }
 
