@@ -71,7 +71,20 @@ namespace
                                                                             "sorceress_castle_captain_quarter_left_side.image",
                                                                             "bottom.image",
                                                                             "top.image",
-                                                                            "shadow.image" };
+                                                                            "shadow.image",
+                                                                            "animated_part1.image",
+                                                                            "animated_part2.image",
+                                                                            "animated_part3.image",
+                                                                            "animated_part4.image",
+                                                                            "animated_part5.image",
+                                                                            "animated_part6.image",
+                                                                            "animated_part7.image",
+                                                                            "animated_part8.image",
+                                                                            "animated_part9.image",
+                                                                            "animated_part10.image",
+                                                                            "animated_part11.image",
+                                                                            "animated_part12.image",
+                                                                            "animated_part13.image" };
 
     fheroes2::H2DReader reader;
 
