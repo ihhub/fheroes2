@@ -288,7 +288,7 @@ namespace fheroes2
         int categoryOffsetY = categoryRoi.y + 4;
 
         Game::HotKeyCategory selectedCategory = Game::HotKeyCategory::ALL;
-        
+
         const fheroes2::Text categoryHeader( _( "Category:" ), fheroes2::FontType::normalWhite() );
         categoryHeader.draw( roi.x + 45, roi.y + 32, display );
 
