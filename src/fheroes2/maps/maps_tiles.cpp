@@ -115,7 +115,7 @@ namespace
             return objGrasShadowBitset[icnIndex];
         }
         case ICN::NEW_OBJECTS: {
-            static const std::bitset<256> adventureObjectsShadowBitset = fheroes2::makeBitsetFromVector<256>( { 2 } );
+            static const std::bitset<256> adventureObjectsShadowBitset = fheroes2::makeBitsetFromVector<256>( { 1 } );
             return adventureObjectsShadowBitset[icnIndex];
         }
         case ICN::OBJNMUL2: {
