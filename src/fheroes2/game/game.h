@@ -60,7 +60,7 @@ namespace Game
     fheroes2::GameMode LoadGame();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
-    fheroes2::GameMode NewHotSeat( const size_t playerCount );
+    fheroes2::GameMode NewHotSeat( const size_t playerCountOptionIndex );
     fheroes2::GameMode NewSuccessionWarsCampaign();
     fheroes2::GameMode NewPriceOfLoyaltyCampaign();
     fheroes2::GameMode NewBattleOnly();
