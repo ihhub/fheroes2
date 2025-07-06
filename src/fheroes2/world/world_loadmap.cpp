@@ -1314,7 +1314,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
             return false;
         }
 
-        // On some hacked MP2 maps boats can present on the land.
+        // On some hacked MP2 maps boats are placed on land. One example is the map "Roc around the .".
         if ( tile.getMainObjectType() == MP2::OBJ_BOAT && !tile.isWater() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "Invalid MP2 format: boat at tile index " << tile.GetIndex() << " is placed on the land! It is removed from this tile to avoid bugs." )
