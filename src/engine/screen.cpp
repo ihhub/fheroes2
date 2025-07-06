@@ -1127,7 +1127,7 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( fheroes2::cursor().isSoftwareEmulation() || isNearestScaling() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -1421,6 +1421,23 @@ namespace fheroes2
         Image::reset();
 
         _screenSize = { info.screenWidth, info.screenHeight };
+    }
+
+    void Display::resetRenderer()
+    {
+        const bool isFullScreen = _engine->isFullScreen();
+
+        // deallocate engine resources
+        _engine->clear();
+
+        _prevRoi = {};
+
+        ResolutionInfo res( width(), height(), _screenSize.width, _screenSize.height );
+
+        // allocate engine resources
+        if ( !_engine->allocate( res, isFullScreen ) ) {
+            clear();
+        }
     }
 
     void Display::setWindowPos( const Point point )

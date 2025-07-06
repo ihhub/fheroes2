@@ -4778,10 +4778,24 @@ namespace
             break;
         }
         case ICN::GAME_OPTION_ICON: {
-            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id].resize( 5 );
 
             fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            _icnVsSprite[id][0]._disableTransformLayer();
             fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+            _icnVsSprite[id][1]._disableTransformLayer();
+
+            fheroes2::h2d::readImage( "graphics_filter_nearest_icon.image", _icnVsSprite[id][2] );
+            _icnVsSprite[id][2]._disableTransformLayer();
+            fheroes2::h2d::readImage( "graphics_filter_linear_icon.image", _icnVsSprite[id][3] );
+            _icnVsSprite[id][3]._disableTransformLayer();
+
+            // TODO: Design a better icon for hardware/software cursor option.
+            fheroes2::Sprite & icon = _icnVsSprite[id][4];
+            icon = _icnVsSprite[id][1];
+            const fheroes2::Sprite & pointer = fheroes2::AGG::GetICN( ICN::ADVMCO, 0 );
+            fheroes2::Blit( pointer, 0, 0, icon, ( icon.width() - pointer.width() ) / 2 - 5, ( icon.height() - pointer.height() ) / 2, pointer.width(),
+                            pointer.height() );
 
             break;
         }

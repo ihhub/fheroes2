@@ -788,6 +788,20 @@ void Settings::setMonochromeCursor( const bool enable )
     Cursor::Refresh();
 }
 
+void Settings::setSoftwareCursor( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
+        fheroes2::cursor().enableSoftwareEmulation( true );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
+        fheroes2::cursor().enableSoftwareEmulation( false );
+    }
+
+    Cursor::Refresh();
+}
+
 void Settings::setTextSupportMode( const bool enable )
 {
     if ( enable ) {
@@ -891,6 +905,11 @@ bool Settings::isMonochromeCursorEnabled() const
     return _gameOptions.Modes( GAME_MONOCHROME_CURSOR );
 }
 
+bool Settings::isSoftwareCursorEnabled() const
+{
+    return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
+}
+
 bool Settings::isTextSupportModeEnabled() const
 {
     return _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE );
@@ -919,6 +938,11 @@ bool Settings::isBattleShowDamageInfoEnabled() const
 bool Settings::isHideInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
+}
+
+bool Settings::isScreenScalingTypeNearest() const
+{
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
@@ -952,6 +976,21 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+void Settings::switchToNextInterfaceType()
+{
+    switch ( _interfaceType ) {
+    case InterfaceType::DYNAMIC:
+        _interfaceType = InterfaceType::GOOD;
+        break;
+    case InterfaceType::GOOD:
+        _interfaceType = InterfaceType::EVIL;
+        break;
+    default:
+        _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
 }
 
 bool Settings::isEditorAnimationEnabled() const

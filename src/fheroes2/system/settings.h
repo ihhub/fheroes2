@@ -198,12 +198,14 @@ public:
     bool BattleShowTurnOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
+    bool isSoftwareCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
+    bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -215,6 +217,8 @@ public:
     {
         return _interfaceType;
     }
+
+    void switchToNextInterfaceType();
 
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
@@ -280,6 +284,7 @@ public:
     void setBattleShowTurnOrder( const bool enable );
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
+    void setSoftwareCursor( const bool enable );
     void setTextSupportMode( const bool enable );
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
