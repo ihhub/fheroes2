@@ -36,15 +36,23 @@ namespace fheroes2
     {
     public:
         Image() = default;
-        Image( const int32_t width_, const int32_t height_ );
 
-        Image( const Image & image_ );
-        Image( Image && image_ ) noexcept;
+        Image( const int32_t width, const int32_t height )
+        {
+            Image::resize( width, height );
+        }
+
+        Image( const Image & image )
+        {
+            copy( image );
+        }
+
+        Image( Image && image ) noexcept;
 
         virtual ~Image() = default;
 
-        Image & operator=( const Image & image_ );
-        Image & operator=( Image && image_ ) noexcept;
+        Image & operator=( const Image & image );
+        Image & operator=( Image && image ) noexcept;
 
         virtual void resize( const int32_t width_, const int32_t height_ );
 
@@ -114,8 +122,29 @@ namespace fheroes2
     {
     public:
         Sprite() = default;
-        Sprite( const int32_t width_, const int32_t height_, const int32_t x_ = 0, const int32_t y_ = 0 );
-        Sprite( const Image & image, const int32_t x_ = 0, const int32_t y_ = 0 );
+        Sprite( const int32_t width, const int32_t height, const int32_t x = 0, const int32_t y = 0 )
+            : Image( width, height )
+            , _x( x )
+            , _y( y )
+        {
+            // Do nothing.
+        }
+
+        explicit Sprite( const Image & image, const int32_t x = 0, const int32_t y = 0 )
+            : Image( image )
+            , _x( x )
+            , _y( y )
+        {
+            // Do nothing.
+        }
+
+        explicit Sprite( Image && image, const int32_t x = 0, const int32_t y = 0 )
+            : Image( std::move( image ) )
+            , _x( x )
+            , _y( y )
+        {
+            // Do nothing.
+        }
 
         Sprite( const Sprite & sprite ) = default;
         Sprite( Sprite && sprite ) noexcept;
@@ -124,6 +153,8 @@ namespace fheroes2
 
         Sprite & operator=( const Sprite & sprite );
         Sprite & operator=( Sprite && sprite ) noexcept;
+
+        Sprite & operator=( Image && image ) noexcept;
 
         int32_t x() const
         {
@@ -143,16 +174,22 @@ namespace fheroes2
     };
 
     // This class is used in situations when we draw a window within another window
-    class ImageRestorer
+    class ImageRestorer final
     {
     public:
         explicit ImageRestorer( Image & image );
         ImageRestorer( Image & image, const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
         ImageRestorer( const ImageRestorer & ) = delete;
+        ImageRestorer & operator=( const ImageRestorer & ) = delete;
 
         // Restores the original image if necessary, see the implementation for details
-        ~ImageRestorer();
+        ~ImageRestorer()
+        {
+            if ( !_isRestored ) {
+                restore();
+            }
+        }
 
         void update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
@@ -209,9 +246,6 @@ namespace fheroes2
     // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 
-    // Replace a particular pixel value by transparency value (transform layer value will be 1)
-    void AddTransparency( Image & image, const uint8_t valueToReplace );
-
     // make sure that output image's transform layer doesn't have skipping values (transform == 1)
     void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip = false );
     void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, const uint8_t alphaValue, const bool flip = false );
@@ -227,26 +261,27 @@ namespace fheroes2
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette );
 
-    void ApplyAlpha( const Image & in, Image & out, const uint8_t alpha );
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha );
 
     void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, const uint8_t transformId );
 
-    // draw one image onto another
+    // Draw one image on another taking into account the transparency and shadows data in the transform layer.
     void Blit( const Image & in, Image & out, const bool flip = false );
     void Blit( const Image & in, Image & out, const Rect & outRoi, const bool flip = false );
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
+    void Blit( const Image & in, Image & out, const int32_t outX, const int32_t outY, const bool flip = false );
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 
     // inPos must contain non-negative values
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
-    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi );
+    void Copy( const Image & in, const int32_t inX, const int32_t inY, Image & out, const Rect & outRoi );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // Copies transform the layer from in to out. Both images must be of the same size.
-    void CopyTransformLayer( const Image & in, Image & out );
+    void copyTransformLayer( const Image & in, Image & out );
+    // Copies transform the layer from in to out.
+    void copyTransformLayer( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     Sprite CreateContour( const Image & image, const uint8_t value );
 

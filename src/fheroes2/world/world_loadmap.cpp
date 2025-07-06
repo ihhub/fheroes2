@@ -272,7 +272,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             }
         }
 
-        tile.Init( i, mp2tile );
+        assert( tile == Maps::Tile{} );
+
+        tile.setIndex( i );
+        tile.setTerrain( mp2tile.terrainImageIndex, mp2tile.terrainFlags );
+
+        tile.Init( mp2tile );
 
         // Read extra information if it's present.
         size_t addonIndex = mp2tile.nextAddonIndex;
@@ -281,8 +286,21 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.pushGroundObjectPart( vec_mp2addons[addonIndex] );
-            tile.pushTopObjectPart( vec_mp2addons[addonIndex] );
+
+            const auto & objectInfo = vec_mp2addons[addonIndex];
+
+            const MP2::ObjectIcnType groundObjectIcnType = static_cast<MP2::ObjectIcnType>( objectInfo.objectNameN1 >> 2 );
+            const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( objectInfo.objectNameN2 >> 2 );
+
+            if ( groundObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+                tile.pushGroundObjectPart( { static_cast<Maps::ObjectLayerType>( objectInfo.quantityN & 0x03 ), objectInfo.level1ObjectUID, groundObjectIcnType,
+                                             objectInfo.bottomIcnImageIndex } );
+            }
+
+            if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+                tile.pushTopObjectPart( { Maps::OBJECT_LAYER, objectInfo.level2ObjectUID, topObjectIcnType, objectInfo.topIcnImageIndex } );
+            }
+
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 

@@ -48,7 +48,7 @@ class HeroBase;
 
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
@@ -93,7 +93,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::PCG32 & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 
@@ -278,7 +278,7 @@ namespace Battle
         // structure still has enough hitpoints.
         void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
-        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const Battle::CellDirection dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
@@ -299,11 +299,11 @@ namespace Battle
         void ApplyActionToggleAutoCombat( Command & cmd );
         void ApplyActionQuickCombat( const Command & cmd );
 
-        void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
-        void ApplyActionSpellMirrorImage( Command & cmd );
-        void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthquake( const Command & cmd );
-        void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
+        void _applyActionSpellSummonElemental( const Spell & spell );
+        void _applyActionSpellMirrorImage( Command & cmd );
+        void _applyActionSpellTeleport( Command & cmd );
+        void _applyActionSpellEarthquake();
+        void _applyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
         // then this method does nothing. Otherwise, it's the caller's responsibility to make sure that this position
@@ -363,7 +363,7 @@ namespace Battle
         // places (for example, in code that performs situation assessment or AI decision-making) because in this
         // case the battles performed by AI will not be reproducible by a human player when performing exactly the
         // same actions.
-        Rand::DeterministicRandomGenerator & _randomGenerator;
+        Rand::PCG32 & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;
 

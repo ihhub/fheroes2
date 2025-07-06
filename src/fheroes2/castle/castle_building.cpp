@@ -344,14 +344,22 @@ namespace
             fheroes2::Blit( sprite0, display, offset.x + sprite0.x(), offset.y + sprite0.y() );
         }
 
+        // The original Wizard's castle "bay" is not actually a bay, but a river flowing through a gorge in the wastelands,
+        // which must be animated, even if the castle itself is not located on the seashore.
+        else if ( castleRace == Race::WZRD ) {
+            const int32_t riverIcnId = ICN::TWNZEXT0;
+            const uint32_t riverExtraIndex = 1 + animationIndex % 5;
+
+            // The river is already present on the background so there is no need to draw its sprite (image index 0).
+            // We draw only the river animation.
+            fheroes2::drawCastleDialogBuilding( riverIcnId, riverExtraIndex, castle, offset, max );
+        }
+
         const uint32_t fadingInBuildingId = fadeBuilding.getBuilding();
 
-        // Bay animation. We have two special cases:
-        // 1. The Wizard's castle "bay" is not actually a bay, but a river flowing through a gorge in the wastelands,
-        // which must be drawn and animated, even if the castle itself is not located on the seashore.
-        // 2. The Barbarian's castle bay should always be drawn when the castle has sea access even if the Shipyard is built.
-        if ( castleRace == Race::WZRD
-             || ( castle.HasSeaAccess() && ( castleRace == Race::BARB || !castle.isBuild( BUILD_SHIPYARD ) || fadingInBuildingId == BUILD_SHIPYARD ) ) ) {
+        // Bay animation. We have a special case for the Barbarian's castle:
+        // the bay should always be drawn when the castle has sea access even if the Shipyard is built.
+        if ( fadingInBuildingId == BUILD_SHIPYARD || ( castle.HasSeaAccess() && ( castleRace == Race::BARB || !castle.isBuild( BUILD_SHIPYARD ) ) ) ) {
             int bayIcnId = 0;
             const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
@@ -372,7 +380,7 @@ namespace
                 bayIcnId = ICN::TWNWEXT0;
                 break;
             case Race::WZRD:
-                bayIcnId = ICN::TWNZEXT0;
+                bayIcnId = ICN::WIZARD_CASTLE_BAY;
                 break;
             default:
                 // Did you add a new race? Add the logic for it!

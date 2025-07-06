@@ -114,7 +114,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
+        void Init( const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -227,15 +227,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushGroundObjectPart( const MP2::MP2AddonInfo & ma );
+        void pushGroundObjectPart( ObjectPart part );
 
-        void pushGroundObjectPart( ObjectPart ta );
-
-        void pushTopObjectPart( const MP2::MP2AddonInfo & ma );
-
-        void pushTopObjectPart( ObjectPart ta )
+        void pushTopObjectPart( ObjectPart part )
         {
-            _topObjectPart.emplace_back( ta );
+            _topObjectPart.emplace_back( part );
         }
 
         const std::list<ObjectPart> & getGroundObjectParts() const

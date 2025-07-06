@@ -48,11 +48,12 @@ namespace
         const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
         fheroes2::StandardWindow background( optionButtons, false, 0, display );
+        background.renderSymmetricButtons( optionButtons, 0, false );
 
-        fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
-        fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
-        fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
-        fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
+        const fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
+        const fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
+        const fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
+        const fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
 
         fheroes2::Button buttonCancel;
 
@@ -67,10 +68,7 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            newGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( newGameButton.area() ) );
-            loadGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( loadGameButton.area() ) );
-            saveGameButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( saveGameButton.area() ) );
-            quitButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( quitButton.area() ) );
+            optionButtons.drawOnState( le );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( newGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
