@@ -33,7 +33,6 @@
 #include "direction.h"
 #include "ground.h"
 #include "heroes.h"
-#include "maps.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
@@ -127,10 +126,7 @@ namespace Maps
             return _index;
         }
 
-        fheroes2::Point GetCenter() const
-        {
-            return GetPoint( _index );
-        }
+        fheroes2::Point GetCenter() const;
 
         MP2::MapObjectType getMainObjectType() const
         {

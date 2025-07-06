@@ -481,6 +481,11 @@ void Maps::Tile::setHero( Heroes * hero )
     }
 }
 
+fheroes2::Point Maps::Tile::GetCenter() const
+{
+    return GetPoint( _index );
+}
+
 MP2::MapObjectType Maps::Tile::_getMainObjectTypeUnderHero() const
 {
     if ( _mainObjectType != MP2::OBJ_HERO ) {
