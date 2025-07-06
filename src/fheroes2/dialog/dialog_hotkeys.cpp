@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
@@ -340,7 +340,7 @@ namespace fheroes2
                 if ( le.MouseClickLeft( pair.second ) ) {
                     selectedCategory = pair.first;
 
-                    // ? DO NOT re-declare 'filtered' here
+                    // ? DO NOT re-declare 'filtered' here  
                     filtered.clear();
                     for ( const auto & item : hotKeyEvents ) {
                         if ( selectedCategory == Game::HotKeyCategory::ALL || item.second == selectedCategory )
