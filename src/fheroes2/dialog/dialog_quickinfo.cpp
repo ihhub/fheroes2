@@ -428,7 +428,7 @@ namespace
             const uint32_t cost = isRoad ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
             if ( cost > 0 ) {
                 str += '\n';
-                str.append( _( "move points cost: %{cost}" ) );
+                str.append( _( "penalty: %{cost}%" ) );
                 StringReplace( str, "%{cost}", static_cast<int32_t>( cost ) );
             }
         }
