@@ -847,7 +847,7 @@ namespace
             }
             else {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( fheroes2::cursor().isSoftwareEmulation() || isNearestScaling() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
