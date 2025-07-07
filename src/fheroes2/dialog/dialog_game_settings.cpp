@@ -247,7 +247,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowScreenScalingTypeRoi ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Screen Scaling Type" ),
-                    _( "Toggle the type of screen scaling you want to use. Linear scaling makes resized screen image blurry while nearest scaling preserves sharpness of original game. The nearest scaling looks best on integer scales, in example X2 or X3." ),
+                    _( "Toggle the type of screen scaling you want to use. Linear scaling makes resized screen image blurry while nearest scaling preserves sharpness of original game. The nearest scaling looks best on integer scales, for example 2.0x or 3.0x." ),
                     0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowInterfaceTypeRoi ) ) {
@@ -284,7 +284,7 @@ namespace fheroes2
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // We need to do first render of the whole screen to update the rendered background image when this dialog is called from the menu.
+        // First we need to render the whole screen to update the rendered background image when this dialog is called from the menu.
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         Settings & conf = Settings::Get();
