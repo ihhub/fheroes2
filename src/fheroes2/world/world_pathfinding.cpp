@@ -75,7 +75,6 @@ namespace
         assert( Color::allPlayerColors() & color );
 
         const Maps::Tile & tile = world.getTile( tileIndex );
-        const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const auto isTileAccessible = [color, armyStrength, minimalAdvantage, &tile]() {
@@ -94,6 +93,8 @@ namespace
 
         // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HERO ) {
+            const bool toWater = tile.isWater();
+
             // Heroes on the water can be attacked from the nearby shore, but they cannot be passed through
             if ( fromWater != toWater ) {
                 assert( !fromWater && toWater );
@@ -188,7 +189,7 @@ namespace
 
         // AI can use boats to overcome water obstacles
         if ( objectType == MP2::OBJ_BOAT ) {
-            assert( !fromWater && toWater );
+            assert( !fromWater && tile.isWater() );
 
             return true;
         }
