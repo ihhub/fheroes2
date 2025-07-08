@@ -1930,7 +1930,7 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const Maps::Tile & tile = world.getTile( dst_index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
-    const bool isHeroDisembarking = ( hero.isShipMaster() && tile.isSuitableForDisembarkation() );
+    const bool isHeroDisembarking = hero.isShipMaster() && tile.isSuitableForDisembarkation();
     const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
 
     if ( isHeroActing ) {

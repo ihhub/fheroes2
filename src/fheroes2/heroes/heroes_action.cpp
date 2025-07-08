@@ -3802,7 +3802,7 @@ void Heroes::Action( int tileIndex )
     const Maps::Tile & tile = world.getTile( tileIndex );
     const MP2::MapObjectType objectType = tile.getMainObjectType( tileIndex != heroPosIndex );
 
-    const bool isHeroDisembarking = ( isShipMaster() && tile.isSuitableForDisembarkation() );
+    const bool isHeroDisembarking = isShipMaster() && tile.isSuitableForDisembarkation();
     const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, isShipMaster() );
 
     if ( isHeroActing ) {
