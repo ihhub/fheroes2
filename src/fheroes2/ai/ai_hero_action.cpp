@@ -1930,7 +1930,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const Maps::Tile & tile = world.getTile( dst_index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
-    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
+    const bool isHeroDisembarking = ( hero.isShipMaster() && tile.isSuitableForDisembarkation() );
+
+    const bool isActionObject = isHeroDisembarking || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
     if ( isActionObject ) {
         hero.SetModes( Heroes::ACTION );
 
@@ -1940,251 +1942,250 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         }
     }
 
-    if ( hero.isShipMaster() && tile.isSuitableForDisembarkation() ) {
-        assert( objectType == MP2::OBJ_COAST || !isActionObject );
+    switch ( objectType ) {
+    case MP2::OBJ_BOAT:
+        AIToBoat( hero, dst_index );
+        break;
 
-        AIToCoast( hero, dst_index );
-    }
-    else {
-        switch ( objectType ) {
-        case MP2::OBJ_BOAT:
-            AIToBoat( hero, dst_index );
-            break;
+    case MP2::OBJ_MONSTER:
+        AIToMonster( hero, dst_index );
+        break;
+    case MP2::OBJ_HERO:
+        AIToHeroes( hero, dst_index );
+        break;
+    case MP2::OBJ_CASTLE:
+        AIToCastle( hero, dst_index );
+        break;
 
-        case MP2::OBJ_MONSTER:
-            AIToMonster( hero, dst_index );
-            break;
-        case MP2::OBJ_HERO:
-            AIToHeroes( hero, dst_index );
-            break;
-        case MP2::OBJ_CASTLE:
-            AIToCastle( hero, dst_index );
-            break;
+    case MP2::OBJ_BARREL:
+    case MP2::OBJ_BOTTLE:
+    case MP2::OBJ_CAMPFIRE:
+    case MP2::OBJ_RESOURCE:
+        AIToPickupResource( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_BARREL:
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_RESOURCE:
-            AIToPickupResource( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+        AIToTreasureChest( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_ARTIFACT:
+        AIToArtifact( hero, dst_index );
+        break;
 
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-            AIToTreasureChest( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_ARTIFACT:
-            AIToArtifact( hero, dst_index );
-            break;
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WINDMILL:
+    case MP2::OBJ_WATER_WHEEL:
+        AIToObjectResource( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATER_WHEEL:
-            AIToObjectResource( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_WAGON:
+        AIToWagon( hero, dst_index );
+        break;
+    case MP2::OBJ_SKELETON:
+        AIToSkeleton( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_FLOTSAM:
+        AIToFlotSam( hero, dst_index );
+        break;
 
-        case MP2::OBJ_WAGON:
-            AIToWagon( hero, dst_index );
-            break;
-        case MP2::OBJ_SKELETON:
-            AIToSkeleton( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_FLOTSAM:
-            AIToFlotSam( hero, dst_index );
-            break;
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_MINE:
+    case MP2::OBJ_SAWMILL:
+    case MP2::OBJ_LIGHTHOUSE:
+        AIToCaptureObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINE:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_LIGHTHOUSE:
-            AIToCaptureObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_ABANDONED_MINE:
+        AIToAbandonedMine( hero, dst_index );
+        break;
 
-        case MP2::OBJ_ABANDONED_MINE:
-            AIToAbandonedMine( hero, dst_index );
-            break;
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        AIToShipwreckSurvivor( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-            AIToShipwreckSurvivor( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_EVENT:
+        AIToEvent( hero, dst_index );
+        break;
 
-        case MP2::OBJ_EVENT:
-            AIToEvent( hero, dst_index );
-            break;
+    case MP2::OBJ_SIGN:
+        AIToSign( hero, dst_index );
+        break;
 
-        case MP2::OBJ_SIGN:
-            AIToSign( hero, dst_index );
-            break;
+    case MP2::OBJ_OBSERVATION_TOWER:
+        AIToObservationTower( hero, dst_index );
+        break;
+    case MP2::OBJ_MAGELLANS_MAPS:
+        AIToMagellanMaps( hero, dst_index );
+        break;
 
-        case MP2::OBJ_OBSERVATION_TOWER:
-            AIToObservationTower( hero, dst_index );
-            break;
-        case MP2::OBJ_MAGELLANS_MAPS:
-            AIToMagellanMaps( hero, dst_index );
-            break;
+    case MP2::OBJ_STONE_LITHS:
+        AIToTeleports( hero, dst_index );
+        break;
+    case MP2::OBJ_WHIRLPOOL:
+        AIToWhirlpools( hero, dst_index );
+        break;
 
-        case MP2::OBJ_STONE_LITHS:
-            AIToTeleports( hero, dst_index );
-            break;
-        case MP2::OBJ_WHIRLPOOL:
-            AIToWhirlpools( hero, dst_index );
-            break;
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_MERCENARY_CAMP:
+    case MP2::OBJ_WITCH_DOCTORS_HUT:
+    case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_ARENA:
+        AIToPrimarySkillObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_ARENA:
-            AIToPrimarySkillObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_GAZEBO:
+        AIToExperienceObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_GAZEBO:
-            AIToExperienceObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_WITCHS_HUT:
+        AIToWitchsHut( hero, dst_index );
+        break;
 
-        case MP2::OBJ_WITCHS_HUT:
-            AIToWitchsHut( hero, dst_index );
-            break;
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        AIToShrine( hero, dst_index );
+        break;
 
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-            AIToShrine( hero, dst_index );
-            break;
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_MERMAID:
+        AIToGoodLuckObject( hero, dst_index );
+        break;
 
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_MERMAID:
-            AIToGoodLuckObject( hero, dst_index );
-            break;
+    case MP2::OBJ_OASIS:
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_WATERING_HOLE:
+    case MP2::OBJ_BUOY:
+        AIToGoodMoraleObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_WATERING_HOLE:
-        case MP2::OBJ_BUOY:
-            AIToGoodMoraleObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_OBELISK:
+        AIToObelisk( hero, tile );
+        break;
 
-        case MP2::OBJ_OBELISK:
-            AIToObelisk( hero, tile );
-            break;
+    case MP2::OBJ_ARTESIAN_SPRING:
+        AIToArtesianSpring( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_MAGIC_WELL:
+        AIToMagicWell( hero, dst_index );
+        break;
 
-        case MP2::OBJ_ARTESIAN_SPRING:
-            AIToArtesianSpring( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_MAGIC_WELL:
-            AIToMagicWell( hero, dst_index );
-            break;
+    case MP2::OBJ_XANADU:
+        AIToXanadu( hero, dst_index );
+        break;
 
-        case MP2::OBJ_XANADU:
-            AIToXanadu( hero, dst_index );
-            break;
+    case MP2::OBJ_HILL_FORT:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
+        AIToUpgradeArmyObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_HILL_FORT:
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            AIToUpgradeArmyObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_DERELICT_SHIP:
+        AIToPoorMoraleObject( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DERELICT_SHIP:
-            AIToPoorMoraleObject( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_PYRAMID:
+        AIToPyramid( hero, dst_index );
+        break;
+    case MP2::OBJ_DAEMON_CAVE:
+        AIToDaemonCave( hero, dst_index );
+        break;
 
-        case MP2::OBJ_PYRAMID:
-            AIToPyramid( hero, dst_index );
-            break;
-        case MP2::OBJ_DAEMON_CAVE:
-            AIToDaemonCave( hero, dst_index );
-            break;
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        AIToTreeKnowledge( hero, dst_index );
+        break;
 
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            AIToTreeKnowledge( hero, dst_index );
-            break;
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+        AIToDwellingJoinMonster( hero, dst_index );
+        break;
 
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_DWARF_COTTAGE:
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_PEASANT_HUT:
-            AIToDwellingJoinMonster( hero, dst_index );
-            break;
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_GENIE_LAMP:
+    // Price of Loyalty objects
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
+        AIToDwellingRecruitMonster( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
-        case MP2::OBJ_GENIE_LAMP:
-        // Price of Loyalty objects
-        case MP2::OBJ_WATER_ALTAR:
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-            AIToDwellingRecruitMonster( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_TROLL_BRIDGE:
+        AIToDwellingBattleMonster( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-            AIToDwellingBattleMonster( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_STABLES:
+        AIToStables( hero, objectType, dst_index );
+        break;
 
-        case MP2::OBJ_STABLES:
-            AIToStables( hero, objectType, dst_index );
-            break;
+    case MP2::OBJ_BARRIER:
+        AIToBarrier( hero, dst_index );
+        break;
+    case MP2::OBJ_TRAVELLER_TENT:
+        AIToTravellersTent( hero, dst_index );
+        break;
 
-        case MP2::OBJ_BARRIER:
-            AIToBarrier( hero, dst_index );
-            break;
-        case MP2::OBJ_TRAVELLER_TENT:
-            AIToTravellersTent( hero, dst_index );
-            break;
+    case MP2::OBJ_JAIL:
+        AIToJail( hero, dst_index );
+        break;
+    case MP2::OBJ_HUT_OF_MAGI:
+        AIToHutMagi( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_ALCHEMIST_TOWER:
+        AIToAlchemistTower( hero );
+        break;
 
-        case MP2::OBJ_JAIL:
-            AIToJail( hero, dst_index );
-            break;
-        case MP2::OBJ_HUT_OF_MAGI:
-            AIToHutMagi( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_ALCHEMIST_TOWER:
-            AIToAlchemistTower( hero );
-            break;
+    case MP2::OBJ_TRADING_POST:
+        AIToTradingPost( hero );
+        break;
 
-        case MP2::OBJ_TRADING_POST:
-            AIToTradingPost( hero );
-            break;
-
-        // AI has no advantage or knowledge to use these objects
-        case MP2::OBJ_ORACLE:
-        case MP2::OBJ_EYE_OF_MAGI:
-        case MP2::OBJ_SPHINX:
-            break;
-        case MP2::OBJ_SIRENS:
-            // AI must have some action even if it goes on this object by mistake.
-            AIToSirens( hero, objectType, dst_index );
-            break;
-        case MP2::OBJ_BLACK_CAT:
-            AIToBlackCatObject( hero, dst_index );
-            break;
-        default:
-            // AI should know what to do with this type of action object! Please add logic for it.
-            assert( !isActionObject );
+    // AI has no advantage or knowledge to use these objects
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_SPHINX:
+        break;
+    case MP2::OBJ_SIRENS:
+        // AI must have some action even if it goes on this object by mistake.
+        AIToSirens( hero, objectType, dst_index );
+        break;
+    case MP2::OBJ_BLACK_CAT:
+        AIToBlackCatObject( hero, dst_index );
+        break;
+    default:
+        if ( isHeroDisembarking ) {
+            AIToCoast( hero, dst_index );
             break;
         }
+
+        // AI should know what to do with this type of action object! Please add logic for it.
+        assert( !isActionObject );
+        break;
     }
 
-    if ( MP2::isNeedStayFront( objectType ) ) {
-        hero.GetPath().Reset();
-    }
-
-    // Ignore empty tiles
     if ( isActionObject ) {
+        // Due to the peculiarities of AI pathfinding, the AI-controlled hero can perform actions on
+        // the tiles he passes through, such as engaging in battle with a monster guarding that tile.
+        // After such a battle, he may suffer losses in his army and/or spell points, so a reassessment
+        // of potential hero targets is required. Force this reassessment by resetting the hero's path.
+        hero.GetPath().Reset();
+
         AI::Planner::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 }
