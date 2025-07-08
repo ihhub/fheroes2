@@ -42,6 +42,7 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "direction.h"
 #include "game_language.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -1311,6 +1312,27 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
             ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
             // You are trying to load a PoL map named as a MP2 file.
             return false;
+        }
+
+        // On some hacked MP2 maps boats are placed on land. One example is the map "Roc around the .".
+        if ( tile.getMainObjectType() == MP2::OBJ_BOAT && !tile.isWater() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Invalid MP2 format: boat at tile index " << tile.GetIndex() << " is placed on the land! It is removed from this tile to avoid bugs." )
+
+            // Remove the "hacked" boat from the map.
+            removeMainObjectFromTile( tile );
+
+            // Search for the water around and move the boat there.
+            for ( const int32_t tileIndex : Maps::getAroundIndexes( tile.GetIndex(), 1 ) ) {
+                Maps::Tile & nearbyTile = world.getTile( tileIndex );
+                if ( nearbyTile.isWater() && nearbyTile.getMainObjectType() == MP2::OBJ_NONE ) {
+                    nearbyTile.setBoat( Direction::RIGHT, PlayerColor::NONE );
+
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "The boat is placed on water on the empty nearby tile with index " << nearbyTile.GetIndex() << "." )
+
+                    break;
+                }
+            }
         }
     }
 
