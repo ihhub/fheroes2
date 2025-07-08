@@ -208,7 +208,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
 
     const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
-        ApplyPenaltyMovement( path.GetFrontPenalty() );
+        applyMovementPenalty( path.GetFrontPenalty() );
 
         if ( !performMovement ) {
             // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
@@ -446,6 +446,17 @@ void Heroes::AngleStep( int to_direct )
             direction = next;
         }
     }
+}
+
+void Heroes::applyMovementPenalty( const uint32_t penalty )
+{
+    if ( penalty > move_point ) {
+        move_point = 0;
+
+        return;
+    }
+
+    move_point -= penalty;
 }
 
 fheroes2::Point Heroes::getCurrentPixelOffset() const
