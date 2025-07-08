@@ -3803,14 +3803,14 @@ void Heroes::Action( int tileIndex )
     const MP2::MapObjectType objectType = tile.getMainObjectType( tileIndex != heroPosIndex );
 
     const bool isHeroDisembarking = ( isShipMaster() && tile.isSuitableForDisembarkation() );
+    const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, isShipMaster() );
 
-    const bool isActionObject = isHeroDisembarking || MP2::isInGameActionObject( objectType, isShipMaster() );
-    if ( isActionObject ) {
+    if ( isHeroActing ) {
         SetModes( ACTION );
     }
 
     // Most likely there will be some action or event, immediately center the map on the hero to avoid subsequent minor screen movements
-    if ( Modes( ACTION ) || objectType == MP2::OBJ_EVENT ) {
+    if ( isHeroActing || objectType == MP2::OBJ_EVENT ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.getGameArea().SetCenter( GetCenter() );
@@ -4083,7 +4083,7 @@ void Heroes::Action( int tileIndex )
             break;
         }
 
-        assert( !isActionObject );
+        assert( !isHeroActing );
         break;
     }
 }

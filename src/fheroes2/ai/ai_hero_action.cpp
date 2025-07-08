@@ -1931,9 +1931,9 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
     const bool isHeroDisembarking = ( hero.isShipMaster() && tile.isSuitableForDisembarkation() );
+    const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
 
-    const bool isActionObject = isHeroDisembarking || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
-    if ( isActionObject ) {
+    if ( isHeroActing ) {
         hero.SetModes( Heroes::ACTION );
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
@@ -2175,15 +2175,16 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         }
 
         // AI should know what to do with this type of action object! Please add logic for it.
-        assert( !isActionObject );
+        assert( !isHeroActing );
         break;
     }
 
-    if ( isActionObject ) {
+    if ( isHeroActing ) {
         // Due to the peculiarities of AI pathfinding, the AI-controlled hero can perform actions on
         // the tiles he passes through, such as engaging in battle with a monster guarding that tile.
-        // After such a battle, he may suffer losses in his army and/or spell points, so a reassessment
-        // of potential hero targets is required. Force this reassessment by resetting the hero's path.
+        // After such an action, he may suffer losses in his army and/or spell points, or, conversely,
+        // acquire additional skills, so a reassessment of the hero's potential targets is required.
+        // Force this reassessment by resetting the hero's path.
         hero.GetPath().Reset();
 
         AI::Planner::Get().HeroesActionComplete( hero, dst_index, objectType );
