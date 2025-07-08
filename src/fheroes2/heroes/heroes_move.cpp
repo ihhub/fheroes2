@@ -292,9 +292,9 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     return false;
 }
 
-void Heroes::AngleStep( int to_direct )
+void Heroes::AngleStep( const int targetDirection )
 {
-    bool clockwise = Direction::ShortDistanceClockWise( direction, to_direct );
+    const bool clockwise = Direction::ShortDistanceClockWise( direction, targetDirection );
 
     // start index
     if ( 45 > sprite_index && ( sprite_index % heroFrameCountPerTile ) == 0 ) {

@@ -723,7 +723,7 @@ private:
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
-    void AngleStep( int );
+    void AngleStep( const int targetDirection );
     void applyMovementPenalty( const uint32_t penalty );
     bool MoveStep( const bool jumpToNextTile );
     bool isInVisibleMapArea() const;
