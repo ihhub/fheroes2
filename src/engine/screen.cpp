@@ -535,8 +535,9 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation )
+            if ( enable == _emulation ) {
                 return;
+            }
 
             if ( enable ) {
                 clear();
@@ -557,8 +558,9 @@ namespace
                 _emulation = false;
             }
 
-            if ( _cursorUpdater != nullptr )
+            if ( _cursorUpdater != nullptr ) {
                 _cursorUpdater();
+            }
         }
 
         static RenderCursor * create()
@@ -847,7 +849,8 @@ namespace
             }
             else {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() || isNearestScaling() ) {
+                // We force fullscreen at desktop resolution for nearest scaling to disable hardware scaling of game resolution by the monitor.
+                if ( isNearestScaling() || fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -1127,7 +1130,8 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() || isNearestScaling() ) {
+                // We force fullscreen at desktop resolution for nearest scaling to disable hardware scaling of game resolution by the monitor.
+                if ( isNearestScaling() || fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {

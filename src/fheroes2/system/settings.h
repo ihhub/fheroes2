@@ -198,7 +198,6 @@ public:
     bool BattleShowTurnOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
-    bool isSoftwareCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
@@ -284,7 +283,6 @@ public:
     void setBattleShowTurnOrder( const bool enable );
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
-    void setSoftwareCursor( const bool enable );
     void setTextSupportMode( const bool enable );
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );

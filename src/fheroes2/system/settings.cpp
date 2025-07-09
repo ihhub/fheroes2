@@ -788,20 +788,6 @@ void Settings::setMonochromeCursor( const bool enable )
     Cursor::Refresh();
 }
 
-void Settings::setSoftwareCursor( const bool enable )
-{
-    if ( enable ) {
-        _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
-        fheroes2::cursor().enableSoftwareEmulation( true );
-    }
-    else {
-        _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
-        fheroes2::cursor().enableSoftwareEmulation( false );
-    }
-
-    Cursor::Refresh();
-}
-
 void Settings::setTextSupportMode( const bool enable )
 {
     if ( enable ) {
@@ -903,11 +889,6 @@ bool Settings::isPriceOfLoyaltySupported() const
 bool Settings::isMonochromeCursorEnabled() const
 {
     return _gameOptions.Modes( GAME_MONOCHROME_CURSOR );
-}
-
-bool Settings::isSoftwareCursorEnabled() const
-{
-    return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
 }
 
 bool Settings::isTextSupportModeEnabled() const

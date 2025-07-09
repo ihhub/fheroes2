@@ -59,7 +59,6 @@ namespace
         AudioSettings,
         HotKeys,
         CursorType,
-        CursorRenderType,
         ScreenScalingType,
         InterfaceType,
         TextSupportMode,
@@ -77,8 +76,6 @@ namespace
     const fheroes2::Rect audioRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect cursorRenderTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                              optionWindowSize };
     const fheroes2::Rect screenScalingTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize, optionWindowSize };
     const fheroes2::Rect interfaceTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 1, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
                                            optionWindowSize };
@@ -109,15 +106,6 @@ namespace
     {
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawCursorRenderTypeOptions( const fheroes2::Rect & optionRoi, const bool isSoftwareCursorEnabled )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 4 ), _( "Mouse Cursor Render Type" ),
-                              isSoftwareCursorEnabled ? _( "Software" ) : _( "Hardware" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-
-        const fheroes2::Text text( isSoftwareCursorEnabled ? "SOFT" : "HARD", fheroes2::FontType::normalWhite() );
-        text.drawInRoi( optionRoi.x + ( optionRoi.width - text.width() ) / 2, optionRoi.y + optionRoi.height - 20, fheroes2::Display::instance(), optionRoi );
     }
 
     void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isTextSupportModeEnabled )
@@ -164,19 +152,17 @@ namespace
         const fheroes2::Rect windowAudioRoi( audioRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowCursorRenderTypeRoi( cursorRenderTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowScreenScalingTypeRoi( screenScalingTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowCursorRenderTypeRoi,
-                                  &windowScreenScalingTypeRoi, &windowInterfaceTypeRoi, &windowTextSupportModeRoi]() {
+        const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowScreenScalingTypeRoi,
+                                  &windowInterfaceTypeRoi, &windowTextSupportModeRoi]() {
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
             drawHotKeyOptions( windowHotKeyRoi );
             drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
-            drawCursorRenderTypeOptions( windowCursorRenderTypeRoi, conf.isSoftwareCursorEnabled() );
             drawScreenScalingTypeOptions( windowScreenScalingTypeRoi, conf.isScreenScalingTypeNearest() );
             drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
             drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled() );
@@ -210,9 +196,6 @@ namespace
             if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
                 return SelectedWindow::CursorType;
             }
-            if ( le.MouseClickLeft( windowCursorRenderTypeRoi ) ) {
-                return SelectedWindow::CursorRenderType;
-            }
             if ( le.MouseClickLeft( windowScreenScalingTypeRoi ) ) {
                 return SelectedWindow::ScreenScalingType;
             }
@@ -237,12 +220,6 @@ namespace
             }
             else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
-            }
-            else if ( le.isMouseRightButtonPressedInArea( windowCursorRenderTypeRoi ) ) {
-                fheroes2::showStandardTextMessage(
-                    _( "Mouse Cursor Render Type" ),
-                    _( "Toggle between software and hardware cursor rendering. Software cursor is scaled with the game image while hardware cursor always preserves its size." ),
-                    0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowScreenScalingTypeRoi ) ) {
                 fheroes2::showStandardTextMessage(
@@ -337,11 +314,6 @@ namespace fheroes2
                 break;
             case SelectedWindow::ScreenScalingType:
                 conf.setScreenScalingTypeNearest( !conf.isScreenScalingTypeNearest() );
-                display.resetRenderer();
-                windowType = SelectedWindow::UpdateSettings;
-                break;
-            case SelectedWindow::CursorRenderType:
-                conf.setSoftwareCursor( !conf.isSoftwareCursorEnabled() );
                 display.resetRenderer();
                 windowType = SelectedWindow::UpdateSettings;
                 break;
