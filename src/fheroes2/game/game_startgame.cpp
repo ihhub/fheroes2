@@ -522,9 +522,6 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     case MP2::OBJ_MONSTER:
         return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
 
-    case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
-
     default:
         if ( isWater ) {
             if ( MP2::isWaterActionObject( tile.getMainObjectType() ) ) {
@@ -534,6 +531,9 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
             if ( tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
+        }
+        else {
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
 
         break;

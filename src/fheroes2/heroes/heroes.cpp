@@ -1958,16 +1958,6 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     }
 }
 
-void Heroes::ApplyPenaltyMovement( uint32_t penalty )
-{
-    if ( move_point >= penalty ) {
-        move_point -= penalty;
-    }
-    else {
-        move_point = 0;
-    }
-}
-
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
     if ( !isActive() ) {

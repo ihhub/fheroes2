@@ -1015,6 +1015,42 @@ bool Maps::Tile::isSuitableForUltimateArtifact() const
     return true;
 }
 
+bool Maps::Tile::isSuitableForDisembarkation() const
+{
+    // Tiles with OBJ_COAST are always suitable for disembarkation
+    if ( _mainObjectType == MP2::OBJ_COAST ) {
+        return true;
+    }
+
+    // Tiles with heroes are a special case because heroes are moving objects and, strictly speaking, are not part of the map itself, so the checks below do not work with
+    // them
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
+        return false;
+    }
+
+    // Tiles with events are not suitable for disembarkation (at least for now)
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        return false;
+    }
+
+    // It is impossible to disembark on water tiles
+    if ( isWater() ) {
+        return false;
+    }
+
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        // Roads, streams and flags are completely passable.
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            return true;
+        }
+
+        return part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
+
+    return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )
+           && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
+}
+
 bool Maps::Tile::isPassabilityTransparent() const
 {
     for ( const auto & part : _groundObjectPart ) {
@@ -1034,13 +1070,19 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
 
     const bool tileIsWater = isWater();
 
-    // From the water we can get either to the coast tile or to the water tile (provided there is no boat on this tile).
-    if ( fromWater && _mainObjectType != MP2::OBJ_COAST && ( !tileIsWater || _mainObjectType == MP2::OBJ_BOAT ) ) {
-        return false;
+    // From the water we can get either to a water tile (provided that there is no boat on that tile) or to a shore tile suitable for disembarkation.
+    if ( fromWater ) {
+        if ( tileIsWater ) {
+            if ( _mainObjectType == MP2::OBJ_BOAT ) {
+                return false;
+            }
+        }
+        else if ( !isSuitableForDisembarkation() ) {
+            return false;
+        }
     }
-
-    // From the ground we can get to the water tile only if this tile contains a certain object.
-    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
+    // From the ground we can get to a water tile only if this tile contains a certain object.
+    else if ( tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
         return false;
     }
 
