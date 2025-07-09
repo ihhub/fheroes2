@@ -114,7 +114,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
+        void Init( const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -128,7 +128,15 @@ namespace Maps
 
         fheroes2::Point GetCenter() const;
 
-        MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType getMainObjectType() const
+        {
+            return _mainObjectType;
+        }
+
+        constexpr MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero ) const
+        {
+            return ignoreObjectUnderHero ? _mainObjectType : _getMainObjectTypeUnderHero();
+        }
 
         const ObjectPart & getMainObjectPart() const
         {
@@ -181,6 +189,11 @@ namespace Maps
         bool isStream() const;
         bool isSuitableForUltimateArtifact() const;
 
+        // Checks whether it is possible to disembark on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the water. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForDisembarkation() const;
+
         ObjectPart * getGroundObjectPart( const uint32_t uid );
         ObjectPart * getTopObjectPart( const uint32_t uid );
 
@@ -211,7 +224,10 @@ namespace Maps
             return _region;
         }
 
-        void UpdateRegion( uint32_t newRegionID );
+        void UpdateRegion( const uint32_t newRegionID )
+        {
+            _region = ( _tilePassabilityDirections != Direction::UNKNOWN ) ? newRegionID : static_cast<uint32_t>( REGION_NODE_BLOCKED );
+        }
 
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
@@ -227,15 +243,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushGroundObjectPart( const MP2::MP2AddonInfo & ma );
+        void pushGroundObjectPart( ObjectPart part );
 
-        void pushGroundObjectPart( ObjectPart ta );
-
-        void pushTopObjectPart( const MP2::MP2AddonInfo & ma );
-
-        void pushTopObjectPart( ObjectPart ta )
+        void pushTopObjectPart( ObjectPart part )
         {
-            _topObjectPart.emplace_back( ta );
+            _topObjectPart.emplace_back( part );
         }
 
         const std::list<ObjectPart> & getGroundObjectParts() const
@@ -362,6 +374,8 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
+
+        MP2::MapObjectType _getMainObjectTypeUnderHero() const;
 
         friend OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
         friend IStreamBase & operator>>( IStreamBase & stream, Tile & tile );

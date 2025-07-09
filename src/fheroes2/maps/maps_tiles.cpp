@@ -411,16 +411,9 @@ namespace
     }
 }
 
-void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
+void Maps::Tile::Init( const MP2::MP2TileInfo & mp2 )
 {
-    _tilePassabilityDirections = DIRECTION_ALL;
-
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
-    _fogColors = Color::allPlayerColors();
-    _terrainImageIndex = mp2.terrainImageIndex;
-    _terrainFlags = mp2.terrainFlags;
-    _boatOwnerColor = PlayerColor::NONE;
-    _index = index;
 
     setMainObjectType( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
@@ -431,30 +424,12 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
                    "Metadata present for non action object " << MP2::StringObject( _mainObjectType ) << " at tile " << _index << ". Metadata value " << _metadata[0] )
     }
 
-    _groundObjectPart.clear();
-    _topObjectPart.clear();
-
-    const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
-
-    const ObjectLayerType layerType = static_cast<ObjectLayerType>( mp2.quantity1 & 0x03 );
-
     // In the original Editor the road bit is set even if no road exist.
     // It is important to verify the existence of a road without relying on this bit.
-    if ( isSpriteRoad( bottomObjectIcnType, mp2.bottomIcnImageIndex ) ) {
-        _isTileMarkedAsRoad = true;
-    }
 
-    if ( _mainObjectType == MP2::OBJ_NONE && ( layerType == ObjectLayerType::SHADOW_LAYER || layerType == ObjectLayerType::TERRAIN_LAYER ) ) {
-        // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
-        if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-            _groundObjectPart.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
-        }
-    }
-    else {
-        _mainObjectPart.layerType = layerType;
-        _mainObjectPart._uid = mp2.level1ObjectUID;
-        _mainObjectPart.icnType = bottomObjectIcnType;
-        _mainObjectPart.icnIndex = mp2.bottomIcnImageIndex;
+    const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
+    if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+        pushGroundObjectPart( { static_cast<ObjectLayerType>( mp2.quantity1 & 0x03 ), mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex } );
     }
 
     const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName2 >> 2 );
@@ -465,17 +440,17 @@ void Maps::Tile::Init( int32_t index, const MP2::MP2TileInfo & mp2 )
         // One object part for a crack object has invalid layer.
         // This causes a rendering bug which is also present in the original game.
         if ( topObjectIcnType == MP2::OBJ_ICN_TYPE_OBJNCRCK && mp2.topIcnImageIndex == 226 ) {
-            _groundObjectPart.emplace_back( ObjectLayerType::TERRAIN_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+            pushGroundObjectPart( { ObjectLayerType::TERRAIN_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex } );
         }
         else {
-            _topObjectPart.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+            pushTopObjectPart( { OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex } );
         }
     }
 }
 
 Heroes * Maps::Tile::getHero() const
 {
-    return MP2::OBJ_HERO == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
+    return ( MP2::OBJ_HERO == _mainObjectType ) && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tile::setHero( Heroes * hero )
@@ -511,14 +486,14 @@ fheroes2::Point Maps::Tile::GetCenter() const
     return GetPoint( _index );
 }
 
-MP2::MapObjectType Maps::Tile::getMainObjectType( const bool ignoreObjectUnderHero /* true */ ) const
+MP2::MapObjectType Maps::Tile::_getMainObjectTypeUnderHero() const
 {
-    if ( !ignoreObjectUnderHero && MP2::OBJ_HERO == _mainObjectType ) {
-        const Heroes * hero = getHero();
-        return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
+    if ( _mainObjectType != MP2::OBJ_HERO ) {
+        return _mainObjectType;
     }
 
-    return _mainObjectType;
+    const Heroes * hero = getHero();
+    return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
 }
 
 void Maps::Tile::setMainObjectType( const MP2::MapObjectType objectType )
@@ -836,53 +811,13 @@ bool Maps::Tile::doesObjectExist( const uint32_t uid ) const
                         [uid]( const auto & part ) { return part._uid == uid && !part.isPassabilityTransparent(); } );
 }
 
-void Maps::Tile::UpdateRegion( uint32_t newRegionID )
+void Maps::Tile::pushGroundObjectPart( ObjectPart part )
 {
-    if ( _tilePassabilityDirections ) {
-        _region = newRegionID;
-    }
-    else {
-        _region = REGION_NODE_BLOCKED;
-    }
-}
-
-void Maps::Tile::pushGroundObjectPart( const MP2::MP2AddonInfo & ma )
-{
-    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );
-    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-        // No object exist.
-        return;
-    }
-
-    // In the original Editor the road bit is set even if no road exist.
-    // It is important to verify the existence of a road without relying on this bit.
-    if ( isSpriteRoad( objectIcnType, ma.bottomIcnImageIndex ) ) {
+    if ( isSpriteRoad( part.icnType, part.icnIndex ) ) {
         _isTileMarkedAsRoad = true;
     }
 
-    _groundObjectPart.emplace_back( static_cast<ObjectLayerType>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
-}
-
-void Maps::Tile::pushTopObjectPart( const MP2::MP2AddonInfo & ma )
-{
-    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 );
-    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-        // No object exist.
-        return;
-    }
-
-    // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
-    // TODO: remove layer type for top layer objects.
-    _topObjectPart.emplace_back( OBJECT_LAYER, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
-}
-
-void Maps::Tile::pushGroundObjectPart( ObjectPart ta )
-{
-    if ( isSpriteRoad( ta.icnType, ta.icnIndex ) ) {
-        _isTileMarkedAsRoad = true;
-    }
-
-    _groundObjectPart.emplace_back( ta );
+    _groundObjectPart.emplace_back( part );
 }
 
 void Maps::Tile::sortObjectParts()
@@ -1080,6 +1015,42 @@ bool Maps::Tile::isSuitableForUltimateArtifact() const
     return true;
 }
 
+bool Maps::Tile::isSuitableForDisembarkation() const
+{
+    // Tiles with OBJ_COAST are always suitable for disembarkation
+    if ( _mainObjectType == MP2::OBJ_COAST ) {
+        return true;
+    }
+
+    // Tiles with heroes are a special case because heroes are moving objects and, strictly speaking, are not part of the map itself, so the checks below do not work with
+    // them
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
+        return false;
+    }
+
+    // Tiles with events are not suitable for disembarkation (at least for now)
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        return false;
+    }
+
+    // It is impossible to disembark on water tiles
+    if ( isWater() ) {
+        return false;
+    }
+
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        // Roads, streams and flags are completely passable.
+        if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
+            return true;
+        }
+
+        return part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
+
+    return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )
+           && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
+}
+
 bool Maps::Tile::isPassabilityTransparent() const
 {
     for ( const auto & part : _groundObjectPart ) {
@@ -1099,13 +1070,19 @@ bool Maps::Tile::isPassableFrom( const int direction, const bool fromWater, cons
 
     const bool tileIsWater = isWater();
 
-    // From the water we can get either to the coast tile or to the water tile (provided there is no boat on this tile).
-    if ( fromWater && _mainObjectType != MP2::OBJ_COAST && ( !tileIsWater || _mainObjectType == MP2::OBJ_BOAT ) ) {
-        return false;
+    // From the water we can get either to a water tile (provided that there is no boat on that tile) or to a shore tile suitable for disembarkation.
+    if ( fromWater ) {
+        if ( tileIsWater ) {
+            if ( _mainObjectType == MP2::OBJ_BOAT ) {
+                return false;
+            }
+        }
+        else if ( !isSuitableForDisembarkation() ) {
+            return false;
+        }
     }
-
-    // From the ground we can get to the water tile only if this tile contains a certain object.
-    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
+    // From the ground we can get to a water tile only if this tile contains a certain object.
+    else if ( tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
         return false;
     }
 
