@@ -286,7 +286,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_CAST_SPELL )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|cast battle spell" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER )]
-            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle battle turn order display" ), fheroes2::Key::KEY_T };
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle display of battle turn order" ), fheroes2::Key::KEY_T };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|dwelling level 1" ), fheroes2::Key::KEY_1 };
