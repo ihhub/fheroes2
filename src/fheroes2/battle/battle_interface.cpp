@@ -2930,7 +2930,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             EventShowOptions();
         }
         // Toggle the display of the battle turn order
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY ) ) {
             conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
 
             humanturn_redraw = true;
