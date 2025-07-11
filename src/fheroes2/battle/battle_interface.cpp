@@ -2911,7 +2911,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Settings & conf = Settings::Get();
+    Settings & conf = Settings::Get();
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
@@ -2929,13 +2929,24 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
+        // Toggle the display of the battle turn order
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY ) ) {
+            conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
+
+            humanturn_redraw = true;
+        }
         // Switch the auto combat mode on
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_AUTO_COMBAT ) ) {
-            EventStartAutoCombat( unit, actions );
+            if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable the auto combat mode?" ), Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                _startAutoCombat( unit, actions );
+            }
         }
         // Resolve the combat in quick combat mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_QUICK_COMBAT ) ) {
-            EventQuickCombat( actions );
+            if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO )
+                 == Dialog::YES ) {
+                _quickCombat( actions );
+            }
         }
         // Cast the spell
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
@@ -3324,29 +3335,6 @@ void Battle::Interface::EventShowOptions()
     _openBattleSettingsDialog();
     _buttonSettings.drawOnRelease();
     humanturn_redraw = true;
-}
-
-bool Battle::Interface::EventStartAutoCombat( const Unit & unit, Actions & actions )
-{
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to enable the auto combat mode?" ), Dialog::YES | Dialog::NO ) != Dialog::YES ) {
-        return false;
-    }
-
-    _startAutoCombat( unit, actions );
-
-    return true;
-}
-
-bool Battle::Interface::EventQuickCombat( Actions & actions )
-{
-    if ( fheroes2::showStandardTextMessage( {}, _( "Are you sure you want to resolve the battle in the quick combat mode?" ), Dialog::YES | Dialog::NO )
-         != Dialog::YES ) {
-        return false;
-    }
-
-    _quickCombat( actions );
-
-    return true;
 }
 
 void Battle::Interface::_startAutoCombat( const Unit & unit, Actions & actions )
