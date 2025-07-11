@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-03-16 22:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -834,6 +834,14 @@ msgstr "Lanzar %{spell}"
 msgid "Select spell target"
 msgstr "Seleccionar objetivo del hechizo"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "¿Estás seguro de que quieres activar el combate automático?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
+
 msgid "View Ballista info"
 msgstr "Ver información de la ballesta"
 
@@ -898,14 +906,6 @@ msgstr "Barra de mensajes"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Muestra los resultados de las acciones de cada monstruo."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "¿Estás seguro de que quieres activar el combate automático?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
 
 msgid ""
 "AUTO\n"
@@ -5630,6 +5630,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Mostrar el siguiente héroe"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""

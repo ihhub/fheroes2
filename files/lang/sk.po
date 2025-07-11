@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -807,6 +807,14 @@ msgstr "Kúzli %{spell}"
 msgid "Select spell target"
 msgstr "Urči cieľ kúzla"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Určite chceš povoliť automatický boj?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
 msgid "View Ballista info"
 msgstr "Zobraz info o balistovi"
 
@@ -871,14 +879,6 @@ msgstr "Panel správ"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Ukáže výsledky činností jednotlivých bojovníkov."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Určite chceš povoliť automatický boj?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
 
 msgid ""
 "AUTO\n"
@@ -5652,6 +5652,10 @@ msgstr "preskoč kolo v boji"
 
 msgid "hotkey|cast battle spell"
 msgstr "vyčaruj bojové kúzlo"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "prepni boj do automatického módu"
 
 msgid "hotkey|dwelling level 1"
 msgstr "obydlie úrovne 1"

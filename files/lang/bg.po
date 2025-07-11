@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -815,6 +815,14 @@ msgstr "Направи %{spell}"
 msgid "Select spell target"
 msgstr "Избери цел за заклинание"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
 msgid "View Ballista info"
 msgstr "Виж информация за Катапулт"
 
@@ -879,14 +887,6 @@ msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid ""
 "AUTO\n"
@@ -5690,6 +5690,10 @@ msgstr "пропусни ход в битка"
 
 msgid "hotkey|cast battle spell"
 msgstr "направи бойно заклинание"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "превключи автоматичния режим на битка"
 
 msgid "hotkey|dwelling level 1"
 msgstr "ниво на жилище 1"
