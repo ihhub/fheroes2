@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -810,6 +810,14 @@ msgstr "%{spell} uygula"
 msgid "Select spell target"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "View Ballista info"
 msgstr "Mancınık bilgilerini görüntüle"
 
@@ -874,14 +882,6 @@ msgstr "Mesaj Çubuğu"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid ""
 "AUTO\n"
@@ -5324,6 +5324,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""

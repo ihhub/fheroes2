@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -798,6 +798,14 @@ msgstr "Rzuć zaklęcie: %{spell}"
 msgid "Select spell target"
 msgstr "Wybierz cel zaklęcia"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Czy na pewno chcesz włączyć automatyczną walkę?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
+
 msgid "View Ballista info"
 msgstr "Informacje o baliście"
 
@@ -862,14 +870,6 @@ msgstr "Pasek Wiadomości"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Pokazuje rezultat akcji wykonanych przez indywidualną jednostkę."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Czy na pewno chcesz włączyć automatyczną walkę?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
 
 msgid ""
 "AUTO\n"
@@ -5655,6 +5655,10 @@ msgstr "pomiń turę w walce"
 
 msgid "hotkey|cast battle spell"
 msgstr "rzuć zaklęcie bojowe"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "włącz/wyłącz automatyczny tryb walki"
 
 msgid "hotkey|dwelling level 1"
 msgstr "siedlisko poziom 1"

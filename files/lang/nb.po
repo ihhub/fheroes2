@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -810,6 +810,14 @@ msgstr "Bruk %{spell}"
 msgid "Select spell target"
 msgstr "Velg trolldomsmål"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Er du sikker på at du ønsker å skru på autokamp?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
+
 msgid "View Ballista info"
 msgstr "Vis info om ballisten"
 
@@ -874,14 +882,6 @@ msgstr "Kamplogg"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Er du sikker på at du ønsker å skru på autokamp?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
 
 msgid ""
 "AUTO\n"
@@ -5732,6 +5732,10 @@ msgstr "Velg pass i kamp"
 
 msgid "hotkey|cast battle spell"
 msgstr "Bruk magi i kamp"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Slå på/av automatiske trekk i kamp"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bosted nivå 1"
