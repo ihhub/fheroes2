@@ -217,15 +217,7 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
-                    conf.setInterfaceType( InterfaceType::GOOD );
-                }
-                else if ( conf.getInterfaceType() == InterfaceType::GOOD ) {
-                    conf.setInterfaceType( InterfaceType::EVIL );
-                }
-                else {
-                    conf.setInterfaceType( InterfaceType::DYNAMIC );
-                }
+                conf.switchToNextInterfaceType();
                 updateUI();
                 saveConfiguration = true;
 

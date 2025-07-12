@@ -921,6 +921,11 @@ bool Settings::isHideInterfaceEnabled() const
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
 }
 
+bool Settings::isScreenScalingTypeNearest() const
+{
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
+}
+
 bool Settings::isEvilInterfaceEnabled() const
 {
     switch ( _interfaceType ) {
@@ -952,6 +957,21 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+void Settings::switchToNextInterfaceType()
+{
+    switch ( _interfaceType ) {
+    case InterfaceType::DYNAMIC:
+        _interfaceType = InterfaceType::GOOD;
+        break;
+    case InterfaceType::GOOD:
+        _interfaceType = InterfaceType::EVIL;
+        break;
+    default:
+        _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
 }
 
 bool Settings::isEditorAnimationEnabled() const
