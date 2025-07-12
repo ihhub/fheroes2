@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -700,6 +700,12 @@ msgstr ""
 msgid "Select spell target"
 msgstr ""
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr ""
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+
 msgid "View Ballista info"
 msgstr ""
 
@@ -759,12 +765,6 @@ msgid "Message Bar"
 msgstr ""
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr ""
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr ""
 
 msgid ""
@@ -5006,6 +5006,9 @@ msgid "hotkey|skip turn in battle"
 msgstr ""
 
 msgid "hotkey|cast battle spell"
+msgstr ""
+
+msgid "hotkey|toggle display of battle turn order"
 msgstr ""
 
 msgid "hotkey|dwelling level 1"

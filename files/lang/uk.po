@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -825,6 +825,12 @@ msgstr "Накласти %{spell}"
 msgid "Select spell target"
 msgstr "Обрати ціль закляття"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Ви впевнені, що хочете увімкнути автобитву?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ви впевнені, що хочете завершити битву в режимі швидкого бою?"
+
 msgid "View Ballista info"
 msgstr "Дані по Балісті"
 
@@ -887,12 +893,6 @@ msgstr "Табло повідомлень"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Ви впевнені, що хочете увімкнути автобитву?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ви впевнені, що хочете завершити битву в режимі швидкого бою?"
 
 msgid ""
 "AUTO\n"
@@ -5503,6 +5503,10 @@ msgstr "пропустити хід у бою"
 
 msgid "hotkey|cast battle spell"
 msgstr "накласти бойове заклинання"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "увімкнути режим автоматичного бою"
 
 msgid "hotkey|dwelling level 1"
 msgstr "житло 1-го рівня"

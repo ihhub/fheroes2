@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -818,6 +818,12 @@ msgstr "Lancer %{spell}"
 msgid "Select spell target"
 msgstr "Sélectionner la cible du sort"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Êtes-vous sûr de vouloir désactiver le mode combat automatique ?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Êtes-vous sûr de vouloir résoudre le combat en mode combat rapide ?"
+
 msgid "View Ballista info"
 msgstr "Voir les infos de la baliste"
 
@@ -882,12 +888,6 @@ msgstr "Barre d'informations"
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Êtes-vous sûr de vouloir désactiver le mode combat automatique ?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Êtes-vous sûr de vouloir résoudre le combat en mode combat rapide ?"
 
 msgid ""
 "AUTO\n"
@@ -5651,6 +5651,10 @@ msgstr "Passer le tour dans le combat"
 
 msgid "hotkey|cast battle spell"
 msgstr "Lancer sortilège de bataille"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Activer/désactiver le mode combat auto"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Demeure de niveau 1"

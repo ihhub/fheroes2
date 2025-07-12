@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 15:29+0000\n"
+"POT-Creation-Date: 2025-07-11 14:12+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -803,6 +803,14 @@ msgstr "Zaubern %{spell}"
 msgid "Select spell target"
 msgstr "Ziel des Zaubers auswählen"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+"Seid Ihr sicher, dass Ihr den Kampf im schnellen Kampfmodus durchführen "
+"möchtet?"
+
 msgid "View Ballista info"
 msgstr "Ballista-Infos anzeigen"
 
@@ -865,14 +873,6 @@ msgstr "Nachrichtenleiste"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Ergebnisse der Aktionen der einzelnen Monster anzeigen."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr ""
-"Seid Ihr sicher, dass Ihr den Kampf im schnellen Kampfmodus durchführen "
-"möchtet?"
 
 msgid ""
 "AUTO\n"
@@ -5609,6 +5609,10 @@ msgstr "Runde im Kampf überspringen"
 
 msgid "hotkey|cast battle spell"
 msgstr "Kampfzauber sprechen"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Auto-Kampf-Modus umschalten"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Behausung Stufe 1"
