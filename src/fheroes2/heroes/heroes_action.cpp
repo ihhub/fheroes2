@@ -1810,6 +1810,10 @@ namespace
 
             if ( tile.isWater() ) {
                 if ( gold == 0 ) {
+                    fheroes2::showStandardTextMessage( std::move( hdr ),
+                                                       _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ),
+                                                       Dialog::OK );
+
                     return {};
                 }
 
