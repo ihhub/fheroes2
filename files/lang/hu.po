@@ -806,6 +806,12 @@ msgstr "%{spell} varázslat idézése"
 msgid "Select spell target"
 msgstr "Varázslat célpontjának kiválasztása"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Biztos, hogy be akarod kapcsolni az automatikus csata módot?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Biztos vagy benne hogy gyors csata módban kívánod befejezni a csatát?"
+
 msgid "View Ballista info"
 msgstr "Hajítógép információk"
 
@@ -868,12 +874,6 @@ msgstr "Üzenetsáv"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Mutatja egy lény tevékenységének eredményét."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Biztos, hogy be akarod kapcsolni az automatikus csata módot?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Biztos vagy benne hogy gyors csata módban kívánod befejezni a csatát?"
 
 msgid ""
 "AUTO\n"
@@ -5482,6 +5482,10 @@ msgstr "kör kihagyása a csatában"
 msgid "hotkey|cast battle spell"
 msgstr "varázslat idézése csatában"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "automatikus csata mód kapcsoló"
+
 msgid "hotkey|dwelling level 1"
 msgstr "toborzóhely 1. szint"
 
@@ -7235,6 +7239,14 @@ msgid ""
 msgstr ""
 "A megfontoltság a vitézség tiszteletre méltó oldala. Ma úgy döntesz, hogy "
 "elállsz a harctól."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Több órás munkával sikerül kihalásznod egy ládát a tengerből. Kinyitod, és "
+"%{gold} aranyat találsz benne."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

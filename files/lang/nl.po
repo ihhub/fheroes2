@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-12 14:58+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -766,6 +766,15 @@ msgstr "%{spell} uitspreken"
 msgid "Select spell target"
 msgstr "Selecteer spreuk doelwit"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Weet je zeker dat je je wilt terugtrekken?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
 msgid "View Ballista info"
 msgstr "Ballista-info bekijken"
 
@@ -830,15 +839,6 @@ msgstr "Brichtenbalk"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Toont de resultaten van de acties van individuele monsters."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Weet je zeker dat je je wilt terugtrekken?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid ""
 "AUTO\n"
@@ -5379,6 +5379,10 @@ msgstr ""
 msgid "hotkey|cast battle spell"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Systeem instellingen aanpassen"
+
 msgid "hotkey|dwelling level 1"
 msgstr ""
 
@@ -6873,6 +6877,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
