@@ -333,7 +333,10 @@ namespace Battle
         fheroes2::Point getRelativeMouseCursorPos() const;
 
         void setStatus( const std::string & message, const bool top );
-        void SetUnitForContourDrawing( const Unit * unit );
+        void setUnitForContourDrawing( const Unit * unit )
+        {
+            _unitForContourDrawing = unit;
+        }
 
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
         void FadeArena( const bool clearMessageLog );
