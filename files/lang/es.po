@@ -3297,7 +3297,7 @@ msgstr ""
 "%{skill2}"
 
 msgid "Learn %{secondary-skill}"
-msgstr "Aprender %(secondary-skill)"
+msgstr "Aprender %{secondary-skill}"
 
 msgid "n/a"
 msgstr "n/d"
