@@ -616,7 +616,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
         else if ( buttonUpgrade && le.isMouseRightButtonPressedInArea( buttonUpgrade->area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
+            fheroes2::showResourceMessage( fheroes2::Text( _( "Upgrade" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( _( "Upgrade your troops." ), fheroes2::FontType::normalWhite() ), 0, troop.GetTotalUpgradeCost() );
         }
         else if ( buttonDismiss && le.isMouseRightButtonPressedInArea( buttonDismiss->area() ) ) {
             fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
