@@ -2362,9 +2362,9 @@ void AllCastles::removeCastle( const fheroes2::Point & position )
     }
 
     // After the castle is removed we need to decrease the indices of the castles with "id" more than `castleId`.
-    for ( auto it = _castleTiles.begin(); it != _castleTiles.end(); ++it ) {
-        if ( it->second > castleId ) {
-            --it->second;
+    for ( auto & [pos, id] : _castleTiles ) {
+        if ( id > castleId ) {
+            --id;
         }
     }
 }
