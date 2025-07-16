@@ -1202,8 +1202,12 @@ bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2:
                 Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
                 return true;
             }
+            // There is no need to process other items of `_rects`.
+            return false;
         }
     }
+
+    _interface->setUnitForContourDrawing( nullptr );
 
     return false;
 }
@@ -1966,17 +1970,16 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
         drawnPosition = _drawTroopSprite( unit, monsterSprite );
     }
 
-    if ( _currentUnit == &unit && _currentUnit != _unitForContourDrawing && _spriteInsteadCurrentUnit == nullptr ) {
-        // Current unit's turn which is idling. Highlight this unit's contour.
-        const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
-        fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
-    }
-
-    if ( _unitForContourDrawing != nullptr && _unitForContourDrawing == &unit ) {
-        // Additional unit to pay attantion to. Highlight this unit's contour.
+    if ( _unitForContourDrawing == &unit ) {
+        // Additional unit to pay attention to. Highlight this unit's contour.
         const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, GetArmyColorFromPlayerColor( unit.GetArmyColor() ) );
         fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
         setUnitForContourDrawing( nullptr );
+    }
+    else if ( _currentUnit == &unit && _spriteInsteadCurrentUnit == nullptr ) {
+        // Current unit's turn which is idling. Highlight this unit's contour.
+        const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
+        fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
     }
 }
 
