@@ -1737,11 +1737,11 @@ namespace Interface
                 }
             }
 
-            if ( mapHeroCount > Heroes::HEROES_COUNT - 3 ) {
+            if ( mapHeroCount > AllHeroes::getMaximumAllowedHeroes() - 1 ) {
                 // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
 
                 std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
-                StringReplace( warning, "%{count}", Heroes::HEROES_COUNT - 2 );
+                StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
                 _warningMessage.reset( std::move( warning ) );
                 return;
             }
@@ -1951,11 +1951,11 @@ namespace Interface
                     }
                 }
 
-                if ( mapHeroCount > Heroes::HEROES_COUNT - 3 ) {
+                if ( mapHeroCount > AllHeroes::getMaximumAllowedHeroes() - 1 ) {
                     // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
 
                     std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
-                    StringReplace( warning, "%{count}", Heroes::HEROES_COUNT - 2 );
+                    StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
                     _warningMessage.reset( std::move( warning ) );
                     return;
                 }

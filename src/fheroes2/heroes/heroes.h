@@ -811,6 +811,13 @@ public:
         _heroes.clear();
     }
 
+    // Return the maximum allowed heroes on map limited by the count of hero portraits
+    // and by the count of her default names.
+    static constexpr size_t getMaximumAllowedHeroes()
+    {
+        return Heroes::HEROES_COUNT - 2;
+    }
+
     Heroes * Get( const int hid ) const;
     Heroes * Get( const fheroes2::Point & center ) const;
 
