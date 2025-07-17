@@ -345,6 +345,12 @@ namespace
                         Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( bottomTileIndex ), false );
                     }
 
+                    // The castle entrance is marked as road. Update this tile to remove the mark.
+                    Maps::updateRoadSpriteOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
+
+                    // Remove the castle from `world` castles vector.
+                    world.removeCastle( Maps::GetPoint( static_cast<int32_t>( mapTileIndex ) ) );
+
                     needRedraw = true;
                     updateMapPlayerInformation = true;
                 }
@@ -641,6 +647,14 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
+            // TODO: Allow castles with custom names to exceed the 72 random castle names limit.
+            // To do this we'll need also to check that the custom name is not present in random names.
+            if ( world.getCastleCount() > 71 ) {
+                errorMessage = _( "A maximum of 72 %{objects} can be placed on the map." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
+                return false;
+            }
+
             const Maps::Tile & tile = world.getTile( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
