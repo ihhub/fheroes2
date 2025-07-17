@@ -25,6 +25,7 @@
 
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <list>
