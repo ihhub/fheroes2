@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2025-07-10 23:37+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4147,6 +4147,10 @@ msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
+
+#, fuzzy
+msgid "A maximum of 72 %{objects} can be placed on the map."
+msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "

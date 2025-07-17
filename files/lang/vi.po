@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4246,6 +4246,10 @@ msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 #, fuzzy
 msgid "Action objects must be placed on clear tiles."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
+#, fuzzy
+msgid "A maximum of 72 %{objects} can be placed on the map."
+msgstr "Thị trấn không thể đặt trên nước."
 
 #, fuzzy
 msgid ""

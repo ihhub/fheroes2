@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4095,6 +4095,9 @@ msgid "Objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
+msgstr ""
+
+msgid "A maximum of 72 %{objects} can be placed on the map."
 msgstr ""
 
 msgid ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2025-07-15 07:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4176,6 +4176,10 @@ msgstr "Объекты нельзя размещать за пределами �
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Активные объекты можно размещать только в свободных клетках карты."
+
+#, fuzzy
+msgid "A maximum of 72 %{objects} can be placed on the map."
+msgstr "На карте можно разместить максимум %{count} обелисков."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
