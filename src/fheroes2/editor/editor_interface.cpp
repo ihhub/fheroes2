@@ -33,6 +33,7 @@
 
 #include "artifact.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -647,11 +648,12 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
-            // TODO: Allow castles with custom names to exceed the 72 random castle names limit.
-            // To do this we'll need also to check that the custom name is not present in random names.
-            if ( world.getCastleCount() > 71 ) {
-                errorMessage = _( "A maximum of 72 %{objects} can be placed on the map." );
+            // TODO: Allow castles with custom names to exceed the default castle names limit.
+            // To do this we'll need also to check that the custom name is not present in default names.
+            if ( world.getCastleCount() > AllCastles::getMaximumAllowedCastles() - 1 ) {
+                errorMessage = _( "A maximum of %{count} %{objects} can be placed on the map." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
+                StringReplace( errorMessage, "%{count}", AllCastles::getMaximumAllowedCastles() );
                 return false;
             }
 

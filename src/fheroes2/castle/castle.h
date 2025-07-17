@@ -556,6 +556,8 @@ public:
         return _castles.size();
     }
 
+    static size_t getMaximumAllowedCastles();
+
     void AddCastle( std::unique_ptr<Castle> && castle );
 
     Castle * Get( const fheroes2::Point & position ) const;
