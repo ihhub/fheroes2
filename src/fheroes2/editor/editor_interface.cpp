@@ -1702,19 +1702,34 @@ namespace Interface
             const auto & objects = Maps::getObjectsByGroup( groupType );
 
             const uint32_t color = objectInfo.metadata[0];
-            size_t heroCount = 0;
+            size_t kingdomHeroCount = 0;
+            size_t mapHeroCount = 0;
             for ( const auto & mapTile : _mapFormat.tiles ) {
                 for ( const auto & object : mapTile.objects ) {
                     if ( object.group == groupType ) {
                         assert( object.index < objects.size() );
                         if ( objects[object.index].metadata[0] == color ) {
-                            ++heroCount;
+                            ++kingdomHeroCount;
                         }
+
+                        ++mapHeroCount;
+                    }
+                    else if ( Maps::isJailObject( object.group, object.index ) ) {
+                        // Jails are also heroes, but in jail.
+                        ++mapHeroCount;
                     }
                 }
             }
 
-            if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
+            if ( mapHeroCount > 70 ) {
+                // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
+
+                std::string warning( _( "A maximum of 71 heroes including jailed heroes can be placed on the map." ) );
+                _warningMessage.reset( std::move( warning ) );
+                return;
+            }
+
+            if ( kingdomHeroCount >= GameStatic::GetKingdomMaxHeroes() ) {
                 std::string warning( _( "A maximum of %{count} heroes of the same color can be placed on the map." ) );
                 StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
                 _warningMessage.reset( std::move( warning ) );
@@ -1905,6 +1920,24 @@ namespace Interface
                 if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
+                    _warningMessage.reset( std::move( warning ) );
+                    return;
+                }
+            }
+            else if ( objectInfo.objectType == MP2::OBJ_JAIL ) {
+                size_t mapHeroCount = 0;
+                for ( const auto & mapTile : _mapFormat.tiles ) {
+                    for ( const auto & object : mapTile.objects ) {
+                        if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES || Maps::isJailObject( object.group, object.index ) ) {
+                            ++mapHeroCount;
+                        }
+                    }
+                }
+
+                if ( mapHeroCount > 70 ) {
+                    // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
+
+                    std::string warning( _( "A maximum of 71 heroes including jailed heroes can be placed on the map." ) );
                     _warningMessage.reset( std::move( warning ) );
                     return;
                 }
