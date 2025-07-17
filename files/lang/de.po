@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4190,6 +4190,10 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 #, fuzzy
 msgid "Action objects must be placed on clear tiles."
 msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "A maximum of 72 %{objects} can be placed on the map."
+msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
 
 #, fuzzy
 msgid ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
+"POT-Creation-Date: 2025-07-17 11:23+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4169,6 +4169,10 @@ msgstr "Неможливо розмістити об'єкт поза мапою.
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Об'єкти дії мають бути розміщені на чистому просторі."
+
+#, fuzzy
+msgid "A maximum of 72 %{objects} can be placed on the map."
+msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
