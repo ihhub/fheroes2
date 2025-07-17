@@ -560,6 +560,8 @@ public:
 
     Castle * Get( const fheroes2::Point & position ) const;
 
+    void removeCastle( const fheroes2::Point & position );
+
     void Scout( const PlayerColorsSet colors ) const;
 
     void NewDay() const;

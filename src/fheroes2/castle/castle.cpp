@@ -2338,6 +2338,37 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     return _castles[iter->second].get();
 }
 
+void AllCastles::removeCastle( const fheroes2::Point & position )
+{
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return;
+    }
+
+    const size_t castleId = iter->second;
+
+    _castles.erase( _castles.begin() + castleId );
+
+    _castleTiles.erase( iter );
+
+    // Castle is represented by more than 1 tile on the radar - remove the other tiles.
+    for ( auto it = _castleTiles.begin(); it != _castleTiles.end(); ) {
+        if ( it->second == castleId ) {
+            it = _castleTiles.erase( it );
+        }
+        else {
+            ++it;
+        }
+    }
+
+    // After the castle is removed we need to decrease the indices of the castles with "id" more than `castleId`.
+    for ( auto & [pos, id] : _castleTiles ) {
+        if ( id > castleId ) {
+            --id;
+        }
+    }
+}
+
 void AllCastles::Scout( const PlayerColorsSet colors ) const
 {
     for ( const Castle * castle : *this ) {
