@@ -650,7 +650,7 @@ namespace
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
             // TODO: Allow castles with custom names to exceed the default castle names limit.
             // To do this we'll need also to check that the custom name is not present in default names.
-            if ( world.getCastleCount() > AllCastles::getMaximumAllowedCastles() - 1 ) {
+            if ( world.getCastleCount() >= AllCastles::getMaximumAllowedCastles() ) {
                 errorMessage = _( "A maximum of %{count} %{objects} can be placed on the map." );
                 StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
                 StringReplace( errorMessage, "%{count}", AllCastles::getMaximumAllowedCastles() );
@@ -1737,7 +1737,7 @@ namespace Interface
                 }
             }
 
-            if ( mapHeroCount > AllHeroes::getMaximumAllowedHeroes() - 1 ) {
+            if ( mapHeroCount >= AllHeroes::getMaximumAllowedHeroes() ) {
                 // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
 
                 std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
@@ -1951,7 +1951,7 @@ namespace Interface
                     }
                 }
 
-                if ( mapHeroCount > AllHeroes::getMaximumAllowedHeroes() - 1 ) {
+                if ( mapHeroCount >= AllHeroes::getMaximumAllowedHeroes() ) {
                     // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
 
                     std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
