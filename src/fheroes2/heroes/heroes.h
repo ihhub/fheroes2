@@ -816,7 +816,9 @@ public:
     // and by the count of her default names.
     static constexpr size_t getMaximumAllowedHeroes()
     {
-        return Heroes::HEROES_COUNT - 2;
+        // We exclude the "UNKNOWN" hero, the "debug" hero, all 17 heroes from campaign
+        // and we must also leave two heroes unused to be shown in castle for hire.
+        return Heroes::HEROES_COUNT - 2 - 17 - 2;
     }
 
     Heroes * Get( const int hid ) const;
