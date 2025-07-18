@@ -36,7 +36,11 @@ class Recruit
 public:
     Recruit();
     Recruit( const Heroes & hero, const uint32_t surrenderDay );
-    explicit Recruit( const Heroes & hero );
+    explicit Recruit( const Heroes & hero )
+        : Recruit( hero, 0 )
+    {
+        // Do nothing.
+    }
 
     int getID() const
     {
@@ -56,15 +60,20 @@ private:
     friend IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
 };
 
-class Recruits : public std::pair<Recruit, Recruit>
+class Recruits final : public std::pair<Recruit, Recruit>
 {
 public:
-    Recruits();
-
     void Reset();
 
-    int GetID1() const;
-    int GetID2() const;
+    int GetID1() const
+    {
+        return first.getID();
+    }
+
+    int GetID2() const
+    {
+        return second.getID();
+    }
 
     Heroes * GetHero1() const;
     Heroes * GetHero2() const;
