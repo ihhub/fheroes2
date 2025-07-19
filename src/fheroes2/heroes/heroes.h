@@ -463,7 +463,7 @@ public:
 
     Skill::SecSkills & GetSecondarySkills()
     {
-        return _secondaySkills;
+        return _secondarySkills;
     }
 
     bool PickupArtifact( const Artifact & art );
@@ -766,7 +766,7 @@ private:
     uint32_t _experience{ 0 };
     std::string _name;
 
-    Skill::SecSkills _secondaySkills;
+    Skill::SecSkills _secondarySkills;
 
     Army _army{ this };
 

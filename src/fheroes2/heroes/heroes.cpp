@@ -243,7 +243,7 @@ Heroes::Heroes( const int heroId, const int race )
     , ColorBase( PlayerColor::NONE )
     , _experience( _getStartingXp() )
     , _name( getDefaultName( heroId ) )
-    , _secondaySkills( race )
+    , _secondarySkills( race )
     , _id( heroId )
     , _portrait( heroId )
     , _race( race )
@@ -256,11 +256,11 @@ Heroes::Heroes( const int heroId, const int race )
         _army.JoinTroop( Monster::BLACK_DRAGON, 2, false );
         _army.JoinTroop( Monster::RED_DRAGON, 3, false );
 
-        _secondaySkills = Skill::SecSkills();
-        _secondaySkills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::ADVANCED ) );
-        _secondaySkills.AddSkill( Skill::Secondary( Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED ) );
-        _secondaySkills.AddSkill( Skill::Secondary( Skill::Secondary::SCOUTING, Skill::Level::BASIC ) );
-        _secondaySkills.AddSkill( Skill::Secondary( Skill::Secondary::MYSTICISM, Skill::Level::BASIC ) );
+        _secondarySkills = Skill::SecSkills();
+        _secondarySkills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::ADVANCED ) );
+        _secondarySkills.AddSkill( Skill::Secondary( Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED ) );
+        _secondarySkills.AddSkill( Skill::Secondary( Skill::Secondary::SCOUTING, Skill::Level::BASIC ) );
+        _secondarySkills.AddSkill( Skill::Secondary( Skill::Secondary::MYSTICISM, Skill::Level::BASIC ) );
 
         PickupArtifact( Artifact::STEALTH_SHIELD );
         PickupArtifact( Artifact::DRAGON_SWORD );
@@ -444,7 +444,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, c
     HeroBase::LoadDefaults( HeroBase::HEROES, _race );
 
     // Reset secondary skills to defaults
-    _secondaySkills = Skill::SecSkills( _race );
+    _secondarySkills = Skill::SecSkills( _race );
 
     // Reset the army to default
     _army.Reset( true );
@@ -531,15 +531,15 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, c
             skill.SetLevel( dataStream.get() );
         }
 
-        _secondaySkills = Skill::SecSkills();
+        _secondarySkills = Skill::SecSkills();
 
         for ( const Skill::Secondary & skill : secs ) {
             if ( skill.isValid() ) {
                 // The original map editor does not check presence of similar skills even those which have different levels.
                 // We need to check whether the existing skill has a lower level before updating it.
-                const auto * existingSkill = _secondaySkills.FindSkill( skill.Skill() );
+                const auto * existingSkill = _secondarySkills.FindSkill( skill.Skill() );
                 if ( existingSkill == nullptr || ( existingSkill->Level() < skill.Level() ) ) {
-                    _secondaySkills.AddSkill( skill );
+                    _secondarySkills.AddSkill( skill );
                 }
             }
         }
@@ -671,15 +671,15 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
     if ( doesHeroHaveCustomSecondarySkills ) {
         SetModes( CUSTOM );
 
-        _secondaySkills = {};
+        _secondarySkills = {};
 
         for ( size_t i = 0; i < heroMetadata.secondarySkill.size(); ++i ) {
-            _secondaySkills.AddSkill( Skill::Secondary{ heroMetadata.secondarySkill[i], heroMetadata.secondarySkillLevel[i] } );
+            _secondarySkills.AddSkill( Skill::Secondary{ heroMetadata.secondarySkill[i], heroMetadata.secondarySkillLevel[i] } );
         }
     }
     else if ( !isEditor ) {
         // Reset secondary skills to defaults
-        _secondaySkills = Skill::SecSkills( _race );
+        _secondarySkills = Skill::SecSkills( _race );
     }
 
     // For Editor we need to fill all the rest of the 8 skills with the empty ones.
@@ -784,7 +784,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     }
 
     // Hero's secondary skills.
-    const std::vector<Skill::Secondary> & skills = _secondaySkills.ToVector();
+    const std::vector<Skill::Secondary> & skills = _secondarySkills.ToVector();
     const size_t skillsSize = skills.size();
     assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
     for ( size_t i = 0; i < skillsSize; ++i ) {
@@ -871,7 +871,7 @@ uint32_t Heroes::GetManaIndexSprite() const
 int Heroes::getStatsValue() const
 {
     // experience and artifacts don't matter here, only natural stats
-    return getTotalPrimarySkillLevel() + _secondaySkills.GetTotalLevel();
+    return getTotalPrimarySkillLevel() + _secondarySkills.GetTotalLevel();
 }
 
 double Heroes::getRecruitValue() const
@@ -1712,28 +1712,28 @@ void Heroes::SetShipMaster( const bool isShipMaster )
 
 bool Heroes::HasSecondarySkill( const int skill ) const
 {
-    return Skill::Level::NONE != _secondaySkills.GetLevel( skill );
+    return Skill::Level::NONE != _secondarySkills.GetLevel( skill );
 }
 
 uint32_t Heroes::GetSecondarySkillValue( const int skill ) const
 {
-    return _secondaySkills.GetValue( skill );
+    return _secondarySkills.GetValue( skill );
 }
 
 bool Heroes::HasMaxSecondarySkill() const
 {
-    return maxNumOfSecSkills <= _secondaySkills.Count();
+    return maxNumOfSecSkills <= _secondarySkills.Count();
 }
 
 int Heroes::GetLevelSkill( const int skill ) const
 {
-    return _secondaySkills.GetLevel( skill );
+    return _secondarySkills.GetLevel( skill );
 }
 
 void Heroes::LearnSkill( const Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        _secondaySkills.AddSkill( skill );
+        _secondarySkills.AddSkill( skill );
     }
 }
 
@@ -1854,7 +1854,7 @@ void Heroes::_levelUp( const bool skipSecondary, const bool autoselect /* = fals
 
 void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect /* = false */ )
 {
-    const auto [sec1, sec2] = _secondaySkills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2 );
+    const auto [sec1, sec2] = _secondarySkills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )
@@ -1890,13 +1890,13 @@ void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const in
 
     if ( selected.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) )
-        Skill::Secondary * secs = _secondaySkills.FindSkill( selected.Skill() );
+        Skill::Secondary * secs = _secondarySkills.FindSkill( selected.Skill() );
 
         if ( secs ) {
             secs->NextLevel();
         }
         else {
-            _secondaySkills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
+            _secondarySkills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
         }
 
         // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
@@ -2167,7 +2167,7 @@ std::string Heroes::String() const
     }
 
     if ( isControlAI() ) {
-        os << "skills          : " << _secondaySkills.String() << std::endl
+        os << "skills          : " << _secondarySkills.String() << std::endl
            << "artifacts       : " << bag_artifacts.String() << std::endl
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << _army.String() << std::endl
@@ -2545,7 +2545,7 @@ OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero )
     stream << base;
 
     // Heroes
-    return stream << hero._name << col << hero._experience << hero._secondaySkills << hero._army << hero._id << hero._portrait << hero._race << hero._objectTypeUnderHero
+    return stream << hero._name << col << hero._experience << hero._secondarySkills << hero._army << hero._id << hero._portrait << hero._race << hero._objectTypeUnderHero
                   << hero._path << hero._direction << hero._spriteIndex << hero._patrolCenter << hero._patrolDistance << hero._visitedObjects << hero._lastGroundRegion;
 }
 
@@ -2558,7 +2558,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     stream >> base;
 
     // Heroes
-    stream >> hero._name >> col >> hero._experience >> hero._secondaySkills >> hero._army >> hero._id >> hero._portrait >> hero._race;
+    stream >> hero._name >> col >> hero._experience >> hero._secondarySkills >> hero._army >> hero._id >> hero._portrait >> hero._race;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {

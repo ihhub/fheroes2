@@ -306,7 +306,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     SecondarySkillsBar secskill_bar( *this, false, isEditor, isEditor );
     secskill_bar.setTableSize( { 8, 1 } );
     secskill_bar.setInBetweenItemsOffset( { 5, 0 } );
-    secskill_bar.SetContent( _secondaySkills.ToVector() );
+    secskill_bar.SetContent( _secondarySkills.ToVector() );
     secskill_bar.setRenderingOffset( { dialogRoi.x + 3, dialogRoi.y + 233 } );
     secskill_bar.Redraw( display );
 
