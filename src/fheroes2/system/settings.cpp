@@ -868,11 +868,13 @@ void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
         _gameOptions.SetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( true );
     }
     else {
         _gameOptions.ResetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( false );
+    }
+
+    if ( enable != fheroes2::engine().isNearestScaling() ) {
+        fheroes2::engine().setNearestScaling( enable );
     }
 }
 

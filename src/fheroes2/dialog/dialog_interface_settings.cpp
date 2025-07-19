@@ -106,9 +106,9 @@ namespace
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
         const auto drawOptions = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
             drawInterfacePresence( windowInterfacePresenceRoi );
-            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
             drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 

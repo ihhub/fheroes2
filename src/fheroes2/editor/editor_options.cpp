@@ -161,8 +161,8 @@ namespace
             drawHotKeyOptions( windowHotKeyRoi );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
-            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
-            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 
