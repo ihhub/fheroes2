@@ -37,11 +37,16 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2025-07-16" version="v1.1.10">
+    <release date="2025-07-20" version="v1.1.10">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.10</url>
       <description>
-        <p>Changes in v1.1.10 (16 July 2025):</p>
+        <p>Changes in v1.1.10 (20 July 2025):</p>
         <ul>
+          <li>limit maximum number of heroes and jails allowed to place in the Editor</li>
+          <li>fix a crash when setting "One side defeats another" victory condition and then removing players from the map</li>
+          <li>fix a crash when the number of placed castles in the Editor exceeds the limit</li>
+          <li>add the Good, Bad, Magne map</li>
+          <li>update the Eruption map</li>
           <li>update the Spanish translation</li>
           <li>update the Hungarian translation</li>
           <li>show the proper message when picking-up an empty water chest</li>
