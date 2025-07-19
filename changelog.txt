@@ -1,3 +1,48 @@
+version 1.1.10 (20 July 2025)
+- limit maximum number of heroes and jails allowed to place in the Editor
+- fix a crash when setting victory condition "One side defeats another" and then removing all players from the map
+- fix a crash when the number of placed castles in the Editor exceeds the limit
+- add the Good, Bad, Magne map
+- update the Eruption map
+- update the Spanish translation
+- update the Hungarian translation
+- show the proper message when picking-up an empty water chest
+- implement the hotkey to toggle the display of the battle turn order
+- allow heroes to disembark on proper tiles even if they aren't marked as coast
+- remove or move to the nearest water the boats that are placed on land in hacked maps
+- update the Russian translation
+- fix passability issue for a mountain object
+- fix rendering bug for a particular crack object
+- use engine-generated Russian fonts and buttons even when Russian assets are present
+- update the German translation
+- add a frame to the Swordsman walking animation to make it smoother
+- allow to exit Town Settings without applying changes in the Editor
+- fix map and players' info update when restarting the map that was changed and saved in the Editor
+- fix erasure of object by clicking on its flag in the Editor
+- fix placement of an object that overlaps with a flag of an existing object in the Editor
+- add a new keyboard icon to the button that opens Virtual Keyboard
+- fix the position adjustment logic in case of a tail attack in battles
+- fix passabilites update after erasing an object in the Editor
+- update the Swedish translation
+- remember the position of the game window after closing the application
+- fix scroll cursor ("arrow") positioning on screen edges for software rendered cursor
+- update the Hungarian translation
+- support 8-directions of attack for wide creatures in battles
+- use original button sizes as the minimum size for Editor and Main Menu generated buttons
+- add hero casting animation to Teleport, Summon Elemental, Mirror Image, and Earthquake spells animation
+- make Editor's File Dialog buttons' size auto-adjustable
+- add straight corners to the Magic Book to indicate that a player cannot switch to the next page
+- update the Ukrainian translation
+- fix white pixels in Sorceress castle sky and rainbow
+- add missing bay artwork for Wizard castle
+- do not place monsters during the "Month of" event on tiles with Adventure Events
+- fix incorrect event removal after removing a nearby object on a map in the Editor
+- make random generation code platform-independent
+- fix button font generation when using non-English assets
+- speed up rendering in battles
+- add the ability to sort save files by name or date
+- rework New Game, Load Game and Editor menus
+
 version 1.1.9 (10 June 2025)
 - update the Swedish translation
 - fix showing one 1st level troop in hero's army during the hero fade-out animation after losing a battle
