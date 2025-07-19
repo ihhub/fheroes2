@@ -183,7 +183,7 @@ namespace Maps
 
         bool isRoad() const
         {
-            return _isTileMarkedAsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+            return _isTileMarkedAsRoad;
         }
 
         bool isStream() const;
