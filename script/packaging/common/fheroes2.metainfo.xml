@@ -43,7 +43,7 @@
         <p>Changes in v1.1.10 (20 July 2025):</p>
         <ul>
           <li>limit maximum number of heroes and jails allowed to place in the Editor</li>
-          <li>fix a crash when setting "One side defeats another" victory condition and then removing players from the map</li>
+          <li>fix a crash when setting victory condition "One side defeats another" and then removing all players from the map</li>
           <li>fix a crash when the number of placed castles in the Editor exceeds the limit</li>
           <li>add the Good, Bad, Magne map</li>
           <li>update the Eruption map</li>
