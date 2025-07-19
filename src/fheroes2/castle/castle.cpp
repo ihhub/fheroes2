@@ -80,7 +80,7 @@
 
 namespace
 {
-    const size_t maximumCastles = 72;
+    constexpr size_t maximumCastles = 72;
 
     const std::array<const char *, maximumCastles> defaultCastleNames
         = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
@@ -2280,6 +2280,11 @@ Castle * VecCastles::GetFirstCastle() const
 AllCastles::AllCastles()
 {
     _castles.reserve( maximumCastles );
+}
+
+size_t AllCastles::getMaximumAllowedCastles()
+{
+    return maximumCastles;
 }
 
 void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )

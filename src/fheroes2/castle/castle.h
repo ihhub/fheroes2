@@ -556,6 +556,9 @@ public:
         return _castles.size();
     }
 
+    // Return the maximum allowed castles and towns on map limited by the count of castle default names.
+    static size_t getMaximumAllowedCastles();
+
     void AddCastle( std::unique_ptr<Castle> && castle );
 
     Castle * Get( const fheroes2::Point & position ) const;
