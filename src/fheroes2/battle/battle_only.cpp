@@ -523,11 +523,11 @@ void Battle::Only::copyHero( const Heroes & in, Heroes & out )
     out.knowledge = in.knowledge;
     out.power = in.power;
     out._id = in._id;
-    out.portrait = in.portrait;
+    out._portrait = in._portrait;
     out._race = in._race;
 
-    out.secondary_skills.ToVector() = in.secondary_skills.ToVector();
-    out.army.Assign( in.army );
+    out._secondarySkills.ToVector() = in._secondarySkills.ToVector();
+    out._army.Assign( in._army );
 
     out.bag_artifacts = in.bag_artifacts;
     out.spell_book = in.spell_book;

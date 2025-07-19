@@ -390,7 +390,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.setTableSize( { 8, 1 } );
     secskill_bar1.setInBetweenItemsOffset( { -1, 0 } );
-    secskill_bar1.SetContent( secondary_skills.ToVector() );
+    secskill_bar1.SetContent( _secondarySkills.ToVector() );
     secskill_bar1.setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
     secskill_bar1.Redraw( display );
 
