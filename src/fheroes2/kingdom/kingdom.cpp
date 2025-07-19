@@ -531,7 +531,8 @@ const Recruits & Kingdom::GetRecruits()
         recruits.SetHero2( world.GetHeroForHire( Race::NONE, recruits.GetID1() ) );
     }
 
-    assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
+    // Heroes for recruitment must be different except if there are no heroes left (both are Heroes::UNKNOWN).
+    assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN ) );
 
     return recruits;
 }

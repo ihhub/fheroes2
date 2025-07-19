@@ -25,6 +25,7 @@
 
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <list>
@@ -836,6 +837,14 @@ public:
     void Clear()
     {
         _heroes.clear();
+    }
+
+    // Return the maximum allowed heroes on map limited by the count of hero portraits
+    // and by the count of her default names.
+    static constexpr size_t getMaximumAllowedHeroes()
+    {
+        // We exclude the "UNKNOWN" hero, the "debug" hero, all 17 heroes from campaign.
+        return Heroes::HEROES_COUNT - 2 - 17;
     }
 
     Heroes * Get( const int heroId ) const;
