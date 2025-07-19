@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
-"PO-Revision-Date: 2025-07-03 15:47+0300\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -818,6 +818,12 @@ msgstr "Произнести \"%{spell}\""
 msgid "Select spell target"
 msgstr "Выберите цель заклинания"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Вы действительно хотите включить автобитву?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Вы действительно хотите закончить битву в режиме быстрой битвы?"
+
 msgid "View Ballista info"
 msgstr "Информация о баллисте"
 
@@ -882,12 +888,6 @@ msgstr "Информационная строка"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Здесь отображаются результаты действий отдельных отрядов."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Вы действительно хотите включить автобитву?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Вы действительно хотите закончить битву в режиме быстрой битвы?"
 
 msgid ""
 "AUTO\n"
@@ -4177,6 +4177,10 @@ msgstr "Объекты нельзя размещать за пределами �
 msgid "Action objects must be placed on clear tiles."
 msgstr "Активные объекты можно размещать только в свободных клетках карты."
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+"На карте можно разместить не более %{count} объектов типа \"%{objects}\"."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4298,8 +4302,14 @@ msgid "Streams"
 msgstr "Реки"
 
 msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr ""
+"На карте можно разместить не более %{count} героев, включая героев в тюрьмах."
+
+msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr "На карте можно разместить максимум %{count} героев одного цвета."
+msgstr "На карте можно разместить не более %{count} героев одного цвета."
 
 msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
@@ -4308,7 +4318,7 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "На одной карте можно разместить только один великий артефакт."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "На карте можно разместить максимум %{count} обелисков."
+msgstr "На карте можно разместить не более %{count} обелисков."
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
@@ -5515,6 +5525,9 @@ msgstr "пропустить ход в битве"
 
 msgid "hotkey|cast battle spell"
 msgstr "произнести боевое заклинание"
+
+msgid "hotkey|toggle display of battle turn order"
+msgstr "отображение порядка действий отрядов в бою (вкл./выкл.)"
 
 msgid "hotkey|dwelling level 1"
 msgstr "поселение 1 уровня"
@@ -7272,6 +7285,13 @@ msgid ""
 msgstr ""
 "Осмотрительность - это лучшая черта доблести, посему Вы решили избежать "
 "сражения сегодня."
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Потратив несколько часов на попытки выловить сундук из воды, Вы наконец "
+"открыли его и обнаружили, что он пуст."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -12212,3 +12232,7 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "На карте можно разместить максимум %{count} обелисков."

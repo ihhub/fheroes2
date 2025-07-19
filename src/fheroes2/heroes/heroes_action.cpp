@@ -666,9 +666,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        if ( hero.isShipMaster() ) {
-            return;
-        }
+        assert( !hero.isShipMaster() );
 
         hero.setLastGroundRegion( world.getTile( hero.GetIndex() ).GetRegion() );
 
@@ -717,9 +715,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        if ( !hero.isShipMaster() ) {
-            return;
-        }
+        assert( hero.isShipMaster() );
 
         const int fromIndex = hero.GetIndex();
         Maps::Tile & from = world.getTile( fromIndex );
@@ -1814,6 +1810,10 @@ namespace
 
             if ( tile.isWater() ) {
                 if ( gold == 0 ) {
+                    fheroes2::showStandardTextMessage( std::move( hdr ),
+                                                       _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ),
+                                                       Dialog::OK );
+
                     return {};
                 }
 
@@ -3803,13 +3803,18 @@ void Heroes::Action( int tileIndex )
         AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( tileIndex != heroPosIndex );
-    if ( MP2::isInGameActionObject( objectType, isShipMaster() ) ) {
+    const Maps::Tile & tile = world.getTile( tileIndex );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( tileIndex != heroPosIndex );
+
+    const bool isHeroDisembarking = isShipMaster() && tile.isSuitableForDisembarkation();
+    const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, isShipMaster() );
+
+    if ( isHeroActing ) {
         SetModes( ACTION );
     }
 
     // Most likely there will be some action or event, immediately center the map on the hero to avoid subsequent minor screen movements
-    if ( Modes( ACTION ) || objectType == MP2::OBJ_EVENT ) {
+    if ( isHeroActing || objectType == MP2::OBJ_EVENT ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.getGameArea().SetCenter( GetCenter() );
@@ -3834,10 +3839,6 @@ void Heroes::Action( int tileIndex )
 
     case MP2::OBJ_BOAT:
         ActionToBoat( *this, tileIndex );
-        break;
-
-    case MP2::OBJ_COAST:
-        ActionToCoast( *this, tileIndex );
         break;
 
     case MP2::OBJ_WINDMILL:
@@ -4081,6 +4082,12 @@ void Heroes::Action( int tileIndex )
         break;
 
     default:
+        if ( isHeroDisembarking ) {
+            ActionToCoast( *this, tileIndex );
+            break;
+        }
+
+        assert( !isHeroActing );
         break;
     }
 }

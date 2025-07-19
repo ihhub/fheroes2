@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -721,6 +721,16 @@ msgstr ""
 msgid "Select spell target"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
 msgid "View Ballista info"
 msgstr ""
 
@@ -781,16 +791,6 @@ msgstr ""
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr ""
-"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr ""
-"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
 
 msgid ""
 "AUTO\n"
@@ -3983,6 +3983,9 @@ msgstr ""
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4105,6 +4108,11 @@ msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -5328,6 +5336,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Rodyti kitą miestą"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""
@@ -6854,6 +6866,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""

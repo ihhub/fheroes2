@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -806,6 +806,12 @@ msgstr "Sešli %{spell}"
 msgid "Select spell target"
 msgstr "Vyberte cíl kouzla"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Opravdu si přejete zapnout režim automatického boje?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Opravdu si přejete dokončit bitvu v režimu rychlého boje?"
+
 msgid "View Ballista info"
 msgstr "Zobrazit informace o Katapultu"
 
@@ -870,12 +876,6 @@ msgstr "Pruh zpráv"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Zobrazuje následky počínání jednotlivých jednotek."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Opravdu si přejete zapnout režim automatického boje?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Opravdu si přejete dokončit bitvu v režimu rychlého boje?"
 
 msgid ""
 "AUTO\n"
@@ -4133,6 +4133,10 @@ msgstr "Objekty nelze umístit mimo mapu."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Akční objekty musí být umístěny na prázdných polích."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4250,6 +4254,12 @@ msgstr "Cesty"
 
 msgid "Streams"
 msgstr "Řeky"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Na mapě může být umístěno maximálně %{count} hrdinů stejné barvy."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5459,6 +5469,10 @@ msgstr "Přeskočit tah v bitvě"
 
 msgid "hotkey|cast battle spell"
 msgstr "Seslat bojové kouzlo"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Přepnout režim automatického boje"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Obydlí úrovně 1"
@@ -7191,6 +7205,14 @@ msgid ""
 msgstr ""
 "Opatrnost je lepší částí odvahy, a tak se rozhodneš tento boj pro dnešek "
 "vynechat."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Po hodinách snahy vytáhnout truhlu z moře ji konečně otevřeš a najdeš "
+"%{gold} zlata."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -12086,6 +12108,10 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

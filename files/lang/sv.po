@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -817,6 +817,12 @@ msgstr "Kasta %{spell}"
 msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
+
 msgid "View Ballista info"
 msgstr "Visa Ballistinformation"
 
@@ -881,12 +887,6 @@ msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Är du säker på att du vill aktivera automatisk strid?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
 
 msgid ""
 "AUTO\n"
@@ -4155,6 +4155,10 @@ msgstr "Föremål kan inte placeras utanför kartan."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4273,6 +4277,12 @@ msgstr "Vägar"
 
 msgid "Streams"
 msgstr "Floder"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5481,6 +5491,10 @@ msgstr "Hoppa över runda i strid"
 
 msgid "hotkey|cast battle spell"
 msgstr "Kasta stridsbesvärjelse"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Aktivera Automatiskt Stridsläge"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bostad, nivå 1"
@@ -7244,6 +7258,14 @@ msgid ""
 msgstr ""
 "Det är bättre att fly än att illa fäkta, så du bestämmer dig för att undvika "
 "denna strid för idag."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
+"öppnar du den och hittar %{gold} guldmynt."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -12184,6 +12206,10 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

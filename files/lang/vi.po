@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -813,6 +813,14 @@ msgstr "Niệm %{spell}"
 msgid "Select spell target"
 msgstr "Chọn mục tiêu niệm chú"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
 msgid "View Ballista info"
 msgstr "Xem thông tin Máy bắn đá"
 
@@ -877,14 +885,6 @@ msgstr "Thanh Tin nhắn"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Hiển thị kết quả hành động của từng quái vật."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
 
 msgid ""
 "AUTO\n"
@@ -4248,6 +4248,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4367,6 +4371,12 @@ msgstr "Đường"
 
 msgid "Streams"
 msgstr "Suối"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Thị trấn không thể đặt trên nước."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5653,6 +5663,10 @@ msgstr "bỏ lượt trong trận chiến"
 
 msgid "hotkey|cast battle spell"
 msgstr "niệm chú trong trận chiến"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "chuyển đổi chế độ tự động chiến đấu"
 
 msgid "hotkey|dwelling level 1"
 msgstr "nhà lính cấp 1"
@@ -7434,6 +7448,14 @@ msgid ""
 msgstr ""
 "Sự thận trọng là phần tốt hơn của lòng dũng cảm và ngươi quyết định tránh "
 "cuộc chiến này ngay hôm nay."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Sau hàng giờ cố gắng câu chiếc rương ngoài biển, ngươi mở nó ra và tìm thấy "
+"%{gold} vàng."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

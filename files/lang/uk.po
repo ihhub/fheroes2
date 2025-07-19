@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -825,6 +825,12 @@ msgstr "Накласти %{spell}"
 msgid "Select spell target"
 msgstr "Обрати ціль закляття"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Ви впевнені, що хочете увімкнути автобитву?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ви впевнені, що хочете завершити битву в режимі швидкого бою?"
+
 msgid "View Ballista info"
 msgstr "Дані по Балісті"
 
@@ -887,12 +893,6 @@ msgstr "Табло повідомлень"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Ви впевнені, що хочете увімкнути автобитву?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ви впевнені, що хочете завершити битву в режимі швидкого бою?"
 
 msgid ""
 "AUTO\n"
@@ -4170,6 +4170,10 @@ msgstr "Неможливо розмістити об'єкт поза мапою.
 msgid "Action objects must be placed on clear tiles."
 msgstr "Об'єкти дії мають бути розміщені на чистому просторі."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "На мапі можна розмістити максимум %{count} обелісків."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4288,6 +4292,12 @@ msgstr "Дороги"
 
 msgid "Streams"
 msgstr "Струмки"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "На мапі можна розмістити максимум %{count} героя однакового кольору."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5503,6 +5513,10 @@ msgstr "пропустити хід у бою"
 
 msgid "hotkey|cast battle spell"
 msgstr "накласти бойове заклинання"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "увімкнути режим автоматичного бою"
 
 msgid "hotkey|dwelling level 1"
 msgstr "житло 1-го рівня"
@@ -7272,6 +7286,14 @@ msgid ""
 msgstr ""
 "Розсудливість - краща частина доблесті і ви вирішуєте уникнути цієї битви "
 "сьогодні."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Витративши кілька годин виловлюючи скриню з моря, ви відкриваєте її та "
+"знаходите в ній %{gold} золотих монет."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -12223,6 +12245,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

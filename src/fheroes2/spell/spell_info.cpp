@@ -38,6 +38,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "settings.h"
 #include "spell.h"
 #include "tools.h"
@@ -400,7 +401,18 @@ namespace fheroes2
                      }
 
                      // On original HoMM2 maps, neutral boats can only be summoned by human players
-                     return hero.isControlAI();
+                     {
+#if defined( WITH_DEBUG )
+                         const Player * player = Players::Get( heroColor );
+                         assert( player != nullptr );
+
+                         const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+                         const bool isAIAutoControlMode = false;
+#endif
+
+                         return hero.isControlAI() && !isAIAutoControlMode;
+                     }
                  }() ) {
                 continue;
             }

@@ -25,6 +25,7 @@
 
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <list>
@@ -556,7 +557,6 @@ public:
     void ResetAction();
     void Action( int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
-    void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
@@ -724,7 +724,8 @@ private:
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
-    void AngleStep( int );
+    void AngleStep( const int targetDirection );
+    void applyMovementPenalty( const uint32_t penalty );
     bool MoveStep( const bool jumpToNextTile );
     bool isInVisibleMapArea() const;
 
@@ -809,6 +810,14 @@ public:
     void Clear()
     {
         _heroes.clear();
+    }
+
+    // Return the maximum allowed heroes on map limited by the count of hero portraits
+    // and by the count of her default names.
+    static constexpr size_t getMaximumAllowedHeroes()
+    {
+        // We exclude the "UNKNOWN" hero, the "debug" hero, all 17 heroes from campaign.
+        return Heroes::HEROES_COUNT - 2 - 17;
     }
 
     Heroes * Get( const int hid ) const;

@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
-#include <cstddef>
 #include <iterator>
 #include <map>
 #include <set>
@@ -1955,16 +1954,6 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
                 ScoutRadar();
             }
         }
-    }
-}
-
-void Heroes::ApplyPenaltyMovement( uint32_t penalty )
-{
-    if ( move_point >= penalty ) {
-        move_point -= penalty;
-    }
-    else {
-        move_point = 0;
     }
 }
 
