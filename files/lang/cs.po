@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4134,7 +4134,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Akční objekty musí být umístěny na prázdných polích."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
 msgid ""
@@ -4254,6 +4254,12 @@ msgstr "Cesty"
 
 msgid "Streams"
 msgstr "Řeky"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Na mapě může být umístěno maximálně %{count} hrdinů stejné barvy."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12102,6 +12108,10 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

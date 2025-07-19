@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4182,7 +4182,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
 
 msgid ""
@@ -4303,6 +4303,12 @@ msgstr "Estradas"
 
 msgid "Streams"
 msgstr "Riachos"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12319,6 +12325,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4316,7 +4316,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4441,6 +4441,12 @@ msgstr "Vei"
 #, fuzzy
 msgid "Streams"
 msgstr "Bekkmodus"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
