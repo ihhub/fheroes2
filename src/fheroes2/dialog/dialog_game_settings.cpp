@@ -21,7 +21,6 @@
 #include "dialog_game_settings.h"
 
 #include <cassert>
-#include <cstdint>
 #include <functional>
 #include <string>
 #include <vector>
