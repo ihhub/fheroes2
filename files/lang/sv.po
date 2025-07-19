@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4156,7 +4156,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} obelisker kan placeras på kartan."
 
 msgid ""
@@ -4277,6 +4277,12 @@ msgstr "Vägar"
 
 msgid "Streams"
 msgstr "Floder"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12200,6 +12206,10 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

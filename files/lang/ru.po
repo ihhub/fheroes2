@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-07-15 07:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4178,7 +4178,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Активные объекты можно размещать только в свободных клетках карты."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "На карте можно разместить максимум %{count} обелисков."
 
 msgid ""
@@ -4300,6 +4300,12 @@ msgstr "Дороги"
 
 msgid "Streams"
 msgstr "Реки"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "На карте можно разместить максимум %{count} героев одного цвета."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12226,3 +12232,7 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "На карте можно разместить максимум %{count} обелисков."

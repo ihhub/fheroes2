@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-07-10 23:37+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4149,7 +4149,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
 
 msgid ""
@@ -4269,6 +4269,12 @@ msgstr "Utak"
 
 msgid "Streams"
 msgstr "Folyóvizek"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12178,6 +12184,10 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr ""

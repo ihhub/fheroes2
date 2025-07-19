@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:23+0000\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4244,7 +4244,7 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
 #, fuzzy
-msgid "A maximum of 72 %{objects} can be placed on the map."
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 "Un maximum de %{count} héros de la même couleur peuvent être placés sur la "
 "carte."
@@ -4373,6 +4373,14 @@ msgstr "Routes"
 
 msgid "Streams"
 msgstr "Rivières"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr ""
+"Un maximum de %{count} héros de la même couleur peuvent être placés sur la "
+"carte."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -12504,6 +12512,12 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr ""
+#~ "Un maximum de %{count} héros de la même couleur peuvent être placés sur "
+#~ "la carte."
 
 #~ msgid "CONFIG"
 #~ msgstr ""
