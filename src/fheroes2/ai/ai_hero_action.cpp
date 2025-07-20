@@ -1760,9 +1760,7 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        if ( hero.isShipMaster() ) {
-            return;
-        }
+        assert( !hero.isShipMaster() );
 
         hero.setLastGroundRegion( world.getTile( hero.GetIndex() ).GetRegion() );
 
@@ -1803,9 +1801,7 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        if ( !hero.isShipMaster() ) {
-            return;
-        }
+        assert( hero.isShipMaster() );
 
         const int fromIndex = hero.GetIndex();
         Maps::Tile & from = world.getTile( fromIndex );
@@ -1934,8 +1930,10 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     const Maps::Tile & tile = world.getTile( dst_index );
     const MP2::MapObjectType objectType = tile.getMainObjectType( dst_index != hero.GetIndex() );
 
-    const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
-    if ( isActionObject ) {
+    const bool isHeroDisembarking = hero.isShipMaster() && tile.isSuitableForDisembarkation();
+    const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, hero.isShipMaster() );
+
+    if ( isHeroActing ) {
         hero.SetModes( Heroes::ACTION );
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
@@ -1947,10 +1945,6 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
     switch ( objectType ) {
     case MP2::OBJ_BOAT:
         AIToBoat( hero, dst_index );
-        break;
-    case MP2::OBJ_COAST:
-        // Coast is not an action object by definition but we need to do hero's animation.
-        AIToCoast( hero, dst_index );
         break;
 
     case MP2::OBJ_MONSTER:
@@ -2175,17 +2169,24 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToBlackCatObject( hero, dst_index );
         break;
     default:
+        if ( isHeroDisembarking ) {
+            AIToCoast( hero, dst_index );
+            break;
+        }
+
         // AI should know what to do with this type of action object! Please add logic for it.
-        assert( !isActionObject );
+        assert( !isHeroActing );
         break;
     }
 
-    if ( MP2::isNeedStayFront( objectType ) ) {
+    if ( isHeroActing ) {
+        // Due to the peculiarities of AI pathfinding, the AI-controlled hero can perform actions on
+        // the tiles he passes through, such as engaging in battle with a monster guarding that tile.
+        // After such an action, he may suffer losses in his army and/or spell points, or, conversely,
+        // acquire additional skills, so a reassessment of the hero's potential targets is required.
+        // Force this reassessment by resetting the hero's path.
         hero.GetPath().Reset();
-    }
 
-    // Ignore empty tiles
-    if ( isActionObject ) {
         AI::Planner::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 }

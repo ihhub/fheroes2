@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-12 14:58+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -817,6 +817,12 @@ msgstr "Kasta %{spell}"
 msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
+
 msgid "View Ballista info"
 msgstr "Visa Ballistinformation"
 
@@ -881,12 +887,6 @@ msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Är du säker på att du vill aktivera automatisk strid?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
 
 msgid ""
 "AUTO\n"
@@ -5482,6 +5482,10 @@ msgstr "Hoppa över runda i strid"
 msgid "hotkey|cast battle spell"
 msgstr "Kasta stridsbesvärjelse"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Aktivera Automatiskt Stridsläge"
+
 msgid "hotkey|dwelling level 1"
 msgstr "Bostad, nivå 1"
 
@@ -7244,6 +7248,14 @@ msgid ""
 msgstr ""
 "Det är bättre att fly än att illa fäkta, så du bestämmer dig för att undvika "
 "denna strid för idag."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
+"öppnar du den och hittar %{gold} guldmynt."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

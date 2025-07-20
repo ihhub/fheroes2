@@ -172,10 +172,7 @@ namespace
 
             return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
-        if ( hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_COAST ) {
-            return true;
-        }
-        if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
+        if ( hero.isShipMaster() && next.isSuitableForDisembarkation() ) {
             return true;
         }
 
@@ -211,7 +208,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
 
     const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
-        ApplyPenaltyMovement( path.GetFrontPenalty() );
+        applyMovementPenalty( path.GetFrontPenalty() );
 
         if ( !performMovement ) {
             // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
@@ -295,9 +292,9 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     return false;
 }
 
-void Heroes::AngleStep( int to_direct )
+void Heroes::AngleStep( const int targetDirection )
 {
-    bool clockwise = Direction::ShortDistanceClockWise( direction, to_direct );
+    const bool clockwise = Direction::ShortDistanceClockWise( direction, targetDirection );
 
     // start index
     if ( 45 > sprite_index && ( sprite_index % heroFrameCountPerTile ) == 0 ) {
@@ -449,6 +446,17 @@ void Heroes::AngleStep( int to_direct )
             direction = next;
         }
     }
+}
+
+void Heroes::applyMovementPenalty( const uint32_t penalty )
+{
+    if ( penalty > move_point ) {
+        move_point = 0;
+
+        return;
+    }
+
+    move_point -= penalty;
 }
 
 fheroes2::Point Heroes::getCurrentPixelOffset() const

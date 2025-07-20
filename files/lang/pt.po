@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-12 14:58+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -814,6 +814,12 @@ msgstr "Lançar %{spell}"
 msgid "Select spell target"
 msgstr "Selecionar alvo do feitiço"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Tem certeza de que quer ativar o modo de combate automático?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Tem certeza de que quer resolver a batalha no modo de combate rápido?"
+
 msgid "View Ballista info"
 msgstr "Ver informações da Balista"
 
@@ -878,12 +884,6 @@ msgstr "Barra de Mensagem"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Mostra os resultados das ações individuais dos monstros."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Tem certeza de que quer ativar o modo de combate automático?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Tem certeza de que quer resolver a batalha no modo de combate rápido?"
 
 msgid ""
 "AUTO\n"
@@ -5517,6 +5517,10 @@ msgstr "pular turno na batalha"
 msgid "hotkey|cast battle spell"
 msgstr "lançar feitiço de batalha"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "alternar modo de combate automático"
+
 msgid "hotkey|dwelling level 1"
 msgstr "nível 1 da moradia"
 
@@ -7304,6 +7308,14 @@ msgid ""
 msgstr ""
 "A discrição é a melhor parte da coragem, e você decide evitar esta luta por "
 "hoje."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Depois de passar horas tentando tirar o baú de fora do mar, você o abre e "
+"encontra %{gold} peças de ouro."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

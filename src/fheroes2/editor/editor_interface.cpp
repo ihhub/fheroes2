@@ -903,7 +903,7 @@ namespace Interface
                                                              Dialog::YES | Dialog::NO );
 
                     if ( returnValue == Dialog::YES ) {
-                        return fheroes2::GameMode::MAIN_MENU;
+                        res = fheroes2::GameMode::MAIN_MENU;
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY ) ) {
@@ -1123,6 +1123,11 @@ namespace Interface
                 validateFadeInAndRender();
             }
         }
+
+        // When exiting the editor we must reset the players data to properly load the new maps.
+        conf.GetPlayers().clear();
+        // And reset the players configuration for the selected map to properly initialize it when starting a new map.
+        Game::SavePlayers( "", {} );
 
         Game::setDisplayFadeIn();
 
@@ -2098,11 +2103,7 @@ namespace Interface
             Maps::FileInfo fi;
             if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
                 // Update the default map info to allow to start this map without the need to select it from the all maps list.
-                Settings & conf = Settings::Get();
-                conf.setCurrentMapInfo( std::move( fi ) );
-
-                // Reset saved players parameters (including alliances) for starting a new game because they may have changed in editor.
-                Game::SavePlayers( "", {} );
+                Settings::Get().setCurrentMapInfo( std::move( fi ) );
             }
             else {
                 assert( 0 );

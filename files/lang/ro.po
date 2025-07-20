@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-12 14:58+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -820,6 +820,14 @@ msgstr "Aruncă %{spell}"
 msgid "Select spell target"
 msgstr "Selectați ținta vrăjii"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Sigur vreți să activați lupta automată?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
 msgid "View Ballista info"
 msgstr "Vezi informații despre Ballista"
 
@@ -884,14 +892,6 @@ msgstr "Bara de mesaje"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Afișează rezultatele acțiunilor individuale ale monștrilor."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Sigur vreți să activați lupta automată?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
 
 msgid ""
 "AUTO\n"
@@ -5309,6 +5309,10 @@ msgstr ""
 msgid "hotkey|cast battle spell"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Personalizează opțiunile sistemului"
+
 msgid "hotkey|dwelling level 1"
 msgstr ""
 
@@ -6816,6 +6820,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
