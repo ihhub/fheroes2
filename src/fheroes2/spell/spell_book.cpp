@@ -86,8 +86,9 @@ namespace
                                 const HeroBase & hero, const bool canCastSpell, const bool isRight, fheroes2::Image & output, const fheroes2::Point & outputOffset )
     {
         for ( int32_t i = 0; i < spellsPerPage; ++i ) {
-            if ( spells.size() <= index + i )
+            if ( spells.size() <= index + i ) {
                 return;
+            }
 
             const int32_t ox = 84 + 81 * ( i & 1 );
             const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + ( isRight ? 1 : 0 ) ) % 2 ) * 5;
@@ -231,16 +232,16 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width,
                               spellBookSize.height );
-    const fheroes2::Rect restorerRoi( pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
-    fheroes2::ImageRestorer restorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
-    const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
-    const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
+    fheroes2::ImageRestorer restorer( display, pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
 
-    const fheroes2::Rect info_rt( pos.x + bookmarkInfoOffset.x, pos.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
-    const fheroes2::Rect advn_rt( pos.x + bookmarkAdvOffset.x, pos.y + bookmarkAdvOffset.y, bookmark_advn.width(), bookmark_advn.height() );
-    const fheroes2::Rect cmbt_rt( pos.x + bookmarkCombatoOffset.x, pos.y + bookmarkCombatoOffset.y, bookmark_cmbt.width(), bookmark_cmbt.height() );
-    const fheroes2::Rect clos_rt( pos.x + bookmarkCloseOffset.x, pos.y + bookmarkCloseOffset.y, bookmark_clos.width(), bookmark_clos.height() );
+    const fheroes2::Rect previousPageRoi( pos.x + 30, pos.y + 8, 30, 25 );
+    const fheroes2::Rect nextPageRoi( pos.x + 410, pos.y + 8, 30, 25 );
+
+    const fheroes2::Rect spellPointsRoi( pos.x + bookmarkInfoOffset.x, pos.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
+    const fheroes2::Rect adventureSpellsRoi( pos.x + bookmarkAdvOffset.x, pos.y + bookmarkAdvOffset.y, bookmark_advn.width(), bookmark_advn.height() );
+    const fheroes2::Rect combatSpellsRoi( pos.x + bookmarkCombatoOffset.x, pos.y + bookmarkCombatoOffset.y, bookmark_cmbt.width(), bookmark_cmbt.height() );
+    const fheroes2::Rect closeRoi( pos.x + bookmarkCloseOffset.x, pos.y + bookmarkCloseOffset.y, bookmark_clos.width(), bookmark_clos.height() );
 
     Spell curspell = Spell::NONE;
 
@@ -250,7 +251,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     spellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero, canCastSpell );
     bool redraw = false;
 
-    display.render( restorerRoi );
+    display.render( restorer.rect() );
 
     const auto getHeroSpellPointsInfo = [&hero]() {
         std::string result = _( "Your hero has %{sp} spell points remaining out of %{max}." );
@@ -263,47 +264,49 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     LocalEvent & le = LocalEvent::Get();
 
+    auto isNotFirstPage = [this]() { return _startSpellIndex > 0; };
+    auto isNotLastPage = [this, &displayedSpells]() { return displayedSpells.size() > ( _startSpellIndex + ( spellsPerPage * 2 ) ); };
+
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && _startSpellIndex > 0 ) {
+        if ( ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && isNotFirstPage() ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) )
-                  && displayedSpells.size() > ( _startSpellIndex + ( spellsPerPage * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) && isNotLastPage() ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( info_rt ) ) {
+        else if ( le.MouseClickLeft( spellPointsRoi ) ) {
             fheroes2::showStandardTextMessage( "", getHeroSpellPointsInfo(), Dialog::OK );
         }
-        else if ( le.MouseClickLeft( advn_rt ) && _spellFilter != Filter::ADVN && displayableSpells != Filter::CMBT ) {
+        else if ( le.MouseClickLeft( adventureSpellsRoi ) && _spellFilter != Filter::ADVN && displayableSpells != Filter::CMBT ) {
             _spellFilter = Filter::ADVN;
             _startSpellIndex = 0;
             displayedSpells = SetFilter( _spellFilter, &hero );
             redraw = true;
         }
-        else if ( le.MouseClickLeft( cmbt_rt ) && _spellFilter != Filter::CMBT && displayableSpells != Filter::ADVN ) {
+        else if ( le.MouseClickLeft( combatSpellsRoi ) && _spellFilter != Filter::CMBT && displayableSpells != Filter::ADVN ) {
             _spellFilter = Filter::CMBT;
             _startSpellIndex = 0;
             displayedSpells = SetFilter( _spellFilter, &hero );
             redraw = true;
         }
-        else if ( le.isMouseRightButtonPressedInArea( info_rt ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( spellPointsRoi ) ) {
             fheroes2::showStandardTextMessage( "", getHeroSpellPointsInfo(), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( advn_rt ) && displayableSpells != Filter::CMBT ) {
+        else if ( le.isMouseRightButtonPressedInArea( adventureSpellsRoi ) && displayableSpells != Filter::CMBT ) {
             fheroes2::showStandardTextMessage( "", _( "View Adventure Spells" ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
+        else if ( le.isMouseRightButtonPressedInArea( combatSpellsRoi ) && displayableSpells != Filter::ADVN ) {
             fheroes2::showStandardTextMessage( "", _( "View Combat Spells" ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( prev_list ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( previousPageRoi ) && isNotFirstPage() ) {
             fheroes2::showStandardTextMessage( "", _( "View previous page" ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( next_list ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( nextPageRoi ) && isNotLastPage() ) {
             fheroes2::showStandardTextMessage( "", _( "View next page" ), Dialog::ZERO );
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() ) {
+        else if ( le.MouseClickLeft( closeRoi ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         else if ( le.MouseClickLeft( pos ) ) {
@@ -332,22 +335,22 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         }
 
         if ( statusCallback ) {
-            if ( le.isMouseCursorPosInArea( info_rt ) ) {
+            if ( le.isMouseCursorPosInArea( spellPointsRoi ) ) {
                 statusCallback( getHeroSpellPointsInfo() );
             }
-            else if ( le.isMouseCursorPosInArea( advn_rt ) && displayableSpells != Filter::CMBT ) {
+            else if ( le.isMouseCursorPosInArea( adventureSpellsRoi ) && displayableSpells != Filter::CMBT ) {
                 statusCallback( _( "View Adventure Spells" ) );
             }
-            else if ( le.isMouseCursorPosInArea( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
+            else if ( le.isMouseCursorPosInArea( combatSpellsRoi ) && displayableSpells != Filter::ADVN ) {
                 statusCallback( _( "View Combat Spells" ) );
             }
-            else if ( le.isMouseCursorPosInArea( prev_list ) ) {
+            else if ( le.isMouseCursorPosInArea( previousPageRoi ) && isNotFirstPage() ) {
                 statusCallback( _( "View previous page" ) );
             }
-            else if ( le.isMouseCursorPosInArea( next_list ) ) {
+            else if ( le.isMouseCursorPosInArea( nextPageRoi ) && isNotLastPage() ) {
                 statusCallback( _( "View next page" ) );
             }
-            else if ( le.isMouseCursorPosInArea( clos_rt ) ) {
+            else if ( le.isMouseCursorPosInArea( closeRoi ) ) {
                 statusCallback( _( "Close Spellbook" ) );
             }
             else if ( le.isMouseCursorPosInArea( pos ) ) {
@@ -388,13 +391,13 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         if ( redraw ) {
             restorer.restore();
             spellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero, canCastSpell );
-            display.render( restorerRoi );
+            display.render( restorer.rect() );
             redraw = false;
         }
     }
 
     restorer.restore();
-    display.render( restorerRoi );
+    display.render( restorer.rect() );
 
     return curspell;
 }
@@ -407,7 +410,7 @@ void SpellBook::Edit( const HeroBase & hero )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    size_t current_index = 0;
+    size_t firstSpellOnPageIndex = 0;
     SpellStorage displayedSpells = SetFilter( Filter::ALL, &hero );
 
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
@@ -418,35 +421,35 @@ void SpellBook::Edit( const HeroBase & hero )
 
     const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width,
                               spellBookSize.height );
-    const fheroes2::Rect restorerRoi( pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
-    fheroes2::ImageRestorer restorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
-    const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
-    const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
-    const fheroes2::Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
+    fheroes2::ImageRestorer restorer( display, pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
+
+    const fheroes2::Rect previousPageRoi( pos.x + 30, pos.y + 8, 30, 25 );
+    const fheroes2::Rect nextPageRoi( pos.x + 410, pos.y + 8, 30, 25 );
+    const fheroes2::Rect closeRoi( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
 
     std::vector<fheroes2::Rect> coords;
     const size_t twoPagesSpells = static_cast<size_t>( spellsPerPage ) * 2;
     coords.reserve( twoPagesSpells );
 
-    spellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
+    spellBookRedrawLists( displayedSpells, coords, firstSpellOnPageIndex, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
     bool redraw = false;
 
-    display.render( restorerRoi );
+    display.render( restorer.rect() );
 
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( prev_list ) && current_index ) {
-            current_index -= twoPagesSpells;
+        if ( le.MouseClickLeft( previousPageRoi ) && firstSpellOnPageIndex ) {
+            firstSpellOnPageIndex -= twoPagesSpells;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && size() > ( current_index + twoPagesSpells ) ) {
-            current_index += twoPagesSpells;
+        else if ( le.MouseClickLeft( nextPageRoi ) && size() > ( firstSpellOnPageIndex + twoPagesSpells ) ) {
+            firstSpellOnPageIndex += twoPagesSpells;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        else if ( le.MouseClickLeft( closeRoi ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             // Close Spell Book.
             break;
         }
@@ -454,7 +457,7 @@ void SpellBook::Edit( const HeroBase & hero )
             const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( 0 <= index ) {
-                const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
+                const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + firstSpellOnPageIndex );
 
                 if ( spell < displayedSpells.end() ) {
                     fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );
@@ -474,7 +477,7 @@ void SpellBook::Edit( const HeroBase & hero )
             const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
 
             if ( index >= 0 ) {
-                const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
+                const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + firstSpellOnPageIndex );
 
                 if ( spell < displayedSpells.end() && removeSpell( *spell ) ) {
                     displayedSpells = SetFilter( Filter::ALL, &hero );
@@ -485,14 +488,14 @@ void SpellBook::Edit( const HeroBase & hero )
 
         if ( redraw ) {
             restorer.restore();
-            spellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
-            display.render( restorerRoi );
+            spellBookRedrawLists( displayedSpells, coords, firstSpellOnPageIndex, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
+            display.render( restorer.rect() );
             redraw = false;
         }
     }
 
     restorer.restore();
-    display.render( restorerRoi );
+    display.render( restorer.rect() );
 }
 
 void SpellBook::resetState()
