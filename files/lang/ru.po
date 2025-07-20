@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-12 14:58+0000\n"
-"PO-Revision-Date: 2025-07-15 07:12+0300\n"
+"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -4177,6 +4177,10 @@ msgstr "Объекты нельзя размещать за пределами �
 msgid "Action objects must be placed on clear tiles."
 msgstr "Активные объекты можно размещать только в свободных клетках карты."
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+"На карте можно разместить не более %{count} объектов типа \"%{objects}\"."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4298,8 +4302,14 @@ msgid "Streams"
 msgstr "Реки"
 
 msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr ""
+"На карте можно разместить не более %{count} героев, включая героев в тюрьмах."
+
+msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr "На карте можно разместить максимум %{count} героев одного цвета."
+msgstr "На карте можно разместить не более %{count} героев одного цвета."
 
 msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
@@ -4308,7 +4318,7 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "На одной карте можно разместить только один великий артефакт."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr "На карте можно разместить максимум %{count} обелисков."
+msgstr "На карте можно разместить не более %{count} обелисков."
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
@@ -12222,3 +12232,7 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "На карте можно разместить максимум %{count} обелисков."

@@ -1732,10 +1732,15 @@ namespace Maps
         }
         else {
             // No colors are set so no alliances should exist.
-            map.alliances = { 0 };
+            map.alliances.clear();
 
             // No races are set.
             map.playerRace = { 0 };
+        }
+
+        if ( map.alliances.empty() && map.victoryConditionType == FileInfo::VictoryCondition::VICTORY_DEFEAT_OTHER_SIDE ) {
+            // When there are no alliances there are no sides. Reset the victory condition to the default.
+            map.victoryConditionType = FileInfo::VictoryCondition::VICTORY_DEFEAT_EVERYONE;
         }
 
         // Update events according to the possible changes in human and/or AI player colors.
