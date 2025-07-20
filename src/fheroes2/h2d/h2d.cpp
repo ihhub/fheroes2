@@ -99,7 +99,7 @@ namespace
                                                                             "animated_part10.image",
                                                                             "animated_part11.image",
                                                                             "animated_part12.image",
-                                                                            "animated_part13.image"};
+                                                                            "animated_part13.image" };
 
     fheroes2::H2DReader reader;
 
