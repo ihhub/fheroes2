@@ -234,35 +234,26 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor, Interface * interface )
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor)
         {
             _area = roi;
             _orderOfUnits = units;
             _opponentColor = opponentColor;
-            _interface = interface;
         }
 
         void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output );
-        bool queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
+        bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        enum class TypeUnitForDrawing : uint8_t
-        {
-            DEFAULT,
-            CURRENT,
-            UNDER_CURSOR,
-        };
-
-        static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, TypeUnitForDrawing typeUnitForDrawing,
+        static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert,
                                  const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
         PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _area;
         std::vector<UnitPos> _rects;
-        Interface * _interface = nullptr;
     };
 
     class PopupDamageInfo : public Dialog::FrameBorder
@@ -333,9 +324,10 @@ namespace Battle
         fheroes2::Point getRelativeMouseCursorPos() const;
 
         void setStatus( const std::string & message, const bool top );
-        void setUnitForContourDrawing( const Unit * unit )
+
+        void setUnitTobeHighlighted( const Unit * unit )
         {
-            _unitForContourDrawing = unit;
+            _unitToHighlight = unit;
         }
 
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
@@ -497,7 +489,7 @@ namespace Battle
         const Unit * _currentUnit{ nullptr };
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
-        const Unit * _unitForContourDrawing{ nullptr };
+        const Unit * _unitToHighlight{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;

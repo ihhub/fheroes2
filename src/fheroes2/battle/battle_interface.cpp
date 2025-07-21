@@ -718,6 +718,7 @@ namespace
         return Battle::CellDirection::UNKNOWN;
     }
 
+    // Mapping a color bit flag to a color code
     uint8_t GetArmyColorFromPlayerColor( const PlayerColor playerColor )
     {
         switch ( playerColor ) {
@@ -1179,7 +1180,7 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1191,7 +1192,7 @@ bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2:
             msg = _( "View %{monster} info" );
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
 
-            _interface->setUnitForContourDrawing( unit );
+            interface.setUnitTobeHighlighted( unit );
 
             // Process mouse buttons events.
             if ( le.MouseClickLeft( unitRoi ) ) {
@@ -1207,13 +1208,10 @@ bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2:
         }
     }
 
-    _interface->setUnitForContourDrawing( nullptr );
-
     return false;
 }
 
-void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, TypeUnitForDrawing typeUnitForDrawing,
-                                     const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t unitColor, fheroes2::Image & output )
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
@@ -1237,15 +1235,9 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
     const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
     number.drawInRoi( pos.x + 2, pos.y + 4, output, pos );
 
-    if ( typeUnitForDrawing == TypeUnitForDrawing::DEFAULT ) {
-        const uint8_t color = GetArmyColorFromPlayerColor( unit.GetCurrentColor() );
-        fheroes2::DrawRect( output, pos, color );
-    }
-    else {
-        fheroes2::DrawRect( output, pos, currentUnitColor );
-    }
+    fheroes2::DrawRect( output, pos, unitColor );
 
-    if ( typeUnitForDrawing != TypeUnitForDrawing::CURRENT && unit.Modes( Battle::TR_MOVED ) ) {
+    if ( unit.Modes( Battle::TR_MOVED ) ) {
         fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
                                 PAL::GetPalette( PAL::PaletteType::GRAY ) );
         fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize, 3 );
@@ -1311,15 +1303,12 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
 
         _rects[unitRectIndex].first = unit;
 
-        TypeUnitForDrawing typeUnitForDrawing = TypeUnitForDrawing::DEFAULT;
-        if ( current == unit ) {
-            typeUnitForDrawing = TypeUnitForDrawing::CURRENT;
-        }
-        else if ( underCursor == unit ) {
-            typeUnitForDrawing = TypeUnitForDrawing::UNDER_CURSOR;
+        uint8_t unitColor = GetArmyColorFromPlayerColor( unit->GetCurrentColor() );
+        if ( current == unit || underCursor == unit ) {
+            unitColor = currentUnitColor;
         }
 
-        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, typeUnitForDrawing, currentUnitColor, output );
+        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, unitColor, output );
 
         ++unitRectIndex;
         ++unitsProcessed;
@@ -1472,7 +1461,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    _turnOrder.set( _interfacePosition, units, arena.GetArmy2Color(), this );
+    _turnOrder.set( _interfacePosition, units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
@@ -1970,11 +1959,11 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
         drawnPosition = _drawTroopSprite( unit, monsterSprite );
     }
 
-    if ( _unitForContourDrawing == &unit ) {
+    if ( _unitToHighlight == &unit ) {
         // Additional unit to pay attention to. Highlight this unit's contour.
         const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, GetArmyColorFromPlayerColor( unit.GetArmyColor() ) );
         fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
-        setUnitForContourDrawing( nullptr );
+        setUnitTobeHighlighted( nullptr );
     }
     else if ( _currentUnit == &unit && _spriteInsteadCurrentUnit == nullptr ) {
         // Current unit's turn which is idling. Highlight this unit's contour.
@@ -3017,7 +3006,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        if ( _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() ) ) {
+        if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition() ) ) {
             humanturn_redraw = true;
         }
     }
