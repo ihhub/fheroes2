@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <numeric>
 
-#include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle_arena.h"

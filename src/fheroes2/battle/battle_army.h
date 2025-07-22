@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "army.h"
+#include "army_troop.h"
 #include "battle_troop.h"
 #include "bitmodes.h"
 #include "monster.h"
