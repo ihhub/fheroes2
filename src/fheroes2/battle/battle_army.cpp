@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <numeric>
 
 #include "army_troop.h"
 #include "artifact.h"
@@ -209,8 +210,9 @@ uint32_t Battle::Force::GetSurrenderCost() const
 
 void Battle::Force::NewTurn()
 {
-    if ( GetCommander() )
+    if ( GetCommander() ) {
         GetCommander()->ResetModes( Heroes::SPELLCASTED );
+    }
 
     std::for_each( begin(), end(), []( Unit * unit ) { unit->NewTurn(); } );
 }
@@ -270,40 +272,54 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
-uint32_t Battle::Force::GetDeadCounts() const
+uint32_t Battle::Force::getTotalNumberOfDeadUnits() const
 {
-    uint32_t res = 0;
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const Battle::Unit * unit ) {
+        assert( unit != nullptr );
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        res += ( *it )->GetDead();
-
-    return res;
+        return total + unit->GetDead();
+    } );
 }
 
-uint32_t Battle::Force::GetDeadHitPoints() const
+uint32_t Battle::Force::getTotalNumberOfDeadUnitsInOriginalArmy() const
 {
-    uint32_t res = 0;
+    uint32_t result = 0;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        res += static_cast<Monster *>( *it )->GetHitPoints() * ( *it )->GetDead();
-    }
+    applyActionToTroopsOfOriginalArmy( [&result]( const Troop & troop, const Unit & unit ) {
+        const uint32_t initialCount = troop.GetCount();
+        const uint32_t currentCount = unit.GetDead() > unit.GetInitialCount() ? 0 : unit.GetInitialCount() - unit.GetDead();
 
-    return res;
+        if ( currentCount > initialCount ) {
+            return;
+        }
+
+        result += initialCount - currentCount;
+    } );
+
+    return result;
 }
 
-void Battle::Force::SyncArmyCount()
+uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 {
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
-        Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
+    uint32_t result = 0;
+
+    applyActionToTroopsOfOriginalArmy( [&result]( const Troop & troop, const Unit & unit ) {
+        const uint32_t initialCount = troop.GetCount();
+        const uint32_t currentCount = unit.GetDead() > unit.GetInitialCount() ? 0 : unit.GetInitialCount() - unit.GetDead();
+
+        if ( currentCount > initialCount ) {
+            return;
         }
 
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr ) {
-            continue;
-        }
+        result += troop.Monster::GetHitPoints() * ( initialCount - currentCount );
+    } );
 
-        troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
-    }
+    return result;
+}
+
+void Battle::Force::syncOriginalArmy() const
+{
+    applyActionToTroopsOfOriginalArmy( []( Troop & troop, const Unit & unit ) {
+        troop.SetCount( unit.GetDead() > unit.GetInitialCount() ? 0 : unit.GetInitialCount() - unit.GetDead() );
+    } );
 }

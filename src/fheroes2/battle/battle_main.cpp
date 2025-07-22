@@ -448,8 +448,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             }
         }
 
-        arena.GetForce1().SyncArmyCount();
-        arena.GetForce2().SyncArmyCount();
+        arena.GetForce1().syncOriginalArmy();
+        arena.GetForce2().syncOriginalArmy();
 
         if ( commander1 ) {
             commander1->ActionAfterBattle();

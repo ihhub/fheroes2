@@ -657,8 +657,8 @@ void Battle::Arena::Turns()
 
     // If the battle is over, calculate the experience and the number of units killed
     if ( result_game.army1 || result_game.army2 ) {
-        result_game.exp1 = _army2->GetDeadHitPoints();
-        result_game.exp2 = _army1->GetDeadHitPoints();
+        result_game.exp1 = _army2->calculateExperienceBasedOnLosses();
+        result_game.exp2 = _army1->calculateExperienceBasedOnLosses();
 
         const HeroBase * army1Commander = _army1->GetCommander();
         const HeroBase * army2Commander = _army2->GetCommander();
@@ -677,7 +677,7 @@ void Battle::Arena::Turns()
         }
 
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
-        result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
+        result_game.killed = army_loss ? army_loss->getTotalNumberOfDeadUnitsInOriginalArmy() : 0;
     }
 }
 
