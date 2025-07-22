@@ -157,7 +157,7 @@ namespace Battle
 
     private:
         template <typename T>
-        void applyActionToTroopsOfOriginalArmy( const T & action ) const
+        void applyActionToTroopsFromOriginalArmy( const T & action ) const
         {
             for ( uint32_t index = 0; index < army.Size(); ++index ) {
                 Troop * troop = army.GetTroop( index );
