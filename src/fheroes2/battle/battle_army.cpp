@@ -282,36 +282,19 @@ uint32_t Battle::Force::getTotalNumberOfDeadUnits() const
 
 uint32_t Battle::Force::calculateNumberOfDeadUnitsForNecromancy() const
 {
-    uint32_t result = 0;
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const Battle::Unit * unit ) {
+        assert( unit != nullptr );
 
-    applyActionToTroopsOfOriginalArmy( [&result]( const Troop & troop, const Unit & unit ) {
-        const uint32_t initialCount = troop.GetCount();
-        const uint32_t currentCount = unit.GetDead() > unit.GetInitialCount() ? 0 : unit.GetInitialCount() - unit.GetDead();
-
-        if ( currentCount > initialCount ) {
-            return;
-        }
-
-        result += initialCount - currentCount;
+        return total + std::min( unit->GetInitialCount(), unit->GetDead() );
     } );
-
-    return result;
 }
 
 uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 {
     uint32_t result = 0;
 
-    applyActionToTroopsOfOriginalArmy( [&result]( const Troop & troop, const Unit & unit ) {
-        const uint32_t initialCount = troop.GetCount();
-        const uint32_t currentCount = unit.GetDead() > unit.GetInitialCount() ? 0 : unit.GetInitialCount() - unit.GetDead();
-
-        if ( currentCount > initialCount ) {
-            return;
-        }
-
-        result += troop.Monster::GetHitPoints() * ( initialCount - currentCount );
-    } );
+    applyActionToTroopsOfOriginalArmy(
+        [&result]( const Troop &, const Unit & unit ) { result += unit.Monster::GetHitPoints() * std::min( unit.GetInitialCount(), unit.GetDead() ); } );
 
     return result;
 }
