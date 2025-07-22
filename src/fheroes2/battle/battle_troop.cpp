@@ -136,6 +136,7 @@ Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool isRefl
     , _uid( uid )
     , _hitPoints( troop.GetHitPoints() )
     , _initialCount( troop.GetCount() )
+    , _maxCount( troop.GetCount() )
     , _shotsLeft( troop.GetShots() )
     , _idleTimer( animation.getIdleDelay() )
     , _isReflected( isReflected )
@@ -257,7 +258,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
+    const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
     assert( totalHitPoints > _hitPoints );
     return totalHitPoints - _hitPoints;
 }
@@ -717,19 +718,19 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
+uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, _hitPoints + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     _hitPoints += points;
 
-    if ( allowToExceedInitialCount ) {
-        _initialCount = std::max( _initialCount, GetCount() );
+    if ( allowToExceedMaxCount ) {
+        _maxCount = std::max( _maxCount, GetCount() );
     }
-    else if ( GetCount() > _initialCount ) {
-        resurrect -= GetCount() - _initialCount;
-        SetCount( _initialCount );
+    else if ( GetCount() > _maxCount ) {
+        resurrect -= GetCount() - _maxCount;
+        SetCount( _maxCount );
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
@@ -1160,7 +1161,7 @@ double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
-    return GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
+    return GetCost() * ( GetDead() > GetMaxCount() ? 0 : GetMaxCount() - GetDead() );
 }
 
 int Battle::Unit::GetControl() const
@@ -1498,7 +1499,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == _initialCount ) {
+        if ( GetCount() == _maxCount ) {
             return 100;
         }
         break;
@@ -1550,7 +1551,7 @@ Spell Battle::Unit::GetSpellMagic( Rand::PCG32 & randomGenerator ) const
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return _hitPoints < _initialCount * Monster::GetHitPoints();
+    return _hitPoints < _maxCount * Monster::GetHitPoints();
 }
 
 bool Battle::Unit::SwitchAnimation( const int rule, const bool reverse /* = false */ )
