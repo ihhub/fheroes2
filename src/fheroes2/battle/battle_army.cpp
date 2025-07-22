@@ -280,7 +280,7 @@ uint32_t Battle::Force::getTotalNumberOfDeadUnits() const
     } );
 }
 
-uint32_t Battle::Force::getTotalNumberOfDeadUnitsInOriginalArmy() const
+uint32_t Battle::Force::calculateNumberOfDeadUnitsForNecromancy() const
 {
     uint32_t result = 0;
 

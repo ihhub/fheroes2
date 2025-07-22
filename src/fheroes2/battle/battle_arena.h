@@ -116,7 +116,7 @@ namespace Battle
 
         Result & GetResult()
         {
-            return result_game;
+            return _battleResult;
         }
 
         HeroBase * GetCommander1() const;
@@ -345,7 +345,7 @@ namespace Battle
         std::unique_ptr<Bridge> _bridge;
 
         std::unique_ptr<Interface> _interface;
-        Result result_game;
+        Result _battleResult;
 
         Graveyard _graveyard;
         SpellStorage _usedSpells;

@@ -796,10 +796,10 @@ void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
     if ( _army1->GetColor() == currentColor ) {
-        result_game.army1 = RESULT_RETREAT;
+        _battleResult.attacker = RESULT_RETREAT;
     }
     else if ( _army2->GetColor() == currentColor ) {
-        result_game.army2 = RESULT_RETREAT;
+        _battleResult.defender = RESULT_RETREAT;
     }
     else {
         assert( 0 );
@@ -845,7 +845,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
         world.GetKingdom( _army1->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
 
-        result_game.army1 = RESULT_SURRENDER;
+        _battleResult.attacker = RESULT_SURRENDER;
     }
     else if ( _army2->GetColor() == currentColor ) {
         Funds cost;
@@ -867,7 +867,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
         world.GetKingdom( _army2->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
 
-        result_game.army2 = RESULT_SURRENDER;
+        _battleResult.defender = RESULT_SURRENDER;
     }
     else {
         assert( 0 );

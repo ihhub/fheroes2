@@ -136,7 +136,8 @@ namespace Battle
         bool HasMonster( const Monster & ) const;
 
         uint32_t getTotalNumberOfDeadUnits() const;
-        uint32_t getTotalNumberOfDeadUnitsInOriginalArmy() const;
+
+        uint32_t calculateNumberOfDeadUnitsForNecromancy() const;
         uint32_t calculateExperienceBasedOnLosses() const;
 
         PlayerColor GetColor() const;

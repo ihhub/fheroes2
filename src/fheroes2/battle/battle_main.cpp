@@ -162,14 +162,18 @@ namespace
 
     uint32_t getBattleResult( const uint32_t army )
     {
-        if ( army & Battle::RESULT_SURRENDER )
+        if ( army & Battle::RESULT_SURRENDER ) {
             return Battle::RESULT_SURRENDER;
-        if ( army & Battle::RESULT_RETREAT )
+        }
+        if ( army & Battle::RESULT_RETREAT ) {
             return Battle::RESULT_RETREAT;
-        if ( army & Battle::RESULT_LOSS )
+        }
+        if ( army & Battle::RESULT_LOSS ) {
             return Battle::RESULT_LOSS;
-        if ( army & Battle::RESULT_WINS )
+        }
+        if ( army & Battle::RESULT_WINS ) {
             return Battle::RESULT_WINS;
+        }
 
         return 0;
     }
@@ -292,11 +296,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     if ( !army1.isValid() || !army2.isValid() ) {
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
-            result.army1 = RESULT_WINS;
+            result.attacker = RESULT_WINS;
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() )
         }
         else {
-            result.army2 = RESULT_WINS;
+            result.defender = RESULT_WINS;
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() )
         }
         return result;
@@ -391,14 +395,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         }
         result = arena.GetResult();
 
-        HeroBase * const winnerHero = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
-        HeroBase * const loserHero = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
+        HeroBase * const winnerHero = ( result.attacker & RESULT_WINS ? commander1 : ( result.defender & RESULT_WINS ? commander2 : nullptr ) );
+        HeroBase * const loserHero = ( result.attacker & RESULT_LOSS ? commander1 : ( result.defender & RESULT_LOSS ? commander2 : nullptr ) );
 
-        const bool isLoserHeroAbandoned = !( ( result.army1 & RESULT_LOSS ? result.army1 : result.army2 ) & ( RESULT_RETREAT | RESULT_SURRENDER ) );
+        const bool isLoserHeroAbandoned = !( ( result.attacker & RESULT_LOSS ? result.attacker : result.defender ) & ( RESULT_RETREAT | RESULT_SURRENDER ) );
         const bool shouldTransferArtifacts = ( winnerHero != nullptr && loserHero != nullptr && winnerHero->isHeroes() && loserHero->isHeroes() && isLoserHeroAbandoned );
 
         if ( showBattle ) {
-            const bool clearMessageLog = ( result.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) );
+            const bool clearMessageLog = ( result.attacker & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.defender & ( RESULT_RETREAT | RESULT_SURRENDER ) );
             arena.FadeArena( clearMessageLog );
         }
 
@@ -463,7 +467,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         }
 
         if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) ) {
-            necromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
+            necromancySkillAction( *winnerHero, result.numOfDeadUnitsForNecromancy, winnerHero->isControlHuman() );
         }
 
         break;
@@ -475,37 +479,38 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     army1.resetInvalidMonsters();
     army2.resetInvalidMonsters();
 
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+               "attacker: " << ( result.attacker & RESULT_WINS ? "wins" : "loss" ) << ", defender: " << ( result.defender & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;
 }
 
-uint32_t Battle::Result::AttackerResult() const
+uint32_t Battle::Result::getAttackerResult() const
 {
-    return getBattleResult( army1 );
+    return getBattleResult( attacker );
 }
 
-uint32_t Battle::Result::DefenderResult() const
+uint32_t Battle::Result::getDefenderResult() const
 {
-    return getBattleResult( army2 );
+    return getBattleResult( defender );
 }
 
-uint32_t Battle::Result::GetExperienceAttacker() const
+uint32_t Battle::Result::getAttackerExperience() const
 {
-    return exp1;
+    return attackerExperience;
 }
 
-uint32_t Battle::Result::GetExperienceDefender() const
+uint32_t Battle::Result::getDefenderExperience() const
 {
-    return exp2;
+    return defenderExperience;
 }
 
-bool Battle::Result::AttackerWins() const
+bool Battle::Result::isAttackerWin() const
 {
-    return ( army1 & RESULT_WINS ) != 0;
+    return ( attacker & RESULT_WINS ) != 0;
 }
 
-bool Battle::Result::DefenderWins() const
+bool Battle::Result::isDefenderWin() const
 {
-    return ( army2 & RESULT_WINS ) != 0;
+    return ( defender & RESULT_WINS ) != 0;
 }

@@ -543,22 +543,24 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LoopedAnimationSequence sequence;
 
     fheroes2::FontType summaryTitleFont = fheroes2::FontType::normalWhite();
-    if ( ( res.army1 & RESULT_WINS ) && attackerIsHuman ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+    if ( ( res.attacker & RESULT_WINS ) && attackerIsHuman ) {
+        GetSummaryParams( res.attacker, res.defender, _army1->GetCommander(), res.attackerExperience, _army2->GetSurrenderCost(), sequence, title, surrenderText,
+                          outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && defenderIsHuman ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+    else if ( ( res.defender & RESULT_WINS ) && defenderIsHuman ) {
+        GetSummaryParams( res.defender, res.attacker, _army2->GetCommander(), res.defenderExperience, _army1->GetSurrenderCost(), sequence, title, surrenderText,
+                          outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( attackerIsHuman ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, 0, sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.attacker, res.defender, _army1->GetCommander(), res.attackerExperience, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( defenderIsHuman ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, 0, sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.defender, res.attacker, _army2->GetCommander(), res.defenderExperience, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
 
@@ -704,8 +706,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( !artifacts.empty() ) {
-        const HeroBase * winner = ( res.army1 & RESULT_WINS ? _army1->GetCommander() : ( res.army2 & RESULT_WINS ? _army2->GetCommander() : nullptr ) );
-        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? _army1->GetCommander() : ( res.army2 & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
+        const HeroBase * winner = ( res.attacker & RESULT_WINS ? _army1->GetCommander() : ( res.defender & RESULT_WINS ? _army2->GetCommander() : nullptr ) );
+        const HeroBase * loser = ( res.attacker & RESULT_LOSS ? _army1->GetCommander() : ( res.defender & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
 
         // Cannot transfer artifacts
         if ( winner == nullptr || loser == nullptr ) {

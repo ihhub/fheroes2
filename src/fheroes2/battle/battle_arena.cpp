@@ -547,7 +547,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
 
 bool Battle::Arena::BattleValid() const
 {
-    return _army1->isValid() && _army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
+    return _army1->isValid() && _army2->isValid() && 0 == _battleResult.attacker && 0 == _battleResult.defender;
 }
 
 void Battle::Arena::Turns()
@@ -644,40 +644,40 @@ void Battle::Arena::Turns()
     }
 
     // Check if the battle is over
-    if ( !_army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
-        result_game.army1 |= RESULT_LOSS;
+    if ( !_army1->isValid() || ( _battleResult.attacker & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        _battleResult.attacker |= RESULT_LOSS;
         // Check if any of the original troops in the army2 are still alive
-        result_game.army2 = _army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
+        _battleResult.defender = _army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
-    else if ( !_army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
-        result_game.army2 |= RESULT_LOSS;
+    else if ( !_army2->isValid() || ( _battleResult.defender & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        _battleResult.defender |= RESULT_LOSS;
         // Check if any of the original troops in the army1 are still alive
-        result_game.army1 = _army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
+        _battleResult.attacker = _army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
 
     // If the battle is over, calculate the experience and the number of units killed
-    if ( result_game.army1 || result_game.army2 ) {
-        result_game.exp1 = _army2->calculateExperienceBasedOnLosses();
-        result_game.exp2 = _army1->calculateExperienceBasedOnLosses();
+    if ( _battleResult.attacker || _battleResult.defender ) {
+        _battleResult.attackerExperience = _army2->calculateExperienceBasedOnLosses();
+        _battleResult.defenderExperience = _army1->calculateExperienceBasedOnLosses();
 
         const HeroBase * army1Commander = _army1->GetCommander();
         const HeroBase * army2Commander = _army2->GetCommander();
 
         // Attacker (or defender) gets an experience bonus if the enemy army was under the command of a hero who was defeated (i.e. did not retreat or surrender)
-        if ( army1Commander && army1Commander->isHeroes() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
-            result_game.exp2 += 500;
+        if ( army1Commander && army1Commander->isHeroes() && !( _battleResult.attacker & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+            _battleResult.defenderExperience += 500;
         }
-        if ( army2Commander && army2Commander->isHeroes() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
-            result_game.exp1 += 500;
+        if ( army2Commander && army2Commander->isHeroes() && !( _battleResult.defender & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+            _battleResult.attackerExperience += 500;
         }
 
         // Attacker gets an additional experience bonus after successfully besieging a town or castle
         if ( _isTown ) {
-            result_game.exp1 += 500;
+            _battleResult.attackerExperience += 500;
         }
 
-        const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
-        result_game.killed = army_loss ? army_loss->getTotalNumberOfDeadUnitsInOriginalArmy() : 0;
+        const Force * army_loss = ( _battleResult.attacker & RESULT_LOSS ? _army1.get() : ( _battleResult.defender & RESULT_LOSS ? _army2.get() : nullptr ) );
+        _battleResult.numOfDeadUnitsForNecromancy = army_loss ? army_loss->calculateNumberOfDeadUnitsForNecromancy() : 0;
     }
 }
 
