@@ -264,15 +264,13 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     LocalEvent & le = LocalEvent::Get();
 
-    auto isNotFirstPage = [this]() { return _startSpellIndex > 0; };
-    auto isNotLastPage = [this, &displayedSpells]() { return displayedSpells.size() > ( _startSpellIndex + ( spellsPerPage * 2 ) ); };
-
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && isNotFirstPage() ) {
+        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) && isNotLastPage() ) {
+        else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 )
+                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
         }
@@ -300,10 +298,10 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.isMouseRightButtonPressedInArea( combatSpellsRoi ) && displayableSpells != Filter::ADVN ) {
             fheroes2::showStandardTextMessage( "", _( "View Combat Spells" ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( previousPageRoi ) && isNotFirstPage() ) {
+        else if ( !_isFirstPage() && le.isMouseRightButtonPressedInArea( previousPageRoi ) ) {
             fheroes2::showStandardTextMessage( "", _( "View previous page" ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( nextPageRoi ) && isNotLastPage() ) {
+        else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 ) && le.isMouseRightButtonPressedInArea( nextPageRoi ) ) {
             fheroes2::showStandardTextMessage( "", _( "View next page" ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( closeRoi ) || Game::HotKeyCloseWindow() ) {
@@ -344,10 +342,10 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             else if ( le.isMouseCursorPosInArea( combatSpellsRoi ) && displayableSpells != Filter::ADVN ) {
                 statusCallback( _( "View Combat Spells" ) );
             }
-            else if ( le.isMouseCursorPosInArea( previousPageRoi ) && isNotFirstPage() ) {
+            else if ( !_isFirstPage() && le.isMouseCursorPosInArea( previousPageRoi ) ) {
                 statusCallback( _( "View previous page" ) );
             }
-            else if ( le.isMouseCursorPosInArea( nextPageRoi ) && isNotLastPage() ) {
+            else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 ) && le.isMouseCursorPosInArea( nextPageRoi ) ) {
                 statusCallback( _( "View next page" ) );
             }
             else if ( le.isMouseCursorPosInArea( closeRoi ) ) {
