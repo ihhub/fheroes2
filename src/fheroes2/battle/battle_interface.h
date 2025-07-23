@@ -234,7 +234,7 @@ namespace Battle
 
         TurnOrder & operator=( const TurnOrder & ) = delete;
 
-        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor)
+        void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor )
         {
             _area = roi;
             _orderOfUnits = units;
@@ -247,8 +247,7 @@ namespace Battle
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert,
-                                 const uint8_t currentUnitColor, fheroes2::Image & output );
+        static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
         PlayerColor _opponentColor{ PlayerColor::NONE };
