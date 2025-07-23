@@ -28,7 +28,6 @@
 
 #include "spell.h"
 
-class Artifact;
 class BagArtifacts;
 
 class SpellStorage : public std::vector<Spell>
