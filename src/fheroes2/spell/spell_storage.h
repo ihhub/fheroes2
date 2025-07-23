@@ -40,10 +40,7 @@ public:
     void Append( const BagArtifacts & bag );
     bool removeSpell( const Spell & spell );
 
-    bool isPresentSpell( const Spell & spell ) const
-    {
-        return std::find( cbegin(), cend(), spell ) != cend();
-    }
+    bool isPresentSpell( const Spell & spell ) const;
 
     std::string String() const;
 };

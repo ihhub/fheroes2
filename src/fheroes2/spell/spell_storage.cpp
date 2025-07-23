@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,9 +35,9 @@ SpellStorage SpellStorage::GetSpells( const int level /* = -1 */ ) const
 
     SpellStorage result;
 
-    for ( auto it = cbegin(); it != cend(); ++it ) {
-        if ( it->isLevel( level ) ) {
-            result.push_back( *it );
+    for ( const Spell & spell : *this ) {
+        if ( spell.isLevel( level ) ) {
+            result.push_back( spell );
         }
     }
 
@@ -60,11 +60,9 @@ void SpellStorage::Append( const Spell & spell )
 void SpellStorage::Append( const SpellStorage & storage )
 {
     for ( const Spell & spell : storage ) {
-        if ( isPresentSpell( spell ) ) {
-            continue;
+        if ( std::find( cbegin(), cend(), spell ) == cend() ) {
+            push_back( spell );
         }
-
-        push_back( spell );
     }
 }
 
@@ -102,4 +100,9 @@ bool SpellStorage::removeSpell( const Spell & spell )
     erase( foundSpell );
 
     return true;
+}
+
+bool SpellStorage::isPresentSpell( const Spell & spell ) const
+{
+    return std::find( cbegin(), cend(), spell ) != cend();
 }
