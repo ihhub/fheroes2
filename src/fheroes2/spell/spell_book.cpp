@@ -48,7 +48,7 @@
 
 namespace
 {
-    const int32_t spellsPerPage = 6;
+    const size_t spellsPerPage = 6;
 
     const fheroes2::Point bookmarkInfoOffset( 123, 273 );
     const fheroes2::Point bookmarkAdvOffset( 266, 269 );
@@ -85,13 +85,16 @@ namespace
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
                                 const HeroBase & hero, const bool canCastSpell, const bool isRight, fheroes2::Image & output, const fheroes2::Point & outputOffset )
     {
-        for ( int32_t i = 0; i < spellsPerPage; ++i ) {
+        for ( size_t i = 0; i < spellsPerPage; ++i ) {
             if ( spells.size() <= index + i ) {
                 return;
             }
 
-            const int32_t ox = 84 + 81 * ( i & 1 );
-            const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + ( isRight ? 1 : 0 ) ) % 2 ) * 5;
+            const int32_t posX = static_cast<int32_t>( i % 2 );
+            const int32_t ox = 84 + 81 * posX;
+            // Make spell near left and right edge of book 5 pixels lower.
+            const int32_t extraOffsetY = ( ( posX == 1 ) == isRight ) ? 0 : 5;
+            const int32_t oy = 71 + 78 * static_cast<int32_t>( i / 2 ) - extraOffsetY;
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
@@ -100,9 +103,7 @@ namespace
             const bool isAvailable = !canCastSpell || hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            int vertOffset = 49 - icon.height();
-            if ( vertOffset > 6 )
-                vertOffset = 6;
+            const int32_t vertOffset = std::min( 6, 49 - icon.height() );
             fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, output, rect.x, rect.y );
 
@@ -427,7 +428,7 @@ void SpellBook::Edit( const HeroBase & hero )
     const fheroes2::Rect closeRoi( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
 
     std::vector<fheroes2::Rect> coords;
-    const size_t twoPagesSpells = static_cast<size_t>( spellsPerPage ) * 2;
+    const size_t twoPagesSpells = spellsPerPage * 2;
     coords.reserve( twoPagesSpells );
 
     spellBookRedrawLists( displayedSpells, coords, firstSpellOnPageIndex, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
