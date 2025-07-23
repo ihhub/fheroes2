@@ -70,8 +70,8 @@ std::string SpellStorage::String() const
 {
     std::string output;
 
-    for ( auto it = cbegin(); it != cend(); ++it ) {
-        output += it->GetName();
+    for ( const Spell & spell : *this ) {
+        output += spell.GetName();
         output += ", ";
     }
 
