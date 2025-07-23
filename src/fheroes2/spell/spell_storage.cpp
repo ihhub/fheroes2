@@ -27,46 +27,52 @@
 
 #include "artifact.h"
 
-SpellStorage::SpellStorage()
+SpellStorage SpellStorage::GetSpells( const int level /* = -1 */ ) const
 {
-    reserve( 67 );
-}
+    if ( level == -1 ) {
+        return *this;
+    }
 
-SpellStorage SpellStorage::GetSpells( int lvl ) const
-{
     SpellStorage result;
-    result.reserve( 20 );
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( lvl == -1 || ( *it ).isLevel( lvl ) )
+
+    for ( auto it = cbegin(); it != cend(); ++it ) {
+        if ( it->isLevel( level ) ) {
             result.push_back( *it );
+        }
+    }
+
     return result;
 }
 
-void SpellStorage::Append( const Spell & sp )
+void SpellStorage::Append( const Spell & spell )
 {
-    if ( sp != Spell::NONE && end() == std::find( begin(), end(), sp ) )
-        push_back( sp );
-}
-
-void SpellStorage::Append( const SpellStorage & st )
-{
-    for ( const Spell & sp : st ) {
-        if ( std::find( begin(), end(), sp ) == end() ) {
-            push_back( sp );
-        }
+    if ( spell == Spell::NONE ) {
+        return;
     }
+
+    if ( isPresentSpell( spell ) ) {
+        return;
+    }
+
+    push_back( spell );
 }
 
-bool SpellStorage::isPresentSpell( const Spell & spell ) const
+void SpellStorage::Append( const SpellStorage & storage )
 {
-    return end() != std::find( begin(), end(), spell );
+    for ( const Spell & spell : storage ) {
+        if ( isPresentSpell( spell ) ) {
+            continue;
+        }
+
+        push_back( spell );
+    }
 }
 
 std::string SpellStorage::String() const
 {
     std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
+    for ( auto it = cbegin(); it != cend(); ++it ) {
         output += it->GetName();
         output += ", ";
     }
@@ -76,13 +82,9 @@ std::string SpellStorage::String() const
 
 void SpellStorage::Append( const BagArtifacts & bag )
 {
-    for ( BagArtifacts::const_iterator it = bag.begin(); it != bag.end(); ++it )
-        Append( *it );
-}
-
-void SpellStorage::Append( const Artifact & art )
-{
-    Append( Spell( art.getSpellId() ) );
+    for ( const Artifact & artifact : bag ) {
+        Append( Spell( artifact.getSpellId() ) );
+    }
 }
 
 bool SpellStorage::removeSpell( const Spell & spell )
@@ -91,10 +93,13 @@ bool SpellStorage::removeSpell( const Spell & spell )
         return false;
     }
 
-    if ( auto foundSpell = std::find( begin(), end(), spell ); foundSpell != end() ) {
-        erase( foundSpell );
-        return true;
+    auto foundSpell = std::find( cbegin(), cend(), spell );
+
+    if ( foundSpell == end() ) {
+        return false;
     }
 
-    return false;
+    erase( foundSpell );
+
+    return true;
 }
