@@ -93,7 +93,7 @@ bool SpellStorage::removeSpell( const Spell & spell )
 
     auto foundSpell = std::find( cbegin(), cend(), spell );
 
-    if ( foundSpell == end() ) {
+    if ( foundSpell == cend() ) {
         return false;
     }
 
