@@ -642,7 +642,8 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
     // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths
     if ( currentTurnNumber > _currentTurnNumber && _numberOfRemainingTurnsWithoutDeaths > 0 ) {
         auto prevNumbersOfDeadUnits = std::tie( _attackerForceTotalNumberOfDeadUnits, _defenderForceTotalNumberOfDeadUnits );
-        const auto currNumbersOfDeadUnits = std::make_tuple( arena.getAttackingForce().getTotalNumberOfDeadUnits(), arena.getDefendingForce().getTotalNumberOfDeadUnits() );
+        const auto currNumbersOfDeadUnits
+            = std::make_tuple( arena.getAttackingForce().getTotalNumberOfDeadUnits(), arena.getDefendingForce().getTotalNumberOfDeadUnits() );
 
         // Either we don't have numbers of dead units from the previous turn, or there were changes in these numbers compared
         // to the previous turn, reset the counter
