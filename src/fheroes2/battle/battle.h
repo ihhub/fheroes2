@@ -56,7 +56,7 @@ namespace Battle
         uint32_t getDefenderExperience() const;
     };
 
-    Result Loader( Army &, Army &, int32_t );
+    Result Loader( Army & attackingArmy, Army & defendingArmy, const int32_t tileIndex );
 
     struct TargetInfo
     {

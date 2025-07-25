@@ -203,7 +203,7 @@ void Battle::Unit::UpdateDirection()
     const Arena * arena = GetArena();
     assert( arena != nullptr );
 
-    SetReflection( arena->GetArmy1Color() != GetArmyColor() );
+    SetReflection( arena->getAttackingArmyColor() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
