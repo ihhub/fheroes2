@@ -302,5 +302,5 @@ uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 void Battle::Force::syncOriginalArmy() const
 {
     _applyActionToTroopsFromOriginalArmy(
-        []( Troop & troop, const Unit & unit ) { troop.SetCount( unit.GetDead() > unit.GetMaxCount() ? 0 : unit.GetMaxCount() - unit.GetDead() ); } );
+        []( Troop & troop, const Unit & unit ) { troop.SetCount( unit.GetDead() >= unit.GetMaxCount() ? 0 : unit.GetMaxCount() - unit.GetDead() ); } );
 }
