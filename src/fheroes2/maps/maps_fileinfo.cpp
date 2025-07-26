@@ -312,6 +312,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
         Maps::Tile tile;
         tile.Init( mp2tile );
+        tile.sortObjectParts();
 
         if ( const auto [color, dummy] = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex ); ( colorsAvailableForHumans & color ) == 0 ) {
             const PlayerColorsSet side1 = colorsAvailableForHumans | color;
