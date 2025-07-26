@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6530,12 +6530,6 @@ msgstr "Злой"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}: штраф за разграбление"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object}: штраф за расхищение"
-
 msgid "Ector"
 msgstr "Эктор"
 
@@ -6560,6 +6554,9 @@ msgstr "Крэг Хэк"
 msgid "Fineous"
 msgstr "Финеус"
 
+msgid "Jaclyn"
+msgstr "Жаклин"
+
 msgid "Jezebel"
 msgstr "Изабэль"
 
@@ -6568,9 +6565,6 @@ msgstr "Атлас"
 
 msgid "Ergon"
 msgstr "Эргон"
-
-msgid "Jaclyn"
-msgstr "Жаклин"
 
 msgid "Gem"
 msgstr "Джэм"
@@ -6659,6 +6653,9 @@ msgstr "Брат Бракс"
 msgid "Dainwin"
 msgstr "Дейнвин"
 
+msgid "Gallavant"
+msgstr "Галавант"
+
 msgid "Joseph"
 msgstr "Джозеф"
 
@@ -6677,14 +6674,17 @@ msgstr "Дракония"
 msgid "Elderian"
 msgstr "Элдериан"
 
-msgid "Gallavant"
-msgstr "Галавант"
-
 msgid "Jarkonas"
 msgstr "Джарконас"
 
 msgid "Martine"
 msgstr "Мартина"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}: штраф за разграбление"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object}: штраф за расхищение"
 
 msgid " gives you maximum morale"
 msgstr " повышает Вашу мораль до максимума"

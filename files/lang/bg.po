@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6711,14 +6711,6 @@ msgstr "Зъл"
 msgid ", FPS: "
 msgstr ""
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} разбойник"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} нападнат"
-
 msgid "Ector"
 msgstr "Ектор"
 
@@ -6743,6 +6735,9 @@ msgstr "Краг Хак"
 msgid "Fineous"
 msgstr "Финиас"
 
+msgid "Jaclyn"
+msgstr "Жаклин"
+
 msgid "Jezebel"
 msgstr "Джезабел"
 
@@ -6751,9 +6746,6 @@ msgstr "Атлас"
 
 msgid "Ergon"
 msgstr "Ергон"
-
-msgid "Jaclyn"
-msgstr "Жаклин"
 
 msgid "Gem"
 msgstr "Джем"
@@ -6842,6 +6834,9 @@ msgstr "Брат Бракс"
 msgid "Dainwin"
 msgstr "Дейнуин"
 
+msgid "Gallavant"
+msgstr "Галевант"
+
 msgid "Joseph"
 msgstr "Джоузеф"
 
@@ -6860,14 +6855,19 @@ msgstr "Дракония"
 msgid "Elderian"
 msgstr "Елдериан"
 
-msgid "Gallavant"
-msgstr "Галевант"
-
 msgid "Jarkonas"
 msgstr "Джарконас"
 
 msgid "Martine"
 msgstr "Мартинa"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} разбойник"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} нападнат"
 
 msgid " gives you maximum morale"
 msgstr " ти дава максимален морал"
