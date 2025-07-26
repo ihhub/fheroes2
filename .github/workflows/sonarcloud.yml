@@ -2,6 +2,11 @@ name: SonarCloud Analyzer
 
 on:
   workflow_call:
+    inputs:
+      run:
+        type: boolean
+        required: false
+        default: true
     secrets:
       SONAR_TOKEN:
         required: true
@@ -15,7 +20,8 @@ jobs:
     # Workflows initiated by Dependabot do not have access to repo secrets, so this job should not be run in this case.
     if: >-
       ${{
-          github.repository == 'ihhub/fheroes2'
+          inputs.run
+          && github.repository == 'ihhub/fheroes2'
           && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) )
           && github.actor != 'dependabot[bot]'
        }}

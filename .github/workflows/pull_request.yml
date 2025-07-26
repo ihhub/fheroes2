@@ -21,6 +21,7 @@ jobs:
         shell: bash
     outputs:
       runCxxAnalyzers: ${{ steps.dispatch.outputs.runCxxAnalyzers }}
+      runSonarAnalyzer: ${{ steps.dispatch.outputs.runSonarAnalyzer }}
     steps:
     - uses: actions/github-script@v7
       id: dispatch
@@ -37,7 +38,13 @@ jobs:
                   [/\.c$/, /\.cpp$/, /\.h$/, /CMakeLists\.txt$/].some((pattern) => pattern.test(fileMetadata.filename))
               )) {
                   core.setOutput("runCxxAnalyzers", "YES");
+                  core.setOutput("runSonarAnalyzer", "YES");
                   break;
+              }
+              if (!modifiedFiles.data.every((fileMetadata) =>
+                  [/files\/lang\/[^/]*\.po$/, /docs\/json\/[^/]*\.json$/].some((pattern) => pattern.test(fileMetadata.filename))
+              )) {
+                  core.setOutput("runSonarAnalyzer", "YES");
               }
           }
   style:
@@ -69,8 +76,11 @@ jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     needs:
+    - dispatcher
     - style
     uses: ./.github/workflows/sonarcloud.yml
+    with:
+      run: ${{ needs.dispatcher.outputs.runSonarAnalyzer == 'YES' }}
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   android:
