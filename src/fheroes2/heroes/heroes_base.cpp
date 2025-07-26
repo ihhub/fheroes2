@@ -527,7 +527,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( *hero );
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
-                    const uint32_t dist = hero->GetVisionsDistance();
+                    const uint32_t dist = Heroes::GetVisionsDistance();
                     *res = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
                     StringReplace( *res, "%{count}", dist );
                 }
