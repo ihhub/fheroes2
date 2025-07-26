@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6528,12 +6528,6 @@ msgstr "Зло"
 msgid ", FPS: "
 msgstr ", кдр/с:"
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} пограбовано"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} розграбовано"
-
 msgid "Ector"
 msgstr "Ектор"
 
@@ -6558,6 +6552,9 @@ msgstr "Креґ Хек"
 msgid "Fineous"
 msgstr "Файнеоус"
 
+msgid "Jaclyn"
+msgstr "Жаклін"
+
 msgid "Jezebel"
 msgstr "Джезебель"
 
@@ -6566,9 +6563,6 @@ msgstr "Атлас"
 
 msgid "Ergon"
 msgstr "Ергон"
-
-msgid "Jaclyn"
-msgstr "Жаклін"
 
 msgid "Gem"
 msgstr "Джем"
@@ -6657,6 +6651,9 @@ msgstr "Брат Бракс"
 msgid "Dainwin"
 msgstr "Дейнвін"
 
+msgid "Gallavant"
+msgstr "Ґалавант"
+
 msgid "Joseph"
 msgstr "Джозеф"
 
@@ -6675,14 +6672,17 @@ msgstr "Драконія"
 msgid "Elderian"
 msgstr "Елдраян"
 
-msgid "Gallavant"
-msgstr "Ґалавант"
-
 msgid "Jarkonas"
 msgstr "Ярконас"
 
 msgid "Martine"
 msgstr "Мартін"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} пограбовано"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} розграбовано"
 
 msgid " gives you maximum morale"
 msgstr " надає максимальний бойовий дух"

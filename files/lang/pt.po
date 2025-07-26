@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -6545,12 +6545,6 @@ msgstr "Do Mal"
 msgid ", FPS: "
 msgstr ", QPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "Ladrão de %{object}"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} assaltada"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6575,6 +6569,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6583,9 +6580,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6674,6 +6668,9 @@ msgstr "Irmão Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6692,14 +6689,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "Ladrão de %{object}"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} assaltada"
 
 msgid " gives you maximum morale"
 msgstr " concede o máximo de moral"
