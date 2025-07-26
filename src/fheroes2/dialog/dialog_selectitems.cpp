@@ -125,7 +125,7 @@ namespace
         {
             const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-            renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+            renderItem( port, Heroes::getDefaultName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override

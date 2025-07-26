@@ -3746,7 +3746,7 @@ void Heroes::ScoutRadar() const
     I.setRedraw( Interface::REDRAW_RADAR );
 }
 
-void Heroes::Action( int tileIndex )
+void Heroes::Action( const int tileIndex )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     struct FocusUpdater
