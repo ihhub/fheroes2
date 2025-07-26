@@ -293,7 +293,7 @@ uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 {
     uint32_t result = 0;
 
-    applyActionToTroopsFromOriginalArmy(
+    _applyActionToTroopsFromOriginalArmy(
         [&result]( const Troop &, const Unit & unit ) { result += unit.Monster::GetHitPoints() * std::min( unit.GetInitialCount(), unit.GetDead() ); } );
 
     return result;
@@ -301,6 +301,6 @@ uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 
 void Battle::Force::syncOriginalArmy() const
 {
-    applyActionToTroopsFromOriginalArmy(
+    _applyActionToTroopsFromOriginalArmy(
         []( Troop & troop, const Unit & unit ) { troop.SetCount( unit.GetDead() > unit.GetMaxCount() ? 0 : unit.GetMaxCount() - unit.GetDead() ); } );
 }
