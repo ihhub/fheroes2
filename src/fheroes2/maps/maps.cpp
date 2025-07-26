@@ -364,7 +364,7 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t wid
 
 MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
 {
-    const uint32_t dist = hero.GetVisionsDistance();
+    const uint32_t dist = Heroes::GetVisionsDistance();
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const PlayerColor heroColor = hero.GetColor();
