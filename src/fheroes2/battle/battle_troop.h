@@ -203,6 +203,11 @@ namespace Battle
             return _initialCount;
         }
 
+        uint32_t GetMaxCount() const
+        {
+            return _maxCount;
+        }
+
         uint32_t GetDead() const
         {
             return _deadCount;
@@ -337,7 +342,7 @@ namespace Battle
     private:
         // Returns the count of killed troops.
         uint32_t _applyDamage( const uint32_t dmg );
-        uint32_t _resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
+        uint32_t _resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary );
 
         // Applies a damage-causing spell to this unit.
         void _spellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target );
@@ -355,7 +360,8 @@ namespace Battle
 
         const uint32_t _uid{ 0 };
         uint32_t _hitPoints{ 0 };
-        uint32_t _initialCount{ 0 };
+        const uint32_t _initialCount{ 0 };
+        uint32_t _maxCount{ 0 };
         uint32_t _deadCount{ 0 };
         uint32_t _shotsLeft{ 0 };
         uint32_t _disruptingRaysNum{ 0 };

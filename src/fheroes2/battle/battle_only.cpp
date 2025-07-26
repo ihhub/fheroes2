@@ -444,9 +444,9 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 
     for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
-            const fheroes2::Sprite & port1 = armyInfo[idx].hero->GetPortrait( PORT_BIG );
-            if ( !port1.empty() ) {
-                fheroes2::Copy( port1, 0, 0, display, armyInfo[idx].portraitRoi );
+            const fheroes2::Sprite & port = armyInfo[idx].hero->GetPortrait( PORT_BIG );
+            if ( !port.empty() ) {
+                fheroes2::Copy( port, 0, 0, display, armyInfo[idx].portraitRoi );
             }
         }
         else {

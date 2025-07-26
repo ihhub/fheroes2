@@ -795,11 +795,11 @@ void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
-    if ( _army1->GetColor() == currentColor ) {
-        result_game.army1 = RESULT_RETREAT;
+    if ( _attackingArmy->GetColor() == currentColor ) {
+        _battleResult.attacker = RESULT_RETREAT;
     }
-    else if ( _army2->GetColor() == currentColor ) {
-        result_game.army2 = RESULT_RETREAT;
+    else if ( _defendingArmy->GetColor() == currentColor ) {
+        _battleResult.defender = RESULT_RETREAT;
     }
     else {
         assert( 0 );
@@ -825,10 +825,10 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
 
     const PlayerColor currentColor = GetCurrentColor();
 
-    if ( _army1->GetColor() == currentColor ) {
+    if ( _attackingArmy->GetColor() == currentColor ) {
         Funds cost;
 
-        cost.gold = _army1->GetSurrenderCost();
+        cost.gold = _attackingArmy->GetSurrenderCost();
 
         if ( !checkPreconditions( cost ) ) {
             ERROR_LOG( "Preconditions were not met" )
@@ -842,15 +842,15 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
-        world.GetKingdom( _army1->GetColor() ).OddFundsResource( cost );
-        world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
+        world.GetKingdom( _attackingArmy->GetColor() ).OddFundsResource( cost );
+        world.GetKingdom( _defendingArmy->GetColor() ).AddFundsResource( cost );
 
-        result_game.army1 = RESULT_SURRENDER;
+        _battleResult.attacker = RESULT_SURRENDER;
     }
-    else if ( _army2->GetColor() == currentColor ) {
+    else if ( _defendingArmy->GetColor() == currentColor ) {
         Funds cost;
 
-        cost.gold = _army2->GetSurrenderCost();
+        cost.gold = _defendingArmy->GetSurrenderCost();
 
         if ( !checkPreconditions( cost ) ) {
             ERROR_LOG( "Preconditions were not met" )
@@ -864,10 +864,10 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
-        world.GetKingdom( _army2->GetColor() ).OddFundsResource( cost );
-        world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
+        world.GetKingdom( _defendingArmy->GetColor() ).OddFundsResource( cost );
+        world.GetKingdom( _attackingArmy->GetColor() ).AddFundsResource( cost );
 
-        result_game.army2 = RESULT_SURRENDER;
+        _battleResult.defender = RESULT_SURRENDER;
     }
     else {
         assert( 0 );
@@ -1321,7 +1321,7 @@ void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
         const Arena * arena = GetArena();
         assert( arena != nullptr );
 
-        if ( color != arena->GetArmy1Color() && color != arena->GetArmy2Color() ) {
+        if ( color != arena->getAttackingArmyColor() && color != arena->getDefendingArmyColor() ) {
             return false;
         }
 
@@ -1362,10 +1362,10 @@ void Battle::Arena::ApplyActionToggleAutoCombat( Command & cmd )
 
 void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 {
-    const int army1Control = GetForce1().GetControl();
-    const int army2Control = GetForce2().GetControl();
+    const int attackingArmyControl = getAttackingForce().GetControl();
+    const int defendingArmyControl = getDefendingForce().GetControl();
 
-    if ( !( army1Control & CONTROL_HUMAN ) && !( army2Control & CONTROL_HUMAN ) ) {
+    if ( !( attackingArmyControl & CONTROL_HUMAN ) && !( defendingArmyControl & CONTROL_HUMAN ) ) {
         ERROR_LOG( "Preconditions were not met" )
 
 #ifdef WITH_DEBUG
@@ -1377,14 +1377,14 @@ void Battle::Arena::ApplyActionQuickCombat( const Command & /* cmd */ )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
 
-    const PlayerColor army1Color = GetArmy1Color();
-    const PlayerColor army2Color = GetArmy2Color();
+    const PlayerColor attackingArmyColor = getAttackingArmyColor();
+    const PlayerColor defendingArmyColor = getDefendingArmyColor();
 
-    if ( army1Control & CONTROL_HUMAN ) {
-        _autoCombatColors |= army1Color;
+    if ( attackingArmyControl & CONTROL_HUMAN ) {
+        _autoCombatColors |= attackingArmyColor;
     }
-    if ( army2Control & CONTROL_HUMAN ) {
-        _autoCombatColors |= army2Color;
+    if ( defendingArmyControl & CONTROL_HUMAN ) {
+        _autoCombatColors |= defendingArmyColor;
     }
 
     _interface.reset();
