@@ -50,10 +50,19 @@ namespace Battle
 
         bool isAttackerWin() const;
         bool isDefenderWin() const;
+
         uint32_t getAttackerResult() const;
         uint32_t getDefenderResult() const;
-        uint32_t getAttackerExperience() const;
-        uint32_t getDefenderExperience() const;
+
+        uint32_t getAttackerExperience() const
+        {
+            return attackerExperience;
+        }
+
+        uint32_t getDefenderExperience() const
+        {
+            return defenderExperience;
+        }
     };
 
     Result Loader( Army & attackingArmy, Army & defendingArmy, const int32_t tileIndex );

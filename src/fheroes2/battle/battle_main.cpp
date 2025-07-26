@@ -495,16 +495,6 @@ uint32_t Battle::Result::getDefenderResult() const
     return getBattleResult( defender );
 }
 
-uint32_t Battle::Result::getAttackerExperience() const
-{
-    return attackerExperience;
-}
-
-uint32_t Battle::Result::getDefenderExperience() const
-{
-    return defenderExperience;
-}
-
 bool Battle::Result::isAttackerWin() const
 {
     return ( attacker & RESULT_WINS ) != 0;
