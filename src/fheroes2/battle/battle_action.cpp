@@ -1422,6 +1422,9 @@ void Battle::Arena::_applyActionSpellSummonElemental( const Spell & spell )
         const HeroBase * commander = GetCurrentCommander();
         assert( commander != nullptr );
 
+        // We are summoning a unit and need to set it fully transparent before the summon animation starts.
+        elem->SetCustomAlpha( 0 );
+
         TargetsInfo targetsInfo;
         targetsInfo.emplace_back( elem );
 

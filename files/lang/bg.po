@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -815,6 +815,14 @@ msgstr "Направи %{spell}"
 msgid "Select spell target"
 msgstr "Избери цел за заклинание"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
 msgid "View Ballista info"
 msgstr "Виж информация за Катапулт"
 
@@ -879,14 +887,6 @@ msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid ""
 "AUTO\n"
@@ -4274,6 +4274,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4393,6 +4397,12 @@ msgstr "Пътища"
 
 msgid "Streams"
 msgstr "Потоци"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Чудовищата не могат да се поставят върху вода."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5691,6 +5701,10 @@ msgstr "пропусни ход в битка"
 msgid "hotkey|cast battle spell"
 msgstr "направи бойно заклинание"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "превключи автоматичния режим на битка"
+
 msgid "hotkey|dwelling level 1"
 msgstr "ниво на жилище 1"
 
@@ -6697,14 +6711,6 @@ msgstr "Зъл"
 msgid ", FPS: "
 msgstr ""
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} разбойник"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} нападнат"
-
 msgid "Ector"
 msgstr "Ектор"
 
@@ -6729,6 +6735,9 @@ msgstr "Краг Хак"
 msgid "Fineous"
 msgstr "Финиас"
 
+msgid "Jaclyn"
+msgstr "Жаклин"
+
 msgid "Jezebel"
 msgstr "Джезабел"
 
@@ -6737,9 +6746,6 @@ msgstr "Атлас"
 
 msgid "Ergon"
 msgstr "Ергон"
-
-msgid "Jaclyn"
-msgstr "Жаклин"
 
 msgid "Gem"
 msgstr "Джем"
@@ -6828,6 +6834,9 @@ msgstr "Брат Бракс"
 msgid "Dainwin"
 msgstr "Дейнуин"
 
+msgid "Gallavant"
+msgstr "Галевант"
+
 msgid "Joseph"
 msgstr "Джоузеф"
 
@@ -6846,14 +6855,19 @@ msgstr "Дракония"
 msgid "Elderian"
 msgstr "Елдериан"
 
-msgid "Gallavant"
-msgstr "Галевант"
-
 msgid "Jarkonas"
 msgstr "Джарконас"
 
 msgid "Martine"
 msgstr "Мартинa"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} разбойник"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} нападнат"
 
 msgid " gives you maximum morale"
 msgstr " ти дава максимален морал"
@@ -7458,6 +7472,14 @@ msgid ""
 msgstr ""
 "Дискретността е по-добрата част от доблестта и ти решаваш да избегнеш тази "
 "битка днес."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"След като си прекарал часове в опити да извадиш сандъка от морето, ти го "
+"отваряш и намирате %{gold} златни парчета."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

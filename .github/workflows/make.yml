@@ -103,7 +103,7 @@ jobs:
             FHEROES2_WITH_TSAN: ON
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
-          os: macos-13
+          os: macos-14
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -288,6 +288,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
+        # TODO: remove this temporary workaround
+        sudo rm -f /etc/apt/sources.list.d/bullseye-backports.list
+        #
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
     - name: Build

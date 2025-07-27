@@ -416,11 +416,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait;
-        noHeroPortrait._disableTransformLayer();
-        noHeroPortrait.resize( rectHero1.width, rectHero1.height );
-        noHeroPortrait.fill( 0 );
-        fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
+        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
     }
 
     // indicator
@@ -437,11 +434,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait;
-        noHeroPortrait._disableTransformLayer();
-        noHeroPortrait.resize( rectHero2.width, rectHero2.height );
-        noHeroPortrait.fill( 0 );
-        fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
+        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
     }
 
     // indicator

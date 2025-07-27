@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 15:29+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -803,6 +803,14 @@ msgstr "Zaubern %{spell}"
 msgid "Select spell target"
 msgstr "Ziel des Zaubers auswählen"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+"Seid Ihr sicher, dass Ihr den Kampf im schnellen Kampfmodus durchführen "
+"möchtet?"
+
 msgid "View Ballista info"
 msgstr "Ballista-Infos anzeigen"
 
@@ -865,14 +873,6 @@ msgstr "Nachrichtenleiste"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Ergebnisse der Aktionen der einzelnen Monster anzeigen."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr ""
-"Seid Ihr sicher, dass Ihr den Kampf im schnellen Kampfmodus durchführen "
-"möchtet?"
 
 msgid ""
 "AUTO\n"
@@ -4192,6 +4192,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4313,6 +4317,12 @@ msgstr "Weg"
 #, fuzzy
 msgid "Streams"
 msgstr "Wasserlauf-Modus"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5610,6 +5620,10 @@ msgstr "Runde im Kampf überspringen"
 msgid "hotkey|cast battle spell"
 msgstr "Kampfzauber sprechen"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Auto-Kampf-Modus umschalten"
+
 msgid "hotkey|dwelling level 1"
 msgstr "Behausung Stufe 1"
 
@@ -6641,14 +6655,6 @@ msgstr "Böse"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} Räuber"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} überfallen"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6673,6 +6679,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6681,9 +6690,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6772,6 +6778,9 @@ msgstr "Bruder Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6790,14 +6799,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} Räuber"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} überfallen"
 
 msgid " gives you maximum morale"
 msgstr " gibt Euch maximale Moral"
@@ -7439,6 +7453,14 @@ msgid ""
 msgstr ""
 "Der bessere Teil der Tapferkeit ist Vorsicht und so beschließt Ihr, diesen "
 "Kampf für heute zu vermeiden."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Nachdem Ihr stundenlang versucht habt, die Kiste aus dem Meer zu fischen, "
+"öffnet Ihr sie und findet %{gold}-Goldstücke."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "

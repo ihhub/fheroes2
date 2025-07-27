@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 00:14+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -808,6 +808,12 @@ msgstr "Kast %{spell}"
 msgid "Select spell target"
 msgstr "Vælg magiens mål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Er du sikker på, at du vil aktivere den automatiske kamptilstand?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Er du sikker på, at du vil løse kampen i den hurtige kamptilstand?"
+
 msgid "View Ballista info"
 msgstr "Se Ballistens info"
 
@@ -871,12 +877,6 @@ msgstr "Beskedlinje"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Er du sikker på, at du vil aktivere den automatiske kamptilstand?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Er du sikker på, at du vil løse kampen i den hurtige kamptilstand?"
 
 msgid ""
 "AUTO\n"
@@ -4223,6 +4223,10 @@ msgstr "Objekter kan ikke placeres udenfor kortet."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Handlingsobjekter skal placeres på rene felter."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4341,6 +4345,12 @@ msgstr "Veje"
 
 msgid "Streams"
 msgstr "Å-tilstand"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5554,6 +5564,10 @@ msgstr "Skift tur i kamp"
 msgid "hotkey|cast battle spell"
 msgstr "Kast kampmagi"
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Autokamp (til/fra)"
+
 msgid "hotkey|dwelling level 1"
 msgstr "Bosted niveau 1"
 
@@ -6562,12 +6576,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS:"
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}srøver"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plyndret"
-
 msgid "Ector"
 msgstr "Hektor"
 
@@ -6592,6 +6600,9 @@ msgstr "Lars Hug"
 msgid "Fineous"
 msgstr "Fineas"
 
+msgid "Jaclyn"
+msgstr "Jakobine"
+
 msgid "Jezebel"
 msgstr "Izabel"
 
@@ -6600,9 +6611,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Egon"
-
-msgid "Jaclyn"
-msgstr "Jakobine"
 
 msgid "Gem"
 msgstr "Perle"
@@ -6691,6 +6699,9 @@ msgstr "Bror Braks"
 msgid "Dainwin"
 msgstr "Dejnvin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Josef"
 
@@ -6709,14 +6720,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Oldrian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Harkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}srøver"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plyndret"
 
 msgid " gives you maximum morale"
 msgstr " giver dig maksimal moral"
@@ -7333,6 +7347,14 @@ msgid ""
 msgstr ""
 "Diskretion er den bedste del af tapperhed, og du beslutter dig for at undgå "
 "denne kamp for i dag."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter at have brugt timevis på at prøve at fiske kisten op af havet, åbner "
+"du den og finder %{gold} guldstykker."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -12319,6 +12341,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
 
 #~ msgid "Click to change the Castle name. Right-click to reset to default."
 #~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."

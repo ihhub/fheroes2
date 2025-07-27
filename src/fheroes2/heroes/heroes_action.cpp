@@ -1810,6 +1810,10 @@ namespace
 
             if ( tile.isWater() ) {
                 if ( gold == 0 ) {
+                    fheroes2::showStandardTextMessage( std::move( hdr ),
+                                                       _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ),
+                                                       Dialog::OK );
+
                     return {};
                 }
 
@@ -3742,7 +3746,7 @@ void Heroes::ScoutRadar() const
     I.setRedraw( Interface::REDRAW_RADAR );
 }
 
-void Heroes::Action( int tileIndex )
+void Heroes::Action( const int tileIndex )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     struct FocusUpdater
