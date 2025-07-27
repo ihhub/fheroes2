@@ -930,7 +930,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
+    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
