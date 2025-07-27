@@ -722,7 +722,8 @@ namespace
     uint8_t GetArmyColorFromPlayerColor( const PlayerColor playerColor )
     {
         switch ( playerColor ) {
-        case PlayerColor::UNUSED: // Berserkers
+        // Units under Berserker spell.
+        case PlayerColor::UNUSED:
             return Battle::ArmyColor::ARMY_COLOR_BLACK;
         case PlayerColor::BLUE:
             return Battle::ArmyColor::ARMY_COLOR_BLUE;
@@ -739,7 +740,8 @@ namespace
         case PlayerColor::NONE:
             return Battle::ArmyColor::ARMY_COLOR_GRAY;
         default:
-            assert( 0 ); // Did you add another player color?
+            // Did you add another player color?
+            assert( 0 );
             return Battle::ArmyColor::ARMY_COLOR_GRAY;
         }
     }
