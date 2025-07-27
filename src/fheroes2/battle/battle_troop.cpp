@@ -458,7 +458,7 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
     }
 
     // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return 0;
     }
 
@@ -620,7 +620,7 @@ uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         // Units with this ability retaliate even when under the influence of paralyzing spells
-        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
             SetModes( TR_RESPONDED );
         }
 
@@ -919,7 +919,7 @@ bool Battle::Unit::AllowResponse() const
 
 void Battle::Unit::SetResponse()
 {
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return;
     }
 
