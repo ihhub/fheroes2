@@ -193,17 +193,17 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
             attacker.UpdateDirection( board[tgt].GetPos() );
         }
 
-        if ( !attacker.isIgnoringRetaliation() && defender.AllowResponse() ) {
-            const int32_t responseTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
-            const Battle::CellDirection responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
+        if ( !attacker.isIgnoringRetaliation() && defender.isRetaliationAllowed() ) {
+            const int32_t retaliationTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
+            const Battle::CellDirection retaliationDir = calculateAttackDirection( defender, defender.GetPosition(), retaliationTgt );
 
             if ( defender.isWide() ) {
-                if ( !directionIsValidForAttack( defender, responseTgt, responseDir ) ) {
+                if ( !directionIsValidForAttack( defender, retaliationTgt, retaliationDir ) ) {
                     defender.SetReflection( !defender.isReflect() );
                 }
             }
             else {
-                defender.UpdateDirection( board[responseTgt].GetPos() );
+                defender.UpdateDirection( board[retaliationTgt].GetPos() );
             }
         }
     }
@@ -617,9 +617,9 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
     BattleProcess( *attacker, *defender, tgt, dir );
 
     if ( defender->isValid() ) {
-        if ( handfighting && !attacker->isIgnoringRetaliation() && defender->AllowResponse() ) {
+        if ( handfighting && !attacker->isIgnoringRetaliation() && defender->isRetaliationAllowed() ) {
             BattleProcess( *defender, *attacker );
-            defender->SetResponse();
+            defender->setRetaliationAsCompleted();
         }
 
         if ( doubleAttack && attacker->isValid() && !attacker->isImmovable() ) {

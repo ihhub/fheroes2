@@ -389,7 +389,7 @@ void Battle::Unit::NewTurn()
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
-    ResetModes( TR_RESPONDED );
+    ResetModes( TR_RETALIATED );
     ResetModes( TR_MOVED );
     ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
@@ -453,12 +453,12 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
     }
 
     // Mirror images are destroyed anyway and hypnotized units never respond to an attack
-    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+    if ( Modes( TR_RETALIATED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
         return 0;
     }
 
     // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return 0;
     }
 
@@ -620,8 +620,8 @@ uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         // Units with this ability retaliate even when under the influence of paralyzing spells
-        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-            SetModes( TR_RESPONDED );
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+            SetModes( TR_RETALIATED );
         }
 
         SetModes( TR_MOVED );
@@ -897,7 +897,7 @@ std::string Battle::Unit::String( const bool more /* = false */ ) const
     return ss.str();
 }
 
-bool Battle::Unit::AllowResponse() const
+bool Battle::Unit::isRetaliationAllowed() const
 {
     // Hypnotized units never respond to an attack
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -914,16 +914,16 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    return ( !Modes( TR_RESPONDED ) );
+    return ( !Modes( TR_RETALIATED ) );
 }
 
-void Battle::Unit::SetResponse()
+void Battle::Unit::setRetaliationAsCompleted()
 {
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return;
     }
 
-    SetModes( TR_RESPONDED );
+    SetModes( TR_RETALIATED );
 }
 
 void Battle::Unit::PostAttackAction( const Unit & enemy )

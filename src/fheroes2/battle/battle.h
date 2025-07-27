@@ -79,7 +79,7 @@ namespace Battle
 
     enum MonsterState : uint32_t
     {
-        TR_RESPONDED = 0x00000001,
+        TR_RETALIATED = 0x00000001,
         TR_MOVED = 0x00000002,
         TR_SKIP = 0x00000004,
 
