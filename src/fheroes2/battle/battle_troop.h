@@ -129,8 +129,7 @@ namespace Battle
 
         bool isFlying() const;
         bool isDoubleAttack() const;
-
-        bool AllowResponse() const;
+        bool isRetaliationAllowed() const;
         // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
 
@@ -300,9 +299,11 @@ namespace Battle
 
         uint32_t HowManyWillBeKilled( const uint32_t dmg ) const;
 
-        void SetResponse();
+        void setRetaliationAsCompleted();
+
         void UpdateDirection();
         bool UpdateDirection( const fheroes2::Rect & pos );
+
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
