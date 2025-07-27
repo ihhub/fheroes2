@@ -52,6 +52,16 @@ public:
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
 
 private:
+    bool _isFirstPage() const
+    {
+        return _startSpellIndex == 0;
+    }
+
+    bool _isLastPage( const size_t spellsCount, const size_t spellsPerScreen ) const
+    {
+        return ( _startSpellIndex + spellsPerScreen ) >= spellsCount;
+    }
+
     mutable size_t _startSpellIndex = 0;
 
     mutable Filter _spellFilter = Filter::ADVN;

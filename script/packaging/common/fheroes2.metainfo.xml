@@ -37,6 +37,57 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-07-20" version="v1.1.10">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.10</url>
+      <description>
+        <p>Changes in v1.1.10 (20 July 2025):</p>
+        <ul>
+          <li>limit maximum number of heroes and jails allowed to place in the Editor</li>
+          <li>fix a crash when setting victory condition "One side defeats another" and then removing all players from the map</li>
+          <li>fix a crash when the number of placed castles in the Editor exceeds the limit</li>
+          <li>add the Good, Bad, Magne map</li>
+          <li>update the Eruption map</li>
+          <li>update the Spanish translation</li>
+          <li>update the Hungarian translation</li>
+          <li>show the proper message when picking-up an empty water chest</li>
+          <li>implement the hotkey to toggle the display of the battle turn order</li>
+          <li>allow heroes to disembark on proper tiles even if they aren't marked as coast</li>
+          <li>remove or move to the nearest water the boats that are placed on land in hacked maps</li>
+          <li>update the Russian translation</li>
+          <li>fix passability issue for a mountain object</li>
+          <li>fix rendering bug for a particular crack object</li>
+          <li>use engine-generated Russian fonts and buttons even when Russian assets are present</li>
+          <li>update the German translation</li>
+          <li>add a frame to the Swordsman walking animation to make it smoother</li>
+          <li>allow to exit Town Settings without applying changes in the Editor</li>
+          <li>fix map and players' info update when restarting the map that was changed and saved in the Editor</li>
+          <li>fix erasure of object by clicking on its flag in the Editor</li>
+          <li>fix placement of an object that overlaps with a flag of an existing object in the Editor</li>
+          <li>add a new keyboard icon to the button that opens Virtual Keyboard</li>
+          <li>fix the position adjustment logic in case of a tail attack in battles</li>
+          <li>fix passabilites update after erasing an object in the Editor</li>
+          <li>update the Swedish translation</li>
+          <li>remember the position of the game window after closing the application</li>
+          <li>fix scroll cursor ("arrow") positioning on screen edges for software rendered cursor</li>
+          <li>update the Hungarian translation</li>
+          <li>support 8-directions of attack for wide creatures in battles</li>
+          <li>use original button sizes as the minimum size for Editor and Main Menu generated buttons</li>
+          <li>add hero casting animation to Teleport, Summon Elemental, Mirror Image, and Earthquake spells animation</li>
+          <li>make Editor's File Dialog buttons' size auto-adjustable</li>
+          <li>add straight corners to the Magic Book to indicate that a player cannot switch to the next page</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix white pixels in Sorceress castle sky and rainbow</li>
+          <li>add missing bay artwork for Wizard castle</li>
+          <li>do not place monsters during the "Month of" event on tiles with Adventure Events</li>
+          <li>fix incorrect event removal after removing a nearby object on a map in the Editor</li>
+          <li>make random generation code platform-independent</li>
+          <li>fix button font generation when using non-English assets</li>
+          <li>speed up rendering in battles</li>
+          <li>add the ability to sort save files by name or date</li>
+          <li>rework New Game, Load Game and Editor menus</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-06-10" version="v1.1.9">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.9</url>
       <description>

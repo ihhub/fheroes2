@@ -904,7 +904,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
         assert( hero != nullptr );
 
         if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
-            const uint32_t crystalBallDistance = hero->GetVisionsDistance();
+            const uint32_t crystalBallDistance = Heroes::GetVisionsDistance();
 
             if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -527,7 +527,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( *hero );
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
-                    const uint32_t dist = hero->GetVisionsDistance();
+                    const uint32_t dist = Heroes::GetVisionsDistance();
                     *res = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
                     StringReplace( *res, "%{count}", dist );
                 }

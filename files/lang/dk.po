@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-07-26 02:35+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -6576,12 +6576,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS:"
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}srøver"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plyndret"
-
 msgid "Ector"
 msgstr "Hektor"
 
@@ -6606,6 +6600,9 @@ msgstr "Lars Hug"
 msgid "Fineous"
 msgstr "Fineas"
 
+msgid "Jaclyn"
+msgstr "Jakobine"
+
 msgid "Jezebel"
 msgstr "Izabel"
 
@@ -6614,9 +6611,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Egon"
-
-msgid "Jaclyn"
-msgstr "Jakobine"
 
 msgid "Gem"
 msgstr "Perle"
@@ -6705,6 +6699,9 @@ msgstr "Bror Braks"
 msgid "Dainwin"
 msgstr "Dejnvin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Josef"
 
@@ -6723,14 +6720,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Oldrian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Harkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}srøver"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plyndret"
 
 msgid " gives you maximum morale"
 msgstr " giver dig maksimal moral"

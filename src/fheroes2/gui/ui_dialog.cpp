@@ -457,6 +457,10 @@ namespace fheroes2
     {
         std::vector<ResourceDialogElement> elements;
 
+        // In the original HoMM2, gold usually comes first in the list of resources, let's do the same here.
+        if ( funds.gold != 0 ) {
+            elements.emplace_back( Resource::GOLD, std::to_string( funds.gold ) );
+        }
         if ( funds.wood != 0 ) {
             elements.emplace_back( Resource::WOOD, std::to_string( funds.wood ) );
         }
@@ -474,9 +478,6 @@ namespace fheroes2
         }
         if ( funds.gems != 0 ) {
             elements.emplace_back( Resource::GEMS, std::to_string( funds.gems ) );
-        }
-        if ( funds.gold != 0 ) {
-            elements.emplace_back( Resource::GOLD, std::to_string( funds.gold ) );
         }
 
         return elements;
