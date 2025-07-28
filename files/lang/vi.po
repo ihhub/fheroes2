@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10209,8 +10209,9 @@ msgstr "Tấn công 2 ô lục giác"
 msgid "Flyer"
 msgstr "Loài bay"
 
-msgid "Always retaliates"
-msgstr "Luôn phản đòn"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Không có sự phản đòn của kẻ thù"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Tấn công tất cả kẻ thù lân cận"
@@ -12544,6 +12545,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Luôn phản đòn"
 
 #~ msgid "CONFIG"
 #~ msgstr "ĐIỀU CHỈNH"

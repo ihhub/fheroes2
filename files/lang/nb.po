@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10365,8 +10365,9 @@ msgstr "Tofeltsangrep"
 msgid "Flyer"
 msgstr "Flyger"
 
-msgid "Always retaliates"
-msgstr "Tar alltid igjen"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Ingen fiendtlige hevnslag"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriper alle fiender rundt seg"
@@ -12722,6 +12723,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Tar alltid igjen"
 
 #~ msgid "CONFIG"
 #~ msgstr "VALG"
