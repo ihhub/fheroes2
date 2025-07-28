@@ -25,8 +25,8 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <numeric>
 
-#include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle_arena.h"
@@ -152,7 +152,7 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
         }
 
         const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr || unit->GetDead() >= unit->GetInitialCount() ) {
+        if ( unit == nullptr || unit->GetDead() >= unit->GetMaxCount() ) {
             continue;
         }
 
@@ -209,8 +209,9 @@ uint32_t Battle::Force::GetSurrenderCost() const
 
 void Battle::Force::NewTurn()
 {
-    if ( GetCommander() )
+    if ( GetCommander() ) {
         GetCommander()->ResetModes( Heroes::SPELLCASTED );
+    }
 
     std::for_each( begin(), end(), []( Unit * unit ) { unit->NewTurn(); } );
 }
@@ -270,40 +271,36 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
-uint32_t Battle::Force::GetDeadCounts() const
+uint32_t Battle::Force::getTotalNumberOfDeadUnits() const
 {
-    uint32_t res = 0;
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const Battle::Unit * unit ) {
+        assert( unit != nullptr );
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        res += ( *it )->GetDead();
-
-    return res;
+        return total + unit->GetDead();
+    } );
 }
 
-uint32_t Battle::Force::GetDeadHitPoints() const
+uint32_t Battle::Force::calculateNumberOfDeadUnitsForNecromancy() const
 {
-    uint32_t res = 0;
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const Battle::Unit * unit ) {
+        assert( unit != nullptr );
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        res += static_cast<Monster *>( *it )->GetHitPoints() * ( *it )->GetDead();
-    }
-
-    return res;
+        return total + std::min( unit->GetInitialCount(), unit->GetDead() );
+    } );
 }
 
-void Battle::Force::SyncArmyCount()
+uint32_t Battle::Force::calculateExperienceBasedOnLosses() const
 {
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
-        Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
-        }
+    uint32_t result = 0;
 
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr ) {
-            continue;
-        }
+    _applyActionToTroopsFromOriginalArmy(
+        [&result]( const Troop &, const Unit & unit ) { result += unit.Monster::GetHitPoints() * std::min( unit.GetInitialCount(), unit.GetDead() ); } );
 
-        troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
-    }
+    return result;
+}
+
+void Battle::Force::syncOriginalArmy() const
+{
+    _applyActionToTroopsFromOriginalArmy(
+        []( Troop & troop, const Unit & unit ) { troop.SetCount( unit.GetDead() >= unit.GetMaxCount() ? 0 : unit.GetMaxCount() - unit.GetDead() ); } );
 }

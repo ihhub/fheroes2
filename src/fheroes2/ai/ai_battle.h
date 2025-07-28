@@ -119,8 +119,8 @@ namespace AI
         // Member variables related to the logic of checking the limit of the number of turns
         uint32_t _currentTurnNumber{ 0 };
         uint32_t _numberOfRemainingTurnsWithoutDeaths{ MAX_TURNS_WITHOUT_DEATHS };
-        uint32_t _attackerForceNumberOfDead{ 0 };
-        uint32_t _defenderForceNumberOfDead{ 0 };
+        uint32_t _attackerForceTotalNumberOfDeadUnits{ 0 };
+        uint32_t _defenderForceTotalNumberOfDeadUnits{ 0 };
 
         // Member variables with a lifetime in one turn
         const HeroBase * _commander{ nullptr };

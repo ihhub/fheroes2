@@ -463,8 +463,8 @@ namespace Battle
         fheroes2::Button _buttonSkip;
         Status status;
 
-        std::unique_ptr<OpponentSprite> _opponent1;
-        std::unique_ptr<OpponentSprite> _opponent2;
+        std::unique_ptr<OpponentSprite> _attackingOpponent;
+        std::unique_ptr<OpponentSprite> _defendingOpponent;
 
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
