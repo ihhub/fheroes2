@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -10066,8 +10066,9 @@ msgstr "2-feltsangreb"
 msgid "Flyer"
 msgstr "Kan flyve"
 
-msgid "Always retaliates"
-msgstr "Slår altid igen"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Fjender kan ikke slå igen"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriber alle fjender omkring sig"
@@ -12341,6 +12342,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Slår altid igen"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

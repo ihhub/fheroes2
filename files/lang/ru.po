@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -10008,8 +10008,9 @@ msgstr "Атака на две клетки"
 msgid "Flyer"
 msgstr "Летает"
 
-msgid "Always retaliates"
-msgstr "Всегда отвечает на удар"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Враг не отвечает на атаку"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Атакует всех соседних врагов"
@@ -12232,6 +12233,9 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Всегда отвечает на удар"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

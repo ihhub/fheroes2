@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10023,8 +10023,9 @@ msgstr "Атакує два клітинки"
 msgid "Flyer"
 msgstr "Літаючий"
 
-msgid "Always retaliates"
-msgstr "Завжди наносить контрудар"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Без ворожої помсти"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Атакує всіх ворогів поруч"
@@ -12245,6 +12246,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Завжди наносить контрудар"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

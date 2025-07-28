@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10161,8 +10161,9 @@ msgstr "Útok cez dve polia"
 msgid "Flyer"
 msgstr "Lieta"
 
-msgid "Always retaliates"
-msgstr "Vždy vracia úder"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Nepriateľ nevracia úder"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Útočí na všetkých susedných nepriateľov"
@@ -12413,6 +12414,9 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vždy vracia úder"
 
 #~ msgid "CONFIG"
 #~ msgstr "NASTAV"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -9512,8 +9512,9 @@ msgstr "Colpo di due riquardri"
 msgid "Flyer"
 msgstr "Creatura Volante"
 
-msgid "Always retaliates"
-msgstr "Contrattacca sempre"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Nessun contrattacco nemico"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Attacca tutti i nemici adiacenti"
@@ -11490,3 +11491,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Contrattacca sempre"

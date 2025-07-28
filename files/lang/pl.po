@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10213,8 +10213,9 @@ msgstr "Atakuje dwa pola"
 msgid "Flyer"
 msgstr "Latający"
 
-msgid "Always retaliates"
-msgstr "Zawsze kontratakuje"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Powstrzymuje kontratak"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Atakuje wszystkich przyległych przeciwników"
@@ -12540,6 +12541,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Always retaliates"
+#~ msgstr "Zawsze kontratakuje"
 
 #~ msgid "CONFIG"
 #~ msgstr "KONFIGURACJA"

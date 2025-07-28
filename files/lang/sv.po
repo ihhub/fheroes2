@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2025-06-07 12:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -9974,8 +9974,9 @@ msgstr "Två-rutsanfall"
 msgid "Flyer"
 msgstr "Flygare"
 
-msgid "Always retaliates"
-msgstr "Vedergäller alltid"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Ingen fiendevedergällning"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
@@ -12206,6 +12207,9 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vedergäller alltid"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."
