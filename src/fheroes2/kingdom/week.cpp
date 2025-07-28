@@ -26,7 +26,6 @@
 #include <cassert>
 
 #include "rand.h"
-#include "tools.h"
 #include "translations.h"
 
 namespace
