@@ -100,7 +100,7 @@ namespace Rand
 
         static constexpr uint64_t makeOdd( const uint64_t value )
         {
-            return ( value << 1U ) | 1U;
+            return ( value | 1 );
         }
 
         // Defines a new templated false value to be used in static_assert

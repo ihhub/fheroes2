@@ -36,7 +36,7 @@ int Battle::Command::GetNextValue()
     return val;
 }
 
-uint32_t Battle::Command::updateSeed( uint32_t seed ) const
+uint64_t Battle::Command::updateSeed( uint64_t seed ) const
 {
     switch ( _type ) {
     case CommandType::ATTACK:

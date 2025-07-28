@@ -132,7 +132,7 @@ namespace Battle
         int GetNextValue();
 
         // Updates the specified seed using the contents of this command. Returns the updated seed (or the original seed if this command is not suitable for seed update).
-        uint32_t updateSeed( uint32_t seed ) const;
+        uint64_t updateSeed( uint64_t seed ) const;
 
         Command & operator<<( const int val );
 
