@@ -138,22 +138,22 @@ namespace
         for ( size_t i = 0; i < attackingArmy.Size(); ++i ) {
             const Troop * troop = attackingArmy.GetTroop( i );
             if ( troop->isValid() ) {
-                fheroes2::hashCombine( seed, troop->GetID() );
-                fheroes2::hashCombine( seed, troop->GetCount() );
+                Rand::combineSeedWithValueHash( seed, troop->GetID() );
+                Rand::combineSeedWithValueHash( seed, troop->GetCount() );
             }
             else {
-                fheroes2::hashCombine( seed, 0 );
+                Rand::combineSeedWithValueHash( seed, 0 );
             }
         }
 
         for ( size_t i = 0; i < defendingArmy.Size(); ++i ) {
             const Troop * troop = defendingArmy.GetTroop( i );
             if ( troop->isValid() ) {
-                fheroes2::hashCombine( seed, troop->GetID() );
-                fheroes2::hashCombine( seed, troop->GetCount() );
+                Rand::combineSeedWithValueHash( seed, troop->GetID() );
+                Rand::combineSeedWithValueHash( seed, troop->GetCount() );
             }
             else {
-                fheroes2::hashCombine( seed, 0 );
+                Rand::combineSeedWithValueHash( seed, 0 );
             }
         }
 

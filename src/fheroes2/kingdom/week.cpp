@@ -33,14 +33,14 @@ namespace
     WeekName WeekRand( const uint32_t seed )
     {
         uint32_t weekTypeSeed = seed;
-        fheroes2::hashCombine( weekTypeSeed, 367245 ); // Salt
+        Rand::combineSeedWithValueHash( weekTypeSeed, 367245 ); // Salt
 
         uint32_t weekType = Rand::GetWithSeed( 0, 3, weekTypeSeed );
 
         // A regular week, probability 75%
         if ( weekType < 3 ) {
             uint32_t weekSeed = seed;
-            fheroes2::hashCombine( weekSeed, 1946256 ); // Salt
+            Rand::combineSeedWithValueHash( weekSeed, 1946256 ); // Salt
 
             return Rand::GetWithSeed( WeekName::SQUIRREL, WeekName::CONDOR, weekSeed );
         }
@@ -52,14 +52,14 @@ namespace
     WeekName MonthRand( const uint32_t seed )
     {
         uint32_t monthTypeSeed = seed;
-        fheroes2::hashCombine( monthTypeSeed, 9536582 ); // Salt
+        Rand::combineSeedWithValueHash( monthTypeSeed, 9536582 ); // Salt
 
         uint32_t monthType = Rand::GetWithSeed( 0, 9, monthTypeSeed );
 
         // A regular month, probability 50%
         if ( monthType < 5 ) {
             uint32_t monthSeed = seed;
-            fheroes2::hashCombine( monthSeed, 5544783 ); // Salt
+            Rand::combineSeedWithValueHash( monthSeed, 5544783 ); // Salt
 
             return Rand::GetWithSeed( WeekName::ANT, WeekName::BEETLE, monthSeed );
         }
@@ -76,7 +76,7 @@ namespace
     Monster::MonsterType RandomMonsterWeekOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
-        fheroes2::hashCombine( monsterSeed, 886473 ); // Salt
+        Rand::combineSeedWithValueHash( monsterSeed, 886473 ); // Salt
 
         return Rand::GetWithSeed( Monster::PEASANT, Monster::BONE_DRAGON, monsterSeed );
     }
@@ -84,7 +84,7 @@ namespace
     Monster::MonsterType RandomMonsterMonthOf( const uint32_t seed )
     {
         uint32_t monsterSeed = seed;
-        fheroes2::hashCombine( monsterSeed, 1130906 ); // Salt
+        Rand::combineSeedWithValueHash( monsterSeed, 1130906 ); // Salt
 
         switch ( Rand::GetWithSeed( 1, 12, monsterSeed ) ) {
         case 1:

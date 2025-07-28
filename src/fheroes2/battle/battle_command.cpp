@@ -25,7 +25,7 @@
 
 #include <algorithm>
 
-#include "tools.h"
+#include "rand.h"
 
 int Battle::Command::GetNextValue()
 {
@@ -42,12 +42,12 @@ uint64_t Battle::Command::updateSeed( uint64_t seed ) const
     case CommandType::ATTACK:
         assert( size() == 5 );
 
-        fheroes2::hashCombine( seed, _type );
+        Rand::combineSeedWithValueHash( seed, _type );
         // Use only cell index to move and attacker & defender UIDs, because cell index to attack and attack direction may differ depending on whether the AI or the human
         // player gives the command
-        fheroes2::hashCombine( seed, at( 2 ) );
-        fheroes2::hashCombine( seed, at( 3 ) );
-        fheroes2::hashCombine( seed, at( 4 ) );
+        Rand::combineSeedWithValueHash( seed, at( 2 ) );
+        Rand::combineSeedWithValueHash( seed, at( 3 ) );
+        Rand::combineSeedWithValueHash( seed, at( 4 ) );
         break;
 
     case CommandType::MOVE:
@@ -58,8 +58,8 @@ uint64_t Battle::Command::updateSeed( uint64_t seed ) const
     case CommandType::RETREAT:
     case CommandType::SURRENDER:
     case CommandType::SKIP:
-        fheroes2::hashCombine( seed, _type );
-        std::for_each( begin(), end(), [&seed]( const int param ) { fheroes2::hashCombine( seed, param ); } );
+        Rand::combineSeedWithValueHash( seed, _type );
+        std::for_each( begin(), end(), [&seed]( const int param ) { Rand::combineSeedWithValueHash( seed, param ); } );
         break;
 
     // These commands should never affect the seed generation

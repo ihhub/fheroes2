@@ -83,13 +83,6 @@ namespace fheroes2
 {
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
-    template <typename Seed, typename Value, std::enable_if_t<std::is_same_v<Seed, uint32_t> || std::is_same_v<Seed, uint64_t>, bool> = true>
-    void hashCombine( Seed & seed, const Value & v )
-    {
-        std::hash<Value> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-    }
-
     template <size_t N>
     std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )
     {

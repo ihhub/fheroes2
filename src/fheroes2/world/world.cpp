@@ -1368,7 +1368,7 @@ uint32_t World::GetWeekSeed() const
 {
     uint32_t weekSeed = _seed;
 
-    fheroes2::hashCombine( weekSeed, week );
+    Rand::combineSeedWithValueHash( weekSeed, week );
 
     return weekSeed;
 }

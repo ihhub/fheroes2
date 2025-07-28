@@ -253,4 +253,11 @@ namespace Rand
     private:
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
+
+    template <typename Seed, typename Value, std::enable_if_t<std::is_same_v<Seed, uint32_t> || std::is_same_v<Seed, uint64_t>, bool> = true>
+    void combineSeedWithValueHash( Seed & seed, const Value & v )
+    {
+        std::hash<Value> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
 }
