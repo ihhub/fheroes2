@@ -59,10 +59,8 @@ namespace Rand
 
         explicit constexpr PCG32( const uint64_t seed = defaultSeed, const uint64_t stream = defaultStream )
             : _state( 0 )
-            , _increment( makeOdd( stream ) )
+            , _increment( stream )
         {
-            // _increment must be odd
-            assert( _increment % 2 == 1 );
             advanceState();
             _state += seed;
             advanceState();
@@ -85,7 +83,7 @@ namespace Rand
 
         constexpr void setStream( const uint64_t stream )
         {
-            _increment = makeOdd( stream );
+            _increment = stream;
         }
 
     private:
@@ -96,11 +94,6 @@ namespace Rand
         static constexpr uint32_t rotateRight( const uint32_t value, const uint32_t rotations )
         {
             return ( value >> rotations ) | ( value << ( ( ~( rotations - 1 ) ) & 31 ) );
-        }
-
-        static constexpr uint64_t makeOdd( const uint64_t value )
-        {
-            return ( value | 1 );
         }
 
         // Defines a new templated false value to be used in static_assert
