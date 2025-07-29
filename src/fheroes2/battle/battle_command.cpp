@@ -36,18 +36,18 @@ int Battle::Command::GetNextValue()
     return val;
 }
 
-uint64_t Battle::Command::updateSeed( uint64_t seed ) const
+uint64_t Battle::Command::updatePCG32Stream( uint64_t stream ) const
 {
     switch ( _type ) {
     case CommandType::ATTACK:
         assert( size() == 5 );
 
-        Rand::combineSeedWithValueHash( seed, _type );
+        Rand::combineSeedWithValueHash( stream, _type );
         // Use only cell index to move and attacker & defender UIDs, because cell index to attack and attack direction may differ depending on whether the AI or the human
         // player gives the command
-        Rand::combineSeedWithValueHash( seed, at( 2 ) );
-        Rand::combineSeedWithValueHash( seed, at( 3 ) );
-        Rand::combineSeedWithValueHash( seed, at( 4 ) );
+        Rand::combineSeedWithValueHash( stream, at( 2 ) );
+        Rand::combineSeedWithValueHash( stream, at( 3 ) );
+        Rand::combineSeedWithValueHash( stream, at( 4 ) );
         break;
 
     case CommandType::MOVE:
@@ -58,11 +58,11 @@ uint64_t Battle::Command::updateSeed( uint64_t seed ) const
     case CommandType::RETREAT:
     case CommandType::SURRENDER:
     case CommandType::SKIP:
-        Rand::combineSeedWithValueHash( seed, _type );
-        std::for_each( begin(), end(), [&seed]( const int param ) { Rand::combineSeedWithValueHash( seed, param ); } );
+        Rand::combineSeedWithValueHash( stream, _type );
+        std::for_each( begin(), end(), [&stream]( const int param ) { Rand::combineSeedWithValueHash( stream, param ); } );
         break;
 
-    // These commands should never affect the seed generation
+    // These commands should never affect the stream
     case CommandType::TOGGLE_AUTO_COMBAT:
     case CommandType::QUICK_COMBAT:
         break;
@@ -72,7 +72,7 @@ uint64_t Battle::Command::updateSeed( uint64_t seed ) const
         break;
     }
 
-    return seed;
+    return stream;
 }
 
 Battle::Command & Battle::Command::operator<<( const int val )

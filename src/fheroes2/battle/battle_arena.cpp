@@ -516,7 +516,7 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
         }
 
         const uint64_t newStream = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.getStream(),
-                                                    []( const uint64_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
+                                                    []( const uint64_t stream, const Command & cmd ) { return cmd.updatePCG32Stream( stream ); } );
         _randomGenerator.setStream( newStream );
 
         while ( !actions.empty() ) {
