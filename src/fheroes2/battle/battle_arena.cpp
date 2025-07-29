@@ -515,9 +515,9 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
             }
         }
 
-        const uint64_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.getStream(),
-                                                  []( const uint64_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
-        _randomGenerator.setStream( newSeed );
+        const uint64_t newStream = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.getStream(),
+                                                    []( const uint64_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
+        _randomGenerator.setStream( newStream );
 
         while ( !actions.empty() ) {
             ApplyAction( actions.front() );
