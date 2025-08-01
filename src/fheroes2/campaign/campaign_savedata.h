@@ -83,7 +83,7 @@ namespace Campaign
 
         uint32_t getDaysPassed() const
         {
-            return std::accumulate( _daysPassed.cbegin(), _daysPassed.cend(), 0 );
+            return std::accumulate( _daysPassed.cbegin(), _daysPassed.cend(), 0U );
         }
 
         int32_t getDifficulty() const
