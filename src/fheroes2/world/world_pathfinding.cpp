@@ -279,8 +279,8 @@ namespace
             return false;
         }
 
-        // ... this only works when moving from the shore to an empty water tile...
-        if ( fromWater || !toTile.isWater() || toTile.getMainObjectType() != MP2::OBJ_NONE ) {
+        // ... this only works when moving from the shore to a suitable water tile...
+        if ( fromWater || !toTile.isSuitableForSummoningBoat() ) {
             return false;
         }
 
@@ -866,9 +866,8 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
 
         const Maps::Tile & toTile = world.getTile( to );
 
-        // AI-controlled hero may get from the shore to an empty water tile using the Summon Boat spell
-        const bool isEmptyWaterTile = ( toTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_NONE );
-        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || isEmptyWaterTile ) );
+        // AI-controlled hero may get from the shore to a suitable water tile using the Summon Boat spell
+        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || toTile.isSuitableForSummoningBoat() ) );
         const bool isDisembarks = ( fromTile.isWater() && toTile.isSuitableForDisembarkation() );
 
         // When the hero gets into a boat or disembarks, he spends all remaining movement points.
