@@ -91,18 +91,19 @@ namespace Campaign
 
     void CampaignSaveData::addDaysPassed( const uint32_t days )
     {
-        _daysPassed += days;
+        _daysPassed.emplace_back( days );
+        assert( _daysPassed.size() == _finishedMaps.size() );
     }
 
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
+        _daysPassed.clear();
         _bonusesForFinishedMaps.clear();
         _obtainedCampaignAwards.clear();
         _carryOverTroops.clear();
         _currentScenarioInfoId = { -1, -1 };
         _currentScenarioBonusId = -1;
-        _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
         _minDifficulty = CampaignDifficulty::Normal;
     }
@@ -176,7 +177,19 @@ namespace Campaign
         // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
         data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
 
-        stream >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1111_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1111_RELEASE ) {
+            uint32_t daysPassed{ 0 };
+            stream >> daysPassed;
+
+            data._daysPassed.clear();
+            data._daysPassed.resize( data._finishedMaps.size(), daysPassed );
+        }
+        else {
+            stream >> data._daysPassed;
+        }
+
+        stream >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1108_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1108_RELEASE ) {
