@@ -146,6 +146,10 @@ namespace Interface
             _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
                 editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
             } );
+
+            // This is just to compensate [16, 16] pixels offset on the first opening of the Editor
+            // to show the correct top-left corner of the map.
+            _gameArea.SetAreaPosition( 0, 0, 2 * fheroes2::borderWidthPx, 2 * fheroes2::borderWidthPx );
         }
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
