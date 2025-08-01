@@ -114,6 +114,10 @@ namespace
                 { 0, 4, 29, 32, 36, 39, 42, 44, 46, 48, 76, 82, 88, 92, 94, 98, 102, 105, 108, 111, 113, 120, 124, 128, 134, 138, 141, 143, 145, 147 } );
             return objGrasShadowBitset[icnIndex];
         }
+        case ICN::NEW_OBJECTS: {
+            static const std::bitset<256> adventureObjectsShadowBitset = fheroes2::makeBitsetFromVector<256>( { 1 } );
+            return adventureObjectsShadowBitset[icnIndex];
+        }
         case ICN::OBJNMUL2: {
             static const std::bitset<256> objMul2ShadowBitset = fheroes2::makeBitsetFromVector<256>(
                 { 14,  17,  20,  24,  42,  43,  49,  50,  60,  71,  72,  113, 115, 118, 121, 123, 127, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147,

@@ -1101,6 +1101,8 @@ namespace ICN
 
         SCENIBKG_EVIL,
 
+        NEW_OBJECTS,
+
         EVIL_DIALOG_PLAIN_CORNERS,
 
         // IMPORTANT! Put any new entry just above this one.

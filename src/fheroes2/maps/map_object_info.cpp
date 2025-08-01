@@ -4696,6 +4696,17 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // New object.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NEW_OBJECT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_NEW_OBJECTS, 0U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NEW_OBJECT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_NEW_OBJECTS, 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_NEW_OBJECTS, 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_NEW_OBJECT );
+            object.topLevelParts.back().animationFrames = 13;
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateKingdomHeroes( std::vector<Maps::ObjectInfo> & objects )
