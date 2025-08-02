@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <cstring>
 #include <memory>
+#include <ostream>
 
 #include "exception.h"
 #include "image.h"
