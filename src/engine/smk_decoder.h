@@ -88,5 +88,5 @@ private:
     unsigned long _frameCount{ 0 };
     unsigned long _currentFrameId{ 0 };
 
-    std::unique_ptr<smk_t, void ( * )( smk_t * )> _videoFile{ nullptr, smk_close };
+    std::unique_ptr<struct smk_t, void ( * )( struct smk_t * )> _videoFile{ nullptr, smk_close };
 };
