@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -41,28 +41,10 @@ Recruit::Recruit( const Heroes & hero, const uint32_t surrenderDay )
     , _surrenderDay( surrenderDay )
 {}
 
-Recruit::Recruit( const Heroes & hero )
-    : Recruit( hero, 0 )
-{}
-
-Recruits::Recruits()
-    : std::pair<Recruit, Recruit>()
-{}
-
 void Recruits::Reset()
 {
     first = {};
     second = {};
-}
-
-int Recruits::GetID1() const
-{
-    return first.getID();
-}
-
-int Recruits::GetID2() const
-{
-    return second.getID();
 }
 
 Heroes * Recruits::GetHero1() const

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,11 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_RADAR_H
-#define H2INTERFACE_RADAR_H
+#pragma once
 
 #include <cstdint>
 
+#include "color.h"
 #include "image.h"
 #include "interface_border.h"
 #include "math_base.h"
@@ -89,7 +89,7 @@ namespace Interface
         void SavePosition() override;
         void SetZoom();
 
-        void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
+        void RedrawObjects( const PlayerColorsSet playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType _radarType;
@@ -102,5 +102,3 @@ namespace Interface
         bool _hide{ true };
     };
 }
-
-#endif

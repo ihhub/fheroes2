@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SETTINGS_H
-#define H2SETTINGS_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -38,6 +37,8 @@
 
 class IStreamBase;
 class OStreamBase;
+
+enum class PlayerColor : uint8_t;
 
 inline constexpr int defaultBattleSpeed{ 4 };
 
@@ -63,6 +64,19 @@ enum class ZoomLevel : uint8_t
     ZoomLevel1 = 1,
     ZoomLevel2 = 2,
     ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+};
+
+enum class InterfaceType : uint8_t
+{
+    GOOD = 0,
+    EVIL = 1,
+    DYNAMIC = 2
+};
+
+enum class SaveFileSortingMethod : uint8_t
+{
+    FILENAME,
+    TIMESTAMP,
 };
 
 class Settings
@@ -192,6 +206,16 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
+    void setInterfaceType( InterfaceType type )
+    {
+        _interfaceType = type;
+    }
+
+    InterfaceType getInterfaceType() const
+    {
+        return _interfaceType;
+    }
+
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 
@@ -217,6 +241,16 @@ public:
     const fheroes2::ResolutionInfo & currentResolutionInfo() const
     {
         return _resolutionInfo;
+    }
+
+    fheroes2::Point getSavedWindowPos() const
+    {
+        return _windowPos;
+    }
+
+    void setStartWindowPos( const fheroes2::Point pos )
+    {
+        _windowPos = pos;
     }
 
     void EnablePriceOfLoyaltySupport( const bool set );
@@ -253,7 +287,6 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
-    void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -311,13 +344,13 @@ public:
         return players;
     }
 
-    int CurrentColor() const
+    PlayerColor CurrentColor() const
     {
         return players.getCurrentColor();
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( const int color )
+    void SetCurrentColor( const PlayerColor color )
     {
         players.setCurrentColor( color );
     }
@@ -335,6 +368,16 @@ public:
     void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
+    }
+
+    SaveFileSortingMethod getSaveFileSortingMethod() const
+    {
+        return _saveFileSortType;
+    }
+
+    void setSaveFileSortingMethod( const SaveFileSortingMethod sortType )
+    {
+        _saveFileSortType = sortType;
     }
 
     void SetProgramPath( const char * path );
@@ -362,6 +405,8 @@ private:
     BitModes _editorOptions;
 
     fheroes2::ResolutionInfo _resolutionInfo;
+    fheroes2::Point _windowPos;
+
     int _gameDifficulty;
 
     std::string _programPath;
@@ -371,6 +416,8 @@ private:
     std::string _loadedFileLanguage;
 
     Maps::FileInfo _currentMapInfo;
+
+    SaveFileSortingMethod _saveFileSortType;
 
     int sound_volume;
     int music_volume;
@@ -383,6 +430,7 @@ private:
 
     int game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
+    InterfaceType _interfaceType{ InterfaceType::GOOD };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
@@ -394,5 +442,3 @@ private:
 
 OStreamBase & operator<<( OStreamBase & stream, const Settings & conf );
 IStreamBase & operator>>( IStreamBase & stream, Settings & conf );
-
-#endif

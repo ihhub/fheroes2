@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,21 +40,21 @@ namespace AI
 {
     struct BattleTargetPair
     {
-        int cell = -1;
-        const Battle::Unit * unit = nullptr;
+        int cell{ -1 };
+        const Battle::Unit * unit{ nullptr };
     };
 
     struct SpellSelection
     {
-        int spellID = -1;
-        int32_t cell = -1;
-        double value = 0.0;
+        int spellID{ -1 };
+        int32_t cell{ -1 };
+        double value{ 0.0 };
     };
 
     struct SpellcastOutcome
     {
-        int32_t cell = -1;
-        double value = 0.0;
+        int32_t cell{ -1 };
+        double value{ 0.0 };
 
         void updateOutcome( const double potentialValue, const int32_t targetCell, const bool isMassEffect = false )
         {
@@ -102,7 +102,8 @@ namespace AI
                                            const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispelValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
-        SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
+        SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
+        SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
 
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const;
@@ -112,31 +113,32 @@ namespace AI
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
-        // the auto battle should be interrupted (one way or another)
-        static const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+        // the auto combat should be interrupted (one way or another)
+        static const uint32_t MAX_TURNS_WITHOUT_DEATHS{ 50 };
 
         // Member variables related to the logic of checking the limit of the number of turns
-        uint32_t _currentTurnNumber = 0;
-        uint32_t _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
-        uint32_t _attackerForceNumberOfDead = 0;
-        uint32_t _defenderForceNumberOfDead = 0;
+        uint32_t _currentTurnNumber{ 0 };
+        uint32_t _numberOfRemainingTurnsWithoutDeaths{ MAX_TURNS_WITHOUT_DEATHS };
+        uint32_t _attackerForceTotalNumberOfDeadUnits{ 0 };
+        uint32_t _defenderForceTotalNumberOfDeadUnits{ 0 };
 
         // Member variables with a lifetime in one turn
-        const HeroBase * _commander = nullptr;
-        int _myColor = Color::NONE;
-        double _myArmyStrength = 0;
-        double _enemyArmyStrength = 0;
-        double _myShootersStrength = 0;
-        double _enemyShootersStrength = 0;
-        double _myRangedUnitsOnly = 0;
-        double _enemyRangedUnitsOnly = 0;
-        double _myArmyAverageSpeed = 0;
-        double _enemyAverageSpeed = 0;
-        double _enemySpellStrength = 0;
-        bool _attackingCastle = false;
-        bool _defendingCastle = false;
-        bool _considerRetreat = false;
-        bool _defensiveTactics = false;
-        bool _cautiousOffensive = false;
+        const HeroBase * _commander{ nullptr };
+        PlayerColor _myColor{ PlayerColor::NONE };
+        double _myArmyStrength{ 0.0 };
+        double _enemyArmyStrength{ 0.0 };
+        double _myShootersStrength{ 0.0 };
+        double _enemyShootersStrength{ 0.0 };
+        double _myRangedUnitsOnly{ 0.0 };
+        double _enemyRangedUnitsOnly{ 0.0 };
+        double _myArmyAverageSpeed{ 0.0 };
+        double _enemyAverageSpeed{ 0.0 };
+        double _enemySpellStrength{ 0.0 };
+        bool _attackingCastle{ false };
+        bool _defendingCastle{ false };
+        bool _considerRetreat{ false };
+        bool _defensiveTactics{ false };
+        bool _cautiousOffensive{ false };
+        bool _avoidStackingUnits{ false };
     };
 }

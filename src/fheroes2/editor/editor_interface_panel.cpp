@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -213,6 +213,8 @@ namespace Interface
         _selectedLandscapeObjectType.fill( -1 );
         _selectedAdventureObjectType.fill( -1 );
         _selectedKingdomObjectType.fill( -1 );
+
+        updateUndoRedoButtonsStates( false, false );
     }
 
     fheroes2::Rect EditorPanel::getBrushArea() const
@@ -228,14 +230,6 @@ namespace Interface
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
-                if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    // For mine we need to decode the objectType.
-                    int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
-
-                    return getObjectOccupiedArea( objectGroup, type );
-                }
 
                 return getObjectOccupiedArea( objectGroup, objectType );
             }
@@ -338,8 +332,8 @@ namespace Interface
         }
 
         _buttonMagnify.setICNInfo( icnId, 12, 13 );
-        _buttonUndo.setICNInfo( icnId, 14, 15 );
-        _buttonNew.setICNInfo( icnId, 16, 17 );
+        _buttonUndo.setICNInfo( icnId, 41, 42 );
+        _buttonRedo.setICNInfo( icnId, 43, 44 );
         _buttonSpecs.setICNInfo( icnId, 18, 19 );
         _buttonFile.setICNInfo( icnId, 20, 21 );
         _buttonSystem.setICNInfo( icnId, 22, 23 );
@@ -429,8 +423,8 @@ namespace Interface
         _buttonUndo.setPosition( _rectMagnify.x + _rectMagnify.width, displayY );
         _rectUndo = _buttonUndo.area();
 
-        _buttonNew.setPosition( _rectUndo.x + _rectUndo.width, displayY );
-        _rectNew = _buttonNew.area();
+        _buttonRedo.setPosition( _rectUndo.x + _rectUndo.width, displayY );
+        _rectRedo = _buttonRedo.area();
 
         // System buttons bottom row.
         displayY += _rectMagnify.height;
@@ -602,7 +596,7 @@ namespace Interface
 
         _buttonMagnify.draw();
         _buttonUndo.draw();
-        _buttonNew.draw();
+        _buttonRedo.draw();
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
@@ -799,11 +793,11 @@ namespace Interface
             return;
         case Instrument::LANDSCAPE_OBJECTS:
             switch ( _selectedLandscapeObject ) {
+            case LandscapeObjectBrush::LANDSCAPE_MISC:
             case LandscapeObjectBrush::MOUNTAINS:
             case LandscapeObjectBrush::ROCKS:
             case LandscapeObjectBrush::TREES:
             case LandscapeObjectBrush::WATER_OBJECTS:
-            case LandscapeObjectBrush::LANDSCAPE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
                 return;
@@ -813,34 +807,15 @@ namespace Interface
             break;
         case Instrument::ADVENTURE_OBJECTS:
             switch ( _selectedAdventureObject ) {
+            case AdventureObjectBrush::ADVENTURE_MISC:
             case AdventureObjectBrush::ARTIFACTS:
             case AdventureObjectBrush::DWELLINGS:
+            case AdventureObjectBrush::MINES:
             case AdventureObjectBrush::POWER_UPS:
             case AdventureObjectBrush::TREASURES:
             case AdventureObjectBrush::WATER_ADVENTURE:
-            case AdventureObjectBrush::ADVENTURE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
-                return;
-            case AdventureObjectBrush::MINES:
-                _interface.setCursorUpdater( [this]( const int32_t /*tileIndex*/ ) {
-                    int32_t type = -1;
-                    int32_t color = -1;
-                    getMineObjectProperties( type, color );
-
-                    if ( type == -1 || color == -1 ) {
-                        // The object type is not set. We show the POINTER cursor for this case.
-                        Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
-
-                    // TODO: Implement a function to render also the owner flag after ownership selection is implemented.
-                    const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::ADVENTURE_MINES, type );
-
-                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-                } );
                 return;
             default:
                 break;
@@ -892,6 +867,25 @@ namespace Interface
         }
 
         _interface.setCursorUpdater( {} );
+    }
+
+    void EditorPanel::updateUndoRedoButtonsStates( const bool isUndoAvailable, const bool isRedoAvailable )
+    {
+        auto updateButtonState = []( fheroes2::ButtonBase & button, const bool isAvailable ) {
+            if ( isAvailable ) {
+                if ( button.isDisabled() ) {
+                    button.enable();
+                    button.draw();
+                }
+            }
+            else if ( button.isEnabled() ) {
+                button.disable();
+                button.draw();
+            }
+        };
+
+        updateButtonState( _buttonUndo, isUndoAvailable );
+        updateButtonState( _buttonRedo, isRedoAvailable );
     }
 
     fheroes2::GameMode EditorPanel::queueEventProcessing()
@@ -1092,15 +1086,7 @@ namespace Interface
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
-                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
-                    int32_t type = -1;
-                    int32_t color = -1;
-
-                    getMineObjectProperties( type, color );
-                    Dialog::selectMineType( type, color );
-
-                    return _generateMineObjectProperties( type, color );
-                } );
+                handleObjectMouseClick( Dialog::selectMineType );
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
@@ -1185,22 +1171,21 @@ namespace Interface
             }
         }
 
-        _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedInArea( _rectMagnify ) );
-        _buttonUndo.drawOnState( le.isMouseLeftButtonPressedInArea( _rectUndo ) );
-        _buttonNew.drawOnState( le.isMouseLeftButtonPressedInArea( _rectNew ) );
-        _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSpecs ) );
-        _buttonFile.drawOnState( le.isMouseLeftButtonPressedInArea( _rectFile ) );
-        _buttonSystem.drawOnState( le.isMouseLeftButtonPressedInArea( _rectSystem ) );
+        _buttonMagnify.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectMagnify ) );
+        _buttonUndo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectUndo ) );
+        _buttonRedo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectRedo ) );
+        _buttonSpecs.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectSpecs ) );
+        _buttonFile.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectFile ) );
+        _buttonSystem.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _rectSystem ) );
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
         }
         else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
             _interface.undoAction();
-            return fheroes2::GameMode::CANCEL;
         }
-        else if ( le.MouseClickLeft( _rectNew ) ) {
-            res = EditorInterface::eventNewMap();
+        else if ( _buttonRedo.isEnabled() && le.MouseClickLeft( _rectRedo ) ) {
+            _interface.redoAction();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             EditorInterface::Get().openMapSpecificationsDialog();
@@ -1246,10 +1231,8 @@ namespace Interface
         else if ( le.isMouseRightButtonPressedInArea( _rectUndo ) ) {
             fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
-        else if ( le.isMouseRightButtonPressedInArea( _rectNew ) ) {
-            // TODO: update this text once random map generator is ready.
-            //       The original text should be "Create a new map, either from scratch or using the random map generator."
-            fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
+        else if ( le.isMouseRightButtonPressedInArea( _rectRedo ) ) {
+            fheroes2::showStandardTextMessage( _( "Redo" ), _( "Redo the last undone action." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _rectSpecs ) ) {
             fheroes2::showStandardTextMessage( _( "Specifications" ), _( "Edit map title, description, and other general information." ), Dialog::ZERO );
@@ -1316,33 +1299,5 @@ namespace Interface
         }
 
         return color * static_cast<int32_t>( townObjects.size() ) + type;
-    }
-
-    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & color ) const
-    {
-        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-        if ( mineObjects.empty() ) {
-            // How is it even possible?
-            assert( 0 );
-            type = -1;
-            color = -1;
-            return;
-        }
-
-        type = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
-        color = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / static_cast<int32_t>( mineObjects.size() );
-    }
-
-    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t color )
-    {
-        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-        if ( mineObjects.empty() ) {
-            // How is it even possible?
-            assert( 0 );
-            return -1;
-        }
-
-        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type );
-        return ( objectType < 0 ) ? -1 : objectType;
     }
 }

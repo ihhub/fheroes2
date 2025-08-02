@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -72,10 +73,10 @@ namespace
 
     struct MeleeAttackOutcome
     {
-        int32_t fromIndex = -1;
-        double attackValue = INT32_MIN;
-        double positionValue = INT32_MIN;
-        bool canAttackImmediately = false;
+        int32_t fromIndex{ -1 };
+        double attackValue{ std::numeric_limits<double>::lowest() };
+        double positionValue{ std::numeric_limits<double>::lowest() };
+        bool canAttackImmediately{ false };
     };
 
     bool ValueHasImproved( double primary, double primaryMax, double secondary, double secondaryMax )
@@ -94,7 +95,7 @@ namespace
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
     }
 
-    int32_t doubleCellAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const int32_t from, const int32_t targetCell )
+    double doubleCellAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const int32_t from, const int32_t targetCell )
     {
         const Battle::Cell * behind = Battle::Board::GetCell( targetCell, Battle::Board::GetDirection( from, targetCell ) );
         const Battle::Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
@@ -103,10 +104,10 @@ namespace
             return secondaryTarget->evaluateThreatForUnit( attacker );
         }
 
-        return 0;
+        return 0.0;
     }
 
-    std::pair<int32_t, int> optimalAttackVector( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
+    std::pair<int32_t, Battle::CellDirection> optimalAttackVector( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
     {
         assert( attackPos.isValidForUnit( attacker ) );
         assert( Battle::Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
@@ -116,7 +117,7 @@ namespace
         const std::array<const Battle::Cell *, 2> attackCells = { attackPos.GetHead(), attackPos.GetTail() };
         const std::array<const Battle::Cell *, 2> targetCells = { targetPos.GetHead(), targetPos.GetTail() };
 
-        std::pair<int32_t, int> bestAttackVector{ -1, Battle::UNKNOWN };
+        std::pair<int32_t, Battle::CellDirection> bestAttackVector{ -1, Battle::CellDirection::UNKNOWN };
         double bestAttackValue = 0.0;
 
         for ( const Battle::Cell * attackCell : attackCells ) {
@@ -156,7 +157,7 @@ namespace
         return bestAttackVector;
     }
 
-    int32_t optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
+    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
     {
         assert( attackPos.isValidForUnit( attacker ) );
 
@@ -176,11 +177,11 @@ namespace
                 unitsUnderAttack.insert( unit );
             }
 
-            return std::accumulate( unitsUnderAttack.begin(), unitsUnderAttack.end(), static_cast<int32_t>( 0 ),
-                                    [&attacker]( const int32_t total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
+            return std::accumulate( unitsUnderAttack.begin(), unitsUnderAttack.end(), static_cast<double>( 0.0 ),
+                                    [&attacker]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
         }
 
-        int32_t attackValue = target.evaluateThreatForUnit( attacker );
+        double attackValue = target.evaluateThreatForUnit( attacker );
 
         // A double cell attack should only be considered if the attacker is actually able to attack the target from the given attack position. Otherwise, the attacker
         // can at least block the target if the target is a shooter, so this position can be valuable in any case.
@@ -196,7 +197,7 @@ namespace
         return attackValue;
     }
 
-    using PositionValues = std::map<Battle::Position, int32_t>;
+    using PositionValues = std::map<Battle::Position, double>;
 
     PositionValues evaluatePotentialAttackPositions( Battle::Arena & arena, const Battle::Unit & attacker )
     {
@@ -245,13 +246,14 @@ namespace
                     continue;
                 }
 
-                const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
+                const double attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
 
                 if ( const auto [iter, inserted] = result.try_emplace( pos, attackValue ); !inserted ) {
                     // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
                     // account
                     if ( attacker.isAllAdjacentCellsAttack() ) {
-                        assert( iter->second == attackValue );
+                        // Silence the -Wfloat-equal, since the values here should be literally equal
+                        assert( std::make_tuple( iter->second ) == std::make_tuple( attackValue ) );
                     }
                     else if ( enemyUnit->isArchers() ) {
                         iter->second += attackValue;
@@ -420,8 +422,8 @@ namespace
 
     struct CellDistanceInfo
     {
-        int32_t idx = -1;
-        uint32_t dist = UINT32_MAX;
+        int32_t idx{ -1 };
+        uint32_t dist{ UINT32_MAX };
     };
 
     CellDistanceInfo findNearestCellNextToUnit( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Unit & target )
@@ -610,8 +612,8 @@ void AI::BattlePlanner::battleBegins()
 {
     _currentTurnNumber = 0;
     _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
-    _attackerForceNumberOfDead = 0;
-    _defenderForceNumberOfDead = 0;
+    _attackerForceTotalNumberOfDeadUnits = 0;
+    _defenderForceTotalNumberOfDeadUnits = 0;
 }
 
 void AI::BattlePlanner::BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions )
@@ -627,10 +629,10 @@ void AI::BattlePlanner::BattleTurn( Battle::Arena & arena, const Battle::Unit & 
 
 bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Battle::Actions & actions )
 {
-    const int currentColor = arena.GetCurrentColor();
+    const PlayerColor currentColor = arena.GetCurrentColor();
 
     // Not the attacker's turn, no further checks
-    if ( currentColor != arena.GetArmy1Color() ) {
+    if ( currentColor != arena.getAttackingArmyColor() ) {
         return false;
     }
 
@@ -639,13 +641,14 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths
     if ( currentTurnNumber > _currentTurnNumber && _numberOfRemainingTurnsWithoutDeaths > 0 ) {
-        auto prevNumbersOfDead = std::tie( _attackerForceNumberOfDead, _defenderForceNumberOfDead );
-        const auto currNumbersOfDead = std::make_tuple( arena.GetForce1().GetDeadCounts(), arena.GetForce2().GetDeadCounts() );
+        auto prevNumbersOfDeadUnits = std::tie( _attackerForceTotalNumberOfDeadUnits, _defenderForceTotalNumberOfDeadUnits );
+        const auto currNumbersOfDeadUnits
+            = std::make_tuple( arena.getAttackingForce().getTotalNumberOfDeadUnits(), arena.getDefendingForce().getTotalNumberOfDeadUnits() );
 
         // Either we don't have numbers of dead units from the previous turn, or there were changes in these numbers compared
         // to the previous turn, reset the counter
-        if ( _currentTurnNumber == 0 || currentTurnNumber - _currentTurnNumber != 1 || prevNumbersOfDead != currNumbersOfDead ) {
-            prevNumbersOfDead = currNumbersOfDead;
+        if ( _currentTurnNumber == 0 || currentTurnNumber - _currentTurnNumber != 1 || prevNumbersOfDeadUnits != currNumbersOfDeadUnits ) {
+            prevNumbersOfDeadUnits = currNumbersOfDeadUnits;
 
             _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
         }
@@ -659,13 +662,13 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     // We have gone beyond the limit on the number of turns without deaths and have to stop
     if ( _numberOfRemainingTurnsWithoutDeaths == 0 ) {
-        // If this is an auto battle (and not the instant battle, because the battle UI is present), then turn it off until the end of the battle
-        if ( arena.AutoBattleInProgress() && Battle::Arena::GetInterface() != nullptr ) {
-            assert( arena.CanToggleAutoBattle() );
+        // If this is an auto combat (and not a quick combat, because the battle UI is present), then turn it off until the end of the battle
+        if ( arena.AutoCombatInProgress() && Battle::Arena::GetInterface() != nullptr ) {
+            assert( arena.CanToggleAutoCombat() );
 
-            actions.emplace_back( Battle::Command::AUTO_SWITCH, currentColor );
+            actions.emplace_back( Battle::Command::TOGGLE_AUTO_COMBAT, static_cast<std::underlying_type_t<PlayerColor>>( currentColor ) );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto battle is turned off" )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto combat is turned off" )
         }
         // Otherwise the attacker's hero should retreat
         else {
@@ -711,7 +714,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 return Outcome::ContinueBattle;
             }
 
-            // Human-controlled heroes should not retreat or surrender during auto/instant battles
+            // Human-controlled heroes should not retreat or surrender during auto/quick combat
             if ( actualHero->isControlHuman() ) {
                 return Outcome::ContinueBattle;
             }
@@ -906,7 +909,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
 
                 actions.emplace_back( Battle::Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                      ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, attackDirection );
+                                      ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, static_cast<int>( attackDirection ) );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx << ", attack vector: "
@@ -956,12 +959,14 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
     _considerRetreat = false;
     _defensiveTactics = false;
     _cautiousOffensive = false;
+    _avoidStackingUnits = false;
 
     if ( enemyForce.empty() ) {
         return;
     }
 
     double sumEnemyStr = 0.0;
+    double areaAttackThreat = 0.0;
 
     for ( const Battle::Unit * unit : enemyForce ) {
         assert( unit != nullptr );
@@ -976,6 +981,9 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
         if ( unit->isArchers() && !unit->isImmovable() ) {
             _enemyRangedUnitsOnly += unitStr;
+            if ( unit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !unit->isHandFighting() ) {
+                areaAttackThreat += unitStr;
+            }
         }
 
         // The average speed is weighted by the troop strength
@@ -988,6 +996,10 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
 
     if ( sumEnemyStr > 0.0 ) {
         _enemyAverageSpeed /= sumEnemyStr;
+    }
+
+    if ( areaAttackThreat / sumEnemyStr > 0.1 ) {
+        _avoidStackingUnits = true;
     }
 
     uint32_t initialUnitCount = 0;
@@ -1040,7 +1052,7 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
     // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
     if ( castle && Battle::Arena::isAnyTowerPresent() ) {
         const bool attackerIgnoresCover = [&arena]() {
-            const HeroBase * commander = arena.GetForce1().GetCommander();
+            const HeroBase * commander = arena.getAttackingForce().GetCommander();
             assert( commander != nullptr );
 
             if ( commander->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) ) {
@@ -1420,7 +1432,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     // Archers are able to shoot
     else {
         BattleTargetPair target;
-        double highestPriority = INT32_MIN;
+        double highestPriority = std::numeric_limits<double>::lowest();
 
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
@@ -1553,7 +1565,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena,
                 // If this distance was zero, it would mean that this enemy unit would have already been attacked by the current unit
                 assert( nearestCellInfo.dist > 0 );
 
-                const double priority = static_cast<double>( enemy->evaluateThreatForUnit( currentUnit ) ) / nearestCellInfo.dist;
+                const double priority = enemy->evaluateThreatForUnit( currentUnit ) / nearestCellInfo.dist;
                 if ( priority < maxPriority ) {
                     continue;
                 }
@@ -1709,12 +1721,12 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                 continue;
             }
 
-            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, frnd]() -> CellDistanceInfo {
-                const Battle::Indexes nearbyIndexes = [&currentUnit, frnd]() {
+            const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, avoidStackingUnits = _avoidStackingUnits, frnd]() -> CellDistanceInfo {
+                const Battle::Indexes nearbyIndexes = [&currentUnit, avoidStackingUnits, frnd]() {
                     Battle::Indexes result;
                     result.reserve( 8 );
 
-                    const std::array<int, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<int, 6> {
+                    const std::array<Battle::CellDirection, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<Battle::CellDirection, 6> {
                         const bool preferToCoverFromTheSide = [&currentUnit, frnd]() {
                             // If the covering unit is not a wide unit, then using this unit to cover the shooter from the side does not give any advantage
                             if ( !currentUnit.isWide() ) {
@@ -1739,17 +1751,21 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
                         if ( preferToCoverFromTheSide ) {
                             if ( frnd->isReflect() ) {
-                                return { Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT };
+                                return { Battle::CellDirection::TOP_LEFT,  Battle::CellDirection::BOTTOM_LEFT,  Battle::CellDirection::LEFT,
+                                         Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT };
                             }
 
-                            return { Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT };
+                            return { Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT,
+                                     Battle::CellDirection::TOP_LEFT,  Battle::CellDirection::BOTTOM_LEFT,  Battle::CellDirection::LEFT };
                         }
 
                         if ( frnd->isReflect() ) {
-                            return { Battle::LEFT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT };
+                            return { Battle::CellDirection::LEFT,      Battle::CellDirection::TOP_LEFT,     Battle::CellDirection::BOTTOM_LEFT,
+                                     Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT };
                         }
 
-                        return { Battle::RIGHT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT };
+                        return { Battle::CellDirection::RIGHT,    Battle::CellDirection::TOP_RIGHT,   Battle::CellDirection::BOTTOM_RIGHT,
+                                 Battle::CellDirection::TOP_LEFT, Battle::CellDirection::BOTTOM_LEFT, Battle::CellDirection::LEFT };
                     }();
 
                     for ( const int32_t idx : std::array<int32_t, 2>{ frnd->GetHeadIndex(), frnd->GetTailIndex() } ) {
@@ -1757,12 +1773,48 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                             continue;
                         }
 
-                        for ( const int dir : priorityDirections ) {
+                        for ( const Battle::CellDirection dir : priorityDirections ) {
                             if ( !Battle::Board::isValidDirection( idx, dir ) ) {
                                 continue;
                             }
 
-                            const int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+                            int32_t nearbyIdx = Battle::Board::GetIndexDirection( idx, dir );
+
+                            if ( avoidStackingUnits ) {
+                                // In this mode, the covering units should not be positioned close to the shooter or to each other. Let's try to position the covering
+                                // unit one cell further away, and if this fails, then ignore this position.
+                                if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                    continue;
+                                }
+
+                                nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+
+                                if ( currentUnit.isWide() ) {
+                                    // If the shooter is covered in front by a wide unit, then this unit should be located one more cell further away.
+                                    if ( dir == ( frnd->isReflect() ? Battle::CellDirection::LEFT : Battle::CellDirection::RIGHT ) ) {
+                                        if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
+                                            continue;
+                                        }
+
+                                        nearbyIdx = Battle::Board::GetIndexDirection( nearbyIdx, dir );
+                                    }
+                                    // If a wide unit covers a shooter from behind (which is rare, but it can happen) it is necessary to check that the covering unit
+                                    // will not be located close to the shooter - which can happen if there is any obstacle in place of the intended tail of the unit.
+                                    else if ( dir == ( frnd->isReflect() ? Battle::CellDirection::RIGHT : Battle::CellDirection::LEFT ) ) {
+                                        const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearbyIdx );
+                                        if ( pos.GetHead() == nullptr ) {
+                                            continue;
+                                        }
+
+                                        assert( pos.isValidForUnit( currentUnit ) );
+                                        assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
+
+                                        if ( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 ) {
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
 
                             if ( std::find( result.begin(), result.end(), nearbyIdx ) != result.end() ) {
                                 continue;
@@ -1782,7 +1834,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     }
 
                     assert( pos.isValidForUnit( currentUnit ) );
-                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
+                    assert( Battle::Board::GetDistance( pos, frnd->GetPosition() ) > 0 );
 
                     if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                         continue;
@@ -1904,7 +1956,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
             // If the decision is made to attack one of the neighboring enemy units (if any) while covering the archer, then we should choose the best target
             {
-                int32_t bestAttackValue = 0;
+                double bestAttackValue = 0.0;
 
                 for ( const Battle::Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
@@ -1916,7 +1968,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     const Battle::Position pos = Battle::Position::GetReachable( currentUnit, target.cell );
                     assert( pos.isValidForUnit( currentUnit ) );
 
-                    const int32_t attackValue = optimalAttackValue( currentUnit, *enemy, pos );
+                    const double attackValue = optimalAttackValue( currentUnit, *enemy, pos );
                     if ( bestAttackValue < attackValue ) {
                         bestAttackValue = attackValue;
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -43,8 +43,8 @@ namespace Skill
 
     class Secondary;
 
-    int GetLeadershipModifiers( int level, std::string * strs );
-    int GetLuckModifiers( int level, std::string * strs );
+    int getLeadershipModifiers( int level, std::string * strs );
+    int getLuckModifiers( int level, std::string * strs );
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
@@ -122,7 +122,6 @@ namespace Skill
         // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
-        static int RandForWitchsHut();
         static const char * String( int );
     };
 
@@ -187,6 +186,7 @@ namespace Skill
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
         static int getHeroDefaultSkillValue( const int skill, const int race );
+        static std::pair<int, int> getSkillValueRange( const int skill );
 
     protected:
         void LoadDefaults( int type, int race );

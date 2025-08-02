@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,11 +24,68 @@
 #include "rand.h"
 
 #include <numeric>
+#include <random>
 
-std::mt19937 & Rand::CurrentThreadRandomDevice()
+namespace
+{
+    // Implementation of Fast Random Integer Generation in an Interval (https://arxiv.org/abs/1805.10941)
+    // NOTE: we can't use std::uniform_int_distribution here because it behaves differently on different platforms
+    uint32_t uniformIntInInterval( const uint32_t range, Rand::PCG32 & gen )
+    {
+        assert( range > 0 );
+
+        // Our implementation assumes our RNG can use the entire range of uint32_t
+        static_assert( Rand::PCG32::min() == 0 && Rand::PCG32::max() == std::numeric_limits<uint32_t>::max() );
+
+        uint32_t generated = gen();
+        uint64_t mult = ( static_cast<uint64_t>( generated ) * range );
+        uint32_t lowerPart = static_cast<uint32_t>( mult );
+
+        if ( lowerPart >= range ) {
+            const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+            assert( upperPart <= range );
+
+            return upperPart;
+        }
+
+        // This is the same as (2**32 - range) % range in the two's complement representation
+        const uint32_t discardBound = static_cast<uint32_t>( ~( range - 1 ) ) % range;
+
+        while ( lowerPart < discardBound ) {
+            generated = gen();
+            mult = ( static_cast<uint64_t>( generated ) * range );
+            lowerPart = static_cast<uint32_t>( mult );
+        }
+
+        const uint32_t upperPart = static_cast<uint32_t>( mult >> 32 );
+        assert( upperPart <= range );
+
+        return upperPart;
+    }
+}
+
+uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, PCG32 & gen )
+{
+    if ( from == to ) {
+        return from;
+    }
+
+    assert( from < to );
+    const uint32_t rangeExclusive = to - from;
+    // If the range is the entire uint32_t (from 0 to 2**32-1), we can just return a random number
+    if ( rangeExclusive == std::numeric_limits<uint32_t>::max() ) {
+        static_assert( PCG32::min() == 0 && PCG32::max() == std::numeric_limits<uint32_t>::max() );
+
+        return gen();
+    }
+
+    return from + uniformIntInInterval( rangeExclusive + 1, gen );
+}
+
+Rand::PCG32 & Rand::CurrentThreadRandomDevice()
 {
     thread_local std::random_device rd;
-    thread_local std::mt19937 gen( rd() );
+    thread_local PCG32 gen( rd );
 
     return gen;
 }
@@ -39,9 +96,7 @@ uint32_t Rand::Get( uint32_t from, uint32_t to /* = 0 */ )
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
-
-    return distrib( CurrentThreadRandomDevice() );
+    return uniformIntDistribution( from, to, CurrentThreadRandomDevice() );
 }
 
 uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
@@ -50,21 +105,17 @@ uint32_t Rand::GetWithSeed( uint32_t from, uint32_t to, uint32_t seed )
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
-    std::mt19937 seededGen( seed );
-
-    return distrib( seededGen );
+    PCG32 seededGen( seed );
+    return uniformIntDistribution( from, to, seededGen );
 }
 
-uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
+uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, PCG32 & gen )
 {
     if ( from > to ) {
         std::swap( from, to );
     }
 
-    std::uniform_int_distribution<uint32_t> distrib( from, to );
-
-    return distrib( gen );
+    return uniformIntDistribution( from, to, gen );
 }
 
 int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const
@@ -90,24 +141,4 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
     assert( 0 );
 
     return 0;
-}
-
-Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )
-    : _currentSeed( initialSeed )
-{}
-
-uint32_t Rand::DeterministicRandomGenerator::GetSeed() const
-{
-    return _currentSeed;
-}
-
-void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
-{
-    _currentSeed = seed;
-}
-
-uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /* = 0 */ )
-{
-    ++_currentSeed;
-    return Rand::GetWithSeed( from, to, _currentSeed );
 }

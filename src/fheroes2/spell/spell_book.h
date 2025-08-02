@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SPELLBOOK_H
-#define H2SPELLBOOK_H
+#pragma once
 
 #include <cstddef>
 #include <functional>
@@ -33,7 +32,7 @@
 
 class HeroBase;
 
-class SpellBook : public SpellStorage
+class SpellBook final : public SpellStorage
 {
 public:
     enum class Filter : int
@@ -53,9 +52,17 @@ public:
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
 
 private:
+    bool _isFirstPage() const
+    {
+        return _startSpellIndex == 0;
+    }
+
+    bool _isLastPage( const size_t spellsCount, const size_t spellsPerScreen ) const
+    {
+        return ( _startSpellIndex + spellsPerScreen ) >= spellsCount;
+    }
+
     mutable size_t _startSpellIndex = 0;
 
     mutable Filter _spellFilter = Filter::ADVN;
 };
-
-#endif

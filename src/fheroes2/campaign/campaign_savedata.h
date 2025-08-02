@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,9 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CAMPAIGN_SAVEDATA_H
-#define H2CAMPAIGN_SAVEDATA_H
+#pragma once
 
+#include <algorithm>
 #include <cstdint>
 #include <optional>
 #include <vector>
@@ -90,9 +90,15 @@ namespace Campaign
             return _difficulty;
         }
 
-        void setDifficulty( const int32_t difficulty )
+        int32_t getMinDifficulty() const
+        {
+            return _minDifficulty;
+        }
+
+        void setDifficulty( const int32_t difficulty, const bool resetMinDifficulty )
         {
             _difficulty = difficulty;
+            _minDifficulty = ( resetMinDifficulty ? difficulty : std::min( difficulty, _minDifficulty ) );
         }
 
         // Get the campaign difficulty in percents for rating calculations.
@@ -138,6 +144,7 @@ namespace Campaign
 
         uint32_t _daysPassed{ 0 };
         int32_t _difficulty{ CampaignDifficulty::Normal };
+        int32_t _minDifficulty{ CampaignDifficulty::Normal };
     };
 
     // Call this function only when playing campaign scenario.
@@ -151,5 +158,3 @@ namespace Campaign
     // that case the difficulty of the corresponding campaign map should be used). Call this function only when playing campaign scenario.
     std::optional<int> getCurrentScenarioDifficultyLevel();
 }
-
-#endif

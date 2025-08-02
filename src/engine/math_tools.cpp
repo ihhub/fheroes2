@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,76 +36,49 @@ double fheroes2::GetAngle( const Point & start, const Point & target )
     return angle;
 }
 
-std::vector<fheroes2::Point> fheroes2::GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step )
+std::vector<fheroes2::Point> fheroes2::getLinePoints( const Point & pt1, const Point & pt2, const uint32_t step )
 {
     const int dx = pt2.x - pt1.x;
     const int dy = pt2.y - pt1.y;
     const uint32_t dist = static_cast<uint32_t>( std::hypot( dx, dy ) );
     // Round up the integer division and avoid the division by zero in calculation of total line points.
-    const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 0;
+    const uint32_t intervalsBetweenPointsCount = ( step > 0 ) ? ( dist + step / 2 ) / step : 0;
+
+    if ( intervalsBetweenPointsCount < 2 ) {
+        // If there are no intervals than 'pt2' could be closer to 'pt1' than 'step'.
+        // In this case we put 'pt1' as the start of the line.
+        // And put 'pt2' as the end of the line only if 'pt1' is not equal to 'pt2'.
+        if ( pt1 == pt2 ) {
+            return { pt1 };
+        }
+
+        return { pt1, pt2 };
+    }
+
+    // Otherwise we calculate the euclidean line, using the determined parameters.
+    const double stepX = dx / static_cast<double>( intervalsBetweenPointsCount );
+    const double stepY = dy / static_cast<double>( intervalsBetweenPointsCount );
 
     std::vector<Point> line;
+    line.reserve( intervalsBetweenPointsCount + 1 );
 
-    if ( length < 2 ) {
-        // If the length is equal to 0 than 'pt2' could be closer to 'pt1' than 'step'.
-        // In this case we put 'pt1' as the start of the line.
-        line.emplace_back( pt1 );
-        // And put 'pt2' as the end of the line only if 'pt1' is not equal to 'pt2'.
-        if ( pt1 != pt2 ) {
-            line.emplace_back( pt2 );
-        }
+    // Line always starts from `pt1`.
+    line.emplace_back( pt1 );
+
+    double offsetX = static_cast<double>( pt1.x );
+    double offsetY = static_cast<double>( pt1.y );
+
+    for ( uint32_t i = 1; i < intervalsBetweenPointsCount; ++i ) {
+        offsetX += stepX;
+        offsetY += stepY;
+
+        line.emplace_back( static_cast<int32_t>( offsetX ), static_cast<int32_t>( offsetY ) );
     }
-    else {
-        // Otherwise we calculate the euclidean line, using the determined parameters.
-        const double moveX = dx / static_cast<double>( length );
-        const double moveY = dy / static_cast<double>( length );
 
-        line.reserve( length + 1 );
+    // And ends in `pt2`.
+    line.emplace_back( pt2 );
 
-        for ( uint32_t i = 0; i <= length; ++i ) {
-            line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
-        }
-    }
     return line;
-}
-
-std::vector<fheroes2::Point> fheroes2::GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step )
-{
-    std::vector<Point> res;
-
-    const int32_t dx = std::abs( pt2.x - pt1.x );
-    const int32_t dy = std::abs( pt2.y - pt1.y );
-
-    int32_t ns = ( dx > dy ? dx : dy ) / 2;
-
-    Point pt( pt1 );
-
-    for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
-        if ( dx > dy ) {
-            pt.x < pt2.x ? ++pt.x : --pt.x;
-            ns -= dy;
-        }
-        else {
-            pt.y < pt2.y ? ++pt.y : --pt.y;
-            ns -= dx;
-        }
-
-        if ( ns < 0 ) {
-            if ( dx > dy ) {
-                pt.y < pt2.y ? ++pt.y : --pt.y;
-                ns += dx;
-            }
-            else {
-                pt.x < pt2.x ? ++pt.x : --pt.x;
-                ns += dy;
-            }
-        }
-
-        if ( 0 == ( i % step ) )
-            res.push_back( pt );
-    }
-
-    return res;
 }
 
 std::vector<fheroes2::Point> fheroes2::GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,10 +20,10 @@
 
 #include "editor_ui_helper.h"
 
+#include <cassert>
 #include <utility>
 
 #include "agg_image.h"
-#include "color.h"
 #include "icn.h"
 #include "image.h"
 #include "resource.h"
@@ -35,11 +35,11 @@
 
 namespace Editor
 {
-    Checkbox::Checkbox( const int32_t x, const int32_t y, const int boxColor, const bool checked, fheroes2::Image & output )
+    Checkbox::Checkbox( const int32_t x, const int32_t y, const PlayerColor boxColor, const bool checked, fheroes2::Image & output )
         : _color( boxColor )
         , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
     {
-        const int32_t icnIndex = ( _color == Color::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
+        const int32_t icnIndex = ( _color == PlayerColor::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
         const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
 
         _area = { x, y, playerIcon.width(), playerIcon.height() };
@@ -65,31 +65,37 @@ namespace Editor
         return !_checkmark.isHidden();
     }
 
-    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const int32_t availableColors, const int32_t selectedColors, const int32_t boxOffsetX,
-                                const int32_t boxOffsetY, fheroes2::Image & output )
+    void createColorCheckboxes( std::vector<std::unique_ptr<Checkbox>> & list, const PlayerColorsSet availableColors, const PlayerColorsSet selectedColors,
+                                const int32_t boxOffsetX, const int32_t boxOffsetY, fheroes2::Image & output )
     {
         int32_t colorsAdded = 0;
 
-        for ( const int color : Colors( availableColors ) ) {
-            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( color & selectedColors ) != 0, output ) );
+        for ( const PlayerColor color : PlayerColorsVector( availableColors ) ) {
+            list.emplace_back( std::make_unique<Checkbox>( boxOffsetX + colorsAdded * 32, boxOffsetY, color, ( selectedColors & color ) != 0, output ) );
             ++colorsAdded;
         }
     }
 
     fheroes2::Rect drawCheckboxWithText( fheroes2::MovableSprite & checkSprite, std::string str, fheroes2::Image & output, const int32_t posX, const int32_t posY,
-                                         const bool isEvil )
+                                         const bool isEvil, const int32_t maxWidth )
     {
+        assert( maxWidth > 0 );
+
         const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
         fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
 
         fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
-        const fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
-        checkboxText.draw( posX + 23, posY + 4, output );
+
+        const int32_t textOffsetX{ 23 };
+
+        fheroes2::Text checkboxText( std::move( str ), fheroes2::FontType::normalWhite() );
+        checkboxText.fitToOneRow( maxWidth - textOffsetX );
+        checkboxText.draw( posX + textOffsetX, posY + 4, output );
 
         checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
         checkSprite.setPosition( posX + 2, posY + 2 );
 
-        return { posX, posY, 23 + checkboxText.width(), checkboxBackground.height() };
+        return { posX, posY, textOffsetX + checkboxText.width(), checkboxBackground.height() };
     }
 
     void renderResources( const Funds & resources, const fheroes2::Rect & roi, fheroes2::Image & output, std::array<fheroes2::Rect, 7> & resourceRoi )

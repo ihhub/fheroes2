@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,27 +20,34 @@
 
 #include "editor_object_popup_window.h"
 
+#include <array>
 #include <cassert>
 #include <cstdint>
+#include <map>
 #include <ostream>
 #include <string>
 #include <utility>
+#include <vector>
 
+#include "artifact.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
 #include "logging.h"
+#include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
 #include "resource.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_map_interface.h"
 #include "world.h"
 
 namespace
 {
-    std::string getObjectInfoText( const Maps::Tile & tile )
+    std::string getObjectInfoText( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat )
     {
         const MP2::MapObjectType type = tile.getMainObjectType();
         switch ( type ) {
@@ -51,10 +58,71 @@ namespace
 
             return Maps::Ground::String( tile.GetGround() );
         case MP2::OBJ_RESOURCE: {
-            const Funds funds = getFundsFromTile( tile );
-            assert( funds.GetValidItemsCount() == 1 );
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES ) ) {
+                assert( !info.groundLevelParts.empty() );
 
-            return Resource::String( funds.getFirstValidResource().first );
+                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
+                        std::string message = _( "editor|%{count} %{resource}" );
+                        StringReplace( message, "%{count}", iter->second.metadata[0] );
+                        StringReplace( message, "%{resource}", Resource::String( static_cast<int32_t>( info.metadata[0] ) ) );
+
+                        return message;
+                    }
+
+                    return Resource::String( static_cast<int32_t>( info.metadata[0] ) );
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_ARTIFACT: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == MP2::OBJ_ARTIFACT && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    return MP2::StringObject( MP2::OBJ_ARTIFACT ) + std::string( "\n" ) + Artifact( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_MONSTER: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == MP2::OBJ_MONSTER && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
+                        const int32_t monsterCount = iter->second.metadata[0];
+                        std::string message = "%{count} %{monster}";
+                        StringReplace( message, "%{count}", monsterCount );
+
+                        if ( monsterCount == 1 ) {
+                            StringReplace( message, "%{monster}", Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName() );
+                        }
+                        else {
+                            StringReplace( message, "%{monster}", Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName() );
+                        }
+
+                        return message;
+                    }
+
+                    return MP2::StringObject( MP2::OBJ_MONSTER ) + std::string( "\n" ) + Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName();
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
         }
         default:
             break;
@@ -66,7 +134,7 @@ namespace
 
 namespace Editor
 {
-    void showPopupWindow( const Maps::Tile & tile )
+    void showPopupWindow( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat )
     {
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
@@ -74,10 +142,10 @@ namespace Editor
         const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
         if ( mainTileIndex != -1 ) {
-            infoString = getObjectInfoText( world.getTile( mainTileIndex ) );
+            infoString = getObjectInfoText( world.getTile( mainTileIndex ), mapFormat );
         }
         else {
-            infoString = getObjectInfoText( tile );
+            infoString = getObjectInfoText( tile, mapFormat );
         }
 
         infoString += "\n[";

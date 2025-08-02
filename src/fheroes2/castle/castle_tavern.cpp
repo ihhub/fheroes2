@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,7 @@
 #include "castle.h" // IWYU pragma: associated
 #include "dialog.h"
 #include "game_delays.h"
+#include "game_string.h"
 #include "icn.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -37,14 +38,14 @@
 
 void Castle::_openTavern() const
 {
-    auto [rumor, language] = world.getCurrentRumor();
+    auto rumor = world.getCurrentRumor();
 
     std::string body( _( "A generous tip for the barkeep yields the following rumor:" ) );
     body += "\n\n";
 
     auto text = std::make_shared<fheroes2::MultiFontText>();
     text->add( fheroes2::Text{ std::move( body ), fheroes2::FontType::normalWhite() } );
-    text->add( fheroes2::Text{ std::move( rumor ), fheroes2::FontType::normalWhite(), language } );
+    text->add( fheroes2::Text{ std::move( rumor.text ), fheroes2::FontType::normalWhite(), rumor.language } );
 
     const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
     const fheroes2::TextDialogElement textBodyUI( text );

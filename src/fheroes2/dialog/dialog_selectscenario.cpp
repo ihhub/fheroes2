@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,11 +26,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <ostream>
 #include <string>
 #include <vector>
 
 #include "agg_image.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -38,6 +38,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -87,6 +88,27 @@ namespace
     };
 
     Maps::MapSize currentMapFilter = Maps::ZERO;
+
+    void outputMapSelectionInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Choose Map\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) << " to view only maps of size small (36 x 36)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) << " to view only maps of size medium (72 x 72)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) << " to view only maps of size large (108 x 108)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) << " to view only maps of size extra large (144 x 144)." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) << " to view all maps, regardless of size." )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to close the dialog and return to the previous menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to select the map." )
+    }
+
+    void outputNoMapInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "No maps exist for the chosen type. Returning to the previous menu." )
+    }
 
     void ShowToolTip( const std::string & header, const std::string & body )
     {
@@ -379,7 +401,7 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
     }
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t colors )
+const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const PlayerColorsSet colors )
 {
     const uint32_t iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
@@ -423,8 +445,11 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
 const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor )
 {
     if ( allMaps.empty() ) {
+        outputNoMapInTextSupportMode();
         return nullptr;
     }
+
+    outputMapSelectionInTextSupportMode();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -570,7 +595,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     display.render();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
         listbox.QueueEventProcessing();
 
@@ -648,11 +673,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
 
         // The currentPressedButton must be set correctly before the following button redrawing code block, otherwise, the map size selection button that has just been
         // clicked will be redrawn in the released state for a short time.
-        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
-        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
-        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
-        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
-        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
+        buttonSelectSmall.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectSmall.area() ) || currentPressedButton == &buttonSelectSmall );
+        buttonSelectMedium.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectMedium.area() ) || currentPressedButton == &buttonSelectMedium );
+        buttonSelectLarge.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectLarge.area() ) || currentPressedButton == &buttonSelectLarge );
+        buttonSelectXLarge.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectXLarge.area() ) || currentPressedButton == &buttonSelectXLarge );
+        buttonSelectAll.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSelectAll.area() ) || currentPressedButton == &buttonSelectAll );
 
         if ( le.isMouseRightButtonPressedInArea( buttonSelectSmall.area() ) ) {
             ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );

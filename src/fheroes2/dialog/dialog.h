@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2DIALOG_H
-#define H2DIALOG_H
+
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -150,6 +150,8 @@ namespace Dialog
 
         void redraw();
 
+        static int32_t getButtonAreaHeight();
+
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         fheroes2::Rect area;
@@ -222,5 +224,3 @@ namespace Dialog
         int border;
     };
 }
-
-#endif

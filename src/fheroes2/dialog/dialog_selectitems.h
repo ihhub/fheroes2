@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2EDITOR_DIALOGS_H
-#define H2EDITOR_DIALOGS_H
+#pragma once
 
 #include <cstdint>
 #include <memory>
 #include <string>
 
 #include "artifact.h"
+#include "color.h"
 #include "heroes.h"
 #include "image.h"
 #include "interface_list.h"
@@ -139,7 +139,7 @@ namespace Dialog
 
     int selectLandscapeMiscellaneousObjectType( const int objectType );
 
-    void selectMineType( int32_t & type, int32_t & color );
+    int32_t selectMineType( const int32_t type );
 
     int selectMountainType( const int mountainType );
 
@@ -150,6 +150,6 @@ namespace Dialog
     int selectPowerUpObjectType( const int powerUpObjectType );
 
     int selectAdventureMiscellaneousObjectType( const int objectType );
-}
 
-#endif
+    PlayerColor selectPlayerColor( const PlayerColor color, const uint8_t availableColors );
+}

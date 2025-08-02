@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstring>
 #include <iterator>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <utility>
@@ -46,6 +47,7 @@
 #include <SDL_render.h>
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
+#include <SDL_version.h>
 #include <SDL_video.h>
 
 // Managing compiler warnings for SDL headers
@@ -216,40 +218,45 @@ namespace
         return palette.data();
     }
 
+    // Updates `roi` to be only inside {0, 0, width, height} rectangle.
+    // Returns false if `roi` is out of such rectangle.
     bool getActiveArea( fheroes2::Rect & roi, const int32_t width, const int32_t height )
     {
-        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height )
+        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height ) {
             return false;
+        }
 
         if ( roi.x < 0 ) {
-            const int32_t offsetX = -roi.x;
-            if ( offsetX >= roi.width )
+            if ( -roi.x >= roi.width ) {
                 return false;
+            }
 
+            roi.width += roi.x;
             roi.x = 0;
-            roi.width -= offsetX;
         }
 
         if ( roi.y < 0 ) {
-            const int32_t offsetY = -roi.y;
-            if ( offsetY >= roi.height )
+            if ( -roi.y >= roi.height ) {
                 return false;
+            }
 
+            roi.height += roi.y;
             roi.y = 0;
-            roi.height -= offsetY;
         }
 
-        if ( roi.x + roi.width > width ) {
-            const int32_t offsetX = roi.x + roi.width - width;
-            if ( offsetX >= roi.width )
+        if ( const int32_t offsetX = roi.x + roi.width - width; offsetX > 0 ) {
+            if ( offsetX >= roi.width ) {
                 return false;
+            }
+
             roi.width -= offsetX;
         }
 
-        if ( roi.y + roi.height > height ) {
-            const int32_t offsetY = roi.y + roi.height - height;
-            if ( offsetY >= roi.height )
+        if ( const int32_t offsetY = roi.y + roi.height - height; offsetY > 0 ) {
+            if ( offsetY >= roi.height ) {
                 return false;
+            }
+
             roi.height -= offsetY;
         }
 
@@ -420,10 +427,7 @@ namespace
         }
     };
 #endif
-}
 
-namespace
-{
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
@@ -450,10 +454,11 @@ namespace
 
         bool isVisible() const override
         {
-            if ( _emulation )
+            if ( _emulation ) {
                 return fheroes2::Cursor::isVisible();
-            else
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            }
+
+            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -582,10 +587,7 @@ namespace
             }
         }
     };
-}
 
-namespace
-{
 #if defined( TARGET_PS_VITA )
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
@@ -795,6 +797,31 @@ namespace
         }
     };
 #else
+    std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
+    {
+        const int numDisplays = SDL_GetNumVideoDisplays();
+        if ( numDisplays < 1 ) {
+            ERROR_LOG( "Failed to get the number of video displays. The error value: " << numDisplays << ", description: " << SDL_GetError() )
+            return std::nullopt;
+        }
+
+        for ( int displayIndex = 0; displayIndex < numDisplays; ++displayIndex ) {
+            SDL_Rect displayBounds;
+            if ( SDL_GetDisplayBounds( displayIndex, &displayBounds ) != 0 ) {
+                ERROR_LOG( "Failed to get display bounds for display #" << displayIndex << ". The error: " << SDL_GetError() )
+                continue;
+            }
+            const int displayMaxX = displayBounds.x + displayBounds.w;
+            const int displayMaxY = displayBounds.y + displayBounds.h;
+            const int32_t windowMaxX = windowPos.x + resolutionInfo.screenWidth;
+            const int32_t windowMaxY = windowPos.y + resolutionInfo.screenHeight;
+            if ( windowPos.x >= displayBounds.x && windowMaxX < displayMaxX && windowPos.y >= displayBounds.y && windowMaxY < displayMaxY ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
@@ -815,9 +842,8 @@ namespace
             }
 
             uint32_t flags = SDL_GetWindowFlags( _window );
-            if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-                flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-                flags &= ~SDL_WINDOW_FULLSCREEN;
+            if ( flags & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) ) {
+                flags &= ~( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP );
             }
             else {
 #if defined( _WIN32 )
@@ -831,38 +857,46 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
+                // Update the window position, in case we get queried for it
+                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+
+                // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
+                // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
+                // case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used under the hood. To avoid
+                // this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the window size to the size of
+                // the in-game display area before switching to the full-screen mode.
                 SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
 
-                const fheroes2::Display & display = fheroes2::Display::instance();
-                if ( display.width() != 0 && display.height() != 0 ) {
+                if ( const fheroes2::Display & display = fheroes2::Display::instance(); display.width() != 0 && display.height() != 0 ) {
                     assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
+
                     SDL_SetWindowSize( _window, display.screenSize().width, display.screenSize().height );
                 }
             }
 
-            const int returnCode = SDL_SetWindowFullscreen( _window, flags );
-            if ( returnCode < 0 ) {
+            if ( const int returnCode = SDL_SetWindowFullscreen( _window, flags ); returnCode < 0 ) {
                 ERROR_LOG( "Failed to set fullscreen mode flags. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
             _syncFullScreen();
 
+            // If the full-screen mode has been turned off, then restore the remembered window size.
             if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
             _retrieveWindowInfo();
-
             _toggleMouseCaptureMode();
         }
 
         bool isFullScreen() const override
         {
-            if ( _window == nullptr )
+            if ( _window == nullptr ) {
                 return BaseRenderEngine::isFullScreen();
+            }
 
             const uint32_t flags = SDL_GetWindowFlags( _window );
-            return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
+            return ( flags & ( SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP ) );
         }
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
@@ -980,20 +1014,33 @@ namespace
         {
             _isVSyncEnabled = enable;
 
-            if ( _window != nullptr ) {
-                // We do not need to rebuild window but renderer only.
-                if ( _texture != nullptr ) {
-                    SDL_DestroyTexture( _texture );
-                    _texture = nullptr;
-                }
+            if ( _renderer == nullptr ) {
+                return;
+            }
 
-                if ( _renderer != nullptr ) {
-                    SDL_DestroyRenderer( _renderer );
-                    _renderer = nullptr;
-                }
+            _toggleVSync();
+        }
 
-                const fheroes2::Display & display = fheroes2::Display::instance();
-                _createRenderer( display.width(), display.height() );
+        fheroes2::Point getWindowPos() const override
+        {
+            if ( isFullScreen() ) {
+                return _prevWindowPos;
+            }
+            if ( _window == nullptr ) {
+                return { -1, -1 };
+            }
+            fheroes2::Point result;
+            SDL_GetWindowPosition( _window, &result.x, &result.y );
+            return result;
+        }
+
+        void setWindowPos( const fheroes2::Point pos ) override
+        {
+            if ( pos == fheroes2::Point{ -1, -1 } ) {
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+            }
+            else {
+                _prevWindowPos = pos;
             }
         }
 
@@ -1043,28 +1090,17 @@ namespace
                 _surface = nullptr;
             }
 
-            _windowedSize = fheroes2::Size();
-
             _driverIndex = -1;
+            _windowedSize = {};
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
-            if ( _surface == nullptr )
-                return;
-
-            if ( _texture == nullptr ) {
-                if ( _renderer != nullptr )
-                    SDL_DestroyRenderer( _renderer );
-
-                // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-                _renderer = SDL_CreateRenderer( _window, _driverIndex, renderFlags() );
-                if ( _renderer == nullptr ) {
-                    ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
-                }
-
+            if ( _surface == nullptr ) {
                 return;
             }
+
+            assert( _renderer != nullptr && _texture != nullptr );
 
             copyImageToSurface( display, _surface, roi );
 
@@ -1120,7 +1156,7 @@ namespace
             }
 #endif
 
-            uint32_t flags = SDL_WINDOW_SHOWN;
+            uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -1134,7 +1170,13 @@ namespace
 #endif
             }
 
-            flags |= SDL_WINDOW_RESIZABLE;
+            std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
+
+            // check if the previous window position is within display or error occured
+            if ( !isInDisplay || !*isInDisplay ) {
+                // reset position if it is not within the bounds of any display
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+            }
 
             _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
                                         resolutionInfo.screenHeight, flags );
@@ -1152,10 +1194,9 @@ namespace
             SDL_RendererInfo rendererInfo;
             _driverIndex = -1;
 
-            const uint32_t renderingFlags = renderFlags();
+            if ( const int driverCount = SDL_GetNumRenderDrivers(); driverCount >= 0 ) {
+                const uint32_t requiredFlags = SDL_RENDERER_ACCELERATED;
 
-            const int driverCount = SDL_GetNumRenderDrivers();
-            if ( driverCount >= 0 ) {
                 for ( int driverId = 0; driverId < driverCount; ++driverId ) {
                     int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
                     if ( returnCode < 0 ) {
@@ -1163,7 +1204,7 @@ namespace
                         continue;
                     }
 
-                    if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                    if ( ( rendererInfo.flags & requiredFlags ) != requiredFlags ) {
                         continue;
                     }
 
@@ -1203,7 +1244,56 @@ namespace
 
             _createPalette();
 
-            return _createRenderer( resolutionInfo.gameWidth, resolutionInfo.gameHeight );
+            _renderer = SDL_CreateRenderer( _window, _driverIndex, SDL_RENDERER_ACCELERATED );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                    << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            if ( const int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            if ( const int returnCode = SDL_SetRenderTarget( _renderer, nullptr ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
+            }
+
+            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
+            }
+
+            if ( const int returnCode = SDL_RenderSetLogicalSize( _renderer, resolutionInfo.gameWidth, resolutionInfo.gameHeight ); returnCode < 0 ) {
+                ERROR_LOG( "Failed to create logical size of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                               << " size. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            if ( _texture == nullptr ) {
+                ERROR_LOG( "Failed to create a texture from a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                           << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            if ( !_retrieveWindowInfo() ) {
+                clear();
+                return false;
+            }
+
+            _toggleMouseCaptureMode();
+            _toggleVSync();
+
+            return true;
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
@@ -1223,15 +1313,6 @@ namespace
         bool isMouseCursorActive() const override
         {
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
-        }
-
-        uint32_t renderFlags() const
-        {
-            if ( _isVSyncEnabled ) {
-                return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-            }
-
-            return SDL_RENDERER_ACCELERATED;
         }
 
         void _createPalette()
@@ -1289,82 +1370,38 @@ namespace
             return true;
         }
 
-        void _toggleMouseCaptureMode()
+        void _toggleVSync()
         {
-            // To properly support fullscreen mode on devices with multiple displays or devices with notch,
-            // it is important to lock the mouse in the application window area.
-            if ( isFullScreen() ) {
-                SDL_SetWindowGrab( _window, SDL_TRUE );
-            }
-            else {
-                SDL_SetWindowGrab( _window, SDL_FALSE );
+            assert( _renderer != nullptr );
+
+#if !SDL_VERSION_ATLEAST( 2, 0, 18 )
+#error SDL_RenderSetVSync() is only supported since SDL 2.0.18
+#endif
+
+            if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
+                ERROR_LOG( "Failed to " << ( _isVSyncEnabled ? "enable" : "disable" ) << " vsync mode for renderer. The error value: " << returnCode
+                                        << ", description: " << SDL_GetError() )
             }
         }
 
-        bool _createRenderer( const int32_t width_, const int32_t height_ )
+        void _toggleMouseCaptureMode()
         {
-            const uint32_t renderingFlags = renderFlags();
+            assert( _window != nullptr );
 
-            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
-            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set the " SDL_HINT_RENDER_SCALE_QUALITY " hint." )
-            }
-
-            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
-            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
-            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set the " SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS " hint." )
-            }
-
-            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
-                                                               << ", description: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
-            if ( _texture == nullptr ) {
-                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            if ( !_retrieveWindowInfo() ) {
-                clear();
-                return false;
-            }
-
-            _toggleMouseCaptureMode();
-
-            return true;
+            // To properly support fullscreen mode on devices with multiple displays or devices with notch,
+            // it is important to lock the mouse in the application window area.
+            SDL_SetWindowGrab( _window, isFullScreen() ? SDL_TRUE : SDL_FALSE );
         }
 
         void _syncFullScreen()
         {
-            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
-                BaseRenderEngine::toggleFullScreen();
-
-                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
+            if ( isFullScreen() == BaseRenderEngine::isFullScreen() ) {
+                return;
             }
+
+            BaseRenderEngine::toggleFullScreen();
+
+            assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
         }
     };
 #endif
@@ -1380,9 +1417,6 @@ namespace fheroes2
     Display::Display()
         : _engine( RenderEngine::create() )
         , _cursor( RenderCursor::create() )
-        , _preprocessing( nullptr )
-        , _postprocessing( nullptr )
-        , _renderSurface( nullptr )
     {
         _disableTransformLayer();
     }
@@ -1421,6 +1455,11 @@ namespace fheroes2
         _screenSize = { info.screenWidth, info.screenHeight };
     }
 
+    void Display::setWindowPos( const Point point )
+    {
+        _engine->setWindowPos( point );
+    }
+
     Display & Display::instance()
     {
         static Display display;
@@ -1430,22 +1469,25 @@ namespace fheroes2
     void Display::render( const Rect & roi )
     {
         Rect temp( roi );
-        if ( !getActiveArea( temp, width(), height() ) )
+        if ( !getActiveArea( temp, width(), height() ) ) {
             return;
-
-        getActiveArea( _prevRoi, width(), height() );
+        }
 
         if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
-            const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-            Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
+            Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
-            if ( !backup.empty() ) {
-                // ROI must include cursor's area as well, otherwise cursor won't be rendered.
-                Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-                if ( getActiveArea( cursorROI, width(), height() ) ) {
-                    temp = getBoundaryRect( temp, cursorROI );
-                }
+            if ( _cursor->_keepInScreenArea ) {
+                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+            }
+
+            const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+            Blit( cursorImage, 0, 0, *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+
+            // ROI must include cursor's area as well, otherwise cursor won't be rendered.
+            if ( !backup.empty() && getActiveArea( cursorROI, width(), height() ) ) {
+                temp = getBoundaryRect( temp, cursorROI );
             }
 
             // Previous position of cursor must be updated as well to avoid ghost effect.
@@ -1471,6 +1513,7 @@ namespace fheroes2
     void Display::updateNextRenderRoi( const Rect & roi )
     {
         _prevRoi = getBoundaryRect( _prevRoi, roi );
+        getActiveArea( _prevRoi, width(), height() );
     }
 
     void Display::_renderFrame( const Rect & roi ) const
@@ -1531,11 +1574,19 @@ namespace fheroes2
 
     BaseRenderEngine & engine()
     {
-        return *( Display::instance()._engine );
+        const fheroes2::Display & display = Display::instance();
+
+        assert( display._engine );
+
+        return *( display._engine );
     }
 
     Cursor & cursor()
     {
-        return *( Display::instance()._cursor );
+        const fheroes2::Display & display = Display::instance();
+
+        assert( display._cursor );
+
+        return *( display._cursor );
     }
 }

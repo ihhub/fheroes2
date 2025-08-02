@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,6 +80,13 @@ namespace
 #if defined( ANDROID )
         // Value greater than 1024 causes audio distortion on Android
         int chunkSize = 1024;
+#elif defined( __EMSCRIPTEN__ )
+        // When a WebAssembly app is running in a browser, no background threads (emulated by the web workers) have
+        // access to the audio. The audio can only be accessed (and feeded) from the main thread (when yielding to
+        // the browser's event loop). The chunk size should be large enough to avoid playback issues caused by other
+        // activities performed on the main thread. On the other hand, it shouldn't be too big, because it is possible
+        // to stop the audio playback only after the current chunk has been completely played.
+        int chunkSize = 8192;
 #else
         int chunkSize = 2048;
 #endif
@@ -330,6 +337,11 @@ namespace
             return _currentTrackPlaybackMode;
         }
 
+        bool isCurrentTrackBeingHalted() const
+        {
+            return _isCurrentTrackBeingHalted;
+        }
+
         // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         uint64_t getCurrentTrackChangeCounter() const
         {
@@ -347,6 +359,7 @@ namespace
 
             _currentTrackUID = musicUID;
             _currentTrackPlaybackMode = trackPlaybackMode;
+            _isCurrentTrackBeingHalted = false;
 
             ++_currentTrackChangeCounter;
         }
@@ -357,8 +370,14 @@ namespace
 
             _currentTrackUID = 0;
             _currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
+            _isCurrentTrackBeingHalted = false;
 
             ++_currentTrackChangeCounter;
+        }
+
+        void prepareToHaltCurrentTrack()
+        {
+            _isCurrentTrackBeingHalted = true;
         }
 
         void resetTimer()
@@ -394,6 +413,7 @@ namespace
 
         uint64_t _currentTrackUID{ 0 };
         Music::PlaybackMode _currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
+        bool _isCurrentTrackBeingHalted{ false };
 
         // This counter should be incremented every time the current track or its playback mode changes
         std::atomic<uint64_t> _currentTrackChangeCounter{ 0 };
@@ -444,8 +464,12 @@ namespace
                 return;
             }
 
-            // REWIND_AND_PLAY_INFINITE should be handled by the SDL_Mixer itself
-            if ( musicTrackManager.getCurrentTrackPlaybackMode() != Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+            // The current track has been intentionally halted and should not be restarted
+            if ( musicTrackManager.isCurrentTrackBeingHalted() ) {
+                return;
+            }
+
+            if ( musicTrackManager.getCurrentTrackPlaybackMode() == Music::PlaybackMode::PLAY_ONCE ) {
                 return;
             }
 
@@ -475,16 +499,7 @@ namespace
         musicRestartManager.restartCurrentMusicTrack();
     }
 
-    bool isMusicResumeSupported( const Mix_Music * mus )
-    {
-        assert( mus != nullptr );
-
-        const Mix_MusicType musicType = Mix_GetMusicType( mus );
-
-        return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
-    }
-
-    void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
+    void playMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode )
     {
         // This function should never be called if a music track is currently playing.
         // Thus we have a guarantee that the Mix_HookMusicFinished()'s callback will
@@ -503,34 +518,15 @@ namespace
             return;
         }
 
-        bool resumePlayback = false;
-        bool autoLoop = false;
-
-        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-            if ( isMusicResumeSupported( mus.get() ) ) {
-                resumePlayback = true;
-            }
-            else {
-                // It is impossible to resume this track, let's reflect it by changing the playback mode
-                playbackMode = Music::PlaybackMode::REWIND_AND_PLAY_INFINITE;
-                autoLoop = true;
-            }
-        }
-        else if ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE ) {
-            autoLoop = true;
-        }
-
         // Update the current track information while the music playback is not yet started, so the
         // Mix_HookMusicFinished()'s callback cannot be called
         musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
 
-        const int loopCount = autoLoop ? -1 : 0;
-
         int returnCode = -1;
 
         // Resume the music only if at least 1 second of the track has been played.
-        if ( resumePlayback && track->getPosition() > 1 ) {
-            returnCode = Mix_FadeInMusicPos( mus.get(), loopCount, musicFadeInMs, track->getPosition() );
+        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE && track->getPosition() > 1 ) {
+            returnCode = Mix_FadeInMusicPos( mus.get(), 0, musicFadeInMs, track->getPosition() );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to resume the music track. The error: " << Mix_GetError() )
@@ -540,7 +536,9 @@ namespace
         // Either there is no need to resume music playback, or the resumption failed. Let's try to
         // start the playback from the beginning.
         if ( returnCode != 0 ) {
-            returnCode = Mix_FadeInMusic( mus.get(), loopCount, musicFadeInMs );
+            track->setPosition( 0 );
+
+            returnCode = Mix_FadeInMusic( mus.get(), 0, musicFadeInMs );
 
             if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to play the music track. The error: " << Mix_GetError() )
@@ -1048,6 +1046,12 @@ void Music::Stop()
         return;
     }
 
+    // Some platforms (such as WebAssembly) may not support background threads. In this case,
+    // the Mix_HookMusicFinished()'s callback can trigger an immediate restart of playback of
+    // the stopped track. This is not what we want, so we should notify that this track will
+    // be intentionally stopped and should not be restarted.
+    musicTrackManager.prepareToHaltCurrentTrack();
+
     // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
     // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
@@ -1072,10 +1076,10 @@ bool Music::isPlaying()
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    return !musicTrackManager.getCurrentTrack().expired() && Mix_PlayingMusic();
+    return isInitialized && Mix_PlayingMusic();
 }
 
-void Music::SetMidiSoundFonts( const ListFiles & files )
+void Music::setMidiSoundFonts( const ListFiles & files )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
@@ -1100,4 +1104,21 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     if ( Mix_SetSoundFonts( System::encLocalToUTF8( filePaths ).c_str() ) == 0 ) {
         ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
+}
+
+void Music::setMidiTimidityCfg( const std::string & path )
+{
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+#if SDL_MIXER_VERSION_ATLEAST( 2, 6, 0 )
+    if ( Mix_SetTimidityCfg( System::encLocalToUTF8( path ).c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: " << Mix_GetError() )
+    }
+#else
+    ERROR_LOG( "Failed to set the path to the timidity.cfg file to " << path << ". The error: operation not supported" )
+#endif
 }

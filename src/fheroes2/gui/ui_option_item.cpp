@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,11 +20,16 @@
 
 #include "ui_option_item.h"
 
+#include <cassert>
 #include <cstdint>
 #include <utility>
 
+#include "agg_image.h"
+#include "icn.h"
 #include "image.h"
 #include "screen.h"
+#include "settings.h"
+#include "translations.h"
 #include "ui_text.h"
 
 namespace
@@ -49,5 +54,81 @@ namespace fheroes2
         name.draw( textHorizontalOffset, optionRoi.y + optionRoi.height + nameVerticalOffset, textMaxWidth, display );
 
         Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
+        fheroes2::addGradientShadow( icon, display, { optionRoi.x, optionRoi.y }, { -5, 5 } );
+    }
+
+    void drawScrollSpeed( const fheroes2::Rect & optionRoi, const int speed )
+    {
+        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
+        uint32_t scrollSpeedIconId = 0;
+        std::string scrollSpeedName;
+
+        if ( speed == SCROLL_SPEED_NONE ) {
+            scrollSpeedName = _( "Off" );
+            scrollSpeedIconIcn = ICN::SPANEL;
+            scrollSpeedIconId = 9;
+        }
+        else if ( speed == SCROLL_SPEED_SLOW ) {
+            scrollSpeedName = _( "Slow" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
+        }
+        else if ( speed == SCROLL_SPEED_NORMAL ) {
+            scrollSpeedName = _( "Normal" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
+        }
+        else if ( speed == SCROLL_SPEED_FAST ) {
+            scrollSpeedName = _( "Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 1;
+        }
+        else if ( speed == SCROLL_SPEED_VERY_FAST ) {
+            scrollSpeedName = _( "Very Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 2;
+        }
+
+        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
+
+        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
+        fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+    }
+
+    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType )
+    {
+        uint32_t icnInx = 15;
+        std::string value;
+        switch ( interfaceType ) {
+        case InterfaceType::DYNAMIC:
+            value = _( "Dynamic" );
+            break;
+        case InterfaceType::GOOD:
+            icnInx = 16;
+            value = _( "Good" );
+            break;
+        case InterfaceType::EVIL:
+            icnInx = 17;
+            value = _( "Evil" );
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+    }
+
+    void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor )
+    {
+        if ( isMonochromeCursor ) {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        }
+        else {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        }
     }
 }

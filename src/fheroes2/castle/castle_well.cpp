@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -215,7 +215,7 @@ void Castle::_openWell()
     const int32_t buttonOffsetY = roi.y + bottomBarOffsetY;
 
     // MAX button.
-    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUYMAX, 0, 1 );
+    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUTTON_WELL_MAX, 0, 1 );
 
     // EXIT button.
     fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
@@ -245,9 +245,9 @@ void Castle::_openWell()
     Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
-        buttonMax.drawOnState( le.isMouseLeftButtonPressedInArea( buttonMax.area() ) );
+        buttonMax.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMax.area() ) );
         const BuildingType pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
@@ -376,7 +376,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
     const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 ).width();
+    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUTTON_WELL_MAX, 0 ).width();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
     fheroes2::Copy( bottomBar, 1, 0, background, buttonMaxWidth, bottomBarOffsetY, backgroundWidth / 2 - buttonMaxWidth, barHeight );
     fheroes2::Copy( bottomBar, bottomBar.width() - backgroundWidth / 2 + exitWidth - 1, 0, background, backgroundWidth / 2, bottomBarOffsetY,
@@ -385,8 +385,9 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     // The original assets Well background has a transparent line to the right of EXIT button and it is not covered by any other image. Fill it with the black color.
     fheroes2::Fill( background, background.width() - 1, bottomBarOffsetY, 1, bottomBar.height(), static_cast<uint8_t>( 0 ) );
 
+    const fheroes2::Rect textRoi{ 0, bottomBarOffsetY, backgroundWidth, bottomBar.height() - 1 };
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType::normalWhite() );
-    text.draw( 315 - text.width() / 2, bottomBarOffsetY + 3, background );
+    text.drawInRoi( 315 - text.width() / 2, bottomBarOffsetY + 3, background, textRoi );
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
@@ -505,7 +506,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += text.height( text.width() );
 
-        text.set( Speed::String( static_cast<int>( monster.GetSpeed() ) ), statsFontType );
+        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
         text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
         renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 

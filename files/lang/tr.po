@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-28 15:55+0000\n"
+"POT-Creation-Date: 2025-07-28 00:05+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -16,71 +16,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.2.2\n"
 
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"SADECE\n"
-"SAVAŞ"
+msgid "SELECT"
+msgstr "SEÇ"
 
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"YENİ\n"
-"OYUN"
+msgid "S"
+msgstr "S"
 
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"KAYDET"
+msgid "M"
+msgstr "M"
 
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"YÜKLE"
+msgid "L"
+msgstr "L"
 
-msgid "INFO"
-msgstr "BİLGİ"
+msgid "X-L"
+msgstr "X-L"
 
-msgid "QUIT"
+msgid "ALL"
+msgstr "HEPSİ"
+
+msgid "EXIT"
 msgstr "ÇIKIŞ"
 
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"YENİ\n"
-"HARİTA"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"KAYDET"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"YÜKLE"
-
-msgid "CANCEL"
-msgstr "İPTAL"
+msgid "smallerButton|EXIT"
+msgstr "ÇIKIŞ"
 
 msgid "OKAY"
 msgstr "TAMAM"
 
-msgid "smallerButton|OKAY"
-msgstr "TAMAM"
+msgid "HEROES"
+msgstr "KAHRAMANLAR"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"KASABALAR/\n"
+"KALELER"
+
+msgid "CANCEL"
+msgstr "İPTAL"
 
 msgid "ACCEPT"
 msgstr "KABUL"
@@ -100,136 +76,23 @@ msgstr "EVET"
 msgid "NO"
 msgstr "HAYIR"
 
-msgid "EXIT"
-msgstr "ÇIKIŞ"
-
-msgid "smallerButton|EXIT"
-msgstr "ÇIKIŞ"
-
 msgid "DISMISS"
 msgstr "BIRAK"
 
 msgid "UPGRADE"
 msgstr "GELİŞTİR"
 
-msgid "RESTART"
-msgstr "TEKRARLA"
-
-msgid "HEROES"
-msgstr "KAHRAMANLAR"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"KASABALAR/\n"
-"KALELER"
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "HEPSİ"
-
-msgid "SELECT"
-msgstr "SEÇ"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDART\n"
-"OYUN"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"HİKAYE\n"
-"OYUNU"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ÇOK\n"
-"OYUNCULU\n"
-"OYUN"
-
-msgid "CONFIG"
-msgstr "AYARLAR"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORİJİNAL\n"
-"HİKAYE"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"EKLENTİ\n"
-"HİKAYESİ"
-
-msgid "HOT SEAT"
-msgstr "SIRAYLA OYNAMA"
-
-msgid "2 PLAYERS"
-msgstr "2 OYUNCU"
-
-msgid "3 PLAYERS"
-msgstr "3 OYUNCU"
-
-msgid "4 PLAYERS"
-msgstr "4 OYUNCU"
-
-msgid "5 PLAYERS"
-msgstr "5 OYUNCU"
-
-msgid "6 PLAYERS"
-msgstr "6 OYUNCU"
-
 msgid "GIFT"
 msgstr "HEDİYE"
+
+msgid "RESTART"
+msgstr "TEKRARLA"
 
 msgid "MAX"
 msgstr "MAKS"
 
-msgid "DIFFICULTY"
-msgstr "ZORLUK"
-
-msgid "VIEW INTRO"
-msgstr "İNTROYU İZLE"
-
 msgid "MIN"
 msgstr "MİN"
-
-msgid "RESET"
-msgstr "SIFIRLA"
-
-msgid "START"
-msgstr "BAŞLA"
-
-msgid "CASTLE"
-msgstr "KALE"
-
-msgid "TOWN"
-msgstr "KASABA"
-
-msgid "RESTRICT"
-msgstr "KISITLA"
 
 msgid ""
 "D\n"
@@ -257,22 +120,6 @@ msgstr ""
 "K\n"
 "I\n"
 "Ş"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"D\n"
-"E\n"
-"V\n"
-"R\n"
-"İ\n"
-"Y\n"
-"E"
 
 msgid ""
 "C\n"
@@ -310,14 +157,170 @@ msgstr ""
 "R\n"
 "T"
 
-msgid "RUMORS"
-msgstr "SÖYLENTİLER"
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"YENİ\n"
+"OYUN"
 
-msgid "EVENTS"
-msgstr "ETKİNLİKLER"
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"YÜKLE"
 
-msgid "LANGUAGE"
-msgstr "DİL"
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"KAYDET"
+
+msgid "QUIT"
+msgstr "ÇIKIŞ"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "BAŞLA"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"YENİ\n"
+"HARİTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"KAYDET"
+
+msgid "INFO"
+msgstr "BİLGİ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"SADECE\n"
+"SAVAŞ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDART\n"
+"OYUN"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"HİKAYE\n"
+"OYUNU"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ÇOK\n"
+"OYUNCULU\n"
+"OYUN"
+
+msgid "HOT SEAT"
+msgstr ""
+"SIRAYLA\n"
+"OYNAMA"
+
+msgid "2 PLAYERS"
+msgstr "2 OYUNCU"
+
+msgid "3 PLAYERS"
+msgstr "3 OYUNCU"
+
+msgid "4 PLAYERS"
+msgstr "4 OYUNCU"
+
+msgid "5 PLAYERS"
+msgstr "5 OYUNCU"
+
+msgid "6 PLAYERS"
+msgstr "6 OYUNCU"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORİJİNAL\n"
+"HİKAYE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"EKLENTİ\n"
+"HİKAYESİ"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ZORLUK"
+
+msgid "VIEW INTRO"
+msgstr "İNTROYU İZLE"
+
+msgid "RESET"
+msgstr "SIFIRLA"
+
+msgid "START"
+msgstr "BAŞLA"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"D\n"
+"E\n"
+"V\n"
+"R\n"
+"İ\n"
+"Y\n"
+"E"
 
 msgid "Warrior"
 msgstr "Savaşçı"
@@ -472,10 +475,12 @@ msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} düşman birliklerinin yarısını yok etti!"
 msgstr[1] "%{name} düşman birliklerinin yarısını yok etti!"
 
-msgid "%{name} has turned off the auto battle"
+#, fuzzy
+msgid "%{name} has turned off the auto combat"
 msgstr "%{name} otomatik savaşı kapattı"
 
-msgid "%{name} has turned on the auto battle"
+#, fuzzy
+msgid "%{name} has turned on the auto combat"
 msgstr "%{name} otomatik savaşı açtı"
 
 msgid "Spell failed!"
@@ -505,9 +510,10 @@ msgid ""
 "Elemental to."
 msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
 
+#, fuzzy
 msgid ""
-"The Moat reduces the defense skill of troops trapped in it by %{count} and "
-"restricts their movement range."
+"The Moat interrupts any movement through it and reduces the defense skill of "
+"troops present in it by %{count}."
 msgstr ""
 "Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
 "hızını %{count} düşürüyor."
@@ -696,9 +702,6 @@ msgstr "Şans"
 msgid "Spell Points"
 msgstr "Büyü Puanları"
 
-msgid "Hero's Options"
-msgstr "Kahramanın Seçenekleri"
-
 msgid "Cast Spell"
 msgstr "Yapılan Büyü"
 
@@ -716,6 +719,9 @@ msgstr "Kahraman Ekranı"
 
 msgid "Captain's Options"
 msgstr "Kaptanın Seçenekleri"
+
+msgid "Hero's Options"
+msgstr "Kahramanın Seçenekleri"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -804,20 +810,32 @@ msgstr "%{spell} uygula"
 msgid "Select spell target"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "View Ballista info"
 msgstr "Mancınık bilgilerini görüntüle"
 
 msgid "Ballista"
 msgstr "Mancınık"
 
-msgid "Enable auto combat"
-msgstr "Otomatik savacı aç"
-
-msgid "Allows the computer to fight out the battle for you."
-msgstr "Bilgisayarın sizin için savaşmasına izin verir."
-
-msgid "Auto Combat"
+#, fuzzy
+msgid "Automatic combat modes"
 msgstr "Otomatik savaş"
+
+#, fuzzy
+msgid "Automatic Combat Modes"
+msgstr "Otomatik savaş"
+
+msgid ""
+"Choose between proceeding the combat in auto combat mode or in quick combat "
+"mode."
+msgstr ""
 
 msgid "Customize system options"
 msgstr "Sistem seçeneklerini özelleştirin"
@@ -865,11 +883,38 @@ msgstr "Mesaj Çubuğu"
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 
-msgid "Are you sure you want to enable auto combat?"
-msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
+
+#, fuzzy
+msgid "The computer continues the combat for you."
+msgstr "Bilgisayarın sizin için savaşmasına izin verir."
+
+msgid ""
+"autoCombat|This can be interrupted at any moment by pressing the Auto Combat "
+"hotkey or the default Cancel key, or by performing a left or right click "
+"anywhere on the game screen."
+msgstr ""
+
+msgid "Auto Combat"
+msgstr "Otomatik savaş"
+
+msgid "The combat is resolved from the current state."
+msgstr ""
+
+msgid "quickCombat|This cannot be undone."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Combat"
+msgstr "Otomatik savaş"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -984,7 +1029,8 @@ msgstr "Ayna görüntüsü oluşturuldu."
 msgid "The mirror image is destroyed!"
 msgstr "Ayna görüntüsü yok edildi!"
 
-msgid "Are you sure you want to interrupt the auto combat?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Otomatik savaşı kesmek istediğine emin misin?"
 
 msgid "Error"
@@ -2595,8 +2641,10 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The Moat slows attacking units. Any unit entering the moat must end its turn "
-"there and becomes more vulnerable to attack."
+"The Moat slows and weakens attacking units. Any walking unit entering the "
+"moat must end its turn there and can only move within the moat one hex at a "
+"time. Any creature present in the moat will have its defense skill reduced "
+"by %{count}."
 msgstr ""
 
 msgid ""
@@ -3021,8 +3069,9 @@ msgstr "Önce alıcıları seçin!"
 msgid "You cannot select %{resource}!"
 msgstr "%{resource} seçemezsin!"
 
-msgid "Select count %{resource}:"
-msgstr "%{resource} sayısını seç:"
+#, fuzzy
+msgid "Set %{resource-type} Count"
+msgstr "%{monster} sayısını ayarla"
 
 msgid "Select Recipients"
 msgstr "Alıcıları Seçin"
@@ -3086,15 +3135,6 @@ msgstr "Etkinlik: "
 msgid "Hot Keys:"
 msgstr "Kısayollar:"
 
-msgid "Evil"
-msgstr "Şeytani"
-
-msgid "Good"
-msgstr "İyi"
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
 msgid "Hide"
 msgstr "Gizle"
 
@@ -3104,26 +3144,17 @@ msgstr "Göster"
 msgid "Interface"
 msgstr "Arayüz"
 
-msgid "Slow"
-msgstr "Yavaş"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hızlı"
-
-msgid "Very Fast"
-msgstr "Çok Hızlı"
-
-msgid "Scroll Speed"
-msgstr "Kaydırma Hızı"
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
+
+msgid "Scroll Speed"
+msgstr "Kaydırma Hızı"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Pencereyi kaydırma hızını ayarlar."
@@ -3164,6 +3195,9 @@ msgstr ""
 "Ya %{skill1}\n"
 "ya da\n"
 "%{skill2} öğrenebilirsin."
+
+msgid "Learn %{secondary-skill}"
+msgstr ""
 
 msgid "n/a"
 msgstr "n/a"
@@ -3264,7 +3298,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "%{name} (Level %{level})"
+msgid "heroQuickInfo|(Level %{level})"
 msgstr ""
 
 msgid "Attack:"
@@ -3361,6 +3395,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr ""
 
@@ -3371,6 +3411,19 @@ msgid "Click to save the current game."
 msgstr ""
 
 msgid "Click to load a previously saved game."
+msgstr ""
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+msgid "Sort by Name"
+msgstr ""
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+msgid "Sort by Date"
 msgstr ""
 
 msgid "File to Save:"
@@ -3430,6 +3483,12 @@ msgstr ""
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
+msgid "TOWN"
+msgstr "KASABA"
+
+msgid "CASTLE"
+msgstr "KALE"
+
 msgid "Click to start placing the selected castle/town."
 msgstr ""
 
@@ -3487,6 +3546,9 @@ msgstr "Büyü hedefini seç"
 #, fuzzy
 msgid "Select Adventure Object:"
 msgstr "Büyü hedefini seç"
+
+msgid "Select color"
+msgstr ""
 
 msgid "Players Icon"
 msgstr ""
@@ -3650,7 +3712,7 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "autoBattle|Manual"
+msgid "combatMode|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3760,6 +3822,9 @@ msgstr ""
 msgid "Default Buildings"
 msgstr ""
 
+msgid "RESTRICT"
+msgstr "KISITLA"
+
 msgid "Default Army"
 msgstr ""
 
@@ -3770,11 +3835,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Kahraman Ekranı"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Enter Castle name"
 msgstr ""
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Savaşa geri dön."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3791,8 +3861,23 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Ayarlar"
 
 #, fuzzy
 msgid "Message Text:"
@@ -3881,19 +3966,52 @@ msgstr ""
 msgid "Delete an existing event."
 msgstr ""
 
+msgid "Effects:"
+msgstr ""
+
+#, fuzzy
+msgid "Conditions:"
+msgstr ""
+"Yenilgi\n"
+"Şartları"
+
 msgid "Cancel event after first visit"
+msgstr ""
+
+msgid "Computer colors allowed to get the event:"
+msgstr ""
+
+msgid "Set Experience value"
 msgstr ""
 
 msgid "Artifact"
 msgstr ""
 
-msgid "No artifact will be given as a reward."
+msgid "No artifact will be given by the event."
 msgstr ""
 
 msgid "Delete Artifact"
 msgstr ""
 
-msgid "Delete an artifact from the reward."
+msgid "Delete an artifact from the event."
+msgstr ""
+
+msgid "No Secondary Skill will be given by the event."
+msgstr ""
+
+msgid "Secondary Skill"
+msgstr ""
+
+msgid "Delete Secondary Skill"
+msgstr ""
+
+msgid "Delete the Secondary Skill from the event."
+msgstr ""
+
+msgid "No resources will be part of this event."
+msgstr ""
+
+msgid "These resources will be a part of the event."
 msgstr ""
 
 msgid ""
@@ -3919,6 +4037,9 @@ msgstr ""
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -3935,6 +4056,41 @@ msgstr ""
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid ""
+"Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+#, fuzzy
+msgid "Start Map"
+msgstr "Başla"
+
+msgid ""
+"Do you wish to leave the Editor and start the map? (Any unsaved changes to "
+"the current map will be lost.)"
 msgstr ""
 
 msgid "Create a new map from scratch."
@@ -3958,6 +4114,13 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+#, fuzzy
+msgid "Return to the game's Main Menu."
+msgstr "Savaşa geri dön."
+
+msgid "Leave the Editor and play the map in the Standard Game mode."
+msgstr ""
+
 msgid "Input %{object} text"
 msgstr ""
 
@@ -3970,10 +4133,21 @@ msgstr ""
 msgid "This artifact"
 msgstr ""
 
+msgid "The total number of obelisks is %{count}."
+msgstr ""
+
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -4226,6 +4400,12 @@ msgstr ""
 msgid "Undo your last action."
 msgstr ""
 
+msgid "Redo"
+msgstr ""
+
+msgid "Redo the last undone action."
+msgstr ""
+
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
@@ -4243,14 +4423,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-
-msgid "Cancel back to the New Map menu."
-msgstr ""
-
-msgid "Cancel back to the main menu."
-msgstr ""
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Savaşa geri dön."
 
 msgid "From Scratch"
 msgstr ""
@@ -4264,7 +4439,14 @@ msgstr ""
 msgid "Random"
 msgstr ""
 
-msgid "Cancel back to the Map Editor main menu."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Savaşa geri dön."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 
 msgid "No maps available!"
@@ -4392,6 +4574,18 @@ msgstr ""
 msgid "Map Description"
 msgstr ""
 
+msgid "RUMORS"
+msgstr "SÖYLENTİLER"
+
+msgid "EVENTS"
+msgstr "ETKİNLİKLER"
+
+msgid "LANGUAGE"
+msgstr "DİL"
+
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4409,9 +4603,8 @@ msgstr ""
 msgid "Change Map Description"
 msgstr ""
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -4430,6 +4623,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 msgid "Click to change your map name."
 msgstr ""
@@ -4460,6 +4658,10 @@ msgid ""
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
+
+#, fuzzy
+msgid "editor|%{count} %{resource}"
+msgstr "%{resource} sayısını seç:"
 
 msgid "Animation"
 msgstr ""
@@ -4560,6 +4762,12 @@ msgstr ""
 msgid "Delete an existing answer for the question."
 msgstr ""
 
+msgid "No artifact will be given as a reward."
+msgstr ""
+
+msgid "Delete an artifact from the reward."
+msgstr ""
+
 msgid "Day: %{day} Week: %{week} Month: %{month}"
 msgstr ""
 
@@ -4583,6 +4791,9 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr ""
@@ -4633,8 +4844,9 @@ msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
 
 msgid "Restart the current scenario."
@@ -4644,9 +4856,9 @@ msgid "Difficulty"
 msgstr ""
 
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -4860,6 +5072,9 @@ msgid "hotkey|toggle fullscreen"
 msgstr ""
 
 msgid "hotkey|toggle text support mode"
+msgstr ""
+
+msgid "hotkey|toggle developer mode"
 msgstr ""
 
 msgid "hotkey|new game"
@@ -5102,12 +5317,12 @@ msgstr ""
 msgid "hotkey|surrender during battle"
 msgstr ""
 
-msgid "hotkey|toggle battle auto mode"
-msgstr ""
-
 #, fuzzy
-msgid "hotkey|finish the battle in auto mode"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid "hotkey|toggle auto combat mode"
+msgstr "Sistem seçeneklerini özelleştirin"
+
+msgid "hotkey|quick combat"
+msgstr ""
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -5117,6 +5332,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""
@@ -5175,6 +5394,9 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid "hotkey|exchange all troops"
+msgstr ""
+
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
@@ -5191,9 +5413,6 @@ msgid "Default Actions"
 msgstr ""
 
 msgid "Global Actions"
-msgstr ""
-
-msgid "Main Menu"
 msgstr ""
 
 msgid "World Map"
@@ -5240,14 +5459,6 @@ msgstr ""
 msgid "No save files to load."
 msgstr ""
 
-msgid "Hot Seat"
-msgstr ""
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-
 msgid "A single player game playing out a single map."
 msgstr ""
 
@@ -5268,44 +5479,39 @@ msgid ""
 "other on a single map."
 msgstr ""
 
-msgid "fheroes2 Resurrection Team presents"
+msgid "Hot Seat"
 msgstr ""
 
-msgid "Greetings!"
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr ""
+
+msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"\n"
+"\n"
+"To simulate a right-click with a touch to get info on various items, you "
+"need to first touch and keep touching on the item of interest and then touch "
+"anywhere else on the screen. While holding the second finger, you can remove "
+"the first one from the screen and keep viewing the information on the item."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
 
-msgid "Please Remember"
-msgstr ""
-
-msgid ""
-"You can always change the language, resolution and settings of the game by "
-"clicking on the "
-msgstr ""
-
-msgid "door"
-msgstr ""
-
-msgid " on the left side of the Main Menu, or with the "
-msgstr ""
-
-msgid " button from the "
-msgstr ""
-
-msgid "NEW GAME"
-msgstr ""
-
-msgid ""
-" menu. \n"
-"\n"
-"Enjoy the game!"
+msgid "Greetings!"
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -5334,37 +5540,7 @@ msgid ""
 "Please make sure that all necessary files are present in the system."
 msgstr ""
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-
-msgid "Original Campaign"
-msgstr ""
-
-msgid "Expansion Campaign"
-msgstr ""
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
-
 msgid "Loading video. Please wait..."
-msgstr ""
-
-msgid "Host"
-msgstr ""
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-
-msgid "Guest"
-msgstr ""
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
 msgstr ""
 
 msgid ""
@@ -5383,11 +5559,6 @@ msgid "Battle Only"
 msgstr "Sadece Savaş"
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
-
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
 msgid "2 Players"
@@ -5428,6 +5599,25 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
+msgid "Original Campaign"
+msgstr ""
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+
+msgid "Expansion Campaign"
+msgstr ""
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
 
@@ -5465,6 +5655,11 @@ msgstr ""
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
+msgstr ""
+
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
 msgstr ""
 
 msgid ""
@@ -5908,6 +6103,9 @@ msgid ""
 "skill"
 msgstr ""
 
+msgid "The available values range from %{min} to %{max}."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr ""
 
@@ -5998,13 +6196,28 @@ msgstr ""
 msgid "Vietnamese"
 msgstr "Görünüm %{name}"
 
+msgid "Greek"
+msgstr ""
+
+msgid "Slow"
+msgstr "Yavaş"
+
+msgid "Fast"
+msgstr "Hızlı"
+
+msgid "Very Fast"
+msgstr "Çok Hızlı"
+
+msgid "Dynamic"
+msgstr ""
+
+msgid "Good"
+msgstr "İyi"
+
+msgid "Evil"
+msgstr "Şeytani"
+
 msgid ", FPS: "
-msgstr ""
-
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid "Ector"
@@ -6031,6 +6244,9 @@ msgstr ""
 msgid "Fineous"
 msgstr ""
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr ""
 
@@ -6038,9 +6254,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6130,6 +6343,9 @@ msgstr ""
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6148,13 +6364,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -6199,6 +6418,11 @@ msgid ""
 msgstr ""
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
+msgstr ""
+
+msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
 msgstr ""
 
 msgid ""
@@ -6610,8 +6834,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -6620,19 +6844,14 @@ msgid ""
 msgstr ""
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
 "the gold or distribute the gold to the peasants for experience. Do you wish "
 "to keep the gold?"
-msgstr ""
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
 msgstr ""
 
 msgid ""
@@ -7170,6 +7389,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 #, fuzzy
 msgid "No spell book is present."
 msgstr "Yapılacak büyü yok."
@@ -7282,9 +7513,6 @@ msgstr ""
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
-
 msgid "View Experience Info"
 msgstr ""
 
@@ -7387,6 +7615,9 @@ msgstr ""
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
+msgstr ""
+
+msgid "million|M"
 msgstr ""
 
 msgid "Level %{level}"
@@ -8489,6 +8720,13 @@ msgstr "Bataklık"
 msgid "Frozen Lake"
 msgstr ""
 
+#, fuzzy
+msgid "Black Cat"
+msgstr "Siyah & Beyaz"
+
+msgid "Barrel"
+msgstr ""
+
 msgid "randomRace|level 1 creatures"
 msgstr ""
 
@@ -8969,6 +9207,9 @@ msgstr ""
 msgid "% damage from Elemental spells"
 msgstr ""
 
+msgid "% damage from %{spell} spell"
+msgstr ""
+
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
@@ -8996,7 +9237,7 @@ msgstr ""
 msgid "Flyer"
 msgstr ""
 
-msgid "Always retaliates"
+msgid "Unlimited retaliation"
 msgstr ""
 
 msgid "Attacks all adjacent enemies"
@@ -9035,19 +9276,40 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-msgid "200% damage from Fire spells"
+msgid "Earth creature"
 msgstr ""
 
-msgid "200% damage from Cold spells"
+msgid "Air creature"
 msgstr ""
 
-msgid "% damage from %{spell} spell"
+msgid "Fire creature"
 msgstr ""
 
-msgid "% immunity to "
+msgid "Water creature"
+msgstr ""
+
+msgid "Double damage from Fire spells"
+msgstr ""
+
+msgid "Double damage from Cold spells"
+msgstr ""
+
+msgid "Double damage from Earth creatures"
+msgstr ""
+
+msgid "Double damage from Air creatures"
+msgstr ""
+
+msgid "Double damage from Fire creatures"
+msgstr ""
+
+msgid "Double damage from Water creatures"
 msgstr ""
 
 msgid "Lightning"
+msgstr ""
+
+msgid "% immunity to "
 msgstr ""
 
 msgid "% damage from "
@@ -9902,14 +10164,14 @@ msgstr ""
 msgid "Endless Pouch of Crystal"
 msgstr ""
 
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr ""
-
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid "Spiked Helm"
@@ -9998,16 +10260,16 @@ msgid "Arm of the Martyr"
 msgstr ""
 
 msgid ""
-"The %{name} increases the hero's spell power by %{count} but adds the undead "
-"morale penalty."
-msgstr ""
-
-msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
 "ground. Despite its missing a body, it is still moving. Your troops find the "
 "dismembered arm repulsive, but you cannot bring yourself to drop it: it "
 "seems to hold some sort of magical power that influences your decision "
 "making."
+msgstr ""
+
+msgid ""
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
+"morale penalty."
 msgstr ""
 
 msgid "Breastplate of Anduran"
@@ -10042,9 +10304,9 @@ msgid "Battle Garb of Anduran"
 msgstr ""
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for the hero's troops and gives the hero the Town "
-"Portal spell."
+"The %{name} combines the powers of the three Anduran artifacts (+5 to "
+"attack, defense, and spell power). It also provides maximum luck and morale "
+"for the hero's troops and gives the hero the Town Portal spell."
 msgstr ""
 
 msgid ""
@@ -10332,10 +10594,12 @@ msgstr ""
 msgid "Slows all enemies to half movement rate."
 msgstr ""
 
-msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgid "spell|Blind"
 msgstr ""
 
-msgid "spell|Blind"
+msgid ""
+"Clouds the affected creatures' eyes, preventing them from moving and reduces "
+"the damage when retaliating by %{count} percent."
 msgstr ""
 
 msgid "Bless"
@@ -10816,8 +11080,5 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr ""
 
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
+#~ msgid "CONFIG"
+#~ msgstr "AYARLAR"

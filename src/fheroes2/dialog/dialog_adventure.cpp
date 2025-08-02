@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -79,11 +79,11 @@ namespace
 
         // dialog menu loop
         while ( le.HandleEvents() ) {
-            buttonWorld.drawOnState( le.isMouseLeftButtonPressedInArea( buttonWorld.area() ) );
-            buttonPuzzle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPuzzle.area() ) );
-            buttonInfo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonInfo.area() ) );
-            buttonDig.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDig.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+            buttonWorld.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonWorld.area() ) );
+            buttonPuzzle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPuzzle.area() ) );
+            buttonInfo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonInfo.area() ) );
+            buttonDig.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDig.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                 result = Dialog::WORLD;

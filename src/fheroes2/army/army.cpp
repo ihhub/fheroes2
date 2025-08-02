@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,6 @@
 #include <cmath>
 #include <map>
 #include <numeric>
-#include <random>
 #include <set>
 #include <sstream>
 #include <utility>
@@ -42,6 +41,7 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "game_io.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -54,6 +54,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -237,19 +238,16 @@ Troops::~Troops()
     } );
 }
 
-void Troops::Assign( const Troop * itbeg, const Troop * itend )
+void Troops::Assign( const Troop * troopsBegin, const Troop * troopsEnd )
 {
     Clean();
 
-    iterator it = begin();
+    for ( iterator iter = begin(); iter != end() && troopsBegin != troopsEnd; ++iter, ++troopsBegin ) {
+        assert( *iter != nullptr && troopsBegin != nullptr );
 
-    while ( it != end() && itbeg != itend ) {
-        if ( itbeg->isValid() ) {
-            ( *it )->Set( *itbeg );
+        if ( troopsBegin->isValid() ) {
+            ( *iter )->Set( *troopsBegin );
         }
-
-        ++it;
-        ++itbeg;
     }
 }
 
@@ -257,24 +255,25 @@ void Troops::Assign( const Troops & troops )
 {
     Clean();
 
-    iterator it1 = begin();
-    const_iterator it2 = troops.begin();
+    for ( auto [thisIter, troopsIter] = std::make_pair( begin(), troops.begin() ); thisIter != end() && troopsIter != troops.end(); ++thisIter, ++troopsIter ) {
+        assert( *thisIter != nullptr && *troopsIter != nullptr );
 
-    while ( it1 != end() && it2 != troops.end() ) {
-        if ( ( *it2 )->isValid() )
-            ( *it1 )->Set( **it2 );
-        ++it2;
-        ++it1;
+        if ( ( *troopsIter )->isValid() ) {
+            ( *thisIter )->Set( **troopsIter );
+        }
     }
 }
 
 void Troops::Insert( const Troops & troops )
 {
-    for ( const_iterator it = troops.begin(); it != troops.end(); ++it )
-        push_back( new Troop( **it ) );
+    for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
+        push_back( new Troop( *troop ) );
+    }
 }
 
-void Troops::PushBack( const Monster & mons, uint32_t count )
+void Troops::PushBack( const Monster & mons, const uint32_t count )
 {
     push_back( new Troop( mons, count ) );
 }
@@ -346,21 +345,18 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
 
 bool Troops::isValid() const
 {
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            return true;
-    }
-    return false;
+    return std::any_of( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } );
 }
 
 uint32_t Troops::GetOccupiedSlotCount() const
 {
-    uint32_t total = 0;
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            ++total;
-    }
-    return total;
+    return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+        return troop->isValid();
+    } ) );
 }
 
 bool Troops::areAllTroopsUnique() const
@@ -394,13 +390,20 @@ bool Troops::HasMonster( const Monster & mons ) const
 
 bool Troops::AllTroopsAreUndead() const
 {
+    bool isValidArmy = false;
+
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() && !( *it )->isUndead() ) {
-            return false;
+        if ( ( *it )->isValid() ) {
+            isValidArmy = true;
+
+            if ( !( *it )->isUndead() ) {
+                return false;
+            }
         }
     }
 
-    return true;
+    // If army has no units then the army cannot be marked as undead.
+    return isValidArmy;
 }
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
@@ -987,8 +990,6 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
 
 Army::Army( HeroBase * cmdr /* = nullptr */ )
     : commander( cmdr )
-    , _isSpreadCombatFormation( true )
-    , color( Color::NONE )
 {
     reserve( maximumTroopCount );
 
@@ -999,8 +1000,6 @@ Army::Army( HeroBase * cmdr /* = nullptr */ )
 
 Army::Army( const Maps::Tile & tile )
     : commander( nullptr )
-    , _isSpreadCombatFormation( true )
-    , color( Color::NONE )
 {
     reserve( maximumTroopCount );
 
@@ -1011,11 +1010,6 @@ Army::Army( const Maps::Tile & tile )
     setFromTile( tile );
 }
 
-const Troops & Army::getTroops() const
-{
-    return *this;
-}
-
 void Army::setFromTile( const Maps::Tile & tile )
 {
     assert( commander == nullptr );
@@ -1024,10 +1018,10 @@ void Army::setFromTile( const Maps::Tile & tile )
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.getMainObjectType( false ) );
     if ( isCaptureObject ) {
-        color = getColorFromTile( tile );
+        _color = getColorFromTile( tile );
     }
     else {
-        color = Color::NONE;
+        _color = PlayerColor::NONE;
     }
 
     switch ( tile.getMainObjectType( false ) ) {
@@ -1170,10 +1164,10 @@ void Army::setFromTile( const Maps::Tile & tile )
     }
 }
 
-int Army::GetColor() const
+PlayerColor Army::GetColor() const
 {
     const HeroBase * currentCommander = GetCommander();
-    return currentCommander != nullptr ? currentCommander->GetColor() : color;
+    return currentCommander != nullptr ? currentCommander->GetColor() : _color;
 }
 
 int Army::GetLuck() const
@@ -1207,17 +1201,12 @@ int Army::GetMoraleModificator( std::string * strs ) const
     // different race penalty
     std::set<int> races;
     bool hasUndead = false;
-    bool allUndead = true;
 
     for ( const Troop * troop : *this )
         if ( troop->isValid() ) {
             races.insert( troop->GetRace() );
             hasUndead = hasUndead || troop->isUndead();
-            allUndead = allUndead && troop->isUndead();
         }
-
-    if ( allUndead )
-        return Morale::NORMAL;
 
     int result = Morale::NORMAL;
 
@@ -1370,7 +1359,7 @@ const HeroBase * Army::GetCommander() const
 
 int Army::GetControl() const
 {
-    return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
+    return commander ? commander->GetControl() : ( _color == PlayerColor::NONE ? CONTROL_AI : Players::GetPlayerControl( _color ) );
 }
 
 uint32_t Army::getTotalCount() const
@@ -1509,6 +1498,20 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
     moveTroops( false );
 }
 
+void Army::SwapTroops( Army & from )
+{
+    assert( this != &from );
+
+    // Heroes need to have at least one occupied slot in their army, so both armies should have at least one
+    // occupied slot, even if the exchange of armies takes place between a castle garrison and a hero.
+    assert( from.isValid() && isValid() );
+
+    const Troops temp = this->getTroops();
+
+    Assign( from );
+    from.Assign( temp );
+}
+
 uint32_t Army::ActionToSirens() const
 {
     uint32_t experience = 0;
@@ -1581,19 +1584,25 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
                                      const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
+
+    if ( count == 0 ) {
+        // There are no valid troops to render.
+        return;
+    }
+
     const int offsetX = lineWidth / 6;
     const int offsetY = isCompact ? 31 : 49;
 
-    fheroes2::Image & output = fheroes2::Display::instance();
-
     if ( count < 3 ) {
         fheroes2::drawMiniMonsters( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, isCompact, isDetailedView, isGarrisonView,
-                                    thievesGuildsCount, output );
+                                    thievesGuildsCount, fheroes2::Display::instance() );
     }
     else {
-        const int firstLineTroopCount = 2;
-        const int secondLineTroopCount = count - firstLineTroopCount;
-        const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
+        const uint32_t firstLineTroopCount = 2;
+        const uint32_t secondLineTroopCount = count - firstLineTroopCount;
+        const int32_t secondLineWidth = ( secondLineTroopCount == 2 ) ? lineWidth * 2 / 3 : lineWidth;
+
+        fheroes2::Image & output = fheroes2::Display::instance();
 
         fheroes2::drawMiniMonsters( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, isCompact, isDetailedView, isGarrisonView,
                                     thievesGuildsCount, output );
@@ -1604,6 +1613,12 @@ void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_
 
 NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop )
 {
+    if ( !troop.isValid() ) {
+        assert( 0 );
+
+        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
+    }
+
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
@@ -1614,8 +1629,9 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
             const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
 
-            if ( !isAlliance && !isCurse )
+            if ( !isAlliance && !isCurse ) {
                 continue;
+            }
 
             Monster monster( campaignAwards[i]._subType );
             while ( true ) {
@@ -1631,29 +1647,38 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                     }
                 }
 
-                // try to cycle through the creature's upgrades
-                if ( !monster.isAllowUpgrade() )
+                // Also check the upgraded variant(s) of the same monster
+                if ( !monster.isAllowUpgrade() ) {
                     break;
+                }
 
                 monster = monster.GetUpgrade();
             }
         }
     }
 
-    if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
-    if ( Maps::isMonsterOnTileJoinConditionSkip( tile ) || !troop.isValid() ) {
-        return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
-    }
-
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = Troops( hero.GetArmy().getTroops() ).GetStrength() / troop.GetStrength();
 
-    // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
-    // mandatory condition for their joining in accordance with the mechanics of the original game
-    if ( armyStrengthRatio > 2 && hero.GetArmy().CanJoinTroop( troop ) ) {
+    const bool canJoin = [&hero, &tile, &troop, armyStrengthRatio]() {
+        if ( armyStrengthRatio <= 2 ) {
+            return false;
+        }
+
+        // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a mandatory condition for their joining in accordance with the
+        // mechanics of the original game
+        if ( !hero.GetArmy().CanJoinTroop( troop ) ) {
+            return false;
+        }
+
+        if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
+            return false;
+        }
+
+        return !Maps::isMonsterOnTileJoinConditionSkip( tile );
+    }();
+
+    if ( canJoin ) {
         if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
@@ -1662,8 +1687,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             const uint32_t amountToJoin
                 = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            // The ability to hire the entire stack of monsters is a mandatory condition for their joining
-            // due to hero's Diplomacy skill in accordance with the mechanics of the original game
+            // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
+            // the mechanics of the original game
             if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
@@ -1671,7 +1696,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     }
 
     if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
-        // ... surely flee before us
+        // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 
@@ -1897,7 +1922,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         stacksCount = maximumTroopCount;
     }
     else {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+        Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
         stacksCount = Rand::GetWithGen( 3, 5, seededGen );
     }
@@ -1912,7 +1937,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         assert( troopToUpgrade != nullptr );
 
         if ( troopToUpgrade->isValid() && troopToUpgrade->isAllowUpgrade() ) {
-            std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
+            Rand::PCG32 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
 
             // 50% chance to get an upgraded stack
             if ( Rand::GetWithGen( 0, 1, seededGen ) == 1 ) {
@@ -1932,7 +1957,7 @@ OStreamBase & operator<<( OStreamBase & stream, const Army & army )
         stream << *troop;
     } );
 
-    return stream << army._isSpreadCombatFormation << army.color;
+    return stream << army._isSpreadCombatFormation << army._color;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Army & army )
@@ -1955,7 +1980,17 @@ IStreamBase & operator>>( IStreamBase & stream, Army & army )
         } );
     }
 
-    stream >> army._isSpreadCombatFormation >> army.color;
+    stream >> army._isSpreadCombatFormation;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        army._color = static_cast<PlayerColor>( temp );
+    }
+    else {
+        stream >> army._color;
+    }
 
     assert( std::all_of( army.begin(), army.end(), [&army]( const Troop * troop ) {
         const ArmyTroop * armyTroop = dynamic_cast<const ArmyTroop *>( troop );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,10 +32,10 @@
 #include <vector>
 
 #include "ai_common.h"
-#include "ai_hero_action.h"
 #include "ai_planner.h" // IWYU pragma: associated
 #include "ai_planner_internals.h"
 #include "army.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
@@ -43,6 +43,8 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mode.h"
+#include "game_over.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
@@ -55,6 +57,7 @@
 #include "mus.h"
 #include "players.h"
 #include "resource.h"
+#include "route.h"
 #include "skill.h"
 #include "spell.h"
 #include "world.h"
@@ -211,7 +214,7 @@ namespace
         }
     }
 
-    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tile & tile )
+    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const PlayerColor kingdomColor, const Maps::Tile & tile )
     {
         const MP2::MapObjectType object = tile.getMainObjectType();
         const int32_t tileIndex = tile.GetIndex();
@@ -247,7 +250,7 @@ namespace
             }
 
             // Neutral castles don't pose a threat because they can't hire heroes
-            if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
+            if ( castle->GetColor() == PlayerColor::NONE || castle->isFriends( kingdomColor ) ) {
                 return {};
             }
 
@@ -616,7 +619,7 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
     updatePriorityForEnemyArmy( kingdom, *enemyArmy );
 }
 
-void AI::Planner::KingdomTurn( Kingdom & kingdom )
+fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
 #if defined( WITH_DEBUG )
     class AIAutoControlModeCommitter
@@ -641,7 +644,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         AIAutoControlModeCommitter & operator=( const AIAutoControlModeCommitter & ) = delete;
 
     private:
-        const int _kingdomColor;
+        const PlayerColor _kingdomColor;
     };
 
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
@@ -657,11 +660,11 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     _regions.clear();
     _regions.resize( world.getRegionCount() );
 
-    const int myColor = kingdom.GetColor();
+    const PlayerColor myColor = kingdom.GetColor();
 
-    if ( kingdom.isLoss() || myColor == Color::NONE ) {
+    if ( kingdom.isLoss() || myColor == PlayerColor::NONE ) {
         kingdom.LossPostActions();
-        return;
+        return fheroes2::GameMode::END_TURN;
     }
 
     // Reset the turn progress indicator
@@ -676,12 +679,13 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
     DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )
 
-    // Step 1. Scan visible map (based on game difficulty), add goals and threats
-    bool underViewSpell = false;
+    // Scan visible map (based on game difficulty), add goals and threats
     int32_t availableHeroCount = 0;
     Heroes * bestHeroToViewAll = nullptr;
 
     for ( Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
         hero->ResetModes( Heroes::SLEEPER );
         hero->setDimensionDoorUsage( 0 );
 
@@ -689,14 +693,24 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             ++availableHeroCount;
         }
 
-        if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
+        if ( hero->CanCastSpell( Spell::VIEWALL ) && ( bestHeroToViewAll == nullptr || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
             bestHeroToViewAll = hero;
         }
     }
 
-    if ( bestHeroToViewAll && HeroesCastAdventureSpell( *bestHeroToViewAll, Spell::VIEWALL ) ) {
-        underViewSpell = true;
-    }
+    const bool isUnderViewSpell = [bestHeroToViewAll]() {
+        if ( bestHeroToViewAll == nullptr ) {
+            return false;
+        }
+
+        assert( bestHeroToViewAll->CanCastSpell( Spell::VIEWALL ) );
+
+        bestHeroToViewAll->SpellCasted( Spell::VIEWALL );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, bestHeroToViewAll->GetName() << " casts the View All spell" )
+
+        return true;
+    }();
 
     const int mapSize = world.w() * world.h();
 
@@ -711,7 +725,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
 
         RegionStats & stats = _regions[regionID];
-        if ( !underViewSpell && tile.isFog( myColor ) ) {
+        if ( !isUnderViewSpell && tile.isFog( myColor ) ) {
             continue;
         }
 
@@ -747,7 +761,7 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
             if ( castle->isFriends( myColor ) ) {
                 ++stats.friendlyCastles;
             }
-            else if ( castle->GetColor() != Color::NONE ) {
+            else if ( castle->GetColor() != PlayerColor::NONE ) {
                 ++stats.enemyCastles;
             }
         }
@@ -772,31 +786,61 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     updateKingdomBudget( kingdom );
 
-    uint32_t progressStatus = 1;
-    status.drawAITurnProgress( progressStatus );
+    uint32_t currentProgressValue = 1;
+    status.drawAITurnProgress( currentProgressValue );
+
+    // If there is a hero who is ready to dig up the Ultimate Artifact, then it is necessary to do this at the beginning of the turn
+    if ( const auto iter = std::find_if( heroes.begin(), heroes.end(),
+                                         []( const Heroes * hero ) {
+                                             assert( hero != nullptr );
+
+                                             const UltimateArtifact & art = world.GetUltimateArtifact();
+
+                                             return art.isPosition( hero->GetIndex() ) && isUltimateArtifactAvailableToHero( art, *hero );
+                                         } );
+         iter != heroes.end() ) {
+        Heroes * hero = *iter;
+        assert( hero != nullptr && !hero->isShipMaster() && hero->GetMovePoints() == hero->GetMaxMovePoints() && hero->GetPath().empty() );
+
+        hero->ResetMovePoints();
+
+        if ( !world.DiggingForUltimateArtifact( hero->GetCenter() ) || !hero->PickupArtifact( world.GetUltimateArtifact().GetArtifact() ) ) {
+            assert( 0 );
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero->GetName() << " dug up the Ultimate Artifact at tile " << hero->GetIndex() )
+
+        // If obtaining the Ultimate Artifact was a victory condition, the game ends
+        if ( const fheroes2::GameMode gameState = GameOver::Result::Get().checkGameOver(); gameState != fheroes2::GameMode::CANCEL ) {
+            return gameState;
+        }
+    }
 
     std::set<int> castlesInDanger;
     std::vector<AICastle> sortedCastleList;
 
     while ( true ) {
-        // Step 2. Do some hero stuff.
         // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
         for ( Heroes * hero : heroes ) {
+            assert( hero != nullptr );
+
             HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_NONE );
         }
 
-        // Step 3. Reassign heroes roles
         setHeroRoles( heroes, Game::getDifficulty() );
 
         castlesInDanger = findCastlesInDanger( kingdom );
         for ( Heroes * hero : heroes ) {
-            if ( castlesInDanger.find( hero->GetIndex() ) != castlesInDanger.end() ) {
-                // If a hero is in a castle and this castle is in danger then the hero is most likely not able to defeat
-                // a threatening enemy in an open field. Therefore let's make him stay in the castle.
-                // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
+            assert( hero != nullptr );
 
-                HeroesActionComplete( *hero, hero->GetIndex(), hero->getObjectTypeUnderHero() );
+            if ( castlesInDanger.find( hero->GetIndex() ) == castlesInDanger.end() ) {
+                continue;
             }
+
+            // If a hero is in a castle and this castle is in danger then the hero is most likely not able to defeat
+            // a threatening enemy in an open field. Therefore let's make him stay in the castle.
+            // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
+            HeroesActionComplete( *hero, hero->GetIndex(), hero->getObjectTypeUnderHero() );
         }
 
         sortedCastleList = getSortedCastleList( castles, castlesInDanger );
@@ -804,11 +848,14 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         // If AI has less than three heroes at the start of the turn we assume
         // that he will buy another one in this turn and allow progress to increase only for 2 points.
         uint32_t const endProgressValue
-            = ( progressStatus == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( progressStatus + 2U, 9U );
+            = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
 
-        bool moreTaskForHeroes = HeroesTurn( heroes, progressStatus, endProgressValue );
+        bool moreTaskForHeroes = false;
+        const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );
+        if ( gameState != fheroes2::GameMode::END_TURN ) {
+            return gameState;
+        }
 
-        // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
 
@@ -852,15 +899,19 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
         sortedCastleList = getSortedCastleList( castles, castlesInDanger );
     }
 
-    // Step 5. Castle development according to kingdom budget
+    // Perform the castle development
     for ( const AICastle & entry : sortedCastleList ) {
-        if ( entry.castle != nullptr ) {
-            CastleTurn( *entry.castle, entry.underThreat );
+        if ( entry.castle == nullptr ) {
+            continue;
         }
+
+        CastleTurn( *entry.castle, entry.underThreat );
     }
 
     // For heroes in castles or towns, transfer their slowest troops to the garrison at the end of the turn to try to get a movement bonus on the next turn
     for ( Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
         Castle * castle = hero->inCastleMutable();
         if ( castle == nullptr ) {
             continue;
@@ -870,6 +921,8 @@ void AI::Planner::KingdomTurn( Kingdom & kingdom )
     }
 
     status.resetAITurnProgress();
+
+    return fheroes2::GameMode::END_TURN;
 }
 
 bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,

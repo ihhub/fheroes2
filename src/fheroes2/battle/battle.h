@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_H
-#define H2BATTLE_H
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -43,21 +42,30 @@ namespace Battle
 
     struct Result
     {
-        uint32_t army1{ 0 };
-        uint32_t army2{ 0 };
-        uint32_t exp1{ 0 };
-        uint32_t exp2{ 0 };
-        uint32_t killed{ 0 };
+        uint32_t attacker{ 0 };
+        uint32_t defender{ 0 };
+        uint32_t attackerExperience{ 0 };
+        uint32_t defenderExperience{ 0 };
+        uint32_t numOfDeadUnitsForNecromancy{ 0 };
 
-        bool AttackerWins() const;
-        bool DefenderWins() const;
-        uint32_t AttackerResult() const;
-        uint32_t DefenderResult() const;
-        uint32_t GetExperienceAttacker() const;
-        uint32_t GetExperienceDefender() const;
+        bool isAttackerWin() const;
+        bool isDefenderWin() const;
+
+        uint32_t getAttackerResult() const;
+        uint32_t getDefenderResult() const;
+
+        uint32_t getAttackerExperience() const
+        {
+            return attackerExperience;
+        }
+
+        uint32_t getDefenderExperience() const
+        {
+            return defenderExperience;
+        }
     };
 
-    Result Loader( Army &, Army &, int32_t );
+    Result Loader( Army & attackingArmy, Army & defendingArmy, const int32_t tileIndex );
 
     struct TargetInfo
     {
@@ -80,7 +88,7 @@ namespace Battle
 
     enum MonsterState : uint32_t
     {
-        TR_RESPONDED = 0x00000001,
+        TR_RETALIATED = 0x00000001,
         TR_MOVED = 0x00000002,
         TR_SKIP = 0x00000004,
 
@@ -139,5 +147,3 @@ namespace Battle
         BOTTOM_BRIDGE_TOWER = 10
     };
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -197,6 +197,23 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
     return ( skill == POWER || skill == KNOWLEDGE ) ? 1 : 0;
 }
 
+std::pair<int, int> Skill::Primary::getSkillValueRange( const int skill )
+{
+    switch ( skill ) {
+    case ATTACK:
+    case DEFENSE:
+        return { 0, 99 };
+    case POWER:
+    case KNOWLEDGE:
+        return { 1, 99 };
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return { 0, 0 };
+}
+
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
     const FactionProperties * ptr = GameStatic::GetFactionProperties( race );
@@ -385,62 +402,6 @@ void Skill::Secondary::NextLevel()
 bool Skill::Secondary::isValid() const
 {
     return Skill() != UNKNOWN && Level() != Level::NONE;
-}
-
-int Skill::Secondary::RandForWitchsHut()
-{
-    const Skill::SecondarySkillValues * ptr = GameStatic::GetSecondarySkillValuesForWitchsHut();
-    if ( ptr == nullptr ) {
-        return UNKNOWN;
-    }
-
-    std::vector<int> v;
-    v.reserve( 14 );
-
-    if ( ptr->archery ) {
-        v.push_back( ARCHERY );
-    }
-    if ( ptr->ballistics ) {
-        v.push_back( BALLISTICS );
-    }
-    if ( ptr->diplomacy ) {
-        v.push_back( DIPLOMACY );
-    }
-    if ( ptr->eagleeye ) {
-        v.push_back( EAGLE_EYE );
-    }
-    if ( ptr->estates ) {
-        v.push_back( ESTATES );
-    }
-    if ( ptr->leadership ) {
-        v.push_back( LEADERSHIP );
-    }
-    if ( ptr->logistics ) {
-        v.push_back( LOGISTICS );
-    }
-    if ( ptr->luck ) {
-        v.push_back( LUCK );
-    }
-    if ( ptr->mysticism ) {
-        v.push_back( MYSTICISM );
-    }
-    if ( ptr->navigation ) {
-        v.push_back( NAVIGATION );
-    }
-    if ( ptr->necromancy ) {
-        v.push_back( NECROMANCY );
-    }
-    if ( ptr->pathfinding ) {
-        v.push_back( PATHFINDING );
-    }
-    if ( ptr->scouting ) {
-        v.push_back( SCOUTING );
-    }
-    if ( ptr->wisdom ) {
-        v.push_back( WISDOM );
-    }
-
-    return v.empty() ? UNKNOWN : Rand::Get( v );
 }
 
 int Skill::Secondary::GetIndexSprite1() const
@@ -888,30 +849,34 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
     return result;
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
+int Skill::getLeadershipModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
+int Skill::getLuckModifiers( int level, std::string * strs )
 {
     Secondary skill( Secondary::LUCK, level );
 
-    if ( skill.GetValue() && strs ) {
+    const int skillValue = static_cast<int>( skill.GetValue() );
+
+    if ( skillValue != 0 && strs ) {
         strs->append( skill.GetName() );
-        fheroes2::appendModifierToString( *strs, skill.GetValue() );
+        fheroes2::appendModifierToString( *strs, skillValue );
         strs->append( "\n" );
     }
 
-    return skill.GetValue();
+    return skillValue;
 }
 
 uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -114,23 +114,6 @@ namespace
         { "estates", { 100, 250, 500 } },
         { nullptr, { 0, 0, 0 } },
     } };
-
-    const Skill::SecondarySkillValues secondarySkillValuesForWitchsHut = {
-        1, // archery
-        1, // ballistics
-        1, // diplomacy
-        1, // eagleeye
-        1, // estates
-        0, // leadership
-        1, // logistics
-        1, // luck
-        1, // mysticism
-        1, // navigation
-        0, // necromancy
-        1, // pathfinding
-        1, // scouting
-        1 // wisdom
-    };
 }
 
 uint32_t GameStatic::GetLostOnWhirlpoolPercent()
@@ -138,7 +121,7 @@ uint32_t GameStatic::GetLostOnWhirlpoolPercent()
     return 50;
 }
 
-uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
+int32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
 {
     switch ( type ) {
     case FogDiscoveryType::CASTLE:
@@ -146,7 +129,7 @@ uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
     case FogDiscoveryType::HEROES:
         return 4;
     case FogDiscoveryType::OBSERVATION_TOWER:
-        return 20;
+        return 19;
     case FogDiscoveryType::MAGI_EYES:
         return 9;
     default:
@@ -191,25 +174,39 @@ uint32_t GameStatic::GetCastleGrownMonthOf()
     return 100;
 }
 
-int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
+int32_t GameStatic::getObjectLuckEffect( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_MERMAID:
+        return 1;
+    case MP2::OBJ_BLACK_CAT:
+    case MP2::OBJ_PYRAMID:
+        return -2;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+int32_t GameStatic::getObjectMoraleEffect( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
     case MP2::OBJ_OASIS:
     case MP2::OBJ_WATERING_HOLE:
-    case MP2::OBJ_MERMAID:
-    case MP2::OBJ_FAERIE_RING:
-    case MP2::OBJ_FOUNTAIN:
-    case MP2::OBJ_IDOL:
         return 1;
     case MP2::OBJ_TEMPLE:
         return 2;
-    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_BLACK_CAT:
+        return 3;
     case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SHIPWRECK:
         return -1;
-    case MP2::OBJ_PYRAMID:
-        return -2;
     default:
         break;
     }
@@ -277,9 +274,14 @@ const Skill::SecondarySkillValuesPerLevel * GameStatic::GetSecondarySkillValuesP
     return nullptr;
 }
 
-const Skill::SecondarySkillValues * GameStatic::GetSecondarySkillValuesForWitchsHut()
+const std::vector<int32_t> & GameStatic::getSecondarySkillsForWitchsHut()
 {
-    return &secondarySkillValuesForWitchsHut;
+    // Every skill except Leadership and Necromancy.
+    static const std::vector<int32_t> skills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS, Skill::Secondary::SCOUTING,
+                                              Skill::Secondary::DIPLOMACY,   Skill::Secondary::NAVIGATION, Skill::Secondary::WISDOM,    Skill::Secondary::MYSTICISM,
+                                              Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE, Skill::Secondary::ESTATES };
+
+    return skills;
 }
 
 int GameStatic::GetBattleMoatReduceDefense()

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cstddef>
+#include <initializer_list>
 
 #include "serialize.h"
 #include "zzlib.h"
@@ -57,8 +58,11 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const AdventureMapEventMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, AdventureMapEventMetadata & metadata );
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata );
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata );
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata );
 }
 
 namespace
@@ -72,7 +76,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 6 };
+    constexpr uint16_t currentSupportedVersion{ 9 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -178,11 +182,48 @@ namespace
         }
     }
 
+    void convertFromV6ToV7( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 6, "Remove this function." );
+
+        if ( map.version > 6 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 38 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 1 position "down" to add new Stone Liths object.
+                    objInfo.index += 1;
+                }
+            }
+        }
+    }
+
+    void convertFromV7ToV8( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 7, "Remove this function." );
+
+        if ( map.version > 7 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && objInfo.index >= 43 ) {
+                    // Shift the objects in the Adventure Miscellaneous group by 3 position "down" to add new Observation Tower variants.
+                    objInfo.index += 3;
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
-               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.size << map.mainLanguage << map.name << map.description;
+               << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.width << map.mainLanguage << map.name << map.description
+               << map.creatorNotes;
 
         return !stream.fail();
     }
@@ -196,14 +237,21 @@ namespace
 
         stream >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances >> map.playerRace
             >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossConditionType
-            >> map.lossConditionMetadata >> map.size;
+            >> map.lossConditionMetadata >> map.width;
 
-        if ( map.size <= 0 ) {
+        if ( map.width <= 0 ) {
             // This is not a correct map size.
             return false;
         }
 
         stream >> map.mainLanguage >> map.name >> map.description;
+
+        if ( map.version < 9 ) {
+            map.creatorNotes = {};
+        }
+        else {
+            stream >> map.creatorNotes;
+        }
 
         return !stream.fail();
     }
@@ -220,7 +268,7 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.shrineMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -263,18 +311,25 @@ namespace
 
         decompressed >> map.additionalInfo >> map.tiles;
 
-        if ( map.tiles.size() != static_cast<size_t>( map.size ) * map.size ) {
+        if ( map.tiles.size() != static_cast<size_t>( map.width ) * map.width ) {
             map = {};
             return false;
         }
 
         decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.shrineMetadata;
+            >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
+
+        static_assert( minimumSupportedVersion <= 8, "Remove this check." );
+        if ( map.version > 8 ) {
+            decompressed >> map.capturableObjectsMetadata;
+        }
 
         convertFromV2ToV3( map );
         convertFromV3ToV4( map );
         convertFromV4ToV5( map );
         convertFromV5ToV6( map );
+        convertFromV6ToV7( map );
+        convertFromV7ToV8( map );
 
         return !stream.fail();
     }
@@ -294,12 +349,12 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const TileInfo & tile )
     {
-        return stream << tile.terrainIndex << tile.terrainFlag << tile.objects;
+        return stream << tile.terrainIndex << tile.terrainFlags << tile.objects;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, TileInfo & tile )
     {
-        return stream >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
+        return stream >> tile.terrainIndex >> tile.terrainFlags >> tile.objects;
     }
 
     OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo )
@@ -386,14 +441,24 @@ namespace Maps::Map_Format
                >> metadata.experience >> metadata.secondarySkill >> metadata.secondarySkillLevel >> metadata.monsterType >> metadata.monsterCount;
     }
 
-    OStreamBase & operator<<( OStreamBase & stream, const ShrineMetadata & metadata )
+    OStreamBase & operator<<( OStreamBase & stream, const SelectionObjectMetadata & metadata )
     {
-        return stream << metadata.allowedSpells;
+        return stream << metadata.selectedItems;
     }
 
-    IStreamBase & operator>>( IStreamBase & stream, ShrineMetadata & metadata )
+    IStreamBase & operator>>( IStreamBase & stream, SelectionObjectMetadata & metadata )
     {
-        return stream >> metadata.allowedSpells;
+        return stream >> metadata.selectedItems;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectMetadata & metadata )
+    {
+        return stream << metadata.ownerColor;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata )
+    {
+        return stream >> metadata.ownerColor;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

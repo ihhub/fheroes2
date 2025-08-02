@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -120,7 +120,7 @@ void Interface::StatusPanel::_redraw() const
     else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
         _drawDayInfo();
 
-        if ( conf.CurrentColor() & Players::HumanColors() ) {
+        if ( Players::HumanColors() & conf.CurrentColor() ) {
             _drawKingdomInfo( stonHeight + 5 );
 
             if ( _state != StatusType::STATUS_RESOURCE ) {
@@ -317,18 +317,18 @@ void Interface::StatusPanel::_drawResourceInfo( const int32_t offsetY ) const
 
 void Interface::StatusPanel::_drawArmyInfo( const int32_t offsetY ) const
 {
-    const Army * armies = nullptr;
+    const Army * armyTroops = nullptr;
 
-    if ( GetFocusHeroes() ) {
-        armies = &GetFocusHeroes()->GetArmy();
+    if ( const Heroes * focusedHero = GetFocusHeroes(); focusedHero != nullptr ) {
+        armyTroops = &focusedHero->GetArmy();
     }
-    else if ( GetFocusCastle() ) {
-        armies = &GetFocusCastle()->GetArmy();
+    else if ( const Castle * focusedCastle = GetFocusCastle(); focusedCastle != nullptr ) {
+        armyTroops = &focusedCastle->GetArmy();
     }
 
-    if ( armies ) {
+    if ( armyTroops ) {
         const fheroes2::Rect & pos = GetArea();
-        Army::drawMultipleMonsterLines( *armies, pos.x + 4, pos.y + 1 + offsetY, 138, true, true );
+        Army::drawMultipleMonsterLines( *armyTroops, pos.x + 4, pos.y + 1 + offsetY, 138, true, true );
     }
 }
 
@@ -350,21 +350,21 @@ void Interface::StatusPanel::_drawAITurns() const
     uint32_t colorIndex = 0;
 
     switch ( Settings::Get().CurrentColor() ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         break;
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         colorIndex = 1;
         break;
-    case Color::RED:
+    case PlayerColor::RED:
         colorIndex = 2;
         break;
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         colorIndex = 3;
         break;
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         colorIndex = 4;
         break;
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         colorIndex = 5;
         break;
     default:
@@ -489,15 +489,17 @@ void Interface::StatusPanel::TimerEventProcessing()
 
 void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
 {
+    // Even if there is no need to draw anything, we still need to pump the event queue to
+    // update the position of the software-emulated mouse cursor, feed the music player by
+    // another music chunk on some platforms (e.g. WebAssembly), etc.
+    LocalEvent::Get().HandleEvents( false );
+
     const bool updateProgress = ( progressValue != _aiTurnProgress );
     const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );
 
     if ( !updateProgress && !isMapAnimation ) {
         return;
     }
-
-    // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
-    LocalEvent::Get().HandleEvents( false );
 
     if ( updateProgress ) {
         if ( progressValue == 0 ) {

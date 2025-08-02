@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,12 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAME_H
-#define H2GAME_H
+#pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
 class Players;
@@ -59,16 +60,12 @@ namespace Game
     fheroes2::GameMode LoadGame();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
-    fheroes2::GameMode CampaignSelection();
+    fheroes2::GameMode NewHotSeat( const size_t playerCountOptionIndex );
     fheroes2::GameMode NewSuccessionWarsCampaign();
     fheroes2::GameMode NewPriceOfLoyaltyCampaign();
-    fheroes2::GameMode NewMulti();
-    fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
-    fheroes2::GameMode NewNetwork(); // To be utilized in future.
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
-    fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
     fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario( const uint8_t humanPlayerCount );
@@ -94,9 +91,9 @@ namespace Game
     // If display fade-in state is set reset it to false and return true. Otherwise return false.
     bool validateDisplayFadeIn();
 
-    int GetKingdomColors();
-    int GetActualKingdomColors();
-    void DialogPlayers( int color, std::string title, std::string message );
+    PlayerColorsSet GetKingdomColors();
+    PlayerColorsSet GetActualKingdomColors();
+    void DialogPlayers( const PlayerColor color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
     void updateAdventureMapAnimationIndex();
@@ -105,7 +102,6 @@ namespace Game
     uint32_t getGameOverScoreFactor();
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
-    uint8_t SelectCountPlayers();
 
     void PlayPickupSound();
 
@@ -128,5 +124,3 @@ namespace Game
     // (unless the abbreviated number is requested), otherwise, a qualitative estimate is returned (Few, Several, etc).
     std::string formatMonsterCount( const uint32_t count, const bool isDetailedView, const bool abbreviateNumber = false );
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -92,7 +92,7 @@ namespace
 
 const char * Artifact::GetName() const
 {
-    return _( fheroes2::getArtifactData( id ).name );
+    return _( fheroes2::getArtifactData( id ).untranslatedName );
 }
 
 bool Artifact::isUltimate() const
@@ -389,26 +389,24 @@ void Artifact::SetSpell( const int v )
         return;
     }
 
-    const bool adv = Rand::Get( 1 ) != 0;
-
     switch ( v ) {
     case Spell::RANDOM:
-        ext = Spell::Rand( Rand::Get( 1, 5 ), adv ).GetID();
+        ext = Spell::getRandomSpell( static_cast<int>( Rand::Get( 1, 5 ) ) ).GetID();
         break;
     case Spell::RANDOM1:
-        ext = Spell::Rand( 1, adv ).GetID();
+        ext = Spell::getRandomSpell( 1 ).GetID();
         break;
     case Spell::RANDOM2:
-        ext = Spell::Rand( 2, adv ).GetID();
+        ext = Spell::getRandomSpell( 2 ).GetID();
         break;
     case Spell::RANDOM3:
-        ext = Spell::Rand( 3, adv ).GetID();
+        ext = Spell::getRandomSpell( 3 ).GetID();
         break;
     case Spell::RANDOM4:
-        ext = Spell::Rand( 4, adv ).GetID();
+        ext = Spell::getRandomSpell( 4 ).GetID();
         break;
     case Spell::RANDOM5:
-        ext = Spell::Rand( 5, adv ).GetID();
+        ext = Spell::getRandomSpell( 5 ).GetID();
         break;
     default:
         ext = v;
@@ -503,7 +501,7 @@ Artifact Artifact::getArtifactFromMapSpriteIndex( const uint32_t index )
 
 const char * Artifact::getDiscoveryDescription( const Artifact & art )
 {
-    return _( fheroes2::getArtifactData( art.GetID() ).discoveryEventDescription );
+    return _( fheroes2::getArtifactData( art.GetID() ).untranslatedDiscoveryEventDescription );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Artifact & art )

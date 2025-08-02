@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -77,12 +77,12 @@ namespace
     struct SelectRecipientsColors
     {
         static constexpr int recipientSpacing = 22;
-        const Colors colors;
-        int recipients{ 0 };
+        const PlayerColorsVector colors;
+        PlayerColorsSet recipients{ 0 };
         std::vector<fheroes2::Rect> positions;
 
-        SelectRecipientsColors( const fheroes2::Point & pos, int senderColor )
-            : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
+        SelectRecipientsColors( const fheroes2::Point & pos, PlayerColor senderColor )
+            : colors( Settings::Get().GetPlayers().GetActualColors() & ( ~senderColor ) )
         {
             positions.reserve( colors.size() );
             const fheroes2::Display & display = fheroes2::Display::instance();
@@ -108,12 +108,13 @@ namespace
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
+            for ( PlayerColorsVector::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
                 const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
-                if ( recipients & *it )
+                if ( recipients & *it ) {
                     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
+                }
             }
         }
 
@@ -122,12 +123,14 @@ namespace
             const int32_t index = GetIndexClick();
 
             if ( index >= 0 ) {
-                const int cols = colors[index];
+                const PlayerColor color = colors[index];
 
-                if ( recipients & cols )
-                    recipients &= ~cols;
-                else
-                    recipients |= cols;
+                if ( recipients & color ) {
+                    recipients &= ~color;
+                }
+                else {
+                    recipients |= color;
+                }
 
                 return true;
             }
@@ -201,8 +204,8 @@ namespace
                     fheroes2::showStandardTextMessage( {}, std::move( msg ), Dialog::OK );
                 }
                 else {
-                    std::string msg = _( "Select count %{resource}:" );
-                    StringReplace( msg, "%{resource}", Resource::String( rs ) );
+                    std::string msg = _( "Set %{resource-type} Count" );
+                    StringReplace( msg, "%{resource-type}", Resource::String( rs ) );
 
                     if ( Dialog::SelectCount( std::move( msg ), 0, max, sel, step ) && cur != sel ) {
                         int32_t * from = funds.GetPtr( rs );

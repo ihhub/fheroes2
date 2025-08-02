@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -91,7 +91,7 @@ namespace
             const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
             const int tradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD;
-            const int giftButtonIcnID = isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD;
+            const int giftButtonIcnID = isEvilInterface ? ICN::BUTTON_GIFT_EVIL : ICN::BUTTON_GIFT_GOOD;
 
             buttonGift.setICNInfo( giftButtonIcnID, 0, 1 );
             buttonTrade.setICNInfo( tradeButtonIcnID, 0, 1 );
@@ -446,19 +446,19 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonGift.isEnabled() ) {
-            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGift.area() ) );
+            buttonGift.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonGift.area() ) );
         }
         if ( buttonTrade.isEnabled() ) {
-            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) );
+            buttonTrade.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonTrade.area() ) );
         }
         if ( buttonLeft.isEnabled() ) {
-            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) );
+            buttonLeft.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLeft.area() ) );
         }
         if ( buttonRight.isEnabled() ) {
-            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRight.area() ) );
+            buttonRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRight.area() ) );
         }
 
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;

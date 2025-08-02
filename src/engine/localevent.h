@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -21,8 +21,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2LOCALEVENT_H
-#define H2LOCALEVENT_H
+
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -55,6 +55,7 @@ namespace fheroes2
         KEY_DOLLAR,
         KEY_AMPERSAND,
         KEY_QUOTE,
+        KEY_BACKQUOTE,
         KEY_LEFT_PARENTHESIS,
         KEY_RIGHT_PARENTHESIS,
         KEY_ASTERISK,
@@ -258,6 +259,11 @@ public:
         return isMouseLeftButtonPressed() && ( area & _mousePressLeftPos );
     }
 
+    bool isMouseLeftButtonPressedAndHeldInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseLeftButtonPressedInArea( area ) && isMouseCursorPosInArea( area );
+    }
+
     bool isMouseRightButtonPressed() const
     {
         return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_RIGHT;
@@ -327,9 +333,11 @@ public:
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
-        if ( newSpeed > 0 ) {
-            _controllerPointerSpeed = newSpeed / _constrollerSpeedModifier;
+        if ( newSpeed <= 0 ) {
+            return;
         }
+
+        _controllerPointerSpeed = newSpeed / _controllerSpeedModifier;
     }
 
     bool isDragInProgress() const
@@ -472,8 +480,8 @@ private:
     fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more usable ones
-    const double _constrollerSpeedModifier{ 2000000.0 };
-    double _controllerPointerSpeed{ 10.0 / _constrollerSpeedModifier };
+    const double _controllerSpeedModifier{ 2000000.0 };
+    double _controllerPointerSpeed{ 10.0 / _controllerSpeedModifier };
     fheroes2::PointBase2D<double> _emulatedPointerPos;
 
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values
@@ -519,5 +527,3 @@ private:
         _actionStates &= ~states;
     }
 };
-
-#endif

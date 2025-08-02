@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,38 +126,22 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dialogRoi.x, pos.y + heroDescriptionText.height( fheroes2::boxAreaWidthPx ) + spacer );
     rbs.Redraw();
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
-    fheroes2::Button buttonOkay( dialogRoi.x, pos.y, okayButtonIcnID, 0, 1 );
+    fheroes2::ButtonGroup buttonGroup( dialogRoi, Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonBase & buttonOkay = buttonGroup.button( 0 );
+    const fheroes2::ButtonBase & buttonCancel = buttonGroup.button( 1 );
 
     if ( !AllowBuyHero() ) {
         buttonOkay.disable();
     }
 
-    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-
-    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
-    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
-    fheroes2::Button buttonCancel( pos.x, pos.y, cancelButtonIcnID, 0, 1 );
-
-    buttonOkay.draw();
-    buttonCancel.draw();
-
+    buttonGroup.draw();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonOkay.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOkay.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-
-        if ( buttonOkay.isEnabled() && ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
-            return Dialog::OK;
-        }
-
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            break;
+        const int result = buttonGroup.processEvents();
+        if ( result != Dialog::ZERO ) {
+            return result;
         }
 
         if ( le.isMouseRightButtonPressedInArea( heroPortraitArea ) ) {
@@ -432,11 +416,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait;
-        noHeroPortrait._disableTransformLayer();
-        noHeroPortrait.resize( rectHero1.width, rectHero1.height );
-        noHeroPortrait.fill( 0 );
-        fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
+        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
     }
 
     // indicator
@@ -453,11 +434,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait;
-        noHeroPortrait._disableTransformLayer();
-        noHeroPortrait.resize( rectHero2.width, rectHero2.height );
-        noHeroPortrait.fill( 0 );
-        fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
+        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
     }
 
     // indicator
@@ -479,7 +457,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, statusBarWidth - 16 * 2, 0 } );
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, statusBarWidth - 16 * 2, 0 } );
 
     // button next castle
     fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );
@@ -518,21 +496,21 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
         if ( buttonPrevCastle.isEnabled() ) {
-            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) );
+            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevCastle.area() ) );
 
             if ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::PrevConstructionWindow;
             }
         }
         if ( buttonNextCastle.isEnabled() ) {
-            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) );
+            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextCastle.area() ) );
 
             if ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
                 return ConstructionDialogResult::NextConstructionWindow;

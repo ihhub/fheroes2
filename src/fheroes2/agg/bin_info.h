@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BIN_FRM_H
-#define H2BIN_FRM_H
+#pragma once
 
 #include <algorithm>
 #include <cstddef>
@@ -71,26 +70,30 @@ namespace Bin_Info
         };
 
         std::vector<std::vector<int>> frameXOffset;
-        uint32_t moveSpeed;
-        uint32_t shootSpeed;
-        uint32_t flightSpeed;
+        uint32_t moveSpeed{ 450 };
+        uint32_t shootSpeed{ 0 };
+        uint32_t flightSpeed{ 0 };
         fheroes2::Point eyePosition;
-        int32_t troopCountOffsetLeft;
-        int32_t troopCountOffsetRight;
+        int32_t troopCountOffsetLeft{ 0 };
+        int32_t troopCountOffsetRight{ 0 };
         std::vector<fheroes2::Point> projectileOffset;
         std::vector<float> projectileAngles;
         std::vector<float> idlePriority;
         std::vector<uint32_t> unusedIdleDelays;
-        uint32_t idleAnimationCount;
-        uint32_t idleAnimationDelay;
+        uint32_t idleAnimationCount{ 0 };
+        uint32_t idleAnimationDelay{ 0 };
         std::vector<std::vector<int>> animationFrames;
 
-        MonsterAnimInfo( int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
-        bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
+        MonsterAnimInfo( const int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
+
+        bool hasAnim( const size_t animID = MonsterAnimInfo::STATIC ) const
+        {
+            return ( animationFrames.size() > animID ) && !animationFrames[animID].empty();
+        }
+
         bool isValid() const;
         size_t getProjectileID( const double angle ) const;
     };
 
-    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID );
+    MonsterAnimInfo GetMonsterInfo( const uint32_t monsterID );
 }
-#endif

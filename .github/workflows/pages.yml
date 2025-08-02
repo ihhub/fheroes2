@@ -1,0 +1,58 @@
+name: Build and deploy website
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write # To verify the deployment originates from an appropriate source
+  pages: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build website
+    if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Prepare directory structure
+        run: |
+          mkdir -p .pages/dist/play-online
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: docs
+          destination: .pages/dist
+      - name: Download and extract Emscripten release
+        run: |
+          gh release download fheroes2-emscripten-sdl2_dev -D .pages
+          unzip .pages/fheroes2_emscripten.zip -d .pages/dist/play-online
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .pages/dist
+  deploy:
+    name: Deploy website
+    if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4

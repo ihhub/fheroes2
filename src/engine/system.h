@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SYSTEM_H
-#define H2SYSTEM_H
+#pragma once
 
 #include <ctime>
 #include <filesystem>
@@ -33,6 +32,9 @@
 namespace System
 {
     bool isHandheldDevice();
+
+    // Returns true if the target platform supports touch input, otherwise returns false.
+    bool isTouchInputAvailable();
 
     bool isVirtualKeyboardSupported();
 
@@ -85,5 +87,3 @@ namespace System
 
     tm GetTM( const time_t time );
 }
-
-#endif

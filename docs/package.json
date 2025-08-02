@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "prettier": "3.5.3",
+    "markdownlint-cli2": "^0.17.2"
+  },
+  "scripts": {
+    "format-html-css": "prettier --write **/*.{html,scss}",
+    "format-js": "find . -name \"*.js\" -exec clang-format -i {} \\;",
+    "lint-md": "npx markdownlint-cli2 --no-globs --config ../.markdownlint-cli2.jsonc",
+    "format-md": "npx markdownlint-cli2 --fix --no-globs --config ../.markdownlint-cli2.jsonc"
+  }
+}

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <optional>
 #include <sstream>
 
 #include "agg_image.h"
@@ -96,41 +97,15 @@ namespace
     }
 }
 
-Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
-    : std::pair<uint32_t, uint32_t>( mode, duration )
-{}
-
-bool Battle::ModeDuration::isMode( uint32_t mode ) const
+uint32_t Battle::ModesAffected::GetMode( const uint32_t mode ) const
 {
-    return ( first & mode ) != 0;
-}
-
-bool Battle::ModeDuration::isZeroDuration() const
-{
-    return 0 == second;
-}
-
-void Battle::ModeDuration::DecreaseDuration()
-{
-    if ( second ) {
-        --second;
-    }
-}
-
-Battle::ModesAffected::ModesAffected()
-{
-    reserve( 3 );
-}
-
-uint32_t Battle::ModesAffected::GetMode( uint32_t mode ) const
-{
-    const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
+    const const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     return it == end() ? 0 : it->second;
 }
 
-void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
+void Battle::ModesAffected::AddMode( const uint32_t mode, const uint32_t duration )
 {
-    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
+    const iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it == end() ) {
         emplace_back( mode, duration );
     }
@@ -139,7 +114,7 @@ void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
     }
 }
 
-void Battle::ModesAffected::RemoveMode( uint32_t mode )
+void Battle::ModesAffected::RemoveMode( const uint32_t mode )
 {
     erase( std::remove_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } ), end() );
 }
@@ -151,44 +126,40 @@ void Battle::ModesAffected::DecreaseDuration()
 
 uint32_t Battle::ModesAffected::FindZeroDuration() const
 {
-    const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
+    const const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool ref, const uint32_t uid )
+Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool isReflected, const uint32_t uid )
     : ArmyTroop( nullptr, troop )
     , animation( id )
     , _uid( uid )
-    , hp( troop.GetHitPoints() )
+    , _hitPoints( troop.GetHitPoints() )
     , _initialCount( troop.GetCount() )
-    , dead( 0 )
-    , shots( troop.GetShots() )
-    , _disruptingRaysNum( 0 )
-    , reflect( ref )
-    , mirror( nullptr )
-    , idleTimer( animation.getIdleDelay() )
-    , _blindRetaliation( false )
-    , customAlphaMask( 255 )
+    , _maxCount( troop.GetCount() )
+    , _shotsLeft( troop.GetShots() )
+    , _idleTimer( animation.getIdleDelay() )
+    , _isReflected( isReflected )
 {
     SetPosition( pos );
 }
 
-void Battle::Unit::SetPosition( const int32_t idx )
+void Battle::Unit::SetPosition( const int32_t index )
 {
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( nullptr );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( nullptr );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( nullptr );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( nullptr );
     }
 
-    position.Set( idx, isWide(), reflect );
+    _position.Set( index, isWide(), _isReflected );
 
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( this );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( this );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( this );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( this );
     }
 }
 
@@ -197,33 +168,34 @@ void Battle::Unit::SetPosition( const Position & pos )
     // Position may be empty if this unit is a castle tower
     assert( pos.isValidForUnit( this ) || pos.isEmpty() );
 
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( nullptr );
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( nullptr );
     }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( nullptr );
-    }
-
-    position = pos;
-
-    if ( position.GetHead() ) {
-        position.GetHead()->SetUnit( this );
-    }
-    if ( position.GetTail() ) {
-        position.GetTail()->SetUnit( this );
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( nullptr );
     }
 
-    if ( isWide() && position.GetHead() && position.GetTail() ) {
-        reflect = GetHeadIndex() < GetTailIndex();
+    _position = pos;
+
+    if ( _position.GetHead() ) {
+        _position.GetHead()->SetUnit( this );
+    }
+    if ( _position.GetTail() ) {
+        _position.GetTail()->SetUnit( this );
+    }
+
+    if ( isWide() && _position.GetHead() && _position.GetTail() ) {
+        _isReflected = GetHeadIndex() < GetTailIndex();
     }
 }
 
-void Battle::Unit::SetReflection( bool r )
+void Battle::Unit::SetReflection( const bool isReflected )
 {
-    if ( reflect != r )
-        position.Swap();
+    if ( _isReflected != isReflected ) {
+        _position.Swap();
 
-    reflect = r;
+        _isReflected = isReflected;
+    }
 }
 
 void Battle::Unit::UpdateDirection()
@@ -231,17 +203,21 @@ void Battle::Unit::UpdateDirection()
     const Arena * arena = GetArena();
     assert( arena != nullptr );
 
-    SetReflection( arena->GetArmy1Color() != GetArmyColor() );
+    SetReflection( arena->getAttackingArmyColor() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
 {
-    bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
+    if ( _position.GetRect().x == pos.x ) {
+        return false;
+    }
 
-    if ( need != reflect ) {
-        SetReflection( need );
+    const bool isReflected = _position.GetRect().x > pos.x;
+    if ( isReflected != _isReflected ) {
+        SetReflection( isReflected );
         return true;
     }
+
     return false;
 }
 
@@ -250,15 +226,16 @@ bool Battle::Unit::isBattle() const
     return true;
 }
 
-bool Battle::Unit::isModes( uint32_t v ) const
+bool Battle::Unit::isModes( const uint32_t modes_ ) const
 {
-    return Modes( v );
+    return Modes( modes_ );
 }
 
 std::string Battle::Unit::GetShotString() const
 {
-    if ( Troop::GetShots() == GetShots() )
+    if ( Troop::GetShots() == GetShots() ) {
         return std::to_string( Troop::GetShots() );
+    }
 
     std::string output( std::to_string( Troop::GetShots() ) );
     output += " (";
@@ -274,16 +251,6 @@ std::string Battle::Unit::GetSpeedString() const
     return Troop::GetSpeedString( speed );
 }
 
-uint32_t Battle::Unit::GetInitialCount() const
-{
-    return _initialCount;
-}
-
-uint32_t Battle::Unit::GetDead() const
-{
-    return dead;
-}
-
 uint32_t Battle::Unit::GetHitPointsLeft() const
 {
     return GetHitPoints() - ( GetCount() - 1 ) * Monster::GetHitPoints();
@@ -291,14 +258,14 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
-    assert( totalHitPoints > hp );
-    return totalHitPoints - hp;
+    const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
+    assert( totalHitPoints > _hitPoints );
+    return totalHitPoints - _hitPoints;
 }
 
-uint32_t Battle::Unit::GetAffectedDuration( uint32_t mod ) const
+uint32_t Battle::Unit::GetAffectedDuration( const uint32_t mode ) const
 {
-    return affected.GetMode( mod );
+    return _affected.GetMode( mode );
 }
 
 uint32_t Battle::Unit::GetSpeed() const
@@ -323,36 +290,33 @@ int Battle::Unit::GetMorale() const
 
 int32_t Battle::Unit::GetHeadIndex() const
 {
-    return position.GetHead() ? position.GetHead()->GetIndex() : -1;
+    return _position.GetHead() ? _position.GetHead()->GetIndex() : -1;
 }
 
 int32_t Battle::Unit::GetTailIndex() const
 {
-    return position.GetTail() ? position.GetTail()->GetIndex() : -1;
+    return _position.GetTail() ? _position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomMorale( Rand::PCG32 & randomGenerator )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int>( Rand::GetWithGen( 1, 24, randomGenerator ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
-        if ( isControlHuman() ) {
-            SetModes( MORALE_BAD );
-        }
+    else if ( morale < 0 && static_cast<int>( Rand::GetWithGen( 1, 12, randomGenerator ) ) <= -morale ) {
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( randomGenerator.Get( 1, 4 ) != 1 ) {
+        if ( isControlHuman() || ( Rand::GetWithGen( 1, 4, randomGenerator ) != 1 ) ) {
             SetModes( MORALE_BAD );
         }
     }
 }
 
-void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomLuck( Rand::PCG32 & randomGenerator )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( Rand::GetWithGen( 1, 24, randomGenerator ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -423,10 +387,10 @@ bool Battle::Unit::isIdling() const
 void Battle::Unit::NewTurn()
 {
     if ( isRegenerating() ) {
-        hp = ArmyTroop::GetHitPoints();
+        _hitPoints = ArmyTroop::GetHitPoints();
     }
 
-    ResetModes( TR_RESPONDED );
+    ResetModes( TR_RETALIATED );
     ResetModes( TR_MOVED );
     ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
@@ -434,22 +398,22 @@ void Battle::Unit::NewTurn()
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
 
-    affected.DecreaseDuration();
+    _affected.DecreaseDuration();
 
-    for ( uint32_t mode = affected.FindZeroDuration(); mode != 0; mode = affected.FindZeroDuration() ) {
+    for ( uint32_t mode = _affected.FindZeroDuration(); mode != 0; mode = _affected.FindZeroDuration() ) {
         assert( Modes( mode ) );
 
         if ( mode == CAP_MIRROROWNER ) {
-            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+            assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
             if ( Arena::GetInterface() ) {
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { mirror } );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { _mirrorUnit } );
             }
 
-            mirror->hp = 0;
-            mirror->SetCount( 0 );
+            _mirrorUnit->_hitPoints = 0;
+            _mirrorUnit->SetCount( 0 );
             // Affection will be removed here
-            mirror->PostKilledAction();
+            _mirrorUnit->PostKilledAction();
         }
         else {
             removeAffection( mode );
@@ -473,10 +437,10 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
-        return Speed::GetHasteSpeedFromSpell( speed );
+        return Speed::getHasteSpeedFromSpell( speed );
     }
     if ( Modes( SP_SLOW ) ) {
-        return Speed::GetSlowSpeedFromSpell( speed );
+        return Speed::getSlowSpeedFromSpell( speed );
     }
 
     return speed;
@@ -485,21 +449,21 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
 uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
     // The entire unit is destroyed, no retaliation
-    if ( damageTaken >= hp ) {
+    if ( damageTaken >= _hitPoints ) {
         return 0;
     }
 
     // Mirror images are destroyed anyway and hypnotized units never respond to an attack
-    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+    if ( Modes( TR_RETALIATED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
         return 0;
     }
 
     // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return 0;
     }
 
-    const uint32_t unitsLeft = GetCountFromHitPoints( *this, hp - damageTaken );
+    const uint32_t unitsLeft = GetCountFromHitPoints( *this, _hitPoints - damageTaken );
     assert( unitsLeft > 0 );
 
     const uint32_t damagePerUnit = [this]() {
@@ -516,8 +480,15 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
 
     const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
 
-    // The retaliatory damage of a blinded unit is halved
-    return ( Modes( SP_BLIND ) ? retaliatoryDamage / 2 : retaliatoryDamage );
+    if ( !Modes( SP_BLIND ) ) {
+        return retaliatoryDamage;
+    }
+
+    // The retaliatory damage of a blinded unit is reduced
+    const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+    assert( reductionPercent <= 100 );
+
+    return retaliatoryDamage * ( 100 - reductionPercent ) / 100;
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
@@ -560,44 +531,36 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         }
     }
 
-    // The retaliatory damage of a blinded unit is halved
+    // The retaliatory damage of a blinded unit is reduced
     if ( _blindRetaliation ) {
-        dmg /= 2;
+        // Petrified units cannot attack, respectively, there should be no retaliation
+        assert( !enemy.Modes( SP_STONE ) );
+
+        const uint32_t reductionPercent = Spell( Spell::BLIND ).ExtraValue();
+        assert( reductionPercent <= 100 );
+
+        dmg = dmg * ( 100 - reductionPercent ) / 100;
     }
 
     // A petrified unit takes only half of the damage
     if ( enemy.Modes( SP_STONE ) ) {
+        // Petrified units cannot attack, respectively, there should be no retaliation
+        assert( !_blindRetaliation );
+
         dmg /= 2;
     }
 
-    switch ( GetID() ) {
-    case Monster::CRUSADER:
-        if ( enemy.isUndead() ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
-            dmg *= 2;
-        }
-        break;
-    default:
-        break;
+    // If multiple options are suitable at the same time, the damage should be doubled only once
+    if ( ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) && enemy.isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::EARTH_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_EARTH_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::AIR_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_AIR_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::FIRE_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES ) )
+         || ( isAbilityPresent( fheroes2::MonsterAbilityType::WATER_CREATURE )
+              && enemy.isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_WATER_CREATURES ) ) ) {
+        dmg *= 2;
     }
 
     int r = GetAttack() - enemy.GetDefense();
@@ -608,26 +571,31 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
 
-    return static_cast<uint32_t>( dmg ) < 1 ? 1 : static_cast<uint32_t>( dmg );
+    return std::max( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
 }
 
-uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
+uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::PCG32 & randomGenerator ) const
 {
     uint32_t res = 0;
 
-    if ( Modes( SP_BLESS ) )
+    if ( Modes( SP_BLESS ) ) {
         res = CalculateMaxDamage( enemy );
-    else if ( Modes( SP_CURSE ) )
+    }
+    else if ( Modes( SP_CURSE ) ) {
         res = CalculateMinDamage( enemy );
-    else
-        res = randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+    }
+    else {
+        res = Rand::GetWithGen( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ), randomGenerator );
+    }
 
-    if ( Modes( LUCK_GOOD ) )
-        res = res * 2;
-    else if ( Modes( LUCK_BAD ) )
-        res = res / 2;
+    if ( Modes( LUCK_GOOD ) ) {
+        res *= 2;
+    }
+    else if ( Modes( LUCK_BAD ) ) {
+        res /= 2;
+    }
 
-    return res;
+    return std::max( res, 1U );
 }
 
 uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
@@ -636,10 +604,10 @@ uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
         return GetCount();
     }
 
-    return dmg >= hp ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, hp - dmg );
+    return dmg >= _hitPoints ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, _hitPoints - dmg );
 }
 
-uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
+uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 {
     assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
 
@@ -653,8 +621,8 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         // Units with this ability retaliate even when under the influence of paralyzing spells
-        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-            SetModes( TR_RESPONDED );
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+            SetModes( TR_RETALIATED );
         }
 
         SetModes( TR_MOVED );
@@ -669,27 +637,27 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
     }
 
     if ( killed >= GetCount() ) {
-        dead += GetCount();
+        _deadCount += GetCount();
 
         SetCount( 0 );
     }
     else {
-        dead += killed;
+        _deadCount += killed;
 
         SetCount( GetCount() - killed );
     }
 
     if ( Modes( CAP_MIRRORIMAGE ) ) {
-        hp = 0;
+        _hitPoints = 0;
     }
     else {
-        hp -= std::min( hp, dmg );
+        _hitPoints -= std::min( _hitPoints, dmg );
     }
 
     if ( Modes( CAP_MIRROROWNER ) && !isValid() ) {
-        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+        assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
-        mirror->ApplyDamage( mirror->hp );
+        _mirrorUnit->_applyDamage( _mirrorUnit->_hitPoints );
     }
 
     return killed;
@@ -700,9 +668,9 @@ void Battle::Unit::PostKilledAction()
     assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
 
     if ( Modes( CAP_MIRROROWNER ) ) {
-        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+        assert( _mirrorUnit != nullptr && _mirrorUnit->Modes( CAP_MIRRORIMAGE ) && _mirrorUnit->_mirrorUnit == this );
 
-        mirror = nullptr;
+        _mirrorUnit = nullptr;
 
         removeAffection( CAP_MIRROROWNER );
     }
@@ -710,22 +678,22 @@ void Battle::Unit::PostKilledAction()
     if ( Modes( CAP_MIRRORIMAGE ) ) {
         // CAP_MIRROROWNER may have already been removed from the mirror owner,
         // since this method may already have been called for it
-        assert( mirror != nullptr );
+        assert( _mirrorUnit != nullptr );
 
         // But we still need to remove it if it is present
-        if ( mirror->Modes( CAP_MIRROROWNER ) ) {
-            assert( mirror->mirror == this );
+        if ( _mirrorUnit->Modes( CAP_MIRROROWNER ) ) {
+            assert( _mirrorUnit->_mirrorUnit == this );
 
-            mirror->mirror = nullptr;
-            mirror->removeAffection( CAP_MIRROROWNER );
+            _mirrorUnit->_mirrorUnit = nullptr;
+            _mirrorUnit->removeAffection( CAP_MIRROROWNER );
         }
 
-        mirror = nullptr;
+        _mirrorUnit = nullptr;
     }
 
     // Remove all spells
     removeAffection( IS_MAGIC );
-    assert( affected.empty() );
+    assert( _affected.empty() );
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
@@ -735,13 +703,13 @@ void Battle::Unit::PostKilledAction()
         graveyard->addUnit( this );
     }
 
-    Cell * head = position.GetHead();
+    Cell * head = _position.GetHead();
     assert( head != nullptr );
 
     head->SetUnit( nullptr );
 
     if ( isWide() ) {
-        Cell * tail = position.GetTail();
+        Cell * tail = _position.GetTail();
         assert( tail != nullptr );
 
         tail->SetUnit( nullptr );
@@ -750,26 +718,24 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
+uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary )
 {
-    uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
+    uint32_t resurrect = Monster::GetCountFromHitPoints( *this, _hitPoints + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
-    hp += points;
+    _hitPoints += points;
 
-    if ( allowToExceedInitialCount ) {
-        if ( _initialCount < GetCount() ) {
-            _initialCount = GetCount();
-        }
+    if ( allowToExceedMaxCount ) {
+        _maxCount = std::max( _maxCount, GetCount() );
     }
-    else if ( GetCount() > _initialCount ) {
-        resurrect -= GetCount() - _initialCount;
-        SetCount( _initialCount );
-        hp = ArmyTroop::GetHitPoints();
+    else if ( GetCount() > _maxCount ) {
+        resurrect -= GetCount() - _maxCount;
+        SetCount( _maxCount );
+        _hitPoints = ArmyTroop::GetHitPoints();
     }
 
     if ( !isTemporary ) {
-        dead -= ( resurrect < dead ? resurrect : dead );
+        _deadCount -= ( resurrect < _deadCount ? resurrect : _deadCount );
     }
 
     return resurrect;
@@ -782,7 +748,7 @@ bool Battle::Unit::isImmovable() const
 
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
-    killed = ApplyDamage( dmg );
+    killed = _applyDamage( dmg );
 
     if ( killed == 0 ) {
         if ( ptrResurrected != nullptr ) {
@@ -794,10 +760,10 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     uint32_t resurrected = 0;
 
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-        resurrected = enemy.Resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
+        resurrected = enemy._resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
     }
     else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-        resurrected = enemy.Resurrect( killed * Monster::GetHitPoints(), false, false );
+        resurrected = enemy._resurrect( killed * Monster::GetHitPoints(), false, false );
     }
 
     if ( resurrected > 0 ) {
@@ -845,13 +811,13 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
     const uint32_t spoint = applyingHero ? applyingHero->GetPower() : fheroes2::spellPowerForBuiltinMonsterSpells;
 
     if ( spell.isDamage() ) {
-        SpellApplyDamage( spell, spoint, applyingHero, target );
+        _spellApplyDamage( spell, spoint, applyingHero, target );
     }
     else if ( spell.isRestore() || spell.isResurrect() ) {
-        SpellRestoreAction( spell, spoint, applyingHero );
+        _spellRestoreAction( spell, spoint, applyingHero );
     }
     else {
-        SpellModesAction( spell, spoint, applyingHero );
+        _spellModesAction( spell, spoint, applyingHero );
     }
 
     return true;
@@ -910,28 +876,29 @@ std::vector<Spell> Battle::Unit::getCurrentSpellEffects() const
     return spellList;
 }
 
-std::string Battle::Unit::String( bool more ) const
+std::string Battle::Unit::String( const bool more /* = false */ ) const
 {
     std::stringstream ss;
 
     ss << "Unit: "
        << "[ " <<
         // info
-        GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex() << ( reflect ? ", reflect" : "" );
+        GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex()
+       << ( _isReflected ? ", reflect" : "" );
 
     if ( more )
         ss << ", mode(" << GetHexString( modes ) << ")"
            << ", uid(" << GetHexString( _uid ) << ")"
-           << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
-           << ", hp(" << hp << ")"
-           << ", died(" << dead << ")";
+           << ", speed(" << Speed::String( GetSpeed() ) << ", " << GetSpeed() << ")"
+           << ", hp(" << _hitPoints << ")"
+           << ", died(" << _deadCount << ")";
 
     ss << " ]";
 
     return ss.str();
 }
 
-bool Battle::Unit::AllowResponse() const
+bool Battle::Unit::isRetaliationAllowed() const
 {
     // Hypnotized units never respond to an attack
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -948,16 +915,16 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    return ( !Modes( TR_RESPONDED ) );
+    return ( !Modes( TR_RETALIATED ) );
 }
 
-void Battle::Unit::SetResponse()
+void Battle::Unit::setRetaliationAsCompleted()
 {
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return;
     }
 
-    SetModes( TR_RESPONDED );
+    SetModes( TR_RETALIATED );
 }
 
 void Battle::Unit::PostAttackAction( const Unit & enemy )
@@ -966,18 +933,13 @@ void Battle::Unit::PostAttackAction( const Unit & enemy )
         const HeroBase * hero = GetCommander();
 
         if ( hero == nullptr || !hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION ) ) {
-            assert( !Modes( CAP_TOWER ) && shots > 0 );
+            assert( !Modes( CAP_TOWER ) && _shotsLeft > 0 );
 
-            --shots;
+            --_shotsLeft;
         }
     }
 
     ResetModes( LUCK_GOOD | LUCK_BAD );
-}
-
-void Battle::Unit::SetBlindRetaliation( bool value )
-{
-    _blindRetaliation = value;
 }
 
 uint32_t Battle::Unit::GetAttack() const
@@ -1029,7 +991,7 @@ uint32_t Battle::Unit::GetDefense() const
     return res;
 }
 
-int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
+double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 {
     const Unit & attacker = *this;
 
@@ -1126,9 +1088,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
     {
         const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-        const auto spellCasterAbilityIter
-            = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-        if ( spellCasterAbilityIter != attackerAbilities.end() ) {
+        if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+             abilityIter != attackerAbilities.end() ) {
             const auto getDefenderDamage = [&defender]() {
                 if ( defender.Modes( SP_CURSE ) ) {
                     return defender.GetDamageMin();
@@ -1141,14 +1102,14 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
                 return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
             };
 
-            switch ( spellCasterAbilityIter->value ) {
+            switch ( abilityIter->value ) {
             case Spell::BLIND:
             case Spell::PARALYZE:
             case Spell::PETRIFY:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0;
+                if ( defender.AllowApplySpell( static_cast<int32_t>( abilityIter->value ), nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0;
                 }
                 break;
             case Spell::DISPEL:
@@ -1157,8 +1118,8 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             case Spell::CURSE:
                 // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of
                 // another creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
-                if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
-                    attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0;
+                if ( defender.AllowApplySpell( static_cast<int32_t>( abilityIter->value ), nullptr ) ) {
+                    attackerThreat += static_cast<double>( getDefenderDamage() ) * abilityIter->percentage / 100.0 / 10.0;
                 }
                 break;
             default:
@@ -1194,18 +1155,13 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
         attackerThreat /= 1.25;
     }
 
-    return static_cast<int32_t>( attackerThreat * 100 );
-}
-
-uint32_t Battle::Unit::GetHitPoints() const
-{
-    return hp;
+    return attackerThreat;
 }
 
 Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
-    return GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
+    return GetCost() * ( GetDead() > GetMaxCount() ? 0 : GetMaxCount() - GetDead() );
 }
 
 int Battle::Unit::GetControl() const
@@ -1213,7 +1169,7 @@ int Battle::Unit::GetControl() const
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero )
+void Battle::Unit::_spellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero )
 {
     if ( applyingHero ) {
         duration += applyingHero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
@@ -1222,21 +1178,21 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
-        replaceAffection( SP_CURSE, SP_BLESS, duration );
+        _replaceAffection( SP_CURSE, SP_BLESS, duration );
         break;
 
     case Spell::BLOODLUST:
-        addAffection( SP_BLOODLUST, 3 );
+        _addAffection( SP_BLOODLUST, 3 );
         break;
 
     case Spell::CURSE:
     case Spell::MASSCURSE:
-        replaceAffection( SP_BLESS, SP_CURSE, duration );
+        _replaceAffection( SP_BLESS, SP_CURSE, duration );
         break;
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        replaceAffection( SP_SLOW, SP_HASTE, duration );
+        _replaceAffection( SP_SLOW, SP_HASTE, duration );
         break;
 
     case Spell::DISPEL:
@@ -1246,55 +1202,55 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
-        addAffection( SP_SHIELD, duration );
+        _addAffection( SP_SHIELD, duration );
         break;
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        replaceAffection( SP_HASTE, SP_SLOW, duration );
+        _replaceAffection( SP_HASTE, SP_SLOW, duration );
         break;
 
     case Spell::STONESKIN:
-        replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
+        _replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
         break;
 
     case Spell::BLIND:
-        addAffection( SP_BLIND, duration );
+        _addAffection( SP_BLIND, duration );
         // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
         _blindRetaliation = false;
         break;
 
     case Spell::DRAGONSLAYER:
-        addAffection( SP_DRAGONSLAYER, duration );
+        _addAffection( SP_DRAGONSLAYER, duration );
         break;
 
     case Spell::STEELSKIN:
-        replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
+        _replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
         break;
 
     case Spell::ANTIMAGIC:
-        replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
+        _replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
         break;
 
     case Spell::PARALYZE:
-        addAffection( SP_PARALYZE, duration );
+        _addAffection( SP_PARALYZE, duration );
         break;
 
     case Spell::BERSERKER:
-        replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
+        _replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
         break;
 
     case Spell::HYPNOTIZE:
-        replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
+        _replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
         break;
 
     case Spell::PETRIFY:
-        addAffection( SP_STONE, duration );
+        _addAffection( SP_STONE, duration );
         break;
 
     case Spell::MIRRORIMAGE:
         // Special case, CAP_MIRROROWNER mode will be set when mirror image unit will be created
-        affected.AddMode( CAP_MIRROROWNER, duration );
+        _affected.AddMode( CAP_MIRROROWNER, duration );
         break;
 
     case Spell::DISRUPTINGRAY:
@@ -1307,89 +1263,59 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target )
+void Battle::Unit::_spellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
-    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, applyingHero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPower, applyingHero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
         target.damage = dmg;
-        target.killed = ApplyDamage( dmg );
+        target.killed = _applyDamage( dmg );
     }
 }
 
-uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPower, const HeroBase * applyingHero, const uint32_t targetDamage,
                                              const bool ignoreDefendingHero ) const
 {
     assert( spell.isDamage() );
 
-    // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spellPoints;
+    uint32_t dmg = spell.Damage() * spellPower;
 
-    switch ( GetID() ) {
-    case Monster::IRON_GOLEM:
-    case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
-            // 50% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-        case Spell::ARMAGEDDON:
-            dmg /= 2;
-            break;
-        default:
-            break;
+    // If multiple options are suitable at the same time, then the abilities are considered first (in order from more specific to less specific),
+    // and then the weaknesses are considered (also in order from more specific to less specific)
+    {
+        const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
+        const std::vector<fheroes2::MonsterWeakness> & weaknesses = fheroes2::getMonsterData( GetID() ).battleStats.weaknesses;
+
+        // Abilities
+        //
+        if ( const auto certainSpellDmgRedIter
+             = std::find( abilities.begin(), abilities.end(),
+                          std::make_pair( fheroes2::MonsterAbilityType::CERTAIN_SPELL_DAMAGE_REDUCTION, static_cast<uint32_t>( spell.GetID() ) ) );
+             certainSpellDmgRedIter != abilities.end() ) {
+            dmg = dmg * certainSpellDmgRedIter->percentage / 100;
         }
-        break;
-
-    case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
+        else if ( const auto elementalSpellDmgRedIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION );
+                  elementalSpellDmgRedIter != abilities.end() && spell.isElementalSpell() ) {
+            dmg = dmg * elementalSpellDmgRedIter->percentage / 100;
+        }
+        //
+        // Weaknesses
+        //
+        else if ( const auto certainSpellExtraDmgIter
+                  = std::find( weaknesses.begin(), weaknesses.end(),
+                               std::make_pair( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, static_cast<uint32_t>( spell.GetID() ) ) );
+                  certainSpellExtraDmgIter != weaknesses.end() ) {
+            dmg = dmg * ( 100 + certainSpellExtraDmgIter->percentage ) / 100;
+        }
+        else if ( ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS ) && spell.isFire() )
+                  || ( isWeaknessPresent( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_COLD_SPELLS ) && spell.isCold() ) ) {
             dmg *= 2;
-            break;
-        default:
-            break;
         }
-        break;
-
-    case Monster::AIR_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::ELEMENTALSTORM:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
-            // 200% damage
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-            dmg *= 2;
-            break;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
     }
 
-    // check artifact
     if ( applyingHero ) {
         const HeroBase * defendingHero = GetCommander();
         const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
@@ -1457,7 +1383,6 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
                 }
             }
 
-            // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 switch ( targetDamage ) {
                 case 0:
@@ -1498,7 +1423,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     return dmg;
 }
 
-void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero )
+void Battle::Unit::_spellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero )
 {
     switch ( spell.GetID() ) {
     case Spell::CURE:
@@ -1507,10 +1432,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
         removeAffection( IS_BAD_MAGIC );
 
         // restore
-        hp += fheroes2::getHPRestorePoints( spell, spellPoints, applyingHero );
-        if ( hp > ArmyTroop::GetHitPoints() ) {
-            hp = ArmyTroop::GetHitPoints();
-        }
+        _hitPoints += fheroes2::getHPRestorePoints( spell, spellPoints, applyingHero );
+
+        _hitPoints = std::min( _hitPoints, ArmyTroop::GetHitPoints() );
         break;
 
     case Spell::RESURRECT:
@@ -1524,7 +1448,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
-        const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
+        const uint32_t resurrect = _resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Put the unit back on the board
         SetPosition( GetPosition() );
@@ -1575,7 +1499,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == _initialCount ) {
+        if ( GetCount() == _maxCount ) {
             return 100;
         }
         break;
@@ -1590,7 +1514,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::HYPNOTIZE:
         assert( applyingHero != nullptr );
 
-        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, applyingHero->GetPower(), applyingHero ) < hp ) {
+        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, applyingHero->GetPower(), applyingHero ) < _hitPoints ) {
             return 100;
         }
         break;
@@ -1607,42 +1531,41 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
+Spell Battle::Unit::GetSpellMagic( Rand::PCG32 & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
-    const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-    if ( foundAbility == abilities.end() ) {
+
+    const auto abilityIter = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbilityType::SPELL_CASTER );
+    if ( abilityIter == abilities.end() ) {
         // Not a spell caster.
         return Spell::NONE;
     }
 
-    if ( randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( Rand::GetWithGen( 1, 100, randomGenerator ) > abilityIter->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
 
-    return foundAbility->value;
+    return { static_cast<int32_t>( abilityIter->value ) };
 }
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return hp < _initialCount * Monster::GetHitPoints();
+    return _hitPoints < _maxCount * Monster::GetHitPoints();
 }
 
-bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
+bool Battle::Unit::SwitchAnimation( const int rule, const bool reverse /* = false */ )
 {
     if ( rule == Monster_Info::STATIC && GetAnimationState() != Monster_Info::IDLE ) {
         // Reset the delay before switching to the 'IDLE' animation from 'STATIC'.
         checkIdleDelay();
     }
 
-    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
-bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
+bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, const bool reverse /* = false */ )
 {
-    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
@@ -1692,29 +1615,29 @@ int Battle::Unit::M82Land() const
 
 fheroes2::Point Battle::Unit::GetBackPoint() const
 {
-    const fheroes2::Rect & rt = position.GetRect();
-    return reflect ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
+    const fheroes2::Rect & rt = _position.GetRect();
+    return _isReflected ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
 }
 
 fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite(), GetFrame() );
 
-    const fheroes2::Rect & pos = position.GetRect();
+    const fheroes2::Rect & pos = _position.GetRect();
     const int32_t centerY = pos.y + pos.height + sprite.y() / 2 - 10;
 
-    return fheroes2::Point( pos.x + pos.width / 2, centerY );
+    return { pos.x + pos.width / 2, centerY };
 }
 
-fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
+fheroes2::Point Battle::Unit::GetStartMissileOffset( const size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
 }
 
-int Battle::Unit::GetCurrentColor() const
+PlayerColor Battle::Unit::GetCurrentColor() const
 {
     if ( Modes( SP_BERSERKER ) ) {
-        return -1; // Be aware of unknown color
+        return PlayerColor::UNUSED; // Be aware of unknown color
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -1727,12 +1650,12 @@ int Battle::Unit::GetCurrentColor() const
     return GetColor();
 }
 
-int Battle::Unit::GetCurrentOrArmyColor() const
+PlayerColor Battle::Unit::GetCurrentOrArmyColor() const
 {
-    const int color = GetCurrentColor();
+    const PlayerColor color = GetCurrentColor();
 
     // Unknown color in case of SP_BERSERKER mode
-    if ( color < 0 ) {
+    if ( color == PlayerColor::UNUSED ) {
         return GetArmyColor();
     }
 
@@ -1769,24 +1692,24 @@ const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
     return arena->getCommander( GetCurrentOrArmyColor() );
 }
 
-void Battle::Unit::addAffection( const uint32_t mode, const uint32_t duration )
+void Battle::Unit::_addAffection( const uint32_t mode, const uint32_t duration )
 {
     assert( CountBits( mode ) == 1 );
 
     SetModes( mode );
 
-    affected.AddMode( mode, duration );
+    _affected.AddMode( mode, duration );
 }
 
 void Battle::Unit::removeAffection( const uint32_t mode )
 {
     ResetModes( mode );
 
-    affected.RemoveMode( mode );
+    _affected.RemoveMode( mode );
 }
 
-void Battle::Unit::replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
+void Battle::Unit::_replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
 {
     removeAffection( modeToReplace );
-    addAffection( replacementMode, duration );
+    _addAffection( replacementMode, duration );
 }

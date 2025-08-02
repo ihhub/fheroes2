@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -152,7 +152,7 @@ int Captain::GetRace() const
     return home.GetRace();
 }
 
-int Captain::GetColor() const
+PlayerColor Captain::GetColor() const
 {
     return home.GetColor();
 }
@@ -202,8 +202,9 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
     switch ( type ) {
     case PORT_BIG: {
         const int portraitIcnId = GetPortraitIcnId( GetRace() );
-        if ( portraitIcnId < 0 )
-            return fheroes2::Image();
+        if ( portraitIcnId < 0 ) {
+            return {};
+        }
 
         fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( GetColor() ), 0 );

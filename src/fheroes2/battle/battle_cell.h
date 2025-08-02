@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_CELL_H
-#define H2BATTLE_CELL_H
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -35,7 +34,7 @@ namespace Battle
 {
     class Unit;
 
-    enum CellDirection : int
+    enum class CellDirection
     {
         UNKNOWN = 0x00,
         TOP_LEFT = 0x01,
@@ -47,8 +46,71 @@ namespace Battle
         CENTER = 0x40,
         RIGHT_SIDE = TOP_RIGHT | RIGHT | BOTTOM_RIGHT,
         LEFT_SIDE = TOP_LEFT | LEFT | BOTTOM_LEFT,
-        AROUND = RIGHT_SIDE | LEFT_SIDE
     };
+
+    inline CellDirection operator<<( const CellDirection d, const int shift )
+    {
+        return static_cast<CellDirection>( static_cast<int>( d ) << shift );
+    }
+
+    inline CellDirection operator>>( const CellDirection d, const int shift )
+    {
+        return static_cast<CellDirection>( static_cast<int>( d ) >> shift );
+    }
+
+    inline bool isLeftSide( const CellDirection d )
+    {
+        return static_cast<int>( d ) & static_cast<int>( CellDirection::LEFT_SIDE );
+    }
+
+    inline bool isRightSide( const CellDirection d )
+    {
+        return static_cast<int>( d ) & static_cast<int>( CellDirection::RIGHT_SIDE );
+    }
+
+    enum class AttackDirection
+    {
+        UNKNOWN = 0x00,
+        TOP_LEFT = 0x01,
+        TOP = 0x02,
+        TOP_RIGHT = 0x04,
+        RIGHT = 0x08,
+        BOTTOM_RIGHT = 0x10,
+        BOTTOM = 0x20,
+        BOTTOM_LEFT = 0x40,
+        LEFT = 0x80,
+        CENTER = 0x100,
+    };
+
+    inline AttackDirection operator<<( const AttackDirection d, const int shift )
+    {
+        return static_cast<AttackDirection>( static_cast<int>( d ) << shift );
+    }
+
+    inline AttackDirection operator>>( const AttackDirection d, const int shift )
+    {
+        return static_cast<AttackDirection>( static_cast<int>( d ) >> shift );
+    }
+
+    inline AttackDirection asAttackDirection( const CellDirection d )
+    {
+        switch ( d ) {
+        case CellDirection::TOP_LEFT:
+            return AttackDirection::TOP_LEFT;
+        case CellDirection::TOP_RIGHT:
+            return AttackDirection::TOP_RIGHT;
+        case CellDirection::RIGHT:
+            return AttackDirection::RIGHT;
+        case CellDirection::BOTTOM_RIGHT:
+            return AttackDirection::BOTTOM_RIGHT;
+        case CellDirection::BOTTOM_LEFT:
+            return AttackDirection::BOTTOM_LEFT;
+        case CellDirection::LEFT:
+            return AttackDirection::LEFT;
+        default:
+            return AttackDirection::UNKNOWN;
+        }
+    }
 
     class Cell final
     {
@@ -58,7 +120,12 @@ namespace Battle
         // Height of the rendered cell in pixels
         static constexpr int heightPx{ 52 };
 
-        explicit Cell( const int32_t idx );
+        explicit Cell( const int32_t idx )
+            : _index( idx )
+        {
+            SetArea( {} );
+        }
+
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
 
@@ -67,33 +134,62 @@ namespace Battle
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
 
-        int32_t GetIndex() const;
-        const fheroes2::Rect & GetPos() const;
-        int GetObject() const;
+        int32_t GetIndex() const
+        {
+            return _index;
+        }
 
-        const Unit * GetUnit() const;
-        Unit * GetUnit();
+        const fheroes2::Rect & GetPos() const
+        {
+            return _pos;
+        }
 
-        CellDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
+        int GetObject() const
+        {
+            return _object;
+        }
+
+        const Unit * GetUnit() const
+        {
+            return _unit;
+        }
+
+        Unit * GetUnit()
+        {
+            return _unit;
+        }
+
+        AttackDirection GetTriangleDirection( const fheroes2::Point & dst ) const;
 
         bool isPositionIncludePoint( const fheroes2::Point & pt ) const;
 
         void SetArea( const fheroes2::Rect & area );
-        void SetObject( const int object );
-        void SetUnit( Unit * unit );
+
+        void SetObject( const int object )
+        {
+            _object = object;
+        }
+
+        void SetUnit( Unit * unit )
+        {
+            _unit = unit;
+        }
 
         // Checks that the cell is passable for a given unit located in a certain adjacent cell
         bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
         // Checks that the cell is passable for a given unit, i.e. unit can occupy it with his head or tail
         bool isPassableForUnit( const Unit & unit ) const;
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
-        bool isPassable( const bool checkForUnit ) const;
+        bool isPassable( const bool checkForUnit ) const
+        {
+            return _object == 0 && ( !checkForUnit || _unit == nullptr );
+        }
 
     private:
         int32_t _index;
         fheroes2::Rect _pos;
-        int _object;
-        Unit * _unit;
+        int _object{ 0 };
+        Unit * _unit{ nullptr };
         std::array<fheroes2::Point, 7> _coord;
     };
 
@@ -159,5 +255,3 @@ namespace Battle
         bool operator<( const Position & other ) const;
     };
 }
-
-#endif

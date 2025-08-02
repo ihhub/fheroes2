@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_H
-#define H2MAPS_H
+
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
@@ -31,6 +31,8 @@
 #include "math_base.h"
 
 class Heroes;
+
+enum class PlayerColor : uint8_t;
 
 namespace MP2
 {
@@ -73,6 +75,7 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t width, const int32_t height, const int32_t maxDistanceFromTile );
 
     MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
@@ -99,8 +102,8 @@ namespace Maps
 
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scoutingDistance, const int playerColor );
+    void ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
 
     // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
     // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to
@@ -128,5 +131,3 @@ namespace Maps
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void ReplaceRandomCastleObjectId( const fheroes2::Point & );
 }
-
-#endif

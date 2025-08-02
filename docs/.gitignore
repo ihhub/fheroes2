@@ -1,0 +1,11 @@
+_site
+
+node_modules
+
+# Gemfile
+Gemfile
+Gemfile.lock
+Gemfile.dev.lock
+
+# Pre-processed manual page
+fheroes2.6

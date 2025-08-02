@@ -1,4 +1,4 @@
-# [**fheroes2**](README.md) graphical artist guide
+# [fheroes2](README.md) Graphical Artist Guide
 
 The original game has its graphical assets stored in the `HEROES2.agg` file and potentially the `HEROES2X.agg` file if the expansion
 pack The Price of Loyalty is present. These two AGG files are located in the `DATA` folder of the original Heroes 2 installation.
@@ -10,39 +10,39 @@ New assets that the fheroes2 project adds to the game are included in the `files
 
 This guide is designed for Linux, MacOS and Windows users. The source files to these tools are available in the project's repository.
 
-## Where to get the tools
+## Where to Get the Tools
 
-You can download the precompiled tools for your operating system (OS) of choice here:<br>
-[Windows 32-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x86-SDL2/fheroes2_tools_windows_x86_SDL2.zip)<br>
+You can download the precompiled tools for your operating system (OS) of choice here:
+[Windows 32-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x86-SDL2/fheroes2_tools_windows_x86_SDL2.zip)
 [Windows 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x64-SDL2/fheroes2_tools_windows_x64_SDL2.zip)
 
 [MacOS](https://github.com/ihhub/fheroes2/releases/download/fheroes2-osx-sdl2_dev/fheroes2_tools_macos_x86-64_SDL2.zip)
 
-[Linux Ubuntu 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-sdl2_dev/fheroes2_tools_ubuntu_x86-64_SDL2.zip)<br>
+[Linux Ubuntu 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-sdl2_dev/fheroes2_tools_ubuntu_x86-64_SDL2.zip)
 [Linux Ubuntu ARM 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-arm-sdl2_dev/fheroes2_tools_ubuntu_arm64_SDL2.zip)
-
 
 Here is a list and short description of the various graphical artist tools:
 
-- extractor
+* extractor
 
 This tool extracts all the contents of the AGG files mentioned above. Among the extracted files are the ICNs which hold the graphical assets.
 
-- icn2img
+* icn2img
 
 This tool converts the various graphical assets contained within the ICNs into PNG or BMP files.
 
-- pal2img
+* pal2img
 
 This tool generates a PNG or BMP file from the palette file `KB.PAL`. It displays it as 16x16 tiles of 16 pixels each.
 Some colors in the game are used for the cycling animation. They are marked in the generated image by a black area in
 the top-left corner on a tile. Use these colors only if the animation is a requirement:
-- 214, 215, 216, 217
-- 218, 219, 220, 221
-- 231, 232, 233, 234, 235
-- 238, 239, 240, 241
 
-## How to use the tools to extract the images
+* 214, 215, 216, 217
+* 218, 219, 220, 221
+* 231, 232, 233, 234, 235
+* 238, 239, 240, 241
+
+## How to Use the Tools to Extract the Images
 
 Place the `HEROES2.agg` and optionally the `HEROES2X.agg` files in the same folder as you extracted the tools to.
 Then run the script called `extract_agg`. This will create two folders: `agg` and `icn`. Both of them have a subdirectory named `HEROES2`,
@@ -55,15 +55,16 @@ Meanwhile, the folder named `icn` contains the PNG-converted graphical assets. T
 ICN they were stored in, e.g. the folder `apanel` came from the ICN `apanel.icn`. The `icn` folder is in other words the most relevant one for
 graphical artists.
 
-## Where is help needed
+## Where is Help Needed
 
 We have labelled and tracked some issues that need help from graphical artists.
-These can be found [here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3Aassets).
+[Issues that require changes of the original art can be found here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"original+assets").
+[New art tasks can be found here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3A"new+assets").
 
 NOTE! Before starting to work on an issue make sure to check if someone isn't already assigned to it by looking at the relevant place
 within the issue. Also notify the fheroes2 team that you wish to work on the issue. This is to avoid duplicate work.
 
-## The work process
+## The Work Process
 
 1. Choose the item you are going to work on and notify the fheroes2 team to avoid duplicate work.
 2. Present a prototype / complete enough work in your opinion of your work.

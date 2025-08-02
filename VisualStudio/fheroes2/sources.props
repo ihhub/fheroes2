@@ -118,6 +118,8 @@
     <ClCompile Include="src\fheroes2\editor\editor_options.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_rumor_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_save_map_window.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_secondary_skill_selection.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_spell_selection.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_sphinx_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_ui_helper.cpp" />
     <ClCompile Include="src\fheroes2\editor\history_manager.cpp" />
@@ -140,6 +142,7 @@
     <ClCompile Include="src\fheroes2\game\game_scenarioinfo.cpp" />
     <ClCompile Include="src\fheroes2\game\game_startgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_static.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_string.cpp" />
     <ClCompile Include="src\fheroes2\game\game_video.cpp" />
     <ClCompile Include="src\fheroes2\game\highscores.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
@@ -327,6 +330,8 @@
     <ClInclude Include="src\fheroes2\editor\editor_options.h" />
     <ClInclude Include="src\fheroes2\editor\editor_rumor_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_save_map_window.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_secondary_skill_selection.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_spell_selection.h" />
     <ClInclude Include="src\fheroes2\editor\editor_sphinx_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_ui_helper.h" />
     <ClInclude Include="src\fheroes2\editor\history_manager.h" />
@@ -343,6 +348,7 @@
     <ClInclude Include="src\fheroes2\game\game_mode.h" />
     <ClInclude Include="src\fheroes2\game\game_over.h" />
     <ClInclude Include="src\fheroes2\game\game_static.h" />
+    <ClInclude Include="src\fheroes2\game\game_string.h" />
     <ClInclude Include="src\fheroes2\game\game_video.h" />
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
     <ClInclude Include="src\fheroes2\game\highscores.h" />

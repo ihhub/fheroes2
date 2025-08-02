@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <set>
 #include <string>
 #include <utility>
@@ -88,6 +89,59 @@ namespace
 
                 std::swap( bagFrom[fromIdx], bagTo[toIdx] );
             }
+        }
+    }
+
+    void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
+    {
+        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator & fromIter ) {
+            if ( fromIter == from.rend() ) {
+                return;
+            }
+
+            // If there is any artifact left that has not yet been moved, it is assumed that it goes first in the list of artifacts (in place of the missing Magic Book)
+            assert( fromIter == std::prev( from.rend() ) );
+
+            if ( !fromIter->isValid() ) {
+                return;
+            }
+
+            assert( *fromIter != Artifact::MAGIC_BOOK );
+
+            // Just try to put this artifact to the first empty slot (if any)
+            if ( !to.PushArtifact( *fromIter ) ) {
+                return;
+            }
+
+            fromIter->Reset();
+        };
+
+        for ( auto firstBagIter = firstBag.rbegin(), secondBagIter = secondBag.rbegin(); firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend();
+              ++firstBagIter, ++secondBagIter ) {
+            // It is assumed that the only non-transferable artifact is a Magic Book, and that it always comes first in the list of artifacts
+            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
+                assert( firstBagIter == std::prev( firstBag.rend() ) );
+
+                ++firstBagIter;
+            }
+            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
+                assert( secondBagIter == std::prev( secondBag.rend() ) );
+
+                ++secondBagIter;
+            }
+
+            if ( firstBagIter == firstBag.rend() ) {
+                moveRemainingArtifact( secondBag, firstBag, secondBagIter );
+
+                break;
+            }
+            if ( secondBagIter == secondBag.rend() ) {
+                moveRemainingArtifact( firstBag, secondBag, firstBagIter );
+
+                break;
+            }
+
+            std::swap( *firstBagIter, *secondBagIter );
         }
     }
 }
@@ -262,6 +316,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
+    // shadow
+    if ( !isDefaultScreenSize ) {
+        fheroes2::addGradientShadowForArea( display, dst_pt, backSprite.width(), backSprite.height(), fheroes2::borderWidthPx );
+    }
+
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
@@ -331,7 +390,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.setTableSize( { 8, 1 } );
     secskill_bar1.setInBetweenItemsOffset( { -1, 0 } );
-    secskill_bar1.SetContent( secondary_skills.ToVector() );
+    secskill_bar1.SetContent( _secondarySkills.ToVector() );
     secskill_bar1.setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
     secskill_bar1.Redraw( display );
 
@@ -346,11 +405,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
 
     // The original resources do not have such animated buttons so we have to create those.
-    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 267, display );
-    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 290, display );
+    fheroes2::ButtonSprite moveArmyToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 319, display );
+    fheroes2::ButtonSprite moveArmyToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 319, display );
+    fheroes2::ButtonSprite swapArmies = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 268, display );
 
-    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 310, 223, 20 );
-    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 310, 223, 20 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerLeft( display, cur_pt.x + 36, cur_pt.y + 311, 223, 8 );
+    fheroes2::ImageRestorer armyCountBackgroundRestorerRight( display, cur_pt.x + 381, cur_pt.y + 311, 223, 8 );
 
     // army
     dst_pt.x = cur_pt.x + 36;
@@ -393,8 +453,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.Redraw( display );
 
     fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
-    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
-    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 298, cur_pt.y + 384, display );
+    fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 126, cur_pt.y + 426, display );
+    fheroes2::ButtonSprite moveArtifactsToHero1 = createMoveButton( ICN::SWAP_ARROW_RIGHT_TO_LEFT, cur_pt.x + 472, cur_pt.y + 426, display );
+    fheroes2::ButtonSprite swapArtifacts = createMoveButton( ICN::SWAP_ARROWS_CIRCULAR, cur_pt.x + 297, cur_pt.y + 361, display );
 
     // button exit
     dst_pt.x = cur_pt.x + 280;
@@ -403,8 +464,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
+    swapArmies.draw();
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
+    swapArtifacts.draw();
     buttonExit.draw();
 
     // Fade-in heroes meeting dialog. Use half fade if game resolution is not 640x480.
@@ -418,7 +481,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
@@ -428,9 +491,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapArmies.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+            swapArmies.drawOnPress();
+        }
         else {
             moveArmyToHero1.drawOnRelease();
             moveArmyToHero2.drawOnRelease();
+            swapArmies.drawOnRelease();
         }
 
         if ( le.isMouseLeftButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
@@ -441,9 +508,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero1.drawOnPress();
             moveArtifactsToHero2.drawOnRelease();
         }
+        else if ( le.isMouseLeftButtonPressedInArea( swapArtifacts.area() ) ) {
+            swapArtifacts.drawOnPress();
+        }
         else {
             moveArtifactsToHero1.drawOnRelease();
             moveArtifactsToHero2.drawOnRelease();
+            swapArtifacts.drawOnRelease();
         }
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
@@ -616,18 +687,39 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
+        else if ( le.MouseClickLeft( swapArmies.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+            GetArmy().SwapTroops( otherHero.GetArmy() );
+
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            display.render();
+        }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
             moveArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
@@ -638,13 +730,38 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
+            ::swapArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
+
+            backPrimary.restore();
+
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 

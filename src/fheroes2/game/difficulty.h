@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2DIFFICULTY_H
-#define H2DIFFICULTY_H
+
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -69,8 +69,11 @@ namespace Difficulty
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
 
+    // Returns a multiplier of a Guardian spell cost which serves as minimum spell points an AI hero should have to cast the spell.
+    int32_t getGuardianSpellMultiplier( const int difficulty );
+
+    bool isObjectVisitInfoSharingAllowedForAI( const int difficulty );
+
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 }
-
-#endif

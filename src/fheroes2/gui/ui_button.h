@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,8 +33,13 @@
 #include "screen.h"
 #include "ui_base.h"
 
+class LocalEvent;
+
 namespace fheroes2
 {
+    enum class FontColor : uint8_t;
+    struct FontType;
+
     // An abstract class for button usage
     class ButtonBase : public ActionObject
     {
@@ -108,6 +113,9 @@ namespace fheroes2
 
         // Will draw on screen by default
         bool draw( Image & output = Display::instance() ) const;
+
+        // Draws a shadow 5 px to the left and below the button.
+        void drawShadow( Image & output ) const;
 
         // Will draw and render on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Display & output = Display::instance() );
@@ -267,6 +275,10 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         explicit ButtonGroup( const Rect & area = Rect(), const int buttonTypes = 0 );
+        // Generates a group of buttons with the provided texts drawn on them.
+        explicit ButtonGroup( const std::vector<const char *> & texts );
+        // Generates a group of buttons from an ICN containing button sprites.
+        explicit ButtonGroup( const int icnID );
         ButtonGroup( const ButtonGroup & ) = delete;
 
         ~ButtonGroup() = default;
@@ -275,11 +287,27 @@ namespace fheroes2
 
         void createButton( const int32_t offsetX, const int32_t offsetY, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex,
                            const int returnValue );
-        void createButton( const int32_t offsetX, const int32_t offsetY, const Sprite & released, const Sprite & pressed, const int returnValue );
+        void createButton( const int32_t offsetX, const int32_t offsetY, Sprite released, Sprite pressed, const int returnValue );
         void addButton( ButtonSprite && button, const int returnValue );
 
         // Will draw on screen by default
         void draw( Image & output = Display::instance() ) const;
+
+        // Draws shadows for all the buttons in the group according to their coordinates.
+        void drawShadows( Image & output ) const;
+
+        // Disable all the buttons in the button group.
+        void disable() const;
+
+        // Enable all the buttons in the button group.
+        void enable() const;
+
+        void drawOnState( const LocalEvent & le ) const;
+
+        size_t getButtonsCount() const
+        {
+            return _button.size();
+        }
 
         // Make sure that id is less than size!
         ButtonBase & button( const size_t id )
@@ -333,8 +361,14 @@ namespace fheroes2
         std::vector<ButtonBase *> _button;
 
         void subscribeAll();
-        void unsubscribeAll();
+        void unsubscribeAll() const;
     };
+
+    // !!! IMPORTANT !!!
+    // None of the functions below translate the text for a button.
+    // It is the caller's responsibility to pass a translated text if required.
+    // If you want to translate text call this function.
+    const char * getSupportedText( const char * untranslatedText, const FontType font );
 
     // Make transparent edges around buttons making the pressed state appear without parts of the released state
     void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID );
@@ -346,15 +380,22 @@ namespace fheroes2
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
                                        const Point & shadowOffset = Point( -4, 6 ) );
 
-    // The height of text area is only 16 pixels. If 'isTransparentBackground' is set to false the button sprite will have a default background pattern from
-    // STONEBAK or STONEBAK_EVIL (for Evil interface). The pattern is the same for all buttons.
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
-                                const bool isTransparentBackground = false );
+    // Generate released and pressed button sprites with custom sizes (width and height) for a chosen background ICN.
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, Size buttonSize, Point & releasedOffset, Point & pressedOffset,
+                                const int backgroundIcnId );
 
-    // Makes a button that has the width necessary to fit a provided text using an empty button template
-    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
+    // Generates released and pressed button sprites with the width and height necessary to fit a provided text using an empty button template ICN and a chosen background
+    // ICN.
+    void getTextAdaptedSprite( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
-    // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
-                            const bool isTransparentBackground );
+    // Generate custom-size released and pressed button sprites with text on them over a chosen background ICN.
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const Size buttonSize, const bool isEvilInterface, const int backgroundIcnId );
+
+    // Generates multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
+    // backgroundSprites will be resized according to the number of button texts.
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const bool isEvilInterface,
+                                         const int32_t minWidth );
+
+    void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
+                             const Size & buttonSize, const FontColor fontColor );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2DIR_H
-#define H2DIR_H
+
+#pragma once
 
 #include <list>
 #include <string>
@@ -40,5 +40,3 @@ struct ListFiles : public std::list<std::string>
     // Returns true if there are no files in the 'path' directory with names ending in 'filter', case-insensitive, otherwise returns false.
     static bool IsEmpty( const std::string & path, const std::string & filter );
 };
-
-#endif
