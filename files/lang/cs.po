@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3438,6 +3438,18 @@ msgstr "Nastav rozlišení hry:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Kliknutím se rozlišení změní na vybrané."
+
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klikněte pro použití zadaného textu."
 
 msgid "Click to apply the entered text."
 msgstr "Klikněte pro použití zadaného textu."
