@@ -115,7 +115,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
     if ( _microsecondsPerFrame < 1 ) {
         // Since the value is not set let's set a default value for 15 FPS.
-        _microsecondsPerFrame = 1000000 / 15;
+        _microsecondsPerFrame = 1000000.0 / 15.0;
     }
 
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
