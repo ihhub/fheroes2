@@ -72,7 +72,7 @@ namespace Maps
 
         ~ObjectPart() = default;
 
-        // Returns true if it can be passed be hero/boat: part's layer type is SHADOW or TERRAIN.
+        // Returns true if it can be passed by a hero (or a hero on a boat): part's layer type is SHADOW or TERRAIN.
         bool isPassabilityTransparent() const
         {
             return layerType == SHADOW_LAYER || layerType == TERRAIN_LAYER;
@@ -193,6 +193,11 @@ namespace Maps
         // NOTE WELL: this method does not check whether the tile is actually located near the water. If this needs to be
         // taken into account, then it should be checked separately, independent of the call to this method.
         bool isSuitableForDisembarkation() const;
+
+        // Checks whether it is possible to summon a boat on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the shore. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForSummoningBoat() const;
 
         ObjectPart * getGroundObjectPart( const uint32_t uid );
         ObjectPart * getTopObjectPart( const uint32_t uid );
