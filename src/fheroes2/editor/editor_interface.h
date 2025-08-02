@@ -149,8 +149,8 @@ namespace Interface
                 editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
             } );
 
-            // This is just to compensate [16, 16] pixels offset on the first opening of the Editor
-            // to show the correct top-left corner of the map.
+            // This is to compensate [16, 16] pixel offset on a first opening of the Editor
+            // and to show the correct top-left corner of the map.
             _gameArea.SetAreaPosition( 0, 0, 2 * fheroes2::borderWidthPx, 2 * fheroes2::borderWidthPx );
         }
 
