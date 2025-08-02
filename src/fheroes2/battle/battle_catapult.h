@@ -60,8 +60,8 @@ namespace Battle
         bool IsNextShotHit( Rand::PCG32 & randomGenerator ) const;
 
     private:
-        uint32_t catShots;
-        uint32_t doubleDamageChance;
-        bool canMiss;
+        uint32_t catShots{ 0 };
+        uint32_t doubleDamageChance{ 0 };
+        bool canMiss{ false };
     };
 }
