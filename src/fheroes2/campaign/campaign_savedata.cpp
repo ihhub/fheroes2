@@ -182,11 +182,18 @@ namespace Campaign
             uint32_t daysPassed{ 0 };
             stream >> daysPassed;
 
-            data._daysPassed.clear();
-            data._daysPassed.resize( data._finishedMaps.size(), daysPassed );
+            data._daysPassed.assign( data._finishedMaps.size(), 1 );
+
+            if ( !data._daysPassed.empty() && daysPassed > data._daysPassed.size() ) {
+                data._daysPassed.back() += static_cast<uint32_t>( daysPassed - data._daysPassed.size() );
+            }
         }
         else {
             stream >> data._daysPassed;
+
+            // Make sure that the number of elements in the vector of the number of days spent completing individual maps matches the number of elements in the vector of
+            // finished maps
+            data._daysPassed.resize( data._finishedMaps.size(), 1 );
         }
 
         stream >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
