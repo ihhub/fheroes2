@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
@@ -132,7 +133,7 @@ namespace Video
         fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
 
         // This might be not very accurate but it's the best we can have now.
-        const uint32_t delay = static_cast<uint32_t>( video.microsecondsPerFrame() / 1000 + 0.5 );
+        const uint32_t delay = static_cast<uint32_t>( std::lround( video.microsecondsPerFrame() / 1000 ) );
 
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;
