@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3508,6 +3508,18 @@ msgstr "Wybierz rozdzielczość gry:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Zatwierdź podany tekst."
 
 msgid "Click to apply the entered text."
 msgstr "Zatwierdź podany tekst."

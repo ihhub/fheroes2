@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3516,6 +3516,18 @@ msgstr "Изберете резолюция на играта:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Кликни, за да приложиш въведения текст."
 
 msgid "Click to apply the entered text."
 msgstr "Кликни, за да приложиш въведения текст."
