@@ -21,19 +21,22 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "smacker.h"
 
 namespace fheroes2
 {
     class Image;
 }
 
-class SMKVideoSequence
+class SMKVideoSequence final
 {
 public:
     explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
+    ~SMKVideoSequence() = default;
 
     SMKVideoSequence( const SMKVideoSequence & ) = delete;
     SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
@@ -85,5 +88,5 @@ private:
     unsigned long _frameCount{ 0 };
     unsigned long _currentFrameId{ 0 };
 
-    struct smk_t * _videoFile{ nullptr };
+    std::unique_ptr<smk_t, void ( * )( smk_t * )> _videoFile{ nullptr, smk_close };
 };
