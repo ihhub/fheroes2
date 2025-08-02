@@ -156,7 +156,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             needRedraw = true;
         }
         else if ( buttonMax.isVisible() && le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Max" ), _( "Click to select the maximum amount." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "MAX" ), _( "Click to select the maximum amount." ), Dialog::ZERO );
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             valueSelectionElement.setValue( min );
@@ -165,7 +165,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             needRedraw = true;
         }
         else if ( buttonMin.isVisible() && le.isMouseRightButtonPressedInArea( buttonMin.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Min" ), _( "Click to select the minimum amount." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "MIN" ), _( "Click to select the minimum amount." ), Dialog::ZERO );
         }
         else if ( valueSelectionElement.processEvents() ) {
             typedValueBuf.clear();
