@@ -30,6 +30,7 @@
 
 #include "exception.h"
 #include "image.h"
+#include "logging.h"
 #include "serialize.h"
 #include "smacker.h"
 
@@ -65,7 +66,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
     , _height( 0 )
     , _heightScaleFactor( 1 )
-    , _fps( 0 )
+    , _microsecondsPerFrame( 0 )
     , _frameCount( 0 )
     , _currentFrameId( 0 )
     , _videoFile( nullptr )
@@ -73,10 +74,9 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     verifyVideoFile( filePath );
 
     _videoFile = smk_open_file( filePath.c_str(), SMK_MODE_MEMORY );
-    if ( _videoFile == nullptr )
+    if ( _videoFile == nullptr ) {
         return;
-
-    double usf = 0;
+    }
 
     const uint8_t audioChannelCount = 7;
 
@@ -90,8 +90,15 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     unsigned long height = 0;
     unsigned char scaledYMode = 1;
 
-    smk_info_all( _videoFile, nullptr, &_frameCount, &usf );
-    smk_info_video( _videoFile, &width, &height, &scaledYMode );
+    int returnValue = smk_info_all( _videoFile, nullptr, &_frameCount, &_microsecondsPerFrame );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_info_all() failed with error code: " << returnValue )
+    }
+
+    returnValue = smk_info_video( _videoFile, &width, &height, &scaledYMode );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_info_video() failed with error code: " << returnValue )
+    }
 
     _heightScaleFactor = scaledYMode;
 
@@ -107,23 +114,41 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     _width = static_cast<int32_t>( width );
     _height = static_cast<int32_t>( height ) * _heightScaleFactor;
 
-    smk_info_audio( _videoFile, &trackMask, channelsPerTrack, audioBitDepth, audioRate );
+    returnValue = smk_info_audio( _videoFile, &trackMask, channelsPerTrack, audioBitDepth, audioRate );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_info_audio() failed with error code: " << returnValue )
+    }
 
-    if ( usf > 0 )
-        _fps = 1000000.0 / usf;
-    else
-        _fps = 15; // let's use as a default
+    if ( _microsecondsPerFrame < 1 ) {
+        // Since the value is not set let's set a default value for 15 FPS.
+        _microsecondsPerFrame = 1000000 / 15;
+    }
 
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
-            smk_enable_audio( _videoFile, i, 1 );
+            returnValue = smk_enable_audio( _videoFile, i, 1 );
+            if ( returnValue < 0 ) {
+                ERROR_LOG( "smk_enable_audio() failed with error code: " << returnValue )
+            }
         }
     }
 
-    smk_enable_video( _videoFile, 0 ); // disable video reading
-    smk_first( _videoFile );
+    // Disable video reading.
+    returnValue = smk_enable_video( _videoFile, 0 );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_enable_video() failed with error code: " << returnValue )
+    }
+
+    returnValue = smk_first( _videoFile );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_first() failed with error code: " << returnValue )
+    }
+
     unsigned long currentFrame = 0;
-    smk_info_all( _videoFile, &currentFrame, nullptr, nullptr );
+    returnValue = smk_info_all( _videoFile, &currentFrame, nullptr, nullptr );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_info_all() failed with error code: " << returnValue )
+    }
 
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
@@ -142,7 +167,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     }
 
     for ( currentFrame = 1; currentFrame < _frameCount; ++currentFrame ) {
-        smk_next( _videoFile );
+        returnValue = smk_next( _videoFile );
+        if ( returnValue < 0 ) {
+            ERROR_LOG( "smk_next() failed with error code: " << returnValue )
+        }
 
         for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
             if ( trackMask & ( 1 << i ) ) {
@@ -200,8 +228,16 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
         }
     }
 
-    smk_enable_video( _videoFile, 1 ); // enable video reading
-    smk_first( _videoFile );
+    // Enable video reading.
+    returnValue = smk_enable_video( _videoFile, 1 );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_enable_video() failed with error code: " << returnValue )
+    }
+
+    returnValue = smk_first( _videoFile );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_first() failed with error code: " << returnValue )
+    }
 }
 
 SMKVideoSequence::~SMKVideoSequence()
@@ -211,32 +247,16 @@ SMKVideoSequence::~SMKVideoSequence()
     }
 }
 
-int32_t SMKVideoSequence::width() const
-{
-    return _width;
-}
-
-int32_t SMKVideoSequence::height() const
-{
-    return _height;
-}
-
-double SMKVideoSequence::fps() const
-{
-    return _fps;
-}
-
-unsigned long SMKVideoSequence::frameCount() const
-{
-    return _frameCount;
-}
-
 void SMKVideoSequence::resetFrame()
 {
     if ( _videoFile == nullptr )
         return;
 
-    smk_first( _videoFile );
+    const int returnValue = smk_first( _videoFile );
+    if ( returnValue < 0 ) {
+        ERROR_LOG( "smk_first() failed with error code: " << returnValue )
+    }
+
     _currentFrameId = 0;
 }
 
@@ -308,7 +328,10 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
 
     ++_currentFrameId;
     if ( _currentFrameId < _frameCount ) {
-        smk_next( _videoFile );
+        const int returnValue = smk_next( _videoFile );
+        if ( returnValue < 0 ) {
+            ERROR_LOG( "smk_next() failed with error code: " << returnValue )
+        }
     }
 }
 
@@ -318,9 +341,4 @@ std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
     assert( paletteData != nullptr );
 
     return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
-}
-
-const std::vector<std::vector<uint8_t>> & SMKVideoSequence::getAudioChannels() const
-{
-    return _audioChannel;
 }

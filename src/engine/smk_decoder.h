@@ -46,12 +46,30 @@ public:
 
     std::vector<uint8_t> getCurrentPalette() const;
 
-    const std::vector<std::vector<uint8_t>> & getAudioChannels() const;
+    const std::vector<std::vector<uint8_t>> & getAudioChannels() const
+    {
+        return _audioChannel;
+    }
 
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
+    int32_t width() const
+    {
+        return _width;
+    }
+
+    int32_t height() const
+    {
+        return _height;
+    }
+
+    double microsecondsPerFrame() const
+    {
+        return _microsecondsPerFrame;
+    }
+
+    unsigned long frameCount() const
+    {
+        return _frameCount;
+    }
 
     unsigned long getCurrentFrame() const
     {
@@ -60,12 +78,12 @@ public:
 
 private:
     std::vector<std::vector<uint8_t>> _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    int32_t _heightScaleFactor;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
+    int32_t _width{ 0 };
+    int32_t _height{ 0 };
+    int32_t _heightScaleFactor{ 0 };
+    double _microsecondsPerFrame{ 0 };
+    unsigned long _frameCount{ 0 };
+    unsigned long _currentFrameId{ 0 };
 
-    struct smk_t * _videoFile;
+    struct smk_t * _videoFile{ nullptr };
 };
