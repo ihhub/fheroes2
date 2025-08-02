@@ -81,8 +81,8 @@ private:
 
     Army * _army{ nullptr };
     fheroes2::Image backsf;
-    bool use_mini_sprite;
-    bool read_only;
+    bool use_mini_sprite{ false };
+    bool read_only{ false };
     bool can_change{ false };
     bool _saveLastTroop{ true };
     std::string msg;

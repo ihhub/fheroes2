@@ -59,7 +59,7 @@ namespace Battle
 
         void Redraw() const;
 
-        int result;
+        int result{ 0 };
 
         const fheroes2::Rect rtLocal;
         const fheroes2::Rect rtAI;
