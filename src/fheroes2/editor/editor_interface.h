@@ -29,8 +29,10 @@
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
+#include "interface_gamearea.h"
 #include "map_format_info.h"
 #include "timing.h"
+#include "ui_constants.h"
 
 namespace Maps
 {
