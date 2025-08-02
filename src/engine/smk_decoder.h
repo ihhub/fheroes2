@@ -80,7 +80,7 @@ private:
     std::vector<std::vector<uint8_t>> _audioChannel;
     int32_t _width{ 0 };
     int32_t _height{ 0 };
-    int32_t _heightScaleFactor{ 0 };
+    int32_t _heightScaleFactor{ 1 };
     double _microsecondsPerFrame{ 0 };
     unsigned long _frameCount{ 0 };
     unsigned long _currentFrameId{ 0 };
