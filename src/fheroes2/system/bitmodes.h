@@ -61,5 +61,5 @@ protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const BitModes & b );
     friend IStreamBase & operator>>( IStreamBase & stream, BitModes & b );
 
-    uint32_t modes;
+    uint32_t modes{ 0 };
 };

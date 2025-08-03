@@ -104,10 +104,10 @@ namespace Campaign
             STARTING_RACE_AND_ARMY
         };
 
-        int32_t _type;
-        int32_t _subType;
-        int32_t _amount;
-        int32_t _artifactSpellId; // Spell ID of a spell scroll
+        int32_t _type{ 0 };
+        int32_t _subType{ 0 };
+        int32_t _amount{ 0 };
+        int32_t _artifactSpellId{ 0 }; // Spell ID of a spell scroll
 
         ScenarioBonusData();
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );

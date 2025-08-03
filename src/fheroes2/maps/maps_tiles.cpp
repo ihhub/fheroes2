@@ -514,6 +514,12 @@ void Maps::Tile::setBoat( const int direction, const PlayerColor color )
     assert( isWater() );
 
     setMainObjectType( MP2::OBJ_BOAT );
+
+    // Make sure that the object part is being cleared before setting a new one.
+    _mainObjectPart = {};
+
+    // A boat is an object so it must be on the object layer.
+    _mainObjectPart.layerType = ObjectLayerType::OBJECT_LAYER;
     _mainObjectPart.icnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
     switch ( direction ) {
@@ -546,6 +552,9 @@ void Maps::Tile::setBoat( const int direction, const PlayerColor color )
         _mainObjectPart.icnIndex = 18;
         break;
     }
+
+    // Boats are not passable.
+    assert( !_mainObjectPart.isPassabilityTransparent() );
 
 #ifdef WITH_DEBUG
     const uint32_t newUid = getNewObjectUID();

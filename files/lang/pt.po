@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3476,6 +3476,18 @@ msgstr "Selecione a resolução do jogo:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Clique para aplicar a resolução selecionada."
+
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Clique para selecionar esta classe."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Clique para selecionar esta classe."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Clique para aplicar o texto inserido."
 
 msgid "Click to apply the entered text."
 msgstr "Clique para aplicar o texto inserido."
