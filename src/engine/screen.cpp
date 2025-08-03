@@ -938,50 +938,50 @@ namespace
 #endif
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                if ( displayCount >= 1 ) {
-                    // We should limit all available resolutions to the one which is currently chosen
-                    // on the system to avoid ending up having application window which is bigger than the screen resolution.
-                    SDL_DisplayMode maxDisplayMode;
-                    memset( &maxDisplayMode, 0, sizeof SDL_DisplayMode );
-
-                    for ( int displayId = 0; displayId < displayCount; ++displayId ) {
-                        SDL_DisplayMode displayMode;
-
-                        const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
-                        if ( returnValue < 0 ) {
-                            ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue
-                                                                                                  << ", description: " << SDL_GetError() )
-                            continue;
-                        }
-
-                        // There is no ideal formula how to choose the biggest resolution among multiple displays
-                        // so let's use a simple approach.
-                        maxDisplayMode.w = std::max( maxDisplayMode.w, displayMode.w );
-                        maxDisplayMode.h = std::max( maxDisplayMode.h, displayMode.h );
-                    }
-
-                    if ( maxDisplayMode.w == 0 || maxDisplayMode.h == 0 ) {
-                        // None of displays returned a value display mode.
-                        return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
-                    }
-
-                    // If the current display resolution is somehow very small, then ignore it.
-                    // It could appear in cases when the device has smaller than the required by the game resolution.
-                    if ( maxDisplayMode.w < fheroes2::Display::DEFAULT_WIDTH || maxDisplayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
-                        return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
-                    }
-
-                    std::vector<fheroes2::ResolutionInfo> temp;
-                    for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
-                        if ( iter->screenWidth <= maxDisplayMode.w && iter->screenHeight <= maxDisplayMode.h ) {
-                            temp.emplace_back( std::move( *iter ) );
-                        }
-                    }
-
-                    return temp;
+                if ( displayCount < 1 ) {
+                    return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                 }
 
-                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                // We should limit all available resolutions to the one which is currently chosen
+                // on the system to avoid ending up having application window which is bigger than the screen resolution.
+                SDL_DisplayMode maxDisplayMode;
+                memset( &maxDisplayMode, 0, sizeof SDL_DisplayMode );
+
+                for ( int displayId = 0; displayId < displayCount; ++displayId ) {
+                    SDL_DisplayMode displayMode;
+
+                    const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
+                    if ( returnValue < 0 ) {
+                        ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue << ", description: "
+                                                                                              << SDL_GetError() )
+                        continue;
+                    }
+
+                    // There is no ideal formula how to choose the biggest resolution among multiple displays
+                    // so let's use a simple approach.
+                    maxDisplayMode.w = std::max( maxDisplayMode.w, displayMode.w );
+                    maxDisplayMode.h = std::max( maxDisplayMode.h, displayMode.h );
+                }
+
+                if ( maxDisplayMode.w == 0 || maxDisplayMode.h == 0 ) {
+                    // None of displays returned a value display mode.
+                    return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                }
+
+                // If the current display resolution is somehow very small, then ignore it.
+                // It could appear in cases when the device has smaller than the required by the game resolution.
+                if ( maxDisplayMode.w < fheroes2::Display::DEFAULT_WIDTH || maxDisplayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
+                    return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                }
+
+                std::vector<fheroes2::ResolutionInfo> temp;
+                for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
+                    if ( iter->screenWidth <= maxDisplayMode.w && iter->screenHeight <= maxDisplayMode.h ) {
+                        temp.emplace_back( std::move( *iter ) );
+                    }
+                }
+
+                return temp;
             }();
 
             return filteredResolutions;
