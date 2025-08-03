@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  make:
+  make-linux:
     strategy:
       matrix:
         include:
@@ -101,6 +101,58 @@ jobs:
             FHEROES2_WITH_IMAGE: ON
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_TSAN: ON
+    name: Make (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v4
+      if: ${{ contains( matrix.on, github.event_name ) }}
+    - name: Install dependencies
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install ${{ matrix.dependencies }}
+    - name: Build
+      if: ${{ contains( matrix.on, github.event_name ) }}
+      run: |
+        make -j "$(nproc)"
+      env: ${{ matrix.env }}
+    - name: Create packages
+      if: ${{ contains( matrix.on, github.event_name ) && matrix.package_name != '' && matrix.tools_package_name != '' }}
+      run: |
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} ${{ matrix.package_files }}
+        7z a -bb1 -tzip -- ${{ matrix.tools_package_name }} ${{ matrix.tools_package_files }}
+    - uses: actions/upload-artifact@v4
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.package_name != '' }}
+      with:
+        name: ${{ matrix.package_name }}
+        path: ${{ matrix.package_name }}
+        if-no-files-found: error
+    - uses: actions/upload-artifact@v4
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.tools_package_name != '' }}
+      with:
+        name: ${{ matrix.tools_package_name }}
+        path: ${{ matrix.tools_package_name }}
+        if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'push' }}
+      with:
+        artifacts: ${{ matrix.package_name }}, ${{ matrix.tools_package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.release_name }}
+        tag: ${{ matrix.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
+  make-macos:
+    strategy:
+      matrix:
+        include:
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
           os: macos-14
@@ -153,25 +205,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       if: ${{ contains( matrix.on, github.event_name ) }}
-    - name: Install dependencies (Linux)
-      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
-      run: |
-        sudo apt-get -y update
-        sudo apt-get -y install ${{ matrix.dependencies }}
-    - name: Install dependencies (macOS)
-      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
+    - name: Install dependencies
+      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-    - name: Build (Linux)
-      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
-      run: |
-        make -j "$(nproc)"
-      env: ${{ matrix.env }}
-    - name: Build (MacOS)
-      if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
+    - name: Build
+      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.env }}
