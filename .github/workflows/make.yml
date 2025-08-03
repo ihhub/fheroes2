@@ -212,7 +212,7 @@ jobs:
     - name: Install dependencies
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
-        if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
             arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             # On Apple Silicon, Homebrew for ARM64 uses /opt, while Homebrew for x86_64 uses /usr/local
             export PATH=/usr/local/bin:$PATH
@@ -224,7 +224,7 @@ jobs:
     - name: Build
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
-        if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
             # On Apple Silicon, Homebrew for ARM64 uses /opt, while Homebrew for x86_64 uses /usr/local
             export PATH=/usr/local/bin:$PATH
         fi
