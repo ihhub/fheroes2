@@ -977,7 +977,7 @@ namespace
                 std::vector<fheroes2::ResolutionInfo> temp;
                 for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
                     if ( iter->screenWidth <= maxDisplayMode.w && iter->screenHeight <= maxDisplayMode.h ) {
-                        temp.emplace_back( std::move( *iter ) );
+                        temp.emplace_back( *iter );
                     }
                 }
 
