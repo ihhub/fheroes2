@@ -156,8 +156,12 @@ jobs:
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
           os: macos-14
+          arch: x86_64
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
+            CFLAGS: --target=x86_64-apple-macos
+            CXXFLAGS: --target=x86_64-apple-macos
+            LDFLAGS: --target=x86_64-apple-macos
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
@@ -208,6 +212,11 @@ jobs:
     - name: Install dependencies
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
+            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            # On Apple Silicon, Homebrew for ARM64 uses /opt, while Homebrew for x86_64 uses /usr/local
+            export PATH=/usr/local/bin:$PATH
+        fi
         brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
@@ -215,6 +224,10 @@ jobs:
     - name: Build
       if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
+            # On Apple Silicon, Homebrew for ARM64 uses /opt, while Homebrew for x86_64 uses /usr/local
+            export PATH=/usr/local/bin:$PATH
+        fi
         make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.env }}
     - name: Create packages
