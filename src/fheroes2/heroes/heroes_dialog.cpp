@@ -270,7 +270,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
                                 PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        const fheroes2::Text raceText( _( "Hero race:" ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text raceText( _( "Hero class:" ), fheroes2::FontType::normalWhite() );
         raceText.drawInRoi( crestRect.x, crestRect.y + 6, crestRect.width, display, crestRect );
 
         const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( _race, true ) );
@@ -648,7 +648,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             }
             else if ( le.isMouseCursorPosInArea( raceRect ) ) {
                 assert( !needRedraw );
-                message = _( "Click to change race." );
+                message = _( "Click to change class." );
                 if ( le.MouseClickLeft() || le.isMouseWheelDown() ) {
                     _race = Race::getNextRace( _race );
                     needRedraw = true;
