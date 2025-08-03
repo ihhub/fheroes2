@@ -942,8 +942,8 @@ namespace
                     return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                 }
 
-                // We should limit all available resolutions to the one which is currently chosen
-                // on the system to avoid ending up having application window which is bigger than the screen resolution.
+                // We should limit all available resolutions to the one which is currently chosen on the system
+                // to avoid ending up having application window which is bigger than the screen resolution.
                 SDL_DisplayMode maxDisplayMode;
                 memset( &maxDisplayMode, 0, sizeof SDL_DisplayMode );
 
@@ -957,8 +957,8 @@ namespace
                         continue;
                     }
 
-                    // There is no ideal formula how to choose the biggest resolution among multiple displays
-                    // so let's use a simple approach.
+                    // There is no an ideal formula of how to choose the biggest resolution among multiple displays
+                    // so let's use a simple and well-known approach.
                     maxDisplayMode.w = std::max( maxDisplayMode.w, displayMode.w );
                     maxDisplayMode.h = std::max( maxDisplayMode.h, displayMode.h );
                 }
@@ -968,8 +968,8 @@ namespace
                     return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                 }
 
-                // If the current display resolution is somehow very small, then ignore it.
-                // It could appear in cases when the device has smaller than the required by the game resolution.
+                // If the current display resolution is somehow very small, ignore it.
+                // It could happen when a device has smaller than the required by the engine resolution.
                 if ( maxDisplayMode.w < fheroes2::Display::DEFAULT_WIDTH || maxDisplayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
                     return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
                 }
