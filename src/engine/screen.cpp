@@ -913,8 +913,8 @@ namespace
                                 SDL_DisplayMode videoMode;
                                 const int returnCode = SDL_GetDisplayMode( displayId, i, &videoMode );
                                 if ( returnCode != 0 ) {
-                                    ERROR_LOG( "Failed to get display mode on display " << displayId << ". The error value: " << returnCode << ", description: "
-                                                                                        << SDL_GetError() )
+                                    ERROR_LOG( "Failed to get display mode on display " << displayId << ". The error value: " << returnCode
+                                                                                        << ", description: " << SDL_GetError() )
                                 }
                                 else {
                                     resolutionSet.emplace( videoMode.w, videoMode.h );
@@ -952,8 +952,8 @@ namespace
 
                     const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
                     if ( returnValue < 0 ) {
-                        ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue << ", description: "
-                                                                                              << SDL_GetError() )
+                        ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue
+                                                                                              << ", description: " << SDL_GetError() )
                         continue;
                     }
 
