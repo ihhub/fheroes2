@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3104,6 +3104,15 @@ msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
+msgstr ""
+
+msgid "Click to select the maximum amount."
+msgstr ""
+
+msgid "Click to select the minimum amount."
+msgstr ""
+
+msgid "Click to apply the entered number."
 msgstr ""
 
 msgid "Click to apply the entered text."

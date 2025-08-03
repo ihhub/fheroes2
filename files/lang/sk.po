@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-02 11:07+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3495,6 +3495,18 @@ msgstr "Zvoľ rozlíšenie hry:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klikni pre použitie zadaného textu."
 
 msgid "Click to apply the entered text."
 msgstr "Klikni pre použitie zadaného textu."

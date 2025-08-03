@@ -208,7 +208,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
                                                      fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
 
-    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
@@ -368,7 +368,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
             if ( le.isMouseCursorPosInArea( activeCampaignArea[i] ) && videos[i] ) {
                 highlightCampaignId = i;
-                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
+                customDelay = static_cast<uint64_t>( std::lround( videos[highlightCampaignId]->microsecondsPerFrame() / 1000 ) );
                 break;
             }
         }
