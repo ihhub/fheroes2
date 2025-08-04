@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-02 11:07+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -5224,6 +5224,10 @@ msgstr "Jours passés"
 msgid "The number of days spent on this campaign."
 msgstr "Le nombre de jours passés dans cette campagne."
 
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scénario"
+
 msgid "Project Coordination and Core Development"
 msgstr "Coordination du projet et développement"
 
@@ -8434,7 +8438,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Fenêtre d'informations du héros"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8470,7 +8474,7 @@ msgid "Enter hero's name"
 msgstr "Perdre le héros : %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Cliquez pour afficher le village suivant."
 
 msgid ""
