@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-02 11:07+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-08-01 14:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -5048,6 +5048,10 @@ msgstr "Gångna dagar"
 msgid "The number of days spent on this campaign."
 msgstr "Antal gångna dagar för denna kampanj."
 
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenario"
+
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination och huvudutveckling"
 
@@ -8187,7 +8191,8 @@ msgstr "Slumpad hjälte (Nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Hjälteklass"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8221,7 +8226,8 @@ msgstr "Ange patrullradie i antal rutor"
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klicka för byta klass."
 
 msgid ""
