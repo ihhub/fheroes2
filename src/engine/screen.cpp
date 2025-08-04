@@ -943,8 +943,7 @@ namespace
 
             // We should limit all available resolutions to the one which is currently chosen on the system
             // to avoid ending up having application window which is bigger than the screen resolution.
-            SDL_DisplayMode maxDisplayMode;
-            memset( &maxDisplayMode, 0, sizeof( SDL_DisplayMode ) );
+            SDL_DisplayMode maxDisplayMode{};
 
             for ( int displayId = 0; displayId < displayCount; ++displayId ) {
                 SDL_DisplayMode displayMode;
