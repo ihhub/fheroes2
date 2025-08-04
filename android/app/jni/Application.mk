@@ -22,3 +22,5 @@
 APP_STL := c++_shared
 # Minimum supported Android API level
 APP_PLATFORM := android-21
+# Support 16 KB page sizes
+APP_SUPPORT_FLEXIBLE_PAGE_SIZES := true
