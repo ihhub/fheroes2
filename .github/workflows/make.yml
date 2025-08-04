@@ -107,9 +107,9 @@ jobs:
           arch: x86_64
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
-            CFLAGS: --target=x86_64-apple-macos
-            CXXFLAGS: --target=x86_64-apple-macos
-            LDFLAGS: --target=x86_64-apple-macos
+            CFLAGS: --target=x86_64-apple-macos10.15
+            CXXFLAGS: --target=x86_64-apple-macos10.15
+            LDFLAGS: --target=x86_64-apple-macos10.15
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
