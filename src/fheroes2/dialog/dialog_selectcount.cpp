@@ -112,8 +112,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     assert( btnGroups.getButtonsCount() == 2 );
 
-    auto & buttonOkay = btnGroups.button( 0 );
-    auto & buttonCancel = btnGroups.button( 1 );
+    const auto & buttonOkay = btnGroups.button( 0 );
+    const auto & buttonCancel = btnGroups.button( 1 );
     btnGroups.draw();
 
     const fheroes2::Point minMaxButtonOffset( selectionBoxArea.x + selectionBoxArea.width + 6, selectionBoxArea.y );
