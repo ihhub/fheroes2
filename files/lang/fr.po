@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3518,6 +3518,18 @@ msgstr "Choisir la résolution d'écran:"
 msgid "Click to apply the selected resolution."
 msgstr "Cliquez pour valider la résolution choisie."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Cliquez ici pour sélectionner cet alignement."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Cliquez ici pour sélectionner cet alignement."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Cliquez pour valider le texte."
+
 msgid "Click to apply the entered text."
 msgstr "Cliquez pour valider le texte."
 
@@ -5211,6 +5223,10 @@ msgstr "Jours passés"
 
 msgid "The number of days spent on this campaign."
 msgstr "Le nombre de jours passés dans cette campagne."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scénario"
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordination du projet et développement"
@@ -8422,7 +8438,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Fenêtre d'informations du héros"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8458,7 +8474,7 @@ msgid "Enter hero's name"
 msgstr "Perdre le héros : %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Cliquez pour afficher le village suivant."
 
 msgid ""
@@ -10225,8 +10241,9 @@ msgstr "Attaque sur deux hexagones"
 msgid "Flyer"
 msgstr "Volant"
 
-msgid "Always retaliates"
-msgstr "Riposte toujours"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Aucune riposte de l'ennemi"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Attaque tous les ennemis adjacents"
@@ -12512,6 +12529,9 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Riposte toujours"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

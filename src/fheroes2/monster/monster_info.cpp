@@ -71,7 +71,7 @@ namespace
             damagePotential *= 1.2;
         }
 
-        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        if ( fheroes2::isAbilityPresent( abilities, fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
             damagePotential *= 1.25;
         }
 
@@ -436,7 +436,7 @@ namespace
 
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE );
+        monsterData[Monster::GRIFFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION );
 
         monsterData[Monster::HYDRA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::HYDRA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
@@ -674,8 +674,8 @@ namespace fheroes2
             return _( "Two hexes attack" );
         case MonsterAbilityType::FLYING:
             return ignoreBasicAbilities ? "" : _( "Flyer" );
-        case MonsterAbilityType::ALWAYS_RETALIATE:
-            return _( "Always retaliates" );
+        case MonsterAbilityType::UNLIMITED_RETALIATION:
+            return _( "Unlimited retaliation" );
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
             return _( "Attacks all adjacent enemies" );
         case MonsterAbilityType::NO_MELEE_PENALTY:

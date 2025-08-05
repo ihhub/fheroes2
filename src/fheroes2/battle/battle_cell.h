@@ -186,7 +186,7 @@ namespace Battle
         }
 
     private:
-        int32_t _index;
+        int32_t _index{ 0 };
         fheroes2::Rect _pos;
         int _object{ 0 };
         Unit * _unit{ nullptr };

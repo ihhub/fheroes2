@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <numeric>
 #include <optional>
 #include <vector>
 
@@ -82,7 +83,7 @@ namespace Campaign
 
         uint32_t getDaysPassed() const
         {
-            return _daysPassed;
+            return std::accumulate( _daysPassed.cbegin(), _daysPassed.cend(), static_cast<uint32_t>( 0 ) );
         }
 
         int32_t getDifficulty() const
@@ -135,6 +136,7 @@ namespace Campaign
         CampaignSaveData() = default;
 
         std::vector<ScenarioInfoId> _finishedMaps;
+        std::vector<uint32_t> _daysPassed;
         std::vector<int32_t> _bonusesForFinishedMaps;
         std::vector<int> _obtainedCampaignAwards;
         std::vector<Troop> _carryOverTroops;
@@ -142,7 +144,6 @@ namespace Campaign
         ScenarioInfoId _currentScenarioInfoId;
         int32_t _currentScenarioBonusId{ -1 };
 
-        uint32_t _daysPassed{ 0 };
         int32_t _difficulty{ CampaignDifficulty::Normal };
         int32_t _minDifficulty{ CampaignDifficulty::Normal };
     };

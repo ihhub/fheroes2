@@ -110,6 +110,10 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
     valueSelectionElement.draw( display );
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
+    assert( btnGroups.getButtonsCount() == 2 );
+
+    const auto & buttonOkay = btnGroups.button( 0 );
+    const auto & buttonCancel = btnGroups.button( 1 );
     btnGroups.draw();
 
     const fheroes2::Point minMaxButtonOffset( selectionBoxArea.x + selectionBoxArea.width + 6, selectionBoxArea.y );
@@ -151,11 +155,17 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
             needRedraw = true;
         }
+        else if ( buttonMax.isVisible() && le.isMouseRightButtonPressedInArea( buttonMax.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MAX" ), _( "Click to select the maximum amount." ), Dialog::ZERO );
+        }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             valueSelectionElement.setValue( min );
             typedValueBuf.clear();
 
             needRedraw = true;
+        }
+        else if ( buttonMin.isVisible() && le.isMouseRightButtonPressedInArea( buttonMin.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MIN" ), _( "Click to select the minimum amount." ), Dialog::ZERO );
         }
         else if ( valueSelectionElement.processEvents() ) {
             typedValueBuf.clear();
@@ -165,6 +175,12 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
         else if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
             uiElement->processEvents( uiOffset );
             display.render();
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered number." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else {
             result = btnGroups.processEvents();

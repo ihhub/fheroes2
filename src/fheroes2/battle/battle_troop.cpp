@@ -136,6 +136,7 @@ Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool isRefl
     , _uid( uid )
     , _hitPoints( troop.GetHitPoints() )
     , _initialCount( troop.GetCount() )
+    , _maxCount( troop.GetCount() )
     , _shotsLeft( troop.GetShots() )
     , _idleTimer( animation.getIdleDelay() )
     , _isReflected( isReflected )
@@ -202,7 +203,7 @@ void Battle::Unit::UpdateDirection()
     const Arena * arena = GetArena();
     assert( arena != nullptr );
 
-    SetReflection( arena->GetArmy1Color() != GetArmyColor() );
+    SetReflection( arena->getAttackingArmyColor() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
@@ -257,7 +258,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
+    const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
     assert( totalHitPoints > _hitPoints );
     return totalHitPoints - _hitPoints;
 }
@@ -389,7 +390,7 @@ void Battle::Unit::NewTurn()
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
-    ResetModes( TR_RESPONDED );
+    ResetModes( TR_RETALIATED );
     ResetModes( TR_MOVED );
     ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
@@ -453,12 +454,12 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
     }
 
     // Mirror images are destroyed anyway and hypnotized units never respond to an attack
-    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+    if ( Modes( TR_RETALIATED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
         return 0;
     }
 
     // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return 0;
     }
 
@@ -620,8 +621,8 @@ uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         // Units with this ability retaliate even when under the influence of paralyzing spells
-        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-            SetModes( TR_RESPONDED );
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+            SetModes( TR_RETALIATED );
         }
 
         SetModes( TR_MOVED );
@@ -717,19 +718,19 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
+uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, _hitPoints + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     _hitPoints += points;
 
-    if ( allowToExceedInitialCount ) {
-        _initialCount = std::max( _initialCount, GetCount() );
+    if ( allowToExceedMaxCount ) {
+        _maxCount = std::max( _maxCount, GetCount() );
     }
-    else if ( GetCount() > _initialCount ) {
-        resurrect -= GetCount() - _initialCount;
-        SetCount( _initialCount );
+    else if ( GetCount() > _maxCount ) {
+        resurrect -= GetCount() - _maxCount;
+        SetCount( _maxCount );
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
@@ -897,7 +898,7 @@ std::string Battle::Unit::String( const bool more /* = false */ ) const
     return ss.str();
 }
 
-bool Battle::Unit::AllowResponse() const
+bool Battle::Unit::isRetaliationAllowed() const
 {
     // Hypnotized units never respond to an attack
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -914,16 +915,16 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    return ( !Modes( TR_RESPONDED ) );
+    return ( !Modes( TR_RETALIATED ) );
 }
 
-void Battle::Unit::SetResponse()
+void Battle::Unit::setRetaliationAsCompleted()
 {
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return;
     }
 
-    SetModes( TR_RESPONDED );
+    SetModes( TR_RETALIATED );
 }
 
 void Battle::Unit::PostAttackAction( const Unit & enemy )
@@ -1160,7 +1161,7 @@ double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
-    return GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
+    return GetCost() * ( GetDead() > GetMaxCount() ? 0 : GetMaxCount() - GetDead() );
 }
 
 int Battle::Unit::GetControl() const
@@ -1498,7 +1499,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == _initialCount ) {
+        if ( GetCount() == _maxCount ) {
             return 100;
         }
         break;
@@ -1550,7 +1551,7 @@ Spell Battle::Unit::GetSpellMagic( Rand::PCG32 & randomGenerator ) const
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return _hitPoints < _initialCount * Monster::GetHitPoints();
+    return _hitPoints < _maxCount * Monster::GetHitPoints();
 }
 
 bool Battle::Unit::SwitchAnimation( const int rule, const bool reverse /* = false */ )

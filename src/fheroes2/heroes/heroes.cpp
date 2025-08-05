@@ -2192,14 +2192,14 @@ Heroes::HeroSeedsForLevelUp Heroes::_getSeedsForLevelUp() const
      * */
 
     uint32_t hash = world.GetMapSeed();
-    fheroes2::hashCombine( hash, _id );
-    fheroes2::hashCombine( hash, _race );
-    fheroes2::hashCombine( hash, attack );
-    fheroes2::hashCombine( hash, defense );
-    fheroes2::hashCombine( hash, power );
-    fheroes2::hashCombine( hash, knowledge );
+    Rand::combineSeedWithValueHash( hash, _id );
+    Rand::combineSeedWithValueHash( hash, _race );
+    Rand::combineSeedWithValueHash( hash, attack );
+    Rand::combineSeedWithValueHash( hash, defense );
+    Rand::combineSeedWithValueHash( hash, power );
+    Rand::combineSeedWithValueHash( hash, knowledge );
     for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
-        fheroes2::hashCombine( hash, GetLevelSkill( skillId ) );
+        Rand::combineSeedWithValueHash( hash, GetLevelSkill( skillId ) );
     }
 
     HeroSeedsForLevelUp seeds;

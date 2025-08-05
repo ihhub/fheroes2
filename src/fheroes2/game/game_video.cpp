@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
@@ -131,7 +132,8 @@ namespace Video
         uint32_t currentFrame = 0;
         fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
 
-        const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
+        // This might be not very accurate but it's the best we can have now.
+        const uint32_t delay = static_cast<uint32_t>( std::lround( video.microsecondsPerFrame() / 1000 ) );
 
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;

@@ -131,8 +131,9 @@ namespace Battle
 
         int GetNextValue();
 
-        // Updates the specified seed using the contents of this command. Returns the updated seed (or the original seed if this command is not suitable for seed update).
-        uint32_t updateSeed( uint32_t seed ) const;
+        // Updates the specified PCG32 stream using the contents of this command. Returns the updated stream (or the original stream if
+        // this command should not affect the stream).
+        uint64_t updatePCG32Stream( uint64_t stream ) const;
 
         Command & operator<<( const int val );
 

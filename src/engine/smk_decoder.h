@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,19 +21,22 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "smacker.h"
 
 namespace fheroes2
 {
     class Image;
 }
 
-class SMKVideoSequence
+class SMKVideoSequence final
 {
 public:
     explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
+    ~SMKVideoSequence() = default;
 
     SMKVideoSequence( const SMKVideoSequence & ) = delete;
     SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
@@ -46,12 +49,30 @@ public:
 
     std::vector<uint8_t> getCurrentPalette() const;
 
-    const std::vector<std::vector<uint8_t>> & getAudioChannels() const;
+    const std::vector<std::vector<uint8_t>> & getAudioChannels() const
+    {
+        return _audioChannel;
+    }
 
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
+    int32_t width() const
+    {
+        return _width;
+    }
+
+    int32_t height() const
+    {
+        return _height;
+    }
+
+    double microsecondsPerFrame() const
+    {
+        return _microsecondsPerFrame;
+    }
+
+    unsigned long frameCount() const
+    {
+        return _frameCount;
+    }
 
     unsigned long getCurrentFrame() const
     {
@@ -60,12 +81,12 @@ public:
 
 private:
     std::vector<std::vector<uint8_t>> _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    int32_t _heightScaleFactor;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
+    int32_t _width{ 0 };
+    int32_t _height{ 0 };
+    int32_t _heightScaleFactor{ 1 };
+    double _microsecondsPerFrame{ 0 };
+    unsigned long _frameCount{ 0 };
+    unsigned long _currentFrameId{ 0 };
 
-    struct smk_t * _videoFile;
+    std::unique_ptr<struct smk_t, void ( * )( struct smk_t * )> _videoFile{ nullptr, smk_close };
 };

@@ -75,7 +75,7 @@ private:
     std::string GetConditionDescription() const;
 
     const Castle & castle;
-    uint32_t _buildingType;
+    uint32_t _buildingType{ 0 };
     std::string description;
     fheroes2::Rect area;
     BuildingStatus _status;
@@ -87,7 +87,7 @@ struct DwellingItem
         : dwType( dw )
     {}
 
-    const uint32_t dwType;
+    const uint32_t dwType{ 0 };
 };
 
 class DwellingsBar final : public Interface::ItemsBar<DwellingItem>

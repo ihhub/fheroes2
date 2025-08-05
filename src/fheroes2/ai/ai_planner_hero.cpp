@@ -1221,8 +1221,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     }
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SKELETON:
-    case MP2::OBJ_WAGON: {
+    case MP2::OBJ_SKELETON: {
         const Artifact art = getArtifactFromTile( tile );
         if ( !art.isValid() ) {
             // Don't waste time to go here.
@@ -1230,6 +1229,23 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         }
 
         return 1000.0 * art.getArtifactValue();
+    }
+    case MP2::OBJ_WAGON: {
+        const Artifact art = getArtifactFromTile( tile );
+        if ( art.isValid() ) {
+            return 1000.0 * art.getArtifactValue();
+        }
+
+        const Funds loot = getFundsFromTile( tile );
+
+        const double value = getFundsValueBasedOnPriority( loot );
+
+        // This object could have already been visited
+        if ( value < 1 ) {
+            return valueToIgnore;
+        }
+
+        return value;
     }
     case MP2::OBJ_BOTTLE: {
         // A bottle is useless to AI as it contains only a message but it might block path.

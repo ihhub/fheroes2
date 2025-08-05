@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 02:35+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3519,6 +3519,18 @@ msgstr "Vælg spilopløsning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klik for at godkende valgte opløsning."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klik for at vælge denne klasse."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klik for at vælge denne klasse."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klik for at anvende den indtastede tekst."
+
 msgid "Click to apply the entered text."
 msgstr "Klik for at anvende den indtastede tekst."
 
@@ -5113,6 +5125,10 @@ msgstr "Dage brugt"
 
 msgid "The number of days spent on this campaign."
 msgstr "Antal dage brugt på dette felttog."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kort"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination og kerneudvikling"
@@ -8271,7 +8287,8 @@ msgstr "Tilfældig helt (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Tilfældig helt af klassen %{race} (Level %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Helteklasse:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8304,7 +8321,8 @@ msgstr "Indstil patruljeradius i feltantal"
 msgid "Enter hero's name"
 msgstr "Indtast heltens navn"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klik for at skifte race."
 
 msgid ""
@@ -10066,8 +10084,9 @@ msgstr "2-feltsangreb"
 msgid "Flyer"
 msgstr "Kan flyve"
 
-msgid "Always retaliates"
-msgstr "Slår altid igen"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Fjender kan ikke slå igen"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriber alle fjender omkring sig"
@@ -12341,6 +12360,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Slår altid igen"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

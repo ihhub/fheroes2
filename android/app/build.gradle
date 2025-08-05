@@ -90,7 +90,7 @@ dependencies {
     implementation project(':isotools')
     implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
     implementation 'com.google.android.material:material:1.12.0'
 }

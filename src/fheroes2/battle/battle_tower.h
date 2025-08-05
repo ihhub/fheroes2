@@ -65,7 +65,7 @@ namespace Battle
 
     private:
         TowerType _towerType;
-        uint32_t _attackBonus;
-        bool _isValid;
+        uint32_t _attackBonus{ 0 };
+        bool _isValid{ false };
     };
 }

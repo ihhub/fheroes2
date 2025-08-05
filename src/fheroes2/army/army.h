@@ -137,7 +137,7 @@ private:
     Troop * getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const;
 };
 
-struct NeutralMonsterJoiningCondition
+struct NeutralMonsterJoiningCondition final
 {
     enum class Reason : int
     {
@@ -149,12 +149,12 @@ struct NeutralMonsterJoiningCondition
         Bane
     };
 
-    Reason reason;
-    uint32_t monsterCount;
+    Reason reason{ Reason::None };
+    uint32_t monsterCount{ 0 };
 
     // These messages are used only for Alliance and Bane reasons.
-    const char * joiningMessage;
-    const char * fleeingMessage;
+    const char * joiningMessage{ nullptr };
+    const char * fleeingMessage{ nullptr };
 };
 
 class Army final : public Troops, public Control
