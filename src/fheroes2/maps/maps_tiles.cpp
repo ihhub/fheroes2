@@ -1068,6 +1068,11 @@ bool Maps::Tile::isSuitableForSummoningBoat() const
         return false;
     }
 
+    // Tiles with events are not suitable for summoning a boat (at least for now)
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        return false;
+    }
+
     // It is impossible to summon a boat on land
     if ( !isWater() ) {
         return false;
