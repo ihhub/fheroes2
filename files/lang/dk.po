@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-02 11:07+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -5126,6 +5126,10 @@ msgstr "Dage brugt"
 msgid "The number of days spent on this campaign."
 msgstr "Antal dage brugt på dette felttog."
 
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kort"
+
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination og kerneudvikling"
 
@@ -8283,7 +8287,8 @@ msgstr "Tilfældig helt (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Tilfældig helt af klassen %{race} (Level %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Helteklasse:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8316,7 +8321,8 @@ msgstr "Indstil patruljeradius i feltantal"
 msgid "Enter hero's name"
 msgstr "Indtast heltens navn"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klik for at skifte race."
 
 msgid ""

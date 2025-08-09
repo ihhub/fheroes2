@@ -1,13 +1,13 @@
 # Hungarian translation for fheroes2
-# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024-2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-02 11:07+0000\n"
-"PO-Revision-Date: 2025-08-03 20:57+0200\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"PO-Revision-Date: 2025-07-10 23:37+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -5051,6 +5051,10 @@ msgstr "Nap eltelt"
 msgid "The number of days spent on this campaign."
 msgstr "Az eltöltött napok száma ebben a hadjáratban."
 
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Küldetés"
+
 msgid "Project Coordination and Core Development"
 msgstr "Projekt-koordináció és fő fejlesztés"
 
@@ -8162,7 +8166,8 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Hős osztály:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8198,7 +8203,8 @@ msgstr "Járőrözési sugár beállítása"
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Kattints az osztály megváltoztatásához."
 
 msgid ""

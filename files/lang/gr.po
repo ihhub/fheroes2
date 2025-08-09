@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-02 11:07+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -4575,6 +4575,9 @@ msgstr ""
 msgid "The number of days spent on this campaign."
 msgstr ""
 
+msgid "Scenario Title"
+msgstr ""
+
 msgid "Project Coordination and Core Development"
 msgstr ""
 
@@ -7179,7 +7182,7 @@ msgstr ""
 msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7212,7 +7215,7 @@ msgstr ""
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr ""
 
 msgid ""
