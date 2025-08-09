@@ -175,13 +175,13 @@ namespace Battle
         };
 
     private:
-        HeroBase * _heroBase;
+        HeroBase * _heroBase{ nullptr };
         AnimationSequence _currentAnim;
         int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
 
         int _heroIcnId{ ICN::UNKNOWN };
-        bool _isFlippedHorizontally;
+        bool _isFlippedHorizontally{ false };
         fheroes2::Rect _area;
         fheroes2::Point _offset;
     };
@@ -512,9 +512,9 @@ namespace Battle
                 DESTROYED = 24
             };
 
-            bool animationIsRequired;
+            bool animationIsRequired{ false };
 
-            uint32_t currentFrameId;
+            uint32_t currentFrameId{ 0 };
         };
 
         BridgeMovementAnimation _bridgeAnimation{ false, BridgeMovementAnimation::UP_POSITION };
@@ -625,7 +625,7 @@ namespace Battle
 
         private:
             BoardActionIntent & _storedIntent;
-            const bool _isFromTouchpad;
+            const bool _isFromTouchpad{ false };
             std::optional<BoardActionIntent> _intent;
         };
     };

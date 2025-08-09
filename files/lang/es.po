@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3471,6 +3471,18 @@ msgid "Click to apply the selected resolution."
 msgstr "Haz clic para aplicar la resolución seleccionada."
 
 #, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
 msgid "Click to apply the entered text."
 msgstr "Haz clic para volver al menú principal"
 
@@ -5189,6 +5201,10 @@ msgstr "Días transcurridos"
 
 msgid "The number of days spent on this campaign."
 msgstr "El número de días transcurridos en esta campaña."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Escenario"
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordinación del proyecto y desarrollo central"
@@ -8351,7 +8367,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Pantalla de Héroe"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8387,7 +8403,7 @@ msgid "Enter hero's name"
 msgstr "Pierdes el héroe: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Haga clic para ver la siguiente ciudad."
 
 msgid ""

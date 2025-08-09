@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3482,6 +3482,18 @@ msgstr "Выбор разрешения экрана:"
 msgid "Click to apply the selected resolution."
 msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Нажмите сюда чтобы выбрать эту фракцию."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Нажмите сюда чтобы выбрать эту фракцию."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Нажмите, чтобы принять введённый текст."
+
 msgid "Click to apply the entered text."
 msgstr "Нажмите, чтобы принять введённый текст."
 
@@ -5071,6 +5083,10 @@ msgstr "Затрачено дней"
 
 msgid "The number of days spent on this campaign."
 msgstr "Количество дней, потраченных на эту кампанию."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Сценарий"
 
 msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
@@ -8207,7 +8223,8 @@ msgstr "Случайный герой (Уровень %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race}, случайный герой (Уровень %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Фракция героя:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8240,7 +8257,8 @@ msgstr "Введите радиус патрулирования в клетка
 msgid "Enter hero's name"
 msgstr "Введите имя героя"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Нажмите, чтобы изменить фракцию."
 
 msgid ""

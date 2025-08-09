@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3385,6 +3385,18 @@ msgstr "Выберыце разрознасць экранa:"
 msgid "Click to apply the selected resolution."
 msgstr "Націсніце, каб ужыць выбраную разрознасць."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Націсніце, каб ужыць уведзены тэкст."
+
 msgid "Click to apply the entered text."
 msgstr "Націсніце, каб ужыць уведзены тэкст."
 
@@ -4953,6 +4965,10 @@ msgstr ""
 
 msgid "The number of days spent on this campaign."
 msgstr ""
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Сцэнар"
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -7632,7 +7648,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Экран героя"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7667,7 +7683,7 @@ msgid "Enter hero's name"
 msgstr ""
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
 msgid ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3439,6 +3439,18 @@ msgstr "Nastav rozlišení hry:"
 msgid "Click to apply the selected resolution."
 msgstr "Kliknutím se rozlišení změní na vybrané."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klikněte pro použití zadaného textu."
+
 msgid "Click to apply the entered text."
 msgstr "Klikněte pro použití zadaného textu."
 
@@ -5019,6 +5031,10 @@ msgstr "Uběhlo dní"
 
 msgid "The number of days spent on this campaign."
 msgstr "Počet dní od začátku této kampaně."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scénář"
 
 msgid "Project Coordination and Core Development"
 msgstr "Koordinace projektu a hlavní vývoj"
@@ -8113,7 +8129,8 @@ msgstr "Náhodný hrdina (Úroveň %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Náhodný hrdina %{race} (Úroveň %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Rasa hrdiny:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8150,7 +8167,8 @@ msgstr "Nastavte hlídkový rádius v polích"
 msgid "Enter hero's name"
 msgstr "Zadejte jméno hrdiny"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klikni pro změnu rasy."
 
 msgid ""

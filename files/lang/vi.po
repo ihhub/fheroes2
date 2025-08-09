@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3508,6 +3508,18 @@ msgstr "Chọn Độ phân giải:"
 msgid "Click to apply the selected resolution."
 msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Nhấp để áp dụng văn bản đã nhập."
+
 msgid "Click to apply the entered text."
 msgstr "Nhấp để áp dụng văn bản đã nhập."
 
@@ -5203,6 +5215,10 @@ msgstr "Ngày đã qua"
 
 msgid "The number of days spent on this campaign."
 msgstr "Số ngày đã qua trong chiến dịch này."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kịch bản"
 
 msgid "Project Coordination and Core Development"
 msgstr "Điều phối Dự án và Phát triển Lõi"
@@ -8380,7 +8396,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Màn hình Tướng"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8416,7 +8432,7 @@ msgid "Enter hero's name"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy

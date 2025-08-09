@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3471,6 +3471,18 @@ msgstr "Вибрати ігрову роздільність:"
 msgid "Click to apply the selected resolution."
 msgstr "Натисніть, щоб встановити обрану розділову здатність."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Тицьніть щоб обрати цей клас."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Тицьніть щоб обрати цей клас."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Натисніть, щоб підтвердити введений текст."
+
 msgid "Click to apply the entered text."
 msgstr "Натисніть, щоб підтвердити введений текст."
 
@@ -5063,6 +5075,10 @@ msgstr "Витрачено днів"
 
 msgid "The number of days spent on this campaign."
 msgstr "Кількість днів, витрачених на цю кампанію."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Сценарій"
 
 msgid "Project Coordination and Core Development"
 msgstr "Координація проекту та основна розробка"
@@ -8203,7 +8219,8 @@ msgstr "Випадковий герой (Рівень %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Випадковий %{race} герой (Рівень %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Клас героя:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8248,7 +8265,8 @@ msgstr "Встановити радіус патрулювання в стіль
 msgid "Enter hero's name"
 msgstr "Ввести ім'я героя"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Натисніть для зміни раси."
 
 msgid ""

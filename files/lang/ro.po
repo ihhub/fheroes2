@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 00:05+0000\n"
+"POT-Creation-Date: 2025-08-04 00:23+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3324,6 +3324,18 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
 msgid "Click to apply the entered text."
 msgstr ""
 
@@ -4859,6 +4871,10 @@ msgstr ""
 
 msgid "The number of days spent on this campaign."
 msgstr ""
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenariu"
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordonare de Proiect și Dezvoltare"
@@ -7505,7 +7521,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Ecranul eroului"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7539,8 +7555,9 @@ msgstr ""
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Click to change race."
-msgstr ""
+#, fuzzy
+msgid "Click to change class."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
