@@ -2644,11 +2644,11 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
     const Maps::Tile & currTile = world.getTile( heroIdx );
     const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isSuitableForSummoningBoat() ) {
         return;
     }
 
-    // If the hero goes to the water tile, then this should be his last movement
+    // If the hero summons a boat on a water tile and then moves to that tile, then this should be his last movement
     assert( path.size() == 1 );
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
@@ -2735,12 +2735,12 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
     const Maps::Tile & currTile = world.getTile( heroIdx );
     const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isSuitableForSummoningBoat() ) {
         return;
     }
 
-    // If the hero goes to the water tile, then this should be his last movement
-    // (not counting the current step, which is not yet completed at the moment)
+    // If the hero summons a boat on a water tile and then moves to that tile, then this should be his
+    // last movement (not counting the current step, which is not yet completed at the moment)
     assert( path.size() == 2 );
 
     // It may happen that although the hero at the beginning of his path had enough spell points to
