@@ -86,9 +86,9 @@ namespace
             }
         }
 
+        uint16_t requirements{ 0 };
         Maps::FileInfo info;
         int gameType{ 0 };
-        uint16_t requirements{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )
