@@ -410,7 +410,7 @@ std::string Settings::String() const
     os << std::endl
        << "# !!! WARNING !!!" << std::endl
        << "# Modify this file manually only if you are absolutely sure what you are going!" << std::endl
-        << "# !!! WARNING !!!" << std::endl;
+       << "# !!! WARNING !!!" << std::endl;
 
     const fheroes2::Display & display = fheroes2::Display::instance();
 
