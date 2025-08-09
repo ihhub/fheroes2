@@ -429,7 +429,7 @@ std::string Settings::String() const
     os << std::endl << "# Music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# Enable fullscreen mode: on/off" << std::endl;
+    os << std::endl << "# Toggle fullscreen mode: on/off" << std::endl;
     os << "fullscreen = " << ( _gameOptions.Modes( GAME_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
@@ -447,7 +447,7 @@ std::string Settings::String() const
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
-    os << std::endl << "# Show battle grid: on/off" << std::endl;
+    os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Show battle shadow movement: on/off" << std::endl;
