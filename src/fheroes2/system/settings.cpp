@@ -514,7 +514,7 @@ std::string Settings::String() const
     os << std::endl << "# Enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( _gameOptions.Modes( GAME_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# Enable text support mode to output extra information in console window: on/off" << std::endl;
+    os << std::endl << "# Enable text support mode that outputs extra information in console window: on/off" << std::endl;
     os << "text support mode = " << ( _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable monochrome (black and white) cursors in the game: on/off" << std::endl;
