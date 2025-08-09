@@ -57,6 +57,7 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "interface_border.h"
+#include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "localevent.h"
 #include "map_format_helper.h"
@@ -80,6 +81,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
@@ -729,6 +731,14 @@ namespace Interface
                                    display.height() - 2 * fheroes2::borderWidthPx );
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
+
+        if ( prevRoi == fheroes2::Rect{} ) {
+            // This is the first initialization of the game area for the Editor.
+            // Make the top-left corner of the first tile to be at the top-left corner of the shown game area.
+            _gameArea.SetCenterInPixels( { newRoi.width / 2, newRoi.height / 2 } );
+
+            return;
+        }
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );

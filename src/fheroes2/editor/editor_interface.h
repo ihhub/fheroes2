@@ -29,10 +29,8 @@
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
-#include "interface_gamearea.h"
 #include "map_format_info.h"
 #include "timing.h"
-#include "ui_constants.h"
 
 namespace Maps
 {
@@ -148,10 +146,6 @@ namespace Interface
             _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
                 editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
             } );
-
-            // This is to compensate [16, 16] pixel offset on a first opening of the Editor
-            // and to show the correct top-left corner of the map.
-            _gameArea.SetAreaPosition( 0, 0, 2 * fheroes2::borderWidthPx, 2 * fheroes2::borderWidthPx );
         }
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
