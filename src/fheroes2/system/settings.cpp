@@ -526,7 +526,7 @@ std::string Settings::String() const
     os << std::endl << "# Display system information: on/off" << std::endl;
     os << "system info = " << ( _gameOptions.Modes( GAME_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# Should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
+    os << std::endl << "# Perform auto save at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable cursor software rendering: on/off" << std::endl;
