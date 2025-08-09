@@ -69,8 +69,7 @@ namespace
         HeaderSAV() = default;
 
         HeaderSAV( const Maps::FileInfo & fi, const int type, const uint32_t worldDay, const uint32_t worldWeek, const uint32_t worldMonth )
-            : requirements( 0 )
-            , info( fi )
+            : info( fi )
             , gameType( type )
         {
             time_t rawtime;
