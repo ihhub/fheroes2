@@ -1226,6 +1226,15 @@ namespace fheroes2
         return image.x() + image.width();
     }
 
+    int32_t FontCharHandler::getWidth( const std::string_view text ) const
+    {
+        int32_t width = 0;
+        for ( char c : text ) {
+            width += this->getWidth( c );
+        }
+        return width;
+    }
+
     bool FontCharHandler::_isValid( const uint8_t character ) const
     {
         return character >= 0x21 && character <= _charLimit;

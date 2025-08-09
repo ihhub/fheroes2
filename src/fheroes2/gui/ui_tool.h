@@ -167,6 +167,11 @@ namespace fheroes2
             return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
+        FontType fontType() const
+        {
+            return _text.fontType();
+        }
+
     private:
         Image & _output;
         TextInput _text;
