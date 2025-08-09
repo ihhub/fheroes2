@@ -395,7 +395,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                     size_t nextLineEnd = result.find( '\n', nextLineStart );
                     nextLineEnd = ( nextLineEnd == std::string::npos ) ? result.size() : nextLineEnd;
 
-                    fheroes2::FontCharHandler charHandler( textInput.fontType() );
+                    const fheroes2::FontCharHandler charHandler( textInput.fontType() );
 
                     const int currentLineWidth = charHandler.getWidth( std::string_view( &result[lineStart], lineEnd - lineStart ) );
                     const int nextLineWidth = charHandler.getWidth( std::string_view( &result[nextLineStart], nextLineEnd - nextLineStart ) );
@@ -409,8 +409,8 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                     size_t bestPos = nextLineStart;
                     int pixelOffset = 0;
                     for ( size_t i = nextLineStart; i < nextLineEnd; ++i ) {
-                        int charAbsoluteX = nextLineOffset + pixelOffset;
-                        int diff = std::abs( charAbsoluteX - cursorAbsoluteX );
+                        const int charAbsoluteX = nextLineOffset + pixelOffset;
+                        const int diff = std::abs( charAbsoluteX - cursorAbsoluteX );
                         if ( diff < bestDiff ) {
                             bestDiff = diff;
                             bestPos = i;

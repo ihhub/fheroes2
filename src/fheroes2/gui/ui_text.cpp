@@ -1229,7 +1229,7 @@ namespace fheroes2
     int32_t FontCharHandler::getWidth( const std::string_view text ) const
     {
         int32_t width = 0;
-        for ( char c : text ) {
+        for ( const char c : text ) {
             width += this->getWidth( c );
         }
         return width;
