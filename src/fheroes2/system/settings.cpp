@@ -532,7 +532,7 @@ std::string Settings::String() const
     os << std::endl << "# Enable cursor software rendering: on/off" << std::endl;
     os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# Screen scaling type: nearest or linear (default)" << std::endl;
+    os << std::endl << "# Screen scaling type: nearest or linear" << std::endl;
     os << "screen scaling type = " << ( _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
     os << std::endl << "# Show object animation in the Editor: on/off" << std::endl;
