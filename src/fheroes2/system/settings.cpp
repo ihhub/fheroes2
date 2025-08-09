@@ -407,8 +407,10 @@ std::string Settings::String() const
     }
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
-    os << std::endl << "# !!! WARNING !!!" << std::endl << "# Modify this file manually only if you are absolutely sure what you are going!" << std::endl
-       << "# !!! WARNING !!!" << std::endl;
+    os << std::endl
+       << "# !!! WARNING !!!" << std::endl
+       << "# Modify this file manually only if you are absolutely sure what you are going!" << std::endl
+        << "# !!! WARNING !!!" << std::endl;
 
     const fheroes2::Display & display = fheroes2::Display::instance();
 
