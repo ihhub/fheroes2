@@ -223,6 +223,9 @@ namespace fheroes2
 
         void setResolution( ResolutionInfo info );
 
+        // Call this method only if you need to reset renderer to update its parameters (e.g. screen scaling).
+        void resetRenderer();
+
         bool isDefaultSize() const
         {
             return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;

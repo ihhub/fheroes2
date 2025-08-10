@@ -52,6 +52,8 @@ namespace
         "circular_stone_liths_center.image",
         "circular_stone_liths_left.image",
         "circular_stone_liths_top.image",
+        "graphics_filter_linear_icon.image",
+        "graphics_filter_nearest_icon.image",
         "graphics_icon.image",
         "hotkeys_icon.image",
         "keyboard_button_pressed_evil.image",
