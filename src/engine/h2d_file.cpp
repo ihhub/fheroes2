@@ -183,7 +183,7 @@ namespace fheroes2
         const int32_t y = static_cast<int32_t>( stream.getLE32() );
         const bool isSingleLayer = ( stream.get() != 0 );
 
-        if ( static_cast<size_t>( width * height * ( isSingleLayer ? 1 : 2 ) + imageInfoLength ) != data.size() ) {
+        if ( ( static_cast<size_t>( width ) * height * ( isSingleLayer ? 1 : 2 ) + imageInfoLength ) != data.size() ) {
             return false;
         }
 
@@ -193,6 +193,7 @@ namespace fheroes2
 
         if ( isSingleLayer ) {
             memset( image.transform(), 0, size );
+            image._disableTransformLayer();
         }
         else {
             memcpy( image.transform(), data.data() + imageInfoLength + size, size );
