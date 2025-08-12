@@ -20,6 +20,7 @@
 
 #include "h2d_file.h"
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
