@@ -80,6 +80,7 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_language.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "week.h"
@@ -133,43 +134,73 @@ namespace
 
     void ShowNewWeekDialog()
     {
-        // restore the original music on exit
+        // Restore the original music on exit
         const AudioManager::MusicRestorer musicRestorer;
 
         const bool isNewMonth = world.BeginMonth();
 
         AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
+        auto [headerText, messageText] = [isNewMonth]() -> std::pair<const std::string, std::string> {
+            if ( isNewMonth ) {
+                return { _( "New Month!" ), _( "Astrologers proclaim the Month of the %{name}." ) };
+            }
+
+            return { _( "New Week!" ), _( "Astrologers proclaim the Week of the %{name}." ) };
+        }();
+
         const Week & week = world.GetWeekType();
 
-        // head
-        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-        StringReplace( message, "%{name}", week.GetName() );
-        message += "\n\n";
+        StringReplace( messageText, "%{name}", week.GetName() );
+        messageText += "\n\n";
 
-        if ( week.GetType() == WeekName::MONSTERS ) {
+        std::unique_ptr<const fheroes2::CustomImageDialogElement> monsterImageDialogElement;
+
+        switch ( week.GetType() ) {
+        case WeekName::MONSTERS: {
             const Monster monster( week.GetMonster() );
             const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
-            if ( monster.isValid() && count ) {
-                if ( isNewMonth )
-                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-                else
-                    message += _( "%{monster} growth +%{count}." );
-                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-                StringReplace( message, "%{count}", count );
-                message += "\n\n";
+            if ( monster.isValid() && count > 0 ) {
+                if ( isNewMonth ) {
+                    messageText += ( Castle::GetGrownMonthOf() == 100 )
+                                       ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                       : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                             "After regular growth, the population of %{monster} increases by %{count} percent!", count );
+                }
+                else {
+                    messageText += _( "%{monster} growth +%{count}." );
+                }
+
+                StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
+                StringReplace( messageText, "%{count}", count );
+
+                monsterImageDialogElement = std::make_unique<const fheroes2::CustomImageDialogElement>( [&monster]() {
+                    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+
+                    fheroes2::Image surface( border.width(), border.height() );
+                    surface.reset();
+
+                    fheroes2::Blit( border, surface );
+                    fheroes2::renderMonsterFrame( monster, surface, { 6, 6 } );
+
+                    return surface;
+                }() );
             }
+
+            break;
+        }
+        case WeekName::PLAGUE:
+            messageText += _( "All populations are halved." );
+            break;
+        default:
+            messageText += _( "All dwellings increase population." );
+            break;
         }
 
-        if ( week.GetType() == WeekName::PLAGUE )
-            message += _( " All populations are halved." );
-        else
-            message += _( " All dwellings increase population." );
-
-        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+        fheroes2::showStandardTextMessage( headerText, messageText, Dialog::OK,
+                                           monsterImageDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterImageDialogElement.get() }
+                                                                     : std::vector<const fheroes2::DialogElement *>{} );
     }
 
     void ShowWarningLostTownsDialog()
