@@ -160,34 +160,34 @@ namespace
         switch ( week.GetType() ) {
         case WeekName::MONSTERS: {
             const Monster monster( week.GetMonster() );
+            assert( monster.isValid() );
+
             const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+            assert( count > 0 );
 
-            if ( monster.isValid() && count > 0 ) {
-                if ( isNewMonth ) {
-                    messageText += ( Castle::GetGrownMonthOf() == 100 )
-                                       ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                       : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                             "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-                }
-                else {
-                    messageText += _( "%{monster} growth +%{count}." );
-                }
-
-                StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
-                StringReplace( messageText, "%{count}", count );
-
-                monsterImageDialogElement = std::make_unique<const fheroes2::CustomImageDialogElement>( [&monster]() {
-                    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-
-                    fheroes2::Image surface( border.width(), border.height() );
-                    surface.reset();
-
-                    fheroes2::Blit( border, surface );
-                    fheroes2::renderMonsterFrame( monster, surface, { 6, 6 } );
-
-                    return surface;
-                }() );
+            if ( isNewMonth ) {
+                messageText += ( count == 100 ) ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             }
+            else {
+                messageText += _( "%{monster} growth +%{count}." );
+            }
+
+            StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
+            StringReplace( messageText, "%{count}", count );
+
+            monsterImageDialogElement = std::make_unique<const fheroes2::CustomImageDialogElement>( [&monster]() {
+                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+
+                fheroes2::Image surface( border.width(), border.height() );
+                surface.reset();
+
+                fheroes2::Blit( border, surface );
+                fheroes2::renderMonsterFrame( monster, surface, { 6, 6 } );
+
+                return surface;
+            }() );
 
             break;
         }
