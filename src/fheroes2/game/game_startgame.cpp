@@ -142,7 +142,7 @@ namespace
 
         AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
-        auto && [headerText, messageText] = [isNewMonth]() -> std::pair<const std::string, std::string> {
+        auto [headerText, messageText] = [isNewMonth]() -> std::pair<const std::string, std::string> {
             if ( isNewMonth ) {
                 return { _( "New Month!" ), _( "Astrologers proclaim the Month of the %{name}." ) };
             }
