@@ -292,9 +292,10 @@ public final class MapFileManagerActivity extends AppCompatActivity
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
-        EdgeToEdge.enable( this );
-
         super.onCreate( savedInstanceState );
+
+        // TODO: use WindowCompat.enableEdgeToEdge() instead, as soon as androidx.core 1.17 becomes generally available
+        EdgeToEdge.enable( this );
 
         setContentView( R.layout.activity_map_file_manager );
 
