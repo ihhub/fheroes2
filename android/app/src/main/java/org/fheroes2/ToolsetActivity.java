@@ -35,9 +35,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -140,9 +144,19 @@ public final class ToolsetActivity extends AppCompatActivity
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
+        EdgeToEdge.enable( this );
+
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.activity_toolset );
+
+        ViewCompat.setOnApplyWindowInsetsListener( findViewById( android.R.id.content ).getRootView(), ( v, insets ) -> {
+            final Insets paddingInsets = insets.getInsets( WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() );
+
+            v.setPadding( paddingInsets.left, paddingInsets.top, paddingInsets.right, paddingInsets.bottom );
+
+            return WindowInsetsCompat.CONSUMED;
+        } );
 
         viewModel = new ViewModelProvider( this ).get( ToolsetActivityViewModel.class );
         viewModel.liveStatus.observe( this, this::updateUI );

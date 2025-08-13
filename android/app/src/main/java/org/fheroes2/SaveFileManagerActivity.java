@@ -43,9 +43,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -287,9 +291,19 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
+        EdgeToEdge.enable( this );
+
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.activity_save_file_manager );
+
+        ViewCompat.setOnApplyWindowInsetsListener( findViewById( android.R.id.content ).getRootView(), ( v, insets ) -> {
+            final Insets paddingInsets = insets.getInsets( WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() );
+
+            v.setPadding( paddingInsets.left, paddingInsets.top, paddingInsets.right, paddingInsets.bottom );
+
+            return WindowInsetsCompat.CONSUMED;
+        } );
 
         saveFileDir = new File( getExternalFilesDir( null ), "files" + File.separator + "save" );
 
