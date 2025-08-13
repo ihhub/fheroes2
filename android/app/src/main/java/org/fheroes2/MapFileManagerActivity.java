@@ -43,7 +43,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -294,12 +293,9 @@ public final class MapFileManagerActivity extends AppCompatActivity
     {
         super.onCreate( savedInstanceState );
 
-        // TODO: use WindowCompat.enableEdgeToEdge() instead, as soon as androidx.core 1.17 becomes generally available
-        EdgeToEdge.enable( this );
-
         setContentView( R.layout.activity_map_file_manager );
 
-        ViewCompat.setOnApplyWindowInsetsListener( findViewById( android.R.id.content ).getRootView(), ( v, insets ) -> {
+        ViewCompat.setOnApplyWindowInsetsListener( findViewById( R.id.activity_map_file_manager_root_rl ), ( v, insets ) -> {
             final Insets paddingInsets = insets.getInsets( WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() );
 
             v.setPadding( paddingInsets.left, paddingInsets.top, paddingInsets.right, paddingInsets.bottom );
