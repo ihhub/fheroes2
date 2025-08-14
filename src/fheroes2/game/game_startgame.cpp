@@ -155,7 +155,7 @@ namespace
         StringReplace( messageText, "%{name}", week.GetName() );
         messageText += "\n\n";
 
-        std::unique_ptr<const fheroes2::CustomImageDialogElement> monsterImageDialogElement;
+        std::unique_ptr<const fheroes2::MonsterDialogElement> monsterDialogElement;
 
         switch ( week.GetType() ) {
         case WeekName::MONSTERS: {
@@ -177,17 +177,7 @@ namespace
             StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
             StringReplace( messageText, "%{count}", count );
 
-            monsterImageDialogElement = std::make_unique<const fheroes2::CustomImageDialogElement>( [&monster]() {
-                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-
-                fheroes2::Image surface( border.width(), border.height() );
-                surface.reset();
-
-                fheroes2::Blit( border, surface );
-                fheroes2::renderMonsterFrame( monster, surface, { 6, 6 } );
-
-                return surface;
-            }() );
+            monsterDialogElement = std::make_unique<const fheroes2::MonsterDialogElement>( monster );
 
             break;
         }
@@ -200,8 +190,8 @@ namespace
         }
 
         fheroes2::showStandardTextMessage( headerText, messageText, Dialog::OK,
-                                           monsterImageDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterImageDialogElement.get() }
-                                                                     : std::vector<const fheroes2::DialogElement *>{} );
+                                           monsterDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterDialogElement.get() }
+                                                                : std::vector<const fheroes2::DialogElement *>{} );
     }
 
     void ShowWarningLostTownsDialog()
