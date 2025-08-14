@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -6119,8 +6119,14 @@ msgstr "Klik her for at vende tilbage til hovedmenuen."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologer kundgør, at månedens væsen er %{name}."
 
+msgid "New Month!"
+msgstr "Ny måned!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologer kundgør, at ugens væsen er %{name}."
+
+msgid "New Week!"
+msgstr "Ny uge!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter regelmæssig tilvækst er befolkningen på %{monster} fordoblet!"
@@ -6143,17 +6149,13 @@ msgstr ""
 "Tilvækst: +%{count}\n"
 "%{monster}"
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr "Hele befolkningen er halveret."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr "Alle bosteder får øget deres befolkning."
-
-msgid "New Month!"
-msgstr "Ny måned!"
-
-msgid "New Week!"
-msgstr "Ny uge!"
 
 msgid "Beware!"
 msgstr "Pas på!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6250,8 +6250,14 @@ msgstr "Кликни, за да се върнеш към главното мен
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астролозите обявяват месеца на %{name}."
 
+msgid "New Month!"
+msgstr "Нов месец!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Астролозите обявяват седмицата на %{name}."
+
+msgid "New Week!"
+msgstr "Нова Седмица!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "След редовен растеж популацията на %{monster} се удвоява!"
@@ -6272,17 +6278,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} растеж +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Всички популации са наполовина."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Всички жилища увеличават населението."
-
-msgid "New Month!"
-msgstr "Нов месец!"
-
-msgid "New Week!"
-msgstr "Нова Седмица!"
 
 msgid "Beware!"
 msgstr "Внимавай!"

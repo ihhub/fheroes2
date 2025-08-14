@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6073,8 +6073,14 @@ msgstr "Нажмите для возврата в главное меню."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи объявили Месяц %{name}."
 
+msgid "New Month!"
+msgstr "Новый месяц!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Астрологи объявили Неделю %{name}."
+
+msgid "New Week!"
+msgstr "Новая неделя!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "После обычного роста, %{monster} удваивает свою популяцию!"
@@ -6097,17 +6103,13 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster}: популяция увеличивается на %{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Всё население уменьшилось вдвое."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Население всех жилищ возросло."
-
-msgid "New Month!"
-msgstr "Новый месяц!"
-
-msgid "New Week!"
-msgstr "Новая неделя!"
 
 msgid "Beware!"
 msgstr "Внимание!"

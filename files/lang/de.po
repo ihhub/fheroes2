@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6186,8 +6186,14 @@ msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologen verkündigen den Monat im Zeichen %{name}."
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologen verkündigen die Woche im Zeichen %{name}."
+
+msgid "New Week!"
+msgstr "Neue Woche!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr ""
@@ -6209,17 +6215,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Die Population der %{monster} steigt um +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Alle Populationen werden halbiert."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " In allen Behausungen wächst die Population."
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
-msgstr "Neue Woche!"
 
 msgid "Beware!"
 msgstr "Aufgepasst!"
