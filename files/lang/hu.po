@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-07-10 23:37+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -6038,8 +6038,14 @@ msgstr "Kattints a főmenübe való visszatéréshez."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} havát."
 
+msgid "New Month!"
+msgstr "Új hónap!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
+
+msgid "New Week!"
+msgstr "Új hét!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "A(z) %{monster} népessége megduplázódott!"
@@ -6056,17 +6062,13 @@ msgstr[1] "A(z) %{monster} népessége %{count} százalékkal megnövekedett!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} szaporulat: +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Minden populáció megfeleződött."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
-
-msgid "New Month!"
-msgstr "Új hónap!"
-
-msgid "New Week!"
-msgstr "Új hét!"
 
 msgid "Beware!"
 msgstr "Vigyázat!"

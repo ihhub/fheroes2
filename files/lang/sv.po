@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-08-01 14:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -6034,8 +6034,14 @@ msgstr "Klicka för att gå tillbaka till huvudmenyn."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
 
+msgid "New Month!"
+msgstr "Ny Månad!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologerna utropar %{name} vecka."
+
+msgid "New Week!"
+msgstr "Ny Vecka!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter en vanlig ökning har beståndet av %{monster} fördubblats!"
@@ -6054,17 +6060,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Alla populationer är halverade."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Alla boningar ökar sin population."
-
-msgid "New Month!"
-msgstr "Ny Månad!"
-
-msgid "New Week!"
-msgstr "Ny Vecka!"
 
 msgid "Beware!"
 msgstr "Varsko!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6214,8 +6214,14 @@ msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrológovia vyhlasujú mesiac %{name}."
 
+msgid "New Month!"
+msgstr "Nový mesiac!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrológovia vyhlasujú týždeň %{name}."
+
+msgid "New Week!"
+msgstr "Nový týždeň!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "%{monster} budú mať po bežnom raste dvojnásobnú populáciu!"
@@ -6233,17 +6239,13 @@ msgstr[2] "%{monster} budú mať po bežnom raste nárast o %{count} percent!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} vzrástli o %{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Všetky populácie sú znížené na polovicu."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Všetky obydlia zvyšujú počet obyvateľov."
-
-msgid "New Month!"
-msgstr "Nový mesiac!"
-
-msgid "New Week!"
-msgstr "Nový týždeň!"
 
 msgid "Beware!"
 msgstr "Pozor!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6068,8 +6068,14 @@ msgstr "Тицьніть для повернення до головного м�
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи оголошують місяць %{name}."
 
+msgid "New Month!"
+msgstr "Новий місяць!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Астрологи оголошують тиждень %{name}."
+
+msgid "New Week!"
+msgstr "Новий тиждень!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Після звичайного приросту популяція %{monster} подвоюється!"
@@ -6093,17 +6099,13 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} приріст +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr "Все населення зменшується вдвічі."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr "Усі житла збільшують кількість мешканців."
-
-msgid "New Month!"
-msgstr "Новий місяць!"
-
-msgid "New Week!"
-msgstr "Новий тиждень!"
 
 msgid "Beware!"
 msgstr "Стережіться!"
