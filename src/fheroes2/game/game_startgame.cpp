@@ -141,7 +141,7 @@ namespace
 
         AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
-        auto [headerText, messageText] = [isNewMonth]() -> std::pair<const std::string, std::string> {
+        auto [headerText, messageText] = [isNewMonth]() -> std::pair<std::string, std::string> {
             if ( isNewMonth ) {
                 return { _( "New Month!" ), _( "Astrologers proclaim the Month of the %{name}." ) };
             }
@@ -188,7 +188,7 @@ namespace
             break;
         }
 
-        fheroes2::showStandardTextMessage( headerText, messageText, Dialog::OK,
+        fheroes2::showStandardTextMessage( std::move( headerText ), std::move( messageText ), Dialog::OK,
                                            monsterDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterDialogElement.get() }
                                                                 : std::vector<const fheroes2::DialogElement *>{} );
     }
