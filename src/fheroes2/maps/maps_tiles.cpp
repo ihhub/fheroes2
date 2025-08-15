@@ -1078,7 +1078,10 @@ bool Maps::Tile::isSuitableForSummoningBoat() const
         return false;
     }
 
-    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) { return part.isPassabilityTransparent() || isObjectPartShadow( part ); };
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        // The part of the Lighthouse flag that is located on the adjacent tile doesn't affect the passability
+        return part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 || part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
 
     return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )
            && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
