@@ -342,8 +342,7 @@ namespace fheroes2
                 continue;
             }
 
-            const Maps::Tile & tile = world.getTile( tileIdx );
-            if ( !tile.isWater() || tile.getMainObjectType() != MP2::OBJ_NONE ) {
+            if ( !world.getTile( tileIdx ).isSuitableForSummoningBoat() ) {
                 continue;
             }
 
