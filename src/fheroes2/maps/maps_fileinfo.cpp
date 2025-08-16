@@ -224,7 +224,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         break;
     default:
         // Most likely it is a corrupted or hacked map.
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Difficulty level for map " << filePath << " is not being set." )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Difficulty level for map " << filename << " is not being set." )
         return false;
     }
 
