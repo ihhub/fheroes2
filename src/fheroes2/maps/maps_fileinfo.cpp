@@ -223,8 +223,9 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         difficulty = Difficulty::EXPERT;
         break;
     default:
-        difficulty = Difficulty::NORMAL;
-        break;
+        // Most likely it is a corrupted or hacked map.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Difficulty level for map " << filename << " is not being set." )
+        return false;
     }
 
     // Width & height of the map in tiles
@@ -329,6 +330,10 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Map name
     fs.seek( 58 );
     name = fs.getString( mapNameLength );
+    if ( name.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain a name." )
+        return false;
+    }
 
     // Map description
     fs.seek( 118 );
