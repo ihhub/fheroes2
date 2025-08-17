@@ -941,6 +941,12 @@ namespace
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }
 
+            if ( !fheroes2::cursor().isSoftwareEmulation() ) {
+                // If software emulation is not enabled it means that we need to use resolutions supported
+                // by the hardware.
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
             // We should limit all available resolutions to the one which is currently chosen on the system
             // to avoid ending up having application window which is bigger than the screen resolution.
             SDL_DisplayMode maxDisplayMode{};
