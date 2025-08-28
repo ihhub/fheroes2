@@ -258,6 +258,11 @@ namespace fheroes2
             _keepLineTrailingSpaces = true;
         }
 
+        FontType fontType() const
+        {
+            return _fontType;
+        }
+
     protected:
         // Returns text lines parameters (in pixels) in 'offsets': x - horizontal line shift, y - vertical line shift.
         // And in 'characterCount' - the number of characters on the line, in 'lineWidth' the width including the `offsetX` value.
@@ -383,6 +388,7 @@ namespace fheroes2
         const Sprite & getSprite( const uint8_t character ) const;
 
         int32_t getWidth( const uint8_t character ) const;
+        int32_t getWidth( const std::string_view text ) const;
 
         int32_t getSpaceCharWidth() const
         {
