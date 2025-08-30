@@ -641,11 +641,7 @@ void ViewWorld::ViewWorldWindow( const PlayerColor color, const ViewWorldMode mo
         viewCenterInPixels.y = world.h() * fheroes2::tileWidthPx / 2;
     }
 
-#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
     const size_t zoomLevels = 4;
-#else
-    const size_t zoomLevels = interface.isEditor() ? 4 : 3;
-#endif
 
     ZoomROIs currentROI( zoomLevel, viewCenterInPixels, visibleScreenInPixels, zoomLevels );
 
