@@ -1551,8 +1551,7 @@ namespace Interface
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
-                    if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI )
-                         && resourceMetadata->second.count != resourceCount ) {
+                    if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI ) && resourceMetadata->second.count != resourceCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         resourceMetadata->second.count = resourceCount;
                         action.commit();

@@ -328,9 +328,9 @@ namespace
         RWStreamBuf compressed;
         compressed.setBigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata
-                   << map.artifactMetadata << map.resourceMetadata;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
+                   << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata << map.artifactMetadata
+                   << map.resourceMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
