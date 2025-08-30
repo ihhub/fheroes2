@@ -899,17 +899,18 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     // Verify that the input data is correct.
                     if ( monsterObjects[object.index].objectType == MP2::OBJ_RANDOM_MONSTER ) {
-                        selected.erase( std::remove_if( selected.begin(), selected.end(), []( const int value ) {
-                            return !Monster{ value }.isValid();
-                            } ), selected.end() );
+                        selected.erase( std::remove_if( selected.begin(), selected.end(), []( const int value ) { return !Monster{ value }.isValid(); } ),
+                                        selected.end() );
                     }
                     else {
                         const auto level = Monster{ static_cast<int>( object.index ) + 1 }.GetRandomUnitLevel();
 
-                        selected.erase( std::remove_if( selected.begin(), selected.end(), [level]( const int value ) {
-                            const Monster temp{ value };
-                            return !temp.isValid() || temp.GetRandomUnitLevel() != level;
-                            } ), selected.end() );
+                        selected.erase( std::remove_if( selected.begin(), selected.end(),
+                                                        [level]( const int value ) {
+                                                            const Monster temp{ value };
+                                                            return !temp.isValid() || temp.GetRandomUnitLevel() != level;
+                                                        } ),
+                                        selected.end() );
                     }
 
                     if ( !objectInfo.selected.empty() ) {
