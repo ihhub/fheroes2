@@ -64,6 +64,9 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const CapturableObjectMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const MonsterMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, MonsterMetadata & metadata );
 }
 
 namespace
