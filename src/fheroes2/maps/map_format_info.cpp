@@ -24,7 +24,10 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <utility>
 
+#include "artifact.h"
+#include "mp2.h"
 #include "serialize.h"
 #include "zzlib.h"
 

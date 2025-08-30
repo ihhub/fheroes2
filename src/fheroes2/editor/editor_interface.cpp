@@ -1478,7 +1478,7 @@ namespace Interface
 
                     auto monsterMetadata = _mapFormat.monsterMetadata.find( object.id );
                     int32_t monsterCount = monsterMetadata->second.count;
-                    std::vector<int> selectedMonsters = monsterMetadata->second.selected;
+                    const std::vector<int> selectedMonsters = monsterMetadata->second.selected;
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
