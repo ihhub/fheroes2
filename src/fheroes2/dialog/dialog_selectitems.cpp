@@ -1055,7 +1055,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )
 {
-    MultiMonsterSelection monsterList( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
+    MultiMonsterSelection monsterList( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
     monsterList.setup( std::move( allowed ), selected );
 
     const int32_t result = monsterList.selectItemsEventProcessing();
