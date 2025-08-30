@@ -131,6 +131,10 @@ namespace
     public:
         using SelectEnumMonster::SelectEnumMonster;
 
+        using Interface::ListBox<int>::ActionListDoubleClick;
+        using Interface::ListBox<int>::ActionListSingleClick;
+        using Interface::ListBox<int>::ActionListPressRight;
+
         void setup( std::vector<int> allowed, const std::vector<int> & selected )
         {
             _ids = std::move( allowed );
