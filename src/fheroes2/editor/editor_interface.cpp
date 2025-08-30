@@ -1517,8 +1517,7 @@ namespace Interface
                     }
                     case MP2::OBJ_RANDOM_MONSTER: {
                         for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
-                            const Monster temp{ monsterId };
-                            if ( temp.isValid() ) {
+                            if ( Monster{ monsterId }.isValid() ) {
                                 allowedMonsters.emplace_back( monsterId );
                             }
                         }
