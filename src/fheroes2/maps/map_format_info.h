@@ -260,6 +260,17 @@ namespace Maps::Map_Format
         PlayerColor ownerColor{ 0 };
     };
 
+    struct MonsterMetadata
+    {
+        int32_t count{ 0 };
+
+        // This is not used and reserved for the future.
+        int32_t joinCondition{ 0 };
+
+        // Only for random monsters.
+        std::vector<int> selected;
+    };
+
     struct DailyEvent
     {
         std::string message;
@@ -345,6 +356,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
 
         std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
+
+        std::map<uint32_t, MonsterMetadata> monsterMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

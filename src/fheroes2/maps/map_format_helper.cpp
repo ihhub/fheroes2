@@ -1266,6 +1266,9 @@ namespace Maps
                 if ( map.capturableObjectsMetadata.find( uid ) != map.capturableObjectsMetadata.end() ) {
                     VERBOSE_LOG( "`capturableObjectsMetadata` belongs to many objects with same UID: " << uid )
                 }
+                if ( map.monsterMetadata.find( uid ) != map.monsterMetadata.end() ) {
+                    VERBOSE_LOG( "`monsterMetadata` belongs to many objects with same UID: " << uid )
+                }
             }
 
             VERBOSE_LOG( "Non-unique UID " << info.info->id << " at " << info.tileIndex << " (" << info.tileIndex % map.width << ", " << info.tileIndex / map.width
@@ -1381,7 +1384,7 @@ namespace Maps
             heroMetadata->second.race = Race::RAND;
         }
         else if ( group == ObjectGroup::MONSTERS ) {
-            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.monsterMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
 #ifdef NDEBUG

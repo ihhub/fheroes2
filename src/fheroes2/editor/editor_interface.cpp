@@ -125,6 +125,78 @@ namespace
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
 
+    class MonsterMultiSelection final : public fheroes2::DialogElement
+    {
+    public:
+        MonsterMultiSelection( std::vector<int> allowed, std::vector<int> selected, std::string text, const bool isEvilInterface )
+            : _allowed( std::move( allowed ) )
+            , _selected( std::move( selected ) )
+            , _text( text, fheroes2::FontType::normalWhite() )
+            , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_MULTI_SELECTION_EVIL : ICN::BUTTON_MULTI_SELECTION_GOOD ), 0, 1 )
+        {
+            const int32_t offset{ 5 };
+
+            _area = { _text.width(), _text.height() };
+            _area.height += offset;
+            _area.width = std::max( _area.width, _buttonSelection.area().width );
+            _area.height += _buttonSelection.area().height;
+
+            const int32_t maxWidth = std::max( _text.width(), _buttonSelection.area().width );
+            _textArea = { ( maxWidth - _text.width() ) / 2, 0, _text.width(), _text.height() };
+            _buttonArea = { ( maxWidth - _buttonSelection.area().width ) / 2, _text.height() + offset, _buttonSelection.area().width, _buttonSelection.area().height };
+        }
+
+        ~MonsterMultiSelection() override = default;
+
+        void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        {
+            _text.draw( offset.x + _textArea.x, offset.y + _textArea.y, output );
+
+            _buttonSelection.setPosition( offset.x + _buttonArea.x, offset.y + _buttonArea.y );
+             _buttonSelection.draw( output );
+        }
+
+        void processEvents( const fheroes2::Point & offset ) const override
+        {
+            LocalEvent & le = LocalEvent::Get();
+            const fheroes2::Rect buttonRect{ offset.x + _buttonArea.x, offset.y + _buttonArea.y, _buttonArea.width, _buttonArea.height };
+
+            if ( le.isMouseRightButtonPressedInArea( buttonRect ) ) {
+                fheroes2::showStandardTextMessage( _( "SELECT" ), _( "Click to make selection." ), 0 );
+            }
+            else if ( le.MouseClickLeft( buttonRect ) ) {
+                Dialog::multiSelectMonsters( _allowed, _selected );
+            }
+        }
+
+        void showPopup( const int /*buttons*/ ) const override
+        {
+            // Do nothing.
+        }
+
+        bool update( fheroes2::Image & /*output*/, const fheroes2::Point & offset ) const override
+        {
+            _buttonSelection.setPosition( offset.x + _buttonArea.x, offset.y + _buttonArea.y );
+
+            LocalEvent & le = LocalEvent::Get();
+            return _buttonSelection.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSelection.area() ) );
+        }
+
+        std::vector<int> getSelected() const
+        {
+            return _selected;
+        }
+
+    private:
+        std::vector<int> _allowed;
+        mutable std::vector<int> _selected;
+        fheroes2::Rect _textArea;
+        fheroes2::Rect _buttonArea;
+
+        fheroes2::Text _text;
+        mutable fheroes2::Button _buttonSelection;
+    };
+
     size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
     {
         const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
@@ -385,8 +457,8 @@ namespace
                     updateMapPlayerInformation = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::MONSTERS ) {
-                    assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
-                    mapFormat.standardMetadata.erase( objectIter->id );
+                    assert( mapFormat.monsterMetadata.find( objectIter->id ) != mapFormat.monsterMetadata.end() );
+                    mapFormat.monsterMetadata.erase( objectIter->id );
 
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
@@ -1398,14 +1470,16 @@ namespace Interface
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     int32_t monsterCount = 0;
+                    std::vector<int> selectedMonsters;
 
-                    auto monsterMetadata = _mapFormat.standardMetadata.find( object.id );
-                    if ( monsterMetadata != _mapFormat.standardMetadata.end() ) {
-                        monsterCount = monsterMetadata->second.metadata[0];
+                    auto monsterMetadata = _mapFormat.monsterMetadata.find( object.id );
+                    if ( monsterMetadata != _mapFormat.monsterMetadata.end() ) {
+                        monsterCount = monsterMetadata->second.count;
+                        selectedMonsters = monsterMetadata->second.selected;
                     }
                     else {
                         // This could be a corrupted map. Add missing metadata into it. This action should be outside action manager scope.
-                        _mapFormat.standardMetadata[object.id] = { 0, 0, Monster::JOIN_CONDITION_UNSET };
+                        _mapFormat.standardMetadata[object.id] = {};
                     }
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
@@ -1419,10 +1493,50 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get() )
-                         && _mapFormat.standardMetadata[object.id].metadata[0] != monsterCount ) {
+                    std::vector<int> allowedMonsters;
+
+                    switch ( objectType ) {
+                    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+                    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+                    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+                    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG: {
+                        const auto level = tempMonster.GetRandomUnitLevel();
+
+                        for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+                            const Monster temp{ monsterId };
+                            if ( temp.isValid() && temp.GetRandomUnitLevel() == level ) {
+                                allowedMonsters.emplace_back( monsterId );
+                            }
+                        }
+                        break;
+                    }
+                    case MP2::OBJ_RANDOM_MONSTER: {
+                        for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+                            const Monster temp{ monsterId };
+                            if ( temp.isValid() ) {
+                                allowedMonsters.emplace_back( monsterId );
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+
+                    std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
+                    if ( !allowedMonsters.empty() ) {
+                        selectionUi = std::make_unique<const MonsterMultiSelection>(
+                            std::move( allowedMonsters ), selectedMonsters, std::string( "Select monsters" ), Settings::Get().isEvilInterfaceEnabled() );
+                    }
+
+                    if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
+                         && ( _mapFormat.monsterMetadata[object.id].count != monsterCount || ( selectionUi && selectedMonsters != selectionUi->getSelected() ) ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                        _mapFormat.standardMetadata[object.id] = { monsterCount, 0, Monster::JOIN_CONDITION_UNSET };
+                        _mapFormat.monsterMetadata[object.id].count = monsterCount;
+
+                        if ( selectionUi ) {
+                            _mapFormat.monsterMetadata[object.id].selected = selectionUi->getSelected();
+                        }
                         action.commit();
                     }
                 }

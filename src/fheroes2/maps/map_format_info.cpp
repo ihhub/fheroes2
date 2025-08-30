@@ -76,7 +76,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 9 };
+    constexpr uint16_t currentSupportedVersion{ 10 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -218,6 +218,31 @@ namespace
         }
     }
 
+    void convertFromV9ToV10( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 9, "Remove this function." );
+
+        if ( map.version > 9 ) {
+            return;
+        }
+
+        map.monsterMetadata = {};
+
+        // In version 10 we updated metadata for monsters. We have to move the original metadata for them from one structure to another.
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            const auto & tile = map.tiles[tileId];
+
+            for ( const auto & object : tile.objects ) {
+                if ( object.group == Maps::ObjectGroup::MONSTERS ) {
+                    assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+
+                    map.monsterMetadata[object.id].count = map.standardMetadata[object.id].metadata[0];
+                    map.standardMetadata.erase( object.id );
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -268,7 +293,8 @@ namespace
         compressed.setBigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata;
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata
+                   << map.monsterMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -330,6 +356,13 @@ namespace
         convertFromV5ToV6( map );
         convertFromV6ToV7( map );
         convertFromV7ToV8( map );
+
+        if ( map.version > 9 ) {
+            decompressed >> map.monsterMetadata;
+        }
+        else {
+            convertFromV9ToV10( map );
+        }
 
         return !stream.fail();
     }
@@ -459,6 +492,16 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, CapturableObjectMetadata & metadata )
     {
         return stream >> metadata.ownerColor;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const MonsterMetadata & metadata )
+    {
+        return stream << metadata.count << metadata.joinCondition << metadata.selected;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, MonsterMetadata & metadata )
+    {
+        return stream >> metadata.count >> metadata.joinCondition >> metadata.selected;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

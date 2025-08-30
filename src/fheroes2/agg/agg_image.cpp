@@ -155,7 +155,9 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
-                                                ICN::DISMISS_HERO_DISABLED_BUTTON };
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
+                                                ICN::BUTTON_MULTI_SELECTION_GOOD,
+                                                ICN::BUTTON_MULTI_SELECTION_EVIL };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1711,6 +1713,17 @@ namespace
             FillTransform( common, 1, common.height() - 1, 23, 1, 1 );
 
             fheroes2::Blit( common, output );
+            break;
+        }
+        case ICN::BUTTON_MULTI_SELECTION_GOOD:
+        case ICN::BUTTON_MULTI_SELECTION_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_MULTI_SELECTION_EVIL );
+
+            _icnVsSprite[id].resize( 2 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "SELECT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
         default:
