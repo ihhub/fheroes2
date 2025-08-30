@@ -887,14 +887,36 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                 switch ( monsterObjects[object.index].objectType ) {
                 case MP2::OBJ_RANDOM_MONSTER:
-                case MP2::OBJ_RANDOM_MONSTER_WEAK:
                 case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
                 case MP2::OBJ_RANDOM_MONSTER_STRONG:
                 case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+                case MP2::OBJ_RANDOM_MONSTER_WEAK: {
+                    auto & selected = objectInfo.selected;
+                    if ( selected.empty() ) {
+                        // Nothing to do. Use the default behavior.
+                        break;
+                    }
+
+                    // Verify that the input data is correct.
+                    if ( monsterObjects[object.index].objectType == MP2::OBJ_RANDOM_MONSTER ) {
+                        selected.erase( std::remove_if( selected.begin(), selected.end(), []( const int value ) {
+                            return !Monster{ value }.isValid();
+                            } ), selected.end() );
+                    }
+                    else {
+                        const auto level = Monster{ static_cast<int>( object.index ) + 1 }.GetRandomUnitLevel();
+
+                        selected.erase( std::remove_if( selected.begin(), selected.end(), [level]( const int value ) {
+                            const Monster temp{ value };
+                            return !temp.isValid() || temp.GetRandomUnitLevel() != level;
+                            } ), selected.end() );
+                    }
+
                     if ( !objectInfo.selected.empty() ) {
                         tileData[1] = Rand::Get( objectInfo.selected );
                     }
                     break;
+                }
                 default:
                     break;
                 }

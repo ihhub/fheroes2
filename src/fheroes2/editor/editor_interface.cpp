@@ -1501,10 +1501,10 @@ namespace Interface
                     std::vector<int> allowedMonsters;
 
                     switch ( objectType ) {
-                    case MP2::OBJ_RANDOM_MONSTER_WEAK:
                     case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
                     case MP2::OBJ_RANDOM_MONSTER_STRONG:
-                    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG: {
+                    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+                    case MP2::OBJ_RANDOM_MONSTER_WEAK: {
                         const auto level = tempMonster.GetRandomUnitLevel();
 
                         for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
