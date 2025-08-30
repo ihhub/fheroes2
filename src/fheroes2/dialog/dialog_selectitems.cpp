@@ -75,8 +75,8 @@ namespace
         fheroes2::Sprite image = fheroes2::Crop( backgroundOriginal, 36, 267, 43, 43 );
         image.setPosition( 0, 0 );
 
-        fheroes2::Blit( monsterSprite, 0, 0, image, ( image.width() - monsterSprite.width() ) / 2, ( image.height() - monsterSprite.height() ) / 2,
-                        monsterSprite.width(), monsterSprite.height() );
+        fheroes2::Blit( monsterSprite, 0, 0, image, ( image.width() - monsterSprite.width() ) / 2, ( image.height() - monsterSprite.height() ) / 2, monsterSprite.width(),
+                        monsterSprite.height() );
 
         return image;
     }

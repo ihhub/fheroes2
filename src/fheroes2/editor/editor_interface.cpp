@@ -153,7 +153,7 @@ namespace
             _text.draw( offset.x + _textArea.x, offset.y + _textArea.y, output );
 
             _buttonSelection.setPosition( offset.x + _buttonArea.x, offset.y + _buttonArea.y );
-             _buttonSelection.draw( output );
+            _buttonSelection.draw( output );
         }
 
         void processEvents( const fheroes2::Point & offset ) const override
@@ -1525,8 +1525,8 @@ namespace Interface
 
                     std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
-                        selectionUi = std::make_unique<const MonsterMultiSelection>(
-                            std::move( allowedMonsters ), selectedMonsters, std::string( "Select monsters" ), Settings::Get().isEvilInterfaceEnabled() );
+                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, std::string( "Select monsters" ),
+                                                                                     Settings::Get().isEvilInterfaceEnabled() );
                     }
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
