@@ -91,6 +91,11 @@
 #include "world.h"
 #include "world_object_uid.h"
 
+namespace fheroes2
+{
+    class Image;
+}
+
 namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
