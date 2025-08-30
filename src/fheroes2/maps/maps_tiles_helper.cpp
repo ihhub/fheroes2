@@ -153,7 +153,7 @@ namespace
 
         if ( tile.metadata()[1] != Monster::UNKNOWN ) {
             // This metadata is only set for fh2 map format.
-            mons = tile.metadata()[1];
+            mons = static_cast<int32_t>( tile.metadata()[1] );
 
             tile.metadata()[1] = 0;
         }

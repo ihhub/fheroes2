@@ -131,7 +131,7 @@ namespace
     public:
         using SelectEnumMonster::SelectEnumMonster;
 
-        void setup( std::vector<int> allowed, std::vector<int> selected )
+        void setup( std::vector<int> allowed, const std::vector<int> & selected )
         {
             _ids = std::move( allowed );
 
@@ -152,7 +152,7 @@ namespace
 
         std::vector<int> getSelected() const
         {
-            return std::vector<int>( _selected.begin(), _selected.end() );
+            return { _selected.begin(), _selected.end() };
         }
 
         void ActionListSingleClick( int & id ) override

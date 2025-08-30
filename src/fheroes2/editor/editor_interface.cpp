@@ -131,7 +131,7 @@ namespace
         MonsterMultiSelection( std::vector<int> allowed, std::vector<int> selected, std::string text, const bool isEvilInterface )
             : _allowed( std::move( allowed ) )
             , _selected( std::move( selected ) )
-            , _text( text, fheroes2::FontType::normalWhite() )
+            , _text( std::move( text ), fheroes2::FontType::normalWhite() )
             , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_MULTI_SELECTION_EVIL : ICN::BUTTON_MULTI_SELECTION_GOOD ), 0, 1 )
         {
             const int32_t offset{ 5 };
@@ -178,7 +178,7 @@ namespace
         {
             _buttonSelection.setPosition( offset.x + _buttonArea.x, offset.y + _buttonArea.y );
 
-            LocalEvent & le = LocalEvent::Get();
+            const LocalEvent & le = LocalEvent::Get();
             return _buttonSelection.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSelection.area() ) );
         }
 

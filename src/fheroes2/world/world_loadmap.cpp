@@ -894,6 +894,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                     if ( !objectInfo.selected.empty() ) {
                         tileData[1] = Rand::Get( objectInfo.selected );
                     }
+                    break;
+                default:
+                    break;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
