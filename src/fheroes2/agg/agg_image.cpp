@@ -101,6 +101,7 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_OKAY_TOWN,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
                                                 ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
@@ -140,6 +141,7 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_RESET_EVIL,
                                                 ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
@@ -164,12 +166,23 @@ namespace
     {
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
         const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
-        return ( currentLanguage == fheroes2::SupportedLanguage::English && resourceLanguage == fheroes2::SupportedLanguage::English )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Czech && resourceLanguage == fheroes2::SupportedLanguage::Czech )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
-               || ( currentLanguage == fheroes2::SupportedLanguage::French && resourceLanguage == fheroes2::SupportedLanguage::French )
-               || ( currentLanguage == fheroes2::SupportedLanguage::German && resourceLanguage == fheroes2::SupportedLanguage::German )
-               || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
+
+        if ( currentLanguage != resourceLanguage ) {
+            return false;
+        }
+
+        // We return false for the Russian assets to use engine-generated buttons.
+        // It is done to fix some issues in Russian assets and for consistency in CP1251 fonts for all assets.
+        switch ( currentLanguage ) {
+        case fheroes2::SupportedLanguage::Czech:
+        case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::French:
+        case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Polish:
+            return true;
+        default:
+            return false;
+        }
     }
 
     bool IsValidICNId( int id )
@@ -703,6 +716,14 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_OKAY_TOWN: {
+            _icnVsSprite[id].resize( 2 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "OKAY" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+
+            break;
+        }
         case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
         case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL: {
             _icnVsSprite[id].resize( 2 );
@@ -793,7 +814,7 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -815,7 +836,7 @@ namespace
                 _icnVsSprite[id][1] = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -837,7 +858,7 @@ namespace
                 ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                 break;
             }
@@ -858,7 +879,7 @@ namespace
                 ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
 
                 // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                copyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
                 setButtonCornersTransparent( _icnVsSprite[id][1] );
 
                 break;
@@ -1629,11 +1650,15 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_RESET_GOOD: {
+        case ICN::BUTTON_RESET_GOOD:
+        case ICN::BUTTON_RESET_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_RESET_EVIL );
+
             _icnVsSprite[id].resize( 2 );
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "RESET" ), fheroes2::FontType::buttonReleasedWhite() );
-            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -2682,7 +2707,7 @@ namespace
             _icnVsSprite[id][1].setPosition( 0, 0 );
 
             // fix transparent corners
-            CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
+            copyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
             break;
         case ICN::WHITE_LARGE_FONT: {
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
@@ -3543,7 +3568,7 @@ namespace
         case ICN::RECRUIT: {
             if ( _icnVsSprite[id].size() >= 10 ) {
                 // fix transparent corners on released OKAY button
-                CopyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
+                copyTransformLayer( _icnVsSprite[id][9], _icnVsSprite[id][8] );
             }
             break;
         }
@@ -3569,8 +3594,8 @@ namespace
             }
 
             // fix transparent corners on pressed OKAY and CANCEL buttons
-            CopyTransformLayer( images[66], images[67] );
-            CopyTransformLayer( images[68], images[69] );
+            copyTransformLayer( images[66], images[67] );
+            copyTransformLayer( images[68], images[69] );
 
             // Add 6 special icons for the Editor.
             images.resize( 82 + 6 );
@@ -4602,8 +4627,8 @@ namespace
                 FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
                 FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
 
-                CopyTransformLayer( exitCommonMask, released );
-                CopyTransformLayer( exitCommonMask, pressed );
+                copyTransformLayer( exitCommonMask, released );
+                copyTransformLayer( exitCommonMask, pressed );
 
                 // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
                 const fheroes2::Sprite & originalDismiss = fheroes2::AGG::GetICN( ICN::HSBTNS, 0 );
@@ -4969,6 +4994,72 @@ namespace
                 // Add straight spell book corner to indicate first and last page.
                 fheroes2::Sprite & corner = _icnVsSprite[id].emplace_back();
                 fheroes2::h2d::readImage( "book_corner.image", corner );
+            }
+            break;
+        }
+        case ICN::BUTTON_VIRTUAL_KEYBOARD_GOOD:
+        case ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL: {
+            const bool isEvil = ( id == ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL );
+            const int emptyButtonIcn = isEvil ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
+            loadICN( emptyButtonIcn );
+            if ( _icnVsSprite[emptyButtonIcn].size() == 2 ) {
+                // There will be three sprites for the Virtual Keyboard button:
+                // 0 - released;
+                // 1 - pressed on "standard" background;
+                // 2 - pressed on "uniform" background.
+                _icnVsSprite[id].reserve( 3 );
+
+                // Read keyboard images and put them on the button sprites.
+                fheroes2::Sprite temp;
+                const char * const releasedImageName = ( isEvil ? "keyboard_button_released_evil.image" : "keyboard_button_released_good.image" );
+                fheroes2::h2d::readImage( releasedImageName, temp );
+
+                // Generate empty buttons.
+                fheroes2::Sprite & released = _icnVsSprite[id].emplace_back();
+                fheroes2::Sprite & pressed = _icnVsSprite[id].emplace_back();
+
+                fheroes2::Point pressedOffset;
+                fheroes2::Point releasedOffset;
+
+                constexpr int32_t extraWidth = 19;
+
+                fheroes2::getCustomNormalButton( released, pressed, isEvil, { temp.width() + extraWidth, temp.height() }, releasedOffset, pressedOffset, ICN::UNKNOWN );
+
+                // We subtract 1 from `releasedOffset.y` argument because the  loaded released image from `h2d` file is shifted 1 pixel down.
+                fheroes2::Blit( temp, 0, 0, released, extraWidth / 2 + releasedOffset.x, releasedOffset.y - 1, temp.width(), temp.height() );
+
+                const char * const pressedImageName = ( isEvil ? "keyboard_button_pressed_evil.image" : "keyboard_button_pressed_good.image" );
+                fheroes2::h2d::readImage( pressedImageName, temp );
+                fheroes2::Blit( temp, 0, 0, pressed, extraWidth / 2 + pressedOffset.x, pressedOffset.y, temp.width(), temp.height() );
+
+                // Make a button pressed sprite for the "uniform" dialog background.
+                fheroes2::Sprite & pressedUniform = _icnVsSprite[id].emplace_back( pressed );
+                const int uniformBackgroundIcn = isEvil ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD;
+                loadICN( uniformBackgroundIcn );
+                fheroes2::makeTransparentBackground( released, pressedUniform, uniformBackgroundIcn );
+
+                // Make a button pressed sprite for the "standard" dialog background.
+                const int standardDialogBackgroundIcn = isEvil ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+                loadICN( standardDialogBackgroundIcn );
+                fheroes2::makeTransparentBackground( released, pressed, standardDialogBackgroundIcn );
+            }
+            break;
+        }
+        case ICN::SWORDSM2:
+        case ICN::SWORDSMN: {
+            if ( _icnVsSprite[id].size() == 45 && _icnVsSprite[id][3].width() == 38 && _icnVsSprite[id][3].height() > 69 ) {
+                // Add extra frame to make the movement animation more smooth.
+                // It is based on the frame 3 with updated legs drawing.
+                fheroes2::Sprite & newFrame = _icnVsSprite[id].emplace_back( _icnVsSprite[id][3] );
+
+                fheroes2::Sprite temp;
+                fheroes2::h2d::readImage( "swordsman_walking_frame_extra_part_mask.image", temp );
+                fheroes2::copyTransformLayer( temp, 0, 0, newFrame, temp.x(), newFrame.height() - temp.height(), temp.width(), temp.height() );
+
+                fheroes2::h2d::readImage( "swordsman_walking_frame_extra_part.image", temp );
+                fheroes2::Blit( temp, 0, 0, newFrame, temp.x(), newFrame.height() - temp.height(), temp.width(), temp.height() );
+
+                newFrame.setPosition( newFrame.x() + 6, newFrame.y() );
             }
             break;
         }

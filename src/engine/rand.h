@@ -59,10 +59,8 @@ namespace Rand
 
         explicit constexpr PCG32( const uint64_t seed = defaultSeed, const uint64_t stream = defaultStream )
             : _state( 0 )
-            , _increment( ( stream << 1U ) | 1U )
+            , _increment( stream )
         {
-            // _increment must be odd
-            assert( _increment % 2 == 1 );
             advanceState();
             _state += seed;
             advanceState();
@@ -76,6 +74,16 @@ namespace Rand
             const uint32_t xorShifted = static_cast<uint32_t>( ( ( prevState >> 18U ) ^ prevState ) >> 27U );
             const uint32_t rotations = prevState >> 59U;
             return rotateRight( xorShifted, rotations );
+        }
+
+        constexpr uint64_t getStream() const
+        {
+            return _increment;
+        }
+
+        constexpr void setStream( const uint64_t stream )
+        {
+            _increment = stream;
         }
 
     private:
@@ -239,29 +247,10 @@ namespace Rand
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
 
-    // Specific random generator that keeps and update its state
-    class DeterministicRandomGenerator
+    template <typename Seed, typename Value, std::enable_if_t<std::is_same_v<Seed, uint32_t> || std::is_same_v<Seed, uint64_t>, bool> = true>
+    void combineSeedWithValueHash( Seed & seed, const Value & v )
     {
-    public:
-        explicit DeterministicRandomGenerator( const uint32_t initialSeed );
-        DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
-
-        DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
-
-        uint32_t GetSeed() const;
-        void UpdateSeed( const uint32_t seed );
-
-        uint32_t Get( const uint32_t from, const uint32_t to = 0 );
-
-        template <typename T>
-        const T & Get( const std::vector<T> & vec )
-        {
-            ++_currentSeed;
-            PCG32 seededGen( _currentSeed );
-            return Rand::GetWithGen( vec, seededGen );
-        }
-
-    private:
-        uint32_t _currentSeed;
-    };
+        std::hash<Value> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
 }

@@ -488,7 +488,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    const fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
@@ -616,7 +616,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
         }
         else if ( buttonUpgrade && le.isMouseRightButtonPressedInArea( buttonUpgrade->area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
+            fheroes2::showResourceMessage( fheroes2::Text( _( "Upgrade" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( _( "Upgrade your troops." ), fheroes2::FontType::normalWhite() ), 0, troop.GetTotalUpgradeCost() );
         }
         else if ( buttonDismiss && le.isMouseRightButtonPressedInArea( buttonDismiss->area() ) ) {
             fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
@@ -661,6 +662,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             display.render( restorer.rect() );
         }
     }
+
+    // Force restore the background image on dialog close and immediately update this part of the screen.
+    restorer.restore();
+    display.render( restorer.rect() );
 
     return result;
 }

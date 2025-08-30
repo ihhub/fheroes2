@@ -33,6 +33,7 @@
 
 #include "artifact.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -68,6 +69,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "puzzle.h"
 #include "race.h"
 #include "render_processor.h"
@@ -343,6 +345,12 @@ namespace
                     if ( Maps::doesContainRoads( mapFormat.tiles[bottomTileIndex] ) ) {
                         Maps::updateRoadOnTile( mapFormat, static_cast<int32_t>( bottomTileIndex ), false );
                     }
+
+                    // The castle entrance is marked as road. Update this tile to remove the mark.
+                    Maps::updateRoadSpriteOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
+
+                    // Remove the castle from `world` castles vector.
+                    world.removeCastle( Maps::GetPoint( static_cast<int32_t>( mapTileIndex ) ) );
 
                     needRedraw = true;
                     updateMapPlayerInformation = true;
@@ -640,6 +648,15 @@ namespace
             break;
         }
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
+            // TODO: Allow castles with custom names to exceed the default castle names limit.
+            // To do this we'll need also to check that the custom name is not present in default names.
+            if ( world.getCastleCount() >= AllCastles::getMaximumAllowedCastles() ) {
+                errorMessage = _( "A maximum of %{count} %{objects} can be placed on the map." );
+                StringReplace( errorMessage, "%{objects}", Interface::EditorPanel::getObjectGroupName( groupType ) );
+                StringReplace( errorMessage, "%{count}", AllCastles::getMaximumAllowedCastles() );
+                return false;
+            }
+
             const Maps::Tile & tile = world.getTile( tilePos.x, tilePos.y );
 
             if ( tile.isWater() ) {
@@ -714,6 +731,14 @@ namespace Interface
                                    display.height() - 2 * fheroes2::borderWidthPx );
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
+
+        if ( prevRoi == fheroes2::Rect{} ) {
+            // This is the first initialization of the game area for the Editor.
+            // Make the top-left corner of the first tile to be at the top-left corner of the shown game area.
+            _gameArea.SetCenterInPixels( { newRoi.width / 2, newRoi.height / 2 } );
+
+            return;
+        }
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
@@ -902,7 +927,7 @@ namespace Interface
                                                              Dialog::YES | Dialog::NO );
 
                     if ( returnValue == Dialog::YES ) {
-                        return fheroes2::GameMode::MAIN_MENU;
+                        res = fheroes2::GameMode::MAIN_MENU;
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY ) ) {
@@ -1123,6 +1148,11 @@ namespace Interface
             }
         }
 
+        // When exiting the editor we must reset the players data to properly load the new maps.
+        conf.GetPlayers().clear();
+        // And reset the players configuration for the selected map to properly initialize it when starting a new map.
+        Game::SavePlayers( "", {} );
+
         Game::setDisplayFadeIn();
 
         fheroes2::fadeOutDisplay();
@@ -1333,8 +1363,7 @@ namespace Interface
                     auto & castleMetadata = _mapFormat.castleMetadata[object.id];
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
-                    Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage );
-                    if ( castleMetadata != newCastleMetadata ) {
+                    if ( Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage ) && ( castleMetadata != newCastleMetadata ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         castleMetadata = std::move( newCastleMetadata );
                         action.commit();
@@ -1697,19 +1726,35 @@ namespace Interface
             const auto & objects = Maps::getObjectsByGroup( groupType );
 
             const uint32_t color = objectInfo.metadata[0];
-            size_t heroCount = 0;
+            size_t kingdomHeroCount = 0;
+            size_t mapHeroCount = 0;
             for ( const auto & mapTile : _mapFormat.tiles ) {
                 for ( const auto & object : mapTile.objects ) {
                     if ( object.group == groupType ) {
                         assert( object.index < objects.size() );
                         if ( objects[object.index].metadata[0] == color ) {
-                            ++heroCount;
+                            ++kingdomHeroCount;
                         }
+
+                        ++mapHeroCount;
+                    }
+                    else if ( Maps::isJailObject( object.group, object.index ) ) {
+                        // Jails are also heroes, but in jail.
+                        ++mapHeroCount;
                     }
                 }
             }
 
-            if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
+            if ( mapHeroCount >= AllHeroes::getMaximumAllowedHeroes() ) {
+                // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
+
+                std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
+                StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
+                _warningMessage.reset( std::move( warning ) );
+                return;
+            }
+
+            if ( kingdomHeroCount >= GameStatic::GetKingdomMaxHeroes() ) {
                 std::string warning( _( "A maximum of %{count} heroes of the same color can be placed on the map." ) );
                 StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
                 _warningMessage.reset( std::move( warning ) );
@@ -1900,6 +1945,25 @@ namespace Interface
                 if ( obeliskCount >= numOfPuzzleTiles ) {
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
+                    _warningMessage.reset( std::move( warning ) );
+                    return;
+                }
+            }
+            else if ( objectInfo.objectType == MP2::OBJ_JAIL ) {
+                size_t mapHeroCount = 0;
+                for ( const auto & mapTile : _mapFormat.tiles ) {
+                    for ( const auto & object : mapTile.objects ) {
+                        if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES || Maps::isJailObject( object.group, object.index ) ) {
+                            ++mapHeroCount;
+                        }
+                    }
+                }
+
+                if ( mapHeroCount >= AllHeroes::getMaximumAllowedHeroes() ) {
+                    // TODO: Add new hero portraits and allow heroes with custom names (and portraits) exceed this limit.
+
+                    std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
+                    StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
                     _warningMessage.reset( std::move( warning ) );
                     return;
                 }
@@ -2097,6 +2161,7 @@ namespace Interface
             // Set the saved map as a default map for the new Standard Game.
             Maps::FileInfo fi;
             if ( fi.loadResurrectionMap( _mapFormat, fullPath ) ) {
+                // Update the default map info to allow to start this map without the need to select it from the all maps list.
                 Settings::Get().setCurrentMapInfo( std::move( fi ) );
             }
             else {

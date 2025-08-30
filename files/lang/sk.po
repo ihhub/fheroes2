@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -42,6 +42,9 @@ msgstr "PREČ"
 msgid "smallerButton|EXIT"
 msgstr "ODÍĎ"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr ""
 "HRDI-\n"
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PRIJAŤ"
@@ -807,6 +807,14 @@ msgstr "Kúzli %{spell}"
 msgid "Select spell target"
 msgstr "Urči cieľ kúzla"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Určite chceš povoliť automatický boj?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
+
 msgid "View Ballista info"
 msgstr "Zobraz info o balistovi"
 
@@ -871,14 +879,6 @@ msgstr "Panel správ"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Ukáže výsledky činností jednotlivých bojovníkov."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Určite chceš povoliť automatický boj?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
 
 msgid ""
 "AUTO\n"
@@ -3496,6 +3496,18 @@ msgstr "Zvoľ rozlíšenie hry:"
 msgid "Click to apply the selected resolution."
 msgstr "Klikni pre výber zvoleného rozlíšenia."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klikni pre použitie zadaného textu."
+
 msgid "Click to apply the entered text."
 msgstr "Klikni pre použitie zadaného textu."
 
@@ -4027,12 +4039,17 @@ msgstr "Hrad"
 msgid "Town Army"
 msgstr "Mesto"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Stratíš hrdinu '%{name}'."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Stratíš hrad '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4049,8 +4066,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Prepusti túto armádu."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Hrad"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Nastavenie hry"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4227,6 +4261,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4348,6 +4386,12 @@ msgstr "Cesta"
 #, fuzzy
 msgid "Streams"
 msgstr "Režim tokov"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4858,10 +4902,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Klikni pre uloženie terajšej hry."
 
@@ -5171,6 +5211,10 @@ msgstr "Strávené dni"
 
 msgid "The number of days spent on this campaign."
 msgstr "Počet dní strávených na tejto kampani."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenár"
 
 msgid "Project Coordination and Core Development"
 msgstr "Koordinácia projektu a hlavný vývoj"
@@ -5634,6 +5678,10 @@ msgstr "preskoč kolo v boji"
 
 msgid "hotkey|cast battle spell"
 msgstr "vyčaruj bojové kúzlo"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "prepni boj do automatického módu"
 
 msgid "hotkey|dwelling level 1"
 msgstr "obydlie úrovne 1"
@@ -6166,8 +6214,14 @@ msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrológovia vyhlasujú mesiac %{name}."
 
+msgid "New Month!"
+msgstr "Nový mesiac!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrológovia vyhlasujú týždeň %{name}."
+
+msgid "New Week!"
+msgstr "Nový týždeň!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "%{monster} budú mať po bežnom raste dvojnásobnú populáciu!"
@@ -6185,17 +6239,13 @@ msgstr[2] "%{monster} budú mať po bežnom raste nárast o %{count} percent!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} vzrástli o %{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Všetky populácie sú znížené na polovicu."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Všetky obydlia zvyšujú počet obyvateľov."
-
-msgid "New Month!"
-msgstr "Nový mesiac!"
-
-msgid "New Week!"
-msgstr "Nový týždeň!"
 
 msgid "Beware!"
 msgstr "Pozor!"
@@ -6632,14 +6682,6 @@ msgstr "Zlo"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} vykradnutý"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} vyplienená"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6664,6 +6706,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezabel"
 
@@ -6672,9 +6717,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Zafíra"
@@ -6763,6 +6805,9 @@ msgstr "Brat Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6781,14 +6826,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} vykradnutý"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} vyplienená"
 
 msgid " gives you maximum morale"
 msgstr " dáva maximálnu morálku"
@@ -7384,6 +7434,14 @@ msgid ""
 msgstr ""
 "Obozretnosť je lepšia časť statočnosti a rozhodneš sa tomuto boju pre dnešok "
 "vyhnúť."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Po hodinách strávených snahou vyloviť truhlicu z mora ju otvoríš a nájdeš "
+"%{gold} zlatých."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8285,7 +8343,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race} %{name} (Úroveň %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Okno hrdinu"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8321,7 +8379,7 @@ msgid "Enter hero's name"
 msgstr "Stratíš hrdinu '%{name}'."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
@@ -10121,8 +10179,9 @@ msgstr "Útok cez dve polia"
 msgid "Flyer"
 msgstr "Lieta"
 
-msgid "Always retaliates"
-msgstr "Vždy vracia úder"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Nepriateľ nevracia úder"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Útočí na všetkých susedných nepriateľov"
@@ -12373,6 +12432,9 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vždy vracia úder"
 
 #~ msgid "CONFIG"
 #~ msgstr "NASTAV"

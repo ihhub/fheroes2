@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -44,6 +44,9 @@ msgstr "UD"
 msgid "smallerButton|EXIT"
 msgstr "UD"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HELTE"
 
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AFBRYD"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTAG"
@@ -808,6 +808,12 @@ msgstr "Kast %{spell}"
 msgid "Select spell target"
 msgstr "Vælg magiens mål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Er du sikker på, at du vil aktivere den automatiske kamptilstand?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Er du sikker på, at du vil løse kampen i den hurtige kamptilstand?"
+
 msgid "View Ballista info"
 msgstr "Se Ballistens info"
 
@@ -871,12 +877,6 @@ msgstr "Beskedlinje"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Er du sikker på, at du vil aktivere den automatiske kamptilstand?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Er du sikker på, at du vil løse kampen i den hurtige kamptilstand?"
 
 msgid ""
 "AUTO\n"
@@ -3519,6 +3519,18 @@ msgstr "Vælg spilopløsning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klik for at godkende valgte opløsning."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klik for at vælge denne klasse."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klik for at vælge denne klasse."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klik for at anvende den indtastede tekst."
+
 msgid "Click to apply the entered text."
 msgstr "Klik for at anvende den indtastede tekst."
 
@@ -4017,11 +4029,16 @@ msgstr "Borghær"
 msgid "Town Army"
 msgstr "Byhær"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Klik for at ændre kortnavn."
 
 msgid "Enter Castle name"
 msgstr "Skriv borgnavn"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Mist borgen '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillad borgbyggeri i denne by."
@@ -4040,8 +4057,24 @@ msgstr "Begræns bygningskonstruktion"
 msgid "Use default defenders army."
 msgstr "Brug standard forsvarshær."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Bortvis denne hær."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Borghær"
+
+msgid "Click to accept the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Spilindstillinger"
 
 msgid "Message Text:"
 msgstr "Tekstbesked:"
@@ -4202,6 +4235,10 @@ msgstr "Objekter kan ikke placeres udenfor kortet."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Handlingsobjekter skal placeres på rene felter."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4320,6 +4357,12 @@ msgstr "Veje"
 
 msgid "Streams"
 msgstr "Å-tilstand"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4792,9 +4835,6 @@ msgstr "Skift kortbeskrivelse"
 msgid "About"
 msgstr ""
 
-msgid "Click to accept the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
-
 msgid "Click to edit custom rumors."
 msgstr "Klik for at redigere tilpassede rygter."
 
@@ -5085,6 +5125,10 @@ msgstr "Dage brugt"
 
 msgid "The number of days spent on this campaign."
 msgstr "Antal dage brugt på dette felttog."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kort"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination og kerneudvikling"
@@ -5535,6 +5579,10 @@ msgstr "Skift tur i kamp"
 
 msgid "hotkey|cast battle spell"
 msgstr "Kast kampmagi"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Autokamp (til/fra)"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bosted niveau 1"
@@ -6071,8 +6119,14 @@ msgstr "Klik her for at vende tilbage til hovedmenuen."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologer kundgør, at månedens væsen er %{name}."
 
+msgid "New Month!"
+msgstr "Ny måned!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologer kundgør, at ugens væsen er %{name}."
+
+msgid "New Week!"
+msgstr "Ny uge!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter regelmæssig tilvækst er befolkningen på %{monster} fordoblet!"
@@ -6095,17 +6149,13 @@ msgstr ""
 "Tilvækst: +%{count}\n"
 "%{monster}"
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr "Hele befolkningen er halveret."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr "Alle bosteder får øget deres befolkning."
-
-msgid "New Month!"
-msgstr "Ny måned!"
-
-msgid "New Week!"
-msgstr "Ny uge!"
 
 msgid "Beware!"
 msgstr "Pas på!"
@@ -6544,12 +6594,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS:"
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}srøver"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plyndret"
-
 msgid "Ector"
 msgstr "Hektor"
 
@@ -6574,6 +6618,9 @@ msgstr "Lars Hug"
 msgid "Fineous"
 msgstr "Fineas"
 
+msgid "Jaclyn"
+msgstr "Jakobine"
+
 msgid "Jezebel"
 msgstr "Izabel"
 
@@ -6582,9 +6629,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Egon"
-
-msgid "Jaclyn"
-msgstr "Jakobine"
 
 msgid "Gem"
 msgstr "Perle"
@@ -6673,6 +6717,9 @@ msgstr "Bror Braks"
 msgid "Dainwin"
 msgstr "Dejnvin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Josef"
 
@@ -6691,14 +6738,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Oldrian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Harkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}srøver"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plyndret"
 
 msgid " gives you maximum morale"
 msgstr " giver dig maksimal moral"
@@ -7315,6 +7365,14 @@ msgid ""
 msgstr ""
 "Diskretion er den bedste del af tapperhed, og du beslutter dig for at undgå "
 "denne kamp for i dag."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter at have brugt timevis på at prøve at fiske kisten op af havet, åbner "
+"du den og finder %{gold} guldstykker."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8231,7 +8289,8 @@ msgstr "Tilfældig helt (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Tilfældig helt af klassen %{race} (Level %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Helteklasse:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8264,7 +8323,8 @@ msgstr "Indstil patruljeradius i feltantal"
 msgid "Enter hero's name"
 msgstr "Indtast heltens navn"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klik for at skifte race."
 
 msgid ""
@@ -10026,8 +10086,9 @@ msgstr "2-feltsangreb"
 msgid "Flyer"
 msgstr "Kan flyve"
 
-msgid "Always retaliates"
-msgstr "Slår altid igen"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Fjender kan ikke slå igen"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriber alle fjender omkring sig"
@@ -12301,6 +12362,19 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Slår altid igen"
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
 
 #~ msgid "CONFIG"
 #~ msgstr "INDSTIL"

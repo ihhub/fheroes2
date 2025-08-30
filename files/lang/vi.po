@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -41,6 +41,9 @@ msgstr "THOÁT"
 msgid "smallerButton|EXIT"
 msgstr "THOÁT"
 
+msgid "OKAY"
+msgstr "ĐƯỢC"
+
 msgid "HEROES"
 msgstr "TƯỚNG"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "TỪ BỎ"
-
-msgid "OKAY"
-msgstr "ĐƯỢC"
 
 msgid "ACCEPT"
 msgstr "ĐỒNG Ý"
@@ -813,6 +813,14 @@ msgstr "Niệm %{spell}"
 msgid "Select spell target"
 msgstr "Chọn mục tiêu niệm chú"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
 msgid "View Ballista info"
 msgstr "Xem thông tin Máy bắn đá"
 
@@ -877,14 +885,6 @@ msgstr "Thanh Tin nhắn"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Hiển thị kết quả hành động của từng quái vật."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
 
 msgid ""
 "AUTO\n"
@@ -3508,6 +3508,18 @@ msgstr "Chọn Độ phân giải:"
 msgid "Click to apply the selected resolution."
 msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Nhấp để áp dụng văn bản đã nhập."
+
 msgid "Click to apply the entered text."
 msgstr "Nhấp để áp dụng văn bản đã nhập."
 
@@ -4027,12 +4039,17 @@ msgstr "Lâu đài"
 msgid "Town Army"
 msgstr "Thị trấn"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Mất tướng: %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Mất lâu đài '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4049,8 +4066,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Giải tán đội quân này."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Lâu đài"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Cài đặt Trò chơi"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4226,6 +4260,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4345,6 +4383,12 @@ msgstr "Đường"
 
 msgid "Streams"
 msgstr "Suối"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Thị trấn không thể đặt trên nước."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4860,10 +4904,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Nhấp để xem thị trấn sau."
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
@@ -5175,6 +5215,10 @@ msgstr "Ngày đã qua"
 
 msgid "The number of days spent on this campaign."
 msgstr "Số ngày đã qua trong chiến dịch này."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kịch bản"
 
 msgid "Project Coordination and Core Development"
 msgstr "Điều phối Dự án và Phát triển Lõi"
@@ -5635,6 +5679,10 @@ msgstr "bỏ lượt trong trận chiến"
 
 msgid "hotkey|cast battle spell"
 msgstr "niệm chú trong trận chiến"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "chuyển đổi chế độ tự động chiến đấu"
 
 msgid "hotkey|dwelling level 1"
 msgstr "nhà lính cấp 1"
@@ -6155,8 +6203,14 @@ msgstr "Nhấp để quay lại màn hình chính."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tháng của %{name}."
 
+msgid "New Month!"
+msgstr "Tháng Mới!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tuần của %{name}."
+
+msgid "New Week!"
+msgstr "Tuần Mới!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Sau khi tăng trưởng đều đặn, dân số của %{monster} đã tăng gấp đôi!"
@@ -6174,17 +6228,13 @@ msgstr[0] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} tăng trưởng +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Tất cả dân số đều giảm một nửa."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Tất cả các nhà tăng dân số."
-
-msgid "New Month!"
-msgstr "Tháng Mới!"
-
-msgid "New Week!"
-msgstr "Tuần Mới!"
 
 msgid "Beware!"
 msgstr "Coi chừng!"
@@ -6629,14 +6679,6 @@ msgstr "Xấu"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} cướp"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} lính"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6661,6 +6703,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6669,9 +6714,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6760,6 +6802,9 @@ msgstr "Brother Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6778,14 +6823,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} cướp"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} lính"
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
@@ -7416,6 +7466,14 @@ msgid ""
 msgstr ""
 "Sự thận trọng là phần tốt hơn của lòng dũng cảm và ngươi quyết định tránh "
 "cuộc chiến này ngay hôm nay."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Sau hàng giờ cố gắng câu chiếc rương ngoài biển, ngươi mở nó ra và tìm thấy "
+"%{gold} vàng."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8340,7 +8398,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Màn hình Tướng"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8376,7 +8434,7 @@ msgid "Enter hero's name"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
@@ -10169,8 +10227,9 @@ msgstr "Tấn công 2 ô lục giác"
 msgid "Flyer"
 msgstr "Loài bay"
 
-msgid "Always retaliates"
-msgstr "Luôn phản đòn"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Không có sự phản đòn của kẻ thù"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Tấn công tất cả kẻ thù lân cận"
@@ -12504,6 +12563,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Luôn phản đòn"
 
 #~ msgid "CONFIG"
 #~ msgstr "ĐIỀU CHỈNH"

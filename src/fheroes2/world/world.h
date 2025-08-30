@@ -296,6 +296,16 @@ public:
         return vec_castles.Get( tilePosition );
     }
 
+    size_t getCastleCount() const
+    {
+        return vec_castles.Size();
+    }
+
+    void removeCastle( const fheroes2::Point & tilePosition )
+    {
+        vec_castles.removeCastle( tilePosition );
+    }
+
     // Get castle based on its entrance tile. If the tile is not castle's entrance return nullptr.
     const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
     Castle * getCastleEntrance( const fheroes2::Point & tilePosition );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "SAIR"
 msgid "smallerButton|EXIT"
 msgstr "SAIR"
 
+msgid "OKAY"
+msgstr "OK"
+
 msgid "HEROES"
 msgstr "HERÓIS"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "CANCELAR"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "ACEITAR"
@@ -814,6 +814,12 @@ msgstr "Lançar %{spell}"
 msgid "Select spell target"
 msgstr "Selecionar alvo do feitiço"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Tem certeza de que quer ativar o modo de combate automático?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Tem certeza de que quer resolver a batalha no modo de combate rápido?"
+
 msgid "View Ballista info"
 msgstr "Ver informações da Balista"
 
@@ -878,12 +884,6 @@ msgstr "Barra de Mensagem"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Mostra os resultados das ações individuais dos monstros."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Tem certeza de que quer ativar o modo de combate automático?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Tem certeza de que quer resolver a batalha no modo de combate rápido?"
 
 msgid ""
 "AUTO\n"
@@ -3477,6 +3477,18 @@ msgstr "Selecione a resolução do jogo:"
 msgid "Click to apply the selected resolution."
 msgstr "Clique para aplicar a resolução selecionada."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Clique para selecionar esta classe."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Clique para selecionar esta classe."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Clique para aplicar o texto inserido."
+
 msgid "Click to apply the entered text."
 msgstr "Clique para aplicar o texto inserido."
 
@@ -3975,12 +3987,16 @@ msgstr "Exército do Castelo"
 msgid "Town Army"
 msgstr "Exército da Cidade"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Clique para alterar o nome do castelo. Botão direito restaura o padrão."
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Clique para alterar o nome do mapa."
 
 msgid "Enter Castle name"
 msgstr "Insira o nome do Castelo"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Perda o castelo '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr "Permitir a construção de um castelo nessa cidade."
@@ -3999,8 +4015,24 @@ msgstr "Restringir Construção de Estruturas"
 msgid "Use default defenders army."
 msgstr "Usar exército de defensores padrão."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Definir Exército personalizado. Botão direito para redefinir."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Dispensar esse exército."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Exército do Castelo"
+
+msgid "Click to accept the changes made."
+msgstr "Clique para aceitar as alterações feitas."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Clique para aceitar as alterações feitas."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Configurações do Jogo"
 
 msgid "Message Text:"
 msgstr "Texto da Mensagem:"
@@ -4161,6 +4193,10 @@ msgstr "Objetos não podem ser colocados fora do mapa."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
 
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4279,6 +4315,12 @@ msgstr "Estradas"
 
 msgid "Streams"
 msgstr "Riachos"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Um máximo de %{count} heróis da mesma cor pode ser colocado no mapa."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4755,9 +4797,6 @@ msgstr "Alterar Descrição do Mapa"
 msgid "About"
 msgstr ""
 
-msgid "Click to accept the changes made."
-msgstr "Clique para aceitar as alterações feitas."
-
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."
 
@@ -5049,6 +5088,10 @@ msgstr "Dias passados"
 
 msgid "The number of days spent on this campaign."
 msgstr "O número de dias passados nesta campanha."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Cenário"
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordenação do Projeto e Núcleo de Desenvolvimento"
@@ -5499,6 +5542,10 @@ msgstr "pular turno na batalha"
 
 msgid "hotkey|cast battle spell"
 msgstr "lançar feitiço de batalha"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "alternar modo de combate automático"
 
 msgid "hotkey|dwelling level 1"
 msgstr "nível 1 da moradia"
@@ -6038,8 +6085,14 @@ msgstr "Clique para retornar ao menu principal."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Os astrólogos proclamam o Mês de %{name}."
 
+msgid "New Month!"
+msgstr "Novo Mês!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Os astrólogos proclamam a Semana de %{name}."
+
+msgid "New Week!"
+msgstr "Nova Semana!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Após uma produção regular, a população de %{monster} é duplicada!"
@@ -6060,17 +6113,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Produção de +%{count} de %{monster}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Todas as populações foram reduzidas a metade."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Todas as moradias aumentam de população."
-
-msgid "New Month!"
-msgstr "Novo Mês!"
-
-msgid "New Week!"
-msgstr "Nova Semana!"
 
 msgid "Beware!"
 msgstr "Cuidado!"
@@ -6514,12 +6563,6 @@ msgstr "Do Mal"
 msgid ", FPS: "
 msgstr ", QPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "Ladrão de %{object}"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} assaltada"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6544,6 +6587,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6552,9 +6598,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6643,6 +6686,9 @@ msgstr "Irmão Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6661,14 +6707,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "Ladrão de %{object}"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} assaltada"
 
 msgid " gives you maximum morale"
 msgstr " concede o máximo de moral"
@@ -7287,6 +7336,14 @@ msgid ""
 msgstr ""
 "A discrição é a melhor parte da coragem, e você decide evitar esta luta por "
 "hoje."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Depois de passar horas tentando tirar o baú de fora do mar, você o abre e "
+"encontra %{gold} peças de ouro."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8206,7 +8263,8 @@ msgstr "Herói aleatório (Nível %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Herói aleatório %{race} (Nível %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Raça do herói:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8243,7 +8301,8 @@ msgstr "Definir raio de patrulha em ladrilhos"
 msgid "Enter hero's name"
 msgstr "Insira o nome do herói"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Clique para alterar a raça."
 
 msgid ""
@@ -10020,8 +10079,9 @@ msgstr "Ataque de dois hexágonos"
 msgid "Flyer"
 msgstr "Voador"
 
-msgid "Always retaliates"
-msgstr "Sempre retaliar"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Sem retaliação do inimigo"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Ataca todos os inimigos adjacentes"
@@ -12286,6 +12346,20 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Sempre retaliar"
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Definir Exército personalizado. Botão direito para redefinir."
 
 #~ msgid "CONFIG"
 #~ msgstr "AJUSTES"

@@ -125,7 +125,7 @@ namespace
         {
             const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-            renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+            renderItem( port, Heroes::getDefaultName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -1037,12 +1037,18 @@ int Dialog::selectHeroType( const int heroType )
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
-    int heroRace = 0;
+    // Set the default race to be Random.
+    // This value comes from ICN::MINIHERO images.
+    int heroRace = 6;
     int heroColor = 0;
 
     if ( heroType > -1 ) {
         heroRace = heroType % 7;
         heroColor = heroType / 7;
+    }
+    else {
+        // This is an invalid hero!
+        assert( heroType < 7 * 7 );
     }
 
     while ( le.HandleEvents() ) {
@@ -1119,7 +1125,7 @@ int Dialog::selectHeroType( const int heroType )
         needRedraw = false;
     }
 
-    return Heroes::UNKNOWN;
+    return -1;
 }
 
 int Dialog::selectMonsterType( const int monsterType )

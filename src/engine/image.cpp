@@ -1361,7 +1361,7 @@ namespace fheroes2
         }
     }
 
-    void CopyTransformLayer( const Image & in, Image & out )
+    void copyTransformLayer( const Image & in, Image & out )
     {
         if ( in.empty() || out.empty() || in.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
             assert( 0 );
@@ -1376,6 +1376,45 @@ namespace fheroes2
         }
 
         memcpy( out.transform(), in.transform(), in.width() * in.height() );
+    }
+
+    void copyTransformLayer( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() ) {
+            assert( 0 );
+            return;
+        }
+
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        if ( out.singleLayer() ) {
+            // Add the transform layer.
+            Image temp;
+            Copy( out, temp );
+            out = std::move( temp );
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
+
+        if ( inX == 0 && inY == 0 && outX == 0 && outY == 0 && width == widthIn && width == widthOut && height == in.height() && height == out.height() ) {
+            // Both images have identical width and height and a full copy is requested.
+            copyTransformLayer( in, out );
+            return;
+        }
+
+        const int32_t offsetInY = inY * widthIn + inX;
+        const int32_t offsetOutY = outY * widthOut + outX;
+
+        const uint8_t * transformInY = in.transform() + offsetInY;
+        uint8_t * transformOutY = out.transform() + offsetOutY;
+        const uint8_t * transformInYEnd = transformInY + static_cast<ptrdiff_t>( height ) * widthIn;
+
+        for ( ; transformInY != transformInYEnd; transformInY += widthIn, transformOutY += widthOut ) {
+            memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
+        }
     }
 
     Sprite CreateContour( const Image & image, const uint8_t value )

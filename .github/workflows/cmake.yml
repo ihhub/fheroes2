@@ -27,7 +27,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies (Linux)
       if: ${{ startsWith( matrix.os, 'ubuntu-' ) }}
       run: |
@@ -56,7 +56,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Update vcpkg
       run: |
         cd "$VCPKG_INSTALLATION_ROOT"

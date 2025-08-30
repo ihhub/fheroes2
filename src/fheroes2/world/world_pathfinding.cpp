@@ -56,7 +56,6 @@ namespace
     bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )
     {
         const Maps::Tile & tile = world.getTile( tileIndex );
-        const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
@@ -67,17 +66,7 @@ namespace
             return false;
         }
 
-        if ( fromWater && !toWater && objectType == MP2::OBJ_COAST ) {
-            return false;
-        }
-
-        // In general, direct movement from a shore tile to a water tile is not possible, but AI can use this movement for transparent Summon Boat
-        // spellcasting. In this case, it may be necessary to cut the resulting path on a water tile.
-        if ( !fromWater && toWater && objectType == MP2::OBJ_NONE ) {
-            return false;
-        }
-
-        return true;
+        return fromWater == tile.isWater();
     }
 
     bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const PlayerColor color, const bool isArtifactsBagFull,
@@ -86,7 +75,6 @@ namespace
         assert( Color::allPlayerColors() & color );
 
         const Maps::Tile & tile = world.getTile( tileIndex );
-        const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const auto isTileAccessible = [color, armyStrength, minimalAdvantage, &tile]() {
@@ -105,6 +93,8 @@ namespace
 
         // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HERO ) {
+            const bool toWater = tile.isWater();
+
             // Heroes on the water can be attacked from the nearby shore, but they cannot be passed through
             if ( fromWater != toWater ) {
                 assert( !fromWater && toWater );
@@ -199,7 +189,7 @@ namespace
 
         // AI can use boats to overcome water obstacles
         if ( objectType == MP2::OBJ_BOAT ) {
-            assert( !fromWater && toWater );
+            assert( !fromWater && tile.isWater() );
 
             return true;
         }
@@ -230,14 +220,13 @@ namespace
         const Maps::Tile & fromTile = world.getTile( from );
         const bool fromWater = fromTile.isWater();
 
-        // check corner water/coast
         if ( fromWater ) {
             const int mapWidth = world.w();
             switch ( direction ) {
             case Direction::TOP_LEFT: {
                 assert( from >= mapWidth + 1 );
                 if ( world.getTile( from - mapWidth - 1 ).isWater() && ( !world.getTile( from - 1 ).isWater() || !world.getTile( from - mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -246,7 +235,7 @@ namespace
             case Direction::TOP_RIGHT: {
                 assert( from >= mapWidth && from + 1 < mapWidth * world.h() );
                 if ( world.getTile( from - mapWidth + 1 ).isWater() && ( !world.getTile( from + 1 ).isWater() || !world.getTile( from - mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -255,7 +244,7 @@ namespace
             case Direction::BOTTOM_RIGHT: {
                 assert( from + mapWidth + 1 < mapWidth * world.h() );
                 if ( world.getTile( from + mapWidth + 1 ).isWater() && ( !world.getTile( from + 1 ).isWater() || !world.getTile( from + mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -264,7 +253,7 @@ namespace
             case Direction::BOTTOM_LEFT: {
                 assert( from >= 1 && from + mapWidth - 1 < mapWidth * world.h() );
                 if ( world.getTile( from + mapWidth - 1 ).isWater() && ( !world.getTile( from - 1 ).isWater() || !world.getTile( from + mapWidth ).isWater() ) ) {
-                    // Cannot sail through the corner of land.
+                    // It is impossible to sail through the corner formed by the land.
                     return false;
                 }
 
@@ -290,8 +279,8 @@ namespace
             return false;
         }
 
-        // ... this only works when moving from the shore to an empty water tile...
-        if ( fromWater || !toTile.isWater() || toTile.getMainObjectType() != MP2::OBJ_NONE ) {
+        // ... this only works when moving from the shore to a suitable water tile...
+        if ( fromWater || !toTile.isSuitableForSummoningBoat() ) {
             return false;
         }
 
@@ -877,10 +866,9 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
 
         const Maps::Tile & toTile = world.getTile( to );
 
-        // AI-controlled hero may get from the shore to an empty water tile using the Summon Boat spell
-        const bool isEmptyWaterTile = ( toTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_NONE );
-        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || isEmptyWaterTile ) );
-        const bool isDisembarks = ( fromTile.isWater() && toTile.getMainObjectType() == MP2::OBJ_COAST );
+        // AI-controlled hero may get from the shore to a suitable water tile using the Summon Boat spell
+        const bool isComesOnBoard = ( !fromTile.isWater() && ( toTile.getMainObjectType() == MP2::OBJ_BOAT || toTile.isSuitableForSummoningBoat() ) );
+        const bool isDisembarks = ( fromTile.isWater() && toTile.isSuitableForDisembarkation() );
 
         // When the hero gets into a boat or disembarks, he spends all remaining movement points.
         if ( isComesOnBoard || isDisembarks ) {

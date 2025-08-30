@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -42,6 +42,9 @@ msgstr ""
 msgid "smallerButton|EXIT"
 msgstr ""
 
+msgid "OKAY"
+msgstr ""
+
 msgid "HEROES"
 msgstr ""
 
@@ -51,9 +54,6 @@ msgid ""
 msgstr ""
 
 msgid "CANCEL"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -739,6 +739,14 @@ msgstr "Getta %{spell}"
 msgid "Select spell target"
 msgstr "Seleziona il bersaglio della magia"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Sei sicuro di voler fuggire?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Sei sicuro di voler congedare queste forze?"
+
 msgid "View Ballista info"
 msgstr "Mostra dettagli sulla Ballista"
 
@@ -805,14 +813,6 @@ msgstr ""
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Sei sicuro di voler fuggire?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Sei sicuro di voler congedare queste forze?"
 
 msgid ""
 "AUTO\n"
@@ -3336,6 +3336,18 @@ msgid "Click to apply the selected resolution."
 msgstr ""
 
 #, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
 msgid "Click to apply the entered text."
 msgstr "Clicca per salvare la partita in corso."
 
@@ -3858,11 +3870,16 @@ msgstr "Castello"
 msgid "Town Army"
 msgstr "Castello"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Clicca per andare alla città succ."
 
 #, fuzzy
 msgid "Enter Castle name"
+msgstr "Esci dal Castello"
+
+#, fuzzy
+msgid "Reset the Castle name."
 msgstr "Esci dal Castello"
 
 msgid "Allow to build a castle in this town."
@@ -3880,8 +3897,24 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Castello"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Impostazioni del gioco."
 
 msgid "Message Text:"
 msgstr ""
@@ -4050,6 +4083,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Opzioni Avventura"
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Opzioni Avventura"
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4175,6 +4212,12 @@ msgstr "Strada"
 
 msgid "Streams"
 msgstr ""
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Opzioni Avventura"
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4668,10 +4711,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Clicca per andare alla città succ."
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Clicca per salvare la partita in corso."
 
@@ -4966,6 +5005,10 @@ msgstr ""
 
 msgid "The number of days spent on this campaign."
 msgstr ""
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenario"
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -5448,6 +5491,10 @@ msgstr ""
 msgid "hotkey|cast battle spell"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Mostra eroe successivo"
+
 msgid "hotkey|dwelling level 1"
 msgstr ""
 
@@ -5928,8 +5975,14 @@ msgstr ""
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Gli Astrologi prevedono il mese di %{name}."
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Gli Astrologi prevedono la settimana di %{name}."
+
+msgid "New Week!"
+msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr ""
@@ -5952,17 +6005,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Crescita %{monster} +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr "Tutte le populazioni dimezzate."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr "Cresce il numero di truppe disponibili di ogni dimora."
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
-msgstr ""
 
 msgid "Beware!"
 msgstr ""
@@ -6379,12 +6428,6 @@ msgstr "Cattivo"
 msgid ", FPS: "
 msgstr ""
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
-msgstr ""
-
 msgid "Ector"
 msgstr ""
 
@@ -6409,6 +6452,9 @@ msgstr ""
 msgid "Fineous"
 msgstr "Fineo"
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr "Gezebel"
 
@@ -6416,9 +6462,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6508,6 +6551,9 @@ msgstr "Frate Brax"
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6526,13 +6572,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -7003,6 +7052,11 @@ msgstr "Trionfante, cogli la ricompensa, il/la %{art}."
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -7706,7 +7760,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name}: %{race} (Livello %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Schermata Eroe"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7741,7 +7795,7 @@ msgid "Enter hero's name"
 msgstr ""
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Clicca per andare alla città succ."
 
 msgid ""
@@ -9476,8 +9530,9 @@ msgstr "Colpo di due riquardri"
 msgid "Flyer"
 msgstr "Creatura Volante"
 
-msgid "Always retaliates"
-msgstr "Contrattacca sempre"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Nessun contrattacco nemico"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Attacca tutti i nemici adiacenti"
@@ -11454,3 +11509,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Contrattacca sempre"

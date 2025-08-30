@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -41,6 +41,9 @@ msgstr "ИЗХОД"
 msgid "smallerButton|EXIT"
 msgstr "ИЗХОД"
 
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
 msgid "HEROES"
 msgstr "ГЕРОЙ"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ОТКАЗ"
-
-msgid "OKAY"
-msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
 msgstr "ПРИЕМАМ"
@@ -815,6 +815,14 @@ msgstr "Направи %{spell}"
 msgid "Select spell target"
 msgstr "Избери цел за заклинание"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
 msgid "View Ballista info"
 msgstr "Виж информация за Катапулт"
 
@@ -879,14 +887,6 @@ msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid ""
 "AUTO\n"
@@ -3517,6 +3517,18 @@ msgstr "Изберете резолюция на играта:"
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Кликни, за да приложиш въведения текст."
+
 msgid "Click to apply the entered text."
 msgstr "Кликни, за да приложиш въведения текст."
 
@@ -4052,12 +4064,17 @@ msgstr "Замък"
 msgid "Town Army"
 msgstr "Град"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Губиш героя: %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Губиш замъка '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4074,8 +4091,25 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+#, fuzzy
+msgid "Reset the army."
+msgstr "Разпусни тази войска."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Замък"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Игрови настройки"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4252,6 +4286,10 @@ msgid "Action objects must be placed on clear tiles."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4371,6 +4409,12 @@ msgstr "Пътища"
 
 msgid "Streams"
 msgstr "Потоци"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Чудовищата не могат да се поставят върху вода."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4895,10 +4939,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Кликни, за да покажеш следващия град."
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Кликни, за да запазиш текущата игра."
 
@@ -5212,6 +5252,10 @@ msgstr "Прекарани дни"
 
 msgid "The number of days spent on this campaign."
 msgstr "Броят дни, прекарани в тази кампания."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Сценарий"
 
 msgid "Project Coordination and Core Development"
 msgstr "Координация на проекта и основно развитие"
@@ -5672,6 +5716,10 @@ msgstr "пропусни ход в битка"
 
 msgid "hotkey|cast battle spell"
 msgstr "направи бойно заклинание"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "превключи автоматичния режим на битка"
 
 msgid "hotkey|dwelling level 1"
 msgstr "ниво на жилище 1"
@@ -6202,8 +6250,14 @@ msgstr "Кликни, за да се върнеш към главното мен
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астролозите обявяват месеца на %{name}."
 
+msgid "New Month!"
+msgstr "Нов месец!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Астролозите обявяват седмицата на %{name}."
+
+msgid "New Week!"
+msgstr "Нова Седмица!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "След редовен растеж популацията на %{monster} се удвоява!"
@@ -6224,17 +6278,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} растеж +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Всички популации са наполовина."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Всички жилища увеличават населението."
-
-msgid "New Month!"
-msgstr "Нов месец!"
-
-msgid "New Week!"
-msgstr "Нова Седмица!"
 
 msgid "Beware!"
 msgstr "Внимавай!"
@@ -6679,14 +6729,6 @@ msgstr "Зъл"
 msgid ", FPS: "
 msgstr ""
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} разбойник"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} нападнат"
-
 msgid "Ector"
 msgstr "Ектор"
 
@@ -6711,6 +6753,9 @@ msgstr "Краг Хак"
 msgid "Fineous"
 msgstr "Финиас"
 
+msgid "Jaclyn"
+msgstr "Жаклин"
+
 msgid "Jezebel"
 msgstr "Джезабел"
 
@@ -6719,9 +6764,6 @@ msgstr "Атлас"
 
 msgid "Ergon"
 msgstr "Ергон"
-
-msgid "Jaclyn"
-msgstr "Жаклин"
 
 msgid "Gem"
 msgstr "Джем"
@@ -6810,6 +6852,9 @@ msgstr "Брат Бракс"
 msgid "Dainwin"
 msgstr "Дейнуин"
 
+msgid "Gallavant"
+msgstr "Галевант"
+
 msgid "Joseph"
 msgstr "Джоузеф"
 
@@ -6828,14 +6873,19 @@ msgstr "Дракония"
 msgid "Elderian"
 msgstr "Елдериан"
 
-msgid "Gallavant"
-msgstr "Галевант"
-
 msgid "Jarkonas"
 msgstr "Джарконас"
 
 msgid "Martine"
 msgstr "Мартинa"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} разбойник"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} нападнат"
 
 msgid " gives you maximum morale"
 msgstr " ти дава максимален морал"
@@ -7440,6 +7490,14 @@ msgid ""
 msgstr ""
 "Дискретността е по-добрата част от доблестта и ти решаваш да избегнеш тази "
 "битка днес."
+
+#, fuzzy
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"След като си прекарал часове в опити да извадиш сандъка от морето, ти го "
+"отваряш и намирате %{gold} златни парчета."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8346,7 +8404,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Екран на героя"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8382,7 +8440,7 @@ msgid "Enter hero's name"
 msgstr "Губиш героя: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
@@ -10192,8 +10250,9 @@ msgstr "Атака в два шестоъгълника"
 msgid "Flyer"
 msgstr "Летец"
 
-msgid "Always retaliates"
-msgstr "Винаги отмъщава"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Без вражеско отмъщение"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Атакува всички съседни врагове"
@@ -12472,6 +12531,9 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Винаги отмъщава"
 
 #~ msgid "CONFIG"
 #~ msgstr ""

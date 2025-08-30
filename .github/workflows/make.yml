@@ -103,9 +103,13 @@ jobs:
             FHEROES2_WITH_TSAN: ON
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
-          os: macos-13
+          os: macos-14
+          arch: x86_64
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
+            CFLAGS: --target=x86_64-apple-macos10.15
+            CXXFLAGS: --target=x86_64-apple-macos10.15
+            LDFLAGS: --target=x86_64-apple-macos10.15
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
@@ -151,7 +155,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies (Linux)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
@@ -161,6 +165,11 @@ jobs:
     - name: Install dependencies (macOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
+            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
+            export PATH=/usr/local/bin:$PATH
+        fi
         brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
@@ -173,6 +182,10 @@ jobs:
     - name: Build (MacOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
+            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
+            export PATH=/usr/local/bin:$PATH
+        fi
         make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.env }}
     - name: Create packages
@@ -212,7 +225,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -285,9 +298,12 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
+        # TODO: remove this temporary workaround
+        sudo rm -f /etc/apt/sources.list.d/bullseye-backports.list
+        #
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
     - name: Build
@@ -346,7 +362,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
         sudo apt-get -y update

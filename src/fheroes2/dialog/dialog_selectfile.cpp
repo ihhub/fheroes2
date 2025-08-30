@@ -451,7 +451,7 @@ namespace
         listbox.Redraw();
 
         // Virtual keyboard button, text input and blinking cursor are used only in save game mode (when 'isEditing' is true ).
-        std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
+        std::unique_ptr<fheroes2::Button> buttonVirtualKB;
         std::unique_ptr<fheroes2::TextInputField> textInput;
 
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
@@ -520,8 +520,9 @@ namespace
 
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
-            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            buttonVirtualKB = std::make_unique<fheroes2::Button>();
+            const int buttonVirtualKBIcnID = isEvilInterface ? ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL : ICN::BUTTON_VIRTUAL_KEYBOARD_GOOD;
+            background.renderButton( *buttonVirtualKB, buttonVirtualKBIcnID, 0, 1, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             // Prepare the text input and set it to always fit the file name input field width.
             textInput = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ textInputRoi.x + 4, textInputRoi.y + 2, maxFileNameWidth, textInputRoi.height - 2 },

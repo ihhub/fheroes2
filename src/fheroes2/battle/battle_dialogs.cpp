@@ -511,8 +511,8 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 // Returns true if player wants to restart the battle
 bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const
 {
-    const bool attackerIsHuman = _army1->GetControl() & CONTROL_HUMAN;
-    const bool defenderIsHuman = _army2->GetControl() & CONTROL_HUMAN;
+    const bool attackerIsHuman = _attackingArmy->GetControl() & CONTROL_HUMAN;
+    const bool defenderIsHuman = _defendingArmy->GetControl() & CONTROL_HUMAN;
 
     if ( !attackerIsHuman && !defenderIsHuman ) {
         // AI vs AI battle, this dialog should not be shown
@@ -543,22 +543,24 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LoopedAnimationSequence sequence;
 
     fheroes2::FontType summaryTitleFont = fheroes2::FontType::normalWhite();
-    if ( ( res.army1 & RESULT_WINS ) && attackerIsHuman ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+    if ( ( res.attacker & RESULT_WINS ) && attackerIsHuman ) {
+        GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, _defendingArmy->GetSurrenderCost(), sequence, title,
+                          surrenderText, outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && defenderIsHuman ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+    else if ( ( res.defender & RESULT_WINS ) && defenderIsHuman ) {
+        GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, _attackingArmy->GetSurrenderCost(), sequence, title,
+                          surrenderText, outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( attackerIsHuman ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, 0, sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( defenderIsHuman ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, 0, sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
 
@@ -620,11 +622,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.set( _( "Attacker" ), casualtiesFont );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 15, display );
 
-    const Troops killed1 = _army1->GetKilledTroops();
-    const Troops killed2 = _army2->GetKilledTroops();
+    const Troops killedInAttackingArmy = _attackingArmy->GetKilledTroops();
+    const Troops killedInDefendingArmy = _defendingArmy->GetKilledTroops();
 
-    if ( killed1.isValid() ) {
-        Army::drawSingleDetailedMonsterLine( killed1, summaryRoi.x + 13, casualtiesOffsetY + 36, roi.width - 47 );
+    if ( killedInAttackingArmy.isValid() ) {
+        Army::drawSingleDetailedMonsterLine( killedInAttackingArmy, summaryRoi.x + 13, casualtiesOffsetY + 36, roi.width - 47 );
     }
     else {
         text.set( _( "None" ), casualtiesFont );
@@ -635,8 +637,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.set( _( "Defender" ), casualtiesFont );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 75, display );
 
-    if ( killed2.isValid() ) {
-        Army::drawSingleDetailedMonsterLine( killed2, summaryRoi.x + 13, casualtiesOffsetY + 96, roi.width - 47 );
+    if ( killedInDefendingArmy.isValid() ) {
+        Army::drawSingleDetailedMonsterLine( killedInDefendingArmy, summaryRoi.x + 13, casualtiesOffsetY + 96, roi.width - 47 );
     }
     else {
         text.set( _( "None" ), casualtiesFont );
@@ -704,8 +706,10 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( !artifacts.empty() ) {
-        const HeroBase * winner = ( res.army1 & RESULT_WINS ? _army1->GetCommander() : ( res.army2 & RESULT_WINS ? _army2->GetCommander() : nullptr ) );
-        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? _army1->GetCommander() : ( res.army2 & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
+        const HeroBase * winner
+            = ( res.attacker & RESULT_WINS ? _attackingArmy->GetCommander() : ( res.defender & RESULT_WINS ? _defendingArmy->GetCommander() : nullptr ) );
+        const HeroBase * loser
+            = ( res.attacker & RESULT_LOSS ? _attackingArmy->GetCommander() : ( res.defender & RESULT_LOSS ? _defendingArmy->GetCommander() : nullptr ) );
 
         // Cannot transfer artifacts
         if ( winner == nullptr || loser == nullptr ) {

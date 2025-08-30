@@ -149,8 +149,9 @@ namespace
 fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
-    if ( conf.isCampaignGameType() )
+    if ( conf.isCampaignGameType() ) {
         conf.setCurrentMapInfo( {} );
+    }
     conf.SetGameType( Game::TYPE_STANDARD );
     return fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER;
 }
@@ -164,15 +165,15 @@ fheroes2::GameMode Game::NewBattleOnly()
     return fheroes2::GameMode::START_BATTLE_ONLY_MODE;
 }
 
-fheroes2::GameMode Game::NewHotSeat( const size_t playerCount )
+fheroes2::GameMode Game::NewHotSeat( const size_t playerCountOptionIndex )
 {
-    assert( 1 < playerCount && playerCount < 7 );
+    assert( playerCountOptionIndex < playerCountModes.size() );
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() ) {
         conf.setCurrentMapInfo( {} );
     }
     conf.SetGameType( Game::TYPE_HOTSEAT );
-    return playerCountModes[playerCount];
+    return playerCountModes[playerCountOptionIndex];
 }
 
 fheroes2::GameMode Game::NewSuccessionWarsCampaign()
@@ -207,7 +208,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
                                                      fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
 
-    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
@@ -367,7 +368,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
             if ( le.isMouseCursorPosInArea( activeCampaignArea[i] ) && videos[i] ) {
                 highlightCampaignId = i;
-                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
+                customDelay = static_cast<uint64_t>( std::lround( videos[highlightCampaignId]->microsecondsPerFrame() / 1000 ) );
                 break;
             }
         }
@@ -561,8 +562,10 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 
             // Loop through all player count buttons.
             for ( size_t i = 0; i < playerCountOptions; ++i ) {
+                assert( i < playerCountHotkeys.size() );
+
                 if ( le.MouseClickLeft( playerCountButtons.button( i ).area() ) || le.isKeyPressed( playerCountHotkeys[i] ) ) {
-                    return NewHotSeat( i + 2 );
+                    return NewHotSeat( i );
                 }
             }
             if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 0 ).area() ) ) {

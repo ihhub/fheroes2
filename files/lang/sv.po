@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
-"PO-Revision-Date: 2025-06-07 12:43+0200\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"PO-Revision-Date: 2025-08-01 14:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -42,6 +42,9 @@ msgstr "LÄMNA"
 msgid "smallerButton|EXIT"
 msgstr "LÄMN."
 
+msgid "OKAY"
+msgstr "OKEJ"
+
 msgid "HEROES"
 msgstr ""
 "HJÄLT-\n"
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
-
-msgid "OKAY"
-msgstr "OKEJ"
 
 msgid "ACCEPT"
 msgstr "ACCEPTERA"
@@ -817,6 +817,12 @@ msgstr "Kasta %{spell}"
 msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
+
 msgid "View Ballista info"
 msgstr "Visa Ballistinformation"
 
@@ -881,12 +887,6 @@ msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Är du säker på att du vill aktivera automatisk strid?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
 
 msgid ""
 "AUTO\n"
@@ -2328,10 +2328,10 @@ msgid "Upg. Armory"
 msgstr "Uppg. Rustkammare"
 
 msgid "Jousting Arena"
-msgstr "Turneringsarena"
+msgstr "Rännarbana"
 
 msgid "Upg. Jousting Arena"
-msgstr "Uppg. Turneringsarena"
+msgstr "Uppg. Rännarbana"
 
 msgid "Cathedral"
 msgstr "Katedral"
@@ -3457,6 +3457,18 @@ msgstr "Ange Spelupplösning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klicka här för att anta den valda upplösningen."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klicka här för att välja denna klass."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klicka här för att välja denna klass."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klicka här för att anta den inmatade texten."
+
 msgid "Click to apply the entered text."
 msgstr "Klicka här för att anta den inmatade texten."
 
@@ -3951,12 +3963,14 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Klicka för att ändra Borgnamn. Högerklicka för att återställa till standard."
+msgid "Click to change the Castle name."
+msgstr "Klicka för att ändra Borgens namn."
 
 msgid "Enter Castle name"
 msgstr "Skriv Borgnamn"
+
+msgid "Reset the Castle name."
+msgstr "Återställ Borgens namn."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillåt att en borg byggs i denna stad."
@@ -3975,8 +3989,20 @@ msgstr "Begränsa Byggnadskonstruktion"
 msgid "Use default defenders army."
 msgstr "Använd försvararnas standardarmé."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
+msgid "Reset the army."
+msgstr "Återställ armén."
+
+msgid "Set custom Castle Army."
+msgstr "Anpassa Borgarmén."
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+
+msgid "Castle Settings"
+msgstr "Borginställningar"
 
 msgid "Message Text:"
 msgstr "Meddelandetext:"
@@ -4135,6 +4161,9 @@ msgstr "Föremål kan inte placeras utanför kartan."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4253,6 +4282,13 @@ msgstr "Vägar"
 
 msgid "Streams"
 msgstr "Floder"
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr ""
+"Maximalt %{count} hjältar (inklusive fängslade hjältar) kan placeras på "
+"kartan."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4717,9 +4753,6 @@ msgstr "Ändra Kartbeskrivning"
 msgid "About"
 msgstr "Om"
 
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
-
 msgid "Click to edit custom rumors."
 msgstr "Klicka för att redigera anpassade rykten."
 
@@ -5015,6 +5048,10 @@ msgstr "Gångna dagar"
 msgid "The number of days spent on this campaign."
 msgstr "Antal gångna dagar för denna kampanj."
 
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenario"
+
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination och huvudutveckling"
 
@@ -5265,7 +5302,7 @@ msgid "hotkey|hot seat game"
 msgstr "Heta stolen"
 
 msgid "hotkey|battle only game"
-msgstr "Endast strid"
+msgstr "Stridsläge"
 
 msgid "hotkey|choose the original campaign"
 msgstr "Välj orginalkampanj"
@@ -5464,6 +5501,9 @@ msgstr "Hoppa över runda i strid"
 
 msgid "hotkey|cast battle spell"
 msgstr "Kasta stridsbesvärjelse"
+
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Visa turordningen för strid"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bostad, nivå 1"
@@ -5994,8 +6034,14 @@ msgstr "Klicka för att gå tillbaka till huvudmenyn."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
 
+msgid "New Month!"
+msgstr "Ny Månad!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologerna utropar %{name} vecka."
+
+msgid "New Week!"
+msgstr "Ny Vecka!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter en vanlig ökning har beståndet av %{monster} fördubblats!"
@@ -6014,17 +6060,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Alla populationer är halverade."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Alla boningar ökar sin population."
-
-msgid "New Month!"
-msgstr "Ny Månad!"
-
-msgid "New Week!"
-msgstr "Ny Vecka!"
 
 msgid "Beware!"
 msgstr "Varsko!"
@@ -6460,12 +6502,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}splundrare"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plundrat"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6490,6 +6526,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6498,9 +6537,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6589,6 +6625,9 @@ msgstr "Broder Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6607,14 +6646,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}splundrare"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plundrat"
 
 msgid " gives you maximum morale"
 msgstr " ger dig maximalt med stridsmoral"
@@ -7227,6 +7269,13 @@ msgid ""
 msgstr ""
 "Det är bättre att fly än att illa fäkta, så du bestämmer dig för att undvika "
 "denna strid för idag."
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
+"öppnar du den bara för att upptäcka att den är tom."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8144,7 +8193,8 @@ msgstr "Slumpad hjälte (Nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Hjälteklass"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8178,7 +8228,8 @@ msgstr "Ange patrullradie i antal rutor"
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klicka för byta klass."
 
 msgid ""
@@ -9935,8 +9986,8 @@ msgstr "Två-rutsanfall"
 msgid "Flyer"
 msgstr "Flygare"
 
-msgid "Always retaliates"
-msgstr "Vedergäller alltid"
+msgid "Unlimited retaliation"
+msgstr "Obegränsad vedergällning"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
@@ -12167,6 +12218,21 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vedergäller alltid"
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Klicka för att ändra Borgnamn. Högerklicka för att återställa till "
+#~ "standard."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
 
 #~ msgid "CONFIG"
 #~ msgstr ""

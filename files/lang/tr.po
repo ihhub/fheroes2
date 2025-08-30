@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "ÇIKIŞ"
 msgid "smallerButton|EXIT"
 msgstr "ÇIKIŞ"
 
+msgid "OKAY"
+msgstr "TAMAM"
+
 msgid "HEROES"
 msgstr "KAHRAMANLAR"
 
@@ -54,9 +57,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "İPTAL"
-
-msgid "OKAY"
-msgstr "TAMAM"
 
 msgid "ACCEPT"
 msgstr "KABUL"
@@ -810,6 +810,14 @@ msgstr "%{spell} uygula"
 msgid "Select spell target"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "View Ballista info"
 msgstr "Mancınık bilgilerini görüntüle"
 
@@ -874,14 +882,6 @@ msgstr "Mesaj Çubuğu"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Otomatik savaşı etkinleştirmek istediğine emin misin?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid ""
 "AUTO\n"
@@ -3359,6 +3359,18 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Click to apply the entered text."
 msgstr ""
 
@@ -3835,11 +3847,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Kahraman Ekranı"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Enter Castle name"
 msgstr ""
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Savaşa geri dön."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3856,8 +3873,23 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Ayarlar"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4017,6 +4049,9 @@ msgstr ""
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4120,6 +4155,11 @@ msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -4579,10 +4619,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
@@ -4851,6 +4887,10 @@ msgstr "Geçen Günler"
 
 msgid "The number of days spent on this campaign."
 msgstr ""
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Senaryo"
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -5308,6 +5348,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""
@@ -5773,7 +5817,13 @@ msgstr ""
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
+msgstr ""
+
+msgid "New Week!"
 msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -5791,16 +5841,10 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr ""
 
-msgid " All populations are halved."
+msgid "All populations are halved."
 msgstr ""
 
-msgid " All dwellings increase population."
-msgstr ""
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
+msgid "All dwellings increase population."
 msgstr ""
 
 msgid "Beware!"
@@ -6192,12 +6236,6 @@ msgstr "Şeytani"
 msgid ", FPS: "
 msgstr ""
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
-msgstr ""
-
 msgid "Ector"
 msgstr ""
 
@@ -6222,6 +6260,9 @@ msgstr ""
 msgid "Fineous"
 msgstr ""
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr ""
 
@@ -6229,9 +6270,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6321,6 +6359,9 @@ msgstr ""
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6339,13 +6380,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -6803,6 +6847,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -7468,7 +7517,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Kahraman Ekranı"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7502,8 +7551,9 @@ msgstr ""
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Click to change race."
-msgstr ""
+#, fuzzy
+msgid "Click to change class."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -9204,7 +9254,7 @@ msgstr ""
 msgid "Flyer"
 msgstr ""
 
-msgid "Always retaliates"
+msgid "Unlimited retaliation"
 msgstr ""
 
 msgid "Attacks all adjacent enemies"

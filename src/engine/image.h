@@ -279,7 +279,9 @@ namespace fheroes2
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // Copies transform the layer from in to out. Both images must be of the same size.
-    void CopyTransformLayer( const Image & in, Image & out );
+    void copyTransformLayer( const Image & in, Image & out );
+    // Copies transform the layer from in to out.
+    void copyTransformLayer( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     Sprite CreateContour( const Image & image, const uint8_t value );
 

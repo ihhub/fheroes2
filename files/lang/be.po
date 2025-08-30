@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-21 16:35+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -43,6 +43,9 @@ msgstr "ВЫЙСЦІ"
 msgid "smallerButton|EXIT"
 msgstr "ВЫЙСЦІ"
 
+msgid "OKAY"
+msgstr "ДОБРА"
+
 msgid "HEROES"
 msgstr "ГЕРОІ"
 
@@ -55,9 +58,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "НАЗАД"
-
-msgid "OKAY"
-msgstr "ДОБРА"
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -815,6 +815,12 @@ msgstr "Скарыстаць %{spell}"
 msgid "Select spell target"
 msgstr "Выберыце цэль заклінання"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Вы ўпэўнены, што хочаце ўключыць рэжым аўтабою?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Вы ўпэўнены, што хочаце правесці бітву ў рэжыме хуткага бою?"
+
 msgid "View Ballista info"
 msgstr "Інфармацыя пра балісту"
 
@@ -879,12 +885,6 @@ msgstr "Інфармацыйны радок"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Тут паказваюцца вынікі дзеянняў асобных атрадаў."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Вы ўпэўнены, што хочаце ўключыць рэжым аўтабою?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Вы ўпэўнены, што хочаце правесці бітву ў рэжыме хуткага бою?"
 
 msgid ""
 "AUTO\n"
@@ -3385,6 +3385,18 @@ msgstr "Выберыце разрознасць экранa:"
 msgid "Click to apply the selected resolution."
 msgstr "Націсніце, каб ужыць выбраную разрознасць."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Націсніце, каб ужыць уведзены тэкст."
+
 msgid "Click to apply the entered text."
 msgstr "Націсніце, каб ужыць уведзены тэкст."
 
@@ -3896,11 +3908,16 @@ msgstr "Замак"
 msgid "Town Army"
 msgstr "Горад"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
 #, fuzzy
 msgid "Enter Castle name"
+msgstr "Пакінуць замак"
+
+#, fuzzy
+msgid "Reset the Castle name."
 msgstr "Пакінуць замак"
 
 msgid "Allow to build a castle in this town."
@@ -3918,8 +3935,24 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Замак"
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Налады гульні"
 
 msgid "Message Text:"
 msgstr ""
@@ -4076,6 +4109,9 @@ msgstr ""
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4177,6 +4213,11 @@ msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -4648,10 +4689,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Назва абранай мапы."
 
@@ -4928,6 +4965,10 @@ msgstr ""
 
 msgid "The number of days spent on this campaign."
 msgstr ""
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Сцэнар"
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -5398,6 +5439,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Звычайная гульня"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""
@@ -5884,7 +5929,13 @@ msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
+msgstr ""
+
+msgid "New Week!"
 msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -5903,16 +5954,10 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr ""
 
-msgid " All populations are halved."
+msgid "All populations are halved."
 msgstr ""
 
-msgid " All dwellings increase population."
-msgstr ""
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
+msgid "All dwellings increase population."
 msgstr ""
 
 msgid "Beware!"
@@ -6321,12 +6366,6 @@ msgstr "Зло"
 msgid ", FPS: "
 msgstr ""
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
-msgstr ""
-
 msgid "Ector"
 msgstr ""
 
@@ -6351,6 +6390,9 @@ msgstr ""
 msgid "Fineous"
 msgstr ""
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr ""
 
@@ -6358,9 +6400,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6450,6 +6489,9 @@ msgstr ""
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6468,13 +6510,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -6932,6 +6977,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -7598,7 +7648,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Экран героя"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7633,7 +7683,7 @@ msgid "Enter hero's name"
 msgstr ""
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
 msgid ""
@@ -9349,7 +9399,7 @@ msgstr ""
 msgid "Flyer"
 msgstr ""
 
-msgid "Always retaliates"
+msgid "Unlimited retaliation"
 msgstr ""
 
 msgid "Attacks all adjacent enemies"
