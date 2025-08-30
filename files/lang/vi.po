@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6203,8 +6203,14 @@ msgstr "Nhấp để quay lại màn hình chính."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tháng của %{name}."
 
+msgid "New Month!"
+msgstr "Tháng Mới!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tuần của %{name}."
+
+msgid "New Week!"
+msgstr "Tuần Mới!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Sau khi tăng trưởng đều đặn, dân số của %{monster} đã tăng gấp đôi!"
@@ -6222,17 +6228,13 @@ msgstr[0] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} tăng trưởng +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Tất cả dân số đều giảm một nửa."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Tất cả các nhà tăng dân số."
-
-msgid "New Month!"
-msgstr "Tháng Mới!"
-
-msgid "New Week!"
-msgstr "Tuần Mới!"
 
 msgid "Beware!"
 msgstr "Coi chừng!"

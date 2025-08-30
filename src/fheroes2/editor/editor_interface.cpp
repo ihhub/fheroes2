@@ -732,6 +732,14 @@ namespace Interface
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
 
+        if ( prevRoi == fheroes2::Rect{} ) {
+            // This is the first initialization of the game area for the Editor.
+            // Make the top-left corner of the first tile to be at the top-left corner of the shown game area.
+            _gameArea.SetCenterInPixels( { newRoi.width / 2, newRoi.height / 2 } );
+
+            return;
+        }
+
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
     }

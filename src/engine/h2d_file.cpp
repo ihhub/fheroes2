@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #include "h2d_file.h"
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
@@ -34,6 +35,9 @@ namespace
     // 4 bytes - file size
     // 5 bytes - file name
     const size_t minFileSize = 4 + 4 + 4 + 4 + 5 + 1;
+
+    const uint8_t version{ 1U };
+    const std::array<uint8_t, 4> magicSequence{ 'H', '2', 'D', version };
 }
 
 namespace fheroes2
@@ -52,17 +56,10 @@ namespace fheroes2
             return false;
         }
 
-        if ( _fileStream.get() != 'H' ) {
-            return false;
-        }
-        if ( _fileStream.get() != '2' ) {
-            return false;
-        }
-        if ( _fileStream.get() != 'D' ) {
-            return false;
-        }
-        if ( _fileStream.get() != '\0' ) {
-            return false;
+        for ( const uint8_t value : magicSequence ) {
+            if ( _fileStream.get() != value ) {
+                return false;
+            }
         }
 
         const uint32_t fileCount = _fileStream.getLE32();
@@ -119,10 +116,9 @@ namespace fheroes2
             return false;
         }
 
-        fileStream.put( 'H' );
-        fileStream.put( '2' );
-        fileStream.put( 'D' );
-        fileStream.put( '\0' );
+        for ( const uint8_t value : magicSequence ) {
+            fileStream.put( value );
+        }
 
         fileStream.putLE32( static_cast<uint32_t>( _fileData.size() ) );
 
@@ -173,11 +169,10 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
-        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
-        assert( !image.singleLayer() );
+        const size_t imageInfoLength{ 4 + 4 + 4 + 4 + 1 };
 
         const std::vector<uint8_t> & data = reader.getFile( name );
-        if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
+        if ( data.size() < imageInfoLength + 1 ) {
             // Empty or invalid image.
             return false;
         }
@@ -187,14 +182,23 @@ namespace fheroes2
         const int32_t height = static_cast<int32_t>( stream.getLE32() );
         const int32_t x = static_cast<int32_t>( stream.getLE32() );
         const int32_t y = static_cast<int32_t>( stream.getLE32() );
-        if ( static_cast<size_t>( width * height * 2 + 4 + 4 + 4 + 4 ) != data.size() ) {
+        const bool isSingleLayer = ( stream.get() != 0 );
+
+        if ( ( static_cast<size_t>( width ) * height * ( isSingleLayer ? 1 : 2 ) + imageInfoLength ) != data.size() ) {
             return false;
         }
 
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
-        memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
-        memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
+        memcpy( image.image(), data.data() + imageInfoLength, size );
+
+        if ( isSingleLayer ) {
+            memset( image.transform(), 0, size );
+            image._disableTransformLayer();
+        }
+        else {
+            memcpy( image.transform(), data.data() + imageInfoLength + size, size );
+        }
 
         image.setPosition( x, y );
 
@@ -203,18 +207,20 @@ namespace fheroes2
 
     bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
-        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
-        assert( !image.empty() && !image.singleLayer() );
+        assert( !image.empty() );
 
         RWStreamBuf stream;
         stream.putLE32( static_cast<uint32_t>( image.width() ) );
         stream.putLE32( static_cast<uint32_t>( image.height() ) );
         stream.putLE32( static_cast<uint32_t>( image.x() ) );
         stream.putLE32( static_cast<uint32_t>( image.y() ) );
+        stream.put( image.singleLayer() );
 
         const size_t imageSize = static_cast<size_t>( image.width() ) * static_cast<size_t>( image.height() );
         stream.putRaw( image.image(), imageSize );
-        stream.putRaw( image.transform(), imageSize );
+        if ( !image.singleLayer() ) {
+            stream.putRaw( image.transform(), imageSize );
+        }
 
         return writer.add( name, stream.getRaw( 0 ) );
     }

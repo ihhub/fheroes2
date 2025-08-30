@@ -1060,6 +1060,33 @@ bool Maps::Tile::isSuitableForDisembarkation() const
            && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
 }
 
+bool Maps::Tile::isSuitableForSummoningBoat() const
+{
+    // Tiles with heroes are a special case because heroes are moving objects and, strictly speaking, are not part of the map itself, so the checks below do not work with
+    // them
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
+        return false;
+    }
+
+    // Tiles with events are not suitable for summoning a boat (at least for now)
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        return false;
+    }
+
+    // It is impossible to summon a boat on land
+    if ( !isWater() ) {
+        return false;
+    }
+
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        // The part of the Lighthouse flag that is located on the adjacent tile doesn't affect the passability
+        return part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 || part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
+
+    return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )
+           && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
+}
+
 bool Maps::Tile::isPassabilityTransparent() const
 {
     for ( const auto & part : _groundObjectPart ) {

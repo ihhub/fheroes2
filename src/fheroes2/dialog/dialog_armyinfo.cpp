@@ -488,7 +488,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    const fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
@@ -662,6 +662,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             display.render( restorer.rect() );
         }
     }
+
+    // Force restore the background image on dialog close and immediately update this part of the screen.
+    restorer.restore();
+    display.render( restorer.rect() );
 
     return result;
 }

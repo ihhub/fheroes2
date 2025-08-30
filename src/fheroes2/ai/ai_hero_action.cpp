@@ -2427,7 +2427,7 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
     }
 
     Maps::Tile & tileDest = world.getTile( boatDestinationIndex );
-    assert( tileDest.getMainObjectType() == MP2::OBJ_NONE );
+    assert( tileDest.isSuitableForSummoningBoat() );
 
     tileDest.setBoat( Direction::RIGHT, heroColor );
     tileSource.resetBoatOwnerColor();

@@ -1,12 +1,12 @@
 # Hungarian translation for fheroes2
-# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024-2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 00:23+0000\n"
+"POT-Creation-Date: 2025-08-14 16:25+0000\n"
 "PO-Revision-Date: 2025-07-10 23:37+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3458,17 +3458,14 @@ msgstr "Játék felbontás kiválasztása:"
 msgid "Click to apply the selected resolution."
 msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
 
-#, fuzzy
 msgid "Click to select the maximum amount."
-msgstr "Kattints az osztály kiválasztásához."
+msgstr "Kattints a maximális mennyiség kiválasztásához."
 
-#, fuzzy
 msgid "Click to select the minimum amount."
-msgstr "Kattints az osztály kiválasztásához."
+msgstr "Kattints a minimális mennyiség kiválasztásához."
 
-#, fuzzy
 msgid "Click to apply the entered number."
-msgstr "Kattints a begépelt szöveg elküldéséhez."
+msgstr "Kattints a begépelt szám alkalmazásához."
 
 msgid "Click to apply the entered text."
 msgstr "Kattints a begépelt szöveg elküldéséhez."
@@ -4160,9 +4157,8 @@ msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 
-#, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
-msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
+msgstr "Maximum %{count} %{objects} helyezhető el a térképen."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4282,11 +4278,12 @@ msgstr "Utak"
 msgid "Streams"
 msgstr "Folyóvizek"
 
-#, fuzzy
 msgid ""
 "A maximum of %{count} heroes including jailed heroes can be placed on the "
 "map."
-msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
+msgstr ""
+"Maximum %{count} hős (beleértve a börtönben lévőket) helyezhető el a "
+"térképen ugyanabból a színből."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -5508,9 +5505,8 @@ msgstr "kör kihagyása a csatában"
 msgid "hotkey|cast battle spell"
 msgstr "varázslat idézése csatában"
 
-#, fuzzy
 msgid "hotkey|toggle display of battle turn order"
-msgstr "automatikus csata mód kapcsoló"
+msgstr "csata körsorrendje kijelzésének kapcsolója"
 
 msgid "hotkey|dwelling level 1"
 msgstr "toborzóhely 1. szint"
@@ -6042,8 +6038,14 @@ msgstr "Kattints a főmenübe való visszatéréshez."
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} havát."
 
+msgid "New Month!"
+msgstr "Új hónap!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
+
+msgid "New Week!"
+msgstr "Új hét!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "A(z) %{monster} népessége megduplázódott!"
@@ -6060,17 +6062,13 @@ msgstr[1] "A(z) %{monster} népessége %{count} százalékkal megnövekedett!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} szaporulat: +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Minden populáció megfeleződött."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
-
-msgid "New Month!"
-msgstr "Új hónap!"
-
-msgid "New Week!"
-msgstr "Új hét!"
 
 msgid "Beware!"
 msgstr "Vigyázat!"
@@ -7266,13 +7264,12 @@ msgstr ""
 "A megfontoltság a vitézség tiszteletre méltó oldala. Ma úgy döntesz, hogy "
 "elállsz a harctól."
 
-#, fuzzy
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it, "
 "only to find it empty."
 msgstr ""
-"Több órás munkával sikerül kihalásznod egy ládát a tengerből. Kinyitod, és "
-"%{gold} aranyat találsz benne."
+"Több órás munkával sikerül kihalásznod egy ládát a tengerből, de mikor "
+"kinyitod, teljesen üres."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -9978,9 +9975,8 @@ msgstr "Két hexára támad"
 msgid "Flyer"
 msgstr "Repül"
 
-#, fuzzy
 msgid "Unlimited retaliation"
-msgstr "Nem támad vissza rá az ellenség"
+msgstr "Korlátlan visszatámadás"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Minden mellette álló ellenséget támad"

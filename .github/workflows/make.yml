@@ -155,7 +155,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies (Linux)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
@@ -225,7 +225,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -298,7 +298,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
         # TODO: remove this temporary workaround
@@ -362,7 +362,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
         sudo apt-get -y update
