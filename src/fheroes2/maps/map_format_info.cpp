@@ -67,6 +67,12 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const MonsterMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, MonsterMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const ArtifactMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, ArtifactMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const ResourceMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata );
 }
 
 namespace
@@ -222,7 +228,7 @@ namespace
         }
     }
 
-    void convertFromV9ToV10( Maps::Map_Format::MapFormat & map )
+    void convertFromV9ToV10( Maps::Map_Format::MapFormat & map, std::map<uint32_t, Maps::Map_Format::StandardObjectMetadata> standardMetadata )
     {
         static_assert( minimumSupportedVersion <= 9, "Remove this function." );
 
@@ -231,17 +237,43 @@ namespace
         }
 
         map.monsterMetadata = {};
+        map.artifactMetadata = {};
 
-        // In version 10 we updated metadata for monsters. We have to move the original metadata for them from one structure to another.
+        const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+        const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+
+        // In version 10 we updated metadata for monsters and artifacts. We have to move the original metadata for them from one structure to another.
         for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
             const auto & tile = map.tiles[tileId];
 
             for ( const auto & object : tile.objects ) {
                 if ( object.group == Maps::ObjectGroup::MONSTERS ) {
-                    assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
+                    assert( standardMetadata.find( object.id ) != standardMetadata.end() );
 
-                    map.monsterMetadata[object.id].count = map.standardMetadata[object.id].metadata[0];
-                    map.standardMetadata.erase( object.id );
+                    map.monsterMetadata[object.id].count = standardMetadata[object.id].metadata[0];
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+                    const auto & objectInfo = artifactObjects[object.index];
+
+                    assert( standardMetadata.find( object.id ) != standardMetadata.end() );
+
+                    if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        map.artifactMetadata[object.id].radius = standardMetadata[object.id].metadata[0];
+                    }
+                    else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
+                        map.artifactMetadata[object.id].selected.push_back( standardMetadata[object.id].metadata[0] );
+                    }
+                    else {
+                        map.artifactMetadata[object.id] = {};
+                    }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+                    assert( object.index < treasuresObjects.size() );
+                    const auto & objectInfo = treasuresObjects[object.index];
+
+                    if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                        map.resourceMetadata[object.id].count = standardMetadata[object.id].metadata[0];
+                    }
                 }
             }
         }
@@ -296,9 +328,9 @@ namespace
         RWStreamBuf compressed;
         compressed.setBigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata
-                   << map.monsterMetadata;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
+                   << map.signMetadata << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata
+                   << map.artifactMetadata << map.resourceMetadata;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -346,8 +378,14 @@ namespace
             return false;
         }
 
-        decompressed >> map.dailyEvents >> map.rumors >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
+        decompressed >> map.dailyEvents >> map.rumors;
+
+        std::map<uint32_t, Maps::Map_Format::StandardObjectMetadata> standardMetadata;
+        if ( map.version < 10 ) {
+            decompressed >> standardMetadata;
+        }
+
+        decompressed >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata >> map.adventureMapEventMetadata >> map.selectionObjectMetadata;
 
         static_assert( minimumSupportedVersion <= 8, "Remove this check." );
         if ( map.version > 8 ) {
@@ -362,10 +400,10 @@ namespace
         convertFromV7ToV8( map );
 
         if ( map.version > 9 ) {
-            decompressed >> map.monsterMetadata;
+            decompressed >> map.monsterMetadata >> map.artifactMetadata >> map.resourceMetadata;
         }
         else {
-            convertFromV9ToV10( map );
+            convertFromV9ToV10( map, std::move( standardMetadata ) );
         }
 
         return !stream.fail();
@@ -500,12 +538,32 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const MonsterMetadata & metadata )
     {
-        return stream << metadata.count << metadata.joinCondition << metadata.selected;
+        return stream << metadata.count << metadata.joinCondition << metadata.isWeeklyGrowthDisabled << metadata.selected;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, MonsterMetadata & metadata )
     {
-        return stream >> metadata.count >> metadata.joinCondition >> metadata.selected;
+        return stream >> metadata.count >> metadata.joinCondition >> metadata.isWeeklyGrowthDisabled >> metadata.selected;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const ArtifactMetadata & metadata )
+    {
+        return stream << metadata.radius << metadata.captureCondition << metadata.selected;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, ArtifactMetadata & metadata )
+    {
+        return stream >> metadata.radius >> metadata.captureCondition >> metadata.selected;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const ResourceMetadata & metadata )
+    {
+        return stream << metadata.count;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata )
+    {
+        return stream >> metadata.count;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

@@ -505,15 +505,15 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-                    assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
-                    mapFormat.standardMetadata.erase( objectIter->id );
+                    assert( mapFormat.artifactMetadata.find( objectIter->id ) != mapFormat.artifactMetadata.end() );
+                    mapFormat.artifactMetadata.erase( objectIter->id );
 
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
                     if ( objectType == MP2::OBJ_RESOURCE ) {
-                        mapFormat.standardMetadata.erase( objectIter->id );
+                        mapFormat.resourceMetadata.erase( objectIter->id );
                     }
 
                     objectIter = mapTile.objects.erase( objectIter );
@@ -1474,18 +1474,11 @@ namespace Interface
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
-                    int32_t monsterCount = 0;
-                    std::vector<int> selectedMonsters;
+                    assert( _mapFormat.monsterMetadata.find( object.id ) != _mapFormat.monsterMetadata.end() );
 
                     auto monsterMetadata = _mapFormat.monsterMetadata.find( object.id );
-                    if ( monsterMetadata != _mapFormat.monsterMetadata.end() ) {
-                        monsterCount = monsterMetadata->second.count;
-                        selectedMonsters = monsterMetadata->second.selected;
-                    }
-                    else {
-                        // This could be a corrupted map. Add missing metadata into it. This action should be outside action manager scope.
-                        _mapFormat.standardMetadata[object.id] = {};
-                    }
+                    int32_t monsterCount = monsterMetadata->second.count;
+                    std::vector<int> selectedMonsters = monsterMetadata->second.selected;
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
@@ -1545,16 +1538,10 @@ namespace Interface
                     }
                 }
                 else if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
-                    int32_t resourceCount = 0;
+                    assert( _mapFormat.resourceMetadata.find( object.id ) != _mapFormat.resourceMetadata.end() );
 
-                    auto resourceMetadata = _mapFormat.standardMetadata.find( object.id );
-                    if ( resourceMetadata != _mapFormat.standardMetadata.end() ) {
-                        resourceCount = resourceMetadata->second.metadata[0];
-                    }
-                    else {
-                        // This could be a corrupted or older format map. Add missing metadata into it. This action should be outside action manager scope.
-                        _mapFormat.standardMetadata[object.id] = { 0, 0, 0 };
-                    }
+                    auto resourceMetadata = _mapFormat.resourceMetadata.find( object.id );
+                    int32_t resourceCount = resourceMetadata->second.count;
 
                     const int32_t resourceType = static_cast<int32_t>( objectInfo.metadata[0] );
 
@@ -1565,17 +1552,17 @@ namespace Interface
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
                     if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI )
-                         && _mapFormat.standardMetadata[object.id].metadata[0] != resourceCount ) {
+                         && resourceMetadata->second.count != resourceCount ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                        _mapFormat.standardMetadata[object.id] = { resourceCount, 0, 0 };
+                        resourceMetadata->second.count = resourceCount;
                         action.commit();
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
-                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+                        assert( _mapFormat.artifactMetadata.find( object.id ) != _mapFormat.artifactMetadata.end() );
 
-                        auto & originalRadius = _mapFormat.standardMetadata[object.id].metadata[0];
+                        auto & originalRadius = _mapFormat.artifactMetadata[object.id].radius;
                         int32_t radius = originalRadius;
 
                         if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius" ), 0, 100, radius ) && radius != originalRadius ) {
@@ -1585,10 +1572,11 @@ namespace Interface
                         }
                     }
                     else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
-                        // Find Artifact object.
-                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+                        assert( _mapFormat.artifactMetadata.find( object.id ) != _mapFormat.artifactMetadata.end() );
 
-                        auto & artifactSpellId = _mapFormat.standardMetadata[object.id].metadata[0];
+                        auto & selected = _mapFormat.artifactMetadata[object.id].selected;
+
+                        const auto artifactSpellId = selected.empty() ? 0 : selected.front();
 
                         const int newSpellId = Dialog::selectSpell( artifactSpellId, true ).GetID();
 
@@ -1600,7 +1588,9 @@ namespace Interface
 
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        artifactSpellId = newSpellId;
+                        // As of now only one spell can be selected for Spell Scroll.
+                        selected.clear();
+                        selected.emplace_back( newSpellId );
 
                         Maps::setSpellOnTile( tile, newSpellId );
 
@@ -1934,9 +1924,11 @@ namespace Interface
 
                 const auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
                 assert( insertedObject.group == groupType && insertedObject.index == static_cast<uint32_t>( objectType ) );
-                assert( _mapFormat.standardMetadata.find( insertedObject.id ) != _mapFormat.standardMetadata.end() );
+                assert( _mapFormat.artifactMetadata.find( insertedObject.id ) != _mapFormat.artifactMetadata.end() );
 
-                _mapFormat.standardMetadata[insertedObject.id].metadata[0] = spellId;
+                auto & selected = _mapFormat.artifactMetadata[insertedObject.id].selected;
+                selected.clear();
+                selected.emplace_back( spellId );
 
                 Maps::setSpellOnTile( tile, spellId );
             }
@@ -2433,7 +2425,7 @@ namespace Interface
         [[maybe_unused]] size_t objectsReplaced = 0;
 
         // This logic is based on an assumption that only one action object can exist on one tile.
-        if ( replaceKey( _mapFormat.standardMetadata, object.id, newObjectUID ) ) {
+        if ( replaceKey( _mapFormat.resourceMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 
@@ -2458,6 +2450,18 @@ namespace Interface
         }
 
         if ( replaceKey( _mapFormat.selectionObjectMetadata, object.id, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.capturableObjectsMetadata, object.id, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.monsterMetadata, object.id, newObjectUID ) ) {
+            ++objectsReplaced;
+        }
+
+        if ( replaceKey( _mapFormat.artifactMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
         }
 

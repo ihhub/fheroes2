@@ -63,10 +63,10 @@ namespace
 
                 if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
-                    const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
-                    if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
+                    const auto iter = mapFormat.resourceMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.resourceMetadata.end() && iter->second.count > 0 ) {
                         std::string message = _( "editor|%{count} %{resource}" );
-                        StringReplace( message, "%{count}", iter->second.metadata[0] );
+                        StringReplace( message, "%{count}", iter->second.count );
                         StringReplace( message, "%{resource}", Resource::String( static_cast<int32_t>( info.metadata[0] ) ) );
 
                         return message;
@@ -100,9 +100,9 @@ namespace
 
                 if ( info.objectType == MP2::OBJ_MONSTER && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
-                    const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
-                    if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
-                        const int32_t monsterCount = iter->second.metadata[0];
+                    const auto iter = mapFormat.monsterMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.monsterMetadata.end() && iter->second.count > 0 ) {
+                        const int32_t monsterCount = iter->second.count;
                         std::string message = "%{count} %{monster}";
                         StringReplace( message, "%{count}", monsterCount );
 
