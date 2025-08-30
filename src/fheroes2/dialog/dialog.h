@@ -116,7 +116,7 @@ namespace Dialog
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
     bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
-                      const fheroes2::DialogElement * uiElement = nullptr );
+                      const fheroes2::DialogElement * topUiElement = nullptr, const fheroes2::DialogElement * bottomUiElement = nullptr );
 
     // If character limit is set to 0, then no limitation for the resulting string will be applied.
     bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,

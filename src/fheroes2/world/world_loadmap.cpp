@@ -746,15 +746,18 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
     const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
     const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+    const auto & monsterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
 #if defined( WITH_DEBUG )
-    std::set<uint32_t> standardMetadataUIDs;
+    std::set<uint32_t> resourceMetadataUIDs;
     std::set<uint32_t> castleMetadataUIDs;
     std::set<uint32_t> heroMetadataUIDs;
     std::set<uint32_t> sphinxMetadataUIDs;
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
     std::set<uint32_t> selectionObjectMetadataUIDs;
+    std::set<uint32_t> monsterMetadataUIDs;
+    std::set<uint32_t> artifactMetadataUIDs;
 #endif
 
     const auto areSpellsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata, const int spellLevel ) {
@@ -875,15 +878,49 @@ bool World::loadResurrectionMap( const std::string & filename )
             }
             else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
 #if defined( WITH_DEBUG )
-                standardMetadataUIDs.emplace( object.id );
+                monsterMetadataUIDs.emplace( object.id );
 #endif
-                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
-                auto & objectInfo = map.standardMetadata[object.id];
+                assert( map.monsterMetadata.find( object.id ) != map.monsterMetadata.end() );
+                auto & objectInfo = map.monsterMetadata[object.id];
 
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+                tileData[0] = static_cast<uint32_t>( objectInfo.count );
 
-                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
-                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
+                switch ( monsterObjects[object.index].objectType ) {
+                case MP2::OBJ_RANDOM_MONSTER:
+                case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+                case MP2::OBJ_RANDOM_MONSTER_STRONG:
+                case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+                case MP2::OBJ_RANDOM_MONSTER_WEAK: {
+                    auto & selected = objectInfo.selected;
+                    if ( selected.empty() ) {
+                        // Nothing to do. Use the default behavior.
+                        break;
+                    }
+
+                    // Verify that the input data is correct.
+                    if ( monsterObjects[object.index].objectType == MP2::OBJ_RANDOM_MONSTER ) {
+                        selected.erase( std::remove_if( selected.begin(), selected.end(), []( const int value ) { return !Monster{ value }.isValid(); } ),
+                                        selected.end() );
+                    }
+                    else {
+                        const auto level = Monster{ static_cast<int>( object.index ) + 1 }.GetRandomUnitLevel();
+
+                        selected.erase( std::remove_if( selected.begin(), selected.end(),
+                                                        [level]( const int value ) {
+                                                            const Monster temp{ value };
+                                                            return !temp.isValid() || temp.GetRandomUnitLevel() != level;
+                                                        } ),
+                                        selected.end() );
+                    }
+
+                    if ( !objectInfo.selected.empty() ) {
+                        tileData[1] = Rand::Get( objectInfo.selected );
+                    }
+                    break;
+                }
+                default:
+                    break;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
@@ -1092,42 +1129,43 @@ bool World::loadResurrectionMap( const std::string & filename )
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
 #if defined( WITH_DEBUG )
-                standardMetadataUIDs.emplace( object.id );
+                artifactMetadataUIDs.emplace( object.id );
 #endif
 
-                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
-                auto & objectInfo = map.standardMetadata[object.id];
+                assert( map.artifactMetadata.find( object.id ) != map.artifactMetadata.end() );
+                auto & artifactInfo = map.artifactMetadata[object.id];
 
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
-                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
-                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
-                }
-
                 assert( object.index < artifactObjects.size() );
-                if ( artifactObjects[object.index].objectType == MP2::OBJ_ARTIFACT && artifactObjects[object.index].metadata[0] == Artifact::SPELL_SCROLL ) {
+                const auto & objectInfo = artifactObjects[object.index];
+
+                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                    tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
+                }
+                else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
+                    assert( artifactInfo.selected.size() == 1 );
+
                     // This is a hack we need to do since in the original game spells start from 0.
                     // TODO: fix this hack.
-                    assert( tileData[0] > 0 );
-                    tileData[0] = tileData[0] - 1U;
+                    assert( artifactInfo.selected.front() > 0 );
+                    tileData[0] = static_cast<uint32_t>( artifactInfo.selected.front() ) - 1U;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
                 assert( object.index < treasuresObjects.size() );
-
                 const auto & objectInfo = treasuresObjects[object.index];
 
-                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
-                    // Some maps may have resource objects being set by older Editor versions.
-                    // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
 #if defined( WITH_DEBUG )
-                    standardMetadataUIDs.emplace( object.id );
+                    resourceMetadataUIDs.emplace( object.id );
 #endif
+                    assert( map.resourceMetadata.find( object.id ) != map.resourceMetadata.end() );
 
                     std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
                     tileData[0] = objectInfo.metadata[0];
-                    tileData[1] = map.standardMetadata[object.id].metadata[0];
+                    tileData[1] = map.resourceMetadata[object.id].count;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
@@ -1183,16 +1221,18 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
 
 #if defined( WITH_DEBUG )
-    assert( standardMetadataUIDs.size() == map.standardMetadata.size() );
+    assert( resourceMetadataUIDs.size() == map.resourceMetadata.size() );
     assert( castleMetadataUIDs.size() == map.castleMetadata.size() );
     assert( heroMetadataUIDs.size() == map.heroMetadata.size() );
     assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
     assert( signMetadataUIDs.size() == map.signMetadata.size() );
     assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
     assert( selectionObjectMetadataUIDs.size() == map.selectionObjectMetadata.size() );
+    assert( monsterMetadataUIDs.size() == map.monsterMetadata.size() );
+    assert( artifactMetadataUIDs.size() == map.artifactMetadata.size() );
 
-    for ( const uint32_t uid : standardMetadataUIDs ) {
-        assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
+    for ( const uint32_t uid : resourceMetadataUIDs ) {
+        assert( map.resourceMetadata.find( uid ) != map.resourceMetadata.end() );
     }
 
     for ( const uint32_t uid : castleMetadataUIDs ) {
@@ -1217,6 +1257,14 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     for ( const uint32_t uid : selectionObjectMetadataUIDs ) {
         assert( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() );
+    }
+
+    for ( const uint32_t uid : monsterMetadataUIDs ) {
+        assert( map.monsterMetadata.find( uid ) != map.monsterMetadata.end() );
+    }
+
+    for ( const uint32_t uid : artifactMetadataUIDs ) {
+        assert( map.artifactMetadata.find( uid ) != map.artifactMetadata.end() );
     }
 #endif
 

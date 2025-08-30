@@ -77,37 +77,49 @@ namespace
 }
 
 bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step,
-                          const fheroes2::DialogElement * uiElement )
+                          const fheroes2::DialogElement * topUiElement, const fheroes2::DialogElement * bottomUiElement )
 {
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Text headerText( std::move( header ), fheroes2::FontType::normalWhite() );
-    int32_t headerOffsetY{ 10 };
+    const int32_t elementOffset{ 10 };
     const int32_t selectionAreaHeight{ 30 };
     const int32_t headerHeight = headerText.height( fheroes2::boxAreaWidthPx );
-    const int32_t uiWidth = uiElement ? uiElement->area().width : 0;
-    const int32_t uiHeight = uiElement ? uiElement->area().height : 0;
+    const int32_t topUiWidth = topUiElement ? topUiElement->area().width : 0;
+    const int32_t topUiHeight = topUiElement ? topUiElement->area().height : 0;
+    const int32_t bottomUiWidth = bottomUiElement ? bottomUiElement->area().width : 0;
+    const int32_t bottomUiHeight = bottomUiElement ? bottomUiElement->area().height : 0;
+    const int32_t uiAdditionalOffset = ( topUiHeight > 0 ? elementOffset : 0 ) + ( bottomUiHeight > 0 ? elementOffset : 0 );
 
-    const FrameBox box( headerHeight + headerOffsetY + selectionAreaHeight + uiHeight, true );
+    int32_t offsetY = headerHeight + elementOffset;
+
+    const FrameBox box( offsetY + topUiHeight + selectionAreaHeight + bottomUiHeight + uiAdditionalOffset, true );
 
     const fheroes2::Rect & windowArea = box.GetArea();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     headerText.draw( windowArea.x, windowArea.y, fheroes2::boxAreaWidthPx, display );
 
-    const fheroes2::Point uiOffset{ windowArea.x + ( windowArea.width - uiWidth ) / 2, windowArea.y + headerHeight + headerOffsetY };
-    if ( uiElement ) {
-        uiElement->draw( display, uiOffset );
-        headerOffsetY *= 2;
+    offsetY += windowArea.y;
+    const fheroes2::Point topUiOffset{ windowArea.x + ( windowArea.width - topUiWidth ) / 2, offsetY };
+    if ( topUiElement ) {
+        topUiElement->draw( display, topUiOffset );
+        offsetY += elementOffset + topUiHeight;
     }
 
     const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
-    const fheroes2::Rect selectionBoxArea{ windowArea.x + 38, windowArea.y + headerOffsetY + headerHeight + uiHeight, valueSelectionSize.width,
-                                           valueSelectionSize.height };
+    const fheroes2::Rect selectionBoxArea{ windowArea.x + 38, offsetY, valueSelectionSize.width, valueSelectionSize.height };
 
     fheroes2::ValueSelectionDialogElement valueSelectionElement( min, max, selectedValue, step, selectionBoxArea.getPosition() );
     valueSelectionElement.ignoreMouseWheelEventRoiCheck();
     valueSelectionElement.draw( display );
+
+    offsetY += valueSelectionSize.height + elementOffset;
+
+    const fheroes2::Point bottomUiOffset{ windowArea.x + ( windowArea.width - bottomUiWidth ) / 2, offsetY };
+    if ( bottomUiElement ) {
+        bottomUiElement->draw( display, bottomUiOffset );
+    }
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     assert( btnGroups.getButtonsCount() == 2 );
@@ -127,7 +139,8 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
     display.render();
 
-    const fheroes2::Rect uiRect = uiElement ? fheroes2::Rect{ uiOffset, uiElement->area() } : fheroes2::Rect{};
+    const fheroes2::Rect topUiRect = topUiElement ? fheroes2::Rect{ topUiOffset, topUiElement->area() } : fheroes2::Rect{};
+    const fheroes2::Rect bottomUiRect = bottomUiElement ? fheroes2::Rect{ bottomUiOffset, bottomUiElement->area() } : fheroes2::Rect{};
 
     int result = Dialog::ZERO;
     std::string typedValueBuf;
@@ -142,6 +155,14 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
         if ( buttonMin.isVisible() ) {
             buttonMin.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMin.area() ) );
+        }
+
+        if ( topUiElement && topUiElement->update( display, bottomUiOffset ) ) {
+            needRedraw = true;
+        }
+
+        if ( bottomUiElement && bottomUiElement->update( display, bottomUiOffset ) ) {
+            needRedraw = true;
         }
 
         if ( const auto value = fheroes2::processIntegerValueTyping( min, max, typedValueBuf ); value ) {
@@ -172,9 +193,12 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
 
             needRedraw = true;
         }
-        else if ( uiElement && ( le.isMouseLeftButtonReleasedInArea( uiRect ) || le.isMouseRightButtonPressedInArea( uiRect ) ) ) {
-            uiElement->processEvents( uiOffset );
+        else if ( topUiElement && ( le.isMouseLeftButtonReleasedInArea( topUiRect ) || le.isMouseRightButtonPressedInArea( topUiRect ) ) ) {
+            topUiElement->processEvents( topUiOffset );
             display.render();
+        }
+        else if ( bottomUiElement && ( le.isMouseLeftButtonReleasedInArea( bottomUiRect ) || le.isMouseRightButtonPressedInArea( bottomUiRect ) ) ) {
+            bottomUiElement->processEvents( bottomUiOffset );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered number." ), Dialog::ZERO );
