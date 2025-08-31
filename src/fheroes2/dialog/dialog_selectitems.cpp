@@ -1681,7 +1681,7 @@ int32_t Dialog::selectMineType( const int32_t type )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
         }
         else {
             for ( uint32_t i = 0; i < resourceCount; ++i ) {
@@ -1856,7 +1856,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
         }
         else {
             for ( size_t i = 0; i < 7; ++i ) {
