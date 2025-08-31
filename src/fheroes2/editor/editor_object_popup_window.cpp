@@ -61,7 +61,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == MP2::OBJ_RESOURCE && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
                     const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
@@ -84,7 +84,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == MP2::OBJ_ARTIFACT && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
                     return MP2::StringObject( MP2::OBJ_ARTIFACT ) + std::string( "\n" ) + Artifact( static_cast<int32_t>( info.metadata[0] ) ).GetName();
                 }
@@ -98,7 +98,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == MP2::OBJ_MONSTER && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
                      && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
                     const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
@@ -117,6 +117,80 @@ namespace
                     }
 
                     return MP2::StringObject( MP2::OBJ_MONSTER ) + std::string( "\n" ) + Monster( static_cast<int32_t>( info.metadata[0] ) ).GetMultiName();
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_MINE: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                // Mines and Sawmills always have the last image part in the background layer to indicate their type.
+                if ( info.objectType == type && info.groundLevelParts.back().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.back().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+
+                        std::string message = _( "editor|%{object}\n(%{color} player)" );
+                        StringReplace( message, "%{object}", Maps::GetMineName( info.metadata[0] ) );
+                        StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
+
+                        return message;
+                    }
+
+                    return Maps::GetMineName( info.metadata[0] );
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_ALCHEMIST_LAB: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+
+                        std::string message = _( "editor|%{object}\n(%{color} player)" );
+                        StringReplace( message, "%{object}", MP2::StringObject( type ) );
+                        StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
+
+                        return message;
+                    }
+
+                    return MP2::StringObject( type );
+                }
+            }
+
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_LIGHTHOUSE: {
+            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) ) {
+                assert( !info.groundLevelParts.empty() );
+
+                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
+                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                    const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
+                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+
+                        std::string message = _( "editor|%{object}\n(%{color} player)" );
+                        StringReplace( message, "%{object}", MP2::StringObject( type ) );
+                        StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
+
+                        return message;
+                    }
+
+                    return MP2::StringObject( type );
                 }
             }
 
