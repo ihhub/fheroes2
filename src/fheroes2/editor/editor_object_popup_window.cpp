@@ -151,31 +151,19 @@ namespace
             assert( 0 );
             break;
         }
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_ALCHEMIST_LAB: {
-            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ) ) {
-                assert( !info.groundLevelParts.empty() );
-
-                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
-                    const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
-                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
-                        std::string message = _( "editor|%{object}\n(%{color} player)" );
-                        StringReplace( message, "%{object}", MP2::StringObject( type ) );
-                        StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
-
-                        return message;
-                    }
-
-                    return MP2::StringObject( type );
-                }
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_SAWMILL: {
+            Maps::ObjectGroup group;
+            if ( type == MP2::OBJ_LIGHTHOUSE ) {
+                group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
+            }
+            else {
+                assert( ( type == MP2::OBJ_ALCHEMIST_LAB ) || ( type == MP2::OBJ_SAWMILL ) );
+                group = Maps::ObjectGroup::ADVENTURE_MINES;
             }
 
-            // This is an invalid object!
-            assert( 0 );
-            break;
-        }
-        case MP2::OBJ_LIGHTHOUSE: {
-            for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) ) {
+            for ( const auto & info : Maps::getObjectsByGroup( group ) ) {
                 assert( !info.groundLevelParts.empty() );
 
                 if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
