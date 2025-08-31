@@ -44,7 +44,6 @@ namespace Maps::Map_Format
     OStreamBase & operator<<( OStreamBase & stream, const DailyEvent & eventInfo );
     IStreamBase & operator>>( IStreamBase & stream, DailyEvent & eventInfo );
 
-    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata );
 
     OStreamBase & operator<<( OStreamBase & stream, const CastleMetadata & metadata );
@@ -445,11 +444,6 @@ namespace Maps::Map_Format
     {
         return stream >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay
                >> eventInfo.repeatPeriodInDays >> eventInfo.resources;
-    }
-
-    OStreamBase & operator<<( OStreamBase & stream, const StandardObjectMetadata & metadata )
-    {
-        return stream << metadata.metadata;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, StandardObjectMetadata & metadata )
