@@ -30,12 +30,14 @@
 #include <vector>
 
 #include "artifact.h"
+#include "color.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
