@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-08-31 14:45+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3506,6 +3506,10 @@ msgstr ""
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name} cel %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""

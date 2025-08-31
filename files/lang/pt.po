@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-08-31 14:45+0000\n"
 "PO-Revision-Date: 2025-02-23 16:55-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3660,6 +3660,10 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "Aparência de %{mineName}:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Clique para selecionar esta cor."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""

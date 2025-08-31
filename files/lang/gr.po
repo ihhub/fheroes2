@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-08-31 14:45+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3275,6 +3275,9 @@ msgid ""
 msgstr ""
 
 msgid "%{mineName} appearance:"
+msgstr ""
+
+msgid "Click to select the color."
 msgstr ""
 
 msgid "Click to select %{object} as the resource generator to be placed."
