@@ -140,7 +140,7 @@ namespace
                         return message;
                     }
 
-                    return Maps::GetMineName( info.metadata[0] );
+                    return Maps::GetMineName( static_cast<int32_t>( info.metadata[0] ) );
                 }
             }
 
