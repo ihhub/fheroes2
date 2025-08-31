@@ -54,6 +54,29 @@ namespace
         return info.icnIndex == part.icnIndex && info.icnType == part.icnType;
     }
 
+    std::string getCapturableObjectInfo( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat, const MP2::MapObjectType type,
+                                         const Maps::ObjectGroup group )
+    {
+        for ( const auto & info : Maps::getObjectsByGroup( group ) ) {
+            assert( !info.groundLevelParts.empty() );
+
+            if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
+                const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
+                if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+                    std::string message = _( "editor|%{object}\n(%{color} player)" );
+                    StringReplace( message, "%{object}", MP2::StringObject( type ) );
+                    StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
+
+                    return message;
+                }
+
+                return MP2::StringObject( type );
+            }
+        }
+
+        return {};
+    }
+
     std::string getObjectInfoText( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat )
     {
         const MP2::MapObjectType type = tile.getMainObjectType();
@@ -152,32 +175,20 @@ namespace
             break;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_LIGHTHOUSE:
         case MP2::OBJ_SAWMILL: {
-            Maps::ObjectGroup group;
-            if ( type == MP2::OBJ_LIGHTHOUSE ) {
-                group = Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS;
-            }
-            else {
-                assert( ( type == MP2::OBJ_ALCHEMIST_LAB ) || ( type == MP2::OBJ_SAWMILL ) );
-                group = Maps::ObjectGroup::ADVENTURE_MINES;
+            auto infoString = getCapturableObjectInfo( tile, mapFormat, type, Maps::ObjectGroup::ADVENTURE_MINES );
+            if ( !infoString.empty() ) {
+                return infoString;
             }
 
-            for ( const auto & info : Maps::getObjectsByGroup( group ) ) {
-                assert( !info.groundLevelParts.empty() );
-
-                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
-                    const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
-                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
-                        std::string message = _( "editor|%{object}\n(%{color} player)" );
-                        StringReplace( message, "%{object}", MP2::StringObject( type ) );
-                        StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
-
-                        return message;
-                    }
-
-                    return MP2::StringObject( type );
-                }
+            // This is an invalid object!
+            assert( 0 );
+            break;
+        }
+        case MP2::OBJ_LIGHTHOUSE: {
+            auto infoString = getCapturableObjectInfo( tile, mapFormat, type, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+            if ( !infoString.empty() ) {
+                return infoString;
             }
 
             // This is an invalid object!
