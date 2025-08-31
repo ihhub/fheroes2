@@ -797,6 +797,11 @@ namespace
         }
     };
 #else
+    bool shouldUseFullscreenDesktopMode()
+    {
+        return fheroes2::cursor().isSoftwareEmulation();
+    }
+
     std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
     {
         const int numDisplays = SDL_GetNumVideoDisplays();
@@ -847,7 +852,7 @@ namespace
             }
             else {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( shouldUseFullscreenDesktopMode() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -938,6 +943,12 @@ namespace
             resolutionSet = FilterResolutions( resolutionSet );
 
             if ( displayCount < 1 ) {
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            if ( !shouldUseFullscreenDesktopMode() ) {
+                // If software emulation is not enabled it means that we need to use resolutions supported
+                // by the hardware.
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }
 
@@ -1169,7 +1180,7 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( shouldUseFullscreenDesktopMode() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
