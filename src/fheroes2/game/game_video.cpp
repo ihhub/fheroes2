@@ -60,6 +60,16 @@ namespace
 
 namespace Video
 {
+
+    // Internal video state structure
+    struct VideoState
+    {
+        VideoControl control = VideoControl::PLAY_NONE;
+        fheroes2::Point offset = { 0, 0 };
+        int32_t maxFrameDelay = 0;
+        int32_t currentFrameDelay = 0;
+    };
+
     bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
@@ -216,6 +226,144 @@ namespace Video
             display.fill( 0 );
         }
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
+        return true;
+    }
+
+    // Play sequences of videofiles in one frame
+    bool ShowVideo( const std::vector<VideoInfo> & infos, const std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd ) {
+        // Stop any cycling animation.
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+        std::vector<std::pair<VideoState, std::shared_ptr<SMKVideoSequence>>> sequences;
+        bool endVideo = false;
+        int32_t minDelay = 10000;
+
+        for ( const auto & info : infos ) {
+            std::string videoPath;
+            if ( !getVideoFilePath( info.fileName, videoPath ) ) {
+                // File doesn't exist, so no need to even try to load it.
+                DEBUG_LOG( DBG_GAME, DBG_INFO, info.fileName << " video file does not exist." )
+                return false;
+            }
+            std::shared_ptr<SMKVideoSequence> const video = std::make_shared<SMKVideoSequence>( videoPath );
+            if ( video->frameCount() < 1 ) {
+                // something wrong with file, exit now
+                return false;
+            }
+            const int32_t delay = static_cast<int32_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
+            minDelay = std::min( minDelay, delay );
+            VideoState state = { info.control, info.offset, delay, delay };
+            sequences.emplace_back( state, video );
+        }
+
+        // Hide mouse cursor.
+        const CursorRestorer cursorRestorer( false );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        display.fill( 0 );
+        display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
+        // Assuming that first file is background video
+        fheroes2::Rect frameRoi( ( display.width() - sequences.front().second->width() ) / 2, ( display.height() - sequences.front().second->height() ) / 2, 0, 0 );
+
+        std::vector<uint8_t> currPalette;
+        std::vector<uint8_t> prevPalette;
+
+        // Construct first frame
+        for ( const auto & [state, video] : sequences ) {
+            if ( !static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                break;
+            }
+
+            // Prepare the first frame.
+            video->resetFrame();
+            video->getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
+            screenRestorer.changePalette( prevPalette.data() );
+        }
+        // Render subtitles on the first frame
+        for ( const Subtitle & subtitle : subtitles ) {
+            if ( subtitle.needRender( 0 ) ) {
+                subtitle.render( display, frameRoi );
+            }
+        }
+
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( minDelay );
+        // Make sure that the first run is passed immediately.
+        assert( !Game::isCustomDelayNeeded( minDelay ) );
+
+        // Play audio just before rendering the frame. This is important to minimize synchronization issues between audio and video.
+        if ( Audio::isValid() ) {
+            for ( const auto&[ state, video] : sequences ) {
+                if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_AUDIO ) ) {
+                    playAudio( video->getAudioChannels() );
+                }
+            }
+        }
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( minDelay ) ) ) {
+            if ( endVideo ) {
+                break;
+            }
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                Mixer::Stop();
+                break;
+            }
+
+            for ( const auto&[ state, video] : sequences) {
+                if ( !static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                    endVideo = true;
+                    break;
+                }
+                if ( Game::validateCustomAnimationDelay( minDelay ) ) {
+                    if ( video->getCurrentFrame() < video->frameCount() ) {
+                        // Render the prepared frame.
+                        display.render( frameRoi );
+
+                        if ( ( video->getCurrentFrame() + 1 == video->frameCount() ) && static_cast<bool>(state.control & Video::VideoControl::PLAY_LOOP) ) {
+                            video->resetFrame();
+
+                            // Restart audio
+                            if ( Audio::isValid() ) {
+                                if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_AUDIO ) ) {
+                                    playAudio( video->getAudioChannels() );
+                                }
+                            }
+                        }
+
+                        // Prepare the next frame for render.
+                        video->getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, currPalette );
+
+                        if ( prevPalette != currPalette ) {
+                            screenRestorer.changePalette( currPalette.data() );
+                            std::swap( currPalette, prevPalette );
+                        }
+
+                        // Render subtitles on the prepared next frame
+                        for ( const Subtitle & subtitle : subtitles ) {
+                            if ( subtitle.needRender( video->getCurrentFrame() * minDelay ) ) {
+                                subtitle.render( display, frameRoi );
+                            }
+                        }
+                    }
+                    else if ( !static_cast<bool>( state.control & VideoControl::PLAY_WAIT ) ) {
+                        endVideo = true;
+                    }
+                }
+            }
+        }
+
+        if ( fadeColorsOnEnd ) {
+            // Do color fade for 1 second with 15 FPS.
+            fheroes2::colorFade( currPalette, frameRoi, 1000, 15.0 );
+        }
+        else {
+            display.fill( 0 );
+        }
+        display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
 
         return true;
     }

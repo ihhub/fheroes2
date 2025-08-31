@@ -30,4 +30,41 @@ namespace Video
         PLAY_TILL_AUDIO_END,
         IGNORE_VIDEO
     };
+
+    enum class VideoControl : uint32_t
+    {
+        PLAY_NONE =  0,
+        // Play file once and wait user's input
+        PLAY_WAIT =  1 << 0,
+        // Play file with infinite loop
+        PLAY_LOOP =  1 << 1,
+        // Play audio stream from file
+        PLAY_AUDIO = 1 << 2,
+        // Play video stream from file
+        PLAY_VIDEO = 1 << 3,
+        // Set of common flags for convenient
+        // Play cutscene only once
+        PLAY_CUTSCENE = PLAY_AUDIO | PLAY_VIDEO,
+        // Play cutscene and wait for user input
+        PLAY_CUTSCENE_WAIT = PLAY_WAIT | PLAY_AUDIO | PLAY_VIDEO,
+        // Play cutscene in loop
+        PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
+    };
+
+    inline VideoControl operator~ ( VideoControl a ) {
+        using VideoControlType = std::underlying_type_t<VideoControl>;
+        return static_cast<VideoControl>(~static_cast<VideoControlType>(a));
+    }
+    inline VideoControl operator| ( VideoControl a, VideoControl b ) {
+        using VideoControlType = std::underlying_type_t<VideoControl>;
+        return static_cast<VideoControl>(static_cast<VideoControlType>(a) | static_cast<VideoControlType>(b));
+    }
+    inline VideoControl operator& ( VideoControl a, VideoControl b ) {
+        using VideoControlType = std::underlying_type_t<VideoControl>;
+        return static_cast<VideoControl>(static_cast<VideoControlType>(a) & static_cast<VideoControlType>(b));
+    }
+    inline VideoControl operator^ ( VideoControl a, VideoControl b ) {
+        using VideoControlType = std::underlying_type_t<VideoControl>;
+        return static_cast<VideoControl>(static_cast<VideoControlType>(a) ^ static_cast<VideoControlType>(b));
+    }
 }

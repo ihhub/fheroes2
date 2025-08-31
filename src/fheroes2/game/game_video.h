@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "game_video_type.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
@@ -36,6 +37,13 @@ namespace fheroes2
 namespace Video
 {
     enum class VideoAction : int;
+
+    struct VideoInfo
+    {
+        std::string fileName;
+        VideoControl control;
+        fheroes2::Point offset = { 0, 0};
+    };
 
     class Subtitle
     {
@@ -69,4 +77,7 @@ namespace Video
 
     // Returns false if the video is not present or it is corrupted.
     bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
+
+    // Returns false if some video are not present or its are corrupted.
+    bool ShowVideo( const std::vector<VideoInfo> & infos, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
 }
