@@ -1271,7 +1271,9 @@ namespace Interface
             }
         }
         _setCursor();
-        _interface.updateCursor( 0 );
+
+        // The cursor must be set according to the position of mouse cursor.
+        _interface.updateCursor( _interface.getGameArea().GetValidTileIdFromPoint( LocalEvent::Get().getMouseCursorPos() ) );
     }
 
     void EditorPanel::getTownObjectProperties( int32_t & type, int32_t & color ) const
