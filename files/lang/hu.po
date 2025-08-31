@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-08-31 14:45+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3638,6 +3638,10 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} előfordulásai:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kattints ide az erőforrástermelő %{object} elhelyezéséhez."
