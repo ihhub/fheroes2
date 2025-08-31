@@ -785,6 +785,41 @@ namespace
         data.insert( std::move( node ) );
         return true;
     }
+
+    std::vector<int> getAllowedMonsters( const Monster & monster, const MP2::MapObjectType objectType )
+    {
+        std::vector<int> allowedMonsters;
+
+        switch ( objectType ) {
+        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+        case MP2::OBJ_RANDOM_MONSTER_STRONG:
+        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+        case MP2::OBJ_RANDOM_MONSTER_WEAK: {
+            assert( monster.isRandomMonster() );
+            const auto level = monster.GetRandomUnitLevel();
+
+            for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+                const Monster temp{ monsterId };
+                if ( temp.isValid() && temp.GetRandomUnitLevel() == level ) {
+                    allowedMonsters.emplace_back( monsterId );
+                }
+            }
+            break;
+        }
+        case MP2::OBJ_RANDOM_MONSTER: {
+            for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+                if ( Monster{ monsterId }.isValid() ) {
+                    allowedMonsters.emplace_back( monsterId );
+                }
+            }
+            break;
+        }
+        default:
+            break;
+        }
+
+        return allowedMonsters;
+    }
 }
 
 namespace Interface
@@ -1491,34 +1526,7 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    std::vector<int> allowedMonsters;
-
-                    switch ( objectType ) {
-                    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
-                    case MP2::OBJ_RANDOM_MONSTER_STRONG:
-                    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
-                    case MP2::OBJ_RANDOM_MONSTER_WEAK: {
-                        const auto level = tempMonster.GetRandomUnitLevel();
-
-                        for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
-                            const Monster temp{ monsterId };
-                            if ( temp.isValid() && temp.GetRandomUnitLevel() == level ) {
-                                allowedMonsters.emplace_back( monsterId );
-                            }
-                        }
-                        break;
-                    }
-                    case MP2::OBJ_RANDOM_MONSTER: {
-                        for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
-                            if ( Monster{ monsterId }.isValid() ) {
-                                allowedMonsters.emplace_back( monsterId );
-                            }
-                        }
-                        break;
-                    }
-                    default:
-                        break;
-                    }
+                    std::vector<int> allowedMonsters = getAllowedMonsters( tempMonster, objectType );
 
                     std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
