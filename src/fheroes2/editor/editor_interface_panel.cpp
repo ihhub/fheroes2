@@ -37,6 +37,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps_tiles.h"
 #include "monster.h"
