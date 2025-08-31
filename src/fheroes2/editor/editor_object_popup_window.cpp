@@ -134,7 +134,7 @@ namespace
                     const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
                         std::string message = _( "editor|%{object}\n(%{color} player)" );
-                        StringReplace( message, "%{object}", Maps::GetMineName( info.metadata[0] ) );
+                        StringReplace( message, "%{object}", Maps::GetMineName( static_cast<int32_t>( info.metadata[0] ) ) );
                         StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
 
                         return message;
