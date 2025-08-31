@@ -38,7 +38,7 @@ jobs:
           unzip .pages/fheroes2_emscripten.zip -d .pages/dist/play-online
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: .pages/dist
   deploy:

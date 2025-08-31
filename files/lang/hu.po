@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-14 16:25+0000\n"
-"PO-Revision-Date: 2025-07-10 23:37+0200\n"
+"PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -5051,9 +5051,8 @@ msgstr "Nap eltelt"
 msgid "The number of days spent on this campaign."
 msgstr "Az eltöltött napok száma ebben a hadjáratban."
 
-#, fuzzy
 msgid "Scenario Title"
-msgstr "Küldetés"
+msgstr "Küldetés címe"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projekt-koordináció és fő fejlesztés"
@@ -6062,13 +6061,11 @@ msgstr[1] "A(z) %{monster} népessége %{count} százalékkal megnövekedett!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} szaporulat: +%{count}."
 
-#, fuzzy
 msgid "All populations are halved."
-msgstr " Minden populáció megfeleződött."
+msgstr "Az össznépesség megfeleződött."
 
-#, fuzzy
 msgid "All dwellings increase population."
-msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
+msgstr "Mindegyik toborzóhelynek nőtt a népessége."
 
 msgid "Beware!"
 msgstr "Vigyázat!"
@@ -8168,7 +8165,6 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
-#, fuzzy
 msgid "Hero class:"
 msgstr "Hős osztály:"
 
@@ -8205,7 +8201,6 @@ msgstr "Járőrözési sugár beállítása"
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-#, fuzzy
 msgid "Click to change class."
 msgstr "Kattints az osztály megváltoztatásához."
 
