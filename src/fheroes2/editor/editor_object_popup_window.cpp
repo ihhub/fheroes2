@@ -49,6 +49,11 @@
 
 namespace
 {
+    bool isEqual( const Maps::LayeredObjectPartInfo & info, const Maps::ObjectPart & part )
+    {
+        return info.icnIndex == part.icnIndex && info.icnType == part.icnType;
+    }
+
     std::string getObjectInfoText( const Maps::Tile & tile, const Maps::Map_Format::MapFormat & mapFormat )
     {
         const MP2::MapObjectType type = tile.getMainObjectType();
@@ -63,8 +68,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
                         std::string message = _( "editor|%{count} %{resource}" );
@@ -86,8 +90,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                     return MP2::StringObject( MP2::OBJ_ARTIFACT ) + std::string( "\n" ) + Artifact( static_cast<int32_t>( info.metadata[0] ) ).GetName();
                 }
             }
@@ -100,8 +103,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.standardMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.standardMetadata.end() && iter->second.metadata[0] > 0 ) {
                         const int32_t monsterCount = iter->second.metadata[0];
@@ -131,8 +133,7 @@ namespace
                 assert( !info.groundLevelParts.empty() );
 
                 // Mines and Sawmills always have the last image part in the background layer to indicate their type.
-                if ( info.objectType == type && info.groundLevelParts.back().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.back().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.back(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
                         std::string message = _( "editor|%{object}\n(%{color} player)" );
@@ -155,8 +156,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
                         std::string message = _( "editor|%{object}\n(%{color} player)" );
@@ -178,8 +178,7 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                if ( info.objectType == type && info.groundLevelParts.front().icnIndex == tile.getMainObjectPart().icnIndex
-                     && info.groundLevelParts.front().icnType == tile.getMainObjectPart().icnType ) {
+                if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
                     if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
                         std::string message = _( "editor|%{object}\n(%{color} player)" );
