@@ -240,6 +240,7 @@ namespace
 
         map.monsterMetadata = {};
         map.artifactMetadata = {};
+        map.resourceMetadata = {};
 
         const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
         const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
