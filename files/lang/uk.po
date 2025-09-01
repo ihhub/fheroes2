@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-08-31 14:45+0000\n"
 "PO-Revision-Date: 2025-06-15 12:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3652,6 +3652,10 @@ msgstr "Тип ресурсу:"
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} відображення:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Тицьніть щоб обрати цей колір."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Тицьніть, щоб вибрати для розміщення %{object} як генератор ресурсів."
