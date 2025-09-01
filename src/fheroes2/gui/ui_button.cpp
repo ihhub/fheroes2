@@ -678,12 +678,6 @@ namespace fheroes2
     {
         LocalEvent & le = LocalEvent::Get();
 
-        for ( const auto & button : _button ) {
-            if ( button->isEnabled() ) {
-                button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
-            }
-        }
-
         const size_t buttonsCount = _button.size();
 
         assert( buttonsCount == _value.size() );
@@ -691,6 +685,12 @@ namespace fheroes2
         for ( size_t i = 0; i < buttonsCount; ++i ) {
             if ( _button[i]->isEnabled() && le.MouseClickLeft( _button[i]->area() ) ) {
                 return _value[i];
+            }
+        }
+
+        for ( const auto & button : _button ) {
+            if ( button->isEnabled() ) {
+                button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
             }
         }
 
