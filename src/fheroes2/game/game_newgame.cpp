@@ -193,7 +193,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.draw( display.width() / 2 - loadingScreen.width() / 2, display.height() / 2 - loadingScreen.height() / 2 + 2, display );
     display.render();
 
-    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+    Video::ShowVideo( { { "INTRO.SMK", Video::VideoControl::PLAY_CUTSCENE } } );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
@@ -213,7 +213,12 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
     AudioManager::ResetAudio();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+    std::unique_ptr<SMKVideoSequence> audio = getVideo( "CHOOSEW.SMK" );
+    if ( audio ) {
+        for ( auto channel : audio->getAudioChannels() ) {
+            Mixer::Play( channel.data(), static_cast<uint32_t>( channel.size() ), false );
+        }
+    }
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
 
