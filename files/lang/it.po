@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 14:45+0000\n"
+"POT-Creation-Date: 2025-09-02 12:53+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4777,6 +4777,12 @@ msgstr ""
 "data dallo scenario. Mappe più difficili includono più nemici (o più forti), "
 "meno risorse oppure altre condizioni speciali che rendono la partita più "
 "dura all'umano."
+
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "Giocatore %{color}"
 
 #, fuzzy
 msgid "editor|%{count} %{resource}"

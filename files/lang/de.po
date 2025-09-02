@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 14:45+0000\n"
+"POT-Creation-Date: 2025-09-02 12:53+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4919,6 +4919,12 @@ msgstr ""
 "Karten können mehr oder stärkere Feinde, weniger Ressourcen oder andere "
 "spezielle Bedingungen enthalten, die die Dinge für den menschlichen Spieler "
 "schwieriger machen."
+
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "Spieler %{color}"
 
 #, fuzzy
 msgid "editor|%{count} %{resource}"
