@@ -62,7 +62,8 @@ namespace
 
             if ( info.objectType == type && isEqual( info.groundLevelParts.front(), tile.getMainObjectPart() ) ) {
                 const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
-                if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+                if ( iter != mapFormat.capturableObjectsMetadata.end() ) {
+                    assert( iter->second.ownerColor != PlayerColor::NONE );
                     std::string message = _( "editor|%{object}\n(%{color} player)" );
                     StringReplace( message, "%{object}", MP2::StringObject( type ) );
                     StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
@@ -155,10 +156,11 @@ namespace
             for ( const auto & info : Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ) ) {
                 assert( !info.groundLevelParts.empty() );
 
-                // Mines and Sawmills always have the last image part in the background layer to indicate their type.
+                // Mines always have the last image part in the background layer to indicate their type.
                 if ( info.objectType == type && isEqual( info.groundLevelParts.back(), tile.getMainObjectPart() ) ) {
                     const auto iter = mapFormat.capturableObjectsMetadata.find( tile.getMainObjectPart()._uid );
-                    if ( iter != mapFormat.capturableObjectsMetadata.end() && iter->second.ownerColor != PlayerColor::NONE ) {
+                    if ( iter != mapFormat.capturableObjectsMetadata.end() ) {
+                        assert( iter->second.ownerColor != PlayerColor::NONE );
                         std::string message = _( "editor|%{object}\n(%{color} player)" );
                         StringReplace( message, "%{object}", Maps::GetMineName( static_cast<int32_t>( info.metadata[0] ) ) );
                         StringReplace( message, "%{color}", Color::String( iter->second.ownerColor ) );
