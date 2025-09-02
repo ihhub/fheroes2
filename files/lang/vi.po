@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 14:45+0000\n"
+"POT-Creation-Date: 2025-09-02 12:53+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4968,6 +4968,12 @@ msgstr ""
 "người thiết kế kịch bản. Các bản đồ khó hơn có thể bao gồm nhiều kẻ thù hơn "
 "hoặc mạnh hơn, ít tài nguyên hơn hoặc các điều kiện đặc biệt khác khiến mọi "
 "thứ trở nên khó khăn hơn đối với người chơi."
+
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "người chơi mầu %{color}"
 
 #, fuzzy
 msgid "editor|%{count} %{resource}"
