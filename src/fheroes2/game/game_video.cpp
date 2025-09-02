@@ -318,11 +318,11 @@ namespace Video
                     break;
                 }
                 if ( Game::validateCustomAnimationDelay( minDelay ) ) {
-                    if ( video->getCurrentFrame() < video->frameCount() ) {
+                    if ( video->getCurrentFrameId() < video->frameCount() ) {
                         // Render the prepared frame.
                         display.render( frameRoi );
 
-                        if ( ( video->getCurrentFrame() + 1 == video->frameCount() ) && static_cast<bool>(state.control & Video::VideoControl::PLAY_LOOP) ) {
+                        if ( ( video->getCurrentFrameId() + 1 == video->frameCount() ) && static_cast<bool>(state.control & Video::VideoControl::PLAY_LOOP) ) {
                             video->resetFrame();
 
                             // Restart audio
@@ -343,7 +343,7 @@ namespace Video
 
                         // Render subtitles on the prepared next frame
                         for ( const Subtitle & subtitle : subtitles ) {
-                            if ( subtitle.needRender( video->getCurrentFrame() * minDelay ) ) {
+                            if ( subtitle.needRender( video->getCurrentFrameId() * minDelay ) ) {
                                 subtitle.render( display, frameRoi );
                             }
                         }

@@ -260,7 +260,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
             display.render( frameRoi );
 
-            if ( video->frameCount() <= video->getCurrentFrame() ) {
+            if ( video->frameCount() <= video->getCurrentFrameId() ) {
                 video->resetFrame();
             }
         }
@@ -390,7 +390,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
             display.render( frameRoi );
 
-            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrame() ) {
+            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrameId() ) {
                 videos[highlightCampaignId]->resetFrame();
             }
         }
