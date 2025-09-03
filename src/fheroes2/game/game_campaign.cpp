@@ -797,8 +797,8 @@ namespace
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : completedScenario.getEndScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
@@ -820,8 +820,8 @@ namespace
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : scenario.getStartScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
