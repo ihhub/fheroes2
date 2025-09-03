@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,6 @@
 #include <string>
 #include <vector>
 
-#include "game_video_type.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
@@ -36,13 +35,13 @@ namespace fheroes2
 
 namespace Video
 {
-    enum class VideoAction : int;
+    enum class VideoControl : uint32_t;
 
     struct VideoInfo
     {
         std::string fileName;
         VideoControl control;
-        fheroes2::Point offset = { 0, 0};
+        fheroes2::Point offset = { 0, 0 };
     };
 
     class Subtitle
@@ -74,9 +73,6 @@ namespace Video
 
     // Returns true if the file exists.
     bool getVideoFilePath( const std::string & fileName, std::string & path );
-
-    // Returns false if the video is not present or it is corrupted.
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
 
     // Returns false if some video are not present or its are corrupted.
     bool ShowVideo( const std::vector<VideoInfo> & infos, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
