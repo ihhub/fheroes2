@@ -307,6 +307,11 @@ void SMKVideoSequence::getCurrentFrame( fheroes2::Image & image, const int32_t x
 void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
 {
     getCurrentFrame( image, x, y, width, height, palette );
+    skipFrame();
+}
+
+void SMKVideoSequence::skipFrame()
+{
     ++_currentFrameId;
     if ( _currentFrameId < _frameCount ) {
         if ( const signed char returnValue = smk_next( _videoFile.get() ); returnValue < 0 ) {

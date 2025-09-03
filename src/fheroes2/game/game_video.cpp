@@ -281,13 +281,14 @@ namespace Video
 
         // Construct first frame
         for ( auto & [ state, video ] : sequences ) {
-            if ( !static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
-                break;
-            }
-
             // Prepare the first frame.
             video->resetFrame();
-            video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, prevPalette );
+
+            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, prevPalette );
+            } else {
+                video->skipFrame();
+            }
             screenRestorer.changePalette( prevPalette.data() );
 
             // decrease counters
@@ -328,11 +329,6 @@ namespace Video
                 // Render the prepared frame.
                 display.render( firstFrame );
                 for ( auto & [ state, video] : sequences ) {
-                    if ( !static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
-                        endVideo = true;
-                        break;
-                    }
-
                     if ( video->getCurrentFrameId() < video->frameCount() ) {
                         if ( video->getCurrentFrameId() + 1 == video->frameCount() ) {
                             if ( static_cast<bool>(state.control & Video::VideoControl::PLAY_LOOP ) ) {
@@ -350,10 +346,16 @@ namespace Video
 
                         // Prepare the next frame for render.
                         if ( state.currentFrameDelay <= minDelay ) {
-                            video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
+                            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                                video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
+                            } else {
+                                video->skipFrame();
+                            }
                             state.currentFrameDelay = state.maxFrameDelay;
                         } else {
-                            video->getCurrentFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
+                            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                                video->getCurrentFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
+                            }
                             state.currentFrameDelay -= minDelay;
                         }
 
