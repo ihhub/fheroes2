@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,24 +20,18 @@
 
 #pragma once
 
+#include <cstdint>
+#include <type_traits>
+
 namespace Video
 {
-    enum class VideoAction : int
-    {
-        PLAY_TILL_VIDEO_END,
-        LOOP_VIDEO,
-        WAIT_FOR_USER_INPUT,
-        PLAY_TILL_AUDIO_END,
-        IGNORE_VIDEO
-    };
-
     enum class VideoControl : uint32_t
     {
-        PLAY_NONE =  0,
+        PLAY_NONE = 0,
         // Play file once and wait user's input
-        PLAY_WAIT =  1 << 0,
+        PLAY_WAIT = 1 << 0,
         // Play file with infinite loop
-        PLAY_LOOP =  1 << 1,
+        PLAY_LOOP = 1 << 1,
         // Play audio stream from file
         PLAY_AUDIO = 1 << 2,
         // Play video stream from file
@@ -51,20 +45,24 @@ namespace Video
         PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
     };
 
-    inline VideoControl operator~ ( VideoControl a ) {
+    inline VideoControl operator~( VideoControl a )
+    {
         using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>(~static_cast<VideoControlType>(a));
+        return static_cast<VideoControl>( ~static_cast<VideoControlType>( a ) );
     }
-    inline VideoControl operator| ( VideoControl a, VideoControl b ) {
+    inline VideoControl operator|( VideoControl a, VideoControl b )
+    {
         using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>(static_cast<VideoControlType>(a) | static_cast<VideoControlType>(b));
+        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) | static_cast<VideoControlType>( b ) );
     }
-    inline VideoControl operator& ( VideoControl a, VideoControl b ) {
+    inline VideoControl operator&( VideoControl a, VideoControl b )
+    {
         using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>(static_cast<VideoControlType>(a) & static_cast<VideoControlType>(b));
+        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) & static_cast<VideoControlType>( b ) );
     }
-    inline VideoControl operator^ ( VideoControl a, VideoControl b ) {
+    inline VideoControl operator^( VideoControl a, VideoControl b )
+    {
         using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>(static_cast<VideoControlType>(a) ^ static_cast<VideoControlType>(b));
+        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) ^ static_cast<VideoControlType>( b ) );
     }
 }
