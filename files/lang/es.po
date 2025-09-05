@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-31 14:45+0000\n"
+"POT-Creation-Date: 2025-09-02 12:53+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4960,6 +4960,12 @@ msgstr ""
 "pueden incluir enemigos más abundantes o poderosos, menos recursos, o "
 "algunas otras condiciones que vuelvan las cosas más duras para el jugador "
 "humano."
+
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} jugador"
 
 #, fuzzy
 msgid "editor|%{count} %{resource}"
