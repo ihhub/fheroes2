@@ -337,15 +337,17 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             charInsertPos = result.size();
             redraw = true;
         }
-        else if ( le.isAnyKeyPressed() && ( charLimit == 0 || charLimit > result.size() || le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE || le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN) ) {
+        else if ( le.isAnyKeyPressed()
+                  && ( charLimit == 0 || charLimit > result.size() || le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE
+                       || le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN ) ) {
             // Handle new line input for multi-line texts only.
             if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_ENTER ) {
                 result.insert( charInsertPos, 1, '\n' );
                 ++charInsertPos;
             }
-            if ( isMultiLine && (le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN)) {
+            if ( isMultiLine && ( le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN ) ) {
                 const size_t newPos = textInput.getCursorPositionInAdjacentLine( charInsertPos, le.getPressedKeyValue() == fheroes2::Key::KEY_UP );
-                if(newPos == charInsertPos)
+                if ( newPos == charInsertPos )
                     continue;
                 charInsertPos = newPos;
             }
