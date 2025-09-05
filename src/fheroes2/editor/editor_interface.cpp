@@ -137,18 +137,20 @@ namespace
             : _allowed( std::move( allowed ) )
             , _selected( std::move( selected ) )
             , _text( std::move( text ), fheroes2::FontType::normalWhite() )
-            , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_MULTI_SELECTION_EVIL : ICN::BUTTON_MULTI_SELECTION_GOOD ), 0, 1 )
+            , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_SELECT_EVIL : ICN::BUTTON_SELECT_GOOD ), 0, 1 )
         {
             const int32_t offset{ 5 };
 
-            _area = { _text.width(), _text.height() };
-            _area.height += offset;
-            _area.width = std::max( _area.width, _buttonSelection.area().width );
-            _area.height += _buttonSelection.area().height;
+            const fheroes2::Size textArea{ _text.width(), _text.height() };
+            const fheroes2::Size buttonArea{ _buttonSelection.area().width, _buttonSelection.area().height };
 
-            const int32_t maxWidth = std::max( _text.width(), _buttonSelection.area().width );
-            _textArea = { ( maxWidth - _text.width() ) / 2, 0, _text.width(), _text.height() };
-            _buttonArea = { ( maxWidth - _buttonSelection.area().width ) / 2, _text.height() + offset, _buttonSelection.area().width, _buttonSelection.area().height };
+            const int32_t maxWidth = std::max( textArea.width, buttonArea.width );
+            _textArea = { ( maxWidth - textArea.width ) / 2, 0, textArea.width, textArea.height };
+            _buttonArea = { ( maxWidth - buttonArea.width ) / 2, textArea.height + offset, buttonArea.width, buttonArea.height };
+
+            _area = { maxWidth, textArea.height };
+            _area.height += offset;
+            _area.height += buttonArea.height;
         }
 
         ~MonsterMultiSelection() override = default;

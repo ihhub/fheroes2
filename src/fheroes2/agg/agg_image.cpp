@@ -156,8 +156,8 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
-                                                ICN::BUTTON_MULTI_SELECTION_GOOD,
-                                                ICN::BUTTON_MULTI_SELECTION_EVIL };
+                                                ICN::BUTTON_SELECT_GOOD,
+                                                ICN::BUTTON_SELECT_EVIL };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1715,9 +1715,9 @@ namespace
             fheroes2::Blit( common, output );
             break;
         }
-        case ICN::BUTTON_MULTI_SELECTION_GOOD:
-        case ICN::BUTTON_MULTI_SELECTION_EVIL: {
-            const bool isEvilInterface = ( id == ICN::BUTTON_MULTI_SELECTION_EVIL );
+        case ICN::BUTTON_SELECT_GOOD:
+        case ICN::BUTTON_SELECT_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_SELECT_EVIL );
 
             _icnVsSprite[id].resize( 2 );
 
