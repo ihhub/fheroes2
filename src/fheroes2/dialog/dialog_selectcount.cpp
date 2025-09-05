@@ -337,93 +337,17 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             charInsertPos = result.size();
             redraw = true;
         }
-        else if ( le.isAnyKeyPressed() && ( charLimit == 0 || charLimit > result.size() || le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+        else if ( le.isAnyKeyPressed() && ( charLimit == 0 || charLimit > result.size() || le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE || le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN) ) {
             // Handle new line input for multi-line texts only.
             if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_ENTER ) {
                 result.insert( charInsertPos, 1, '\n' );
                 ++charInsertPos;
             }
-            else if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_UP ) {
-                size_t lineStart = result.rfind( '\n', charInsertPos > 0 ? charInsertPos - 1 : 0 );
-                lineStart = ( lineStart == std::string::npos ) ? 0 : lineStart + 1;
-
-                if ( lineStart != 0 ) {
-                    const size_t prevLineEnd = lineStart - 1;
-                    size_t prevLineStart = result.rfind( '\n', prevLineEnd > 0 ? prevLineEnd - 1 : 0 );
-                    prevLineStart = ( prevLineStart == std::string::npos ) ? 0 : prevLineStart + 1;
-
-                    const fheroes2::FontCharHandler charHandler( textInput.fontType() );
-
-                    int currentLineWidth = 0;
-                    for ( size_t i = lineStart; i < result.size() && result[i] != '\n'; ++i )
-                        currentLineWidth += charHandler.getWidth( static_cast<uint8_t>( result[i] ) );
-                    const int prevLineWidth = charHandler.getWidth( std::string_view( &result[prevLineStart], prevLineEnd - prevLineStart ) );
-                    const int currentLineOffset = ( textInputArea.width - currentLineWidth ) / 2;
-                    const int prevLineOffset = ( textInputArea.width - prevLineWidth ) / 2;
-
-                    const int cursorPixelOffset = charHandler.getWidth( std::string_view( &result[lineStart], charInsertPos - lineStart ) );
-                    const int cursorAbsoluteX = currentLineOffset + cursorPixelOffset;
-
-                    int bestDiff = std::numeric_limits<int>::max();
-                    size_t bestPos = prevLineStart;
-                    int pixelOffset = 0;
-                    for ( size_t i = prevLineStart; i < prevLineEnd; ++i ) {
-                        int charAbsoluteX = prevLineOffset + pixelOffset;
-                        int diff = std::abs( charAbsoluteX - cursorAbsoluteX );
-                        if ( diff < bestDiff ) {
-                            bestDiff = diff;
-                            bestPos = i;
-                        }
-                        pixelOffset += charHandler.getWidth( static_cast<uint8_t>( result[i] ) );
-                    }
-                    if ( cursorAbsoluteX > prevLineOffset + prevLineWidth ) {
-                        charInsertPos = prevLineEnd;
-                    }
-                    else {
-                        charInsertPos = bestPos;
-                    }
-                }
-            }
-            else if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN ) {
-                size_t lineStart = result.rfind( '\n', charInsertPos > 0 ? charInsertPos - 1 : 0 );
-                lineStart = ( lineStart == std::string::npos ) ? 0 : lineStart + 1;
-                size_t lineEnd = result.find( '\n', lineStart );
-                lineEnd = ( lineEnd == std::string::npos ) ? result.size() : lineEnd;
-
-                if ( lineEnd < result.size() ) {
-                    size_t nextLineStart = lineEnd + 1;
-                    size_t nextLineEnd = result.find( '\n', nextLineStart );
-                    nextLineEnd = ( nextLineEnd == std::string::npos ) ? result.size() : nextLineEnd;
-
-                    const fheroes2::FontCharHandler charHandler( textInput.fontType() );
-
-                    const int currentLineWidth = charHandler.getWidth( std::string_view( &result[lineStart], lineEnd - lineStart ) );
-                    const int nextLineWidth = charHandler.getWidth( std::string_view( &result[nextLineStart], nextLineEnd - nextLineStart ) );
-                    const int currentLineOffset = ( textInputArea.width - currentLineWidth ) / 2;
-                    const int nextLineOffset = ( textInputArea.width - nextLineWidth ) / 2;
-
-                    const int cursorPixelOffset = charHandler.getWidth( std::string_view( &result[lineStart], charInsertPos - lineStart ) );
-                    const int cursorAbsoluteX = currentLineOffset + cursorPixelOffset;
-
-                    int bestDiff = std::numeric_limits<int>::max();
-                    size_t bestPos = nextLineStart;
-                    int pixelOffset = 0;
-                    for ( size_t i = nextLineStart; i < nextLineEnd; ++i ) {
-                        const int charAbsoluteX = nextLineOffset + pixelOffset;
-                        const int diff = std::abs( charAbsoluteX - cursorAbsoluteX );
-                        if ( diff < bestDiff ) {
-                            bestDiff = diff;
-                            bestPos = i;
-                        }
-                        pixelOffset += charHandler.getWidth( static_cast<uint8_t>( result[i] ) );
-                    }
-                    if ( cursorAbsoluteX > nextLineOffset + nextLineWidth ) {
-                        charInsertPos = nextLineEnd;
-                    }
-                    else {
-                        charInsertPos = bestPos;
-                    }
-                }
+            if ( isMultiLine && (le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN)) {
+                const size_t newPos = textInput.getCursorPositionInAdjacentLine( charInsertPos, le.getPressedKeyValue() == fheroes2::Key::KEY_UP );
+                if(newPos == charInsertPos)
+                    continue;
+                charInsertPos = newPos;
             }
             else {
                 charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
