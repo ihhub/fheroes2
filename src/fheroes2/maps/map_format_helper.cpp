@@ -1242,8 +1242,8 @@ namespace Maps
         for ( const IndexedObjectInfo & info : incorrectObjects ) {
             if ( info.info->id != uid ) {
                 uid = info.info->id;
-                if ( map.standardMetadata.find( uid ) != map.standardMetadata.end() ) {
-                    VERBOSE_LOG( "`standardMetadata` belongs to many objects with same UID: " << uid )
+                if ( map.resourceMetadata.find( uid ) != map.resourceMetadata.end() ) {
+                    VERBOSE_LOG( "`resourceMetadata` belongs to many objects with same UID: " << uid )
                 }
                 if ( map.castleMetadata.find( uid ) != map.castleMetadata.end() ) {
                     VERBOSE_LOG( "`castleMetadata` belongs to many objects with same UID: " << uid )
@@ -1265,6 +1265,12 @@ namespace Maps
                 }
                 if ( map.capturableObjectsMetadata.find( uid ) != map.capturableObjectsMetadata.end() ) {
                     VERBOSE_LOG( "`capturableObjectsMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.monsterMetadata.find( uid ) != map.monsterMetadata.end() ) {
+                    VERBOSE_LOG( "`monsterMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.artifactMetadata.find( uid ) != map.artifactMetadata.end() ) {
+                    VERBOSE_LOG( "`artifactMetadata` belongs to many objects with same UID: " << uid )
                 }
             }
 
@@ -1381,7 +1387,7 @@ namespace Maps
             heroMetadata->second.race = Race::RAND;
         }
         else if ( group == ObjectGroup::MONSTERS ) {
-            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.monsterMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
 #ifdef NDEBUG
@@ -1443,7 +1449,7 @@ namespace Maps
         else if ( group == ObjectGroup::ADVENTURE_ARTIFACTS ) {
             assert( index < getObjectsByGroup( group ).size() );
 
-            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.artifactMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
 #ifdef NDEBUG
