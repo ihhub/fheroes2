@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "game_video.h"
 #include "maps_fileinfo.h"
 
 class IStreamBase;
@@ -31,7 +32,7 @@ class OStreamBase;
 
 namespace Video
 {
-    enum class VideoAction : int;
+    enum class VideoControl : uint32_t;
 }
 
 namespace Campaign
@@ -123,10 +124,10 @@ namespace Campaign
     struct ScenarioIntroVideoInfo
     {
         std::string fileName;
-        Video::VideoAction action;
+        Video::VideoControl control;
     };
 
-    using VideoSequence = std::vector<ScenarioIntroVideoInfo>;
+    using VideoSequence = std::vector<std::vector<Video::VideoInfo>>;
 
     class ScenarioData
     {
@@ -176,12 +177,12 @@ namespace Campaign
             return _lossCondition;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getStartScenarioVideoPlayback() const
+        const std::vector<std::vector<Video::VideoInfo>> & getStartScenarioVideoPlayback() const
         {
             return _startScenarioVideoPlayback;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getEndScenarioVideoPlayback() const
+        const std::vector<std::vector<Video::VideoInfo>> & getEndScenarioVideoPlayback() const
         {
             return _endScenarioVideoPlayback;
         }

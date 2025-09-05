@@ -359,10 +359,10 @@ int main( int argc, char ** argv )
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
-
-            Video::ShowVideo( "NWCLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            Video::ShowVideo( "CYLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            std::vector<std::string> const logos = { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" };
+            for ( const auto & logo : logos ) {
+                Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
+            }
         }
 
         try {
