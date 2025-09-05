@@ -32,10 +32,12 @@
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
+#include "math_tools.h"
 #include "pal.h"
 #include "race.h"
 #include "render_processor.h"
@@ -44,6 +46,7 @@
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -356,6 +359,87 @@ namespace fheroes2
         if ( interfaceType != originalInterfaceType ) {
             Settings::Get().setInterfaceType( originalInterfaceType );
         }
+    }
+
+    void SpellsInOneRow::redraw( const fheroes2::Point & offset, fheroes2::Image & output )
+    {
+        _coords.clear();
+
+        if ( _spells.empty() ) {
+            return;
+        }
+
+        const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+        const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+
+        for ( int32_t i = 0; i < _spells.size(); ++i ) {
+            const Spell & spell = _spells[i];
+
+            if ( spell == Spell::NONE ) {
+                _coords.emplace_back( offset.x + i * 110 - spellScroll.width() / 2, offset.y + 7, spellScroll.width(), spellScroll.height() );
+
+                // Draw folded scroll when there is no spell.
+                const fheroes2::Rect & dst = _coords.back();
+                fheroes2::Blit( spellScroll, output, dst.x, dst.y );
+            }
+            else {
+                _coords.emplace_back( offset.x + i * 110 - spellScrollOpened.width() / 2, offset.y, spellScrollOpened.width(), spellScrollOpened.height() );
+
+                // Draw scroll with a spell over it.
+                const fheroes2::Rect & dst = _coords.back();
+                fheroes2::Blit( spellScrollOpened, output, dst.x, dst.y );
+
+                const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+                fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+
+                const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+                text.draw( dst.x + 18, dst.y + 57, 78, output );
+            }
+        }
+    }
+
+    bool SpellsInOneRow::queueEventProcessing( const bool isEditor )
+    {
+        LocalEvent & le = LocalEvent::Get();
+
+        _currentSpellIndex = GetRectIndex( _coords, le.getMouseCursorPos() );
+
+        if ( _currentSpellIndex < 0 ) {
+            return false;
+        }
+
+        const bool rightMouseButtonPressed = le.isMouseRightButtonPressed();
+        if ( rightMouseButtonPressed || ( !isEditor && le.MouseClickLeft() ) ) {
+            const Spell & spell = _spells[_currentSpellIndex];
+
+            if ( spell != Spell::NONE ) {
+                fheroes2::SpellDialogElement( spell, nullptr ).showPopup( rightMouseButtonPressed ? Dialog::ZERO : Dialog::OK );
+            }
+        }
+
+        return true;
+    }
+
+    Spell SpellsInOneRow::getCurrentSpell() const
+    {
+        if ( _currentSpellIndex < 0 ) {
+            return Spell::NONE;
+        }
+
+        return _spells[_currentSpellIndex];
+    }
+
+    void SpellsInOneRow::setCurrentSpell( const Spell spell )
+    {
+        if ( _currentSpellIndex < 0 ) {
+            return;
+        }
+
+        if ( _spells.isPresentSpell( spell ) ) {
+            return;
+        }
+
+        _spells[_currentSpellIndex] = spell;
     }
 
     void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps )

@@ -87,23 +87,29 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
 {
     assert( CountBits( race ) == 1 && ( race & Race::ALL ) );
 
-    general.clear();
-    library.clear();
+    _general.clear();
+    _library.clear();
+
+    _general.reserve( getMaxSpellsCount( -1, false ) );
+    if ( hasLibrary ) {
+        _library.reserve( 1 );
+    }
 
     std::set<Spell> spellsInUse;
 
     struct MageGuildLevelProps
     {
-        int freeSlots = 0;
-        bool hasAdventureSpell = false;
+        MageGuildLevelProps( const int spellLevel, const bool hasLibraryCapability )
+            : freeSlots( getMaxSpellsCount( spellLevel, hasLibraryCapability ) )
+        {
+            // Do nothing.
+        }
+
+        int32_t freeSlots;
+        bool hasAdventureSpell{ false };
     };
 
-    std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 3, false }, { 3, false }, { 2, false }, { 2, false }, { 1, false } } };
-    if ( hasLibrary ) {
-        for ( auto & [freeSlots, dummy] : mageGuildLevels ) {
-            ++freeSlots;
-        }
-    }
+    std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 1, hasLibrary }, { 2, hasLibrary }, { 3, hasLibrary }, { 4, hasLibrary }, { 5, hasLibrary } } };
 
     const auto addSpell = [this, hasLibrary, &spellsInUse, &mageGuildLevels]( const Spell & spell ) {
         const size_t spellLevel = fheroes2::checkedCast<size_t>( spell.Level() ).value();
@@ -118,10 +124,10 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         }
 
         if ( hasLibrary && freeSlots == 1 ) {
-            library.Append( spell );
+            _library.Append( spell );
         }
         else {
-            general.Append( spell );
+            _general.Append( spell );
         }
 
         --freeSlots;
@@ -164,32 +170,61 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     }
 }
 
-SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLevel ) const
+SpellStorage MageGuild::GetSpells( const int guildLevel, const bool hasLibrary, const int spellLevel /* = -1 */ ) const
 {
     SpellStorage result;
 
     if ( spellLevel == -1 ) {
         // Get all available spells
-        for ( int level = 1; level <= guildLevel; ++level ) {
-            result.Append( general.GetSpells( level ) );
+        if ( guildLevel == 5 ) {
+            // Get spells for all 1-5 levels.
+            result = _general.GetSpells();
 
             if ( hasLibrary ) {
-                result.Append( library.GetSpells( level ) );
+                result.Append( _library.GetSpells() );
+            }
+        }
+        else {
+            for ( int level = 1; level <= guildLevel; ++level ) {
+                result.Append( _general.GetSpells( level ) );
+
+                if ( hasLibrary ) {
+                    result.Append( _library.GetSpells( level ) );
+                }
             }
         }
     }
     else if ( spellLevel <= guildLevel ) {
-        result = general.GetSpells( spellLevel );
+        result = _general.GetSpells( spellLevel );
 
         if ( hasLibrary ) {
-            result.Append( library.GetSpells( spellLevel ) );
+            result.Append( _library.GetSpells( spellLevel ) );
         }
     }
 
     return result;
 }
 
-void MageGuild::trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
+int32_t MageGuild::getMaxSpellsCount( const int spellLevel, const bool hasLibrary )
+{
+    switch ( spellLevel ) {
+    case -1:
+        // Total number of spells in Mage Guild and Library.
+        return 3 + 3 + 2 + 2 + 1 + 1 * 5;
+    case 1:
+    case 2:
+        return 3 + ( hasLibrary ? 1 : 0 );
+    case 3:
+    case 4:
+        return 2 + ( hasLibrary ? 1 : 0 );
+    case 5:
+        return 1 + ( hasLibrary ? 1 : 0 );
+    default:
+        return 0;
+    }
+}
+
+void MageGuild::trainHero( HeroBase & hero, const int guildLevel, const bool hasLibrary ) const
 {
     if ( !hero.HaveSpellBook() ) {
         return;
@@ -205,10 +240,10 @@ void MageGuild::trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) co
 
 OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild )
 {
-    return stream << guild.general << guild.library;
+    return stream << guild._general << guild._library;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild )
 {
-    return stream >> guild.general >> guild.library;
+    return stream >> guild._general >> guild._library;
 }

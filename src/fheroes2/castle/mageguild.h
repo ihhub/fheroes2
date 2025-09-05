@@ -39,13 +39,15 @@ public:
     // https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html
     // except for the part related to the hidden AI-only bonuses.
     void initialize( const int race, const bool hasLibrary );
-    void trainHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
-    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
+    void trainHero( HeroBase & hero, const int guildLevel, const bool hasLibrary ) const;
+    SpellStorage GetSpells( const int guildLevel, const bool hasLibrary, const int spellLevel = -1 ) const;
+
+    static int32_t getMaxSpellsCount( const int spellLevel, const bool hasLibrary );
 
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild );
     friend IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild );
 
-    SpellStorage general;
-    SpellStorage library;
+    SpellStorage _general;
+    SpellStorage _library;
 };

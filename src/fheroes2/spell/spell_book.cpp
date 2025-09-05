@@ -463,7 +463,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 }
             }
             else {
-                const Spell spell = Dialog::selectSpell( Spell::NONE, false );
+                const Spell spell = Dialog::selectSpell( Spell::NONE, false, *this );
                 if ( spell != Spell::NONE ) {
                     Append( spell );
                     displayedSpells = SetFilter( Filter::ALL, &hero );

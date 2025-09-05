@@ -680,7 +680,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
     const int mageGuildLevel = GetLevelMageGuild();
     if ( mageGuildLevel > 0 ) {
         const int spellPower = hero.GetPower();
-        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuilt() );
         for ( const Spell & spell : guildSpells ) {
             if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
                 spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );

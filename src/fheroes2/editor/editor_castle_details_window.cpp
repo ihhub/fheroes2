@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
+#include <map>
 #include <optional>
 #include <string>
 #include <utility>
@@ -40,6 +41,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
@@ -300,6 +302,199 @@ namespace
 
         return isTown ? _( "Random Town Name" ) : _( "Random Castle Name" );
     }
+
+    bool mageGuildSpellsDialog( std::map<uint8_t, int32_t> & mustHaveSpells, std::vector<int32_t> & bannedSpells, const int race, const fheroes2::Rect & backgroundRoi )
+    {
+        // TODO: Add buttons to ban spells for all spell levels like it is done for Shrines.
+        // The already selected `mustHaveSpells` should not be banned and marked as used.
+        // The banned spells should not be available to select for the `mustHaveSpells`.
+        (void)bannedSpells;
+
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::ImageRestorer backgroundRestorer( display, backgroundRoi.x, backgroundRoi.y, backgroundRoi.width, backgroundRoi.height );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
+        const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
+        const int32_t statusBarHeight = statusBarSprite.height();
+
+        fheroes2::Copy( backgroundSprite, 0, 0, display, backgroundRoi.x, backgroundRoi.y, backgroundRoi.width, backgroundRoi.height - statusBarHeight );
+
+        // Guild image.
+
+        int guildIcn = ICN::UNKNOWN;
+        switch ( race ) {
+        case Race::KNGT:
+            guildIcn = ICN::MAGEGLDK;
+            break;
+        case Race::BARB:
+            guildIcn = ICN::MAGEGLDB;
+            break;
+        case Race::SORC:
+            guildIcn = ICN::MAGEGLDS;
+            break;
+        case Race::WRLK:
+            guildIcn = ICN::MAGEGLDW;
+            break;
+        case Race::RAND:
+        case Race::WZRD:
+            guildIcn = ICN::MAGEGLDZ;
+            break;
+        case Race::NECR:
+            guildIcn = ICN::MAGEGLDN;
+            break;
+        default:
+            break;
+        }
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( guildIcn, 4 );
+
+        const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
+
+        fheroes2::Point inPos( 0, 0 );
+        fheroes2::Point outPos( backgroundRoi.x + 100 - area.x - area.width / 2, backgroundRoi.y + 290 - sprite.height() );
+        fheroes2::Size inSize( sprite.width(), sprite.height() );
+
+        if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { backgroundRoi.x, backgroundRoi.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
+            if ( race == Race::RAND ) {
+                fheroes2::Sprite guildSprite = sprite;
+                fheroes2::ApplyPalette( guildSprite, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                fheroes2::Blit( guildSprite, inPos, display, outPos, inSize );
+            }
+            else {
+                fheroes2::Blit( sprite, inPos, display, outPos, inSize );
+            }
+        }
+
+        const bool hasLibraryCapability = ( race == Race::WZRD ) || ( race == Race::RAND );
+
+        // Show spells.
+        std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
+        for ( int32_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+            // REMEMBER! The level of spells as a parameter is in [1, 5] interval, but as an index is in [0, 4] interval.
+            int32_t spellsCount = MageGuild::getMaxSpellsCount( levelIndex + 1, hasLibraryCapability );
+
+            SpellStorage spells;
+            spells.reserve( spellsCount );
+
+            for ( int32_t i = 0; i < spellsCount; ++i ) {
+                auto iter = mustHaveSpells.find( static_cast<uint8_t>( levelIndex * 10 + i ) );
+                if ( iter != mustHaveSpells.end() ) {
+                    spells.emplace_back( iter->second );
+                }
+                else {
+                    spells.emplace_back( Spell::RANDOM + levelIndex + 1 );
+                }
+            }
+
+            spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
+
+            spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * ( levelIndex ) }, display );
+        }
+
+        // OKAY button.
+        const fheroes2::Point statusBarOffset{ backgroundRoi.x, backgroundRoi.y + backgroundRoi.height - statusBarHeight };
+
+        fheroes2::Button buttonOkay( statusBarOffset.x, statusBarOffset.y, ICN::BUTTON_OKAY_TOWN, 0, 1 );
+        buttonOkay.draw();
+
+        // EXIT button.
+        const int32_t buttonExitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+        fheroes2::Button buttonExit( statusBarOffset.x + backgroundRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+        buttonExit.draw();
+
+        // The original status bar image is much longer.
+        // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
+        const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
+        const int32_t statusBarWidth = backgroundRoi.width - buttonExitWidth - buttonOkayWidth;
+        fheroes2::Copy( statusBarSprite, 0, 0, display, statusBarOffset.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth / 2, statusBarHeight );
+        const int32_t statusBarSecondPart = statusBarWidth - statusBarWidth / 2;
+        fheroes2::Copy( statusBarSprite, statusBarSprite.width() - statusBarSecondPart, 0, display, statusBarOffset.x + buttonOkayWidth + statusBarWidth / 2,
+                        statusBarOffset.y, statusBarSecondPart, statusBarHeight );
+
+        StatusBar statusBar;
+        // The status bar has decorations on both sides.
+        // It is important not to render text over them.
+        constexpr int32_t decorationsWidth{ 16 };
+        statusBar.setRoi( { backgroundRoi.x + buttonOkayWidth + decorationsWidth, statusBarOffset.y, statusBarWidth - 2 * decorationsWidth, 0 } );
+
+        display.render( backgroundRoi );
+
+        auto spellSelectProcessing = [&spellRows, &backgroundRoi, &display]( const size_t levelIndex ) {
+            const Spell spell = Dialog::selectSpell( spellRows[levelIndex]->getCurrentSpell().GetID(), true, spellRows[levelIndex]->getSpells(),
+                                                     static_cast<int32_t>( levelIndex ) + 1 );
+
+            if ( spell != Spell::NONE ) {
+                spellRows[levelIndex]->setCurrentSpell( spell );
+                spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * static_cast<int32_t>( levelIndex ) }, display );
+            }
+
+            display.render( backgroundRoi );
+        };
+
+        LocalEvent & le = LocalEvent::Get();
+
+        bool hasChanges = false;
+
+        while ( le.HandleEvents() ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+                break;
+            }
+
+            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
+                // Update containers.
+                for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+                    auto spells = spellRows[levelIndex]->getSpells();
+                    for ( size_t position = 0; position < spells.size(); ++position ) {
+                        const uint8_t key = static_cast<uint8_t>( levelIndex * 10 + position );
+                        auto iter = mustHaveSpells.find( key );
+
+                        const int32_t spellId = spells[position].GetID();
+
+                        if ( spellId == Spell::RANDOM + levelIndex + 1 ) {
+                            if ( iter != mustHaveSpells.end() ) {
+                                mustHaveSpells.erase( iter );
+                            }
+                        }
+                        else {
+                            if ( iter != mustHaveSpells.end() ) {
+                                if ( spellId != iter->second ) {
+                                    iter->second = spellId;
+                                    hasChanges = true;
+                                }
+                            }
+                            else {
+                                mustHaveSpells[key] = spellId;
+                                hasChanges = true;
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+            buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
+
+            for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+                if ( spellRows[levelIndex]->queueEventProcessing( true ) ) {
+                    if ( le.MouseClickLeft() ) {
+                        spellSelectProcessing( levelIndex );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        backgroundRestorer.restore();
+        display.render( backgroundRoi );
+
+        return hasChanges;
+    }
 }
 
 namespace Editor
@@ -347,6 +542,13 @@ namespace Editor
             text.drawInRoi( nameArea.x + ( nameArea.width - text.width() ) / 2, nameArea.y + 2, display, nameArea );
         };
         drawCastleName();
+
+        // Button to open dialog to set forced and disabled spells in the Mages Guild.
+        fheroes2::ButtonSprite buttonSpells;
+        {
+            const char * translatedText = fheroes2::getSupportedText( gettext_noop( "SET SPELLS" ), fheroes2::FontType::buttonReleasedWhite() );
+            window.renderTextAdaptedButtonSprite( buttonSpells, translatedText, { 219, 78 }, fheroes2::StandardWindow::Padding::TOP_CENTER );
+        }
 
         // Allow castle building checkbox.
         fheroes2::Point dstPt( dialogRoi.x + rightPartOffsetX + 10, dialogRoi.y + 130 );
@@ -502,6 +704,7 @@ namespace Editor
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             buttonResetCastleName.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonResetCastleName.area() ) );
             buttonResetArmy.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonResetArmy.area() ) );
+            buttonSpells.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSpells.area() ) );
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 break;
@@ -513,6 +716,9 @@ namespace Editor
 
             if ( le.MouseClickLeft( buttonRestrictBuilding.area() ) ) {
                 buildingRestriction = !buildingRestriction;
+            }
+            else if ( le.MouseClickLeft( buttonSpells.area() ) ) {
+                mageGuildSpellsDialog( castleMetadata.mustHaveSpells, castleMetadata.bannedSpells, race, dialogRoi );
             }
 
             buttonRestrictBuilding.drawOnState( buildingRestriction || le.isMouseLeftButtonPressedAndHeldInArea( buttonRestrictBuilding.area() ) );
