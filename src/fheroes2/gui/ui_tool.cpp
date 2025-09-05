@@ -372,18 +372,19 @@ namespace fheroes2
         const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
         const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
 
-        for ( int32_t i = 0; i < _spells.size(); ++i ) {
+        for ( size_t i = 0; i < _spells.size(); ++i ) {
             const Spell & spell = _spells[i];
 
             if ( spell == Spell::NONE ) {
-                _coords.emplace_back( offset.x + i * 110 - spellScroll.width() / 2, offset.y + 7, spellScroll.width(), spellScroll.height() );
+                _coords.emplace_back( offset.x + static_cast<int32_t>( i ) * 110 - spellScroll.width() / 2, offset.y + 7, spellScroll.width(), spellScroll.height() );
 
                 // Draw folded scroll when there is no spell.
                 const fheroes2::Rect & dst = _coords.back();
                 fheroes2::Blit( spellScroll, output, dst.x, dst.y );
             }
             else {
-                _coords.emplace_back( offset.x + i * 110 - spellScrollOpened.width() / 2, offset.y, spellScrollOpened.width(), spellScrollOpened.height() );
+                _coords.emplace_back( offset.x + static_cast<int32_t>( i ) * 110 - spellScrollOpened.width() / 2, offset.y, spellScrollOpened.width(),
+                                      spellScrollOpened.height() );
 
                 // Draw scroll with a spell over it.
                 const fheroes2::Rect & dst = _coords.back();

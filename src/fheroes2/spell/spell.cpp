@@ -516,7 +516,7 @@ Spell Spell::getRandomSpell( const int level )
 {
     assert( level > 0 && level < 6 );
 
-    std::vector<int32_t> validSpells = getAllSpellIdsSuitableForSpellBook( level );
+    const std::vector<int32_t> validSpells = getAllSpellIdsSuitableForSpellBook( level );
 
     assert( !validSpells.empty() );
 

@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "spell_storage.h"
 
 class IStreamBase;

@@ -21,12 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cstdint>
-#include <iterator>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include "agg_image.h"
 #include "castle.h" // IWYU pragma: associated
@@ -39,7 +36,6 @@
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
-#include "math_tools.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
@@ -140,15 +136,16 @@ void Castle::_openMageGuild( const Heroes * hero ) const
 
     std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
 
-    for ( int32_t spellsLevel = 1; spellsLevel < 6; ++spellsLevel ) {
-        int32_t count = MageGuild::getMaxSpellsCount( spellsLevel, haveLibraryCapability );
+    for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+        const int32_t spellsLevel = static_cast<int32_t>( levelIndex ) + 1;
+        const int32_t count = MageGuild::getMaxSpellsCount( spellsLevel, haveLibraryCapability );
 
         SpellStorage spells = GetMageGuild().GetSpells( guildLevel, hasLibrary, spellsLevel );
         spells.resize( count, Spell::NONE );
 
-        spellRows[spellsLevel - 1] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
+        spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-        spellRows[spellsLevel - 1]->redraw( { cur_pt.x + 250, cur_pt.y + 365 - 90 * ( spellsLevel - 1 ) }, display );
+        spellRows[levelIndex]->redraw( { cur_pt.x + 250, cur_pt.y + 365 - 90 * static_cast<int32_t>( levelIndex ) }, display );
     }
 
     fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );

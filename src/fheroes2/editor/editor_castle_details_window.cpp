@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <optional>
 #include <string>
 #include <utility>
@@ -48,6 +49,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "mageguild.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "math_base.h"
@@ -55,6 +57,8 @@
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "statusbar.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -374,7 +378,7 @@ namespace
         std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
         for ( int32_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
             // REMEMBER! The level of spells as a parameter is in [1, 5] interval, but as an index is in [0, 4] interval.
-            int32_t spellsCount = MageGuild::getMaxSpellsCount( levelIndex + 1, hasLibraryCapability );
+            const int32_t spellsCount = MageGuild::getMaxSpellsCount( levelIndex + 1, hasLibraryCapability );
 
             SpellStorage spells;
             spells.reserve( spellsCount );
@@ -453,7 +457,7 @@ namespace
 
                         const int32_t spellId = spells[position].GetID();
 
-                        if ( spellId == Spell::RANDOM + levelIndex + 1 ) {
+                        if ( spellId == Spell::RANDOM + static_cast<int32_t>( levelIndex ) + 1 ) {
                             if ( iter != mustHaveSpells.end() ) {
                                 mustHaveSpells.erase( iter );
                             }
