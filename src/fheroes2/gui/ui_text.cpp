@@ -1230,7 +1230,7 @@ namespace fheroes2
     {
         int32_t width = 0;
         for ( const char c : text ) {
-            width += this->getWidth( c );
+            width += getWidth( c );
         }
         return width;
     }
