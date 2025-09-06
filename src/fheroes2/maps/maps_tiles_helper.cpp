@@ -151,26 +151,34 @@ namespace
     {
         Monster mons;
 
-        switch ( tile.getMainObjectType() ) {
-        case MP2::OBJ_RANDOM_MONSTER:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY );
-            break;
-        case MP2::OBJ_RANDOM_MONSTER_WEAK:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_1 );
-            break;
-        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_2 );
-            break;
-        case MP2::OBJ_RANDOM_MONSTER_STRONG:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_3 );
-            break;
-        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_4 );
-            break;
-        default:
-            // Did you add another random monster type? Add the logic above!
-            assert( 0 );
-            break;
+        if ( tile.metadata()[1] != Monster::UNKNOWN ) {
+            // This metadata is only set for fh2 map format.
+            mons = static_cast<int32_t>( tile.metadata()[1] );
+
+            tile.metadata()[1] = 0;
+        }
+        else {
+            switch ( tile.getMainObjectType() ) {
+            case MP2::OBJ_RANDOM_MONSTER:
+                mons = Monster::Rand( Monster::LevelType::LEVEL_ANY );
+                break;
+            case MP2::OBJ_RANDOM_MONSTER_WEAK:
+                mons = Monster::Rand( Monster::LevelType::LEVEL_1 );
+                break;
+            case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+                mons = Monster::Rand( Monster::LevelType::LEVEL_2 );
+                break;
+            case MP2::OBJ_RANDOM_MONSTER_STRONG:
+                mons = Monster::Rand( Monster::LevelType::LEVEL_3 );
+                break;
+            case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+                mons = Monster::Rand( Monster::LevelType::LEVEL_4 );
+                break;
+            default:
+                // Did you add another random monster type? Add the logic above!
+                assert( 0 );
+                break;
+            }
         }
 
         if ( !mons.isValid() ) {
