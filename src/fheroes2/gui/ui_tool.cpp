@@ -413,7 +413,7 @@ namespace fheroes2
 
     void SpellsInOneRow::redrawCurrentSpell( fheroes2::Image & output )
     {
-        if ( _currentSpellIndex < 0 || _currentSpellIndex >= _spells.size() || _coords.size() != _spells.size() ) {
+        if ( _currentSpellIndex < 0 || static_cast<size_t>( _currentSpellIndex ) >= _spells.size() || _coords.size() != _spells.size() ) {
             return;
         }
 
