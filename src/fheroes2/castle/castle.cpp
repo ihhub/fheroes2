@@ -389,6 +389,9 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     // Skip the rest of 29 bytes.
 
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability() );
+
     _postLoad();
 }
 
@@ -416,6 +419,9 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
     if ( !metadata.customName.empty() ) {
         _name = metadata.customName;
     }
+
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability(), metadata.mustHaveSpells, metadata.bannedSpells );
 
     _postLoad();
 }
@@ -497,8 +503,6 @@ void Castle::_postLoad()
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
     }
 
-    // MageGuild
-    _mageGuild.initialize( _race, HaveLibraryCapability() );
     _trainGuestHeroAndCaptainInMageGuild();
 
     // AI troops auto pack for gray towns

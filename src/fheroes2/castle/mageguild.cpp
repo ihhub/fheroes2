@@ -26,6 +26,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <numeric>
 #include <optional>
 #include <set>
 #include <vector>
@@ -39,6 +40,8 @@
 
 namespace
 {
+    constexpr std::array<int32_t, 5> guildMaxSpellsCount = { 3, 3, 2, 2, 1 };
+
     Spell getGuaranteedDamageSpell()
     {
         const uint32_t rand = Rand::Get( 0, 100 );
@@ -91,7 +94,8 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
 
     _general.reserve( getMaxSpellsCount( -1, false ) );
     if ( hasLibrary ) {
-        _library.reserve( 1 );
+        // Reserve for all 5 spell levels.
+        _library.reserve( 5 );
     }
 
     std::set<Spell> spellsInUse;
@@ -169,6 +173,168 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     }
 }
 
+void MageGuild::initialize( const int race, const bool hasLibrary, const std::map<uint8_t, int32_t> & mustHaveSpells, const std::vector<int32_t> & bannedSpells )
+{
+    if ( mustHaveSpells.empty() && bannedSpells.empty() ) {
+        // Fallback to original Mage Guild initialization.
+        initialize( race, hasLibrary );
+
+        return;
+    }
+
+    assert( CountBits( race ) == 1 && ( race & Race::ALL ) );
+
+    _general.clear();
+    _library.clear();
+
+    _general.resize( getMaxSpellsCount( -1, false ), Spell::NONE );
+    if ( hasLibrary ) {
+        // Library may have only 5 spell, one of each level.
+        _library.resize( 5, Spell::NONE );
+    }
+
+    std::set<Spell> spellsInUse;
+
+    // Skip "banned" spells during random spells initialization.
+    for ( auto spellId : bannedSpells ) {
+        spellsInUse.insert( spellId );
+    }
+
+    struct MageGuildLevelProps
+    {
+        MageGuildLevelProps( const int spellLevel, const bool hasLibraryCapability )
+            : freeSlots( getMaxSpellsCount( spellLevel, hasLibraryCapability ) )
+        {
+            // Do nothing.
+        }
+
+        int32_t freeSlots;
+        bool hasAdventureSpell{ false };
+    };
+
+    std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 1, hasLibrary }, { 2, hasLibrary }, { 3, hasLibrary }, { 4, hasLibrary }, { 5, hasLibrary } } };
+
+    bool hasGuaranteedDamageSpel = false;
+    bool hasGuaranteedCancellationSpell = false;
+
+    // Place the custom spells.
+    for ( const auto & [place, spellId] : mustHaveSpells ) {
+        const uint8_t levelIndex = place / 10;
+        const int32_t pos = place % 10;
+
+        assert( levelIndex < 5 );
+
+        if ( pos == guildMaxSpellsCount[levelIndex] && !hasLibrary ) {
+            // This may happen when a spell for a library was defined for Random town and the randomly selected race has no Library capability.
+            continue;
+        }
+
+        if ( pos < guildMaxSpellsCount[levelIndex] ) {
+            // This is a spell store in the Mage Guild.
+            _general[std::accumulate( guildMaxSpellsCount.cbegin(), guildMaxSpellsCount.cbegin() + levelIndex, pos )] = spellId;
+        }
+        else {
+            assert( pos == guildMaxSpellsCount[levelIndex] );
+
+            // This is a spell stored in the Library.
+            _library[levelIndex] = spellId;
+        }
+
+        --mageGuildLevels[levelIndex].freeSlots;
+
+        if ( Spell( spellId ).isAdventure() ) {
+            mageGuildLevels[levelIndex].hasAdventureSpell = true;
+        }
+        else if ( spellId == Spell::ARROW || spellId == Spell::LIGHTNINGBOLT || spellId == Spell::FIREBALL || spellId == Spell::COLDRAY || spellId == Spell::COLDRING ) {
+            hasGuaranteedDamageSpel = true;
+        }
+        else if ( spellId == Spell::DISPEL || spellId == Spell::MASSDISPEL || spellId == Spell::ANTIMAGIC || spellId == Spell::CURE ) {
+            hasGuaranteedCancellationSpell = true;
+        }
+
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spellId ); !inserted ) {
+            // The `mustHaveSpells` should not have duplicates.
+            assert( 0 );
+        }
+    }
+
+    const auto addSpell = [this, hasLibrary, &spellsInUse, &mageGuildLevels]( const Spell & spell ) {
+        const int spellLevel = spell.Level();
+        assert( spellLevel > 0 );
+
+        const size_t levelIndex = fheroes2::checkedCast<size_t>( spellLevel - 1 ).value();
+        assert( levelIndex < mageGuildLevels.size() );
+
+        auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[levelIndex];
+        if ( freeSlots < 1 ) {
+            return;
+        }
+
+        // Check for possible duplicates
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spell ); !inserted ) {
+            return;
+        }
+
+        if ( hasLibrary && _library[levelIndex] == Spell::NONE ) {
+            _library[levelIndex] = spell;
+        }
+        else {
+            int32_t pos = std::accumulate( guildMaxSpellsCount.cbegin(), guildMaxSpellsCount.cbegin() + levelIndex, 0 );
+            for ( int32_t offset = 0; offset < guildMaxSpellsCount[levelIndex]; ++offset ) {
+                if ( _general[pos + offset] == Spell::NONE ) {
+                    _general[pos + offset] = spell;
+                    break;
+                }
+            }
+        }
+
+        --freeSlots;
+
+        if ( spell.isAdventure() ) {
+            assert( !hasAdventureSpell );
+
+            hasAdventureSpell = true;
+        }
+    };
+
+    // Mage Guild must always have one of the specific damage spells...
+    if ( !hasGuaranteedDamageSpel ) {
+        addSpell( getGuaranteedDamageSpell() );
+        // TODO: Retry other spells from this group if the spell was not inserted.
+    }
+    // ... as well as one of the specific "spell cancellation" spells
+    if ( !hasGuaranteedCancellationSpell ) {
+        addSpell( getGuaranteedCancellationSpell() );
+        // TODO: Retry other spells from this group if the spell was not inserted.
+    }
+
+    // Initialize random spells.
+    for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
+        const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
+
+        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value() );
+
+        while ( freeSlots > 0 ) {
+            assert( !allSpellsOfLevel.empty() );
+
+            const uint32_t spellIdx = Rand::Get( 0, fheroes2::checkedCast<uint32_t>( allSpellsOfLevel.size() - 1 ).value() );
+            const Spell spell( allSpellsOfLevel[spellIdx] );
+
+            // Some spells may occur less frequently in Mage Guilds than others, depending on race
+            if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
+                continue;
+            }
+
+            // There can only be one adventure spell at each level of the Mage Guild
+            if ( !hasAdventureSpell || !spell.isAdventure() ) {
+                addSpell( spell );
+            }
+
+            allSpellsOfLevel.erase( allSpellsOfLevel.begin() + spellIdx );
+        }
+    }
+}
+
 SpellStorage MageGuild::GetSpells( const int guildLevel, const bool hasLibrary, const int spellLevel /* = -1 */ ) const
 {
     SpellStorage result;
@@ -208,16 +374,14 @@ int32_t MageGuild::getMaxSpellsCount( const int spellLevel, const bool hasLibrar
 {
     switch ( spellLevel ) {
     case -1:
-        // Total number of spells in Mage Guild and Library.
-        return 3 + 3 + 2 + 2 + 1 + 1 * 5;
+        // Total number of spells of all levels.
+        return guildMaxSpellsCount[0] + guildMaxSpellsCount[1] + guildMaxSpellsCount[2] + guildMaxSpellsCount[3] + guildMaxSpellsCount[4] + ( hasLibrary ? 1 : 0 ) * 5;
     case 1:
     case 2:
-        return 3 + ( hasLibrary ? 1 : 0 );
     case 3:
     case 4:
-        return 2 + ( hasLibrary ? 1 : 0 );
     case 5:
-        return 1 + ( hasLibrary ? 1 : 0 );
+        return guildMaxSpellsCount[spellLevel - 1] + ( hasLibrary ? 1 : 0 );
     default:
         return 0;
     }

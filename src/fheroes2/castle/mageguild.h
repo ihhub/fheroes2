@@ -24,6 +24,8 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
+#include <vector>
 
 #include "spell_storage.h"
 
@@ -41,6 +43,7 @@ public:
     // https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html
     // except for the part related to the hidden AI-only bonuses.
     void initialize( const int race, const bool hasLibrary );
+    void initialize( const int race, const bool hasLibrary, const std::map<uint8_t, int32_t> & mustHaveSpells, const std::vector<int32_t> & bannedSpells );
     void trainHero( HeroBase & hero, const int guildLevel, const bool hasLibrary ) const;
     SpellStorage GetSpells( const int guildLevel, const bool hasLibrary, const int spellLevel = -1 ) const;
 
