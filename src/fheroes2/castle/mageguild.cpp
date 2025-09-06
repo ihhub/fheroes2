@@ -279,7 +279,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
             _library[levelIndex] = spell;
         }
         else {
-            int32_t pos = std::accumulate( guildMaxSpellsCount.cbegin(), guildMaxSpellsCount.cbegin() + levelIndex, 0 );
+            const int32_t pos = std::accumulate( guildMaxSpellsCount.cbegin(), guildMaxSpellsCount.cbegin() + levelIndex, 0 );
             for ( int32_t offset = 0; offset < guildMaxSpellsCount[levelIndex]; ++offset ) {
                 if ( _general[pos + offset] == Spell::NONE ) {
                     _general[pos + offset] = spell;
