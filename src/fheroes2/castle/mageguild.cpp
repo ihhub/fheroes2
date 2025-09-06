@@ -29,6 +29,7 @@
 #include <numeric>
 #include <optional>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include "heroes_base.h"
