@@ -145,7 +145,8 @@ void Castle::_openMageGuild( const Heroes * hero ) const
 
         spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-        spellRows[levelIndex]->redraw( { cur_pt.x + 250, cur_pt.y + 365 - 90 * static_cast<int32_t>( levelIndex ) }, display );
+        spellRows[levelIndex]->setPosition( { cur_pt.x + 250, cur_pt.y + 365 - 90 * static_cast<int32_t>( levelIndex ) } );
+        spellRows[levelIndex]->redraw( display );
     }
 
     fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );

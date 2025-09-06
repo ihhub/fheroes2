@@ -361,13 +361,9 @@ namespace fheroes2
         }
     }
 
-    void SpellsInOneRow::redraw( const fheroes2::Point & offset, fheroes2::Image & output )
+    void SpellsInOneRow::setPosition( const fheroes2::Point & offset )
     {
         _coords.clear();
-
-        if ( _spells.empty() ) {
-            return;
-        }
 
         const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
         const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
@@ -377,17 +373,33 @@ namespace fheroes2
 
             if ( spell == Spell::NONE ) {
                 _coords.emplace_back( offset.x + static_cast<int32_t>( i ) * 110 - spellScroll.width() / 2, offset.y + 7, spellScroll.width(), spellScroll.height() );
-
-                // Draw folded scroll when there is no spell.
-                const fheroes2::Rect & dst = _coords.back();
-                fheroes2::Blit( spellScroll, output, dst.x, dst.y );
             }
             else {
                 _coords.emplace_back( offset.x + static_cast<int32_t>( i ) * 110 - spellScrollOpened.width() / 2, offset.y, spellScrollOpened.width(),
                                       spellScrollOpened.height() );
+            }
+        }
+    }
 
+    void SpellsInOneRow::redraw( fheroes2::Image & output )
+    {
+        if ( _spells.empty() || _coords.size() != _spells.size() ) {
+            return;
+        }
+
+        const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+        const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+
+        for ( size_t i = 0; i < _spells.size(); ++i ) {
+            const Spell & spell = _spells[i];
+            const fheroes2::Rect & dst = _coords[i];
+
+            if ( spell == Spell::NONE ) {
+                // Draw folded scroll when there is no spell.
+                fheroes2::Blit( spellScroll, output, dst.x, dst.y );
+            }
+            else {
                 // Draw scroll with a spell over it.
-                const fheroes2::Rect & dst = _coords.back();
                 fheroes2::Blit( spellScrollOpened, output, dst.x, dst.y );
 
                 const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
@@ -396,6 +408,33 @@ namespace fheroes2
                 const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
                 text.draw( dst.x + 18, dst.y + 57, 78, output );
             }
+        }
+    }
+
+    void SpellsInOneRow::redrawCurrentSpell( fheroes2::Image & output )
+    {
+        if ( _currentSpellIndex < 0 || _currentSpellIndex >= _spells.size() || _coords.size() != _spells.size() ) {
+            return;
+        }
+
+        const Spell & spell = _spells[_currentSpellIndex];
+        const fheroes2::Rect & dst = _coords[_currentSpellIndex];
+
+        if ( spell == Spell::NONE ) {
+            // Draw folded scroll when there is no spell.
+            const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+            fheroes2::Blit( spellScroll, output, dst.x, dst.y );
+        }
+        else {
+            // Draw scroll with a spell over it.
+            const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+            fheroes2::Blit( spellScrollOpened, output, dst.x, dst.y );
+
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+
+            const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+            text.draw( dst.x + 18, dst.y + 57, 78, output );
         }
     }
 
@@ -436,7 +475,8 @@ namespace fheroes2
             return;
         }
 
-        if ( _spells.isPresentSpell( spell ) ) {
+        // Allow RANDOM spell IDs to appear multiple times in the same row.
+        if ( spell < Spell::RANDOM && spell > Spell::RANDOM5 && _spells.isPresentSpell( spell ) ) {
             return;
         }
 

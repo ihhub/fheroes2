@@ -264,7 +264,11 @@ namespace fheroes2
             // Do nothing.
         }
 
-        void redraw( const fheroes2::Point & offset, fheroes2::Image & output );
+        void setPosition( const fheroes2::Point & offset );
+
+        void redraw( fheroes2::Image & output );
+        void redrawCurrentSpell( fheroes2::Image & output );
+
         bool queueEventProcessing( const bool isEditor );
 
         Spell getCurrentSpell() const;

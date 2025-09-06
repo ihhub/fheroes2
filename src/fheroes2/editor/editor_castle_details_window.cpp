@@ -410,7 +410,8 @@ namespace
 
             spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-            spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * levelIndex }, display );
+            spellRows[levelIndex]->setPosition( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * levelIndex } );
+            spellRows[levelIndex]->redraw( display );
         }
 
         // OKAY button.
@@ -447,7 +448,7 @@ namespace
 
             if ( spell != Spell::NONE ) {
                 spellRows[levelIndex]->setCurrentSpell( spell );
-                spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * static_cast<int32_t>( levelIndex ) }, display );
+                spellRows[levelIndex]->redrawCurrentSpell( display );
             }
 
             display.render( backgroundRoi );
