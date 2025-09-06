@@ -838,7 +838,10 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel );
 
     if ( !excludeSpellsList.empty() ) {
-        spells.erase( std::remove_if( spells.begin(), spells.end(), [&excludeSpellsList]( const Spell spell ) { return excludeSpellsList.isPresentSpell( spell ); } ),
+        spells.erase( std::remove_if( spells.begin(), spells.end(),
+                                      [&excludeSpellsList, &spellId]( const Spell spell ) {
+                                          return spellId != spell.GetID() && excludeSpellsList.isPresentSpell( spell );
+                                      } ),
                       spells.end() );
     }
 
