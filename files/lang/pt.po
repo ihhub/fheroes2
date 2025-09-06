@@ -34,7 +34,7 @@ msgid "X-L"
 msgstr "GG"
 
 msgid "ALL"
-msgstr "TODOS"
+msgstr "TUDO"
 
 msgid "EXIT"
 msgstr "SAIR"
@@ -89,7 +89,7 @@ msgid "RESTART"
 msgstr "REINICIAR"
 
 msgid "MAX"
-msgstr "MÁX"
+msgstr "MÁX."
 
 msgid "MIN"
 msgstr "MÍN."
@@ -4631,7 +4631,7 @@ msgid "Random"
 msgstr "Aleatório"
 
 msgid "Back"
-msgstr "VOLTAR"
+msgstr "Voltar"
 
 msgid "Return to the Editor's main menu options."
 msgstr "Retornar às opções do menu principal do Editor."
