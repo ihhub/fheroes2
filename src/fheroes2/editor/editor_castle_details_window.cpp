@@ -471,14 +471,16 @@ namespace
                         const uint8_t key = static_cast<uint8_t>( levelIndex * 10 + position );
                         auto iter = mustHaveSpells.find( key );
 
-                        const int32_t spellId = spells[position].GetID();
-
-                        if ( spellId == Spell::RANDOM + static_cast<int32_t>( levelIndex ) + 1 ) {
+                        // Random spells return 0 as their level as well as the spells that should not appear in the Spell Book.
+                        if ( spells[position].Level() != static_cast<int32_t>( levelIndex ) + 1 ) {
                             if ( iter != mustHaveSpells.end() ) {
                                 mustHaveSpells.erase( iter );
+                                hasChanges = true;
                             }
                         }
                         else {
+                            const int32_t spellId = spells[position].GetID();
+
                             if ( iter != mustHaveSpells.end() ) {
                                 if ( spellId != iter->second ) {
                                     iter->second = spellId;
