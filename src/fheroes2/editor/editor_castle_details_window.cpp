@@ -327,52 +327,67 @@ namespace
 
         fheroes2::Copy( backgroundSprite, 0, 0, display, backgroundRoi.x, backgroundRoi.y, backgroundRoi.width, backgroundRoi.height - statusBarHeight );
 
-        // Guild image.
-
-        int guildIcn = ICN::UNKNOWN;
-        switch ( race ) {
-        case Race::KNGT:
-            guildIcn = ICN::MAGEGLDK;
-            break;
-        case Race::BARB:
-            guildIcn = ICN::MAGEGLDB;
-            break;
-        case Race::SORC:
-            guildIcn = ICN::MAGEGLDS;
-            break;
-        case Race::WRLK:
-            guildIcn = ICN::MAGEGLDW;
-            break;
-        case Race::RAND:
-        case Race::WZRD:
-            guildIcn = ICN::MAGEGLDZ;
-            break;
-        case Race::NECR:
-            guildIcn = ICN::MAGEGLDN;
-            break;
-        default:
-            break;
-        }
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( guildIcn, 4 );
-
-        const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
-
-        fheroes2::Point inPos( 0, 0 );
-        fheroes2::Point outPos( backgroundRoi.x + 100 - area.x - area.width / 2, backgroundRoi.y + 290 - sprite.height() );
-        fheroes2::Size inSize( sprite.width(), sprite.height() );
-
-        if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { backgroundRoi.x, backgroundRoi.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
-            if ( race == Race::RAND ) {
-                fheroes2::Sprite guildSprite = sprite;
-                fheroes2::ApplyPalette( guildSprite, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
-                fheroes2::Blit( guildSprite, inPos, display, outPos, inSize );
-            }
-            else {
-                fheroes2::Blit( sprite, inPos, display, outPos, inSize );
-            }
-        }
-
         const bool hasLibraryCapability = ( race == Race::WZRD ) || ( race == Race::RAND );
+
+        const fheroes2::Text title( _( "Select custom spells that will appear in the Mage Guild." ), fheroes2::FontType::normalWhite() );
+        if ( hasLibraryCapability ) {
+            const int32_t titleWidth = 210;
+
+            title.drawInRoi( backgroundRoi.x + backgroundRoi.width - titleWidth - 10, backgroundRoi.y + 10, titleWidth, display, backgroundRoi );
+
+            const fheroes2::Text hint( _( "(The rightmost spells are stored in Library.)" ), fheroes2::FontType::smallWhite() );
+            hint.drawInRoi( backgroundRoi.x + backgroundRoi.width - titleWidth - 10, backgroundRoi.y + 15 + title.height( titleWidth ), titleWidth, display,
+                            backgroundRoi );
+        }
+        else {
+            title.drawInRoi( backgroundRoi.x + backgroundRoi.width - 330, backgroundRoi.y + 10, 320, display, backgroundRoi );
+        }
+
+        // Guild image.
+        {
+            int guildIcn = ICN::UNKNOWN;
+            switch ( race ) {
+            case Race::KNGT:
+                guildIcn = ICN::MAGEGLDK;
+                break;
+            case Race::BARB:
+                guildIcn = ICN::MAGEGLDB;
+                break;
+            case Race::SORC:
+                guildIcn = ICN::MAGEGLDS;
+                break;
+            case Race::WRLK:
+                guildIcn = ICN::MAGEGLDW;
+                break;
+            case Race::RAND:
+            case Race::WZRD:
+                guildIcn = ICN::MAGEGLDZ;
+                break;
+            case Race::NECR:
+                guildIcn = ICN::MAGEGLDN;
+                break;
+            default:
+                break;
+            }
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( guildIcn, 4 );
+
+            const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
+
+            fheroes2::Point inPos( 0, 0 );
+            fheroes2::Point outPos( backgroundRoi.x + 100 - area.x - area.width / 2, backgroundRoi.y + 290 - sprite.height() );
+            fheroes2::Size inSize( sprite.width(), sprite.height() );
+
+            if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { backgroundRoi.x, backgroundRoi.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
+                if ( race == Race::RAND ) {
+                    fheroes2::Sprite guildSprite = sprite;
+                    fheroes2::ApplyPalette( guildSprite, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                    fheroes2::Blit( guildSprite, inPos, display, outPos, inSize );
+                }
+                else {
+                    fheroes2::Blit( sprite, inPos, display, outPos, inSize );
+                }
+            }
+        }
 
         // Show spells.
         std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
@@ -395,7 +410,7 @@ namespace
 
             spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-            spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * ( levelIndex ) }, display );
+            spellRows[levelIndex]->redraw( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * levelIndex }, display );
         }
 
         // OKAY button.
