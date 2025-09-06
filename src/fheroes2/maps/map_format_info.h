@@ -79,10 +79,12 @@ namespace Maps::Map_Format
         // A list of buildings that cannot be built.
         std::vector<uint32_t> bannedBuildings;
 
-        // Spells that must appear in the Magic Guild.
-        std::vector<int32_t> mustHaveSpells;
+        // Spells that must appear in the Mage Guild in relation to position index.
+        // The spell index is written as a decimal number, where the tens digit indicates the spell level (0-4),
+        // and the units digit (0-4) represents its position from left to right.
+        std::map<uint8_t, int32_t> mustHaveSpells;
 
-        // Spells that must NOT appear the Magic Guild.
+        // Spells that must NOT appear the Mage Guild.
         std::vector<int32_t> bannedSpells;
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.

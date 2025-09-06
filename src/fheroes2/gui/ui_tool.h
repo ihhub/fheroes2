@@ -33,6 +33,8 @@
 
 #include "image.h"
 #include "math_base.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"
@@ -251,6 +253,36 @@ namespace fheroes2
 
         const InterfaceType interfaceType;
         const InterfaceType originalInterfaceType;
+    };
+
+    class SpellsInOneRow
+    {
+    public:
+        explicit SpellsInOneRow( SpellStorage spells )
+            : _spells( std::move( spells ) )
+        {
+            // Do nothing.
+        }
+
+        void setPosition( const fheroes2::Point & offset );
+
+        void redraw( fheroes2::Image & output );
+        void redrawCurrentSpell( fheroes2::Image & output );
+
+        bool queueEventProcessing( const bool isEditor );
+
+        Spell getCurrentSpell() const;
+        void setCurrentSpell( const Spell spell );
+
+        const SpellStorage & getSpells() const
+        {
+            return _spells;
+        }
+
+    private:
+        std::vector<fheroes2::Rect> _coords;
+        SpellStorage _spells;
+        int32_t _currentSpellIndex{ -1 };
     };
 
     // Fade display image colors to grayscale part of default game palette.

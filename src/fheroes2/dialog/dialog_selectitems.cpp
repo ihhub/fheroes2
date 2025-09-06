@@ -54,6 +54,7 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
@@ -940,14 +941,27 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const SpellStorage & excludeSpellsList /* = {} */, const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel );
+
+    if ( !excludeSpellsList.empty() ) {
+        spells.erase( std::remove_if( spells.begin(), spells.end(),
+                                      [&excludeSpellsList, &spellId]( const Spell spell ) {
+                                          return spellId != spell.GetID() && excludeSpellsList.isPresentSpell( spell );
+                                      } ),
+                      spells.end() );
+    }
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
-        for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
-            spells.push_back( randomSpellId );
+        if ( spellsLevel == -1 ) {
+            for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
+                spells.push_back( randomSpellId );
+            }
+        }
+        else {
+            spells.push_back( Spell::RANDOM + spellsLevel );
         }
     }
 

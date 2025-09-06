@@ -129,6 +129,11 @@ public:
         return id < s.id;
     }
 
+    bool operator>( const Spell & s ) const
+    {
+        return id > s.id;
+    }
+
     bool operator==( const Spell & s ) const
     {
         return s.id == id;
