@@ -84,6 +84,18 @@ namespace
 
         return Spell::CURE;
     }
+
+    struct MageGuildLevelProps final
+    {
+        MageGuildLevelProps( const int spellLevel, const bool hasLibraryCapability )
+            : freeSlots( MageGuild::getMaxSpellsCount( spellLevel, hasLibraryCapability ) )
+        {
+            // Do nothing.
+        }
+
+        int32_t freeSlots{ 0 };
+        bool hasAdventureSpell{ false };
+    };
 }
 
 void MageGuild::initialize( const int race, const bool hasLibrary )
@@ -100,18 +112,6 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     }
 
     std::set<Spell> spellsInUse;
-
-    struct MageGuildLevelProps
-    {
-        MageGuildLevelProps( const int spellLevel, const bool hasLibraryCapability )
-            : freeSlots( getMaxSpellsCount( spellLevel, hasLibraryCapability ) )
-        {
-            // Do nothing.
-        }
-
-        int32_t freeSlots{ 0 };
-        bool hasAdventureSpell{ false };
-    };
 
     std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 1, hasLibrary }, { 2, hasLibrary }, { 3, hasLibrary }, { 4, hasLibrary }, { 5, hasLibrary } } };
 
@@ -200,18 +200,6 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
     for ( auto spellId : bannedSpells ) {
         spellsInUse.insert( spellId );
     }
-
-    struct MageGuildLevelProps
-    {
-        MageGuildLevelProps( const int spellLevel, const bool hasLibraryCapability )
-            : freeSlots( getMaxSpellsCount( spellLevel, hasLibraryCapability ) )
-        {
-            // Do nothing.
-        }
-
-        int32_t freeSlots{ 0 };
-        bool hasAdventureSpell{ false };
-    };
 
     std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 1, hasLibrary }, { 2, hasLibrary }, { 3, hasLibrary }, { 4, hasLibrary }, { 5, hasLibrary } } };
 
