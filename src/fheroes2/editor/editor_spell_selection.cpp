@@ -166,7 +166,7 @@ namespace
 
 namespace Editor
 {
-    bool openSpellSelectionWindow( std::string title, const int spellLevel, std::vector<int32_t> & selectedSpells )
+    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled )
     {
         if ( spellLevel < 1 || spellLevel > 5 ) {
             // What are you trying to achieve?!
@@ -222,8 +222,36 @@ namespace Editor
         // Buttons.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
-
         background.renderOkayCancelButtons( buttonOk, buttonCancel );
+
+        fheroes2::ButtonGroup levelSelection;
+
+        if ( isMultiLevelSelectionEnabled ) {
+            const int32_t levelSelectionStepX{ 62 };
+            const int32_t spellSelectionButtonOffsetX{ buttonOk.area().x + buttonOk.area().width +
+                                                       ( buttonCancel.area().x -  buttonOk.area().x - buttonOk.area().width - levelSelectionStepX * 5 ) / 2 };
+
+            levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX, activeArea.y + 410, isEvilInterface ? ICN::BUTTON_1_EVIL : ICN::BUTTON_1_GOOD, 0, 1,
+                                         1 );
+            levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX, activeArea.y + 410,
+                                         isEvilInterface ? ICN::BUTTON_2_EVIL : ICN::BUTTON_2_GOOD, 0, 1, 2 );
+            levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 2, activeArea.y + 410,
+                                           isEvilInterface ? ICN::BUTTON_3_EVIL : ICN::BUTTON_3_GOOD, 0, 1, 3 );
+            levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 3, activeArea.y + 410,
+                                           isEvilInterface ? ICN::BUTTON_4_EVIL : ICN::BUTTON_4_GOOD, 0, 1, 4 );
+            levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 4, activeArea.y + 410,
+                                           isEvilInterface ? ICN::BUTTON_5_EVIL : ICN::BUTTON_5_GOOD, 0, 1, 5 );
+
+            levelSelection.drawShadows( display );
+
+            for ( int32_t i = 0; i < 5; ++i ) {
+                if ( i + 1 == spellLevel ) {
+                    levelSelection.button( spellLevel - 1 ).drawOnPress( display );
+                }
+
+                levelSelection.button( i ).draw( display );
+            }
+        }
 
         fheroes2::ImageRestorer restorer( display, activeArea.x, activeArea.y, activeArea.width, activeArea.height );
 
@@ -247,6 +275,28 @@ namespace Editor
 
             if ( buttonOk.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) ) {
                 break;
+            }
+
+            if ( isMultiLevelSelectionEnabled ) {
+
+                bool hasSpellLevelChanged = false;
+                for ( int32_t i = 0; i < 5; ++i ) {
+                    if ( i + 1 == spellLevel ) {
+                        continue;
+                    }
+
+                    if ( le.MouseClickLeft( levelSelection.button( i ).area() ) ) {
+                        spellLevel = i + 1;
+                        hasSpellLevelChanged = true;
+                        break;
+                    }
+
+                    levelSelection.button( i ).drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( levelSelection.button( i ).area() ) );
+                }
+
+                if ( hasSpellLevelChanged ) {
+                    break;
+                }
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {

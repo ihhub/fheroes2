@@ -1074,6 +1074,18 @@ namespace ICN
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
 
+        BUTTON_1_GOOD,
+        BUTTON_2_GOOD,
+        BUTTON_3_GOOD,
+        BUTTON_4_GOOD,
+        BUTTON_5_GOOD,
+
+        BUTTON_1_EVIL,
+        BUTTON_2_EVIL,
+        BUTTON_3_EVIL,
+        BUTTON_4_EVIL,
+        BUTTON_5_EVIL,
+
         BUTTON_MAP_SELECT_GOOD,
         BUTTON_MAP_SELECT_EVIL,
 

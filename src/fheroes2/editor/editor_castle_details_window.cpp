@@ -43,6 +43,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "editor_spell_selection.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
@@ -462,7 +463,13 @@ namespace
             }
 
             if ( eventHandler.MouseClickLeft( buttonBannedSpells.area() ) ) {
-                // Do something.
+                std::array<std::vector<int32_t>, 5> selectedSpells;
+
+                int32_t spellLevel = 1;
+                int32_t selectedLevel = 1;
+                while ( Editor::openSpellSelectionWindow( "Mage Guild", selectedLevel, selectedSpells[spellLevel - 1], true ) && selectedLevel != spellLevel ) {
+                    spellLevel = selectedLevel;
+                }
             }
 
             if ( eventHandler.isMouseCursorPosInArea( buttonOkay.area() ) ) {
