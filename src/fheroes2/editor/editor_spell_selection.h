@@ -26,5 +26,6 @@
 
 namespace Editor
 {
-    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled );
+    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled,
+                                   const int32_t minimumEnabledSpells, const bool isBanSpellsList );
 }

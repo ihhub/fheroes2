@@ -404,9 +404,18 @@ namespace
 
         display.render( backgroundRoi );
 
-        auto spellSelectProcessing = [&spellRows, &backgroundRoi, &display]( const size_t levelIndex ) {
-            const Spell spell = Dialog::selectSpell( spellRows[levelIndex]->getCurrentSpell().GetID(), true, spellRows[levelIndex]->getSpells(),
-                                                     static_cast<int32_t>( levelIndex ) + 1 );
+        auto spellSelectProcessing = [&spellRows, &backgroundRoi, &bannedSpells, &display]( const size_t levelIndex ) {
+            // Exclude the already selected spells and the banned spells.
+            const int32_t spellLevel = static_cast<int32_t>( levelIndex ) + 1;
+            SpellStorage spellsToExclude( spellRows[levelIndex]->getSpells() );
+            for ( const int32_t spellId : bannedSpells ) {
+                const Spell spell( spellId );
+                if ( spell.Level() == spellLevel ) {
+                    spellsToExclude.push_back( spell );
+                }
+            }
+
+            const Spell spell = Dialog::selectSpell( spellRows[levelIndex]->getCurrentSpell().GetID(), true, spellsToExclude, spellLevel );
 
             if ( spell != Spell::NONE ) {
                 spellRows[levelIndex]->setCurrentSpell( spell );
@@ -419,6 +428,7 @@ namespace
         LocalEvent & eventHandler = LocalEvent::Get();
 
         bool hasChanges = false;
+        int32_t banSpellsLevel = 1;
 
         std::string statusBarMessage;
 
@@ -463,12 +473,52 @@ namespace
             }
 
             if ( eventHandler.MouseClickLeft( buttonBannedSpells.area() ) ) {
-                std::array<std::vector<int32_t>, 5> selectedSpells;
+                std::array<std::vector<int32_t>, 5> bannedSpellsContainer;
 
-                int32_t spellLevel = 1;
-                int32_t selectedLevel = 1;
-                while ( Editor::openSpellSelectionWindow( "Mage Guild", selectedLevel, selectedSpells[spellLevel - 1], true ) && selectedLevel != spellLevel ) {
-                    spellLevel = selectedLevel;
+                for ( const int32_t spellId : bannedSpells ) {
+                    const int32_t level = Spell( spellId ).Level();
+                    assert( level > 0 && level < 6 );
+
+                    bannedSpellsContainer[level - 1].push_back( spellId );
+                }
+
+                int32_t selectedLevel = banSpellsLevel;
+                while ( Editor::openSpellSelectionWindow( "Mage Guild", selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
+                                                          MageGuild::getMaxSpellsCount( selectedLevel, hasLibraryCapability ), true ) ) {
+                    if ( selectedLevel == banSpellsLevel ) {
+                        // The banned spells dialog was closed with confirmation of changes.
+                        std::vector<int32_t> result( std::move( bannedSpellsContainer[0] ) );
+                        result.reserve( result.size() + bannedSpellsContainer[1].size() + bannedSpellsContainer[2].size() + bannedSpellsContainer[3].size()
+                                        + bannedSpellsContainer[4].size() );
+                        result.insert( result.end(), bannedSpellsContainer[1].begin(), bannedSpellsContainer[1].end() );
+                        result.insert( result.end(), bannedSpellsContainer[2].begin(), bannedSpellsContainer[2].end() );
+                        result.insert( result.end(), bannedSpellsContainer[3].begin(), bannedSpellsContainer[3].end() );
+                        result.insert( result.end(), bannedSpellsContainer[4].begin(), bannedSpellsContainer[4].end() );
+
+                        if ( result != bannedSpells ) {
+                            bannedSpells = std::move( result );
+
+                            // Remove the banned spells from the spell Rows.
+                            for ( const int32_t spellId : bannedSpells ) {
+                                const Spell spell( spellId );
+                                const int32_t spellLevel = spell.Level();
+                                assert( spellLevel > 0 && spellLevel < 6 );
+
+                                const size_t levelIndex = spellLevel - 1;
+
+                                if ( spellRows[levelIndex]->checkSpellAndMakeItCurrent( spell ) ) {
+                                    spellRows[levelIndex]->setCurrentSpell( Spell::RANDOM + spellLevel );
+                                    spellRows[levelIndex]->redrawCurrentSpell( display );
+                                }
+                            }
+
+                            hasChanges = true;
+                        }
+
+                        break;
+                    }
+
+                    banSpellsLevel = selectedLevel;
                 }
             }
 

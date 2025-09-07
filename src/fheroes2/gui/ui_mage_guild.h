@@ -32,7 +32,7 @@ namespace fheroes2
 {
     class Image;
 
-    void renderMageGuildBuilding( const int raceType, const int guildLevel, const Point offset );
+    void renderMageGuildBuilding( const int raceType, const int guildLevel, const Point & offset );
 
     class SpellsInOneRow final
     {
@@ -43,15 +43,21 @@ namespace fheroes2
             // Do nothing.
         }
 
-        void setPosition( const fheroes2::Point & offset );
+        void setPosition( const Point & offset );
 
-        void redraw( fheroes2::Image & output );
-        void redrawCurrentSpell( fheroes2::Image & output );
+        void redraw( Image & output );
+        void redrawCurrentSpell( Image & output );
 
         bool queueEventProcessing( const bool isEditor );
 
+        // Get spell that is currently selected by pointing mouse cursor over its scroll.
         Spell getCurrentSpell() const;
+        // Change the spell under the mouse pointer to the given one.
         void setCurrentSpell( const Spell spell );
+
+        // Returns `true` if spell is found. The first found spell index is made current.
+        // If spell is not found the current index is reset and method returns `false`.
+        bool checkSpellAndMakeItCurrent( const Spell spellToFind );
 
         const SpellStorage & getSpells() const
         {
@@ -59,7 +65,7 @@ namespace fheroes2
         }
 
     private:
-        std::vector<fheroes2::Rect> _coords;
+        std::vector<Rect> _coords;
         SpellStorage _spells;
         int32_t _currentSpellIndex{ -1 };
     };

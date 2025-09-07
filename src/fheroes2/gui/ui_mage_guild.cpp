@@ -39,7 +39,7 @@
 
 namespace fheroes2
 {
-    void renderMageGuildBuilding( const int raceType, const int guildLevel, const Point offset )
+    void renderMageGuildBuilding( const int raceType, const int guildLevel, const Point & offset )
     {
         int guildIcn = ICN::UNKNOWN;
         switch ( raceType ) {
@@ -68,34 +68,36 @@ namespace fheroes2
         }
 
         assert( guildLevel >= 1 && guildLevel <= 5 );
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( guildIcn, guildLevel - 1 );
+        const Sprite & sprite = AGG::GetICN( guildIcn, guildLevel - 1 );
 
-        const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
+        const Rect area = GetActiveROI( sprite );
 
-        fheroes2::Point inPos( 0, 0 );
-        fheroes2::Point outPos( offset.x + 100 - area.x - area.width / 2, offset.y + 290 - sprite.height() );
-        fheroes2::Size inSize( sprite.width(), sprite.height() );
+        Point inPos( 0, 0 );
+        Point outPos( offset.x + 100 - area.x - area.width / 2, offset.y + 290 - sprite.height() );
+        Size inSize( sprite.width(), sprite.height() );
 
         auto & display = Display::instance();
 
-        if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { offset.x, offset.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
+        if ( FitToRoi( sprite, inPos, display, outPos, inSize, { offset.x, offset.y, 200, Display::DEFAULT_HEIGHT } ) ) {
             if ( raceType == Race::RAND ) {
-                fheroes2::Sprite guildSprite = sprite;
-                fheroes2::ApplyPalette( guildSprite, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
-                fheroes2::Blit( guildSprite, inPos, display, outPos, inSize );
+                // For the random race we use Wizard's Mage Guild in purple palette because Wizard's castle has Library
+                // and random Race can potentially have Library.
+                Sprite guildSprite = sprite;
+                ApplyPalette( guildSprite, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                Blit( guildSprite, inPos, display, outPos, inSize );
             }
             else {
-                fheroes2::Blit( sprite, inPos, display, outPos, inSize );
+                Blit( sprite, inPos, display, outPos, inSize );
             }
         }
     }
 
-    void SpellsInOneRow::setPosition( const fheroes2::Point & offset )
+    void SpellsInOneRow::setPosition( const Point & offset )
     {
         _coords.clear();
 
-        const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
-        const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+        const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
+        const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
 
         for ( size_t i = 0; i < _spells.size(); ++i ) {
             const Spell & spell = _spells[i];
@@ -110,59 +112,59 @@ namespace fheroes2
         }
     }
 
-    void SpellsInOneRow::redraw( fheroes2::Image & output )
+    void SpellsInOneRow::redraw( Image & output )
     {
         if ( _spells.empty() || _coords.size() != _spells.size() ) {
             return;
         }
 
-        const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
-        const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+        const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
+        const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
 
         for ( size_t i = 0; i < _spells.size(); ++i ) {
             const Spell & spell = _spells[i];
-            const fheroes2::Rect & dst = _coords[i];
+            const Rect & dst = _coords[i];
 
             if ( spell == Spell::NONE ) {
                 // Draw folded scroll when there is no spell.
-                fheroes2::Blit( spellScroll, output, dst.x, dst.y );
+                Blit( spellScroll, output, dst.x, dst.y );
             }
             else {
                 // Draw scroll with a spell over it.
-                fheroes2::Blit( spellScrollOpened, output, dst.x, dst.y );
+                Blit( spellScrollOpened, output, dst.x, dst.y );
 
-                const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-                fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+                const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+                Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-                const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+                const Text text( spell.GetName(), FontType::smallWhite() );
                 text.draw( dst.x + 18, dst.y + 57, 78, output );
             }
         }
     }
 
-    void SpellsInOneRow::redrawCurrentSpell( fheroes2::Image & output )
+    void SpellsInOneRow::redrawCurrentSpell( Image & output )
     {
         if ( _currentSpellIndex < 0 || static_cast<size_t>( _currentSpellIndex ) >= _spells.size() || _coords.size() != _spells.size() ) {
             return;
         }
 
         const Spell & spell = _spells[_currentSpellIndex];
-        const fheroes2::Rect & dst = _coords[_currentSpellIndex];
+        const Rect & dst = _coords[_currentSpellIndex];
 
         if ( spell == Spell::NONE ) {
             // Draw folded scroll when there is no spell.
-            const fheroes2::Sprite & spellScroll = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
-            fheroes2::Blit( spellScroll, output, dst.x, dst.y );
+            const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
+            Blit( spellScroll, output, dst.x, dst.y );
         }
         else {
             // Draw scroll with a spell over it.
-            const fheroes2::Sprite & spellScrollOpened = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
-            fheroes2::Blit( spellScrollOpened, output, dst.x, dst.y );
+            const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
+            Blit( spellScrollOpened, output, dst.x, dst.y );
 
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+            const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+            const Text text( spell.GetName(), FontType::smallWhite() );
             text.draw( dst.x + 18, dst.y + 57, 78, output );
         }
     }
@@ -182,7 +184,7 @@ namespace fheroes2
             const Spell & spell = _spells[_currentSpellIndex];
 
             if ( spell != Spell::NONE ) {
-                fheroes2::SpellDialogElement( spell, nullptr ).showPopup( rightMouseButtonPressed ? Dialog::ZERO : Dialog::OK );
+                SpellDialogElement( spell, nullptr ).showPopup( rightMouseButtonPressed ? Dialog::ZERO : Dialog::OK );
             }
         }
 
@@ -210,5 +212,18 @@ namespace fheroes2
         }
 
         _spells[_currentSpellIndex] = spell;
+    }
+
+    bool SpellsInOneRow::checkSpellAndMakeItCurrent( const Spell spellToFind )
+    {
+        for ( size_t i = 0; i < _spells.size(); ++i ) {
+            if ( _spells[i] == spellToFind ) {
+                _currentSpellIndex = static_cast<int32_t>( i );
+                return true;
+            }
+        }
+
+        _currentSpellIndex = -1;
+        return false;
     }
 }

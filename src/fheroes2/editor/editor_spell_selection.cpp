@@ -166,7 +166,8 @@ namespace
 
 namespace Editor
 {
-    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled )
+    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled,
+                                   const int32_t minimumEnabledSpells, const bool isBanSpellsList )
     {
         if ( spellLevel < 1 || spellLevel > 5 ) {
             // What are you trying to achieve?!
@@ -184,7 +185,7 @@ namespace Editor
         bool isAnySpellEnabled = false;
 
         for ( const int spell : availableSpells ) {
-            const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() );
+            const bool isSelected = ( ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() ) != isBanSpellsList );
 
             spells.emplace_back( spell, isSelected );
 
@@ -263,12 +264,6 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( buttonOk.isEnabled() ) {
-                buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
-            }
-
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
@@ -276,6 +271,12 @@ namespace Editor
             if ( buttonOk.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) ) {
                 break;
             }
+
+            if ( buttonOk.isEnabled() ) {
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            }
+
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
             if ( isMultiLevelSelectionEnabled ) {
                 bool hasSpellLevelChanged = false;
@@ -310,16 +311,21 @@ namespace Editor
 
                 spellContainer.draw( display );
 
-                // Check if all spells are being disabled. If they are disable the OKAY button.
-                bool areAllSpellsDisabled = true;
+                // Check if the count of non-disabled is mote then the minimum limit. If so then disable the OKAY button.
+                bool disableOkayButton = true;
+                int32_t selectedSpellsCount = 0;
+
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
-                        areAllSpellsDisabled = false;
-                        break;
+                        ++selectedSpellsCount;
+                        if ( selectedSpellsCount >= minimumEnabledSpells ) {
+                            disableOkayButton = false;
+                            break;
+                        }
                     }
                 }
 
-                if ( areAllSpellsDisabled ) {
+                if ( disableOkayButton ) {
                     buttonOk.disable();
                     buttonOk.draw();
                 }
@@ -335,13 +341,13 @@ namespace Editor
         selectedSpells.clear();
 
         for ( const auto & [spell, isSelected] : spells ) {
-            if ( isSelected ) {
+            if ( isSelected != isBanSpellsList ) {
                 selectedSpells.emplace_back( spell.GetID() );
             }
         }
 
         // If all spells are selected, remove all spells from the selection since an empty container means the use of the default behavior of the game.
-        if ( selectedSpells.size() == spells.size() ) {
+        if ( !isBanSpellsList && selectedSpells.size() == spells.size() ) {
             selectedSpells = {};
         }
 
