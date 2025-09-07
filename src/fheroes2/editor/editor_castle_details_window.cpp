@@ -391,7 +391,7 @@ namespace
 
         // Show spells.
         std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
-        for ( int32_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
+        for ( int32_t levelIndex = 0; levelIndex < static_cast<int32_t>( spellRows.size() ); ++levelIndex ) {
             // REMEMBER! The level of spells as a parameter is in [1, 5] interval, but as an index is in [0, 4] interval.
             const int32_t spellsCount = MageGuild::getMaxSpellsCount( levelIndex + 1, hasLibraryCapability );
 
