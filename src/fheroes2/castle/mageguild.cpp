@@ -109,7 +109,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
             // Do nothing.
         }
 
-        int32_t freeSlots;
+        int32_t freeSlots{ 0 };
         bool hasAdventureSpell{ false };
     };
 
@@ -209,7 +209,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
             // Do nothing.
         }
 
-        int32_t freeSlots;
+        int32_t freeSlots{ 0 };
         bool hasAdventureSpell{ false };
     };
 

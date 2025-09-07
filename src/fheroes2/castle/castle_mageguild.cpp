@@ -136,7 +136,7 @@ void Castle::_openMageGuild( const Heroes * hero ) const
 
     std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
 
-    for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+    for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
         const int32_t spellsLevel = static_cast<int32_t>( levelIndex ) + 1;
         const int32_t count = MageGuild::getMaxSpellsCount( spellsLevel, haveLibraryCapability );
 

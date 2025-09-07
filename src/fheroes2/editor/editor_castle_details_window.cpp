@@ -391,7 +391,7 @@ namespace
 
         // Show spells.
         std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
-        for ( int32_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+        for ( int32_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
             // REMEMBER! The level of spells as a parameter is in [1, 5] interval, but as an index is in [0, 4] interval.
             const int32_t spellsCount = MageGuild::getMaxSpellsCount( levelIndex + 1, hasLibraryCapability );
 
@@ -465,7 +465,7 @@ namespace
 
             if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 // Update containers.
-                for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
+                for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
                     auto spells = spellRows[levelIndex]->getSpells();
                     for ( size_t position = 0; position < spells.size(); ++position ) {
                         const uint8_t key = static_cast<uint8_t>( levelIndex * 10 + position );
@@ -872,6 +872,13 @@ namespace Editor
 
                 if ( message.empty() ) {
                     message = _( "Set custom Castle Army." );
+                }
+            }
+            else if ( le.isMouseCursorPosInArea( buttonSpells.area() ) ) {
+                message = _( "Set spell to be available in Mage Guild." );
+
+                if ( le.isMouseRightButtonPressedInArea( buttonSpells.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Set Spells" ), message, Dialog::ZERO );
                 }
             }
             else if ( le.isMouseCursorPosInArea( buttonOkay.area() ) ) {
