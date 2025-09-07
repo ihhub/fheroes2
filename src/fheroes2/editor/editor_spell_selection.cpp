@@ -228,19 +228,19 @@ namespace Editor
 
         if ( isMultiLevelSelectionEnabled ) {
             const int32_t levelSelectionStepX{ 62 };
-            const int32_t spellSelectionButtonOffsetX{ buttonOk.area().x + buttonOk.area().width +
-                                                       ( buttonCancel.area().x -  buttonOk.area().x - buttonOk.area().width - levelSelectionStepX * 5 ) / 2 };
+            const int32_t spellSelectionButtonOffsetX{ buttonOk.area().x + buttonOk.area().width
+                                                       + ( buttonCancel.area().x - buttonOk.area().x - buttonOk.area().width - levelSelectionStepX * 5 ) / 2 };
 
             levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX, activeArea.y + 410, isEvilInterface ? ICN::BUTTON_1_EVIL : ICN::BUTTON_1_GOOD, 0, 1,
                                          1 );
             levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX, activeArea.y + 410,
                                          isEvilInterface ? ICN::BUTTON_2_EVIL : ICN::BUTTON_2_GOOD, 0, 1, 2 );
             levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 2, activeArea.y + 410,
-                                           isEvilInterface ? ICN::BUTTON_3_EVIL : ICN::BUTTON_3_GOOD, 0, 1, 3 );
+                                         isEvilInterface ? ICN::BUTTON_3_EVIL : ICN::BUTTON_3_GOOD, 0, 1, 3 );
             levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 3, activeArea.y + 410,
-                                           isEvilInterface ? ICN::BUTTON_4_EVIL : ICN::BUTTON_4_GOOD, 0, 1, 4 );
+                                         isEvilInterface ? ICN::BUTTON_4_EVIL : ICN::BUTTON_4_GOOD, 0, 1, 4 );
             levelSelection.createButton( activeArea.x + spellSelectionButtonOffsetX + levelSelectionStepX * 4, activeArea.y + 410,
-                                           isEvilInterface ? ICN::BUTTON_5_EVIL : ICN::BUTTON_5_GOOD, 0, 1, 5 );
+                                         isEvilInterface ? ICN::BUTTON_5_EVIL : ICN::BUTTON_5_GOOD, 0, 1, 5 );
 
             levelSelection.drawShadows( display );
 
@@ -278,7 +278,6 @@ namespace Editor
             }
 
             if ( isMultiLevelSelectionEnabled ) {
-
                 bool hasSpellLevelChanged = false;
                 for ( int32_t i = 0; i < 5; ++i ) {
                     if ( i + 1 == spellLevel ) {
