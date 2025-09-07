@@ -21,8 +21,11 @@
 #pragma once
 
 #include <cstdint>
+#include <utility>
+#include <vector>
 
 #include "math_base.h"
+#include "spell.h"
 #include "spell_storage.h"
 
 namespace fheroes2

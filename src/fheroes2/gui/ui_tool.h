@@ -33,8 +33,6 @@
 
 #include "image.h"
 #include "math_base.h"
-#include "spell.h"
-#include "spell_storage.h"
 #include "timing.h"
 #include "ui_base.h"
 #include "ui_text.h"

@@ -32,12 +32,10 @@
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
-#include "math_tools.h"
 #include "pal.h"
 #include "race.h"
 #include "render_processor.h"
@@ -46,7 +44,6 @@
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_dialog.h"
 
 namespace
 {

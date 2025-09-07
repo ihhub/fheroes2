@@ -21,6 +21,8 @@
 #include "ui_mage_guild.h"
 
 #include <cassert>
+#include <cstddef>
+#include <string>
 
 #include "agg_image.h"
 #include "dialog.h"
