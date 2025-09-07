@@ -330,20 +330,6 @@ namespace
 
         const bool hasLibraryCapability = ( race == Race::WZRD ) || ( race == Race::RAND );
 
-        const fheroes2::Text title( _( "Select custom spells that will appear in the Mage Guild." ), fheroes2::FontType::normalWhite() );
-        if ( hasLibraryCapability ) {
-            const int32_t titleWidth = 210;
-
-            title.drawInRoi( backgroundRoi.x + backgroundRoi.width - titleWidth - 10, backgroundRoi.y + 10, titleWidth, display, backgroundRoi );
-
-            const fheroes2::Text hint( _( "(The rightmost spells are stored in Library.)" ), fheroes2::FontType::smallWhite() );
-            hint.drawInRoi( backgroundRoi.x + backgroundRoi.width - titleWidth - 10, backgroundRoi.y + 15 + title.height( titleWidth ), titleWidth, display,
-                            backgroundRoi );
-        }
-        else {
-            title.drawInRoi( backgroundRoi.x + backgroundRoi.width - 330, backgroundRoi.y + 10, 320, display, backgroundRoi );
-        }
-
         // Guild image.
         fheroes2::renderMageGuildBuilding( race, 5, backgroundRoi.getPosition() );
 
@@ -412,16 +398,18 @@ namespace
             display.render( backgroundRoi );
         };
 
-        LocalEvent & le = LocalEvent::Get();
+        LocalEvent & eventHandler = LocalEvent::Get();
 
         bool hasChanges = false;
 
-        while ( le.HandleEvents() ) {
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+        std::string statusBarMessage;
+
+        while ( eventHandler.HandleEvents() ) {
+            if ( eventHandler.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 
-            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( eventHandler.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 // Update containers.
                 for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
                     auto spells = spellRows[levelIndex]->getSpells();
@@ -455,18 +443,40 @@ namespace
 
                 break;
             }
+            else if ( eventHandler.isMouseCursorPosInArea( buttonOkay.area() ) ) {
+                statusBarMessage = _( "Click to accept the changes made." );
 
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-            buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
+                if ( eventHandler.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Okay" ), statusBarMessage, Dialog::ZERO );
+                }
+            }
+            else if ( eventHandler.isMouseCursorPosInArea( buttonExit.area() ) ) {
+                statusBarMessage = _( "Exit this dialog, discarding the changes made." );
+
+                if ( eventHandler.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this dialog, discarding the changes made." ), Dialog::ZERO );
+                }
+            }
+
+            buttonExit.drawOnState( eventHandler.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+            buttonOkay.drawOnState( eventHandler.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
 
             for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
                 if ( spellRows[levelIndex]->queueEventProcessing( true ) ) {
-                    if ( le.MouseClickLeft() ) {
+                    if ( eventHandler.MouseClickLeft() ) {
                         spellSelectProcessing( levelIndex );
                     }
 
                     break;
                 }
+            }
+
+            if ( statusBarMessage.empty() ) {
+                statusBar.ShowMessage( _( "Set spells to appear in the Mage Guild." ) );
+            }
+            else {
+                statusBar.ShowMessage( std::move( statusBarMessage ) );
+                statusBarMessage.clear();
             }
         }
 
