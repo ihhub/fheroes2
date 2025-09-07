@@ -381,7 +381,6 @@ namespace
 
             buttonBannedSpells.setSprite( released, pressed );
 
-
             buttonBannedSpells.setPosition( backgroundRoi.x + backgroundRoi.width - 10 - released.width(), backgroundRoi.y + 10 );
             addGradientShadow( released, display, buttonBannedSpells.area().getPosition(), { -5, 5 } );
             buttonBannedSpells.draw();
