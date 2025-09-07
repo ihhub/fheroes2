@@ -23,11 +23,11 @@
 #include <cassert>
 
 #include "agg_image.h"
-#include "screen.h"
 #include "icn.h"
 #include "image.h"
 #include "pal.h"
 #include "race.h"
+#include "screen.h"
 
 namespace fheroes2
 {
