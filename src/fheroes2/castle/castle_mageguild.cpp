@@ -44,6 +44,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_mage_guild.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -96,40 +97,8 @@ void Castle::_openMageGuild( const Heroes * hero ) const
     statusText.draw( cur_pt.x + ( fheroes2::Display::DEFAULT_WIDTH - exitWidth ) / 2 - statusText.width() / 2, cur_pt.y + 464, display );
 
     const int guildLevel = GetLevelMageGuild();
-    // sprite
-    int icn = ICN::UNKNOWN;
-    switch ( _race ) {
-    case Race::KNGT:
-        icn = ICN::MAGEGLDK;
-        break;
-    case Race::BARB:
-        icn = ICN::MAGEGLDB;
-        break;
-    case Race::SORC:
-        icn = ICN::MAGEGLDS;
-        break;
-    case Race::WRLK:
-        icn = ICN::MAGEGLDW;
-        break;
-    case Race::WZRD:
-        icn = ICN::MAGEGLDZ;
-        break;
-    case Race::NECR:
-        icn = ICN::MAGEGLDN;
-        break;
-    default:
-        break;
-    }
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, guildLevel - 1 );
-    const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
 
-    fheroes2::Point inPos( 0, 0 );
-    fheroes2::Point outPos( cur_pt.x + 100 - area.x - area.width / 2, cur_pt.y + 290 - sprite.height() );
-    fheroes2::Size inSize( sprite.width(), sprite.height() );
-
-    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
-        fheroes2::Blit( sprite, inPos, display, outPos, inSize );
-    }
+    fheroes2::renderMageGuildBuilding( _race, guildLevel, cur_pt );
 
     const bool haveLibraryCapability = HaveLibraryCapability();
     const bool hasLibrary = isLibraryBuilt();
