@@ -833,7 +833,7 @@ namespace Editor
                 }
             }
             else if ( le.isMouseCursorPosInArea( buttonSpells.area() ) ) {
-                message = _( "Set spell to be available in Mage Guild." );
+                message = _( "Set spells to be available in Mage Guild." );
 
                 if ( le.isMouseRightButtonPressedInArea( buttonSpells.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Set Spells" ), message, Dialog::ZERO );
