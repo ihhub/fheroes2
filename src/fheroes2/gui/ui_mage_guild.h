@@ -20,9 +20,44 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "math_base.h"
+#include "spell_storage.h"
 
 namespace fheroes2
 {
+    class Image;
+
     void renderMageGuildBuilding( const int raceType, const int guildLevel, const Point offset );
+
+    class SpellsInOneRow final
+    {
+    public:
+        explicit SpellsInOneRow( SpellStorage spells )
+            : _spells( std::move( spells ) )
+        {
+            // Do nothing.
+        }
+
+        void setPosition( const fheroes2::Point & offset );
+
+        void redraw( fheroes2::Image & output );
+        void redrawCurrentSpell( fheroes2::Image & output );
+
+        bool queueEventProcessing( const bool isEditor );
+
+        Spell getCurrentSpell() const;
+        void setCurrentSpell( const Spell spell );
+
+        const SpellStorage & getSpells() const
+        {
+            return _spells;
+        }
+
+    private:
+        std::vector<fheroes2::Rect> _coords;
+        SpellStorage _spells;
+        int32_t _currentSpellIndex{ -1 };
+    };
 }

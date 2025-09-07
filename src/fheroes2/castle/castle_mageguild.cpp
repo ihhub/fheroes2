@@ -36,7 +36,6 @@
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
-#include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"

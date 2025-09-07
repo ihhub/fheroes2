@@ -443,7 +443,8 @@ namespace
 
                 break;
             }
-            else if ( eventHandler.isMouseCursorPosInArea( buttonOkay.area() ) ) {
+
+            if ( eventHandler.isMouseCursorPosInArea( buttonOkay.area() ) ) {
                 statusBarMessage = _( "Click to accept the changes made." );
 
                 if ( eventHandler.isMouseRightButtonPressedInArea( buttonOkay.area() ) ) {

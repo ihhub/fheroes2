@@ -255,36 +255,6 @@ namespace fheroes2
         const InterfaceType originalInterfaceType;
     };
 
-    class SpellsInOneRow
-    {
-    public:
-        explicit SpellsInOneRow( SpellStorage spells )
-            : _spells( std::move( spells ) )
-        {
-            // Do nothing.
-        }
-
-        void setPosition( const fheroes2::Point & offset );
-
-        void redraw( fheroes2::Image & output );
-        void redrawCurrentSpell( fheroes2::Image & output );
-
-        bool queueEventProcessing( const bool isEditor );
-
-        Spell getCurrentSpell() const;
-        void setCurrentSpell( const Spell spell );
-
-        const SpellStorage & getSpells() const
-        {
-            return _spells;
-        }
-
-    private:
-        std::vector<fheroes2::Rect> _coords;
-        SpellStorage _spells;
-        int32_t _currentSpellIndex{ -1 };
-    };
-
     // Fade display image colors to grayscale part of default game palette.
     void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps );
 
