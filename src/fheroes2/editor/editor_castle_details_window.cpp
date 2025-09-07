@@ -369,6 +369,24 @@ namespace
         fheroes2::Button buttonExit( statusBarOffset.x + backgroundRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
         buttonExit.draw();
 
+        fheroes2::ButtonSprite buttonBannedSpells;
+        {
+            const char * translatedText = fheroes2::getSupportedText( gettext_noop( "BANNED SPELLS" ), fheroes2::FontType::buttonReleasedWhite() );
+
+            fheroes2::Sprite released;
+            fheroes2::Sprite pressed;
+
+            getTextAdaptedSprite( released, pressed, translatedText, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            buttonBannedSpells.setSprite( released, pressed );
+
+
+            buttonBannedSpells.setPosition( backgroundRoi.x + backgroundRoi.width - 10 - released.width(), backgroundRoi.y + 10 );
+            addGradientShadow( released, display, buttonBannedSpells.area().getPosition(), { -5, 5 } );
+            buttonBannedSpells.draw();
+        }
+
         // The original status bar image is much longer.
         // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
         const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
@@ -444,6 +462,10 @@ namespace
                 break;
             }
 
+            if ( eventHandler.MouseClickLeft( buttonBannedSpells.area() ) ) {
+                // Do something.
+            }
+
             if ( eventHandler.isMouseCursorPosInArea( buttonOkay.area() ) ) {
                 statusBarMessage = _( "Click to accept the changes made." );
 
@@ -458,9 +480,17 @@ namespace
                     fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this dialog, discarding the changes made." ), Dialog::ZERO );
                 }
             }
+            else if ( eventHandler.isMouseCursorPosInArea( buttonBannedSpells.area() ) ) {
+                statusBarMessage = _( "Click to ban spells to appear in the Mage Guild." );
+
+                if ( eventHandler.isMouseRightButtonPressedInArea( buttonBannedSpells.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Banned Spells" ), statusBarMessage, Dialog::ZERO );
+                }
+            }
 
             buttonExit.drawOnState( eventHandler.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             buttonOkay.drawOnState( eventHandler.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
+            buttonBannedSpells.drawOnState( eventHandler.isMouseLeftButtonPressedAndHeldInArea( buttonBannedSpells.area() ) );
 
             for ( size_t levelIndex = 0; levelIndex < 5; ++levelIndex ) {
                 if ( spellRows[levelIndex]->queueEventProcessing( true ) ) {
