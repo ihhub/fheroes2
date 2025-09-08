@@ -234,8 +234,8 @@ namespace Editor
             const int32_t spellSelectionButtonOffsetX{ buttonOk.area().x + buttonOk.area().width + ( widthInBetweenButtons - levelSelectionStepX * 5 ) / 2 };
 
             levelSelection.createButton( spellSelectionButtonOffsetX, activeArea.y + 410, isEvilInterface ? ICN::BUTTON_1_EVIL : ICN::BUTTON_1_GOOD, 0, 1, 1 );
-            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX, activeArea.y + 410,
-                                         isEvilInterface ? ICN::BUTTON_2_EVIL : ICN::BUTTON_2_GOOD, 0, 1, 2 );
+            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX, activeArea.y + 410, isEvilInterface ? ICN::BUTTON_2_EVIL : ICN::BUTTON_2_GOOD,
+                                         0, 1, 2 );
             levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX * 2, activeArea.y + 410,
                                          isEvilInterface ? ICN::BUTTON_3_EVIL : ICN::BUTTON_3_GOOD, 0, 1, 3 );
             levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX * 3, activeArea.y + 410,
