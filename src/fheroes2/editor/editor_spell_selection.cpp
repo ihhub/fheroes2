@@ -340,17 +340,19 @@ namespace Editor
                 }
                 buttonOk.draw( display );
 
-                for ( int32_t i = 0; i < 5; ++i ) {
-                    if ( i + 1 == spellLevel ) {
-                        continue;
+                if ( isMultiLevelSelectionEnabled ) {
+                    for ( int32_t i = 0; i < 5; ++i ) {
+                        if ( i + 1 == spellLevel ) {
+                            continue;
+                        }
+                        if ( disableChangesConfirmation ) {
+                            levelSelection.button( i ).disable();
+                        }
+                        else {
+                            levelSelection.button( i ).enable();
+                        }
+                        levelSelection.button( i ).draw( display );
                     }
-                    if ( disableChangesConfirmation ) {
-                        levelSelection.button( i ).disable();
-                    }
-                    else {
-                        levelSelection.button( i ).enable();
-                    }
-                    levelSelection.button( i ).draw( display );
                 }
 
                 display.render( activeArea );
