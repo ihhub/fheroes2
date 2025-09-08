@@ -370,7 +370,7 @@ namespace Editor
         }
 
         // If all spells are selected, remove all spells from the selection since an empty container means the use of the default behavior of the game.
-        if ( !isBanSpellsList && selectedSpells.size() == spells.size() ) {
+        if ( selectedSpells.size() == spells.size() ) {
             selectedSpells = {};
         }
 
