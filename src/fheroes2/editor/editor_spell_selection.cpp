@@ -249,7 +249,7 @@ namespace Editor
 
             for ( int32_t i = 0; i < 5; ++i ) {
                 if ( i + 1 == spellLevel ) {
-                    levelSelection.button( i ).drawOnPress( display );
+                    levelSelection.button( i ).press();
                 }
 
                 levelSelection.button( i ).draw( display );
