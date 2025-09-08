@@ -29,7 +29,6 @@
 #include <cstddef>
 #include <iterator>
 #include <numeric>
-#include <set>
 #include <utility>
 
 #include "agg_image.h"
@@ -940,14 +939,20 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
+                           const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
-        for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
-            spells.push_back( randomSpellId );
+        if ( spellsLevel == -1 ) {
+            for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
+                spells.push_back( randomSpellId );
+            }
+        }
+        else {
+            spells.push_back( Spell::RANDOM + spellsLevel );
         }
     }
 

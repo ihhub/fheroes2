@@ -1649,7 +1649,7 @@ namespace Interface
                         spellLevel = 1;
                     }
 
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems )
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
@@ -1679,7 +1679,8 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), 5, newMetadata.selectedItems )
+                    int spellLevel = 5;
+                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );

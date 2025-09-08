@@ -222,14 +222,14 @@ public:
         return _race == Race::WZRD;
     }
 
-    bool isLibraryBuild() const
+    bool isLibraryBuilt() const
     {
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
     void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuilt() );
     }
 
     bool isFortificationBuilt() const
