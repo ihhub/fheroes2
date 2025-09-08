@@ -514,7 +514,7 @@ uint32_t Spell::weightForRace( const int race ) const
 
 Spell Spell::getRandomSpell( const int level )
 {
-    assert( level > 0 && level < 6 );
+    assert( level >= 1 && level <= 5 );
 
     const std::vector<int32_t> validSpells = getAllSpellIdsSuitableForSpellBook( level );
 

@@ -487,7 +487,7 @@ namespace
 
                 for ( const int32_t spellId : bannedSpells ) {
                     const int32_t level = Spell( spellId ).Level();
-                    assert( level > 0 && level < 6 );
+                    assert( level >= 1 && level <= 5 );
 
                     bannedSpellsContainer[level - 1].push_back( spellId );
                 }
@@ -530,7 +530,7 @@ namespace
                             for ( const int32_t spellId : bannedSpells ) {
                                 const Spell spell( spellId );
                                 const int32_t spellLevel = spell.Level();
-                                assert( spellLevel > 0 && spellLevel < 6 );
+                                assert( spellLevel >= 1 && spellLevel <= 5 );
 
                                 const size_t levelIndex = spellLevel - 1;
 
