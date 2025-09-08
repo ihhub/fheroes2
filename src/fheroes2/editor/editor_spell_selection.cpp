@@ -71,7 +71,9 @@ namespace
             }
 
             offset.x += ( fheroes2::Display::DEFAULT_WIDTH - static_cast<int32_t>( _spellsPerRow ) * spellItemWidth ) / 2;
-            offset.y += ( fheroes2::Display::DEFAULT_HEIGHT - 50 - spellRowOffsetY * static_cast<int32_t>( _spells.size() / _spellsPerRow ) ) / 2;
+
+            const int32_t rowCount{ static_cast<int32_t>( ( _spells.size() + _spellsPerRow - 1 ) / _spellsPerRow ) };
+            offset.y += ( fheroes2::Display::DEFAULT_HEIGHT - 50 - spellRowOffsetY * rowCount ) / 2;
 
             // Calculate all areas where we are going to render spells.
             _spellRoi.reserve( _spells.size() );
