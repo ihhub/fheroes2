@@ -443,11 +443,11 @@ namespace
         std::string statusBarMessage;
 
         while ( eventHandler.HandleEvents() ) {
-            if ( eventHandler.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( eventHandler.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 break;
             }
 
-            if ( eventHandler.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( eventHandler.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 // Update containers.
                 for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
                     auto spells = spellRows[levelIndex]->getSpells();
