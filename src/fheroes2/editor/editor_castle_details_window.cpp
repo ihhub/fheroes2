@@ -530,6 +530,8 @@ namespace
                             for ( const int32_t spellId : currentBannedSpells ) {
                                 const Spell spell( spellId );
                                 const int32_t spellLevel = spell.Level();
+
+                                // Banned spells must be always valid ones.
                                 assert( spellLevel >= 1 && spellLevel <= 5 );
 
                                 const size_t levelIndex = spellLevel - 1;
@@ -561,7 +563,7 @@ namespace
                 statusBarMessage = _( "Exit this dialog, discarding the changes made." );
 
                 if ( eventHandler.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-                    fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this dialog, discarding the changes made." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Exit" ), statusBarMessage, Dialog::ZERO );
                 }
             }
             else if ( eventHandler.isMouseCursorPosInArea( buttonBannedSpells.area() ) ) {
