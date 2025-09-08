@@ -492,8 +492,26 @@ namespace
                     bannedSpellsContainer[level - 1].push_back( spellId );
                 }
 
+                auto getMageGuildTitle = []( const int level ) {
+                    switch ( level ) {
+                    case 1:
+                        return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD1 );
+                    case 2:
+                        return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD2 );
+                    case 3:
+                        return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD3 );
+                    case 4:
+                        return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD4 );
+                    case 5:
+                        return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD5 );
+                    default:
+                        assert( 0 );
+                        return "";
+                    }
+                };
+
                 int32_t selectedLevel = banSpellsLevel;
-                while ( Editor::openSpellSelectionWindow( "Mage Guild", selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
+                while ( Editor::openSpellSelectionWindow( getMageGuildTitle( selectedLevel ), selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
                                                           MageGuild::getMaxSpellsCount( selectedLevel, hasLibraryCapability ), true ) ) {
                     if ( selectedLevel == banSpellsLevel ) {
                         // The banned spells dialog was closed with confirmation of changes.
