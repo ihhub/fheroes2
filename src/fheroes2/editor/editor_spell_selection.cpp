@@ -374,6 +374,9 @@ namespace Editor
             selectedSpells = {};
         }
 
+        // Do not restore since StandardWindow has its own restorer.
+        restorer.reset();
+
         return true;
     }
 }
