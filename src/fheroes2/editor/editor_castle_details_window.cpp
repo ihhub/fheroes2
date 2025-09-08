@@ -567,7 +567,7 @@ namespace
                 }
             }
             else if ( eventHandler.isMouseCursorPosInArea( buttonBannedSpells.area() ) ) {
-                statusBarMessage = _( "Click to ban spells to appear in the Mage Guild." );
+                statusBarMessage = _( "Click to ban spells from appearing in the Mage Guild." );
 
                 if ( eventHandler.isMouseRightButtonPressedInArea( buttonBannedSpells.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Banned Spells" ), statusBarMessage, Dialog::ZERO );
