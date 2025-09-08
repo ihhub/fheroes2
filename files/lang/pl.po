@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3626,6 +3626,10 @@ msgstr "Wybierz potwora:"
 msgid "Select Hero:"
 msgstr "Wybierz bohatera:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Wybierz potwora:"
+
 msgid "race|Random"
 msgstr "Losowo"
 
@@ -4254,6 +4258,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."

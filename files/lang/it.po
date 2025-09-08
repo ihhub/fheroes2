@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3447,6 +3447,10 @@ msgstr "Scegli mostro:"
 msgid "Select Hero:"
 msgstr "Scegli eroe:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Scegli mostro:"
+
 msgid "race|Random"
 msgstr "Casuale"
 
@@ -4065,6 +4069,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Clicca per andare alla città succ."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3624,6 +3624,10 @@ msgstr "Chọn Quái vật:"
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Chọn Quái vật:"
+
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
 
@@ -4241,6 +4245,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."

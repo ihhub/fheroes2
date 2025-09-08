@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3597,6 +3597,10 @@ msgstr "Выберите существо:"
 msgid "Select Hero:"
 msgstr "Выберите героя:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Выберите существо:"
+
 msgid "race|Random"
 msgstr "Случайно"
 
@@ -4174,6 +4178,10 @@ msgstr ""
 "Если этот флажок установлен, событие произойдёт только один раз. Если флажок "
 "не установлен, событие будет происходить каждый раз, когда один из указанных "
 "игроков пересечёт клетку события."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Нажмите сюда чтобы выбрать этот цвет."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} нельзя размещать на воде."

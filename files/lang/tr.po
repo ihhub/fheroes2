@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3465,6 +3465,10 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Büyü hedefini seç"
+
 msgid "race|Random"
 msgstr ""
 
@@ -4035,6 +4039,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "%{objects} cannot be placed on water."
 msgstr ""
