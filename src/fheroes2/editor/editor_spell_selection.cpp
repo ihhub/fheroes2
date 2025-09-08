@@ -39,6 +39,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -247,7 +248,7 @@ namespace Editor
 
             for ( int32_t i = 0; i < 5; ++i ) {
                 if ( i + 1 == spellLevel ) {
-                    levelSelection.button( spellLevel - 1 ).drawOnPress( display );
+                    levelSelection.button( i ).drawOnPress( display );
                 }
 
                 levelSelection.button( i ).draw( display );
@@ -281,7 +282,14 @@ namespace Editor
             if ( isMultiLevelSelectionEnabled ) {
                 bool hasSpellLevelChanged = false;
                 for ( int32_t i = 0; i < 5; ++i ) {
-                    if ( i + 1 == spellLevel ) {
+                    if ( le.isMouseRightButtonPressedInArea( levelSelection.button( i ).area() ) ) {
+                        std::string str = _( "Click to show only level %{level} spells." );
+                        StringReplace( str, "%{level}", i + 1 );
+                        fheroes2::showStandardTextMessage( _( "Spells level" ), std::move( str ), Dialog::ZERO );
+                        break;
+                    }
+
+                    if ( i + 1 == spellLevel || !levelSelection.button( i ).isEnabled() ) {
                         continue;
                     }
 
@@ -312,26 +320,38 @@ namespace Editor
                 spellContainer.draw( display );
 
                 // Check if the count of non-disabled is mote then the minimum limit. If so then disable the OKAY button.
-                bool disableOkayButton = true;
+                bool disableChangesConfirmation = true;
                 int32_t selectedSpellsCount = 0;
 
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
                         ++selectedSpellsCount;
                         if ( selectedSpellsCount >= minimumEnabledSpells ) {
-                            disableOkayButton = false;
+                            disableChangesConfirmation = false;
                             break;
                         }
                     }
                 }
 
-                if ( disableOkayButton ) {
+                if ( disableChangesConfirmation ) {
                     buttonOk.disable();
-                    buttonOk.draw();
                 }
                 else {
                     buttonOk.enable();
-                    buttonOk.draw();
+                }
+                buttonOk.draw( display );
+
+                for ( int32_t i = 0; i < 5; ++i ) {
+                    if ( i + 1 == spellLevel ) {
+                        continue;
+                    }
+                    if ( disableChangesConfirmation ) {
+                        levelSelection.button( i ).disable();
+                    }
+                    else {
+                        levelSelection.button( i ).enable();
+                    }
+                    levelSelection.button( i ).draw( display );
                 }
 
                 display.render( activeArea );
