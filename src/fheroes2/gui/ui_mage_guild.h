@@ -55,8 +55,9 @@ namespace fheroes2
         // Change the spell under the mouse pointer to the given one.
         void setCurrentSpell( const Spell spell );
 
-        // Replace an index of the spell being replaced. -1 if the spell doesn't exist.
-        int32_t updateSpell( const Spell spellToFind, const Spell spellToReplace );
+        // Returns `true` if spell is found. The first found spell index is made current.
+        // If spell is not found the current index is reset and method returns `false`.
+        bool checkSpellAndMakeItCurrent( const Spell spellToFind );
 
         const SpellStorage & getSpells() const
         {
