@@ -214,16 +214,16 @@ namespace fheroes2
         _spells[_currentSpellIndex] = spell;
     }
 
-    bool SpellsInOneRow::checkSpellAndMakeItCurrent( const Spell spellToFind )
+    int32_t SpellsInOneRow::updateSpell( const Spell spellToFind, const Spell spellToReplace )
     {
         for ( size_t i = 0; i < _spells.size(); ++i ) {
             if ( _spells[i] == spellToFind ) {
+                _spells[i] = spellToReplace;
                 _currentSpellIndex = static_cast<int32_t>( i );
-                return true;
+                return _currentSpellIndex;
             }
         }
 
-        _currentSpellIndex = -1;
-        return false;
+        return -1;
     }
 }

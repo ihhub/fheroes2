@@ -534,8 +534,7 @@ namespace
 
                                 const size_t levelIndex = spellLevel - 1;
 
-                                if ( spellRows[levelIndex]->checkSpellAndMakeItCurrent( spell ) ) {
-                                    spellRows[levelIndex]->setCurrentSpell( Spell::RANDOM + spellLevel );
+                                if ( spellRows[levelIndex]->updateSpell( spell, Spell::RANDOM + spellLevel ) >= 0 ) {
                                     spellRows[levelIndex]->redrawCurrentSpell( display );
                                 }
                             }
