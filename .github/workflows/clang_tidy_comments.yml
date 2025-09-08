@@ -19,7 +19,7 @@ jobs:
         shell: bash
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
@@ -43,7 +43,7 @@ jobs:
         mkdir clang-tidy-result
         unzip -j clang-tidy-result.zip -d clang-tidy-result
     - name: Set environment variables
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const assert = require("node:assert").strict;
@@ -64,7 +64,7 @@ jobs:
         ref: ${{ env.PR_HEAD_SHA }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
