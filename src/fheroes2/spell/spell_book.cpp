@@ -463,7 +463,12 @@ void SpellBook::Edit( const HeroBase & hero )
                 }
             }
             else {
-                const Spell spell = Dialog::selectSpell( Spell::NONE, false, *this );
+                std::set<int32_t> spellsToExclude;
+                for ( const Spell spell : *this ) {
+                    spellsToExclude.insert( spell.GetID() );
+                }
+
+                const Spell spell = Dialog::selectSpell( Spell::NONE, false, spellsToExclude );
                 if ( spell != Spell::NONE ) {
                     Append( spell );
                     displayedSpells = SetFilter( Filter::ALL, &hero );

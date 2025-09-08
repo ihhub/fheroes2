@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -41,7 +42,6 @@
 #include "ui_window.h"
 
 class Kingdom;
-class SpellStorage;
 
 namespace Dialog
 {
@@ -137,7 +137,7 @@ namespace Dialog
 
     Artifact selectArtifact( const int artifactId, const bool isForVictoryConditions );
 
-    Spell selectSpell( const int spellId, const bool includeRandomSpells, const SpellStorage & excludeSpellsList = {}, const int32_t spellsLevel = -1 );
+    Spell selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList = {}, const int32_t spellsLevel = -1 );
 
     int32_t selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description = {},
                                  int32_t castlePositionIndex = -1 );

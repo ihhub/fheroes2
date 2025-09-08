@@ -29,7 +29,6 @@
 #include <cstddef>
 #include <iterator>
 #include <numeric>
-#include <set>
 #include <utility>
 
 #include "agg_image.h"
@@ -54,7 +53,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
@@ -941,14 +939,10 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const SpellStorage & excludeSpellsList /* = {} */, const int32_t spellsLevel /* = -1 */ )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
+                           const int32_t spellsLevel /* = -1 */ )
 {
-    std::set<int32_t> spellsToExclude;
-    for ( const Spell spell : excludeSpellsList ) {
-        spellsToExclude.insert( spell.GetID() );
-    }
-
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, spellsToExclude );
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.

@@ -407,11 +407,20 @@ namespace
         auto spellSelectProcessing = [&spellRows, &backgroundRoi, &bannedSpells, &display]( const size_t levelIndex ) {
             // Exclude the already selected spells and the banned spells.
             const int32_t spellLevel = static_cast<int32_t>( levelIndex ) + 1;
-            SpellStorage spellsToExclude( spellRows[levelIndex]->getSpells() );
+
+            const int32_t currentSpellId = spellRows[levelIndex]->getCurrentSpell().GetID();
+
+            std::set<int32_t> spellsToExclude;
+            for ( const Spell spell : spellRows[levelIndex]->getSpells() ) {
+                const int32_t spellId = spell.GetID();
+                // Do not exclude currently selected spell from the list.
+                if ( spellId != currentSpellId || ( spellId >= Spell::RANDOM && spellId <= Spell ::RANDOM5 ) ) {
+                    spellsToExclude.insert( spellId );
+                }
+            }
             for ( const int32_t spellId : bannedSpells ) {
-                const Spell spell( spellId );
-                if ( spell.Level() == spellLevel ) {
-                    spellsToExclude.push_back( spell );
+                if ( Spell( spellId ).Level() == spellLevel ) {
+                    spellsToExclude.insert( spellId );
                 }
             }
 
