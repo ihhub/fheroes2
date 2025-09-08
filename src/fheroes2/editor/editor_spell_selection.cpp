@@ -170,7 +170,7 @@ namespace
 namespace Editor
 {
     bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled,
-                                   const int32_t minimumEnabledSpells, const bool isBanSpellsList )
+                                   const int32_t minimumEnabledSpells, const bool pickDisabledSpells )
     {
         if ( spellLevel < 1 || spellLevel > 5 ) {
             // What are you trying to achieve?!
@@ -188,7 +188,7 @@ namespace Editor
         bool isAnySpellEnabled = false;
 
         for ( const int spell : availableSpells ) {
-            const bool isSelected = ( ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() ) != isBanSpellsList );
+            const bool isSelected = ( ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() ) != pickDisabledSpells );
 
             spells.emplace_back( spell, isSelected );
 
@@ -364,7 +364,7 @@ namespace Editor
         selectedSpells.clear();
 
         for ( const auto & [spell, isSelected] : spells ) {
-            if ( isSelected != isBanSpellsList ) {
+            if ( isSelected != pickDisabledSpells ) {
                 selectedSpells.emplace_back( spell.GetID() );
             }
         }

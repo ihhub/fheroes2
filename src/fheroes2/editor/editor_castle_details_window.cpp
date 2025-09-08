@@ -485,7 +485,7 @@ namespace
             if ( eventHandler.MouseClickLeft( buttonBannedSpells.area() ) ) {
                 std::array<std::vector<int32_t>, 5> bannedSpellsContainer;
 
-                for ( const int32_t spellId : bannedSpells ) {
+                for ( const int32_t spellId : currentBannedSpells ) {
                     const int32_t level = Spell( spellId ).Level();
                     assert( level >= 1 && level <= 5 );
 
