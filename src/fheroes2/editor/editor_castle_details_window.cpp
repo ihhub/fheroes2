@@ -312,11 +312,6 @@ namespace
 
     bool mageGuildSpellsDialog( std::map<uint8_t, int32_t> & mustHaveSpells, std::vector<int32_t> & bannedSpells, const int race, const fheroes2::Rect & backgroundRoi )
     {
-        // TODO: Add buttons to ban spells for all spell levels like it is done for Shrines.
-        // The already selected `mustHaveSpells` should not be banned and marked as used.
-        // The banned spells should not be available to select for the `mustHaveSpells`.
-        (void)bannedSpells;
-
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
