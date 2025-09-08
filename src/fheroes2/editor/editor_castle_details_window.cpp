@@ -534,11 +534,11 @@ namespace
                                 // Banned spells must be always valid ones.
                                 assert( spellLevel >= 1 && spellLevel <= 5 );
 
-                                const size_t levelIndex = spellLevel - 1;
+                                auto & spellRow = spellRows[spellLevel - 1];
 
-                                if ( spellRows[levelIndex]->checkSpellAndMakeItCurrent( spell ) ) {
-                                    spellRows[levelIndex]->setCurrentSpell( Spell::RANDOM + spellLevel );
-                                    spellRows[levelIndex]->redrawCurrentSpell( display );
+                                if ( spellRow->checkSpellAndMakeItCurrent( spell ) ) {
+                                    spellRow->setCurrentSpell( Spell::RANDOM + spellLevel );
+                                    spellRow->redrawCurrentSpell( display );
                                 }
                             }
 
