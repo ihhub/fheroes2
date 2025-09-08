@@ -194,7 +194,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
         _library.resize( 5, Spell::NONE );
     }
 
-    std::set<Spell> spellsInUse;
+    std::set<int32_t> spellsInUse;
 
     // Skip "banned" spells during random spells initialization.
     for ( auto spellId : bannedSpells ) {
@@ -260,7 +260,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
         }
 
         // Check for possible duplicates
-        if ( const auto [dummy, inserted] = spellsInUse.insert( spell ); !inserted ) {
+        if ( const auto [dummy, inserted] = spellsInUse.insert( spell.GetID() ); !inserted ) {
             return;
         }
 
@@ -279,9 +279,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
 
         --freeSlots;
 
-        if ( spell.isAdventure() ) {
-            assert( !hasAdventureSpell );
-
+        if ( !hasAdventureSpell && spell.isAdventure() ) {
             hasAdventureSpell = true;
         }
     };
@@ -301,7 +299,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
     for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
         const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
 
-        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value() );
+        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value(), spellsInUse );
 
         while ( freeSlots > 0 ) {
             assert( !allSpellsOfLevel.empty() );
@@ -309,13 +307,16 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
             const uint32_t spellIdx = Rand::Get( 0, fheroes2::checkedCast<uint32_t>( allSpellsOfLevel.size() - 1 ).value() );
             const Spell spell( allSpellsOfLevel[spellIdx] );
 
-            // Some spells may occur less frequently in Mage Guilds than others, depending on race
-            if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
+            // Do not skip spells if we don't have enough spells to fill all the slots.
+            const bool moreSpellsThanSlots = static_cast<int32_t>( allSpellsOfLevel.size() ) > freeSlots;
+
+            // Some spells may occur less frequently in Mage Guilds than others, depending on race.
+            if ( moreSpellsThanSlots && Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
                 continue;
             }
 
             // There can only be one adventure spell at each level of the Mage Guild
-            if ( !hasAdventureSpell || !spell.isAdventure() ) {
+            if ( !moreSpellsThanSlots || !hasAdventureSpell || !spell.isAdventure() ) {
                 addSpell( spell );
             }
 

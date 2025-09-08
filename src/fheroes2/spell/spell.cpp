@@ -523,7 +523,7 @@ Spell Spell::getRandomSpell( const int level )
     return validSpells.empty() ? Spell::NONE : Spell( Rand::Get( validSpells ) );
 }
 
-std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )
+std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */, const std::set<int32_t> & spellsToExclude /* = {} */ )
 {
     if ( spellLevel < -1 || spellLevel == 0 || spellLevel > 5 ) {
         // Have you add a new spell level? Check your logic!
@@ -540,6 +540,10 @@ std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel
 
     for ( int32_t spellId = NONE + 1; spellId < SPELL_COUNT; ++spellId ) {
         if ( const int level = Spell( spellId ).Level(); ( spellLevel != -1 && level != spellLevel ) || level < 1 ) {
+            continue;
+        }
+
+        if ( spellsToExclude.count( spellId ) != 0 ) {
             continue;
         }
 

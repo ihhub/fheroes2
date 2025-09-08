@@ -943,15 +943,12 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
 Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const SpellStorage & excludeSpellsList /* = {} */, const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel );
-
-    if ( !excludeSpellsList.empty() ) {
-        spells.erase( std::remove_if( spells.begin(), spells.end(),
-                                      [&excludeSpellsList, &spellId]( const Spell spell ) {
-                                          return spellId != spell.GetID() && excludeSpellsList.isPresentSpell( spell );
-                                      } ),
-                      spells.end() );
+    std::set<int32_t> spellsToExclude;
+    for ( const Spell spell : excludeSpellsList ) {
+        spellsToExclude.insert( spell.GetID() );
     }
+
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, spellsToExclude );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
