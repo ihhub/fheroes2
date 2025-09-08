@@ -72,6 +72,10 @@
 
 namespace
 {
+    // The status bar has decorations on both sides.
+    // It is important not to render text over them.
+    constexpr int32_t statusBarDecorationsWidth{ 16 };
+
     class BuildingData
     {
     public:
@@ -310,25 +314,25 @@ namespace
         return isTown ? _( "Random Town Name" ) : _( "Random Castle Name" );
     }
 
-    bool mageGuildSpellsDialog( std::map<uint8_t, int32_t> & mustHaveSpells, std::vector<int32_t> & bannedSpells, const int race, const fheroes2::Rect & backgroundRoi )
+    bool mageGuildSpellsDialog( std::map<uint8_t, int32_t> & mustHaveSpells, std::vector<int32_t> & bannedSpells, const int race, const fheroes2::Rect & dialogRoi )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::ImageRestorer backgroundRestorer( display, backgroundRoi.x, backgroundRoi.y, backgroundRoi.width, backgroundRoi.height );
+        fheroes2::ImageRestorer backgroundRestorer( display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
         const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
         const int32_t statusBarHeight = statusBarSprite.height();
 
-        fheroes2::Copy( backgroundSprite, 0, 0, display, backgroundRoi.x, backgroundRoi.y, backgroundRoi.width, backgroundRoi.height - statusBarHeight );
+        fheroes2::Copy( backgroundSprite, 0, 0, display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height - statusBarHeight );
 
         const bool hasLibraryCapability = ( race == Race::WZRD ) || ( race == Race::RAND );
 
         // Guild image.
-        fheroes2::renderMageGuildBuilding( race, 5, backgroundRoi.getPosition() );
+        fheroes2::renderMageGuildBuilding( race, 5, dialogRoi.getPosition() );
 
         // Show spells.
         std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
@@ -351,19 +355,19 @@ namespace
 
             spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-            spellRows[levelIndex]->setPosition( { backgroundRoi.x + 250, backgroundRoi.y + 365 - 90 * levelIndex } );
+            spellRows[levelIndex]->setPosition( { dialogRoi.x + 250, dialogRoi.y + 365 - 90 * levelIndex } );
             spellRows[levelIndex]->redraw( display );
         }
 
         // OKAY button.
-        const fheroes2::Point statusBarOffset{ backgroundRoi.x, backgroundRoi.y + backgroundRoi.height - statusBarHeight };
+        const fheroes2::Point statusBarOffset{ dialogRoi.x, dialogRoi.y + dialogRoi.height - statusBarHeight };
 
         fheroes2::Button buttonOkay( statusBarOffset.x, statusBarOffset.y, ICN::BUTTON_OKAY_TOWN, 0, 1 );
         buttonOkay.draw();
 
         // EXIT button.
         const int32_t buttonExitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-        fheroes2::Button buttonExit( statusBarOffset.x + backgroundRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+        fheroes2::Button buttonExit( statusBarOffset.x + dialogRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
         buttonExit.draw();
 
         fheroes2::ButtonSprite buttonBannedSpells;
@@ -378,7 +382,7 @@ namespace
 
             buttonBannedSpells.setSprite( released, pressed );
 
-            buttonBannedSpells.setPosition( backgroundRoi.x + backgroundRoi.width - 10 - released.width(), backgroundRoi.y + 10 );
+            buttonBannedSpells.setPosition( dialogRoi.x + dialogRoi.width - 10 - released.width(), dialogRoi.y + 10 );
             addGradientShadow( released, display, buttonBannedSpells.area().getPosition(), { -5, 5 } );
             buttonBannedSpells.draw();
         }
@@ -386,21 +390,20 @@ namespace
         // The original status bar image is much longer.
         // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
         const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
-        const int32_t statusBarWidth = backgroundRoi.width - buttonExitWidth - buttonOkayWidth;
+        const int32_t statusBarWidth = dialogRoi.width - buttonExitWidth - buttonOkayWidth;
         fheroes2::Copy( statusBarSprite, 0, 0, display, statusBarOffset.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth / 2, statusBarHeight );
         const int32_t statusBarSecondPart = statusBarWidth - statusBarWidth / 2;
         fheroes2::Copy( statusBarSprite, statusBarSprite.width() - statusBarSecondPart, 0, display, statusBarOffset.x + buttonOkayWidth + statusBarWidth / 2,
                         statusBarOffset.y, statusBarSecondPart, statusBarHeight );
 
         StatusBar statusBar;
-        // The status bar has decorations on both sides.
-        // It is important not to render text over them.
-        constexpr int32_t decorationsWidth{ 16 };
-        statusBar.setRoi( { backgroundRoi.x + buttonOkayWidth + decorationsWidth, statusBarOffset.y, statusBarWidth - 2 * decorationsWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth + statusBarDecorationsWidth, statusBarOffset.y, statusBarWidth - 2 * statusBarDecorationsWidth, 0 } );
 
-        display.render( backgroundRoi );
+        display.render( dialogRoi );
 
-        auto spellSelectProcessing = [&spellRows, &backgroundRoi, &bannedSpells, &display]( const size_t levelIndex ) {
+        std::vector<int32_t> currentBannedSpells = bannedSpells;
+
+        auto spellSelectProcessing = [&spellRows, &dialogRoi, &currentBannedSpells, &display]( const size_t levelIndex ) {
             // Exclude the already selected spells and the banned spells.
             const int32_t spellLevel = static_cast<int32_t>( levelIndex ) + 1;
 
@@ -414,7 +417,7 @@ namespace
                     spellsToExclude.insert( spellId );
                 }
             }
-            for ( const int32_t spellId : bannedSpells ) {
+            for ( const int32_t spellId : currentBannedSpells ) {
                 if ( Spell( spellId ).Level() == spellLevel ) {
                     spellsToExclude.insert( spellId );
                 }
@@ -427,13 +430,13 @@ namespace
                 spellRows[levelIndex]->redrawCurrentSpell( display );
             }
 
-            display.render( backgroundRoi );
+            display.render( dialogRoi );
         };
 
         LocalEvent & eventHandler = LocalEvent::Get();
 
         bool hasChanges = false;
-        int32_t banSpellsLevel = 1;
+        int32_t currentBannedSpellsLevel = 1;
 
         std::string statusBarMessage;
 
@@ -443,14 +446,14 @@ namespace
             }
 
             if ( eventHandler.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-                // Update containers.
+                // Update must have spells.
                 for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
                     auto spells = spellRows[levelIndex]->getSpells();
                     for ( size_t position = 0; position < spells.size(); ++position ) {
                         const uint8_t key = static_cast<uint8_t>( levelIndex * 10 + position );
                         auto iter = mustHaveSpells.find( key );
 
-                        // Random spells return 0 as their level as well as the spells that should not appear in the Spell Book.
+                        // Random and invalid spells have level 0.
                         if ( spells[position].Level() != static_cast<int32_t>( levelIndex ) + 1 ) {
                             if ( iter != mustHaveSpells.end() ) {
                                 mustHaveSpells.erase( iter );
@@ -473,6 +476,8 @@ namespace
                         }
                     }
                 }
+
+                bannedSpells = std::move( currentBannedSpells );
 
                 break;
             }
@@ -505,10 +510,10 @@ namespace
                     }
                 };
 
-                int32_t selectedLevel = banSpellsLevel;
+                int32_t selectedLevel = currentBannedSpellsLevel;
                 while ( Editor::openSpellSelectionWindow( getMageGuildTitle( selectedLevel ), selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
                                                           MageGuild::getMaxSpellsCount( selectedLevel, hasLibraryCapability ), true ) ) {
-                    if ( selectedLevel == banSpellsLevel ) {
+                    if ( selectedLevel == currentBannedSpellsLevel ) {
                         // The banned spells dialog was closed with confirmation of changes.
                         std::vector<int32_t> result( std::move( bannedSpellsContainer[0] ) );
                         result.reserve( result.size() + bannedSpellsContainer[1].size() + bannedSpellsContainer[2].size() + bannedSpellsContainer[3].size()
@@ -518,11 +523,11 @@ namespace
                         result.insert( result.end(), bannedSpellsContainer[3].begin(), bannedSpellsContainer[3].end() );
                         result.insert( result.end(), bannedSpellsContainer[4].begin(), bannedSpellsContainer[4].end() );
 
-                        if ( result != bannedSpells ) {
-                            bannedSpells = std::move( result );
+                        if ( result != currentBannedSpells ) {
+                            currentBannedSpells = std::move( result );
 
                             // Remove the banned spells from the spell Rows.
-                            for ( const int32_t spellId : bannedSpells ) {
+                            for ( const int32_t spellId : currentBannedSpells ) {
                                 const Spell spell( spellId );
                                 const int32_t spellLevel = spell.Level();
                                 assert( spellLevel >= 1 && spellLevel <= 5 );
@@ -541,7 +546,7 @@ namespace
                         break;
                     }
 
-                    banSpellsLevel = selectedLevel;
+                    currentBannedSpellsLevel = selectedLevel;
                 }
             }
 
@@ -591,7 +596,7 @@ namespace
         }
 
         backgroundRestorer.restore();
-        display.render( backgroundRoi );
+        display.render( dialogRoi );
 
         return hasChanges;
     }
@@ -787,10 +792,7 @@ namespace Editor
                         statusBarOffset.y, statusBarSecondPart, statusBarHeight );
 
         StatusBar statusBar;
-        // The status bar has decorations on both sides.
-        // It is important not to render text over them.
-        constexpr int32_t decorationsWidth{ 16 };
-        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth + decorationsWidth, statusBarOffset.y, statusBarWidth - 2 * decorationsWidth, 0 } );
+        statusBar.setRoi( { dialogRoi.x + buttonOkayWidth + statusBarDecorationsWidth, statusBarOffset.y, statusBarWidth - 2 * statusBarDecorationsWidth, 0 } );
 
         display.render( dialogWithShadowRoi );
 
