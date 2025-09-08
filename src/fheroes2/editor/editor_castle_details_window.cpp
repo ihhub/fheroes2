@@ -589,7 +589,7 @@ namespace
             }
 
             if ( statusBarMessage.empty() ) {
-                statusBar.ShowMessage( _( "Set spells to appear in the Mage Guild." ) );
+                statusBar.ShowMessage( _( "Configure spells that will appear in the Mage Guild." ) );
             }
             else {
                 statusBar.ShowMessage( std::move( statusBarMessage ) );
