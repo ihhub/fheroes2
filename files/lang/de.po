@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3591,6 +3591,10 @@ msgstr "Monster auswählen:"
 msgid "Select Hero:"
 msgstr "Held auswählen:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Monster auswählen:"
+
 msgid "race|Random"
 msgstr "Zufällig"
 
@@ -4185,6 +4189,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klickt, um diese Farbe zu wählen."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} kann/können nicht auf Wasser platziert werden."

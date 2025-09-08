@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3553,6 +3553,10 @@ msgstr "Vybrat jednotku:"
 msgid "Select Hero:"
 msgstr "Vybrat hrdinu:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Vybrat jednotku:"
+
 msgid "race|Random"
 msgstr "Náhodný"
 
@@ -4131,6 +4135,10 @@ msgstr ""
 "Pokud je toto zaškrtávací políčko zaškrtnuto, událost se spustí pouze "
 "jednou. Pokud není zaškrtnuto, událost se spustí pokaždé, když některý z "
 "uvedených hráčů překročí políčko s událostí."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Kliknout pro výběr barvy."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} nelze umístit na vodu."

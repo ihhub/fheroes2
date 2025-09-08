@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3569,6 +3569,10 @@ msgstr "Lény kiválasztása:"
 msgid "Select Hero:"
 msgstr "Hős kiválasztása:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Lény kiválasztása:"
+
 msgid "race|Random"
 msgstr "Véletlen"
 
@@ -4143,6 +4147,10 @@ msgstr ""
 "Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény csak egyszer "
 "váltódik ki. Ha nincs bejelölve, akkor mindahányszor a megadott játékos "
 "rálép területre."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "Vízen nem helyezhetők el %{objects}."

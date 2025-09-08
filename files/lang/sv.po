@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-08-01 14:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3569,6 +3569,10 @@ msgstr "Välj Varelse:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Välj Varelse:"
+
 msgid "race|Random"
 msgstr "Slumpad"
 
@@ -4147,6 +4151,10 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras en gång. Om "
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klicka här för att välja denna färgen."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."

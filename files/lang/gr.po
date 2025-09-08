@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3209,6 +3209,9 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "Select Monsters:"
+msgstr ""
+
 msgid "race|Random"
 msgstr ""
 
@@ -3755,6 +3758,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "Click to make selection."
 msgstr ""
 
 msgid "%{objects} cannot be placed on water."

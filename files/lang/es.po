@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-02 12:53+0000\n"
+"POT-Creation-Date: 2025-09-08 11:35+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3593,6 +3593,10 @@ msgstr "Mejor monstruo:"
 msgid "Select Hero:"
 msgstr "Mejor héroe:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Mejor monstruo:"
+
 msgid "race|Random"
 msgstr "Aleatorio"
 
@@ -4228,6 +4232,10 @@ msgstr ""
 "Si esta casilla está marcada, el evento se activará solo una vez. Si no está "
 "marcada, el evento se activará cada vez que uno de los jugadores "
 "especificados cruce la casilla del evento."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
