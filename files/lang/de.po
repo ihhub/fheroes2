@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -34,6 +34,21 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "ALLE"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "ENDE"
@@ -3985,6 +4000,30 @@ msgstr "Zufälliges Burg"
 msgid "Random Town Name"
 msgstr "Zufällige Stadt"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Zufällig"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Wolkenburg"
@@ -4044,13 +4083,12 @@ msgstr "Entlassen der Armee."
 msgid "Set custom Castle Army."
 msgstr "Burg"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Klicken um die nächste Stadt anzuzeigen."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klicken um die nächste Stadt anzuzeigen."
+msgid "Set Spells"
+msgstr "Zauberspruch auswählen:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -5009,6 +5047,13 @@ msgstr "Karte speichern"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Die Spruchrolle"
 
 msgid "Riddle:"
 msgstr ""

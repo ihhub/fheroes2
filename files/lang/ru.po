@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-07-19 09:33+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -38,6 +38,21 @@ msgstr "О-Б"
 
 msgid "ALL"
 msgstr "ВСЕ"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "ВЫЙТИ"
@@ -3980,6 +3995,28 @@ msgstr "Случайное название замка"
 msgid "Random Town Name"
 msgstr "Случайное название города"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Нажмите, чтобы применить внесённые изменения."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Выход из данного диалогового окна с отменой внесённых изменений."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Случайное заклинание"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Разрешить замок"
 
@@ -4028,11 +4065,12 @@ msgstr "Сбросить состав армии."
 msgid "Set custom Castle Army."
 msgstr "Задать армию замка."
 
-msgid "Click to accept the changes made."
-msgstr "Нажмите, чтобы применить внесённые изменения."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Выход из данного диалогового окна с отменой внесённых изменений."
+#, fuzzy
+msgid "Set Spells"
+msgstr "Выберите заклинание:"
 
 msgid "Castle Settings"
 msgstr "Настройки замка"
@@ -4929,6 +4967,13 @@ msgstr "Сохранить карту:"
 
 msgid "Click to save the current map."
 msgstr "Нажмите, чтобы сохранить текущую карту."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Свиток Заклинания"
 
 msgid "Riddle:"
 msgstr "Загадка:"

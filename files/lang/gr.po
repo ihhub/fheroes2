@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -33,6 +33,21 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
+msgstr ""
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
 msgstr ""
 
 msgid "EXIT"
@@ -3570,6 +3585,27 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr ""
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr ""
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+msgid "Banned Spells"
+msgstr ""
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3618,10 +3654,10 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr ""
 
-msgid "Click to accept the changes made."
+msgid "Set spells to appear in the Mage Guild."
 msgstr ""
 
-msgid "Exit this dialog, discarding the changes made."
+msgid "Set Spells"
 msgstr ""
 
 msgid "Castle Settings"
@@ -4437,6 +4473,12 @@ msgid "Save Map:"
 msgstr ""
 
 msgid "Click to save the current map."
+msgstr ""
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+msgid "Spells level"
 msgstr ""
 
 msgid "Riddle:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -35,6 +35,21 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "VŠE"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "PRYČ"
@@ -3933,6 +3948,29 @@ msgstr "Náhodný název hradu"
 msgid "Random Town Name"
 msgstr "Náhodný název města"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Náhodné kouzlo"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Povolit stavbu hradu"
 
@@ -3985,12 +4023,12 @@ msgstr "Propustit tuto armádu."
 msgid "Set custom Castle Army."
 msgstr "Armáda hradu"
 
-msgid "Click to accept the changes made."
-msgstr "Klikněte pro potvrzení provedených změn."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klikněte pro potvrzení provedených změn."
+msgid "Set Spells"
+msgstr "Seslat kouzlo:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4878,6 +4916,13 @@ msgstr "Uložit mapu:"
 
 msgid "Click to save the current map."
 msgstr "Klikni pro uložení aktuální mapy."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Kouzelný svitek"
 
 msgid "Riddle:"
 msgstr "Hádanka:"
