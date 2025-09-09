@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -37,6 +37,21 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "ALT"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "UD"
@@ -4017,6 +4032,29 @@ msgstr "Tilfældigt borgnavn"
 msgid "Random Town Name"
 msgstr "Tilfældigt bynavn"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Tilfældig besværgelse"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
@@ -4073,12 +4111,12 @@ msgstr "Bortvis denne hær."
 msgid "Set custom Castle Army."
 msgstr "Borghær"
 
-msgid "Click to accept the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
+msgid "Set Spells"
+msgstr "Vælg magi:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4971,6 +5009,13 @@ msgstr "Gem kort:"
 
 msgid "Click to save the current map."
 msgstr "Klik for at gemme det aktuelle kort."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Trolddomsrulle"
 
 msgid "Riddle:"
 msgstr "Gåde:"

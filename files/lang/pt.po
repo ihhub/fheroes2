@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -35,6 +35,21 @@ msgstr "GG"
 
 msgid "ALL"
 msgstr "TUDO"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "SAIR"
@@ -3978,6 +3993,28 @@ msgstr "Nome Aleat. (Castelo)"
 msgid "Random Town Name"
 msgstr "Nome Aleat. (Cidade)"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Clique para aceitar as alterações feitas."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Sair desta caixa de diálogo, descartando as alterações feitas."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Feitiço Aleatório"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Permitir construção do Castelo"
 
@@ -4028,11 +4065,12 @@ msgstr "Redefinir o exército."
 msgid "Set custom Castle Army."
 msgstr "Definir Exército do Castelo personalizado."
 
-msgid "Click to accept the changes made."
-msgstr "Clique para aceitar as alterações feitas."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Sair desta caixa de diálogo, descartando as alterações feitas."
+#, fuzzy
+msgid "Set Spells"
+msgstr "Selecionar Feitiço:"
 
 msgid "Castle Settings"
 msgstr "Configurações do Castelo"
@@ -4929,6 +4967,13 @@ msgstr "Salvar Mapa:"
 
 msgid "Click to save the current map."
 msgstr "Clique para salvar o mapa atual."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Pergaminho Mágico"
 
 msgid "Riddle:"
 msgstr "Enigma:"

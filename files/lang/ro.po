@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -35,6 +35,21 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "TOT"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "EXIT"
@@ -3809,6 +3824,30 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Vrajă aleatorie"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3861,13 +3900,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr ""
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+msgid "Set Spells"
+msgstr "Aruncă vraja"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4737,6 +4775,13 @@ msgstr "Salvează harta"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Pergament magic"
 
 msgid "Riddle:"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -34,6 +34,21 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
+msgstr ""
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
 msgstr ""
 
 msgid "EXIT"
@@ -3856,6 +3871,30 @@ msgstr "Castello casuale"
 msgid "Random Town Name"
 msgstr "Città casuale"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Clicca per andare alla città succ."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Casuale"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Castello Celeste"
@@ -3912,13 +3951,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr "Castello"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Clicca per andare alla città succ."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Clicca per andare alla città succ."
+msgid "Set Spells"
+msgstr "Scegli magia:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4864,6 +4902,13 @@ msgstr "Salva Partita"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Clicca per salvare la partita in corso."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "magia fallita!"
 
 msgid "Riddle:"
 msgstr ""
