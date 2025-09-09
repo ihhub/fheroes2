@@ -1532,8 +1532,8 @@ namespace Interface
 
                     std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
-                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters,
-                                                                                     std::string( _( "Select Monsters:" ) ), Settings::Get().isEvilInterfaceEnabled() );
+                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
+                                                                                     Settings::Get().isEvilInterfaceEnabled() );
                     }
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
