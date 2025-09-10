@@ -751,8 +751,8 @@ namespace fheroes2
         const fheroes2::FontCharHandler charHandler( _fontType );
 
         auto countCharacters = []( size_t count, TextLineInfo & textLineInfo ) { return count += textLineInfo.characterCount; };
-        const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], 0, countCharacters );
-        const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], 0, countCharacters );
+        const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], 0UL, countCharacters );
+        const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], 0UL, countCharacters );
 
         // TODO update those line once we support different alignment in multi-line text.
         const int32_t currentXPos = ( ( maxWidth - tempLineInfos[currentLineNumber].lineWidth ) / 2 )
