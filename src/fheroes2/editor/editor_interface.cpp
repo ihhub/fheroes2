@@ -1532,7 +1532,7 @@ namespace Interface
 
                     std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
-                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, std::string( "Select Monsters:" ),
+                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
                                                                                      Settings::Get().isEvilInterfaceEnabled() );
                     }
 
