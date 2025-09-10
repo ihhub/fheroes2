@@ -256,68 +256,6 @@ namespace fheroes2
         Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
     }
 
-    size_t TextInputField::getCursorPositionInAdjacentLine( size_t currentPos, bool isLineAbove )
-    {
-        // Find indexes for current & target line delimiters.
-        size_t lineStart = _text.text().rfind( '\n', currentPos > 0 ? currentPos - 1 : 0 );
-        lineStart = ( lineStart == std::string::npos ) ? 0 : lineStart + 1;
-
-        size_t targetLineStart;
-        size_t targetLineEnd;
-
-        if ( isLineAbove ) {
-            if ( lineStart == 0 )
-                return currentPos;
-
-            const size_t prevLineEnd = lineStart - 1;
-            targetLineStart = _text.text().rfind( '\n', prevLineEnd > 0 ? prevLineEnd - 1 : 0 );
-            targetLineStart = ( targetLineStart == std::string::npos ) ? 0 : targetLineStart + 1;
-            targetLineEnd = prevLineEnd;
-        }
-        else {
-            size_t lineEnd = _text.text().find( '\n', lineStart );
-            lineEnd = ( lineEnd == std::string::npos ) ? _text.text().size() : lineEnd;
-
-            if ( lineEnd >= _text.text().size() )
-                return currentPos;
-
-            targetLineStart = lineEnd + 1;
-            targetLineEnd = _text.text().find( '\n', targetLineStart );
-            targetLineEnd = ( targetLineEnd == std::string::npos ) ? _text.text().size() : targetLineEnd;
-        }
-
-        const fheroes2::FontCharHandler charHandler( _text.fontType() );
-
-        // Compute the positions on the screen in pixels.
-        size_t currentLineEnd = _text.text().find( '\n', lineStart );
-        currentLineEnd = ( currentLineEnd == std::string::npos ) ? _text.text().size() : currentLineEnd;
-        const int currentLineWidth = charHandler.getWidth( std::string_view( &_text.text()[lineStart], currentLineEnd - lineStart ) );
-        const int currentLineOffset = ( _textInputArea.width - currentLineWidth ) / 2;
-
-        const int targetLineWidth = charHandler.getWidth( std::string_view( &_text.text()[targetLineStart], targetLineEnd - targetLineStart ) );
-        const int targetLineOffset = ( _textInputArea.width - targetLineWidth ) / 2;
-
-        const int cursorPixelOffset = charHandler.getWidth( std::string_view( &_text.text()[lineStart], currentPos - lineStart ) );
-        const int cursorAbsoluteX = currentLineOffset + cursorPixelOffset;
-
-        // Find the position that matches the best the current offset.
-        int bestDiff = std::numeric_limits<int>::max();
-        size_t bestPos = targetLineStart;
-        int pixelOffset = 0;
-
-        for ( size_t i = targetLineStart; i < targetLineEnd; ++i ) {
-            const int charAbsoluteX = targetLineOffset + pixelOffset;
-            const int diff = std::abs( charAbsoluteX - cursorAbsoluteX );
-            if ( diff < bestDiff ) {
-                bestDiff = diff;
-                bestPos = i;
-            }
-            pixelOffset += charHandler.getWidth( static_cast<uint8_t>( _text.text()[i] ) );
-        }
-
-        return cursorAbsoluteX > targetLineOffset + targetLineWidth ? targetLineEnd : bestPos;
-    }
-
     SystemInfoRenderer::SystemInfoRenderer()
         : _startTime( std::chrono::steady_clock::now() )
         , _text( fheroes2::Display::instance() )

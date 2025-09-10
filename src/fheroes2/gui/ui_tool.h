@@ -172,7 +172,10 @@ namespace fheroes2
             return _text.fontType();
         }
 
-        size_t getCursorPositionInAdjacentLine( size_t currentPos, bool isLineAbove );
+        size_t getCursorPositionInAdjacentLine( size_t currentPos, bool isLineAbove )
+        {
+            return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, isLineAbove );
+        }
 
     private:
         Image & _output;
