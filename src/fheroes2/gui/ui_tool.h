@@ -167,11 +167,6 @@ namespace fheroes2
             return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
-        FontType fontType() const
-        {
-            return _text.fontType();
-        }
-
         size_t getCursorPositionInAdjacentLine( size_t currentPos, bool isLineAbove )
         {
             return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, isLineAbove );

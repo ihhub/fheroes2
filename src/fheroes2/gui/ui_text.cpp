@@ -764,8 +764,8 @@ namespace fheroes2
 
         int32_t targetXPos = targetLineXOffset;
         for ( int32_t i = 0; i < tempLineInfos[targetLineNumber].characterCount; ++i ) {
-            size_t textPos = targetLineStartPos + i;
-            int32_t distance = std::abs( currentXPos - targetXPos );
+            const size_t textPos = targetLineStartPos + i;
+            const int32_t distance = std::abs( currentXPos - targetXPos );
 
             if ( distance < bestDistance ) {
                 bestDistance = distance;
