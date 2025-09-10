@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <map>
 #include <memory>
 #include <numeric>
@@ -750,9 +751,9 @@ namespace fheroes2
 
         const fheroes2::FontCharHandler charHandler( _fontType );
 
-        auto countCharacters = []( size_t count, TextLineInfo & textLineInfo ) { return count += textLineInfo.characterCount; };
-        const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], 0UL, countCharacters );
-        const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], 0UL, countCharacters );
+        auto countCharacters = []( size_t count, const TextLineInfo & textLineInfo ) { return count + textLineInfo.characterCount; };
+        const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], size_t{ 0 }, countCharacters );
+        const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], size_t{ 0 }, countCharacters );
 
         // TODO update those line once we support different alignment in multi-line text.
         const int32_t currentXPos = ( ( maxWidth - tempLineInfos[currentLineNumber].lineWidth ) / 2 )
