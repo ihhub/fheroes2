@@ -36,8 +36,6 @@ namespace fheroes2
 
 namespace Video
 {
-    enum class VideoControl : uint32_t;
-
     struct VideoInfo
     {
         std::string fileName;

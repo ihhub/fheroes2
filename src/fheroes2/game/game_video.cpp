@@ -154,7 +154,7 @@ namespace Video
         for ( auto & [state, video] : sequences ) {
             video->resetFrame();
 
-            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+            if ( state.control & VideoControl::PLAY_VIDEO ) {
                 video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, prevPalette );
             }
             else {
@@ -181,7 +181,7 @@ namespace Video
         // Play audio just before rendering the frame. This is important to minimize synchronization issues between audio and video.
         if ( Audio::isValid() ) {
             for ( const auto & [state, video] : sequences ) {
-                if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_AUDIO ) ) {
+                if ( state.control & VideoControl::PLAY_AUDIO ) {
                     playAudio( video->getAudioChannels() );
                 }
             }
@@ -200,11 +200,11 @@ namespace Video
                 for ( auto & [state, video] : sequences ) {
                     if ( video->getCurrentFrameId() < video->frameCount() ) {
                         if ( video->getCurrentFrameId() + 1 == video->frameCount() ) {
-                            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_LOOP ) ) {
+                            if ( state.control & VideoControl::PLAY_LOOP ) {
                                 video->resetFrame();
                                 // Restart audio
                                 if ( Audio::isValid() ) {
-                                    if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_AUDIO ) ) {
+                                    if ( state.control & VideoControl::PLAY_AUDIO ) {
                                         playAudio( video->getAudioChannels() );
                                     }
                                 }
@@ -216,7 +216,7 @@ namespace Video
 
                         // Prepare the next frame for render.
                         if ( state.currentFrameDelay <= minDelay ) {
-                            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                            if ( state.control & VideoControl::PLAY_VIDEO ) {
                                 video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
                             }
                             else {
@@ -225,7 +225,7 @@ namespace Video
                             state.currentFrameDelay = state.maxFrameDelay;
                         }
                         else {
-                            if ( static_cast<bool>( state.control & Video::VideoControl::PLAY_VIDEO ) ) {
+                            if ( state.control & VideoControl::PLAY_VIDEO ) {
                                 video->getCurrentFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
                             }
                             state.currentFrameDelay -= minDelay;
@@ -243,7 +243,7 @@ namespace Video
                             }
                         }
                     }
-                    else if ( !static_cast<bool>( state.control & VideoControl::PLAY_WAIT ) ) {
+                    else if ( !( state.control & VideoControl::PLAY_WAIT ) ) {
                         endVideo = true;
                     }
                 }

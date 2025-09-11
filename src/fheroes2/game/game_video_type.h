@@ -45,24 +45,15 @@ namespace Video
         PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
     };
 
-    inline VideoControl operator~( VideoControl a )
+    using VideoControlSet = std::underlying_type_t<VideoControl>;
+
+    constexpr VideoControlSet operator&( const VideoControlSet lhs, const VideoControl rhs )
     {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( ~static_cast<VideoControlType>( a ) );
+        return lhs & static_cast<VideoControlSet>( rhs );
     }
-    inline VideoControl operator|( VideoControl a, VideoControl b )
+
+    constexpr VideoControlSet operator&( const VideoControl lhs, const VideoControl rhs )
     {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) | static_cast<VideoControlType>( b ) );
-    }
-    inline VideoControl operator&( VideoControl a, VideoControl b )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) & static_cast<VideoControlType>( b ) );
-    }
-    inline VideoControl operator^( VideoControl a, VideoControl b )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) ^ static_cast<VideoControlType>( b ) );
+        return static_cast<VideoControlSet>( lhs ) & static_cast<VideoControlSet>( rhs );
     }
 }
