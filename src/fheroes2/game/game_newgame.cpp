@@ -193,7 +193,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.draw( display.width() / 2 - loadingScreen.width() / 2, display.height() / 2 - loadingScreen.height() / 2 + 2, display );
     display.render();
 
-    Video::ShowVideo( { { "INTRO.SMK", Video::VideoControl::PLAY_CUTSCENE } } );
+    Video::ShowVideo( { { "INTRO.SMK", Video::VideoControlEnum::PLAY_CUTSCENE } } );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();

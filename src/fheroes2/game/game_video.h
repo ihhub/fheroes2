@@ -36,12 +36,10 @@ namespace fheroes2
 
 namespace Video
 {
-    enum class VideoControl : uint32_t;
-
     struct VideoInfo
     {
         std::string fileName;
-        VideoControl control = VideoControl::PLAY_NONE;
+        VideoControl control = VideoControlEnum::PLAY_NONE;
         fheroes2::Point offset = { 0, 0 };
 
         bool operator==( const VideoInfo & info ) const

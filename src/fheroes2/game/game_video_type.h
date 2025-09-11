@@ -21,11 +21,12 @@
 #pragma once
 
 #include <cstdint>
-#include <type_traits>
+
+#include "bitwise_enum.h"
 
 namespace Video
 {
-    enum class VideoControl : uint32_t
+    enum class VideoControlEnum : uint32_t
     {
         PLAY_NONE = 0,
         // Play file once and wait user's input
@@ -45,24 +46,5 @@ namespace Video
         PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
     };
 
-    inline VideoControl operator~( VideoControl a )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( ~static_cast<VideoControlType>( a ) );
-    }
-    inline VideoControl operator|( VideoControl a, VideoControl b )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) | static_cast<VideoControlType>( b ) );
-    }
-    inline VideoControl operator&( VideoControl a, VideoControl b )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) & static_cast<VideoControlType>( b ) );
-    }
-    inline VideoControl operator^( VideoControl a, VideoControl b )
-    {
-        using VideoControlType = std::underlying_type_t<VideoControl>;
-        return static_cast<VideoControl>( static_cast<VideoControlType>( a ) ^ static_cast<VideoControlType>( b ) );
-    }
+    using VideoControl = Enum::Flags<VideoControlEnum>;
 }

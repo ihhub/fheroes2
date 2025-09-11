@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
+#include <initializer_list>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -360,7 +361,7 @@ int main( int argc, char ** argv )
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
             for ( const auto & logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
-                Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
+                Video::ShowVideo( { { logo, Video::VideoControlEnum::PLAY_CUTSCENE } } );
             }
         }
 

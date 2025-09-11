@@ -30,11 +30,6 @@
 class IStreamBase;
 class OStreamBase;
 
-namespace Video
-{
-    enum class VideoControl : uint32_t;
-}
-
 namespace Campaign
 {
     enum CampaignID
@@ -119,12 +114,6 @@ namespace Campaign
         std::string getDescription() const;
 
         static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
-    };
-
-    struct ScenarioIntroVideoInfo
-    {
-        std::string fileName;
-        Video::VideoControl control;
     };
 
     using VideoSequence = std::vector<std::vector<Video::VideoInfo>>;
