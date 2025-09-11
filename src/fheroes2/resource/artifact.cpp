@@ -1313,7 +1313,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
         else if ( !read_only ) {
             if ( isMagicBook( art ) ) {
-                msg = _( "Cannot move the Spellbook" );
+                msg = _( "Cannot move the Spell Book" );
             }
             else {
                 msg = _( "Exchange %{name2} with %{name}" );
@@ -1338,7 +1338,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 bool ArtifactsBar::ActionBarCursor( Artifact & art1, Artifact & art2 /* selected */ )
 {
     if ( isMagicBook( art2 ) || isMagicBook( art1 ) )
-        msg = _( "Cannot move the Spellbook" );
+        msg = _( "Cannot move the Spell Book" );
     else if ( art1.isValid() ) {
         msg = _( "Exchange %{name2} with %{name}" );
         StringReplace( msg, "%{name}", art1.GetName() );

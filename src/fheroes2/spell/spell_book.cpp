@@ -351,7 +351,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                 statusCallback( _( "View next page" ) );
             }
             else if ( le.isMouseCursorPosInArea( closeRoi ) ) {
-                statusCallback( _( "Close Spellbook" ) );
+                statusCallback( _( "Close Spell Book" ) );
             }
             else if ( le.isMouseCursorPosInArea( pos ) ) {
                 const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
