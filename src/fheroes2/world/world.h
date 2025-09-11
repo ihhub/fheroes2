@@ -465,7 +465,7 @@ private:
 
     void setUltimateArtifact( const int32_t tileId, const int32_t radius );
 
-    void addDebugHero();
+    void tryAddDebugHero();
 
     void setHeroIdsForMapConditions();
 

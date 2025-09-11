@@ -33,6 +33,12 @@
 
 namespace Maps::Map_Format
 {
+    // This structure is deprecated. We are keeping it for backward compatibility.
+    struct StandardObjectMetadata
+    {
+        std::array<int32_t, 3> metadata{ 0 };
+    };
+
     // The following operators are used only inside this module, but they cannot be declared in an anonymous namespace due to the way ADL works
 
     OStreamBase & operator<<( OStreamBase & stream, const TileObjectInfo & object );
