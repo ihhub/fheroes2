@@ -725,33 +725,38 @@ namespace fheroes2
         }
     }
 
-    size_t TextInput::getCursorPositionInAdjacentLine( size_t currentPos, int32_t maxWidth, bool isLineAbove )
+    size_t TextInput::getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool isLineAbove )
     {
         std::vector<TextLineInfo> tempLineInfos;
         _getTextLineInfos( tempLineInfos, maxWidth, height(), true );
+        if(tempLineInfos.empty()) {
+            return currentPos;
+        }
 
         size_t currentLineNumber = 0;
-        size_t nbChars = 0;
-        while ( nbChars + tempLineInfos[currentLineNumber].characterCount <= currentPos && currentLineNumber < tempLineInfos.size() - 1 ) {
-            nbChars += tempLineInfos[currentLineNumber].characterCount;
+        size_t numberOfCharacters = 0;
+        while ( numberOfCharacters + tempLineInfos[currentLineNumber].characterCount <= currentPos && currentLineNumber < tempLineInfos.size() - 1 ) {
+            numberOfCharacters += tempLineInfos[currentLineNumber].characterCount;
             ++currentLineNumber;
         }
 
-        size_t targetLineNumber;
+        size_t targetLineNumber = 0;
         if ( isLineAbove ) {
-            if ( currentLineNumber == 0 )
+            if ( currentLineNumber == 0 ) {
                 return currentPos;
+            }
             targetLineNumber = currentLineNumber - 1;
         }
         else {
-            if ( currentLineNumber == tempLineInfos.size() - 1 )
+            if ( currentLineNumber == tempLineInfos.size() - 1 ) {
                 return currentPos;
+            }
             targetLineNumber = currentLineNumber + 1;
         }
 
         const fheroes2::FontCharHandler charHandler( _fontType );
 
-        auto countCharacters = []( size_t count, const TextLineInfo & textLineInfo ) { return count + textLineInfo.characterCount; };
+        auto countCharacters = []( const size_t count, const TextLineInfo & textLineInfo ) { return count + textLineInfo.characterCount; };
         const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], size_t{ 0 }, countCharacters );
         const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], size_t{ 0 }, countCharacters );
 

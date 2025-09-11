@@ -344,8 +344,9 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             }
             if ( isMultiLine && ( le.getPressedKeyValue() == fheroes2::Key::KEY_UP || le.getPressedKeyValue() == fheroes2::Key::KEY_DOWN ) ) {
                 const size_t newPos = textInput.getCursorPositionInAdjacentLine( charInsertPos, le.getPressedKeyValue() == fheroes2::Key::KEY_UP );
-                if ( newPos == charInsertPos )
+                if ( newPos == charInsertPos ) {
                     continue;
+                }
                 charInsertPos = newPos;
             }
             else {
