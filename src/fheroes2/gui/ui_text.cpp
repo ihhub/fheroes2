@@ -729,7 +729,7 @@ namespace fheroes2
     {
         std::vector<TextLineInfo> tempLineInfos;
         _getTextLineInfos( tempLineInfos, maxWidth, height(), true );
-        if(tempLineInfos.empty()) {
+        if ( tempLineInfos.empty() ) {
             return currentPos;
         }
 
