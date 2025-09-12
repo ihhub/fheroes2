@@ -3979,7 +3979,7 @@ msgid "Banned Spells"
 msgstr "Bannlysta Besvärjelser"
 
 msgid "Select spells that will appear in the Mage Guild."
-msgstr "Ange vilja besvärjelser som kommer att visas i Magisamfundet"
+msgstr "Ange vilka besvärjelser som kommer att visas i Magisamfundet"
 
 msgid "SET SPELLS"
 msgstr "ANGE BESVÄRJELSER"
@@ -4035,7 +4035,7 @@ msgid "Set custom Castle Army."
 msgstr "Anpassa Borgarmén."
 
 msgid "Set spells to appear in the Mage Guild."
-msgstr "Ange besvärjelser att visas i Magisamfundet."
+msgstr "Ange vilka besvärjelser att visas i Magisamfundet."
 
 msgid "Set Spells"
 msgstr "Ange Besvärjelser"
@@ -4926,7 +4926,7 @@ msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
 
 msgid "Click to show only level %{level} spells."
-msgstr "Klicka för att visa endast nivå %{level}-besvärjelser."
+msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
 
 msgid "Spells level"
 msgstr "Besvärjelsenivå"
