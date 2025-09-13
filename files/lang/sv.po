@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-08-01 14:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -35,6 +35,21 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "ALLA"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "LÄMNA"
@@ -3953,6 +3968,28 @@ msgstr "Slumpat Borgnamn"
 msgid "Random Town Name"
 msgstr "Slumpat Stadsnamn"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Slumpad Besvärjelse"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Tillåt Borgbygge"
 
@@ -4003,11 +4040,12 @@ msgstr "Återställ armén."
 msgid "Set custom Castle Army."
 msgstr "Anpassa Borgarmén."
 
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+#, fuzzy
+msgid "Set Spells"
+msgstr "Välj Besvärjelse"
 
 msgid "Castle Settings"
 msgstr "Borginställningar"
@@ -4893,6 +4931,13 @@ msgstr "Spara Karta:"
 
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Besvärjelserulle"
 
 msgid "Riddle:"
 msgstr "Gåta:"

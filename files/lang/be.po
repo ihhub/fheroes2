@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -36,6 +36,21 @@ msgstr ""
 
 msgid "ALL"
 msgstr "УСЕ"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "ВЫЙСЦІ"
@@ -3893,6 +3908,30 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Выпадковае заклінанне"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Воблачны замак"
@@ -3950,13 +3989,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr "Замак"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+msgid "Set Spells"
+msgstr "Прагледзець заклінанні"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4832,6 +4870,13 @@ msgstr "Вялікія мапы"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Назва абранай мапы."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Няўдалае заклінанне!"
 
 msgid "Riddle:"
 msgstr ""

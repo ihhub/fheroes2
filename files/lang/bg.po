@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -33,6 +33,21 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
+msgstr ""
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
 msgstr ""
 
 msgid "EXIT"
@@ -4048,6 +4063,30 @@ msgstr "Случаен замък"
 msgid "Random Town Name"
 msgstr "Случаен град"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Случаен"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Замък в облаците"
@@ -4107,13 +4146,12 @@ msgstr "Разпусни тази войска."
 msgid "Set custom Castle Army."
 msgstr "Замък"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Set Spells"
+msgstr "Избери заклинание:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -5095,6 +5133,13 @@ msgstr "Запазване на картата"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Свитък за заклинание"
 
 msgid "Riddle:"
 msgstr ""

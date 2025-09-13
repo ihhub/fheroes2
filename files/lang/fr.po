@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-08 11:35+0000\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -35,6 +35,21 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "TOUT"
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
 
 msgid "EXIT"
 msgstr "FIN"
@@ -4020,6 +4035,30 @@ msgstr "Nom du château aléatoire"
 msgid "Random Town Name"
 msgstr "Nom du village aléatoire"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Cliquez pour afficher le village suivant."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Sortilège aléatoire"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Château céleste"
@@ -4078,13 +4117,12 @@ msgstr "Ronvoyer cette armée."
 msgid "Set custom Castle Army."
 msgstr "Château"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Cliquez pour afficher le village suivant."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Cliquez pour afficher le village suivant."
+msgid "Set Spells"
+msgstr "Choisir sort :"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -5070,6 +5108,13 @@ msgstr "Sauvegarder la carte"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Enregistrer le jeu en cours."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Parchemin magique"
 
 msgid "Riddle:"
 msgstr ""
