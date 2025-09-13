@@ -52,12 +52,6 @@ namespace Maps::Map_Format
         std::vector<TileObjectInfo> objects;
     };
 
-    // This structure is deprecated. We are keeping it for backward compatibility.
-    struct StandardObjectMetadata
-    {
-        std::array<int32_t, 3> metadata{ 0 };
-    };
-
     struct CastleMetadata
     {
         // Color, type and whether it is castle or town must come from ObjectInfo to make sure
