@@ -1,9 +1,9 @@
 version 1.1.11 (14 September 2025)
 - update the Russian translation
-- add custom and banned spells selection for the Mage Guild in Editor
+- allow to customize and ban spells for the Mage Guild in the Editor
 - update the Portuguese translation
 - allow to select monsters for Random Monster objects in the Editor
-- expand pop-up message on an object that has an owner in the Editor
+- expand the pop-up message for objects with an owner in the Editor
 - fix invalid cursor while choosing an object in the Editor
 - fix Hero Dialog EXIT button flickering
 - fix incorrect sentence for Mines and Observation Tower popup message for OKAY button
@@ -19,7 +19,7 @@ version 1.1.11 (14 September 2025)
 - fix the shifted by 16 pixels position of a map for the first opening in the Editor
 - limit all resolutions to the currently selected resolution in the system in software rendering mode
 - bring back compilation of x86_64 for macOS
-- add a pop-up window for clicking on a scenario title in the campaign window
+- add a pop-up window when right-clicking a scenario title in the campaign window
 - rename strings in the Editor to use "class" instead of "race"
 - fix Wagon object evaluation for the AI when it contains resources
 - improve video processing logic
