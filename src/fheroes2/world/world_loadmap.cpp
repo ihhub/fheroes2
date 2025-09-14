@@ -1369,9 +1369,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     updateArtifactStats();
 
-    // TODO: do not use this method because it contains some weird data conversion as well as fixes for MP2 maps.
-    //       Create a different method to properly handle all loaded objects and their metadata.
-    if ( !ProcessNewMP2Map( filename, false ) ) {
+    if ( !_processNewResurrectionMap( filename ) ) {
         return false;
     }
 
@@ -1417,13 +1415,41 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
     vec_kingdoms.AddHeroes( vec_heroes );
     vec_kingdoms.AddCastles( vec_castles );
 
-    setHeroIdsForMapConditions();
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
+    }
 
     // Set up Ultimate Artifact.
-    int32_t ultimateArtifactTileId = -1;
-    int32_t ultimateArtifactRadius = 0;
-    getUltimateArtifactInfo( vec_tiles, ultimateArtifactTileId, ultimateArtifactRadius );
-    setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
+    setUltimateArtifact();
+
+    PostLoad( true, false );
+
+    vec_kingdoms.ApplyPlayWithStartingHero();
+
+    tryAddDebugHero();
+
+    return true;
+}
+
+bool World::_processNewResurrectionMap( const std::string & filename )
+{
+    for ( Maps::Tile & tile : vec_tiles ) {
+        if ( !updateTileMetadata( tile, tile.getMainObjectType(), false ) ) {
+            ERROR_LOG( "Failed to load Resurrection map '" << filename << "'." )
+            return false;
+        }
+    }
+
+    // Add heroes and castles to kingdoms.
+    vec_kingdoms.AddHeroes( vec_heroes );
+    vec_kingdoms.AddCastles( vec_castles );
+
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
+    }
+
+    // Set up Ultimate Artifact.
+    setUltimateArtifact();
 
     PostLoad( true, false );
 
@@ -1569,8 +1595,12 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     return true;
 }
 
-void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
+void World::setUltimateArtifact()
 {
+    int32_t tileId = -1;
+    int32_t radius = 0;
+    getUltimateArtifactInfo( vec_tiles, tileId, radius );
+
     assert( radius >= 0 );
 
     const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
@@ -1605,10 +1635,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
 
             ultimate_artifact.Set( pos, getUltimateArtifact() );
 
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "No suitable tile to place the Ultimate Artifact was found" )
         }
 
         return;
@@ -1629,6 +1659,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
         pool.erase( std::remove_if( pool.begin(), pool.end(),
                                     [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
                     pool.end() );
+
+        // If this assertion blows up then the map is corrupted.
+        // The Editor has the same Ultimate Artifact placement conditions as the game.
+        assert( !pool.empty() );
 
         if ( !pool.empty() ) {
             pos = Rand::Get( pool );
@@ -1665,7 +1699,7 @@ void World::tryAddDebugHero()
     }
 }
 
-void World::setHeroIdsForMapConditions()
+bool World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
@@ -1674,13 +1708,11 @@ void World::setHeroIdsForMapConditions()
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsWinCondition = Heroes::UNKNOWN;
-
             ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsWinCondition = hero->GetID();
-        }
+
+        heroIdAsWinCondition = hero->GetID();
     }
 
     if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
@@ -1688,14 +1720,14 @@ void World::setHeroIdsForMapConditions()
 
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsLossCondition = Heroes::UNKNOWN;
-
             ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsLossCondition = hero->GetID();
 
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
-        }
+        heroIdAsLossCondition = hero->GetID();
+
+        hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
     }
+
+    return true;
 }
