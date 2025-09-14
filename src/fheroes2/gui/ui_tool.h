@@ -167,9 +167,9 @@ namespace fheroes2
             return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
-        size_t getCursorPositionInAdjacentLine( const size_t currentPos, const bool isLineAbove )
+        size_t getCursorPositionInAdjacentLine( const size_t currentPos, const bool moveUp )
         {
-            return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, isLineAbove );
+            return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, moveUp );
         }
 
     private:

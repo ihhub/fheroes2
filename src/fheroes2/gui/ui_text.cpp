@@ -725,7 +725,7 @@ namespace fheroes2
         }
     }
 
-    size_t TextInput::getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool isLineAbove )
+    size_t TextInput::getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool moveUp )
     {
         std::vector<TextLineInfo> tempLineInfos;
         _getTextLineInfos( tempLineInfos, maxWidth, height(), true );
@@ -741,7 +741,7 @@ namespace fheroes2
         }
 
         size_t targetLineNumber = 0;
-        if ( isLineAbove ) {
+        if ( moveUp ) {
             if ( currentLineNumber == 0 ) {
                 return currentPos;
             }
@@ -769,16 +769,17 @@ namespace fheroes2
         int32_t bestDistance = std::abs( currentXPos - targetLineXOffset );
 
         int32_t targetXPos = targetLineXOffset;
-        for ( int32_t i = 0; i < tempLineInfos[targetLineNumber].characterCount; ++i ) {
+        for ( int32_t i = 0; i < tempLineInfos[targetLineNumber].characterCount + 1; ++i ) {
             const size_t textPos = targetLineStartPos + i;
             const int32_t distance = std::abs( currentXPos - targetXPos );
-
             if ( distance < bestDistance ) {
                 bestDistance = distance;
                 bestPos = textPos;
             }
 
-            targetXPos += charHandler.getWidth( static_cast<uint8_t>( _text[textPos] ) );
+            if ( textPos < _text.size() ) {
+                targetXPos += charHandler.getWidth( static_cast<uint8_t>( _text[textPos] ) );
+            }
         }
 
         return bestPos;
