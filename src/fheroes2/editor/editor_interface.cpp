@@ -1548,9 +1548,20 @@ namespace Interface
                     }
                 }
                 else if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
-                    assert( _mapFormat.resourceMetadata.find( object.id ) != _mapFormat.resourceMetadata.end() );
-
                     auto resourceMetadata = _mapFormat.resourceMetadata.find( object.id );
+                    if ( resourceMetadata == _mapFormat.resourceMetadata.end() ) {
+                        // This could be a corrupted or older format map. Add missing metadata into it. This action should be outside action manager scope.
+                        const auto [iter, isInserted] = _mapFormat.resourceMetadata.try_emplace( object.id, Maps::Map_Format::ResourceMetadata{ 0 } );
+
+                        if ( !isInserted ) {
+                            // How could this happen? Memory allocation issues?
+                            assert( 0 );
+                            return;
+                        }
+
+                        resourceMetadata = iter;
+                    }
+
                     int32_t resourceCount = resourceMetadata->second.count;
 
                     const int32_t resourceType = static_cast<int32_t>( objectInfo.metadata[0] );
@@ -2095,6 +2106,28 @@ namespace Interface
             }
 
             _setObjectOnTileAsAction( tile, groupType, objectType );
+        }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+            if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
+                _warningMessage.reset( std::move( errorMessage ) );
+                return;
+            }
+
+            if ( !_setObjectOnTileAsAction( tile, groupType, objectType ) ) {
+                return;
+            }
+
+            assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
+
+            const auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
+            assert( insertedObject.group == groupType && insertedObject.index == static_cast<uint32_t>( objectType ) );
+
+            if ( const auto & objectInfo = Maps::getObjectInfo( groupType, objectType ); objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                assert( _mapFormat.resourceMetadata.find( insertedObject.id ) == _mapFormat.resourceMetadata.end() );
+
+                // Zero resource value means the default value for the resource that is generated when starting the map.
+                _mapFormat.resourceMetadata[insertedObject.id].count = 0;
+            }
         }
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
