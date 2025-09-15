@@ -37,6 +37,8 @@ namespace Video
         // Play video stream from file
         PLAY_VIDEO = 1 << 3,
         // Set of common flags for convenient
+        // Play only video in loop
+        PLAY_VIDEO_LOOP = PLAY_LOOP | PLAY_VIDEO,
         // Play cutscene only once
         PLAY_CUTSCENE = PLAY_AUDIO | PLAY_VIDEO,
         // Play cutscene and wait for user input
