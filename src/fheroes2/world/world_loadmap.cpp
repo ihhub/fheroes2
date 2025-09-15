@@ -1157,7 +1157,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & objectInfo = treasuresObjects[object.index];
 
                 if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.resourceMetadata.find( object.id ) != map.resourceMetadata.end() ) {
-                    // Some map might be corrupted or broken due to issues in the older versions of the Editor.
+                    // Some maps might be corrupted or broken due to issues in the older versions of the Editor.
 #if defined( WITH_DEBUG )
                     resourceMetadataUIDs.emplace( object.id );
 #endif
