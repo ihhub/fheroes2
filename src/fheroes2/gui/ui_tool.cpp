@@ -44,6 +44,7 @@
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 
 namespace
 {
