@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-20 09:35+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -34,21 +34,6 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "ALLE"
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
-msgstr ""
 
 msgid "EXIT"
 msgstr "ENDE"
