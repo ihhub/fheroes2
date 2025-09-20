@@ -453,8 +453,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         for ( const auto & mapInfo : allMaps ) {
             // Only Resurrection maps must be accepted by the Editor.
             if ( mapInfo.version != GameVersion::RESURRECTION ) {
+                ERROR_LOG( "The fheroes2 engine is corrupted." )
                 assert( 0 );
-                ERROR_LOG( "fheroes2 engine is corrupted." )
+
                 return nullptr;
             }
         }
