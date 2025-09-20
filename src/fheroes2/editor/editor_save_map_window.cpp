@@ -385,7 +385,7 @@ namespace Editor
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    if ( !System::Unlink( listbox.GetCurrent().filename ) ){
+                    if ( !System::Unlink( listbox.GetCurrent().filename ) ) {
                         ERROR_LOG( "Unable to delete file " << listbox.GetCurrent().filename )
                     }
 
