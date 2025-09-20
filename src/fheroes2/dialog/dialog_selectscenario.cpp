@@ -632,7 +632,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         }
 
         if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && scenarioList.isSelected() ) {
-            std::string msg( _( "Are you sure you want to delete map:" ) );
+            std::string msg( _( "Are you sure you want to delete the map:" ) );
             msg.append( "\n\n" );
             msg.append( System::GetFileName( scenarioList.GetCurrent().filename ) );
 
