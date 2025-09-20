@@ -205,6 +205,11 @@ namespace Interface
             return ( *content )[_currentId];
         }
 
+        int getCurrentId() const
+        {
+            return _currentId;
+        }
+
         Item * GetFromPosition( const fheroes2::Point & mp )
         {
             Verify();
