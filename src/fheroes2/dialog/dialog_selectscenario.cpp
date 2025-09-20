@@ -648,15 +648,15 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
                 scenarioList.SetCurrent( std::max( selectedId - 1, 0 ) );
 
                 // Remove the map from all lists.
-                small.erase( std::remove_if( small.begin(), small.end(), [&removedMapInfo]( const auto & info ){ return info.filename == removedMapInfo.filename; } ),
+                small.erase( std::remove_if( small.begin(), small.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
                              small.end() );
-                medium.erase( std::remove_if( medium.begin(), medium.end(), [&removedMapInfo]( const auto & info ){ return info.filename == removedMapInfo.filename; } ),
+                medium.erase( std::remove_if( medium.begin(), medium.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
                               medium.end() );
-                large.erase( std::remove_if( large.begin(), large.end(), [&removedMapInfo]( const auto & info ){ return info.filename == removedMapInfo.filename; } ),
+                large.erase( std::remove_if( large.begin(), large.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
                              large.end() );
-                xlarge.erase( std::remove_if( xlarge.begin(), xlarge.end(), [&removedMapInfo]( const auto & info ){ return info.filename == removedMapInfo.filename; } ),
+                xlarge.erase( std::remove_if( xlarge.begin(), xlarge.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
                               xlarge.end() );
-                all.erase( std::remove_if( all.begin(), all.end(), [&removedMapInfo]( const auto & info ){ return info.filename == removedMapInfo.filename; } ),
+                all.erase( std::remove_if( all.begin(), all.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
                            all.end() );
             }
 
