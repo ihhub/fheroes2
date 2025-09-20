@@ -482,7 +482,7 @@ namespace
             }
 
             fheroes2::drawMainMenuScreen();
-            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
             return fheroes2::GameMode::MAIN_MENU;
         }
 
@@ -492,7 +492,7 @@ namespace
         }
 
         fheroes2::drawMainMenuScreen();
-        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
