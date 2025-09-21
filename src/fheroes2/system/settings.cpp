@@ -566,9 +566,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
     }
 
     // Remove all paths that are not directories.
-    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) {
-        return !System::IsDirectory( path );
-    } ), dirs.end() );
+    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
 
     return dirs;
 }
