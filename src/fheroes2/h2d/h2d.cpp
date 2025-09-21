@@ -42,16 +42,9 @@ namespace
         return Settings::findFile( System::concatPath( "files", "data" ), fileName, path );
 #endif
     }
-}
 
-namespace fheroes2
-{
-    namespace h2d
-    {
-    
     std::string get_resources_dir2()
     {
-    
         CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("h2d"), NULL);
         CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
       char resourcePath[PATH_MAX];
@@ -68,8 +61,12 @@ namespace fheroes2
     
         return nil;
     }
+}
 
-    
+namespace fheroes2
+{
+    namespace h2d
+    {
         H2DInitializer::H2DInitializer()
         {
             std::string filePath = get_resources_dir2();
