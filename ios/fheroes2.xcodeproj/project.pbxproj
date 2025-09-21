@@ -8,7 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1B21D3C42E7FCFBF0045EDB9 /* smacker.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B21D3BB2E7FCFBF0045EDB9 /* smacker.c */; };
-		1B21D3C82E7FCFBF0045EDB9 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1B21D3C12E7FCFBF0045EDB9 /* CMakeLists.txt */; };
+		1BCB73CF2E7FFE0A004628B5 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 1BCB73CA2E7FFE09004628B5 /* music */; };
+		1BCB73D02E7FFE0A004628B5 /* maps in Resources */ = {isa = PBXBuildFile; fileRef = 1BCB73CB2E7FFE09004628B5 /* maps */; };
+		1BCB73D12E7FFE0A004628B5 /* files in Resources */ = {isa = PBXBuildFile; fileRef = 1BCB73CC2E7FFE0A004628B5 /* files */; };
+		1BCB73D22E7FFE0A004628B5 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 1BCB73CD2E7FFE0A004628B5 /* data */; };
+		1BCB73D32E7FFE0A004628B5 /* anim in Resources */ = {isa = PBXBuildFile; fileRef = 1BCB73CE2E7FFE0A004628B5 /* anim */; };
 		EA5466A429FE02FF00A9D8B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA5466A329FE02FF00A9D8B2 /* Assets.xcassets */; };
 		EA5466A729FE02FF00A9D8B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5466A529FE02FF00A9D8B2 /* LaunchScreen.storyboard */; };
 		EA67D2A129FE03C60004F40F /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = EA54669E29FE02FF00A9D8B2 /* Shaders.metal */; };
@@ -18,18 +22,7 @@
 		EA67D5F029FE0B620004F40F /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL2_mixer.framework */; };
 		EA67D5F129FE0B620004F40F /* SDL2_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL2_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA67D5F329FE0CD50004F40F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5F229FE0C8C0004F40F /* libz.tbd */; };
-		EA67D5FE29FE12470004F40F /* heroes2.agg in Resources */ = {isa = PBXBuildFile; fileRef = EA67D5FA29FE12470004F40F /* heroes2.agg */; };
-		EA67D60029FE12470004F40F /* h2offer.smk in Resources */ = {isa = PBXBuildFile; fileRef = EA67D5FC29FE12470004F40F /* h2offer.smk */; };
 		EA67D60229FE186F0004F40F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D60129FE186F0004F40F /* CoreFoundation.framework */; };
-		EA67D60429FE1FD20004F40F /* resurrection.h2d in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60329FE1FD20004F40F /* resurrection.h2d */; };
-		EA67D60629FE1FE90004F40F /* fheroes2.sf3 in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60529FE1FE90004F40F /* fheroes2.sf3 */; };
-		EA67D60F29FE22510004F40F /* heroes2x.agg in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60729FE22500004F40F /* heroes2x.agg */; };
-		EA67D61029FE22510004F40F /* IVYWIZ.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60829FE22500004F40F /* IVYWIZ.SMK */; };
-		EA67D61129FE22510004F40F /* IVYDES.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60929FE22500004F40F /* IVYDES.SMK */; };
-		EA67D61329FE22510004F40F /* IVYVOY.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60B29FE22500004F40F /* IVYVOY.SMK */; };
-		EA67D61529FE22510004F40F /* IVYPOL.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60D29FE22510004F40F /* IVYPOL.SMK */; };
-		EA67D61629FE22510004F40F /* H2XINTRO.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60E29FE22510004F40F /* H2XINTRO.SMK */; };
-		EA67D61829FE26330004F40F /* Betrayal.mp2 in Resources */ = {isa = PBXBuildFile; fileRef = EA67D61729FE26330004F40F /* Betrayal.mp2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +147,11 @@
 		1B21D3BB2E7FCFBF0045EDB9 /* smacker.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = smacker.c; sourceTree = "<group>"; };
 		1B21D3BE2E7FCFBF0045EDB9 /* smk_malloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = smk_malloc.h; sourceTree = "<group>"; };
 		1B21D3C12E7FCFBF0045EDB9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		1BCB73CA2E7FFE09004628B5 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = music; path = ../music; sourceTree = "<group>"; };
+		1BCB73CB2E7FFE09004628B5 /* maps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = maps; path = ../maps; sourceTree = "<group>"; };
+		1BCB73CC2E7FFE0A004628B5 /* files */ = {isa = PBXFileReference; lastKnownFileType = folder; name = files; path = ../files; sourceTree = "<group>"; };
+		1BCB73CD2E7FFE0A004628B5 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = "<group>"; };
+		1BCB73CE2E7FFE0A004628B5 /* anim */ = {isa = PBXFileReference; lastKnownFileType = folder; name = anim; path = ../anim; sourceTree = "<group>"; };
 		EA54669429FE02FF00A9D8B2 /* fheroes2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fheroes2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA54669929FE02FF00A9D8B2 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		EA54669E29FE02FF00A9D8B2 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -163,18 +161,7 @@
 		EA67D2CB29FE05030004F40F /* SDL_uikit_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_uikit_main.c; sourceTree = "<group>"; };
 		EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = ../../SDL_mixer/Xcode/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
 		EA67D5F229FE0C8C0004F40F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		EA67D5FA29FE12470004F40F /* heroes2.agg */ = {isa = PBXFileReference; lastKnownFileType = file; path = heroes2.agg; sourceTree = "<group>"; };
-		EA67D5FC29FE12470004F40F /* h2offer.smk */ = {isa = PBXFileReference; lastKnownFileType = file; path = h2offer.smk; sourceTree = "<group>"; };
 		EA67D60129FE186F0004F40F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		EA67D60329FE1FD20004F40F /* resurrection.h2d */ = {isa = PBXFileReference; lastKnownFileType = file; name = resurrection.h2d; path = ../files/data/resurrection.h2d; sourceTree = "<group>"; };
-		EA67D60529FE1FE90004F40F /* fheroes2.sf3 */ = {isa = PBXFileReference; lastKnownFileType = file; name = fheroes2.sf3; path = ../files/soundfonts/fheroes2.sf3; sourceTree = "<group>"; };
-		EA67D60729FE22500004F40F /* heroes2x.agg */ = {isa = PBXFileReference; lastKnownFileType = file; path = heroes2x.agg; sourceTree = "<group>"; };
-		EA67D60829FE22500004F40F /* IVYWIZ.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYWIZ.SMK; sourceTree = "<group>"; };
-		EA67D60929FE22500004F40F /* IVYDES.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYDES.SMK; sourceTree = "<group>"; };
-		EA67D60B29FE22500004F40F /* IVYVOY.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYVOY.SMK; sourceTree = "<group>"; };
-		EA67D60D29FE22510004F40F /* IVYPOL.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYPOL.SMK; sourceTree = "<group>"; };
-		EA67D60E29FE22510004F40F /* H2XINTRO.SMK */ = {isa = PBXFileReference; lastKnownFileType = text; path = H2XINTRO.SMK; sourceTree = "<group>"; };
-		EA67D61729FE26330004F40F /* Betrayal.mp2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Betrayal.mp2; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -192,10 +179,22 @@
 			);
 			target = EA54669329FE02FF00A9D8B2 /* fheroes2 */;
 		};
+		1BCB63002E7FEDA7004628B5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Makefile.all,
+				Makefile.bsd,
+				Makefile.emscripten,
+				Makefile.osx,
+				Makefile.switch,
+				Makefile.vita,
+			);
+			target = EA54669329FE02FF00A9D8B2 /* fheroes2 */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1B21D0932E7FCBD90045EDB9 /* dist */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = dist; sourceTree = "<group>"; };
+		1B21D0932E7FCBD90045EDB9 /* dist */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1BCB63002E7FEDA7004628B5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = dist; sourceTree = "<group>"; };
 		1B21D0C82E7FCBD90045EDB9 /* engine */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1B21D3AD2E7FCCAC0045EDB9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = engine; sourceTree = "<group>"; };
 		1B21D2652E7FCBD90045EDB9 /* fheroes2 */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1B21D3AE2E7FCCC00045EDB9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = fheroes2; sourceTree = "<group>"; };
 		1B21D26C2E7FCBD90045EDB9 /* resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = resources; sourceTree = "<group>"; };
@@ -238,9 +237,11 @@
 		EA54668B29FE02FF00A9D8B2 = {
 			isa = PBXGroup;
 			children = (
-				EA67D60529FE1FE90004F40F /* fheroes2.sf3 */,
-				EA67D60329FE1FD20004F40F /* resurrection.h2d */,
-				EA67D5F829FE12370004F40F /* data */,
+				1BCB73CE2E7FFE0A004628B5 /* anim */,
+				1BCB73CD2E7FFE0A004628B5 /* data */,
+				1BCB73CC2E7FFE0A004628B5 /* files */,
+				1BCB73CB2E7FFE09004628B5 /* maps */,
+				1BCB73CA2E7FFE09004628B5 /* music */,
 				EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */,
 				EA67D2EE29FE09D20004F40F /* src */,
 				EA67D2A229FE04380004F40F /* SDL.xcodeproj */,
@@ -311,22 +312,6 @@
 				EA67D5EE29FE0B350004F40F /* Create DMG */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		EA67D5F829FE12370004F40F /* data */ = {
-			isa = PBXGroup;
-			children = (
-				EA67D61729FE26330004F40F /* Betrayal.mp2 */,
-				EA67D60E29FE22510004F40F /* H2XINTRO.SMK */,
-				EA67D60729FE22500004F40F /* heroes2x.agg */,
-				EA67D60929FE22500004F40F /* IVYDES.SMK */,
-				EA67D60D29FE22510004F40F /* IVYPOL.SMK */,
-				EA67D60B29FE22500004F40F /* IVYVOY.SMK */,
-				EA67D60829FE22500004F40F /* IVYWIZ.SMK */,
-				EA67D5FC29FE12470004F40F /* h2offer.smk */,
-				EA67D5FA29FE12470004F40F /* heroes2.agg */,
-			);
-			path = data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -505,19 +490,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA67D61129FE22510004F40F /* IVYDES.SMK in Resources */,
-				EA67D60629FE1FE90004F40F /* fheroes2.sf3 in Resources */,
-				EA67D61529FE22510004F40F /* IVYPOL.SMK in Resources */,
-				EA67D60F29FE22510004F40F /* heroes2x.agg in Resources */,
-				EA67D60429FE1FD20004F40F /* resurrection.h2d in Resources */,
-				EA67D60029FE12470004F40F /* h2offer.smk in Resources */,
+				1BCB73CF2E7FFE0A004628B5 /* music in Resources */,
+				1BCB73D02E7FFE0A004628B5 /* maps in Resources */,
+				1BCB73D12E7FFE0A004628B5 /* files in Resources */,
+				1BCB73D22E7FFE0A004628B5 /* data in Resources */,
+				1BCB73D32E7FFE0A004628B5 /* anim in Resources */,
 				EA5466A729FE02FF00A9D8B2 /* LaunchScreen.storyboard in Resources */,
-				1B21D3C82E7FCFBF0045EDB9 /* CMakeLists.txt in Resources */,
-				EA67D5FE29FE12470004F40F /* heroes2.agg in Resources */,
-				EA67D61629FE22510004F40F /* H2XINTRO.SMK in Resources */,
-				EA67D61329FE22510004F40F /* IVYVOY.SMK in Resources */,
-				EA67D61829FE26330004F40F /* Betrayal.mp2 in Resources */,
-				EA67D61029FE22510004F40F /* IVYWIZ.SMK in Resources */,
 				EA5466A429FE02FF00A9D8B2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,7 +648,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CD69SP6A6Z;
+				DEVELOPMENT_TEAM = YGAPAZ55C3;
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -706,7 +684,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CD69SP6A6Z;
+				DEVELOPMENT_TEAM = YGAPAZ55C3;
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

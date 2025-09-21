@@ -24,8 +24,6 @@
 #include <set>
 #include <stdexcept>
 
-#include <CoreFoundation/CoreFoundation.h>
-
 #include "h2d_file.h"
 #include "logging.h"
 #include "settings.h"
@@ -99,33 +97,23 @@ namespace
         return Settings::findFile( System::concatPath( "files", "data" ), fileName, path );
 #endif
     }
-
-    std::string get_resources_dir2()
-    {
-        CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "h2d" ), NULL );
-        CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
-        char resourcePath[PATH_MAX];
-        if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
-            if ( resourceURL != NULL ) {
-                CFRelease( resourceURL );
-            }
-            return resourcePath;
-        }
-
-        return nil;
-    }
 }
 
 namespace fheroes2::h2d
 {
     H2DInitializer::H2DInitializer()
     {
-        std::string filePath = get_resources_dir2();
-        if ( !reader.open( filePath ) ) {
-            VERBOSE_LOG( "Failed to open '" << filePath << "' file." )
-            throw std::logic_error( std::string( "Cannot open file: " ) + filePath );
+        const std::string fileName{ "resurrection.h2d" };
+
+        std::string filePath;
+        if ( !getH2DFilePath( fileName, filePath ) ) {
+            const std::string errorMessage{ "The '" + fileName + "' file was not found." };
+
+            VERBOSE_LOG( errorMessage )
+            throw std::logic_error( errorMessage );
         }
 
+        ERROR_LOG("Open file " << filePath)
         if ( !reader.open( filePath ) ) {
             const std::string errorMessage{ "The '" + filePath + "' file cannot be opened." };
 
@@ -135,7 +123,7 @@ namespace fheroes2::h2d
 
         if ( reader.getAllFileNames() != resurrectionH2DFileListSample ) {
             const std::string errorMessage{ "The list of files contained in '" + filePath
-                                            + "' does not match the sample. Make sure that you are using the latest version of the '" + filePath + "' file." };
+                                            + "' does not match the sample. Make sure that you are using the latest version of the '" + fileName + "' file." };
 
             VERBOSE_LOG( errorMessage )
             throw std::logic_error( errorMessage );
