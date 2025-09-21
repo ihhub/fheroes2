@@ -32,7 +32,7 @@ HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
 C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc|js)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true) \
-                                                   | (grep -v "^ios/SDL_uikit_main.c$" || true)) \
+                                                   | (grep -v "^ios/SDL_uikit_main.c$" || true) \
                                                    | (grep -v "^ios/ShaderTypes.h$" || true))
 SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
