@@ -1170,10 +1170,12 @@ namespace
                 resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
             }
 
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set the " SDL_HINT_ORIENTATIONS " hint." )
             }
+#endif
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {

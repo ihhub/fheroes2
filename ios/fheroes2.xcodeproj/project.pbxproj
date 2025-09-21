@@ -179,7 +179,7 @@
 		EA67D60B29FE22500004F40F /* IVYVOY.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYVOY.SMK; sourceTree = "<group>"; };
 		EA67D60C29FE22510004F40F /* campaign.hs */ = {isa = PBXFileReference; lastKnownFileType = file; path = campaign.hs; sourceTree = "<group>"; };
 		EA67D60D29FE22510004F40F /* IVYPOL.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYPOL.SMK; sourceTree = "<group>"; };
-		EA67D60E29FE22510004F40F /* H2XINTRO.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = H2XINTRO.SMK; sourceTree = "<group>"; };
+		EA67D60E29FE22510004F40F /* H2XINTRO.SMK */ = {isa = PBXFileReference; lastKnownFileType = text; path = H2XINTRO.SMK; sourceTree = "<group>"; };
 		EA67D61729FE26330004F40F /* Betrayal.mp2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Betrayal.mp2; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -683,6 +683,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CD69SP6A6Z;
+				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -695,6 +696,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				PRODUCT_BUNDLE_IDENTIFIER = com.drewbratcher.fheroes2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -717,6 +719,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CD69SP6A6Z;
+				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -729,6 +732,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				PRODUCT_BUNDLE_IDENTIFIER = com.drewbratcher.fheroes2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
