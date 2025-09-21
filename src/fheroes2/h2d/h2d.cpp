@@ -113,7 +113,6 @@ namespace fheroes2::h2d
             throw std::logic_error( errorMessage );
         }
 
-        ERROR_LOG("Open file " << filePath)
         if ( !reader.open( filePath ) ) {
             const std::string errorMessage{ "The '" + filePath + "' file cannot be opened." };
 
