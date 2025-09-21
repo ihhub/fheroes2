@@ -27,9 +27,7 @@
 #include <sstream>
 #include <utility>
 
-#include <CoreFoundation/CoreFoundation.h>
-
-#if defined( MACOS_APP_BUNDLE )
+#if defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ )
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
@@ -723,36 +721,6 @@ std::string get_resources_dir2()
     return nil;
 }
 
-std::string get_resources_dir3()
-{
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "hs" ), NULL );
-    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
-    char resourcePath[PATH_MAX];
-    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
-        if ( resourceURL != NULL ) {
-            CFRelease( resourceURL );
-        }
-        return resourcePath;
-    }
-
-    return nil;
-}
-
-std::string get_resources_dir4()
-{
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "hs" ), NULL );
-    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 1 ) );
-    char resourcePath[PATH_MAX];
-    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
-        if ( resourceURL != NULL ) {
-            CFRelease( resourceURL );
-        }
-        return resourcePath;
-    }
-
-    return nil;
-}
-
 std::string get_resources_dir5()
 {
     CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "mp2" ), NULL );
@@ -772,13 +740,6 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
 {
     ListFiles res;
 
-    res.emplace_back( std::move( get_resources_dir() ) );
-    res.emplace_back( std::move( get_resources_dir0() ) );
-    res.emplace_back( std::move( get_resources_dir2() ) );
-    res.emplace_back( std::move( get_resources_dir3() ) );
-    res.emplace_back( std::move( get_resources_dir4() ) );
-    res.emplace_back( std::move( get_resources_dir5() ) );
-
     for ( const std::string & dir : GetRootDirs() ) {
         const std::string path = !prefixDir.empty() ? System::concatPath( dir, prefixDir ) : dir;
 
@@ -791,6 +752,11 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
             }
         }
     }
+
+    res.emplace_back( std::move( get_resources_dir() ) );
+    res.emplace_back( std::move( get_resources_dir0() ) );
+    res.emplace_back( std::move( get_resources_dir2() ) );
+    res.emplace_back( std::move( get_resources_dir5() ) );
 
     return res;
 }
