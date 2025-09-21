@@ -30,7 +30,9 @@
 set -e -o pipefail
 
 FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|js)$" || true) \
-                                            | (grep -v "^src/thirdparty/.*/.*" || grep -v "^ios/.*" || true))
+                                            | (grep -v "^src/thirdparty/.*/.*" || true)) \
+                                            | (grep -v "^ios/SDL_uikit_main.c$" || true)) \
+                                            | (grep -v "^ios/ShaderTypes.h$" || true))
 
 if [ -z "$FILES_TO_CHECK" ]; then
   echo "There is no source code to check the formatting."
