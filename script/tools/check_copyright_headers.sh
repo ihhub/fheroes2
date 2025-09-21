@@ -31,7 +31,7 @@ SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
 C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc|js)$" || true) \
-                                                   | (grep -v "^src/thirdparty/.*/.*" || true))
+                                                   | (grep -v "^src/thirdparty/.*/.*" || grep -v "^ios/.*/.*" || true))
 SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true) \
