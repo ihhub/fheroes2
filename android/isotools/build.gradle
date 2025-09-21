@@ -1,0 +1,14 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.github.stephenc.javaisotools'
+
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 22
+        targetSdk 35
+    }
+}

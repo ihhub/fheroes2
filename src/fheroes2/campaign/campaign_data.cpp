@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,15 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_data.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <memory>
 #include <utility>
 
 #include "artifact.h"
-#include "campaign_data.h"
 #include "color.h"
 #include "game_video_type.h"
 #include "heroes.h"
@@ -74,7 +74,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BRAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
             break;
         case 3:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE, gettext_noop( "Ogre Alliance" ) );
@@ -179,13 +179,13 @@ namespace
                 gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
-                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-                " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend"
+                " most of their time fighting with one another. Victory is yours when you have defeated all of their castles and heroes." ),
             gettext_noop(
                 "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
             gettext_noop(
                 "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-            gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+            gettext_noop( "You will face four allied enemies in a straightforward fight for resources and treasure. Capture all of the enemy castles for victory." ),
             gettext_noop(
                 "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
             gettext_noop(
@@ -197,7 +197,7 @@ namespace
                 "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
             gettext_noop( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ),
             gettext_noop(
-                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+                "Switching sides leaves you with three castles against the enemy's one. This battle will be the easiest one you will face for the rest of the war...traitor." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( scenarioCount );
 
@@ -271,8 +271,8 @@ namespace
                 gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ),    gettext_noop( "Betrayal" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
-                "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-                " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+                "King Archibald requires you to defeat the three enemies in this region. They are not allied with one another, so they will spend most of their energy fighting"
+                " amongst themselves. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             gettext_noop(
                 "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             gettext_noop(
@@ -293,7 +293,7 @@ namespace
             gettext_noop(
                 "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ),
             gettext_noop(
-                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+                "Switching sides leaves you with three castles against the enemy's one. This battle will be the easiest one you will face for the rest of the war...traitor." ) };
 
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( scenarioCount );
@@ -444,12 +444,12 @@ namespace
             gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
             gettext_noop(
                 "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
-            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be of no help to your kingdom." ),
             gettext_noop(
                 "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
             gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
             gettext_noop(
-                "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
+                "Gain the favor of the elves. They will not allow trees to be chopped down, so we will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
             gettext_noop( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
@@ -508,7 +508,7 @@ namespace
                 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
             gettext_noop( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
             gettext_noop(
-                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
+                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your prize. Find the Orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
             gettext_noop( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 4 );
@@ -609,11 +609,14 @@ namespace Campaign
         case DESCENDANTS_CAMPAIGN:
         case WIZARDS_ISLE_CAMPAIGN:
         case VOYAGE_HOME_CAMPAIGN:
+            break;
         default:
+            // Did you add a new campaign? Add the case handling code for it!
+            assert( 0 );
             break;
         }
 
-        return std::vector<Campaign::CampaignAwardData>();
+        return {};
     }
 
     const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo )
@@ -665,10 +668,8 @@ namespace Campaign
     {
         assert( !_scenarios.empty() );
         for ( const ScenarioData & scenario : _scenarios ) {
-            if ( scenario.getScenarioInfoId() == scenarioInfoId ) {
-                if ( scenario.getNextScenarios().empty() ) {
-                    return true;
-                }
+            if ( ( scenario.getScenarioInfoId() == scenarioInfoId ) && scenario.getNextScenarios().empty() ) {
+                return true;
             }
         }
 
@@ -727,7 +728,7 @@ namespace Campaign
             }
             break;
         case ARCHIBALD_CAMPAIGN:
-            if ( scenarioInfoId.scenarioId == 10 ) {
+            if ( scenarioInfoId.scenarioId == 5 || scenarioInfoId.scenarioId == 10 ) {
                 allAIPlayersInAlliance = true;
             }
             break;
@@ -743,7 +744,7 @@ namespace Campaign
         }
 
         if ( allAIPlayersInAlliance ) {
-            const Colors humanColors( mapInfo.colorsAvailableForHumans );
+            const PlayerColorsVector humanColors( mapInfo.colorsAvailableForHumans );
             // Make sure that this is only one human player on the map.
             if ( humanColors.size() != 1 ) {
                 // Looks like somebody is modifying the original map.
@@ -751,21 +752,18 @@ namespace Campaign
                 return;
             }
 
-            const int aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
+            const PlayerColorsSet aiColors = ( mapInfo.kingdomColors & ( ~mapInfo.colorsAvailableForHumans ) );
             if ( aiColors == 0 ) {
                 // This is definitely not the map to modify.
                 assert( 0 );
                 return;
             }
 
-            // If this assertion blows up then the whole logic behind colors is going crazy.
-            assert( aiColors < 256 );
+            const PlayerColor humanColor = humanColors.front();
 
-            const uint8_t humanColor = static_cast<uint8_t>( humanColors.front() );
-
-            for ( uint8_t & allianceColor : mapInfo.unions ) {
-                if ( allianceColor != humanColor && ( aiColors & allianceColor ) ) {
-                    allianceColor = static_cast<uint8_t>( aiColors );
+            for ( PlayerColorsSet & allianceColor : mapInfo.unions ) {
+                if ( allianceColor != static_cast<PlayerColorsSet>( humanColor ) && ( allianceColor & aiColors ) ) {
+                    allianceColor = aiColors;
                 }
             }
         }
@@ -865,12 +863,12 @@ namespace Campaign
             return description;
         }
         case CampaignAwardData::TYPE_GET_ARTIFACT: {
-            std::string description( _( "\"%{artifact}\" artifact will be carried over the scenario." ) );
+            std::string description( _( "\"%{artifact}\" artifact will be carried over in the campaign." ) );
             StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
-            return _( "The army will be carried over the scenario." );
+            return _( "The army will be carried over in the campaign." );
         }
         case CampaignAwardData::TYPE_RESOURCE_BONUS: {
             std::string description( _( "The kingdom will have +%{count} %{resource} each day." ) );
@@ -879,17 +877,17 @@ namespace Campaign
             return description;
         }
         case CampaignAwardData::TYPE_GET_SPELL: {
-            std::string description( _( "\"%{spell}\" spell will be carried over the scenario." ) );
+            std::string description( _( "The \"%{spell}\" spell will be carried over in the campaign." ) );
             StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_HIREABLE_HERO: {
-            std::string description( _( "%{hero} can be hired in the scenario." ) );
+            std::string description( _( "%{hero} can be hired during scenarios." ) );
             StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
-            std::string description( _( "%{hero} has been defeated and will not appear in the subsequent scenarios." ) );
+            std::string description( _( "%{hero} has been defeated and will not appear in subsequent scenarios." ) );
             StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
             return description;
         }
@@ -945,7 +943,7 @@ namespace Campaign
         case Monster::ELF:
         case Monster::GRAND_ELF:
             return _(
-                "As you approach the group of elves, their leader calls them all to attention.  He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\"  The group explodes with cheers as they run to join your ranks." );
+                "As you approach the group of elves, their leader calls them all to attention. He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\" The group explodes with cheers as they run to join your ranks." );
         default:
             break;
         }
@@ -959,7 +957,7 @@ namespace Campaign
         switch ( monsterId ) {
         case Monster::DWARF:
         case Monster::BATTLE_DWARF:
-            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may pass.\"" );
+            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may pass.\"" );
         case Monster::OGRE:
         case Monster::OGRE_LORD:
             return _( "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\"" );
@@ -967,11 +965,11 @@ namespace Campaign
         case Monster::RED_DRAGON:
         case Monster::BLACK_DRAGON:
             return _(
-                "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
+                "The dragons see you and call out. \"Our alliance with Archibald compels us to join you. Unfortunately you have no room. A pity!\" They quickly scatter." );
         case Monster::ELF:
         case Monster::GRAND_ELF:
             return _(
-                "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
+                "The elves stand at attention as you approach. Their leader calls to you and says, \"Let us not impede your progress, ally! Move on, and may victory be yours.\"" );
         default:
             break;
         }

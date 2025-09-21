@@ -1,0 +1,28 @@
+$version: 1
+
+rules:
+- filters:
+    report_hash: a95dbc87e7d4eb8c0bbf73c1ce08c6bb
+  actions:
+    review_status: false_positive
+    reason: "cetintrin.h:49:10: 1st function call argument is an uninitialized value"
+- filters:
+    report_hash: 076fdab99b1790475cd59e47054be43f
+  actions:
+    review_status: false_positive
+    reason: "cetintrin.h:62:10: 1st function call argument is an uninitialized value"
+- filters:
+    report_hash: d071c5bf5e4d9f23cb32232823dc5f20
+  actions:
+    review_status: false_positive
+    reason: "https://github.com/llvm/llvm-project/issues/47814 https://godbolt.org/z/onxhTsqWa"
+- filters:
+    report_hash: f699c93e80136a0ef2a7837c8b01aee6
+  actions:
+    review_status: false_positive
+    reason: "https://github.com/llvm/llvm-project/issues/47814 https://godbolt.org/z/onxhTsqWa"
+- filters:
+    report_hash: 8f5f809c6c4c2746197c7d9434f936a0
+  actions:
+    review_status: false_positive
+    reason: "https://github.com/llvm/llvm-project/issues/47814 https://godbolt.org/z/onxhTsqWa"

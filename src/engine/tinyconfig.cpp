@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,6 +30,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <ostream>
 #include <regex>
 #include <string_view>
 #include <system_error>
@@ -37,6 +38,7 @@
 #include <utility>
 #include <vector>
 
+#include "logging.h"
 #include "serialize.h"
 #include "tools.h"
 
@@ -57,16 +59,19 @@ namespace
         return key;
     }
 
-    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+    template <typename T, std::enable_if_t<std::is_integral_v<T>, bool> = true>
     bool convertToInt( const std::string_view str, T & intValue )
     {
-        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+        const char * first = str.data();
+        const char * last = str.data() + str.size();
 
-        return ec == std::errc();
+        const auto [ptr, ec] = std::from_chars( first, last, intValue );
+
+        return ( ptr == last && ec == std::errc() );
     }
 }
 
-TinyConfig::TinyConfig( char sep, char com )
+TinyConfig::TinyConfig( const char sep, const char com )
     : separator( sep )
     , comment( com )
 {}
@@ -74,26 +79,27 @@ TinyConfig::TinyConfig( char sep, char com )
 bool TinyConfig::Load( const std::string & cfile )
 {
     StreamFile sf;
-    if ( !sf.open( cfile, "rb" ) )
+    if ( !sf.open( cfile, "rb" ) ) {
         return false;
+    }
 
-    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
+    for ( const std::string & line : StringSplit( sf.getString(), '\n' ) ) {
+        std::string str = StringTrim( line );
 
-    for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
-        std::string str = StringTrim( *it );
-
-        if ( str.empty() || str[0] == comment )
+        if ( str.empty() || str[0] == comment ) {
             continue;
+        }
 
         size_t pos = str.find( separator );
-        if ( std::string::npos != pos ) {
-            std::string left( str.substr( 0, pos ) );
-            std::string right( str.substr( pos + 1, str.length() - pos - 1 ) );
+        if ( pos == std::string::npos ) {
+            continue;
+        }
 
-            left = StringTrim( left );
-            right = StringTrim( right );
+        const std::string key = ModifyKey( StringTrim( str.substr( 0, pos ) ) );
+        const std::string val = StringTrim( str.substr( pos + 1, str.length() - pos - 1 ) );
 
-            emplace( ModifyKey( left ), right );
+        if ( const auto [dummy, inserted] = emplace( key, val ); !inserted ) {
+            ERROR_LOG( "Duplicate key '" << key << "' was found when reading the config file " << cfile )
         }
     }
 
@@ -103,7 +109,17 @@ bool TinyConfig::Load( const std::string & cfile )
 int TinyConfig::IntParams( const std::string & key ) const
 {
     const_iterator it = find( ModifyKey( key ) );
-    return it != end() ? GetInt( it->second ) : 0;
+    if ( it == end() ) {
+        return 0;
+    }
+
+    int result;
+
+    if ( !convertToInt( it->second, result ) ) {
+        return 0;
+    }
+
+    return result;
 }
 
 std::string TinyConfig::StrParams( const std::string & key ) const

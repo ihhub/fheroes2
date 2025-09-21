@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,106 +20,106 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2TILES_H
-#define H2TILES_H
 
+#pragma once
+
+#include <array>
 #include <cstdint>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "color.h"
 #include "direction.h"
+#include "ground.h"
+#include "heroes.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
 
-class Heroes;
-class StreamBase;
-
-namespace fheroes2
-{
-    class Image;
-    struct ObjectRenderingInfo;
-}
-
-namespace Interface
-{
-    class GameArea;
-}
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps
 {
+    // Layer types. They affect passability and also rendering. Rendering must be in the following order:
+    // - terrain objects (they have no shadows)
+    // - shadows
+    // - background objects
+    // - objects
     enum ObjectLayerType : uint8_t
     {
-        OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
-        BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
-        SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
-        TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
+        OBJECT_LAYER = 0, // Common objects like mines, forest, mountains, castles and etc. They affect passability.
+        BACKGROUND_LAYER = 1, // Objects that still affect passability but they must be rendered as background. Such objects are lakes, bushes and etc.
+        SHADOW_LAYER = 2, // Shadows and some special objects like castle's entrance road. No passability changes.
+        TERRAIN_LAYER = 3 // Roads, water flaws and cracks. Essentially everything what is a part of terrain. No passability changes.
     };
 
-    struct TilesAddon
+    struct ObjectPart
     {
-        TilesAddon() = default;
+        ObjectPart() = default;
 
-        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
-                    const bool isMarkedAsRoad );
-
-        TilesAddon( const TilesAddon & ) = default;
-
-        ~TilesAddon() = default;
-
-        TilesAddon & operator=( const TilesAddon & ) = delete;
-
-        bool isUniq( const uint32_t id ) const
+        ObjectPart( const ObjectLayerType layerType_, const uint32_t uid, const MP2::ObjectIcnType icnType_, const uint8_t icnIndex_ )
+            : _uid( uid )
+            , layerType( layerType_ )
+            , icnType( icnType_ )
+            , icnIndex( icnIndex_ )
         {
-            return _uid == id;
+            // Do nothing.
         }
 
-        bool isRoad() const;
+        ObjectPart( const ObjectPart & ) = default;
 
-        bool hasSpriteAnimation() const
+        ~ObjectPart() = default;
+
+        // Returns true if it can be passed by a hero (or a hero on a boat): part's layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const
         {
-            return _hasObjectAnimation;
+            return layerType == SHADOW_LAYER || layerType == TERRAIN_LAYER;
         }
 
-        std::string String( int level ) const;
-
-        static bool isShadow( const TilesAddon & ta );
-
-        static bool isResource( const TilesAddon & ta );
-        static bool isArtifact( const TilesAddon & ta );
-
-        static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
+        bool operator==( const ObjectPart & part ) const
+        {
+            return ( _uid == part._uid ) && ( layerType == part.layerType ) && ( icnType == part.icnType ) && ( icnIndex == part.icnIndex );
+        }
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
 
         // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType{ OBJECT_LAYER };
+        ObjectLayerType layerType{ OBJECT_LAYER };
 
         // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex{ 255 };
-
-        // An indicator where the object has extra animation frames on Adventure Map.
-        bool _hasObjectAnimation{ false };
-
-        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
-        bool _isMarkedAsRoad{ false };
+        uint8_t icnIndex{ 255 };
     };
 
-    using Addons = std::list<TilesAddon>;
-
-    class Tiles
+    class Tile
     {
     public:
-        Tiles() = default;
+        Tile() = default;
 
-        void Init( int32_t, const MP2::mp2tile_t & );
+        bool operator==( const Tile & tile ) const
+        {
+            return ( _groundObjectPart == tile._groundObjectPart ) && ( _topObjectPart == tile._topObjectPart ) && ( _index == tile._index )
+                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainObjectPart == tile._mainObjectPart )
+                   && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
+                   && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
+        }
+
+        bool operator!=( const Tile & tile ) const
+        {
+            return !operator==( tile );
+        }
+
+        void Init( const MP2::MP2TileInfo & mp2 );
+
+        void setIndex( const int32_t index )
+        {
+            _index = index;
+        }
 
         int32_t GetIndex() const
         {
@@ -128,122 +128,111 @@ namespace Maps
 
         fheroes2::Point GetCenter() const;
 
-        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
-
-        MP2::ObjectIcnType getObjectIcnType() const
+        MP2::MapObjectType getMainObjectType() const
         {
-            return _objectIcnType;
+            return _mainObjectType;
         }
 
-        void setObjectIcnType( const MP2::ObjectIcnType type )
+        constexpr MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero ) const
         {
-            _objectIcnType = type;
+            return ignoreObjectUnderHero ? _mainObjectType : _getMainObjectTypeUnderHero();
         }
 
-        uint8_t GetObjectSpriteIndex() const
+        const ObjectPart & getMainObjectPart() const
         {
-            return _imageIndex;
+            return _mainObjectPart;
         }
 
-        void setObjectSpriteIndex( const uint8_t index )
+        ObjectPart & getMainObjectPart()
         {
-            _imageIndex = index;
-        }
-
-        uint32_t GetObjectUID() const
-        {
-            return _uid;
-        }
-
-        void setObjectUID( const uint32_t uid )
-        {
-            _uid = uid;
-        }
-
-        uint8_t getLayerType() const
-        {
-            return _layerType;
+            return _mainObjectPart;
         }
 
         uint16_t GetPassable() const
         {
-            return tilePassable;
+            return _tilePassabilityDirections;
         }
 
-        int GetGround() const;
+        int GetGround() const
+        {
+            return Ground::getGroundByImageIndex( _terrainImageIndex );
+        }
 
         bool isWater() const
         {
-            return 30 > _terrainImageIndex;
+            return Ground::getGroundByImageIndex( _terrainImageIndex ) == Ground::WATER;
         }
 
-        const fheroes2::Image & GetTileSurface() const;
+        // Returns true if tile's main and ground layer object parts do not contain any objects: layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const;
 
-        bool isSameMainObject( const MP2::MapObjectType objectType ) const
+        // Checks whether it is possible to move into this tile from the specified direction
+        bool isPassableFrom( const int direction ) const
         {
-            return objectType == _mainObjectType;
-        }
-
-        bool hasSpriteAnimation() const
-        {
-            return _hasObjectAnimation;
+            return ( direction & _tilePassabilityDirections ) != 0;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
-        bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
+        bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const;
 
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const
         {
-            return ( direction & tilePassable ) != 0;
+            return ( direction & _tilePassabilityDirections ) != 0;
         }
 
         bool isRoad() const
         {
-            return tileIsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+            return _isTileMarkedAsRoad;
         }
 
         bool isStream() const;
-        bool isShadow() const;
-        bool GoodForUltimateArtifact() const;
+        bool isSuitableForUltimateArtifact() const;
 
-        TilesAddon * FindAddonLevel1( uint32_t uniq1 );
-        TilesAddon * FindAddonLevel2( uint32_t uniq2 );
+        // Checks whether it is possible to disembark on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the water. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForDisembarkation() const;
 
-        void SetObject( const MP2::MapObjectType objectType );
+        // Checks whether it is possible to summon a boat on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the shore. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForSummoningBoat() const;
 
-        void SetIndex( const uint32_t index )
-        {
-            _index = index;
-        }
+        ObjectPart * getGroundObjectPart( const uint32_t uid );
+        ObjectPart * getTopObjectPart( const uint32_t uid );
+
+        // Call this function with understanding that the object type you are setting
+        // actually exists on this tile.
+        void setMainObjectType( const MP2::MapObjectType objectType );
 
         void resetBoatOwnerColor()
         {
-            _boatOwnerColor = Color::NONE;
+            _boatOwnerColor = PlayerColor::NONE;
         }
 
-        int getBoatOwnerColor() const
+        PlayerColor getBoatOwnerColor() const
         {
             return _boatOwnerColor;
         }
 
-        void setBoat( const int direction, const int color );
+        void setBoat( const int direction, const PlayerColor color );
         int getBoatDirection() const;
 
-        void resetObjectSprite()
+        void resetMainObjectPart()
         {
-            _objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            _imageIndex = 255;
+            _mainObjectPart = {};
         }
-
-        void FixObject();
 
         uint32_t GetRegion() const
         {
             return _region;
         }
 
-        void UpdateRegion( uint32_t newRegionID );
+        void UpdateRegion( const uint32_t newRegionID )
+        {
+            _region = ( _tilePassabilityDirections != Direction::UNKNOWN ) ? newRegionID : static_cast<uint32_t>( REGION_NODE_BLOCKED );
+        }
 
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
@@ -251,268 +240,194 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        int getOriginalPassability() const;
+        void setOwnershipFlag( const MP2::MapObjectType objectType, PlayerColor color );
 
-        bool isClearGround() const;
-
-        bool doesObjectExist( const uint32_t uid ) const;
-
-        void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
-
-        void removeOwnershipFlag( const MP2::MapObjectType objectType );
-
-        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
-        void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-
-        // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
-        static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
         {
             return _fogDirection;
         }
 
-        void drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
-        void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
+        void pushGroundObjectPart( ObjectPart part );
 
-        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
-
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
-
-        void AddonsPushLevel1( const MP2::mp2tile_t & mt );
-        void AddonsPushLevel1( const MP2::mp2addon_t & ma );
-
-        void AddonsPushLevel1( TilesAddon ta )
+        void pushTopObjectPart( ObjectPart part )
         {
-            addons_level1.emplace_back( ta );
+            _topObjectPart.emplace_back( part );
         }
 
-        void AddonsPushLevel2( const MP2::mp2tile_t & mt );
-        void AddonsPushLevel2( const MP2::mp2addon_t & ma );
-
-        const Addons & getLevel1Addons() const
+        const std::list<ObjectPart> & getGroundObjectParts() const
         {
-            return addons_level1;
+            return _groundObjectPart;
         }
 
-        Addons & getLevel1Addons()
+        std::list<ObjectPart> & getGroundObjectParts()
         {
-            return addons_level1;
+            return _groundObjectPart;
         }
 
-        const Addons & getLevel2Addons() const
+        const std::list<ObjectPart> & getTopObjectParts() const
         {
-            return addons_level2;
+            return _topObjectPart;
         }
 
-        void AddonsSort();
-        void Remove( uint32_t uniqID );
-        void RemoveObjectSprite();
+        void moveMainObjectPartToGroundLevel()
+        {
+            if ( _mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _groundObjectPart.emplace_back( _mainObjectPart );
+                _mainObjectPart = {};
+            }
+        }
+
+        void sortObjectParts();
+
+        // Returns true if any object part was removed.
+        bool removeObjectPartsByUID( const uint32_t objectUID );
+
+        // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
+        void removeObjects( const MP2::ObjectIcnType objectIcnType );
+
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
                             const uint8_t originalImageIndex, const uint8_t newImageIndex );
 
         std::string String() const;
 
-        bool isFog( const int colors ) const
+        bool isFog( const PlayerColor color ) const
+        {
+            return ( _fogColors & color );
+        }
+
+        bool isFog( const PlayerColorsSet colors ) const
         {
             // colors may be the union friends
             return ( _fogColors & colors ) == colors;
         }
 
-        void ClearFog( const int colors );
+        void ClearFog( const PlayerColorsSet colors );
 
-        // Checks whether the object to be captured is guarded by its own forces
-        // (castle has a hero or garrison, dwelling has creatures, etc)
-        bool isCaptureObjectProtected() const;
-
-        // Get Tile metadata field #1 (used for things like monster count or resource amount)
-        uint8_t GetQuantity1() const
+        const std::array<uint32_t, 3> & metadata() const
         {
-            return quantity1;
+            return _metadata;
         }
 
-        void setQuantity1( const uint8_t value )
+        std::array<uint32_t, 3> & metadata()
         {
-            quantity1 = value;
+            return _metadata;
         }
 
-        void setQuantity2( const uint8_t value )
+        uint8_t getTerrainFlags() const
         {
-            quantity2 = value;
+            return _terrainFlags;
         }
 
-        // Get Tile metadata field #2 (used for things like animations or resource type )
-        uint8_t GetQuantity2() const
+        uint16_t getTerrainImageIndex() const
         {
-            return quantity2;
+            return _terrainImageIndex;
         }
 
-        int QuantityVariant() const
+        void setTerrain( const uint16_t terrainImageIndex, const uint8_t terrainFlags )
         {
-            return quantity2 >> 4;
+            _terrainFlags = terrainFlags;
+            _terrainImageIndex = terrainImageIndex;
         }
 
-        int QuantityExt() const
-        {
-            return 0x0f & quantity2;
-        }
+        Heroes * getHero() const;
+        void setHero( Heroes * hero );
 
-        void QuantitySetVariant( const int variant )
-        {
-            quantity2 &= 0x0f;
-            quantity2 |= variant << 4;
-        }
-
-        void QuantitySetExt( int ext )
-        {
-            quantity2 &= 0xf0;
-            quantity2 |= ( 0x0f & ext );
-        }
-
-        void SetObjectPassable( bool );
-
-        // Get additional metadata.
-        int32_t getAdditionalMetadata() const
-        {
-            return additionalMetadata;
-        }
-
-        // Set Tile additional metadata field.
-        void setAdditionalMetadata( const uint32_t value )
-        {
-            additionalMetadata = value;
-        }
-
-        void clearAdditionalMetadata()
-        {
-            additionalMetadata = 0;
-        }
-
-        Heroes * GetHeroes() const;
-        void SetHeroes( Heroes * );
-
-        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
-        void updateEmpty();
-
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
-        void setAsEmpty();
+        // Set tile's object type according to the object's sprite if there is any, otherwise
+        // it is set to coast (MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE).
+        // This method works perfectly only on Resurrection (.fh2m) maps.
+        // It might not work properly on the original maps due to small differences in object types.
+        void updateObjectType();
 
         uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
-
-        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
-        static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
-        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
-
-        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
-        // resources of type 'resource'. This method updates all sprites and sets object types for non-action
-        // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
-        // updated separately.
-        static void RestoreAbandonedMine( Tiles & tile, const int resource );
-
-        // Some tiles have incorrect object type. This is due to original Editor issues.
-        static void fixTileObjectType( Tiles & tile );
-
-        static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
-
-        void swap( TilesAddon & addon ) noexcept;
-
-        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
-
-    private:
-        TilesAddon * getAddonWithFlag( const uint32_t uid );
-
-        // Set or remove a flag which belongs to UID of the object.
-        void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
-        void RemoveJailSprite();
-
-        bool isTallObject() const;
-
-        bool isDetachedObject() const;
-
-        void _setFogDirection( const uint16_t fogDirection )
+        // Do NOT call this method directly!!!
+        void setFogDirection( const uint16_t fogDirection )
         {
             _fogDirection = fogDirection;
         }
 
-        friend StreamBase & operator<<( StreamBase &, const Tiles & );
-        friend StreamBase & operator>>( StreamBase &, Tiles & );
+        // Some tiles have incorrect object type. This is due to original Editor issues.
+        static void fixMP2MapTileObjectType( Tile & tile );
 
-        friend bool operator<( const Tiles & l, const Tiles & r )
-        {
-            return l.GetIndex() < r.GetIndex();
-        }
+        static int32_t getIndexOfMainTile( const Tile & tile );
 
-        static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
-        void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
+        // Update tile or bottom layer object image index.
+        static void updateTileObjectIcnIndex( Tile & tile, const uint32_t uid, const uint8_t newIndex );
 
-        Addons addons_level1; // bottom layer
-        Addons addons_level2; // top layer
+    private:
+        bool isShadow() const;
 
-        int32_t _index = 0;
+        ObjectPart * getObjectPartWithFlag( const uint32_t uid );
+
+        // Set or remove a flag which belongs to UID of the object.
+        void updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
+
+        void _updateRoadFlag();
+
+        bool isAnyTallObjectOnTile() const;
+
+        bool isDetachedObject() const;
+
+        int getTileIndependentPassability() const;
+
+        bool doesObjectExist( const uint32_t uid ) const;
+
+        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
+
+        MP2::MapObjectType _getMainObjectTypeUnderHero() const;
+
+        friend OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
+        friend IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
+
+        // The following members are used in the Editor and in the game.
+
+        ObjectPart _mainObjectPart;
+
+        std::list<ObjectPart> _groundObjectPart;
+
+        std::list<ObjectPart> _topObjectPart;
+
+        int32_t _index{ 0 };
 
         uint16_t _terrainImageIndex{ 0 };
 
+        // Each tile has a main object type which is served as an indicator
+        // whether the tile has any action type object and also as information
+        // for users to read about this tile.
+        MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
+
+        std::array<uint32_t, 3> _metadata{ 0 };
+
+        uint16_t _tilePassabilityDirections{ DIRECTION_ALL };
+
         uint8_t _terrainFlags{ 0 };
 
-        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
-        uint32_t _uid{ 0 };
+        bool _isTileMarkedAsRoad{ false };
 
-        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType{ OBJECT_LAYER };
+        uint8_t _occupantHeroId{ Heroes::UNKNOWN };
 
-        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        // The following members are only used in the game.
 
-        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex{ 255 };
+        PlayerColorsSet _fogColors{ Color::allPlayerColors() };
 
-        // An indicator where the object has extra animation frames on Adventure Map.
-        bool _hasObjectAnimation{ false };
-
-        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
-        bool _isMarkedAsRoad{ false };
-
-        MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
-        uint16_t tilePassable = DIRECTION_ALL;
-        uint8_t _fogColors = Color::ALL;
+        // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
+        PlayerColor _boatOwnerColor{ PlayerColor::NONE };
 
         // Fog direction to render fog in Game Area.
         uint16_t _fogDirection{ DIRECTION_ALL };
 
-        uint8_t heroID = 0;
-
-        // TODO: Combine quantity1 and quantity2 into a single 16/32-bit variable except first 2 bits of quantity1 which are used for level type of an object.
-        uint8_t quantity1 = 0;
-        uint8_t quantity2 = 0;
-
-        // Additional metadata is not set from map's information but during runtime like spells or monster joining conditions.
-        int32_t additionalMetadata = 0;
-
-        bool tileIsRoad = false;
-
-        // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
-        uint8_t _boatOwnerColor = Color::NONE;
-
         // This field does not persist in savegame.
-        uint32_t _region = REGION_NODE_BLOCKED;
+        uint32_t _region{ REGION_NODE_BLOCKED };
     };
 
-    StreamBase & operator<<( StreamBase &, const TilesAddon & );
-    StreamBase & operator<<( StreamBase &, const Tiles & );
-    StreamBase & operator>>( StreamBase &, TilesAddon & );
-    StreamBase & operator>>( StreamBase &, Tiles & );
+    OStreamBase & operator<<( OStreamBase & stream, const ObjectPart & ta );
+    OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
+    IStreamBase & operator>>( IStreamBase & stream, ObjectPart & ta );
+    IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
 }
-
-#endif

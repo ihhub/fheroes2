@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,13 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MONSTER_H
-#define H2MONSTER_H
+#pragma once
 
 #include <cstdint>
 
 #include "monster_info.h"
-#include "payment.h"
+#include "resource.h"
 
 class Spell;
 
@@ -36,6 +35,7 @@ class Monster
 public:
     enum
     {
+        JOIN_CONDITION_UNSET = -1,
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
         JOIN_CONDITION_FREE = 2
@@ -50,7 +50,7 @@ public:
         LEVEL_4
     };
 
-    enum monster_t
+    enum MonsterType : int32_t
     {
         UNKNOWN,
 
@@ -122,20 +122,33 @@ public:
         FIRE_ELEMENT,
         WATER_ELEMENT,
 
-        MONSTER_RND1,
-        MONSTER_RND2,
-        MONSTER_RND3,
-        MONSTER_RND4,
-        MONSTER_RND,
+        // Editor-related monsters.
+        RANDOM_MONSTER,
+        RANDOM_MONSTER_LEVEL_1,
+        RANDOM_MONSTER_LEVEL_2,
+        RANDOM_MONSTER_LEVEL_3,
+        RANDOM_MONSTER_LEVEL_4,
 
         // IMPORTANT! Put all new monsters just above this line.
         MONSTER_COUNT
     };
 
-    Monster( const int m = UNKNOWN );
-    explicit Monster( const Spell & );
-    Monster( int race, uint32_t dw );
+    Monster( const int m = UNKNOWN )
+        : id( m )
+    {
+        // Do nothing.
+    }
+
+    explicit Monster( const Spell & sp );
+    Monster( const int race, const uint32_t dw );
+
+    Monster( const Monster & ) = default;
+    Monster( Monster && ) = default;
+
     virtual ~Monster() = default;
+
+    Monster & operator=( const Monster & ) = default;
+    Monster & operator=( Monster && ) = default;
 
     bool operator==( const Monster & m ) const
     {
@@ -162,7 +175,6 @@ public:
 
     virtual uint32_t GetAttack() const;
     virtual uint32_t GetDefense() const;
-    virtual int GetColor() const;
     virtual int GetMorale() const;
     virtual int GetLuck() const;
     virtual int GetRace() const;
@@ -205,10 +217,16 @@ public:
     const char * GetName() const;
     const char * GetMultiName() const;
     const char * GetPluralName( uint32_t ) const;
+    static const char * getRandomRaceMonstersName( const uint32_t building );
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id < MONSTER_COUNT && !isRandomMonster();
+    }
+
+    bool isRandomMonster() const
+    {
+        return ( id >= RANDOM_MONSTER && id <= RANDOM_MONSTER_LEVEL_4 );
     }
 
     bool isElemental() const
@@ -256,7 +274,7 @@ public:
         return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
     }
 
-    bool ignoreRetaliation() const
+    bool isIgnoringRetaliation() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
     }
@@ -274,6 +292,8 @@ public:
 
     bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
 
+    bool isWeaknessPresent( const fheroes2::MonsterWeaknessType weaknessType ) const;
+
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 
     int ICNMonh() const;
@@ -283,12 +303,11 @@ public:
         return UNKNOWN < id ? id - 1 : 0;
     }
 
-    payment_t GetCost() const
+    Funds GetCost() const
     {
-        return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
+        return Funds( fheroes2::getMonsterData( id ).generalStats.cost );
     }
 
-    payment_t GetUpgradeCost() const;
     uint32_t GetDwelling() const;
 
     int GetMonsterSprite() const
@@ -298,14 +317,15 @@ public:
 
     static Monster Rand( const LevelType type );
 
-    static uint32_t GetCountFromHitPoints( const Monster &, uint32_t );
+    static uint32_t GetCountFromHitPoints( const Monster & mons, const uint32_t hp );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
+    // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
+    Funds GetUpgradeCost() const;
+
     static Monster FromDwelling( int race, uint32_t dw );
 
     int id;
 };
-
-#endif

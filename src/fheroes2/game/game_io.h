@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMEIO_H
-#define H2GAMEIO_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -53,9 +52,7 @@ namespace Game
     // Returns GameMode::CANCEL in case of failure.
     fheroes2::GameMode Load( const std::string & filePath );
 
-    bool LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo );
+    bool LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo );
 
     bool SaveCompletedCampaignScenario();
 }
-
-#endif

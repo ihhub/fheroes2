@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,17 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "bin_info.h"
+
+#include <algorithm>
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
-#include <memory>
 #include <ostream>
+#include <string>
 #include <utility>
 
 #include "agg.h"
-#include "battle_animation.h"
 #include "battle_cell.h"
-#include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_info.h"
@@ -41,20 +42,41 @@ namespace
     {
         return fheroes2::getLEValue<T>( reinterpret_cast<const char *>( data ), base, offset );
     }
+
+    const char * GetFilename( const int monsterId )
+    {
+        return fheroes2::getMonsterData( monsterId ).binFileName;
+    }
+
+    class MonsterAnimCache
+    {
+    public:
+        Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
+        {
+            auto mapIterator = _animMap.find( monsterID );
+            if ( mapIterator != _animMap.end() ) {
+                return mapIterator->second;
+            }
+
+            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ), false ) );
+            if ( info.isValid() ) {
+                _animMap[monsterID] = info;
+                return info;
+            }
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Missing BIN file data: " << GetFilename( monsterID ) << ", monster ID: " << monsterID )
+            return {};
+        }
+
+    private:
+        std::map<int, Bin_Info::MonsterAnimInfo> _animMap;
+    };
+
+    MonsterAnimCache _infoCache;
 }
 
 namespace Bin_Info
 {
-    class MonsterAnimCache
-    {
-    public:
-        AnimationReference createAnimReference( int monsterID ) const;
-        MonsterAnimInfo getAnimInfo( int monsterID );
-
-    private:
-        std::map<int, MonsterAnimInfo> _animMap;
-    };
-
     const size_t CORRECT_FRM_LENGTH = 821;
 
     // When base unit and its upgrade use the same FRM file (e.g. Archer and Ranger)
@@ -63,22 +85,7 @@ namespace Bin_Info
     const double SHOOT_SPEED_UPGRADE = 0.08;
     const double RANGER_SHOOT_SPEED = 0.78;
 
-    std::map<int, AnimationReference> animRefs;
-    MonsterAnimCache _infoCache;
-
-    const char * GetFilename( int monsterId )
-    {
-        return fheroes2::getMonsterData( monsterId ).binFileName;
-    }
-
-    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
-        : moveSpeed( 450 )
-        , shootSpeed( 0 )
-        , flightSpeed( 0 )
-        , troopCountOffsetLeft( 0 )
-        , troopCountOffsetRight( 0 )
-        , idleAnimationCount( 0 )
-        , idleAnimationDelay( 0 )
+    MonsterAnimInfo::MonsterAnimInfo( const int monsterID /* = 0 */, const std::vector<uint8_t> & bytes /* = std::vector<uint8_t>() */ )
     {
         if ( bytes.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
             return;
@@ -97,18 +104,22 @@ namespace Bin_Info
                 moveOffset.push_back( static_cast<int>( getValue<int8_t>( data, 5 + moveID * 16, frame ) ) );
             }
 
-            frameXOffset.push_back( moveOffset );
+            frameXOffset.emplace_back( std::move( moveOffset ) );
         }
 
         // Idle animations data
         idleAnimationCount = data[117];
-        if ( idleAnimationCount > 5u )
-            idleAnimationCount = 5u; // here we need to reset our object
-        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
-            idlePriority.push_back( getValue<float>( data, 118, i ) );
+        if ( idleAnimationCount > 5U ) {
+            idleAnimationCount = 5U; // here we need to reset our object
+        }
 
-        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i ) {
+            idlePriority.push_back( getValue<float>( data, 118, i ) );
+        }
+
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i ) {
             unusedIdleDelays.push_back( getValue<uint32_t>( data, 138, i ) );
+        }
 
         idleAnimationDelay = getValue<uint32_t>( data, 158 );
 
@@ -209,10 +220,13 @@ namespace Bin_Info
         }
 
         uint8_t projectileCount = data[186];
-        if ( projectileCount > 12u )
-            projectileCount = 12u; // here we need to reset our object
-        for ( uint8_t i = 0; i < projectileCount; ++i )
+        if ( projectileCount > 12U ) {
+            projectileCount = 12U; // here we need to reset our object
+        }
+
+        for ( uint8_t i = 0; i < projectileCount; ++i ) {
             projectileAngles.push_back( getValue<float>( data, 187, i ) );
+        }
 
         // Positional offsets for sprites & drawing
         troopCountOffsetLeft = getValue<int32_t>( data, 235 );
@@ -222,12 +236,15 @@ namespace Bin_Info
         for ( int idx = MOVE_START; idx <= SHOOT3_END; ++idx ) {
             std::vector<int> anim;
             uint8_t count = data[243 + idx];
-            if ( count > 16 )
+            if ( count > 16 ) {
                 count = 16; // here we need to reset our object
+            }
+
             for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
-            animationFrames.push_back( anim );
+
+            animationFrames.emplace_back( std::move( anim ) );
         }
 
         if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
@@ -239,14 +256,12 @@ namespace Bin_Info
             }
         }
 
-        if ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) {
+        if ( ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) && animationFrames[DEATH].size() == 8 ) {
             // Dwarves and Battle Dwarves have incorrect death animation.
-            if ( animationFrames[DEATH].size() == 8 ) {
-                animationFrames[DEATH].clear();
+            animationFrames[DEATH].clear();
 
-                for ( int frameId = 49; frameId <= 55; ++frameId ) {
-                    animationFrames[DEATH].push_back( frameId );
-                }
+            for ( int frameId = 49; frameId <= 55; ++frameId ) {
+                animationFrames[DEATH].push_back( frameId );
             }
         }
 
@@ -293,28 +308,33 @@ namespace Bin_Info
             }
         }
 
-        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 )
+        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 ) {
             frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+        }
 
-        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx )
+        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx ) {
             frameXOffset[idx].resize( animationFrames[idx].size(), 0 );
+        }
 
         if ( frameXOffset[MOVE_STOP].size() == 1 && frameXOffset[MOVE_STOP][0] == 0 ) {
-            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 )
+            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 ) {
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
-            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 )
+            }
+            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 ) {
                 frameXOffset[MOVE_STOP][0] = 44 + frameXOffset[MOVE_TILE_START][0];
-            else
+            }
+            else {
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
+            }
         }
 
         // Movement animation fix for Iron and Steel Golem. Also check that the data sizes are correct.
         if ( ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM )
              && ( frameXOffset[MOVE_START].size() == 4 && frameXOffset[MOVE_MAIN].size() == 7 && animationFrames[MOVE_MAIN].size() == 7 ) ) { // the original golem info
             frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-            frameXOffset[MOVE_START][2] = CELLW * 2 / 8 + 3;
-            frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+            frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
+            frameXOffset[MOVE_START][2] = Battle::Cell::widthPx * 2 / 8 + 3;
+            frameXOffset[MOVE_START][3] = Battle::Cell::widthPx * 3 / 8;
 
             // 'MOVE_MAIN' animation is missing 1/4 of animation start. 'MOVE_START' (for first and one cell move) has this 1/4 of animation,
             // but 'MOVE_TILE_START` (for movement after the first cell) is empty, so we move all frames except the last frame from 'MOVE_MAIN'
@@ -329,11 +349,11 @@ namespace Bin_Info
             frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin(), frameXOffset[MOVE_MAIN].end() - 1 );
 
             // Correct the 'x' offset by half of cell.
-            frameXOffset[MOVE_MAIN][0] += CELLW / 2;
+            frameXOffset[MOVE_MAIN][0] += Battle::Cell::widthPx / 2;
             for ( size_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
-                frameXOffset[MOVE_START][id + 4] += CELLW / 2;
+                frameXOffset[MOVE_START][id + 4] += Battle::Cell::widthPx / 2;
                 // For 'MOVE_TILE_START' also include the correction, made in "agg_image.cpp".
-                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - static_cast<int32_t>( id ) ) * CELLW / 28;
+                frameXOffset[MOVE_TILE_START][id] += Battle::Cell::widthPx / 2 - ( 6 - static_cast<int32_t>( id ) ) * Battle::Cell::widthPx / 28;
                 // For 'MOVE_TILE_START' animation frames IDs use new frames, made in "agg_image.cpp", which starts from ID = 40.
                 animationFrames[MOVE_TILE_START][id] = 40 + static_cast<int32_t>( id );
             }
@@ -445,88 +465,65 @@ namespace Bin_Info
             }
         }
 
-        // X offset fix for Swordsman.
-        if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
-             && frameXOffset[MOVE_STOP].size() == 1 ) {
-            frameXOffset[MOVE_START][0] = 0;
-            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-            for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
-                xOffset += CELLW / 4 + 3;
+        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
+            // X offset fix for Swordsman.
+            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) {
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = Battle::Cell::widthPx * 1 / 8;
+                for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
+                    xOffset += Battle::Cell::widthPx / 4 + 3;
+                }
+
+                frameXOffset[MOVE_STOP][0] = Battle::Cell::widthPx;
             }
 
-            frameXOffset[MOVE_STOP][0] = CELLW;
-        }
-    }
-
-    MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
-    {
-        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
-        if ( mapIterator != _animMap.end() ) {
-            return mapIterator->second;
-        }
-        else {
-            const MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( Bin_Info::GetFilename( monsterID ) ) );
-            if ( info.isValid() ) {
-                _animMap[monsterID] = info;
-                return info;
+            // Add extra movement frame to make the animation more smooth.
+            if ( animationFrames[MOVE_MAIN].size() == 7 && frameXOffset[MOVE_MAIN].size() == 7 ) {
+                animationFrames[MOVE_MAIN].insert( animationFrames[MOVE_MAIN].begin(), 45 );
+                frameXOffset[MOVE_MAIN].insert( frameXOffset[MOVE_MAIN].begin(), 8 );
             }
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
+            // Also update the once-cell move animation.
+            if ( animationFrames[MOVE_ONE].size() == 10 && frameXOffset[MOVE_ONE].size() == 10 ) {
+                animationFrames[MOVE_ONE].insert( animationFrames[MOVE_ONE].begin() + 2, 45 );
+                frameXOffset[MOVE_ONE].insert( frameXOffset[MOVE_ONE].begin() + 2, 8 );
             }
         }
-        return MonsterAnimInfo();
     }
 
     bool MonsterAnimInfo::isValid() const
     {
-        if ( animationFrames.size() != SHOOT3_END + 1 )
+        if ( animationFrames.size() != SHOOT3_END + 1 ) {
             return false;
-
-        // Absolute minimal set up
-        const int essentialAnimations[7] = { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 };
-
-        for ( int i = 0; i < 7; ++i ) {
-            if ( animationFrames.at( essentialAnimations[i] ).empty() )
-                return false;
         }
 
-        if ( idlePriority.size() != static_cast<size_t>( idleAnimationCount ) )
-            return false;
+        // Check absolute minimal set of animations.
+        for ( const size_t i : { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 } ) {
+            if ( animationFrames[i].empty() ) {
+                return false;
+            }
+        }
 
-        return true;
-    }
-
-    bool MonsterAnimInfo::hasAnim( int animID ) const
-    {
-        return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
+        return idlePriority.size() == static_cast<size_t>( idleAnimationCount );
     }
 
     size_t MonsterAnimInfo::getProjectileID( const double angle ) const
     {
         const std::vector<float> & angles = projectileAngles;
-        if ( angles.empty() )
+        if ( angles.empty() ) {
             return 0;
+        }
 
         for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
-            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 )
+            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 ) {
                 return id;
+            }
         }
+
         return angles.size() - 1;
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const
-    {
-        return AnimationReference( monsterID );
-    }
-
-    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
+    MonsterAnimInfo GetMonsterInfo( const uint32_t monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
-    }
-
-    void InitBinInfo()
-    {
-        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; ++i )
-            animRefs[i] = _infoCache.createAnimReference( i );
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CAMPAIGN_DATA_H
-#define H2CAMPAIGN_DATA_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -91,11 +90,11 @@ namespace Campaign
         // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
         // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
         // also usable when we have to remove specific awards when completing a mission (PoL campaign)
-        int32_t _id;
-        int32_t _type;
-        int32_t _subType;
-        int32_t _amount;
-        int32_t _startScenarioID;
+        int32_t _id{ 0 };
+        int32_t _type{ 0 };
+        int32_t _subType{ 0 };
+        int32_t _amount{ 0 };
+        int32_t _startScenarioID{ 0 };
         std::string _customName;
 
         CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType );
@@ -116,5 +115,3 @@ namespace Campaign
         static const char * getBaneFleeingMessage( const int monsterId );
     };
 }
-
-#endif

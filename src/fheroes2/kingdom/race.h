@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2RACE_H
-#define H2RACE_H
+
+#pragma once
+
+#include <cstdint>
 
 namespace Race
 {
@@ -39,9 +41,17 @@ namespace Race
         ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    const char * String( int );
-    const char * DoubleLinedString( int );
+    const char * String( int race );
+    const char * DoubleLinedString( int race );
     int Rand();
-}
 
-#endif
+    uint8_t IndexToRace( const int index );
+
+    uint32_t getRaceIcnIndex( const int race, const bool isActivePlayer );
+
+    int getNextRace( const int race );
+    int getPreviousRace( const int race );
+
+    bool isMagicalRace( const int race );
+    bool isEvilRace( const int race );
+}

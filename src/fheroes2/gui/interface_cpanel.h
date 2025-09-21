@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_CPANEL_H
-#define H2INTERFACE_CPANEL_H
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -37,12 +36,12 @@ namespace fheroes2
 
 namespace Interface
 {
-    class Basic;
+    class AdventureMap;
 
     class ControlPanel final : protected fheroes2::Rect
     {
     public:
-        explicit ControlPanel( Basic & );
+        explicit ControlPanel( AdventureMap & );
         ControlPanel( const ControlPanel & ) = delete;
 
         ~ControlPanel() = default;
@@ -55,14 +54,12 @@ namespace Interface
 
         const fheroes2::Rect & GetArea() const;
 
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw() const;
+
     private:
-        friend Basic;
-
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw() const;
-
-        Basic & interface;
+        AdventureMap & interface;
 
         // We do not want to make a copy of images but to store just references to them.
         struct Buttons
@@ -92,5 +89,3 @@ namespace Interface
         fheroes2::Rect rt_end;
     };
 }
-
-#endif

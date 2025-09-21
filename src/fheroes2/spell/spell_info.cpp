@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,14 +27,19 @@
 #include "artifact.h"
 #include "artifact_info.h"
 #include "castle.h"
+#include "color.h"
 #include "direction.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
+#include "mp2.h"
+#include "players.h"
+#include "settings.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -183,7 +188,7 @@ namespace fheroes2
     const Castle * getNearestCastleTownGate( const Heroes & hero )
     {
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomCastles & castles = kingdom.GetCastles();
+        const VecCastles & castles = kingdom.GetCastles();
 
         const Point & heroPosition = hero.GetCenter();
         int32_t minDistance = -1;
@@ -218,7 +223,7 @@ namespace fheroes2
         }
 
         if ( spell.isDamage() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell does %{damage} points of damage." );
             StringReplace( description, "%{damage}", getSpellDamage( spell, hero->GetPower(), hero ) );
 
@@ -235,7 +240,7 @@ namespace fheroes2
 
             const uint32_t summonCount = getSummonMonsterCount( spell, hero->GetPower(), hero );
 
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell summons\n%{count} %{monster}." );
             StringReplace( description, "%{count}", summonCount );
             StringReplace( description, "%{monster}", monster.GetPluralName( summonCount ) );
@@ -244,7 +249,7 @@ namespace fheroes2
         }
 
         if ( spell.isRestore() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell restores %{hp} HP." );
             StringReplace( description, "%{hp}", getHPRestorePoints( spell, hero->GetPower(), hero ) );
 
@@ -252,7 +257,7 @@ namespace fheroes2
         }
 
         if ( spell.isResurrect() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell restores %{hp} HP." );
             StringReplace( description, "%{hp}", getResurrectPoints( spell, hero->GetPower(), hero ) );
 
@@ -269,7 +274,7 @@ namespace fheroes2
 
             const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower(), hero );
 
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell summons %{count} %{monster} to guard the mine." );
             StringReplace( description, "%{count}", guardianCount );
             StringReplace( description, "%{monster}", monster.GetPluralName( guardianCount ) );
@@ -288,14 +293,14 @@ namespace fheroes2
                 return description;
             }
 
-            description += "\n \n";
+            description += "\n\n";
 
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
 
             const Heroes * townHero = castle->GetHero();
             if ( townHero != nullptr ) {
-                description += "\n \n";
+                description += "\n\n";
                 std::string extraLine = _( "This town is occupied by your hero %{hero}." );
                 StringReplace( extraLine, "%{town}", castle->GetName() );
                 StringReplace( extraLine, "%{hero}", townHero->GetName() );
@@ -307,7 +312,7 @@ namespace fheroes2
         }
 
         if ( spell == Spell::HYPNOTIZE ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell controls up to\n%{hp} HP." );
             StringReplace( description, "%{hp}", getHypnotizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
 
@@ -323,39 +328,106 @@ namespace fheroes2
             return -1;
         }
 
-        const int32_t center = hero.GetIndex();
-        const int tilePassability = world.GetTiles( center ).GetPassable();
-        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+        const int32_t heroTileIdx = hero.GetIndex();
+        const int heroTilePassability = world.getTile( heroTileIdx ).GetPassable();
+
         std::vector<int32_t> possibleBoatPositions;
-        for ( const int32_t tileId : tilesAround ) {
-            const int direction = Maps::GetDirection( center, tileId );
-            assert( direction != Direction::UNKNOWN );
+        possibleBoatPositions.reserve( 8 );
 
-            if ( ( tilePassability & direction ) != 0 ) {
-                possibleBoatPositions.emplace_back( tileId );
+        for ( const int32_t tileIdx : Maps::getAroundIndexes( heroTileIdx ) ) {
+            const int direction = Maps::GetDirection( heroTileIdx, tileIdx );
+            assert( direction != Direction::UNKNOWN && direction != Direction::CENTER );
+
+            if ( ( heroTilePassability & direction ) == 0 ) {
+                continue;
+            }
+
+            if ( !world.getTile( tileIdx ).isSuitableForSummoningBoat() ) {
+                continue;
+            }
+
+            possibleBoatPositions.emplace_back( tileIdx );
+        }
+
+        const auto iter = std::min_element( possibleBoatPositions.begin(), possibleBoatPositions.end(),
+                                            [heroPoint = Maps::GetPoint( heroTileIdx )]( const int32_t left, const int32_t right ) {
+                                                const fheroes2::Point leftPoint = Maps::GetPoint( left );
+                                                const fheroes2::Point rightPoint = Maps::GetPoint( right );
+
+                                                const int32_t leftDiffX = leftPoint.x - heroPoint.x;
+                                                const int32_t leftDiffY = leftPoint.y - heroPoint.y;
+                                                const int32_t rightDiffX = rightPoint.x - heroPoint.x;
+                                                const int32_t rightDiffY = rightPoint.y - heroPoint.y;
+
+                                                return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+                                            } );
+        if ( iter == possibleBoatPositions.end() ) {
+            return -1;
+        }
+
+        return *iter;
+    }
+
+    int32_t getSummonableBoat( const Heroes & hero )
+    {
+        const int32_t center = hero.GetIndex();
+        const PlayerColor heroColor = hero.GetColor();
+
+        const bool isResurrectionMap = ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION );
+
+        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
+            assert( Maps::isValidAbsIndex( boatSource ) );
+
+            // In the original game, AI could not use the Summon Boat spell at all, and many of the original maps (including the maps of the original campaign) were
+            // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
+            // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
+            if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
+                     const PlayerColor boatColor = world.getTile( boatSource ).getBoatOwnerColor();
+
+                     // Boats belonging to the hero's kingdom can always be summoned
+                     if ( boatColor == heroColor ) {
+                         return false;
+                     }
+
+                     // Non-neutral boats (belonging to any other kingdom) can never be summoned
+                     if ( boatColor != PlayerColor::NONE ) {
+                         return true;
+                     }
+
+                     // On Resurrection maps, neutral boats can be summoned by both human and AI players
+                     if ( isResurrectionMap ) {
+                         return false;
+                     }
+
+                     // On original HoMM2 maps, neutral boats can only be summoned by human players
+                     {
+#if defined( WITH_DEBUG )
+                         const Player * player = Players::Get( heroColor );
+                         assert( player != nullptr );
+
+                         const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+                         const bool isAIAutoControlMode = false;
+#endif
+
+                         return hero.isControlAI() && !isAIAutoControlMode;
+                     }
+                 }() ) {
+                continue;
+            }
+
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, center );
+            if ( distance > 1 ) {
+                return boatSource;
             }
         }
 
-        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point & rightPoint = Maps::GetPoint( right );
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+        return -1;
+    }
 
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
-
-        int32_t boatDestination = -1;
-        for ( const int32_t tileId : possibleBoatPositions ) {
-            const Maps::Tiles & tile = world.GetTiles( tileId );
-            if ( tile.isWater() ) {
-                boatDestination = tileId;
-                break;
-            }
-        }
-        return boatDestination;
+    bool isHeroNearWater( const Heroes & hero )
+    {
+        const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.getTile( tileId ).isWater(); } );
     }
 }

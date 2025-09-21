@@ -1,0 +1,72 @@
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2025                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+TARGET := fheroes2.js
+
+SDL2_MIXER_FORMATS := mid,mp3,ogg
+
+CCFLAGS := $(CCFLAGS) \
+	--use-port=sdl2 \
+	--use-port=sdl2_mixer \
+	--use-port=zlib \
+	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
+	-sSTRICT
+
+LDFLAGS := $(LDFLAGS) \
+	$(patsubst %, --preload-file ../%@/files/data/, $(wildcard ../../files/data/*.h2d)) \
+	$(patsubst %, --preload-file ../%@/files/lang/, $(wildcard ../../files/lang/*.mo)) \
+	--preload-file ../../../files/timidity/timidity.cfg@/files/timidity/ \
+	$(patsubst %, --preload-file ../%@/files/timidity/instruments/, $(wildcard ../../files/timidity/instruments/*.pat)) \
+	$(patsubst %, --preload-file ../%@/maps/, $(wildcard ../../maps/*.fh2m)) \
+	-sALLOW_MEMORY_GROWTH \
+	-sASYNCIFY \
+	-sASYNCIFY_STACK_SIZE=64kb \
+	-sINCOMING_MODULE_JS_API=canvas,preRun,setStatus \
+	-sINITIAL_MEMORY=128mb \
+	-sMEMORY_GROWTH_LINEAR_STEP=32mb \
+	-sNO_DISABLE_EXCEPTION_CATCHING \
+	-sSDL2_MIXER_FORMATS=$(SDL2_MIXER_FORMATS) \
+	-sSTACK_SIZE=256kb \
+	-sSTRICT \
+	-lGL \
+	-lhtml5 \
+	-lidbfs.js
+
+ifdef FHEROES2_WITH_DEBUG
+CCFLAGS := $(CCFLAGS) -gsource-map
+LDFLAGS := $(LDFLAGS) -O0 -gsource-map
+else
+CCFLAGS := $(CCFLAGS) -flto
+LDFLAGS := $(LDFLAGS) -O3 -flto
+endif
+
+ifdef FHEROES2_WITH_THREADS
+LDFLAGS := $(LDFLAGS) \
+	-Wno-pthreads-mem-growth \
+	-sALLOW_BLOCKING_ON_MAIN_THREAD \
+	-sENVIRONMENT=web,worker \
+	-sPTHREAD_POOL_SIZE=8
+else
+CCFLAGS := $(filter-out -pthread,$(CCFLAGS))
+
+LDFLAGS := $(filter-out -pthread,$(LDFLAGS)) \
+	-sENVIRONMENT=web \
+	-sNO_ALLOW_BLOCKING_ON_MAIN_THREAD
+endif

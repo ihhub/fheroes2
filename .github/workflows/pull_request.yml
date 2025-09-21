@@ -8,20 +8,66 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
+  dispatcher:
+    name: Job dispatcher
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      runCxxAnalyzers: ${{ steps.dispatch.outputs.runCxxAnalyzers }}
+      runSonarAnalyzer: ${{ steps.dispatch.outputs.runSonarAnalyzer }}
+    steps:
+    - uses: actions/github-script@v8
+      id: dispatch
+      with:
+        script: |
+          for await (const modifiedFiles of github.paginate.iterator(
+              github.rest.pulls.listFiles, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: ${{ github.event.number }},
+              }
+          )) {
+              if (modifiedFiles.data.some((fileMetadata) =>
+                  [/\.c$/, /\.cpp$/, /\.h$/, /CMakeLists\.txt$/].some((pattern) => pattern.test(fileMetadata.filename))
+              )) {
+                  core.setOutput("runCxxAnalyzers", "YES");
+                  core.setOutput("runSonarAnalyzer", "YES");
+                  break;
+              }
+              if (!modifiedFiles.data.every((fileMetadata) =>
+                  [/files\/lang\/[^/]*\.po$/, /docs\/json\/[^/]*\.json$/].some((pattern) => pattern.test(fileMetadata.filename))
+              )) {
+                  core.setOutput("runSonarAnalyzer", "YES");
+              }
+          }
   style:
     name: Code style check
-    uses: ./.github/workflows/code_style_check.yml
-  clang:
-    name: Clang Analyzer
     needs:
+    - dispatcher
+    uses: ./.github/workflows/code_style_check.yml
+  codechecker:
+    name: CodeChecker
+    needs:
+    - dispatcher
     - style
-    uses: ./.github/workflows/clang_analyzer.yml
+    uses: ./.github/workflows/codechecker.yml
+    with:
+      run: ${{ needs.dispatcher.outputs.runCxxAnalyzers == 'YES' }}
   iwyu:
     name: IWYU
     needs:
+    - dispatcher
     - style
     uses: ./.github/workflows/iwyu.yml
+    with:
+      run: ${{ needs.dispatcher.outputs.runCxxAnalyzers == 'YES' }}
   msvc:
     name: MSVC
     needs:
@@ -30,8 +76,11 @@ jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     needs:
+    - dispatcher
     - style
     uses: ./.github/workflows/sonarcloud.yml
+    with:
+      run: ${{ needs.dispatcher.outputs.runSonarAnalyzer == 'YES' }}
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   android:

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "monster.h"
+
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "castle.h"
-#include "color.h"
 #include "icn.h"
 #include "luck.h"
-#include "monster.h"
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
@@ -73,24 +74,6 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     return ICN::UNKNOWN;
 }
 
-Monster::Monster( const int m )
-    : id( UNKNOWN )
-{
-    if ( m <= WATER_ELEMENT ) {
-        id = m;
-    }
-    else if ( MONSTER_RND1 == m )
-        id = Rand( LevelType::LEVEL_1 ).GetID();
-    else if ( MONSTER_RND2 == m )
-        id = Rand( LevelType::LEVEL_2 ).GetID();
-    else if ( MONSTER_RND3 == m )
-        id = Rand( LevelType::LEVEL_3 ).GetID();
-    else if ( MONSTER_RND4 == m )
-        id = Rand( LevelType::LEVEL_4 ).GetID();
-    else if ( MONSTER_RND == m )
-        id = Rand( LevelType::LEVEL_ANY ).GetID();
-}
-
 Monster::Monster( const Spell & sp )
     : id( UNKNOWN )
 {
@@ -124,7 +107,7 @@ Monster::Monster( const Spell & sp )
     }
 }
 
-Monster::Monster( int race, uint32_t dw )
+Monster::Monster( const int race, const uint32_t dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
@@ -138,11 +121,6 @@ uint32_t Monster::GetAttack() const
 uint32_t Monster::GetDefense() const
 {
     return fheroes2::getMonsterData( id ).battleStats.defense;
-}
-
-int Monster::GetColor() const
-{
-    return Color::NONE;
 }
 
 int Monster::GetMorale() const
@@ -165,21 +143,22 @@ uint32_t Monster::GetShots() const
     return fheroes2::getMonsterData( id ).battleStats.shots;
 }
 
-// Get universal heuristic of Monster type regardless of context; both combat and strategic value
-// Doesn't account for situational special bonuses such as spell immunity
-double Monster::GetMonsterStrength( int attack, int defense ) const
+double Monster::GetMonsterStrength( int attack /* = -1 */, int defense /* = -1 */ ) const
 {
     // TODO: do not use virtual functions when calculating strength for troops without hero's skills.
 
-    // If no modified values were provided then re-calculate
-    // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
-    if ( attack == -1 )
+    if ( attack < 0 ) {
+        // This is a virtual function that can be overridden in subclasses and take into account various bonuses (for example, hero bonuses)
         attack = GetAttack();
+    }
 
-    if ( defense == -1 )
+    if ( defense < 0 ) {
+        // This is a virtual function that can be overridden in subclasses and take into account various bonuses (for example, hero bonuses)
         defense = GetDefense();
+    }
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
+
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
@@ -242,9 +221,12 @@ uint32_t Monster::GetRNDSize() const
 
 bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
 {
-    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    return fheroes2::isAbilityPresent( fheroes2::getMonsterData( id ).battleStats.abilities, abilityType );
+}
 
-    return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+bool Monster::isWeaknessPresent( const fheroes2::MonsterWeaknessType weaknessType ) const
+{
+    return fheroes2::isWeaknessPresent( fheroes2::getMonsterData( id ).battleStats.weaknesses, weaknessType );
 }
 
 Monster Monster::GetDowngrade() const
@@ -619,7 +601,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case SKELETON:
     case ZOMBIE:
     case ROGUE:
-    case MONSTER_RND1:
+    case RANDOM_MONSTER_LEVEL_1:
         return LevelType::LEVEL_1;
 
     case RANGER:
@@ -637,7 +619,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case MUTANT_ZOMBIE:
     case MUMMY:
     case NOMAD:
-    case MONSTER_RND2:
+    case RANDOM_MONSTER_LEVEL_2:
         return LevelType::LEVEL_2;
 
     case SWORDSMAN:
@@ -667,7 +649,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case AIR_ELEMENT:
     case FIRE_ELEMENT:
     case WATER_ELEMENT:
-    case MONSTER_RND3:
+    case RANDOM_MONSTER_LEVEL_3:
         return LevelType::LEVEL_3;
 
     case PALADIN:
@@ -684,10 +666,10 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case POWER_LICH:
     case BONE_DRAGON:
     case GENIE:
-    case MONSTER_RND4:
+    case RANDOM_MONSTER_LEVEL_4:
         return LevelType::LEVEL_4;
 
-    case MONSTER_RND:
+    case RANDOM_MONSTER:
         switch ( Rand::Get( 0, 3 ) ) {
         default:
             return LevelType::LEVEL_1;
@@ -799,18 +781,45 @@ uint32_t Monster::GetDwelling() const
 
 const char * Monster::GetName() const
 {
-    return _( fheroes2::getMonsterData( id ).generalStats.name );
+    return _( fheroes2::getMonsterData( id ).generalStats.untranslatedName );
 }
 
 const char * Monster::GetMultiName() const
 {
-    return _( fheroes2::getMonsterData( id ).generalStats.pluralName );
+    return _( fheroes2::getMonsterData( id ).generalStats.untranslatedPluralName );
 }
 
 const char * Monster::GetPluralName( uint32_t count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
-    return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
+    return count == 1 ? _( generalStats.untranslatedName ) : _( generalStats.untranslatedPluralName );
+}
+
+const char * Monster::getRandomRaceMonstersName( const uint32_t building )
+{
+    switch ( building ) {
+    case DWELLING_MONSTER1:
+        return _( "randomRace|level 1 creatures" );
+    case DWELLING_MONSTER2:
+    case DWELLING_UPGRADE2:
+        return _( "randomRace|level 2 creatures" );
+    case DWELLING_MONSTER3:
+    case DWELLING_UPGRADE3:
+        return _( "randomRace|level 3 creatures" );
+    case DWELLING_MONSTER4:
+    case DWELLING_UPGRADE4:
+        return _( "randomRace|level 4 creatures" );
+    case DWELLING_MONSTER5:
+    case DWELLING_UPGRADE5:
+        return _( "randomRace|level 5 creatures" );
+    case DWELLING_MONSTER6:
+    case DWELLING_UPGRADE6:
+    case DWELLING_UPGRADE7:
+        return _( "randomRace|level 6 creatures" );
+    default:
+        assert( 0 );
+        return _( "Unknown Monsters" );
+    }
 }
 
 int Monster::ICNMonh() const
@@ -818,21 +827,25 @@ int Monster::ICNMonh() const
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetUpgradeCost() const
+Funds Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
-    const payment_t pay = ( id != upgr.id ) ? ( upgr.GetCost() - GetCost() ) * 2 : GetCost();
-
-    return pay;
-}
-
-uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )
-{
-    if ( hp ) {
-        const uint32_t hp1 = mons.GetHitPoints();
-        const uint32_t count = hp / hp1;
-        return ( count * hp1 ) < hp ? count + 1 : count;
+    if ( id == upgr.id ) {
+        return {};
     }
 
-    return 0;
+    return ( upgr.GetCost() - GetCost() ) * 2;
+}
+
+uint32_t Monster::GetCountFromHitPoints( const Monster & mons, const uint32_t hp )
+{
+    if ( hp == 0 ) {
+        return 0;
+    }
+
+    const uint32_t singleMonsterHP = mons.GetHitPoints();
+    const uint32_t quotient = hp / singleMonsterHP;
+    const uint32_t remainder = hp % singleMonsterHP;
+
+    return ( remainder > 0 ? quotient + 1 : quotient );
 }

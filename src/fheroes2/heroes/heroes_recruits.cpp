@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes_recruits.h"
+
 #include <cassert>
 
+#include "game_io.h"
 #include "heroes.h"
-#include "heroes_recruits.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
@@ -38,28 +41,10 @@ Recruit::Recruit( const Heroes & hero, const uint32_t surrenderDay )
     , _surrenderDay( surrenderDay )
 {}
 
-Recruit::Recruit( const Heroes & hero )
-    : Recruit( hero, 0 )
-{}
-
-Recruits::Recruits()
-    : std::pair<Recruit, Recruit>()
-{}
-
 void Recruits::Reset()
 {
     first = {};
     second = {};
-}
-
-int Recruits::GetID1() const
-{
-    return first.getID();
-}
-
-int Recruits::GetID2() const
-{
-    return second.getID();
 }
 
 Heroes * Recruits::GetHero1() const
@@ -112,17 +97,25 @@ void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrende
 
     hero.SetModes( Heroes::RECRUIT );
 
+    // The original game offers to hire only the hero who retreated or surrendered last. fheroes2 offers to hire up to the last two heroes of this kind.
     Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
 
     recruit = Recruit( hero, heroSurrenderDay );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
+OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit )
 {
-    return msg << recruit._id << recruit._surrenderDay;
+    return stream << recruit._id << recruit._surrenderDay;
 }
 
-StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
+IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit )
 {
-    return msg >> recruit._id >> recruit._surrenderDay;
+    stream >> recruit._id >> recruit._surrenderDay;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++recruit._id;
+    }
+
+    return stream;
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,18 +34,16 @@
 #include "battle_cell.h"
 #include "castle.h"
 #include "monster.h"
-#include "rand.h"
 #include "tools.h"
 #include "translations.h"
 
-Battle::Tower::Tower( const Castle & castle, const TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, randomGenerator, uid )
+Battle::Tower::Tower( const Castle & castle, const TowerType type, const uint32_t uid )
+    : Unit( Troop( Monster::ARCHER, std::min( castle.CountBuildings(), 20U ) ), {}, false, uid )
     , _towerType( type )
     , _attackBonus( castle.GetLevelMageGuild() )
     , _isValid( true )
 {
-    count = std::min( count, 20U );
-    count = std::max( _towerType == TowerType::TWR_CENTER ? count : count / 2, 1U );
+    SetCount( std::max( _towerType == TowerType::TWR_CENTER ? GetCount() : GetCount() / 2, 1U ) );
 
     // Virtual archers shooting from this tower should receive bonuses
     // to their attack skill from the commanding hero (if present)
@@ -108,7 +106,7 @@ fheroes2::Point Battle::Tower::GetPortPosition() const
     return {};
 }
 
-void Battle::Tower::SetDestroy()
+void Battle::Tower::SetDestroyed()
 {
     switch ( _towerType ) {
     case TowerType::TWR_LEFT:
@@ -142,7 +140,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
 
     // This method can be called both during combat and outside of it. In the
     // former case, we have to check if the tower was destroyed during the siege.
-    auto isTowerValid = []( const TowerType towerType ) {
+    const auto isTowerValid = []( const TowerType towerType ) {
         // If the siege is in progress, we need to check the current state of the tower
         if ( GetArena() ) {
             const Tower * tower = Arena::GetTower( towerType );
@@ -160,7 +158,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         const TowerType towerType = *it;
 
         if ( isTowerValid( towerType ) ) {
-            const Tower tower( castle, towerType, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Tower tower( castle, towerType, 0 );
 
             msg.append( _( "The %{name} fires with the strength of %{count} Archers" ) );
             StringReplace( msg, "%{name}", tower.GetName() );
@@ -186,7 +184,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         }
 
         if ( ( it + 1 ) != towerTypes.end() ) {
-            msg.append( "\n \n" );
+            msg.append( "\n\n" );
         }
     }
 

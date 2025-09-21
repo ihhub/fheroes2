@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,8 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_ANIMATION_H
-#define H2BATTLE_ANIMATION_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -33,70 +32,130 @@
 class RandomizedDelay : protected fheroes2::TimeDelay
 {
 public:
-    explicit RandomizedDelay( const uint32_t delay );
+    explicit RandomizedDelay( const uint32_t delay )
+        : fheroes2::TimeDelay( delay )
+        , halfDelay( delay / 2 )
+    {
+        // Do nothing.
+    }
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();
 
 private:
     uint32_t halfDelay;
-    bool timerIsSet;
+    bool timerIsSet{ false };
 };
 
-struct monsterReturnAnim
+struct MonsterReturnAnim
 {
     std::vector<int> start;
     std::vector<int> end;
 };
 
-class AnimationSequence
+class AnimationSequence final
 {
 public:
-    explicit AnimationSequence( const std::vector<int> & seq );
-    AnimationSequence( const AnimationSequence & ) = default;
+    explicit AnimationSequence( const std::vector<int> & seq )
+        : _seq( seq )
+    {
+        // Do nothing.
+    }
+
+    AnimationSequence( const AnimationSequence & ) = delete;
+
+    ~AnimationSequence() = default;
 
     AnimationSequence & operator=( const AnimationSequence & ) = delete;
+
     AnimationSequence & operator=( const std::vector<int> & rhs );
 
-    virtual ~AnimationSequence();
+    int playAnimation( const bool loop = false );
+    int restartAnimation();
 
-    int playAnimation( bool loop = false );
-    virtual int restartAnimation();
+    int getFrame() const
+    {
+        return isValid() ? _seq[_currentFrame] : 0;
+    }
 
-    int getFrame() const;
-    int firstFrame() const;
-    size_t animationLength() const;
-    virtual double movementProgress() const;
-    bool isLastFrame() const;
-    virtual bool isValid() const;
+    int firstFrame() const
+    {
+        return isValid() ? _seq.front() : 0;
+    }
 
-    inline size_t getCurrentFrameId() const
+    size_t animationLength() const
+    {
+        return _seq.size();
+    }
+
+    double movementProgress() const;
+    bool isLastFrame() const
+    {
+        return ( _currentFrame == _seq.size() - 1 );
+    }
+
+    bool isValid() const
+    {
+        return !_seq.empty();
+    }
+
+    size_t getCurrentFrameId() const
     {
         return _currentFrame;
     }
 
-protected:
+private:
     std::vector<int> _seq;
-    size_t _currentFrame;
+    size_t _currentFrame{ 0 };
 };
 
 class AnimationReference
 {
 public:
-    AnimationReference();
-    explicit AnimationReference( int id );
+    explicit AnimationReference( const int monsterID );
+
+    AnimationReference( const AnimationReference & ) = delete;
+    AnimationReference( AnimationReference && ) = default;
 
     virtual ~AnimationReference() = default;
 
-    const std::vector<int> & getAnimationVector( int animState ) const;
-    std::vector<int> getAnimationOffset( int animState ) const;
-    uint32_t getMoveSpeed() const;
-    uint32_t getFlightSpeed() const;
-    uint32_t getShootingSpeed() const;
-    fheroes2::Point getBlindOffset() const;
-    fheroes2::Point getProjectileOffset( size_t direction ) const;
-    int getTroopCountOffset( bool isReflect ) const;
-    uint32_t getIdleDelay() const;
+    AnimationReference & operator=( const AnimationReference & ) = delete;
+    AnimationReference & operator=( AnimationReference && ) = default;
+
+    const std::vector<int> & getAnimationVector( const int animState ) const;
+    std::vector<int> getAnimationOffset( const int animState ) const;
+
+    uint32_t getMoveSpeed() const
+    {
+        return _monsterInfo.moveSpeed;
+    }
+
+    uint32_t getFlightSpeed() const
+    {
+        return _monsterInfo.flightSpeed;
+    }
+
+    uint32_t getShootingSpeed() const
+    {
+        return _monsterInfo.shootSpeed;
+    }
+
+    fheroes2::Point getBlindOffset() const
+    {
+        return _monsterInfo.eyePosition;
+    }
+
+    fheroes2::Point getProjectileOffset( const size_t direction ) const;
+
+    int32_t getTroopCountOffset( const bool isReflect ) const
+    {
+        return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
+    }
+
+    uint32_t getIdleDelay() const
+    {
+        return _monsterInfo.idleAnimationDelay;
+    }
 
 protected:
     int _monsterID;
@@ -107,43 +166,82 @@ protected:
     std::vector<int> _moving;
     std::vector<int> _moveLastTile;
     std::vector<int> _moveOneTile;
-    monsterReturnAnim _flying;
+    MonsterReturnAnim _flying;
     std::vector<int> _winceUp;
     std::vector<int> _winceDown;
     std::vector<int> _wince;
     std::vector<int> _death;
-    monsterReturnAnim _melee[3];
-    monsterReturnAnim _ranged[3];
+    MonsterReturnAnim _melee[3];
+    MonsterReturnAnim _ranged[3];
     std::vector<std::vector<int>> _idle;
     std::vector<std::vector<int>> _offsetX;
 
-    bool appendFrames( std::vector<int> & target, int animID );
+    bool appendFrames( std::vector<int> & target, const size_t animID );
 };
 
-class AnimationState : public AnimationReference
+class AnimationState final : public AnimationReference
 {
 public:
-    explicit AnimationState( int monsterID );
+    explicit AnimationState( const int monsterID );
+
+    AnimationState( const AnimationState & ) = delete;
+
     ~AnimationState() override = default;
 
-    bool switchAnimation( int animstate, bool reverse = false );
-    bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
-    int getCurrentState() const;
+    AnimationState & operator=( const AnimationState & ) = delete;
+
+    bool switchAnimation( const int animState, const bool reverse = false );
+    bool switchAnimation( const std::vector<int> & animationList, const bool reverse = false );
+
+    int getCurrentState() const
+    {
+        return _animState;
+    }
 
     // pass-down methods
-    int playAnimation( bool loop = false );
-    int restartAnimation();
+    int playAnimation( const bool loop = false )
+    {
+        return _currentSequence.playAnimation( loop );
+    }
 
-    int getFrame() const;
-    int firstFrame() const;
+    int restartAnimation()
+    {
+        return _currentSequence.restartAnimation();
+    }
+
+    int getFrame() const
+    {
+        return _currentSequence.getFrame();
+    }
+
+    size_t animationLength() const
+    {
+        return _currentSequence.animationLength();
+    }
+
+    int firstFrame() const
+    {
+        return _currentSequence.firstFrame();
+    }
+
     int32_t getCurrentFrameXOffset() const;
-    size_t animationLength() const;
-    double movementProgress() const;
-    bool isLastFrame() const;
-    bool isValid() const;
+
+    double movementProgress() const
+    {
+        return _currentSequence.movementProgress();
+    }
+
+    bool isLastFrame() const
+    {
+        return _currentSequence.isLastFrame();
+    }
+
+    bool isValid() const
+    {
+        return _currentSequence.isValid();
+    }
 
 private:
     int _animState;
     AnimationSequence _currentSequence;
 };
-#endif

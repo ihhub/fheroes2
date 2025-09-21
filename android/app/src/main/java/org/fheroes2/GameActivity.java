@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,16 +20,21 @@
 
 package org.fheroes2;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
+
 import org.libsdl.app.SDLActivity;
 
 public final class GameActivity extends SDLActivity
@@ -40,12 +45,17 @@ public final class GameActivity extends SDLActivity
         final File filesDir = getFilesDir();
         final File externalFilesDir = getExternalFilesDir( null );
 
-        // Extract H2D and translations to the external app-specific storage (sdcard)
-        extractAssets( "files", externalFilesDir );
-
-        // Extract TiMidity GUS patches and config file to the internal app-specific storage
-        extractAssets( "instruments", filesDir );
-        extractAssets( "timidity.cfg", filesDir );
+        if ( isAssetsDigestChanged( "assets.digest", new File( filesDir, "assets.digest" ) ) ) {
+            try {
+                extractAssets( "files", externalFilesDir );
+                extractAssets( "maps", externalFilesDir );
+                // Digest should be updated only after successful extraction of all assets
+                extractAssets( "assets.digest", filesDir );
+            }
+            catch ( final Exception ex ) {
+                Log.e( "fheroes2", "Failed to extract assets.", ex );
+            }
+        }
 
         super.onCreate( savedInstanceState );
 
@@ -71,41 +81,49 @@ public final class GameActivity extends SDLActivity
         System.exit( 0 );
     }
 
-    private void extractAssets( final String srcPath, final File dstDir )
+    @SuppressWarnings( "SameParameterValue" )
+    private boolean isAssetsDigestChanged( final String assetsDigestPath, final File localDigestFile )
     {
-        final ArrayList<String> assetsPaths;
+        try ( final InputStream assetsDigestStream = getAssets().open( assetsDigestPath ) ) {
+            try ( final InputStream localDigestStream = Files.newInputStream( localDigestFile.toPath() ) ) {
+                if ( Arrays.equals( IOUtils.toByteArray( assetsDigestStream ), IOUtils.toByteArray( localDigestStream ) ) ) {
+                    return false;
+                }
 
-        try {
-            assetsPaths = getAssetsPaths( srcPath );
+                Log.i( "fheroes2", "Digest of assets has been changed." );
+            }
+            catch ( final Exception ex ) {
+                Log.i( "fheroes2", "Failed to access the local digest. Considering the digest of assets as changed.", ex );
+            }
         }
         catch ( final Exception ex ) {
-            Log.e( "fheroes2", "Failed to get a list of assets.", ex );
-
-            return;
+            Log.e( "fheroes2", "Failed to access the digest of assets. Considering the digest of assets as changed.", ex );
         }
 
-        for ( final String path : assetsPaths ) {
+        return true;
+    }
+
+    private void extractAssets( final String srcPath, final File dstDir ) throws IOException
+    {
+        for ( final String path : getAssetsPaths( srcPath ) ) {
             try ( final InputStream in = getAssets().open( path ) ) {
                 final File outFile = new File( dstDir, path );
 
                 final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    outFileDir.mkdirs();
+                    Files.createDirectories( outFileDir.toPath() );
                 }
 
-                try ( final OutputStream out = new FileOutputStream( outFile ) ) {
+                try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
                     IOUtils.copy( in, out );
                 }
-            }
-            catch ( final Exception ex ) {
-                Log.e( "fheroes2", "Failed to extract the asset.", ex );
             }
         }
     }
 
-    private ArrayList<String> getAssetsPaths( final String path ) throws IOException
+    private List<String> getAssetsPaths( final String path ) throws IOException
     {
-        final ArrayList<String> result = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
 
         final String[] assets = getAssets().list( path );
 

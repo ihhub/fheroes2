@@ -1,21 +1,17 @@
-Building with CMake
---------------------------------
-### Linux and macOS
+# Building with CMake
+
+## Linux and macOS
 
 [**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies.
 For Linux and macOS follow to instructions as described above.
 
-Next, you can build project with following commands:
+Next, you can configure the project with following commands:
 
 ```shell
-# SDL1
-cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON
-# OR
-# SDL2
-cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON
+cmake -B build
 ```
 
-After configuration let's build project:
+After configuration let's build the project:
 
 ```shell
 cmake --build build
@@ -23,7 +19,7 @@ cmake --build build
 
 After building, executable can be found in `build` directory.
 
-### Windows / Visual Studio
+## Windows / Visual Studio
 
 For Windows you'll need Visual Studio 2019 with C++ support and
 [vcpkg package manager](https://vcpkg.readthedocs.io/en/latest/) for dependency management.
@@ -49,15 +45,14 @@ After following command Visual Studio automagically will find all required depen
 .\vcpkg\vcpkg integrate install
 ```
 
-Now you ready to compile project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and
+Now you are ready to configure the project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and
 `-DVCPKG_TARGET_TRIPLET` options):
 
 ```shell
-# SDL2
-cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON
+cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
 ```
 
-After configuration let's build project:
+After configuration let's build the project:
 
 ```shell
 cmake --build build --config Release
@@ -65,7 +60,7 @@ cmake --build build --config Release
 
 After building, executable can be found in `build\Release` directory.
 
-### Using Demo data
+## Using Demo Data
 
 CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
 To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For example:

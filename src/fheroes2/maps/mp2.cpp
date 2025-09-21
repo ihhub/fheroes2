@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,6 +60,8 @@ namespace
         case MP2::OBJ_DUNE:
         case MP2::OBJ_LAVAPOOL:
         case MP2::OBJ_SHRUB:
+        case MP2::OBJ_SWAMPY_LAKE:
+        case MP2::OBJ_FROZEN_LAKE:
             return false;
         default:
             break;
@@ -272,8 +274,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _n( "Lighthouse", "Lighthouses", count );
     case OBJ_NON_ACTION_WATER_WHEEL:
         return _n( "Water Wheel", "Water Wheels", count );
-    case OBJ_NON_ACTION_MINES:
-        return _( "Mines" );
+    case OBJ_NON_ACTION_MINE:
+        return _( "Mine" );
     case OBJ_NON_ACTION_MONSTER:
         return _( "Monster" );
     case OBJ_NON_ACTION_OBELISK:
@@ -336,8 +338,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Random Monster - strong" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG:
         return _( "Random Monster - very strong" );
-    case OBJ_NON_ACTION_HEROES:
-        return _( "Heroes" );
+    case OBJ_NON_ACTION_HERO:
+        return _( "Hero" );
     case OBJ_NOTHING_SPECIAL:
         return _( "Nothing Special" );
     case OBJ_MOSSY_ROCK:
@@ -482,6 +484,14 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
         return _( "Water Summoning Altar" );
+    case OBJ_SWAMPY_LAKE:
+        return _( "Swampy Lake" );
+    case OBJ_FROZEN_LAKE:
+        return _( "Frozen Lake" );
+    case OBJ_NON_ACTION_BLACK_CAT:
+        return _( "Black Cat" );
+    case OBJ_NON_ACTION_BARREL:
+        return _( "Barrel" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -494,75 +504,69 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
 
 bool MP2::isDayLife( const MapObjectType objectType )
 {
-    // Only one object on Adventure Map restores every day and this is Magic Well.
+    // Only one object on the Adventure Map restores every day and this is Magic Well.
     return ( objectType == OBJ_MAGIC_WELL );
 }
 
 bool MP2::isWeekLife( const MapObjectType objectType )
 {
-    // TODO: list week object life
     switch ( objectType ) {
-    case OBJ_STABLES:
+    case OBJ_ARTESIAN_SPRING:
     case OBJ_MAGIC_GARDEN:
+    case OBJ_STABLES:
     case OBJ_WATER_WHEEL:
     case OBJ_WINDMILL:
-    case OBJ_ARTESIAN_SPRING:
-    // join army
-    case OBJ_WATCH_TOWER:
-    case OBJ_EXCAVATION:
-    case OBJ_CAVE:
-    case OBJ_TREE_HOUSE:
+    // Monster dwellings.
+    case OBJ_AIR_ALTAR:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_GOBLIN_HUT:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_GOBLIN_HUT:
     case OBJ_HALFLING_HOLE:
     case OBJ_PEASANT_HUT:
-    // recruit army
     case OBJ_RUINS:
     case OBJ_TREE_CITY:
-    case OBJ_WAGON_CAMP:
-    case OBJ_DESERT_TENT:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_BARROW_MOUNDS:
-    // battle and recruit army
-    case OBJ_DRAGON_CITY:
-    case OBJ_CITY_OF_DEAD:
+    case OBJ_TREE_HOUSE:
     case OBJ_TROLL_BRIDGE:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATCH_TOWER:
+    case OBJ_WATER_ALTAR:
     // for AI
-    case OBJ_HEROES:
+    case OBJ_HERO:
         return true;
     default:
         break;
     }
 
     return false;
-}
-
-bool MP2::isMonthLife( const MapObjectType objectType )
-{
-    return objectType == MP2::OBJ_CASTLE;
 }
 
 bool MP2::isBattleLife( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    // luck modificators
-    case OBJ_IDOL:
-    case OBJ_FOUNTAIN:
+    // Luck modifiers.
     case OBJ_FAERIE_RING:
+    case OBJ_FOUNTAIN:
+    case OBJ_IDOL:
     case OBJ_PYRAMID:
-    // morale modificators
+    // Morale modifiers.
     case OBJ_BUOY:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_GRAVEYARD:
+    case OBJ_MERMAID:
     case OBJ_OASIS:
+    case OBJ_SHIPWRECK:
     case OBJ_TEMPLE:
     case OBJ_WATERING_HOLE:
-    case OBJ_GRAVEYARD:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_MERMAID:
+    // Morale and Luck modifiers.
+    case OBJ_BLACK_CAT:
         return true;
     default:
         break;
@@ -571,47 +575,64 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWater )
+bool MP2::isRevisitAllowedForObject( const MapObjectType objectType, const bool accessedFromWater )
 {
-    if ( locatesOnWater ) {
+    switch ( objectType ) {
+    case OBJ_WHIRLPOOL:
+        return false;
+    default:
+        break;
+    }
+
+    return isInGameActionObject( objectType, accessedFromWater );
+}
+
+bool MP2::isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater )
+{
+    if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
-    return isActionObject( objectType );
+    return isInGameActionObject( objectType );
 }
 
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
+    // These are the types of objects that can be placed on water tiles by the original editor and,
+    // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
-    case OBJ_BARRIER: // Can barriers be set on water?
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
-    case OBJ_COAST: // This is actually a land object.
+    case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
+    // Heroes cannot be placed on water by the original editor, but they can board a boat
+    case OBJ_HERO:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
-    case OBJ_MONSTER:
-    case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
-    case OBJ_CASTLE:
+
     case OBJ_BOAT:
+    case OBJ_CASTLE:
         return false;
+
     default:
         break;
     }
 
-    // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( objectType ) : false;
+    // Here we would have to return false, but some map editors allow to place arbitrary objects
+    // on water tiles, so we have to work with this.
+    return isInGameActionObject( objectType );
 }
 
-bool MP2::isActionObject( const MapObjectType objectType )
+bool MP2::isInGameActionObject( const MapObjectType objectType )
 {
     if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) != OBJ_ACTION_OBJECT_TYPE ) {
         // It is not an action object.
@@ -624,6 +645,11 @@ bool MP2::isActionObject( const MapObjectType objectType )
     }
 
     return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
+}
+
+bool MP2::isOffGameActionObject( const MapObjectType objectType )
+{
+    return ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE;
 }
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
@@ -640,10 +666,11 @@ MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType 
     return static_cast<MapObjectType>( objectType | OBJ_ACTION_OBJECT_TYPE );
 }
 
-bool MP2::isQuantityObject( const MapObjectType objectType )
+bool MP2::isValuableResourceObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
+    case OBJ_BARREL:
     case OBJ_CAMPFIRE:
     case OBJ_DAEMON_CAVE:
     case OBJ_DERELICT_SHIP:
@@ -677,7 +704,7 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
     case OBJ_ALCHEMIST_LAB:
     case OBJ_CASTLE:
     case OBJ_LIGHTHOUSE:
-    case OBJ_MINES:
+    case OBJ_MINE:
     case OBJ_SAWMILL:
         return true;
     default:
@@ -692,6 +719,7 @@ bool MP2::isPickupObject( const MapObjectType objectType )
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
     case OBJ_ARTIFACT:
+    case OBJ_BARREL:
     case OBJ_BOTTLE:
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
@@ -729,21 +757,13 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isProtectedObject( const MapObjectType objectType )
+bool MP2::isBattleMandatoryifObjectIsProtected( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_ABANDONED_MINE:
+    // If the artifact is guarded by rogues, it is impossible to refuse a fight.
     case OBJ_ARTIFACT:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_DRAGON_CITY:
-    case OBJ_GRAVEYARD:
     case OBJ_MONSTER:
-    case OBJ_PYRAMID:
-    case OBJ_SHIPWRECK:
-    case OBJ_TROLL_BRIDGE:
         return true;
     default:
         break;
@@ -767,22 +787,23 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
     // Action objects in general should be avoided for fog discovery purposes, because
     // they may be guarded or may require wasting resources
-    return !isActionObject( objectType );
+    return !isInGameActionObject( objectType );
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_HEROES:
-    case OBJ_BOAT:
     case OBJ_BARRIER:
-    case OBJ_JAIL:
+    case OBJ_BOAT:
     case OBJ_BUOY:
-    case OBJ_SKELETON:
+    case OBJ_HERO:
+    case OBJ_JAIL:
     case OBJ_MERMAID:
-    case OBJ_SIRENS:
+    case OBJ_MONSTER:
     case OBJ_SHIPWRECK:
+    case OBJ_SIRENS:
+    case OBJ_SKELETON:
         return true;
     default:
         break;
@@ -794,101 +815,116 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
 int MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_JAIL:
-    case OBJ_BARRIER:
     case OBJ_ARTIFACT:
-    case OBJ_RESOURCE:
-    case OBJ_TREASURE_CHEST:
-    case OBJ_MONSTER:
-    case OBJ_GENIE_LAMP:
-    case OBJ_CAMPFIRE:
-    case OBJ_SHIPWRECK_SURVIVOR:
-    case OBJ_FLOTSAM:
-    case OBJ_SEA_CHEST:
-    case OBJ_BUOY:
-    case OBJ_WHIRLPOOL:
-    case OBJ_BOTTLE:
-    case OBJ_COAST:
+    case OBJ_BARREL:
+    case OBJ_BARRIER:
+    case OBJ_BLACK_CAT:
     case OBJ_BOAT:
-    case OBJ_HEROES:
+    case OBJ_BOTTLE:
+    case OBJ_BUOY:
+    case OBJ_CAMPFIRE:
+    case OBJ_COAST:
+    case OBJ_EVENT:
+    case OBJ_FLOTSAM:
+    case OBJ_GENIE_LAMP:
+    case OBJ_HERO:
+    case OBJ_JAIL:
+    case OBJ_MONSTER:
+    case OBJ_RANDOM_ARTIFACT:
+    case OBJ_RANDOM_ARTIFACT_MAJOR:
+    case OBJ_RANDOM_ARTIFACT_MINOR:
+    case OBJ_RANDOM_ARTIFACT_TREASURE:
+    case OBJ_RANDOM_CASTLE:
+    case OBJ_RANDOM_MONSTER:
+    case OBJ_RANDOM_MONSTER_MEDIUM:
+    case OBJ_RANDOM_MONSTER_STRONG:
+    case OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case OBJ_RANDOM_MONSTER_WEAK:
+    case OBJ_RANDOM_RESOURCE:
+    case OBJ_RANDOM_TOWN:
+    case OBJ_RANDOM_ULTIMATE_ARTIFACT:
+    case OBJ_RESOURCE:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_SKELETON:
+    case OBJ_TREASURE_CHEST:
+    case OBJ_WHIRLPOOL:
         return DIRECTION_ALL;
-    case OBJ_DERELICT_SHIP:
-    case OBJ_TROLL_BRIDGE:
+    case OBJ_ABANDONED_MINE:
+    case OBJ_AIR_ALTAR:
+    case OBJ_ALCHEMIST_LAB:
+    case OBJ_ALCHEMIST_TOWER:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_WITCH_DOCTORS_HUT:
+    case OBJ_ARENA:
+    case OBJ_ARTESIAN_SPRING:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CASTLE:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DAEMON_CAVE:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_EYE_OF_MAGI:
+    case OBJ_FAERIE_RING:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_FORT:
     case OBJ_FOUNTAIN:
-    case OBJ_IDOL:
-    case OBJ_LIGHTHOUSE:
-    case OBJ_OBELISK:
-    case OBJ_SIGN:
-    case OBJ_WATCH_TOWER:
-    case OBJ_WITCHS_HUT:
+    case OBJ_FREEMANS_FOUNDRY:
     case OBJ_GAZEBO:
-    case OBJ_MAGIC_WELL:
-    case OBJ_OBSERVATION_TOWER:
-    case OBJ_PEASANT_HUT:
-    case OBJ_STONE_LITHS:
-    case OBJ_STANDING_STONES:
     case OBJ_GOBLIN_HUT:
+    case OBJ_GRAVEYARD:
+    case OBJ_HALFLING_HOLE:
+    case OBJ_HILL_FORT:
+    case OBJ_HUT_OF_MAGI:
+    case OBJ_IDOL:
+    case OBJ_LEAN_TO:
+    case OBJ_LIGHTHOUSE:
+    case OBJ_MAGELLANS_MAPS:
+    case OBJ_MAGIC_GARDEN:
+    case OBJ_MAGIC_WELL:
+    case OBJ_MERCENARY_CAMP:
+    case OBJ_MERMAID:
+    case OBJ_MINE:
+    case OBJ_OASIS:
+    case OBJ_OBELISK:
+    case OBJ_OBSERVATION_TOWER:
+    case OBJ_ORACLE:
+    case OBJ_PEASANT_HUT:
+    case OBJ_PYRAMID:
+    case OBJ_RUINS:
+    case OBJ_SAWMILL:
+    case OBJ_SHIPWRECK:
     case OBJ_SHRINE_FIRST_CIRCLE:
     case OBJ_SHRINE_SECOND_CIRCLE:
     case OBJ_SHRINE_THIRD_CIRCLE:
-    case OBJ_TREE_HOUSE:
-    case OBJ_ARTESIAN_SPRING:
-    case OBJ_SKELETON:
-    case OBJ_TREE_OF_KNOWLEDGE:
-    case OBJ_ORACLE:
-    case OBJ_OASIS:
-    case OBJ_LEAN_TO:
-    case OBJ_MAGIC_GARDEN:
-    case OBJ_WAGON:
-    case OBJ_TRAVELLER_TENT:
-    case OBJ_ALCHEMIST_TOWER:
-    case OBJ_HUT_OF_MAGI:
-    case OBJ_EYE_OF_MAGI:
-    case OBJ_MERCENARY_CAMP:
-    case OBJ_WINDMILL:
-    case OBJ_WATERING_HOLE:
-    case OBJ_TRADING_POST:
-    case OBJ_EXCAVATION:
-    case OBJ_DESERT_TENT:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_PYRAMID:
-    case OBJ_FORT:
-    case OBJ_RUINS:
-    case OBJ_HILL_FORT:
-    case OBJ_FREEMANS_FOUNDRY:
-    case OBJ_SAWMILL:
-    case OBJ_TREE_CITY:
-    case OBJ_SPHINX:
-    case OBJ_TEMPLE:
-    case OBJ_FAERIE_RING:
-    case OBJ_BARROW_MOUNDS:
-    case OBJ_STABLES:
-    case OBJ_ABANDONED_MINE:
-    case OBJ_MINES:
-    case OBJ_ALCHEMIST_LAB:
-    case OBJ_CAVE:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_GRAVEYARD:
-    case OBJ_DRAGON_CITY:
-    case OBJ_XANADU:
-    case OBJ_HALFLING_HOLE:
-    case OBJ_WAGON_CAMP:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_ARENA:
+    case OBJ_SIGN:
     case OBJ_SIRENS:
-    case OBJ_MERMAID:
+    case OBJ_SPHINX:
+    case OBJ_STABLES:
+    case OBJ_STANDING_STONES:
+    case OBJ_STONE_LITHS:
+    case OBJ_TEMPLE:
+    case OBJ_TRADING_POST:
+    case OBJ_TRAVELLER_TENT:
+    case OBJ_TREE_CITY:
+    case OBJ_TREE_HOUSE:
+    case OBJ_TREE_OF_KNOWLEDGE:
+    case OBJ_TROLL_BRIDGE:
+    case OBJ_WAGON:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATCH_TOWER:
+    case OBJ_WATER_ALTAR:
     case OBJ_WATER_WHEEL:
-    case OBJ_MAGELLANS_MAPS:
-    case OBJ_SHIPWRECK:
+    case OBJ_WATERING_HOLE:
+    case OBJ_WINDMILL:
+    case OBJ_WITCH_DOCTORS_HUT:
+    case OBJ_WITCHS_HUT:
+    case OBJ_XANADU:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    case OBJ_CASTLE:
-        return Direction::CENTER | Direction::BOTTOM;
     default:
         // Did you add a new action object? Please add its passability!
         assert( 0 );
@@ -958,4 +994,57 @@ bool MP2::isDiggingHoleSprite( const int terrainType, const ObjectIcnType object
     }
 
     return ( objectIcnType == terrainObjectIcnType ) && ( index == correctIndex );
+}
+
+bool MP2::doesObjectNeedExtendedMetadata( const MP2::MapObjectType type )
+{
+    switch ( type ) {
+    case OBJ_BOTTLE:
+    case OBJ_CASTLE:
+    case OBJ_EVENT:
+    case OBJ_HERO:
+    case OBJ_JAIL:
+    case OBJ_RANDOM_CASTLE:
+    case OBJ_RANDOM_TOWN:
+    case OBJ_SIGN:
+    case OBJ_SPHINX:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool MP2::doesObjectContainMetadata( const MP2::MapObjectType type )
+{
+    if ( doesObjectNeedExtendedMetadata( type ) ) {
+        // UID for an extended metadata data chunk which should be read outside Tiles object.
+        return true;
+    }
+
+    switch ( type ) {
+    // Only spell scrolls require additional metadata to store spell ID.
+    case OBJ_ARTIFACT:
+    // Traveller's tent and barriers contain a color of the object. As of now we don't use it at all.
+    case OBJ_BARRIER:
+    case OBJ_TRAVELLER_TENT:
+    // Expansion object and dwellings contain ID to identify object type. As of now we don't use it at all.
+    case OBJ_EXPANSION_DWELLING:
+    case OBJ_EXPANSION_OBJECT:
+    // The number of monsters.
+    case OBJ_MONSTER:
+    case OBJ_RANDOM_MONSTER:
+    case OBJ_RANDOM_MONSTER_MEDIUM:
+    case OBJ_RANDOM_MONSTER_STRONG:
+    case OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case OBJ_RANDOM_MONSTER_WEAK:
+    // Ultimate artifact contains radius value to be placed by the engine.
+    case OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
 }

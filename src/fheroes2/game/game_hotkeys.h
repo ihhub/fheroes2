@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace fheroes2
@@ -45,6 +46,11 @@ namespace Game
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
 
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode.
+        GLOBAL_TOGGLE_DEVELOPER_MODE,
+#endif
+
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -64,6 +70,16 @@ namespace Game
         MAIN_MENU_BATTLEONLY,
         MAIN_MENU_NEW_ORIGINAL_CAMPAIGN,
         MAIN_MENU_NEW_EXPANSION_CAMPAIGN,
+
+        EDITOR_MAIN_MENU,
+        EDITOR_NEW_MAP_MENU,
+        EDITOR_LOAD_MAP_MENU,
+        EDITOR_FROM_SCRATCH_MAP_MENU,
+        EDITOR_RANDOM_MAP_MENU,
+        EDITOR_UNDO_LAST_ACTION,
+        EDITOR_REDO_LAST_ACTION,
+        EDITOR_TO_GAME_MAIN_MENU,
+        EDITOR_TOGGLE_PASSABILITY,
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
@@ -90,7 +106,8 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
-        WORLD_CONTINUE_HERO_MOVEMENT,
+        WORLD_QUICK_SELECT_HERO,
+        WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
         WORLD_NEXT_TOWN,
@@ -124,11 +141,12 @@ namespace Game
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
-        BATTLE_AUTO_SWITCH,
-        BATTLE_AUTO_FINISH,
+        BATTLE_TOGGLE_AUTO_COMBAT,
+        BATTLE_QUICK_COMBAT,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,
+        BATTLE_TOGGLE_TURN_ORDER_DISPLAY,
 
         TOWN_DWELLING_LEVEL_1,
         TOWN_DWELLING_LEVEL_2,
@@ -150,10 +168,24 @@ namespace Game
         ARMY_SPLIT_STACK_BY_ONE,
         ARMY_JOIN_STACKS,
         ARMY_UPGRADE_TROOP,
-        ARMY_DISMISS_TROOP,
+        ARMY_DISMISS,
+        ARMY_SWAP,
 
         // WARNING! Put all new event only above this line. No adding in between.
         NO_EVENT,
+    };
+
+    enum class HotKeyCategory : uint8_t
+    {
+        DEFAULT,
+        GLOBAL,
+        MAIN_MENU,
+        CAMPAIGN,
+        WORLD_MAP,
+        BATTLE,
+        TOWN,
+        ARMY,
+        EDITOR,
     };
 
     bool HotKeyPressEvent( const HotKeyEvent eventID );
@@ -171,11 +203,13 @@ namespace Game
 
     const char * getHotKeyEventNameByEventId( const HotKeyEvent eventID );
 
-    std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
+    std::vector<std::pair<HotKeyEvent, HotKeyCategory>> getAllHotKeyEvents();
 
     void globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier );
 
     void HotKeysLoad( const std::string & filename );
 
     void HotKeySave();
+
+    const char * getHotKeyCategoryName( const HotKeyCategory category );
 }

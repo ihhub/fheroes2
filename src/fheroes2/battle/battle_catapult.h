@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,59 +21,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2BATTLE_CATAPULT_H
-#define H2BATTLE_CATAPULT_H
+#pragma once
 
 #include <cstdint>
+#include <map>
 #include <vector>
 
+#include "battle.h"
 #include "math_base.h"
 
 class HeroBase;
+
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
 {
-    enum
-    {
-        CAT_WALL1 = 1,
-        CAT_WALL2 = 2,
-        CAT_WALL3 = 3,
-        CAT_WALL4 = 4,
-        CAT_TOWER1 = 5,
-        CAT_TOWER2 = 6,
-        CAT_BRIDGE = 7,
-        CAT_CENTRAL_TOWER = 8
-    };
-
     class Catapult
     {
     public:
-        explicit Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator );
+        explicit Catapult( const HeroBase & hero );
         Catapult( const Catapult & ) = delete;
 
         Catapult & operator=( const Catapult & ) = delete;
 
-        static fheroes2::Point GetTargetPosition( int target, bool hit );
+        static const std::vector<CastleDefenseStructure> & getAllowedTargets();
+        static CastleDefenseStructure GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets, Rand::PCG32 & randomGenerator );
+        static fheroes2::Point GetTargetPosition( const CastleDefenseStructure target, const bool hit );
 
         uint32_t GetShots() const
         {
             return catShots;
         }
 
-        int GetTarget( const std::vector<uint32_t> & ) const;
-        uint32_t GetDamage() const;
-        bool IsNextShotHit() const;
+        int GetDamage( Rand::PCG32 & randomGenerator ) const;
+        bool IsNextShotHit( Rand::PCG32 & randomGenerator ) const;
 
     private:
-        uint32_t catShots;
-        uint32_t doubleDamageChance;
-        bool canMiss;
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
+        uint32_t catShots{ 0 };
+        uint32_t doubleDamageChance{ 0 };
+        bool canMiss{ false };
     };
 }
-
-#endif

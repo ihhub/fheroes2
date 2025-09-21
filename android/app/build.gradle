@@ -1,15 +1,20 @@
-apply plugin: 'com.android.application'
+import java.nio.file.Files
+import java.security.MessageDigest
+
+plugins {
+    id 'com.android.application'
+}
 
 android {
     namespace 'org.fheroes2'
 
-    compileSdkVersion 33
+    compileSdk 35
 
     defaultConfig {
         applicationId 'org.fheroes2'
 
-        minSdkVersion 22
-        targetSdkVersion 33
+        minSdk 22
+        targetSdk 35
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
@@ -80,27 +85,73 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.5'
 
+    implementation project(':isotools')
     implementation project(':sdl2')
-    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
-    implementation 'com.google.android.material:material:1.8.0'
+
+    implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
+
+    implementation 'com.google.android.material:material:1.13.0'
 }
 
-task copyH2D(type: Copy) {
+tasks.register('copyFH2M', Copy) {
+    from('../../maps') {
+        include '*.fh2m'
+    }
+    into 'src/main/assets/maps'
+}
+
+tasks.register('copyH2D', Copy) {
     from('../../files/data') {
         include '*.h2d'
     }
     into 'src/main/assets/files/data'
 }
 
-task copyTranslations(type: Copy) {
+tasks.register('copyTimidity', Copy) {
+    from('../../files/timidity') {
+        include 'instruments/*.pat'
+        include 'timidity.cfg'
+    }
+    into 'src/main/assets/files/timidity'
+}
+
+tasks.register('copyTranslations', Copy) {
     from('../../files/lang') {
         include '*.mo'
     }
     into 'src/main/assets/files/lang'
 }
 
+tasks.register('generateAssetsDigest') {
+    dependsOn copyFH2M, copyH2D, copyTimidity, copyTranslations
+
+    doLast {
+        final java.nio.file.Path assetsDirPath = layout.projectDirectory.getAsFile()
+                .toPath().resolve('src/main/assets')
+        final java.nio.file.Path digestPath = assetsDirPath.resolve('assets.digest')
+        final boolean isDigestExists = Files.exists(digestPath)
+
+        final StringBuilder sb = new StringBuilder()
+
+        fileTree(dir: assetsDirPath).each {
+            final java.nio.file.Path itPath = it.toPath()
+            if (isDigestExists && Files.isSameFile(itPath, digestPath)) {
+                return
+            }
+
+            final byte[] itBuf = Files.readAllBytes(itPath)
+
+            sb.append(String.format('%0128x % 12d %s\n',
+                    new BigInteger(1, MessageDigest.getInstance('SHA-512').digest(itBuf)),
+                    itBuf.length, assetsDirPath.relativize(itPath)))
+        }
+
+        Files.write(digestPath, sb.toString().getBytes('UTF-8'))
+    }
+}
+
 preBuild {
-    dependsOn copyH2D, copyTranslations
+    dependsOn generateAssetsDigest
 }

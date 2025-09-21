@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,23 +20,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPS_H
-#define H2MAPS_H
+
+#pragma once
 
 #include <algorithm>
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
-#include "mp2.h"
 
-#define TILEWIDTH 32
+class Heroes;
+
+enum class PlayerColor : uint8_t;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
-    enum mapsize_t : int
+    struct ObjectPart;
+
+    enum MapSize : int
     {
         ZERO = 0,
         SMALL = 36,
@@ -48,10 +57,12 @@ namespace Maps
     using Indexes = MapsIndexes;
 
     const char * SizeString( int size );
-    const char * GetMinesName( int res );
+    const char * GetMineName( const int resourceType );
 
     int GetDirection( int from, int to );
-    int32_t GetDirectionIndex( int32_t from, int vector );
+    int32_t GetDirectionIndex( const int32_t from, const int direction );
+    // Returns the nearest point on the map to the current tile, located in the given direction vector.
+    fheroes2::Point getDirectionPoint( const fheroes2::Point & from, const int direction );
     bool isValidDirection( int32_t from, int vector );
 
     bool isValidAbsIndex( const int32_t index );
@@ -64,23 +75,35 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
+    Indexes getAroundIndexes( const int32_t tileIndex, const int32_t width, const int32_t height, const int32_t maxDistanceFromTile );
+
+    MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
-    Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
-    // Returns a list of indexes of tiles with monsters guarding the specified tile
-    Indexes getMonstersProtectingTile( const int32_t tileIndex );
+    // Returns a list of indexes of tiles with monsters guarding the specified tile. If the 'checkObjectOnTile' parameter
+    // is set to true, then an additional check is performed to see if it is possible to interact with an object on this
+    // tile without triggering a monster attack.
+    Indexes getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile = true );
 
-    Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
+    // This function always ignores heroes.
+    bool doesObjectExistOnMap( const MP2::MapObjectType objectType );
+
+    // This function always ignores heroes.
+    Indexes GetObjectPositions( const MP2::MapObjectType objectType );
+
+    // This is a very slow function by performance. Use it only while loading a map.
+    std::vector<std::pair<int32_t, const ObjectPart *>> getObjectParts( const MP2::MapObjectType objectType );
+
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor );
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scoutingDistance, const int playerColor );
+    void ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_t scoutingDistance, const PlayerColor playerColor );
 
     // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
     // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to
@@ -108,5 +131,3 @@ namespace Maps
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void ReplaceRandomCastleObjectId( const fheroes2::Point & );
 }
-
-#endif

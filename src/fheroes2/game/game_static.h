@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,18 +21,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2GAMESTATIC_H
-#define H2GAMESTATIC_H
+#pragma once
 
 #include <cstdint>
+#include <vector>
 
-#include "mp2.h"
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace Skill
 {
-    struct stats_t;
-    struct values_t;
-    struct secondary_t;
+    struct FactionProperties;
+    struct SecondarySkillValuesPerLevel;
 }
 
 class Heroes;
@@ -49,7 +51,7 @@ namespace GameStatic
 
     uint32_t GetLostOnWhirlpoolPercent();
     uint32_t GetGameOverLostDays();
-    uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
+    int32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
     uint32_t GetKingdomMaxHeroes();
 
@@ -60,17 +62,22 @@ namespace GameStatic
 
     uint32_t GetHeroesRestoreSpellPointsPerDay();
 
-    int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
+    // Returns 0 if no effects exist.
+    int32_t getObjectLuckEffect( const MP2::MapObjectType objectType );
+
+    // Returns 0 if no effects exist.
+    int32_t getObjectMoraleEffect( const MP2::MapObjectType objectType );
 
     int GetBattleMoatReduceDefense();
+    // Returns the percentage penalty for the damage dealt by shooters firing at targets protected by castle walls.
+    uint32_t getCastleWallRangedPenalty();
 
-    const Skill::stats_t * GetSkillStats( int race );
-    const Skill::values_t * GetSkillValues( int skill );
-    const Skill::secondary_t * GetSkillForWitchsHut();
+    const Skill::FactionProperties * GetFactionProperties( const int race );
+    const Skill::SecondarySkillValuesPerLevel * GetSecondarySkillValuesPerLevel( const int skill );
+
+    const std::vector<int32_t> & getSecondarySkillsForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
     bool isHeroWorthyToVisitXanadu( const Heroes & hero );
 }
-
-#endif

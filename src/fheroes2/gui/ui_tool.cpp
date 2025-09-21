@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,117 +23,118 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <chrono>
 #include <cmath>
-#include <cstddef>
-#include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <deque>
+#include <stdexcept>
 #include <string>
-#include <utility>
+#include <type_traits>
 
+#include "agg_image.h"
+#include "cursor.h"
 #include "game_delays.h"
+#include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
+#include "pal.h"
+#include "race.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
+#include "tools.h"
 #include "translations.h"
 
 namespace
 {
-    // Renderer of current time and FPS on screen
-    class SystemInfoRenderer
+    // The parameters of display fade effect. Full dark and full bright alpha values.
+    const uint8_t fullDarkAlpha = 0;
+    const uint8_t fullBrightAlpha = 255;
+    // Fade-in and fade-out effects are made in separate functions. Here we set the duration of a single function.
+    const uint32_t screenFadeTimeMs = 100;
+    // For 100 ms duration 6 frames will result in 60 FPS.
+    const uint32_t screenFadeFrameCount = 6;
+    const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
+
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
-    public:
-        SystemInfoRenderer()
-            : _startTime( std::chrono::steady_clock::now() )
-        {}
-
-        void preRender()
-        {
-            if ( !Settings::Get().isSystemInfoEnabled() ) {
-                return;
-            }
-
-            const int32_t offsetX = 26;
-            const int32_t offsetY = fheroes2::Display::instance().height() - 30;
-
-            const tm tmi = System::GetTM( std::time( nullptr ) );
-
-            std::array<char, 9> mbstr{ 0 };
-            std::strftime( mbstr.data(), mbstr.size(), "%H:%M:%S", &tmi );
-
-            std::string info( mbstr.data() );
-
-            const std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
-            const std::chrono::duration<double> time = endTime - _startTime;
-            _startTime = endTime;
-
-            const double totalTime = time.count() * 1000.0;
-            const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
-
-            _fps.push_front( fps );
-            while ( _fps.size() > 10 ) {
-                _fps.pop_back();
-            }
-
-            double averageFps = 0;
-            for ( const double value : _fps ) {
-                averageFps += value;
-            }
-
-            averageFps /= static_cast<double>( _fps.size() );
-            const int32_t currentFps = static_cast<int32_t>( averageFps );
-
-            info += _( ", FPS: " );
-            info += std::to_string( currentFps );
-            if ( averageFps < 10 ) {
-                info += '.';
-                info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
-            }
-
-            _text.SetPos( offsetX, offsetY );
-            _text.SetText( info );
-            _text.Show();
+        if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
+            return;
         }
 
-        void postRender()
-        {
-            if ( _text.isShow() ) {
-                _text.Hide();
+        Cursor::Get().SetThemes( Cursor::POINTER );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+
+        fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
+        Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
+
+        double alpha = startAlpha;
+        const uint32_t delay = fadeTimeMs / frameCount;
+        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
+
+        uint32_t frameNumber = 0;
+
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
+
+                assert( alpha >= 0 && alpha <= 255 );
+
+                const uint8_t fadeAlpha = static_cast<uint8_t>( std::round( alpha ) );
+
+                if ( fadeAlpha == 255 ) {
+                    // This alpha is for fully bright image so there is no need to apply alpha.
+                    Copy( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+                }
+                else if ( fadeAlpha == 0 ) {
+                    // This alpha is for fully dark image so fill it with the black color.
+                    // Color index '0' in all game palettes (including videos) corresponds to the black color.
+                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, 0 );
+                }
+                else {
+                    ApplyAlpha( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fadeAlpha );
+                }
+
+                display.render( fadeRoi );
+
+                alpha -= alphaStep;
+                ++frameNumber;
             }
         }
-
-    private:
-        std::chrono::time_point<std::chrono::steady_clock> _startTime;
-        TextSprite _text;
-        std::deque<double> _fps;
-    };
-
-    SystemInfoRenderer systemInfoRenderer;
+    }
 }
 
 namespace fheroes2
 {
     MovableSprite::MovableSprite()
         : _restorer( Display::instance(), 0, 0, 0, 0 )
-        , _isHidden( true )
-    {}
+    {
+        // Do nothing.
+    }
 
-    MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
-        : Sprite( width_, height_, x_, y_ )
-        , _restorer( Display::instance(), x_, y_, width_, height_ )
-        , _isHidden( height_ == 0 && width_ == 0 )
-    {}
+    MovableSprite::MovableSprite( const int32_t width, const int32_t height, const int32_t x, const int32_t y )
+        : Sprite( width, height, x, y )
+        , _restorer( Display::instance(), x, y, width, height )
+        , _isHidden( height == 0 && width == 0 )
+    {
+        // Do nothing.
+    }
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
         , _restorer( Display::instance(), 0, 0, 0, 0 )
         , _isHidden( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     MovableSprite::~MovableSprite()
     {
@@ -144,20 +145,26 @@ namespace fheroes2
 
     MovableSprite & MovableSprite::operator=( const Sprite & sprite )
     {
+        if ( this == &sprite ) {
+            return *this;
+        }
+
         Sprite::operator=( sprite );
+
         _restorer.update( x(), y(), width(), height() );
+
         return *this;
     }
 
-    void MovableSprite::setPosition( int32_t x_, int32_t y_ )
+    void MovableSprite::setPosition( const int32_t x, const int32_t y )
     {
         if ( _isHidden ) {
-            Sprite::setPosition( x_, y_ );
+            Sprite::setPosition( x, y );
             return;
         }
 
         hide();
-        Sprite::setPosition( x_, y_ );
+        Sprite::setPosition( x, y );
         show();
     }
 
@@ -165,7 +172,7 @@ namespace fheroes2
     {
         if ( _isHidden ) {
             _restorer.update( x(), y(), width(), height() );
-            fheroes2::Blit( *this, Display::instance(), x(), y() );
+            Blit( *this, Display::instance(), x(), y() );
             _isHidden = false;
         }
     }
@@ -176,6 +183,124 @@ namespace fheroes2
             _restorer.restore();
             _isHidden = true;
         }
+    }
+
+    void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
+    {
+        hide();
+
+        assert( _text != nullptr );
+
+        Rect textArea = _text->area();
+        textArea.x += x;
+        textArea.y += y;
+
+        // Not to cut off the top of diacritic signs in capital letters we shift the text down.
+        const int32_t extraShiftY = textArea.y < roi.y ? roi.y - textArea.y : 0;
+        textArea.height += extraShiftY;
+
+        const Rect overlappedRoi = textArea ^ roi;
+
+        _restorer.update( overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
+        _text->drawInRoi( x, y + extraShiftY, _output, overlappedRoi );
+
+        _isHidden = false;
+    }
+
+    TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
+                                    const std::optional<SupportedLanguage> language )
+        : _output( output )
+        , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
+        , _cursor( getCursorSprite( FontType::normalWhite() ) )
+        // We enlarge background to have space for cursor at text edges and space for diacritics.
+        , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
+        , _textInputArea( textArea )
+        , _isSingleLineTextCenterAligned( !isMultiLine && isCenterAligned )
+    {
+        // Do nothing.
+    }
+
+    bool TextInputField::eventProcessing()
+    {
+        if ( !Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            return false;
+        }
+
+        if ( _cursor.isHidden() ) {
+            _cursor.show();
+        }
+        else {
+            _cursor.hide();
+        }
+
+        return true;
+    }
+
+    void TextInputField::draw( const std::string & newText, const int32_t cursorPositionInText )
+    {
+        _cursor.hide();
+        _background.restore();
+
+        _text.set( newText, cursorPositionInText );
+
+        // Multi-line text is currently always automatically center-aligned.
+        const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
+        const int32_t offsetY = _textInputArea.y + 2;
+
+        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+
+        _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
+        _cursor.show();
+
+        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+    }
+
+    SystemInfoRenderer::SystemInfoRenderer()
+        : _startTime( std::chrono::steady_clock::now() )
+        , _text( fheroes2::Display::instance() )
+    {}
+
+    void SystemInfoRenderer::preRender()
+    {
+        const int32_t offsetX = 26;
+        const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+
+        const tm tmi = System::GetTM( std::time( nullptr ) );
+
+        std::array<char, 9> mbstr{ 0 };
+        std::strftime( mbstr.data(), mbstr.size(), "%H:%M:%S", &tmi );
+
+        std::string info( mbstr.data() );
+
+        const std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        _startTime = endTime;
+
+        const double totalTime = time.count() * 1000.0;
+        const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
+
+        _fps.push_front( fps );
+        while ( _fps.size() > 10 ) {
+            _fps.pop_back();
+        }
+
+        double averageFps = 0;
+        for ( const double value : _fps ) {
+            averageFps += value;
+        }
+
+        averageFps /= static_cast<double>( _fps.size() );
+        const int32_t currentFps = static_cast<int32_t>( averageFps );
+
+        info += _( ", FPS: " );
+        info += std::to_string( currentFps );
+        if ( averageFps < 10 ) {
+            info += '.';
+            info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
+        }
+
+        _text.update( std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() ) );
+        _text.draw( offsetX, offsetY );
     }
 
     TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
@@ -203,13 +328,13 @@ namespace fheroes2
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()
     {
-        LocalEvent::PauseCycling();
+        RenderProcessor::instance().stopColorCycling();
     }
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
         Display::instance().changePalette( nullptr );
-        LocalEvent::ResumeCycling();
+        RenderProcessor::instance().startColorCycling();
     }
 
     void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const
@@ -217,19 +342,19 @@ namespace fheroes2
         Display::instance().changePalette( palette );
     }
 
-    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
-        : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
+    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const InterfaceType interfaceType_ )
+        : interfaceType( interfaceType_ )
+        , originalInterfaceType( Settings::Get().getInterfaceType() )
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( interfaceType_ );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
-        if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().setEvilInterface( isOriginalEvilInterface );
+        if ( interfaceType != originalInterfaceType ) {
+            Settings::Get().setInterfaceType( originalInterfaceType );
         }
     }
 
@@ -347,10 +472,9 @@ namespace fheroes2
         const int32_t inHeight = in.height();
         const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
 
-        // If the out image is small for the Death Wave spell effect, resize it and fill the transform layer with "0".
+        // If the out image is small for the Death Wave spell effect, resize it.
         if ( out.width() < outWaveWidth || out.height() < inHeight ) {
             out.resize( outWaveWidth, inHeight );
-            std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );
         }
 
         const int32_t outWidth = out.width();
@@ -409,8 +533,9 @@ namespace fheroes2
         const double redCoeff = 4.0 - darkredStrength / 280.0;
         const double greenBlueCoeff = 4.0 - darkredStrength / 80.0;
 
-        Image out( width, height );
-        std::fill( out.transform(), out.transform() + static_cast<size_t>( width * height ), static_cast<uint8_t>( 0 ) );
+        Image out;
+        out._disableTransformLayer();
+        out.resize( width, height );
 
         uint8_t * imageOutX = out.image();
         const uint8_t * imageIn = in.image();
@@ -466,24 +591,16 @@ namespace fheroes2
         return out;
     }
 
-    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX /* = 0.05 */, const double waveFrequency /* = 20.0 */ )
+    Sprite createRippleEffect( const Sprite & in, const int32_t amplitudeInPixels, const double phaseAtImageTop, const int32_t periodInPixels )
     {
-        if ( in.empty() ) {
-            return {};
+        if ( in.empty() || in.singleLayer() || amplitudeInPixels == 0 ) {
+            return in;
         }
 
         const int32_t widthIn = in.width();
         const int32_t height = in.height();
 
-        // convert frames to -10...10 range with a period of 40
-        const int32_t linearWave = std::abs( 20 - ( frameId + 10 ) % 40 ) - 10;
-        const int32_t progress = 7 - frameId / 10;
-
-        const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
-        const int32_t offsetX = static_cast<int32_t>( std::abs( rippleXModifier ) );
-        const int32_t limitY = static_cast<int32_t>( waveFrequency * M_PI );
-
-        Image out( widthIn + offsetX * 2, height );
+        Sprite out( widthIn + amplitudeInPixels * 2, height, in.x() - amplitudeInPixels, in.y() );
         out.reset();
 
         const int32_t widthOut = out.width();
@@ -495,9 +612,9 @@ namespace fheroes2
         const uint8_t * inTransformY = in.transform();
 
         for ( int32_t y = 0; y < height; ++y, inImageY += widthIn, inTransformY += widthIn, outImageY += widthOut, outTransformY += widthOut ) {
-            // Take top half the sin wave starting at 0 with period set by waveFrequency, result is -1...1
-            const double sinYEffect = sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
-            const int32_t offset = static_cast<int32_t>( rippleXModifier * sinYEffect ) + offsetX;
+            // Calculate sin starting at `phaseAtImageTop` with period set by `periodInPixels`, result is in interval [-1.0, 1.0].
+            const double sinResult = std::sin( ( 2.0 * M_PI ) * y / periodInPixels + phaseAtImageTop );
+            const int32_t offset = static_cast<int32_t>( std::round( amplitudeInPixels * ( sinResult + 1.0 ) ) );
 
             memcpy( outImageY + offset, inImageY, widthIn );
             memcpy( outTransformY + offset, inTransformY, widthIn );
@@ -506,34 +623,48 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs )
+    void fadeOutDisplay()
     {
-        Display & display = Display::instance();
+        const Display & display = Display::instance();
 
-        Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int32_t stepDelay = ( fadeTimeMs * step ) / ( alpha - min );
+        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
 
-        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+    void fadeOutDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
 
-        LocalEvent & le = LocalEvent::Get();
+        // As we are doing fade-out we already have the full bright picture so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullBrightAlpha - screenFadeStep;
 
-        Game::passCustomAnimationDelay( stepDelay );
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( stepDelay ) ) ) {
-            if ( Game::validateCustomAnimationDelay( stepDelay ) ) {
-                if ( alpha < ( min + endAlpha ) ) {
-                    break;
-                }
+        if ( halfFade ) {
+            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullDarkAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
+        }
+    }
 
-                ApplyAlpha( top, shadow, alpha );
-                Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+    void fadeInDisplay()
+    {
+        const Display & display = Display::instance();
 
-                display.render( roi );
+        fadeInDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
 
-                alpha -= step;
-            }
+    void fadeInDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
+
+        // As we are doing fade-in we already have the full dark picture from the previous fade-out so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullDarkAlpha + screenFadeStep;
+
+        if ( halfFade ) {
+            // We add an extra frame to have a smoother fade effect taking into account that the last frame is fully bright to render the image.
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs * 3 / 4, screenFadeFrameCount / 2 + 1 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullBrightAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
         }
     }
 
@@ -563,17 +694,6 @@ namespace fheroes2
                 ++frameNumber;
             }
         }
-    }
-
-    void FadeDisplay( int32_t fadeTimeMs /* = 500 */ )
-    {
-        Display & display = Display::instance();
-        Image temp;
-        Copy( display, temp );
-
-        FadeDisplay( temp, { 0, 0 }, 5, fadeTimeMs );
-
-        Copy( temp, display ); // restore the original image
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
@@ -616,13 +736,127 @@ namespace fheroes2
         }
     }
 
-    void PreRenderSystemInfo()
+    std::optional<int32_t> processIntegerValueTyping( const int32_t min, const int32_t max, std::string & valueBuf )
     {
-        systemInfoRenderer.preRender();
+        assert( min <= max );
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( !le.isAnyKeyPressed() ) {
+            return {};
+        }
+
+        const int32_t zeroBufValue = std::clamp( 0, min, max );
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+            valueBuf.clear();
+
+            return zeroBufValue;
+        }
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_MINUS ) || le.isKeyPressed( fheroes2::Key::KEY_KP_MINUS ) ) {
+            if ( min >= 0 ) {
+                return {};
+            }
+
+            if ( !std::all_of( valueBuf.begin(), valueBuf.end(), []( const char ch ) { return ( ch == '0' ); } ) ) {
+                return {};
+            }
+
+            valueBuf = "-";
+
+            return zeroBufValue;
+        }
+
+        if ( const std::optional<char> newDigit = [&le]() -> std::optional<char> {
+                 using KeyUnderlyingType = std::underlying_type_t<fheroes2::Key>;
+
+                 const fheroes2::Key keyValue = le.getPressedKeyValue();
+
+                 if ( keyValue >= fheroes2::Key::KEY_0 && keyValue <= fheroes2::Key::KEY_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_0 ) + '0' );
+                 }
+
+                 if ( keyValue >= fheroes2::Key::KEY_KP_0 && keyValue <= fheroes2::Key::KEY_KP_9 ) {
+                     return fheroes2::checkedCast<char>( static_cast<KeyUnderlyingType>( keyValue ) - static_cast<KeyUnderlyingType>( fheroes2::Key::KEY_KP_0 ) + '0' );
+                 }
+
+                 return {};
+             }();
+             newDigit ) {
+            valueBuf.push_back( *newDigit );
+
+            const std::optional<int32_t> value = [&valueBuf = std::as_const( valueBuf )]() -> std::optional<int32_t> {
+                try {
+                    return std::stoi( valueBuf );
+                }
+                catch ( std::out_of_range & ) {
+                    return {};
+                }
+            }();
+
+            if ( !value || ( min <= 0 && value < min ) || ( max >= 0 && value > max ) ) {
+                valueBuf.pop_back();
+
+                return {};
+            }
+
+            if ( value == std::clamp( *value, min, max ) ) {
+                return value;
+            }
+
+            return {};
+        }
+
+        return {};
     }
 
-    void PostRenderSystemInfo()
+    void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )
     {
-        systemInfoRenderer.postRender();
+        fheroes2::Image racePortrait( portPos.width, portPos.height );
+
+        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
+            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            if ( applyRandomPalette ) {
+                fheroes2::Sprite tmp = heroSprite;
+                fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                fheroes2::Blit( tmp, 0, std::max( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
+                                std::max( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
+            }
+            else {
+                fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
+                                std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+            }
+        };
+
+        switch ( race ) {
+        case Race::KNGT:
+            preparePortrait( ICN::CMBTHROK, 4, false );
+            break;
+        case Race::BARB:
+            preparePortrait( ICN::CMBTHROB, 5, false );
+            break;
+        case Race::SORC:
+            preparePortrait( ICN::CMBTHROS, 6, false );
+            break;
+        case Race::WRLK:
+            preparePortrait( ICN::CMBTHROW, 7, false );
+            break;
+        case Race::WZRD:
+            preparePortrait( ICN::CMBTHROZ, 8, false );
+            break;
+        case Race::NECR:
+            preparePortrait( ICN::CMBTHRON, 9, false );
+            break;
+        case Race::RAND:
+            preparePortrait( ICN::CMBTHROW, 10, true );
+            break;
+        default:
+            // Have you added a new race? Correct the logic above!
+            assert( 0 );
+            break;
+        }
+        fheroes2::Copy( racePortrait, 0, 0, output, portPos );
     }
 }

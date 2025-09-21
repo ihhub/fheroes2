@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,7 +36,7 @@
 #include "battle.h"
 #include "battle_cell.h"
 #include "cursor.h"
-#include "dialog.h"
+#include "dialog.h" // IWYU pragma: associated
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -48,11 +48,11 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
-#include "payment.h"
+#include "pal.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -126,112 +126,113 @@ namespace
 
     void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     {
-        fheroes2::Point dst_pt;
-        Text text;
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         // attack
-        text.Set( std::string( _( "Attack Skill" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
-        dst_pt.y = dst.y;
-        text.Blit( dst_pt.x, dst_pt.y );
+        fheroes2::Text text( std::string( _( "Attack Skill" ) ) + ":", fheroes2::FontType::normalWhite() );
+        fheroes2::Point dst_pt{ dst.x - text.width(), dst.y };
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         const int offsetX = 6;
         const int offsetY = 16;
 
-        text.Set( troop.GetAttackString() );
+        text.set( troop.GetAttackString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // defense
-        text.Set( std::string( _( "Defense Skill" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Defense Skill" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( troop.GetDefenseString() );
+        text.set( troop.GetDefenseString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        // shot
-        if ( troop.isArchers() ) {
+        if ( fheroes2::getMonsterData( troop.GetID() ).battleStats.shots > 0 ) {
             std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
             message += ':';
-            text.Set( message );
-            dst_pt.x = dst.x - text.w();
+            text.set( std::move( message ), fheroes2::FontType::normalWhite() );
+            dst_pt.x = dst.x - text.width();
             dst_pt.y += offsetY;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-            text.Set( troop.GetShotString() );
+            text.set( troop.GetShotString(), fheroes2::FontType::normalWhite() );
             dst_pt.x = dst.x + offsetX;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
         }
 
         // damage
-        text.Set( std::string( _( "Damage" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Damage" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() )
-            text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ) );
-        else
-            text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) );
+        if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() ) {
+            text.set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ),
+                      fheroes2::FontType::normalWhite() );
+        }
+        else {
+            text.set( std::to_string( troop.GetMonster().GetDamageMin() ), fheroes2::FontType::normalWhite() );
+        }
+
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // hp
-        text.Set( std::string( _( "Hit Points" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Hit Points" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( std::to_string( troop.GetMonster().GetHitPoints() ) );
+        text.set( std::to_string( troop.GetMonster().GetHitPoints() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         if ( troop.isBattle() && troop.GetCount() != 0 ) {
-            text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
-            dst_pt.x = dst.x - text.w();
+            text.set( std::string( _( "Hit Points Left" ) ) + ":", fheroes2::FontType::normalWhite() );
+            dst_pt.x = dst.x - text.width();
             dst_pt.y += offsetY;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-            text.Set( std::to_string( troop.GetHitPointsLeft() ) );
+            text.set( std::to_string( troop.GetHitPointsLeft() ), fheroes2::FontType::normalWhite() );
             dst_pt.x = dst.x + offsetX;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
         }
 
         // speed
-        text.Set( std::string( _( "Speed" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Speed" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( troop.GetSpeedString() );
+        text.set( troop.GetSpeedString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // morale
-        text.Set( std::string( _( "Morale" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Morale" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( Morale::String( troop.GetMorale() ) );
+        text.set( Morale::String( troop.GetMorale() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // luck
-        text.Set( std::string( _( "Luck" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Luck" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( Luck::String( troop.GetLuck() ) );
+        text.set( Luck::String( troop.GetLuck() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
     }
 
-    fheroes2::Sprite GetModesSprite( uint32_t mod )
+    const fheroes2::Sprite & GetModesSprite( const uint32_t mod )
     {
         switch ( mod ) {
         case Battle::SP_BLOODLUST:
@@ -268,7 +269,7 @@ namespace
             break;
         }
 
-        return {};
+        return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
     }
 
     std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
@@ -316,20 +317,21 @@ namespace
         const int maxSpritesWidth = 212;
         const int maxSpriteHeight = 32;
 
-        Text text;
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         if ( ow <= maxSpritesWidth ) {
             ow = dst.x - ow / 2;
             for ( const auto & spell : spellsInfo ) {
                 const fheroes2::Sprite & sprite = GetModesSprite( spell.mode );
                 const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
-                fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+                fheroes2::Blit( sprite, display, imageOffset.x, imageOffset.y );
                 output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) );
 
                 if ( spell.duration > 0 ) {
-                    text.Set( std::to_string( spell.duration ), Font::SMALL );
+                    const fheroes2::Text text( std::to_string( spell.duration ), fheroes2::FontType::smallWhite() );
                     ow += sprite.width() + spell.offset;
-                    text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+                    text.draw( ow - text.width(), dst.y + maxSpriteHeight - text.height() + 3, display );
                 }
                 ow += spell.space;
             }
@@ -351,12 +353,12 @@ namespace
                 const fheroes2::Sprite & sprite = GetModesSprite( spellIt->mode );
                 const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
-                fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+                fheroes2::Blit( sprite, display, imageOffset.x, imageOffset.y );
                 output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) );
 
                 if ( spellIt->duration > 0 ) {
-                    text.Set( std::to_string( spellIt->duration ), Font::SMALL );
-                    text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+                    const fheroes2::Text text( std::to_string( spellIt->duration ), fheroes2::FontType::smallWhite() );
+                    text.draw( ow - text.width(), dst.y + maxSpriteHeight - text.height() + 3, display );
                 }
                 ow -= sprite.width() + space;
             }
@@ -367,17 +369,19 @@ namespace
 
     void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         // name
-        Text text( troop.GetName(), Font::YELLOW_BIG );
-        fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
-        text.Blit( pos.x, pos.y );
+        fheroes2::Text text( troop.GetName(), fheroes2::FontType::normalYellow() );
+        fheroes2::Point pos( offset.x + 29 + ( 227 - text.width() ) / 2, offset.y + 37 );
+        text.draw( pos.x, pos.y + 2, display );
 
         // Description.
         const std::vector<std::string> descriptions = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
         if ( !descriptions.empty() ) {
             const int32_t descriptionWidth = 210;
             const int32_t maximumRowCount = 3;
-            const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
+            const int32_t rowHeight = fheroes2::getFontHeight( fheroes2::FontSize::SMALL );
 
             bool asSolidText = true;
             if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
@@ -403,14 +407,14 @@ namespace
                 const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
                 const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
-                descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, display );
             }
             else {
                 int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
                 for ( const std::string & sentence : descriptions ) {
                     const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
-                    descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                    descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, display );
                     ++sentenceId;
                 }
             }
@@ -418,10 +422,10 @@ namespace
 
         // amount
         if ( troop.GetCount() != 0 ) {
-            text.Set( std::to_string( troop.GetCount() ), Font::BIG );
-            pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
-            pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
-            text.Blit( pos.x, pos.y );
+            text.set( std::to_string( troop.GetCount() ), fheroes2::FontType::normalWhite() );
+            pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.width() / 2;
+            pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.height() / 2;
+            text.draw( pos.x, pos.y + 2, display );
         }
     }
 
@@ -431,9 +435,9 @@ namespace
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
         fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
         if ( isReflected )
-            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
+            monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
         else
-            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
+            monsterPos.x += monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset();
 
         fheroes2::Point inPos( 0, 0 );
         fheroes2::Point outPos( monsterPos.x, monsterPos.y );
@@ -442,7 +446,14 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( fheroes2::FitToRoi( monsterSprite, inPos, display, outPos, inSize, roi ) ) {
-            fheroes2::Blit( monsterSprite, inPos, display, outPos, inSize, isReflected );
+            if ( troop.isModes( Battle::CAP_MIRRORIMAGE ) ) {
+                fheroes2::Sprite outMonsterSprite = monsterSprite;
+                fheroes2::ApplyPalette( outMonsterSprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+                fheroes2::Blit( outMonsterSprite, inPos, display, outPos, inSize, isReflected );
+            }
+            else {
+                fheroes2::Blit( monsterSprite, inPos, display, outPos, inSize, isReflected );
+            }
         }
 
         if ( isAnimated )
@@ -477,7 +488,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    const fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
@@ -506,68 +517,73 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         monsterAnimation.reset();
     }
 
-    const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + SHADOWWIDTH, sprite_dialog.width(), sprite_dialog.height() - 2 * SHADOWWIDTH );
+    const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + fheroes2::shadowWidthPx, sprite_dialog.width(), sprite_dialog.height() - 2 * fheroes2::shadowWidthPx );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
-    const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
-    fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 192;
-    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
+    LocalEvent & le = LocalEvent::Get();
 
-    const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
-    dst_pt.x = pos_rt.x + 280;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
+    if ( !( flags & BUTTONS ) ) {
+        // This is when this dialog is called by a right mouse button press.
+
+        display.render( restorer.rect() );
+
+        while ( le.HandleEvents( true ) ) {
+            if ( !le.isMouseRightButtonPressed() ) {
+                break;
+            }
+        }
+
+        return Dialog::ZERO;
+    }
+
+    std::unique_ptr<fheroes2::Button> buttonUpgrade;
+    std::unique_ptr<fheroes2::Button> buttonDismiss;
 
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
-    dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
+    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
+    const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
+    fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
-    if ( ( flags & ( BUTTONS | UPGRADE ) ) == ( BUTTONS | UPGRADE ) ) {
-        buttonUpgrade.enable();
-        buttonUpgrade.draw();
-    }
-    else {
-        buttonUpgrade.disable();
-    }
+    if ( flags & UPGRADE ) {
+        const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
+        const fheroes2::Point upgradeButtonPosition{ pos_rt.x + 280, pos_rt.y + 192 };
+        buttonUpgrade = std::make_unique<fheroes2::Button>( upgradeButtonPosition.x, upgradeButtonPosition.y, upgradeButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( upgradeButtonIcnID, 0 ), display, upgradeButtonPosition, { -5, 5 } );
 
-    if ( ( flags & ( BUTTONS | DISMISS ) ) == ( BUTTONS | DISMISS ) ) {
-        buttonDismiss.enable();
-        buttonDismiss.draw();
-    }
-    else {
-        buttonDismiss.disable();
+        buttonUpgrade->draw();
     }
 
-    if ( flags & BUTTONS ) {
-        buttonExit.draw();
+    if ( flags & DISMISS ) {
+        const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
+        const fheroes2::Point dismissButtonPosition{ pos_rt.x + 280, pos_rt.y + 221 };
+        buttonDismiss = std::make_unique<fheroes2::Button>( dismissButtonPosition.x, dismissButtonPosition.y, dismissButtonIcnID, 0, 1 );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( dismissButtonIcnID, 0 ), display, dismissButtonPosition, { -5, 5 } );
+
+        buttonDismiss->draw();
     }
 
-    LocalEvent & le = LocalEvent::Get();
+    buttonExit.draw();
+
     int result = Dialog::ZERO;
 
     display.render( restorer.rect() );
 
-    while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
-        if ( !( flags & BUTTONS ) ) {
-            if ( !le.MousePressRight() ) {
-                break;
-            }
-
-            continue;
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
+        if ( buttonUpgrade ) {
+            buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonUpgrade->area() ) );
         }
 
-        if ( buttonUpgrade.isEnabled() ) {
-            le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
+        if ( buttonDismiss ) {
+            buttonDismiss->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDismiss->area() ) );
         }
-        if ( buttonDismiss.isEnabled() ) {
-            le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
-        }
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+
+        if ( buttonUpgrade && ( le.MouseClickLeft( buttonUpgrade->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+            // If this assertion blows up then you are executing this code for a monster which has no upgrades.
+            assert( troop.isAllowUpgrade() );
+
             if ( UPGRADE_DISABLE & flags ) {
                 const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                 fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -582,26 +598,41 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
                 }
             }
         }
-        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
+
+        if ( buttonDismiss && ( le.MouseClickLeft( buttonDismiss->area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
-                    == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
-                                        Dialog::YES | Dialog::NO ) ) {
+                    == fheroes2::showStandardTextMessage( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ),
+                                                          Dialog::YES | Dialog::NO ) ) {
             result = Dialog::DISMISS;
             break;
         }
+
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             result = Dialog::CANCEL;
             break;
         }
 
+        if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
+        }
+        else if ( buttonUpgrade && le.isMouseRightButtonPressedInArea( buttonUpgrade->area() ) ) {
+            fheroes2::showResourceMessage( fheroes2::Text( _( "Upgrade" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( _( "Upgrade your troops." ), fheroes2::FontType::normalWhite() ), 0, troop.GetTotalUpgradeCost() );
+        }
+        else if ( buttonDismiss && le.isMouseRightButtonPressedInArea( buttonDismiss->area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
+        }
+
         for ( const auto & spellInfo : spellAreas ) {
-            if ( le.MousePressRight( spellInfo.first ) ) {
+            if ( le.isMouseRightButtonPressedInArea( spellInfo.first ) ) {
                 fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
                 break;
             }
         }
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            // TODO: Only redraw the half of the window containing the creature. Note that fire-breathing creatures spew fire into the other half,
+            // so the animation has to be changed to only walking animation. Also their walking animation overlaps with the creature name.
             fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
             DrawMonsterStats( monsterStatOffset, troop );
@@ -612,16 +643,19 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
             DrawMonsterInfo( pos_rt.getPosition(), troop );
             DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
-
-            if ( buttonUpgrade.isEnabled() ) {
-                buttonUpgrade.draw();
+            // TODO: Remove these extra shadow drawings once the dialog has been reworked and proper restorers are in place.
+            if ( buttonUpgrade ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_UPGRADE_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 192 }, { -5, 5 } );
+                buttonUpgrade->draw();
             }
 
-            if ( buttonDismiss.isEnabled() ) {
-                buttonDismiss.draw();
+            if ( buttonDismiss ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_DISMISS_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 221 }, { -5, 5 } );
+                buttonDismiss->draw();
             }
 
             if ( buttonExit.isEnabled() ) {
+                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
                 buttonExit.draw();
             }
 
@@ -629,48 +663,19 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         }
     }
 
+    // Force restore the background image on dialog close and immediately update this part of the screen.
+    restorer.restore();
+    display.render( restorer.rect() );
+
     return result;
 }
 
 int Dialog::ArmyJoinFree( const Troop & troop )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    const Text title( _( "Followers" ), Font::YELLOW_BIG );
-
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
-    const int buttons = Dialog::YES | Dialog::NO;
-    int posy = 0;
-
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
-    const fheroes2::Rect & pos = box.GetArea();
-
-    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
-
-    posy = pos.y + 2 * title.h() - 3;
-    textbox.Blit( pos.x, posy );
-
-    fheroes2::ButtonGroup btnGroup( pos, buttons );
-    btnGroup.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    // message loop
-    int result = Dialog::ZERO;
-
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
-    }
-
-    return result;
+    return fheroes2::showStandardTextMessage( _( "Followers" ), std::move( message ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
@@ -686,7 +691,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
         message = _( "The %{monster} is swayed by your diplomatic tongue, and offers to join your army for the sum of %{gold} gold.\nDo you accept?" );
     }
     else {
-        message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n \n" );
+        message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n\n" );
 
         if ( join != troop.GetCount() )
             message += _( "%{offer} of the %{total} %{monster} will join your army, and the rest will leave you alone, for the sum of %{gold} gold.\nDo you accept?" );
@@ -699,26 +704,25 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     StringReplaceWithLowercase( message, "%{monster}", troop.GetPluralName( join ) );
     StringReplace( message, "%{gold}", gold );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text textbox( message, fheroes2::FontType::normalWhite() );
     const int buttons = Dialog::YES | Dialog::NO;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
     int posy = 0;
-    Text text;
 
     message = _( "(Rate: %{percent})" );
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
-    text.Set( message, Font::BIG );
+    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
 
-    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, true );
+    const FrameBox box( 10 + textbox.height( fheroes2::boxAreaWidthPx ) + 10 + text.height() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
-    textbox.Blit( pos.x, posy );
+    textbox.draw( pos.x, posy + 2, fheroes2::boxAreaWidthPx, display );
 
-    posy += textbox.h() + 10;
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, posy );
+    posy += textbox.height( fheroes2::boxAreaWidthPx ) + 10;
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, posy + 2, display );
 
-    posy += text.h() + 40;
+    posy += text.height() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
     const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );

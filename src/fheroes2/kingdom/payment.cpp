@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,27 +24,32 @@
 #include "payment.h"
 #include "buildinginfo.h"
 
-payment_t PaymentConditions::BuyBuilding( int race, uint32_t build )
+Funds PaymentConditions::BuyBuilding( int race, uint32_t build )
 {
     return BuildingInfo::GetCost( build, race );
 }
 
-payment_t PaymentConditions::BuyBoat()
+Funds PaymentConditions::BuyBoat()
 {
-    return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::BuySpellBook()
+Funds PaymentConditions::BuySpellBook()
 {
-    return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::RecruitHero()
+Funds PaymentConditions::RecruitHero()
 {
-    return payment_t( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 2500, 0, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::ForAlchemist()
+Funds PaymentConditions::ForAlchemist()
 {
-    return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
+    return Funds( Cost{ 750, 0, 0, 0, 0, 0, 0 } );
+}
+
+Funds PaymentConditions::getMagellansMapsPurchasePrice()
+{
+    return Funds( Cost{ 1000, 0, 0, 0, 0, 0, 0 } );
 }

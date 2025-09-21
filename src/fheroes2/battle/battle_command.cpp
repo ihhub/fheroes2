@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,15 +22,63 @@
  ***************************************************************************/
 
 #include "battle_command.h"
-#include "spell.h"
 
-Battle::Command::Command( const CommandType cmd )
-    : _type( cmd )
-{}
+#include <algorithm>
+
+#include "rand.h"
+
+int Battle::Command::GetNextValue()
+{
+    int val = 0;
+
+    *this >> val;
+
+    return val;
+}
+
+uint64_t Battle::Command::updatePCG32Stream( uint64_t stream ) const
+{
+    switch ( _type ) {
+    case CommandType::ATTACK:
+        assert( size() == 5 );
+
+        Rand::combineSeedWithValueHash( stream, _type );
+        // Use only cell index to move and attacker & defender UIDs, because cell index to attack and attack direction may differ depending on whether the AI or the human
+        // player gives the command
+        Rand::combineSeedWithValueHash( stream, at( 2 ) );
+        Rand::combineSeedWithValueHash( stream, at( 3 ) );
+        Rand::combineSeedWithValueHash( stream, at( 4 ) );
+        break;
+
+    case CommandType::MOVE:
+    case CommandType::SPELLCAST:
+    case CommandType::MORALE:
+    case CommandType::CATAPULT:
+    case CommandType::TOWER:
+    case CommandType::RETREAT:
+    case CommandType::SURRENDER:
+    case CommandType::SKIP:
+        Rand::combineSeedWithValueHash( stream, _type );
+        std::for_each( begin(), end(), [&stream]( const int param ) { Rand::combineSeedWithValueHash( stream, param ); } );
+        break;
+
+    // These commands should never affect the stream
+    case CommandType::TOGGLE_AUTO_COMBAT:
+    case CommandType::QUICK_COMBAT:
+        break;
+
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return stream;
+}
 
 Battle::Command & Battle::Command::operator<<( const int val )
 {
     push_back( val );
+
     return *this;
 }
 
@@ -40,73 +88,6 @@ Battle::Command & Battle::Command::operator>>( int & val )
         val = back();
         pop_back();
     }
+
     return *this;
-}
-
-int Battle::Command::GetValue()
-{
-    int val = 0;
-    *this >> val;
-    return val;
-}
-
-Battle::Command::Command( const CommandType cmd, const int param1, const int param2 /* = -1 */, const int param3 /* = -1 */, const int param4 /* = -1 */ )
-    : _type( cmd )
-{
-    switch ( _type ) {
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
-        *this << param1; // color
-        break;
-
-    case CommandType::MSG_BATTLE_SURRENDER:
-    case CommandType::MSG_BATTLE_RETREAT:
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
-        break;
-
-    case CommandType::MSG_BATTLE_TOWER:
-        *this << param2 << param1; // enemy uid, type
-        break;
-
-    case CommandType::MSG_BATTLE_CATAPULT: // battle_arena.cpp
-        break;
-
-    case CommandType::MSG_BATTLE_CAST:
-        switch ( param1 ) {
-        case Spell::MIRRORIMAGE:
-            *this << param2 << param1; // who, spell
-            break;
-
-        case Spell::TELEPORT:
-            *this << param3 << param2 << param1; // dst, src, spell
-            break;
-
-        default:
-            *this << param2 << param1; // dst, spell
-            break;
-        }
-        break;
-
-    case CommandType::MSG_BATTLE_END_TURN:
-        *this << param1; // uid
-        break;
-
-    case CommandType::MSG_BATTLE_SKIP:
-        *this << param1; // uid
-        break;
-
-    case CommandType::MSG_BATTLE_MOVE:
-        *this << param2 << param1; // dst, uid
-        break;
-
-    case CommandType::MSG_BATTLE_ATTACK:
-        *this << param4 << param3 << param2 << param1; // direction, dst, uid, uid
-        break;
-
-    case CommandType::MSG_BATTLE_MORALE:
-        *this << param2 << param1; // state, uid
-        break;
-
-    default:
-        break;
-    }
 }

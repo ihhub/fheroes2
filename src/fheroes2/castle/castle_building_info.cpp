@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,17 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-#include <cassert>
-
 #include "castle_building_info.h"
+
+#include <cassert>
+#include <cstdint>
+
 #include "maps_fileinfo.h"
 #include "race.h"
 #include "translations.h"
 
 namespace
 {
-    fheroes2::Rect getKnightBuildingArea( const building_t buildingId )
+    fheroes2::Rect getKnightBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -96,7 +97,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getBarbarianBuildingArea( const building_t buildingId )
+    fheroes2::Rect getBarbarianBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -164,7 +165,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getSorceressBuildingArea( const building_t buildingId )
+    fheroes2::Rect getSorceressBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -229,7 +230,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getWarlockBuildingArea( const building_t buildingId )
+    fheroes2::Rect getWarlockBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -297,7 +298,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getWizardBuildingArea( const building_t buildingId )
+    fheroes2::Rect getWizardBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -365,7 +366,7 @@ namespace
         return {};
     }
 
-    fheroes2::Rect getNecromancerBuildingArea( const building_t buildingId )
+    fheroes2::Rect getNecromancerBuildingArea( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_THIEVESGUILD:
@@ -433,7 +434,7 @@ namespace
         return {};
     }
 
-    const char * getKnightBuildingName( const building_t buildingId )
+    const char * getKnightBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -471,7 +472,7 @@ namespace
         return nullptr;
     }
 
-    const char * getBarbarianBuildingName( const building_t buildingId )
+    const char * getBarbarianBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -505,7 +506,7 @@ namespace
         return nullptr;
     }
 
-    const char * getSorceressBuildingName( const building_t buildingId )
+    const char * getSorceressBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -539,7 +540,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWarlockBuildingName( const building_t buildingId )
+    const char * getWarlockBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -573,7 +574,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWizardBuildingName( const building_t buildingId )
+    const char * getWizardBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -607,7 +608,7 @@ namespace
         return nullptr;
     }
 
-    const char * getNecromancerBuildingName( const building_t buildingId )
+    const char * getNecromancerBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -645,7 +646,47 @@ namespace
         return nullptr;
     }
 
-    const char * getKnightBuildingDescription( const building_t buildingId )
+    const char * getRandomBuildingName( const BuildingType buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "Special" );
+        case BUILD_WEL2:
+            return _( "Horde Building" );
+        case DWELLING_MONSTER1:
+            return _( "Dwelling 1" );
+        case DWELLING_MONSTER2:
+            return _( "Dwelling 2" );
+        case DWELLING_UPGRADE2:
+            return _( "Upg. Dwelling 2" );
+        case DWELLING_MONSTER3:
+            return _( "Dwelling 3" );
+        case DWELLING_UPGRADE3:
+            return _( "Upg. Dwelling 3" );
+        case DWELLING_MONSTER4:
+            return _( "Dwelling 4" );
+        case DWELLING_UPGRADE4:
+            return _( "Upg. Dwelling 4" );
+        case DWELLING_MONSTER5:
+            return _( "Dwelling 5" );
+        case DWELLING_UPGRADE5:
+            return _( "Upg. Dwelling 5" );
+        case DWELLING_MONSTER6:
+            return _( "Dwelling 6" );
+        case DWELLING_UPGRADE6:
+            return _( "Upg. Dwelling 6" );
+        case DWELLING_UPGRADE7:
+            return _( "2x Upg. Dwelling 6" );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
+
+    const char * getKnightBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -661,7 +702,7 @@ namespace
         return nullptr;
     }
 
-    const char * getBarbarianBuildingDescription( const building_t buildingId )
+    const char * getBarbarianBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -677,7 +718,7 @@ namespace
         return nullptr;
     }
 
-    const char * getSorceressBuildingDescription( const building_t buildingId )
+    const char * getSorceressBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -693,7 +734,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWarlockBuildingDescription( const building_t buildingId )
+    const char * getWarlockBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -709,7 +750,7 @@ namespace
         return nullptr;
     }
 
-    const char * getWizardBuildingDescription( const building_t buildingId )
+    const char * getWizardBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -725,7 +766,7 @@ namespace
         return nullptr;
     }
 
-    const char * getNecromancerBuildingDescription( const building_t buildingId )
+    const char * getNecromancerBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
@@ -740,11 +781,27 @@ namespace
         assert( 0 );
         return nullptr;
     }
+
+    const char * getRandomBuildingDescription( const BuildingType buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "The Special building gives a specific bonus to the chosen castle type." );
+        case BUILD_WEL2:
+            return _( "The Horde Building increases the growth rate of the level 1 creatures by 8 per week." );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
 }
 
 namespace fheroes2
 {
-    Rect getCastleBuildingArea( const int race, const building_t buildingId )
+    Rect getCastleBuildingArea( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -774,7 +831,7 @@ namespace fheroes2
         return {};
     }
 
-    const char * getBuildingName( const int race, const building_t buildingId )
+    const char * getBuildingName( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -834,6 +891,8 @@ namespace fheroes2
             return getWizardBuildingName( buildingId );
         case Race::NECR:
             return getNecromancerBuildingName( buildingId );
+        case Race::RAND:
+            return getRandomBuildingName( buildingId );
         default:
             break;
         }
@@ -844,7 +903,7 @@ namespace fheroes2
         return nullptr;
     }
 
-    const char * getBuildingDescription( const int race, const building_t buildingId )
+    const char * getBuildingDescription( const int race, const BuildingType buildingId )
     {
         if ( buildingId == BUILD_NOTHING ) {
             // Special case which we should ignore.
@@ -864,7 +923,7 @@ namespace fheroes2
         case BUILD_WELL:
             return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
         case BUILD_STATUE:
-            return _( "The Statue increases your town's income by %{count} gold per day." );
+            return _( "The Statue increases the town's income by %{count} gold per day." );
         case BUILD_LEFTTURRET:
             return _( "The Left Turret provides extra firepower during castle combat." );
         case BUILD_RIGHTTURRET:
@@ -872,9 +931,11 @@ namespace fheroes2
         case BUILD_MARKETPLACE:
             return _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." );
         case BUILD_MOAT:
-            return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
+            return _( "The Moat slows and weakens attacking units. "
+                      "Any walking unit entering the moat must end its turn there and can only move within the moat one hex at a time. "
+                      "Any creature present in the moat will have its defense skill reduced by %{count}." );
         case BUILD_CASTLE:
-            return _( "The Castle improves town defense and increases income to %{count} gold per day." );
+            return _( "The Castle improves the town's defense and increases its income to %{count} gold per day." );
         case BUILD_TENT:
             return _( "The Tent provides workers to build a castle, provided the materials and the gold are available." );
         case BUILD_CAPTAIN:
@@ -902,6 +963,8 @@ namespace fheroes2
             return getWizardBuildingDescription( buildingId );
         case Race::NECR:
             return getNecromancerBuildingDescription( buildingId );
+        case Race::RAND:
+            return getRandomBuildingDescription( buildingId );
         default:
             break;
         }
@@ -912,9 +975,469 @@ namespace fheroes2
         return nullptr;
     }
 
-    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version )
+    BuildingType getUpgradeForBuilding( const int race, const BuildingType buildingId )
     {
-        std::vector<building_t> priorities;
+        switch ( buildingId ) {
+        case BUILD_TENT:
+            return BUILD_CASTLE;
+        case BUILD_MAGEGUILD1:
+            return BUILD_MAGEGUILD2;
+        case BUILD_MAGEGUILD2:
+            return BUILD_MAGEGUILD3;
+        case BUILD_MAGEGUILD3:
+            return BUILD_MAGEGUILD4;
+        case BUILD_MAGEGUILD4:
+            return BUILD_MAGEGUILD5;
+        default:
+            break;
+        }
+
+        if ( race == Race::BARB ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::KNGT ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::NECR ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::SORC ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::WRLK ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            case DWELLING_UPGRADE6:
+                return DWELLING_UPGRADE7;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::WZRD ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::RAND ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            case DWELLING_UPGRADE6:
+                return DWELLING_UPGRADE7;
+            default:
+                break;
+            }
+        }
+
+        return buildingId;
+    }
+
+    BuildingType getBuildingRequirement( const int race, const BuildingType building )
+    {
+        uint32_t requirement = 0;
+
+        switch ( building ) {
+        case BUILD_SPEC:
+            if ( race == Race::WZRD ) {
+                requirement |= BUILD_MAGEGUILD1;
+            }
+            break;
+
+        case DWELLING_MONSTER2:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+            case Race::WZRD:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_TAVERN;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER3:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::BARB:
+            case Race::SORC:
+            case Race::WZRD:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER4:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_TAVERN;
+                break;
+
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            case Race::WZRD:
+            case Race::WRLK:
+                requirement |= DWELLING_MONSTER2;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_THIEVESGUILD;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER5:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::WRLK:
+                requirement |= DWELLING_MONSTER3;
+                break;
+
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER6:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::BARB:
+            case Race::SORC:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::WRLK:
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER4;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE2:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER2;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE3:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER3;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE4:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE5:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::WZRD:
+                requirement |= BUILD_SPEC;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::NECR:
+                requirement |= BUILD_MAGEGUILD2;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE6:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::WRLK:
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER6;
+                break;
+
+            default:
+                break;
+            }
+            break;
+        case DWELLING_UPGRADE7:
+            if ( race == Race::WRLK )
+                requirement |= DWELLING_UPGRADE6;
+            break;
+
+        default:
+            break;
+        }
+
+        return static_cast<BuildingType>( requirement );
+    }
+
+    std::string getBuildingRequirementString( const int race, const BuildingType building )
+    {
+        // prepare requirement build string
+        std::string requirement;
+        const uint32_t requirementBuildingIds = fheroes2::getBuildingRequirement( race, building );
+        const char sep = '\n';
+
+        for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
+            if ( requirementBuildingIds & itr ) {
+                requirement.append( Castle::GetStringBuilding( itr, race ) );
+                requirement += sep;
+            }
+
+        // Remove the last separator.
+        if ( !requirement.empty() ) {
+            requirement.pop_back();
+        }
+
+        return requirement;
+    }
+
+    int getIndexBuildingSprite( const BuildingType build )
+    {
+        switch ( build ) {
+        case DWELLING_MONSTER1:
+            return 19;
+        case DWELLING_MONSTER2:
+            return 20;
+        case DWELLING_MONSTER3:
+            return 21;
+        case DWELLING_MONSTER4:
+            return 22;
+        case DWELLING_MONSTER5:
+            return 23;
+        case DWELLING_MONSTER6:
+            return 24;
+        case DWELLING_UPGRADE2:
+            return 25;
+        case DWELLING_UPGRADE3:
+            return 26;
+        case DWELLING_UPGRADE4:
+            return 27;
+        case DWELLING_UPGRADE5:
+            return 28;
+        case DWELLING_UPGRADE6:
+            return 29;
+        case DWELLING_UPGRADE7:
+            return 30;
+        case BUILD_MAGEGUILD1:
+        case BUILD_MAGEGUILD2:
+        case BUILD_MAGEGUILD3:
+        case BUILD_MAGEGUILD4:
+        case BUILD_MAGEGUILD5:
+            return 0;
+        case BUILD_THIEVESGUILD:
+            return 1;
+        case BUILD_SHRINE:
+        case BUILD_TAVERN:
+            return 2;
+        case BUILD_SHIPYARD:
+            return 3;
+        case BUILD_WELL:
+            return 4;
+        case BUILD_CASTLE:
+            return 6;
+        case BUILD_STATUE:
+            return 7;
+        case BUILD_LEFTTURRET:
+            return 8;
+        case BUILD_RIGHTTURRET:
+            return 9;
+        case BUILD_MARKETPLACE:
+            return 10;
+        case BUILD_WEL2:
+            return 11;
+        case BUILD_MOAT:
+            return 12;
+        case BUILD_SPEC:
+            return 13;
+        case BUILD_CAPTAIN:
+            return 15;
+        default:
+            break;
+        }
+
+        return 0;
+    }
+
+    std::vector<BuildingType> getBuildingDrawingPriorities( const int race, const GameVersion version )
+    {
+        std::vector<BuildingType> priorities;
         priorities.reserve( 32 );
 
         switch ( race ) {
@@ -1072,7 +1595,7 @@ namespace fheroes2
             break;
         case Race::NECR:
             priorities.emplace_back( BUILD_SPEC );
-            if ( version == GameVersion::PRICE_OF_LOYALTY ) {
+            if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
                 priorities.emplace_back( BUILD_SHRINE );
             }
             priorities.emplace_back( BUILD_TENT );

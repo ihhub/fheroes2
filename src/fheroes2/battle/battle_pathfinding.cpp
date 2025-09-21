@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,9 +24,9 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <vector>
 
 #include "battle_arena.h"
@@ -44,14 +44,14 @@ namespace Battle
 {
     void BattlePathfinder::reEvaluateIfNeeded( const Unit & unit )
     {
-        assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
+        assert( unit.GetHeadIndex() != -1 && ( unit.isWide() ? unit.GetTailIndex() != -1 : unit.GetTailIndex() == -1 ) );
 
         const Board * board = Arena::GetBoard();
         assert( board != nullptr );
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::bitset<ARENASIZE> boardStatus;
+        std::array<bool, Board::sizeInCells> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
@@ -61,7 +61,7 @@ namespace Battle
 
         auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
         const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), boardStatus );
+                                                  unit.GetColor(), std::cref( boardStatus ) );
 
         // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
@@ -85,17 +85,18 @@ namespace Battle
                     continue;
                 }
 
-                assert( !_isWide || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( unit ) );
 
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
 
-                const BattleNodeIndex newNodeIdx = { headCellIdx, tailCellIdx };
-                if ( newNodeIdx == _pathStart ) {
-                    continue;
-                }
+                if ( const auto [iter, inserted] = _cache.try_emplace( { headCellIdx, tailCellIdx } ); inserted ) {
+                    // Wide units can occupy overlapping positions, the distance between which is actually zero,
+                    // but since the movement takes place, we will consider the distance equal to 1 in this case
+                    const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
 
-                _cache.try_emplace( newNodeIdx, _pathStart, 1, 1 );
+                    iter->second.update( _pathStart, 1, distance );
+                }
             }
 
             return;
@@ -126,8 +127,7 @@ namespace Battle
         }();
 
         std::vector<BattleNodeIndex> nodesToExplore;
-
-        nodesToExplore.reserve( ARENASIZE * 2 );
+        nodesToExplore.reserve( Board::sizeInCells * 2 );
         nodesToExplore.push_back( _pathStart );
 
         for ( size_t nodesToExploreIdx = 0; nodesToExploreIdx < nodesToExplore.size(); ++nodesToExploreIdx ) {
@@ -143,7 +143,7 @@ namespace Battle
                 const Cell * currentHeadCell = Board::GetCell( currentHeadCellIdx );
                 assert( currentHeadCell != nullptr );
 
-                const bool isCurrentLeftDirection = ( ( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) & LEFT_SIDE ) != 0 );
+                const bool isCurrentLeftDirection = isLeftSide( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) );
                 // The moat restrictions can be ignored if the wide unit originally occupied a moat cell, and at the current step any part
                 // of this unit occupies the same moat cell
                 const bool isIgnoreMoat = ( currentHeadCellIdx == pathStartMoatCellIdx || currentTailCellIdx == pathStartMoatCellIdx );
@@ -158,22 +158,20 @@ namespace Battle
                         continue;
                     }
 
-                    const int32_t tailCellIdx = ( Board::GetDirection( currentHeadCellIdx, headCellIdx ) & LEFT_SIDE ) ? headCellIdx + 1 : headCellIdx - 1;
+                    const int32_t tailCellIdx = isLeftSide( Board::GetDirection( currentHeadCellIdx, headCellIdx ) ) ? headCellIdx + 1 : headCellIdx - 1;
 
                     const BattleNodeIndex newNodeIdx = { headCellIdx, tailCellIdx };
                     if ( newNodeIdx == _pathStart ) {
                         continue;
                     }
 
-                    // Turning back is not a movement
+                    // Reversal is not a movement
                     const uint32_t cost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
                     const uint32_t distance = currentNode._distance + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : 1 );
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -210,9 +208,7 @@ namespace Battle
 
                     BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = cost;
-                        newNode._distance = distance;
+                        newNode.update( currentNodeIdx, cost, distance );
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -240,6 +236,24 @@ namespace Battle
         const auto & [index, node] = *iter;
 
         return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !isOnCurrentTurn || node._cost <= _speed );
+    }
+
+    uint32_t BattlePathfinder::getCost( const Unit & unit, const Position & position )
+    {
+        assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
+
+        const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
+
+        const auto iter = _cache.find( nodeIdx );
+        assert( iter != _cache.end() );
+
+        const auto & [index, node] = *iter;
+        // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+        assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
+
+        return node._cost;
     }
 
     uint32_t BattlePathfinder::getDistance( const Unit & unit, const Position & position )
@@ -290,20 +304,21 @@ namespace Battle
 
         reEvaluateIfNeeded( unit );
 
-        const BattleNodeIndex targetNodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
-
         Indexes result;
         result.reserve( Speed::INSTANT );
 
         BattleNodeIndex lastReachableNodeIdx{ -1, -1 };
-        BattleNodeIndex nodeIdx = targetNodeIdx;
+        BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
             const auto & [index, node] = *iter;
 
-            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } ) {
+            if ( index == _pathStart ) {
                 break;
             }
+
+            // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+            assert( ( node._from != BattleNodeIndex{ -1, -1 } ) );
 
             nodeIdx = node._from;
 
@@ -340,5 +355,62 @@ namespace Battle
         }
 
         return result;
+    }
+
+    Position BattlePathfinder::getClosestReachablePosition( const Unit & unit, const Position & position )
+    {
+        assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
+
+        BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
+
+        for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
+            const auto & [index, node] = *iter;
+
+            if ( index == _pathStart ) {
+                break;
+            }
+
+            // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+            assert( ( node._from != BattleNodeIndex{ -1, -1 } ) );
+
+            nodeIdx = node._from;
+
+            // A given position may be reachable in principle, but is not reachable on the current turn.
+            // Skip the steps that are not reachable on this turn.
+            if ( node._cost > _speed ) {
+                continue;
+            }
+
+            Position result;
+
+            if ( _isWide ) {
+                assert( index.first != -1 && index.second != -1 );
+
+                const bool isReflect = index.first < index.second;
+
+                result.Set( index.first, true, isReflect );
+
+                assert( result.GetHead() != nullptr && result.GetHead()->GetIndex() == index.first && result.GetTail() != nullptr
+                        && result.GetTail()->GetIndex() == index.second );
+
+                // If a given position is not reachable on the current turn, then the last reachable position of
+                // a wide unit may be reversed in regard to the target one. Detect this and turn it over.
+                if ( isReflect != position.isReflect() ) {
+                    // The last reachable position should not be a reversed version of the target position
+                    assert( !position.contains( index.first ) || !position.contains( index.second ) );
+
+                    result.Swap();
+                }
+            }
+            else {
+                result.Set( index.first, false, false );
+            }
+
+            return result;
+        }
+
+        return {};
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,35 +23,10 @@
 #include <string>
 #include <vector>
 
+#include "game_language.h"
+
 namespace fheroes2
 {
-    enum class SupportedLanguage : int
-    {
-        English = 0, // default language for all versions of the game.
-        French, // GoG version
-        Polish, // GoG version
-        German, // GoG version
-        Russian, // Buka and XXI Vek versions
-        Italian, // Rare version?
-        Czech, // Local release occurred in 2002 by CD Projekt
-
-        // All languages listed below are original to fheroes2.
-        Belarusian,
-        Bulgarian,
-        Danish,
-        Dutch,
-        Hungarian,
-        Norwegian,
-        Portuguese,
-        Romanian,
-        Slovak,
-        Spanish,
-        Swedish,
-        Turkish,
-        Ukrainian,
-        Vietnamese
-    };
-
     class LanguageSwitcher
     {
     public:
@@ -83,4 +58,6 @@ namespace fheroes2
     void updateAlphabet( const std::string & abbreviation );
 
     SupportedLanguage getCurrentLanguage();
+
+    CodePage getCodePage( const SupportedLanguage language );
 }

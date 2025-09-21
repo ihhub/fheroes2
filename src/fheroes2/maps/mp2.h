@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,8 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MP2_H
-#define H2MP2_H
+
+#pragma once
 
 #include <cstdint>
 
@@ -49,22 +49,30 @@ namespace MP2
     };
 
     // Tile structure from the original map format.
-    struct mp2tile_t
+    struct MP2TileInfo
     {
         // Terrain image index used for terrain tile display on Adventure Map.
         uint16_t terrainImageIndex;
 
-        uint8_t objectName1; // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
-        uint8_t level1IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t objectName1;
+
+        // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        uint8_t bottomIcnImageIndex;
 
         // First 2 bits correspond to object layer type used to identify the order of rendering on Adventure Map.
         // The third bit is unknown. TODO: find out what the third bit is used for.
         // The last 5 bits are used together with quantity 2 as the value for the object.
         uint8_t quantity1;
 
-        uint8_t quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
-        uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
-        uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        // Used as a part of quantity, field size is actually 13 bits. Has most significant bits.
+        uint8_t quantity2;
+
+        // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t objectName2;
+
+        // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        uint8_t topIcnImageIndex;
 
         // First 2 bits responsible for terrain shape (0 - 3).
         // Third, forth and fifth bits belong to tiles of water touching land (beach). There are only two combinations of them (from lowest to highest):
@@ -78,7 +86,8 @@ namespace MP2
         // Refer to MapObjectType enumeration below.
         uint8_t mapObjectType;
 
-        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+        // Next add-on index. Zero value means it's the last addon chunk.
+        uint16_t nextAddonIndex;
 
         // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
         // UID is used to find all pieces/addons which belong to the same object.
@@ -92,15 +101,22 @@ namespace MP2
     };
 
     // Addon structure from the original map format.
-    struct mp2addon_t
+    struct MP2AddonInfo
     {
-        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+        // Next add-on index. Zero value means it's the last addon chunk.
+        uint16_t nextAddonIndex;
 
         uint8_t objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
-        uint8_t indexNameN1; // level 1.N or 0xFF
+
+        // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        uint8_t bottomIcnImageIndex;
+
         uint8_t quantityN; // Bitfield containing metadata
+
         uint8_t objectNameN2; // level 2.N
-        uint8_t indexNameN2; // level 1.N or 0xFF
+
+        // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        uint8_t topIcnImageIndex;
 
         // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
         // UID is used to find all pieces/addons which belong to the same object.
@@ -114,7 +130,7 @@ namespace MP2
     };
 
     // An object type could be action and non-action. If both parts are present the difference between them must be 128.
-    enum MapObjectType : uint8_t
+    enum MapObjectType : uint16_t
     {
         // This section defines all types of NON-action objects which are present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
@@ -142,7 +158,7 @@ namespace MP2
         OBJ_NON_ACTION_DRAGON_CITY = 20,
         OBJ_NON_ACTION_LIGHTHOUSE = 21,
         OBJ_NON_ACTION_WATER_WHEEL = 22,
-        OBJ_NON_ACTION_MINES = 23,
+        OBJ_NON_ACTION_MINE = 23,
         OBJ_NON_ACTION_MONSTER = 24, // Never set in maps.
         OBJ_NON_ACTION_OBELISK = 25,
         OBJ_NON_ACTION_OASIS = 26,
@@ -174,7 +190,7 @@ namespace MP2
         OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54, // Never set in maps.
-        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. This type is used for any types of heroes, including random.
+        OBJ_NON_ACTION_HERO = 55, // Never set in maps. This type is used for any types of heroes, including random.
         OBJ_NOTHING_SPECIAL = 56,
         OBJ_MOSSY_ROCK = 57, // It is a Rock with moss for Swamp terrain. ICN::OBJNSWMP, images 138-139. In the original game it has no name.
         OBJ_NON_ACTION_WATCH_TOWER = 58,
@@ -217,7 +233,7 @@ namespace MP2
         OBJ_NON_ACTION_MAGIC_GARDEN = 95, // Never set in maps.
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_REEFS = 98, // Never set in maps. Not in use within the original Editor.
+        OBJ_REEFS = 98, // Never used within the original Editor.
         OBJ_TREES = 99,
         OBJ_MOUNTAINS = 100,
         OBJ_VOLCANO = 101,
@@ -276,7 +292,7 @@ namespace MP2
         OBJ_DRAGON_CITY = OBJ_NON_ACTION_DRAGON_CITY + OBJ_ACTION_OBJECT_TYPE,
         OBJ_LIGHTHOUSE = OBJ_NON_ACTION_LIGHTHOUSE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_WATER_WHEEL = OBJ_NON_ACTION_WATER_WHEEL + OBJ_ACTION_OBJECT_TYPE,
-        OBJ_MINES = OBJ_NON_ACTION_MINES + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MINE = OBJ_NON_ACTION_MINE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_MONSTER = OBJ_NON_ACTION_MONSTER + OBJ_ACTION_OBJECT_TYPE,
         OBJ_OBELISK = OBJ_NON_ACTION_OBELISK + OBJ_ACTION_OBJECT_TYPE,
         OBJ_OASIS = OBJ_NON_ACTION_OASIS + OBJ_ACTION_OBJECT_TYPE,
@@ -308,7 +324,7 @@ namespace MP2
         OBJ_RANDOM_MONSTER_MEDIUM = OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_STRONG + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_VERY_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG + OBJ_ACTION_OBJECT_TYPE,
-        OBJ_HEROES, // This type is used for any types of heroes, including random.
+        OBJ_HERO = OBJ_NON_ACTION_HERO + OBJ_ACTION_OBJECT_TYPE, // This type is used for any types of heroes, including random.
         OBJ_ACTION_NOTHING_SPECIAL = OBJ_NOTHING_SPECIAL + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_ACTION_MOSSY_ROCK = OBJ_MOSSY_ROCK + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_WATCH_TOWER = OBJ_NON_ACTION_WATCH_TOWER + OBJ_ACTION_OBJECT_TYPE,
@@ -380,18 +396,30 @@ namespace MP2
         OBJ_FIRE_ALTAR = OBJ_NON_ACTION_FIRE_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_AIR_ALTAR = OBJ_NON_ACTION_AIR_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_EARTH_ALTAR = OBJ_NON_ACTION_EARTH_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
-        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE // Never set in maps.
+        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
 
         // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries below following the instruction.
+
+        // NEVER use this object type in the Editor!
+        // This object type is used to separate objects from the original game from Resurrection expansion's objects.
+        OBJ_RESURRECTION_OBJECT_TYPE = 256,
 
         // This section defines all types of NON-action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
         // Otherwise, name it with prefix OBJ_.
+        OBJ_SWAMPY_LAKE = 257,
+        OBJ_FROZEN_LAKE = 258,
+        OBJ_NON_ACTION_BLACK_CAT = 259,
+        OBJ_NON_ACTION_BARREL = 260,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
         // Otherwise, name it with prefix OBJ_ACTON_.
         // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
+        OBJ_ACTION_SWAMPY_LAKE = OBJ_SWAMPY_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_FROZEN_LAKE = OBJ_FROZEN_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BLACK_CAT = OBJ_NON_ACTION_BLACK_CAT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BARREL = OBJ_NON_ACTION_BARREL + OBJ_ACTION_OBJECT_TYPE,
     };
 
     enum ObjectIcnType : uint8_t
@@ -470,22 +498,39 @@ namespace MP2
 
     bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
-    // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
-    bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
+    // The method checks whether the object is an action object depending on whether it is accessed from water or from land.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
+    // For example, castle can't be accessed from water.
+    //
+    // TODO: make a separate function to determine whether the object is an action object depending on its location and not
+    // TODO: on where it is accessed from.
+    bool isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
-    // The method checks if the object is an action independent form its location.
-    bool isActionObject( const MapObjectType objectType );
+    // The method checks if the object is an action object regardless of where it is accessed from.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
+    bool isInGameActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object regardless of where it is accessed from.
+    // Use it only for cases when gameplay is not active, like Editor and map initialization.
+    bool isOffGameActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object if it is accessed from water.
+    // Use it only during actual gameplay. Event object is not considered as an action object.
+    bool isWaterActionObject( const MapObjectType objectType );
+
+    // Returns true if the object is an action object and can be revisited by a hero already standing on this object, otherwise
+    // returns false. Use it only during actual gameplay.
+    bool isRevisitAllowedForObject( const MapObjectType objectType, const bool accessedFromWater );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
     MapObjectType getBaseActionObjectType( const MapObjectType objectType );
 
-    bool isWaterActionObject( const MapObjectType objectType );
-
-    bool isQuantityObject( const MapObjectType objectType );
+    bool isValuableResourceObject( const MapObjectType objectType );
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
-    bool isProtectedObject( const MapObjectType objectType );
+    // Returns true if it is impossible to refuse a fight when visiting a protected object of this type.
+    bool isBattleMandatoryifObjectIsProtected( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.
     bool isSafeForFogDiscoveryObject( const MapObjectType objectType );
 
@@ -493,7 +538,6 @@ namespace MP2
 
     bool isDayLife( const MapObjectType objectType );
     bool isWeekLife( const MapObjectType objectType );
-    bool isMonthLife( const MapObjectType objectType );
     bool isBattleLife( const MapObjectType objectType );
 
     // Make sure that you pass a valid action object.
@@ -501,6 +545,11 @@ namespace MP2
 
     bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
     bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
-}
 
-#endif
+    // Only specific objects from the original MP2 format require extended metadata.
+    // These objects store a UID in their initial metadata (quantity1 and quantity2 values).
+    bool doesObjectNeedExtendedMetadata( const MP2::MapObjectType type );
+
+    // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
+    bool doesObjectContainMetadata( const MP2::MapObjectType type );
+}

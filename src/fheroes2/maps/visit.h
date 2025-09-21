@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MAPSVISIT_H
-#define H2MAPSVISIT_H
+#pragma once
 
 class IndexObject;
 
 namespace Visit
 {
-    enum type_t
+    enum Type
     {
         LOCAL,
         GLOBAL
@@ -36,8 +35,5 @@ namespace Visit
 
     bool isDayLife( const IndexObject & visit );
     bool isWeekLife( const IndexObject & visit );
-    bool isMonthLife( const IndexObject & visit );
     bool isBattleLife( const IndexObject & visit );
 }
-
-#endif

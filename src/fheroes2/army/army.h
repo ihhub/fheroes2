@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2ARMY_H
-#define H2ARMY_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -30,10 +29,12 @@
 #include <string>
 #include <vector>
 
+#include "color.h"
 #include "monster.h"
 #include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class Castle;
 class HeroBase;
@@ -42,21 +43,25 @@ class Troop;
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 class Troops : protected std::vector<Troop *>
 {
 public:
     Troops() = default;
+
     Troops( const Troops & troops );
+    Troops( Troops && ) = default;
+
     virtual ~Troops();
+
     Troops & operator=( const Troops & ) = delete;
 
-    void Assign( const Troop *, const Troop * );
-    void Assign( const Troops & );
-    void Insert( const Troops & );
-    void PushBack( const Monster &, uint32_t );
+    void Assign( const Troop * troopsBegin, const Troop * troopsEnd );
+    void Assign( const Troops & troops );
+    void Insert( const Troops & troops );
+    void PushBack( const Monster & mons, const uint32_t count );
     void PopBack();
 
     size_t Size() const
@@ -83,7 +88,7 @@ public:
     bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & troop );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
+    bool JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
     virtual double GetStrength() const;
@@ -91,9 +96,9 @@ public:
     uint32_t getTotalHP() const;
 
     void Clean();
-    void UpgradeTroops( const Castle & );
+    void UpgradeTroops( const Castle & castle ) const;
 
-    Troop * GetFirstValid();
+    Troop * GetFirstValid() const;
     Troop * GetWeakestTroop() const;
     Troop * GetSlowestTroop() const;
 
@@ -113,11 +118,15 @@ public:
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
 
-protected:
-    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+    // Splits the stack consisting of the weakest units into free slots (if any), 1 monster per free slot
+    void splitStackOfWeakestUnitsIntoFreeSlots();
 
     // Combines all stacks consisting of identical monsters
     void MergeSameMonsterTroops();
+
+protected:
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+
     // Combines two stacks consisting of identical monsters. Returns true if there was something to combine, otherwise returns false.
     bool MergeSameMonsterOnce();
     // Returns an optimized version of this Troops instance, i.e. all stacks of identical monsters are combined and there are no empty slots
@@ -128,7 +137,7 @@ private:
     Troop * getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const;
 };
 
-struct NeutralMonsterJoiningCondition
+struct NeutralMonsterJoiningCondition final
 {
     enum class Reason : int
     {
@@ -140,15 +149,15 @@ struct NeutralMonsterJoiningCondition
         Bane
     };
 
-    Reason reason;
-    uint32_t monsterCount;
+    Reason reason{ Reason::None };
+    uint32_t monsterCount{ 0 };
 
     // These messages are used only for Alliance and Bane reasons.
-    const char * joiningMessage;
-    const char * fleeingMessage;
+    const char * joiningMessage{ nullptr };
+    const char * fleeingMessage{ nullptr };
 };
 
-class Army : public Troops, public Control
+class Army final : public Troops, public Control
 {
 public:
     static const size_t maximumTroopCount = 5;
@@ -164,37 +173,43 @@ public:
 
     static void SwapTroops( Troop &, Troop & );
 
-    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes & hero, const Maps::Tile & tile, const Troop & troop );
 
-    static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width );
-    static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+    static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
+    static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
-    explicit Army( HeroBase * s = nullptr );
-    explicit Army( const Maps::Tiles & );
+    explicit Army( HeroBase * cmdr = nullptr );
+    explicit Army( const Maps::Tile & tile );
+
     Army( const Army & ) = delete;
-    Army( Army && ) = delete;
+
+    ~Army() override = default;
+
     Army & operator=( const Army & ) = delete;
-    Army & operator=( Army && ) = delete;
-    ~Army() override;
 
-    const Troops & getTroops() const;
-    // Soft reset means reset to the default army (a few T1 and T2 units).
-    // Hard reset means reset to the minimum army (strictly one T1 unit).
-    void Reset( const bool soft = false );
-    void setFromTile( const Maps::Tiles & tile );
+    const Troops & getTroops() const
+    {
+        return *this;
+    }
 
-    int GetColor() const;
+    // Resets the army. If the army doesn't have a commanding hero, then it makes the army empty. Otherwise, if 'defaultArmy' is set to true, then it creates a default
+    // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
+    // of the commanding hero's faction.
+    void Reset( const bool defaultArmy = false );
+    void setFromTile( const Maps::Tile & tile );
+
+    PlayerColor GetColor() const;
     int GetControl() const override;
     uint32_t getTotalCount() const;
 
     double GetStrength() const override;
-    bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
+    bool isStrongerThan( const Army & target, const double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( int cl )
+    void SetColor( const PlayerColor color )
     {
-        color = cl;
+        _color = color;
     }
 
     int GetMorale() const;
@@ -217,17 +232,21 @@ public:
 
     void JoinStrongestFromArmy( Army & giver );
 
-    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    // Implements the necessary logic to move unit stacks from army to army in the heroes meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
+    // Implements the necessary logic to swap all unit stacks from an army to another army in the heroes meeting dialog and in the
+    // castle dialog - provided that there is at least one occupied slot in the castle garrison. It's the caller's responsibility
+    // to ensure that this is indeed the case.
+    void SwapTroops( Army & from );
 
-    void SetSpreadFormat( bool f )
+    void SetSpreadFormation( const bool spread )
     {
-        combat_format = f;
+        _isSpreadCombatFormation = spread;
     }
 
-    bool isSpreadFormat() const
+    bool isSpreadFormation() const
     {
-        return combat_format;
+        return _isSpreadCombatFormation;
     }
 
     bool SaveLastTroop() const;
@@ -236,29 +255,24 @@ public:
 
     void resetInvalidMonsters() const;
 
-    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. The
-    // logic of combining troops for the castle defense differs from the original game, see the implementation for details.
-    void ArrangeForCastleDefense( Army & garrison );
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. Returns
+    // true if at least one unit from the garrison was moved to the army as reinforcements, otherwise returns false. The logic of
+    // combining troops for the castle defense differs from the original game, see the implementation for details.
+    bool ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 
-protected:
-    friend StreamBase & operator<<( StreamBase &, const Army & );
-    friend StreamBase & operator>>( StreamBase &, Army & );
-
-    HeroBase * commander;
-    bool combat_format;
-    int color;
-
 private:
+    friend OStreamBase & operator<<( OStreamBase & stream, const Army & army );
+    friend IStreamBase & operator>>( IStreamBase & stream, Army & army );
+
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
     // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
+
+    HeroBase * commander;
+    bool _isSpreadCombatFormation{ true };
+    PlayerColor _color{ PlayerColor::NONE };
 };
-
-StreamBase & operator<<( StreamBase &, const Army & );
-StreamBase & operator>>( StreamBase &, Army & );
-
-#endif

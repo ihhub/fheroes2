@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,11 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AUDIO_H
-#define H2AUDIO_H
+#pragma once
 
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 struct ListFiles;
@@ -49,16 +50,17 @@ namespace Mixer
 
     int getChannelCount();
 
-    // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
-    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
-    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, const uint8_t volumePercentage );
+    // Starts playback of the given sound with the ability of looping it, as well as (optionally)
+    // the ability to specify the position of the sound source relative to the listener (the angle
+    // of direction to the sound source in degrees and the distance to the sound source).
+    int Play( const uint8_t * ptr, const uint32_t size, const bool loop, const std::optional<std::pair<int16_t, uint8_t>> position = {} );
 
-    int applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage );
+    void setVolume( const int volumePercentage );
 
-    void setVolume( const int channelId, const int volumePercentage );
+    // Sets the position of the sound source relative to the listener (the angle of direction to
+    // the sound source in degrees and the distance to the sound source) for the given channel.
+    void setPosition( const int channelId, const int16_t angle, const uint8_t distance );
 
-    void Pause( const int channelId = -1 );
-    void Resume( const int channelId = -1 );
     void Stop( const int channelId = -1 );
 
     bool isPlaying( const int channelId );
@@ -103,9 +105,8 @@ namespace Music
 
     bool isPlaying();
 
-    void SetMidiSoundFonts( const ListFiles & files );
+    void setMidiSoundFonts( const ListFiles & files );
+    void setMidiTimidityCfg( const std::string & path );
 
     std::vector<uint8_t> Xmi2Mid( const std::vector<uint8_t> & buf );
 }
-
-#endif

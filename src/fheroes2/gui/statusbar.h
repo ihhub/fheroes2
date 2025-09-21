@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,30 +21,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2STATUSBAR_H
-#define H2STATUSBAR_H
+#pragma once
 
-#include <cstdint>
 #include <string>
 
 #include "math_base.h"
-#include "text.h"
+#include "ui_tool.h"
 
-class StatusBar : public TextSprite
+class StatusBar : public fheroes2::MovableText
 {
 public:
-    StatusBar() = default;
+    StatusBar();
 
-    void SetCenter( const int32_t cx, const int32_t cy )
+    void setRoi( const fheroes2::Rect & roi )
     {
-        center = { cx, cy };
+        _roi = roi;
     }
 
-    void ShowMessage( const std::string & msg );
+    void ShowMessage( std::string msg );
 
 private:
-    fheroes2::Point center;
-    std::string prev;
-};
+    fheroes2::Rect _roi;
 
-#endif
+    std::string _prevMessage;
+    fheroes2::Rect _prevMessageRoi;
+};

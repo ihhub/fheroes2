@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
 #include <cstdlib>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -30,41 +32,52 @@
 #include <string>
 #include <vector>
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
-#include <SDL_version.h>
 
-#if defined( _WIN32 )
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <cassert>
-#else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
+#if defined( _WIN32 )
+#include <cassert>
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_manager.h"
-#include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
+#include "exception.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "h2d.h"
+#include "icn.h"
 #include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -97,29 +110,50 @@ namespace
     {
         const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !System::IsDirectory( configDir ) ) {
-            System::MakeDirectory( configDir );
-        }
+        System::MakeDirectory( configDir );
     }
 
     void InitDataDir()
     {
         const std::string dataDir = System::GetDataDirectory( "fheroes2" );
 
-        if ( dataDir.empty() )
+        if ( dataDir.empty() ) {
             return;
+        }
 
         const std::string dataFiles = System::concatPath( dataDir, "files" );
         const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
-        if ( !System::IsDirectory( dataDir ) )
-            System::MakeDirectory( dataDir );
+        // This call will also create dataDir and dataFiles
+        System::MakeDirectory( dataFilesSave );
+    }
 
-        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
-            System::MakeDirectory( dataFiles );
+    void displayMissingResourceWindow()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
-        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
-            System::MakeDirectory( dataFilesSave );
+        display.fill( 0 );
+        fheroes2::Resize( image, display );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+
+        // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+        const fheroes2::Time timer;
+
+        bool closeWindow = false;
+
+        while ( le.HandleEvents( true, true ) ) {
+            if ( closeWindow && timer.getS() >= 5 ) {
+                break;
+            }
+
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
+                closeWindow = true;
+            }
+        }
     }
 
     class DisplayInitializer
@@ -130,37 +164,43 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
+
             if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
                 // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
                 const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
 
                 for ( const fheroes2::ResolutionInfo & info : resolutions ) {
                     if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
                         bestResolution = info;
                     }
                 }
-
-                display.setResolution( bestResolution );
-            }
-            else {
-                display.setResolution( conf.currentResolutionInfo() );
             }
 
-            display.fill( 0 ); // start from a black screen
+            display.setWindowPos( conf.getSavedWindowPos() );
+            display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
-            // Initialize local event processing.
-            LocalEvent::RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+
+            display.subscribe( [&renderProcessor]( std::vector<uint8_t> & palette ) { return renderProcessor.preRenderAction( palette ); },
+                               [&renderProcessor]() { renderProcessor.postRenderAction(); } );
+
+            // Initialize system info renderer.
+            _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
+
+            renderProcessor.registerRenderers( [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->preRender(); },
+                                               [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->postRender(); } );
+            renderProcessor.startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #if !defined( MACOS_APP_BUNDLE )
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            const fheroes2::Image & appIcon = Compression::CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
         }
@@ -170,8 +210,16 @@ namespace
 
         ~DisplayInitializer()
         {
-            fheroes2::Display::instance().release();
+            fheroes2::RenderProcessor::instance().unregisterRenderers();
+
+            fheroes2::Display & display = fheroes2::Display::instance();
+            display.subscribe( {}, {} );
+            display.release();
         }
+
+    private:
+        // This member must not be initialized before Display.
+        std::unique_ptr<fheroes2::SystemInfoRenderer> _systemInfoRenderer;
     };
 
     class DataInitializer
@@ -185,20 +233,12 @@ namespace
                 _aggInitializer.reset( new AGG::AGGInitializer );
 
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+
+                // Verify that the font is present and it is not corrupted.
+                fheroes2::AGG::GetICN( ICN::FONT, 0 );
             }
             catch ( ... ) {
-                fheroes2::Display & display = fheroes2::Display::instance();
-                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-                display.fill( 0 );
-                fheroes2::Resize( image, display );
-
-                display.render();
-
-                LocalEvent & le = LocalEvent::Get();
-                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-                    // Do nothing.
-                }
+                displayMissingResourceWindow();
 
                 throw;
             }
@@ -222,24 +262,25 @@ namespace
         std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
+
+    // This function checks for a possible situation when a user uses a demo version
+    // of the game. There is no 100% certain way to detect this, so assumptions are made.
+    bool isProbablyDemoVersion()
+    {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+            return false;
+        }
+
+        // The demo version of the game only has 1 map.
+        const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+        return maps.size() == 1;
+    }
 }
-
-// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
-#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
-#undef main
-
-int main( int argc, char ** argv );
-
-int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
-{
-    return main( __argc, __argv );
-}
-#endif
 
 int main( int argc, char ** argv )
 {
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
-#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( _WIN32 )
     assert( argc == __argc );
 
     argv = __argv;
@@ -285,19 +326,36 @@ int main( int argc, char ** argv )
         }
 #endif
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
+        const std::string timidityCfgPath = []() -> std::string {
+            if ( std::string path; Settings::findFile( System::concatPath( "files", "timidity" ), "timidity.cfg", path ) ) {
+                return path;
+            }
+
+            return {};
+        }();
+
+#ifdef WITH_DEBUG
+        if ( !timidityCfgPath.empty() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Path to the timidity.cfg file: " << timidityCfgPath )
+        }
+#endif
+
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts,
+                                                               timidityCfgPath );
 
         // Load palette.
-        fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
-        fheroes2::Display::instance().changePalette( nullptr, true );
+        fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        display.changePalette( nullptr, true );
 
-        // load BIN data
-        Bin_Info::InitBinInfo();
-
-        // init game data
-        Game::Init();
-
+        // Update the fonts according to the game language set in the configuration.
+        // NOTICE: it must be done before initializing the engine to properly load all
+        // language-specific font characters for the selected language because during
+        // initialization the English language is forced to properly read the configuration files.
         conf.setGameLanguage( conf.getGameLanguage() );
+
+        // Initialize game data.
+        Game::Init();
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
@@ -307,13 +365,28 @@ int main( int argc, char ** argv )
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 
-        // init cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-        Game::mainGameLoop( conf.isFirstGameRun() );
+        try {
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+            const fheroes2::Point pos = conf.getSavedWindowPos();
+            Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
+            const fheroes2::Point currentPos = display.getWindowPos();
+            if ( pos != currentPos ) {
+                conf.setStartWindowPos( currentPos );
+                conf.Save( Settings::configFileName );
+            }
+        }
+        catch ( const fheroes2::InvalidDataResources & ex ) {
+            ERROR_LOG( ex.what() )
+            displayMissingResourceWindow();
+            return EXIT_FAILURE;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
+        return EXIT_FAILURE;
+    }
+    catch ( ... ) {
+        ERROR_LOG( "An unknown exception occurred during application runtime." )
         return EXIT_FAILURE;
     }
 

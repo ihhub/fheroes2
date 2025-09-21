@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,31 +20,47 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2MAPSFILEINFO_H
-#define H2MAPSFILEINFO_H
+
+#pragma once
 
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <type_traits>
 #include <vector>
 
-#include "gamedefs.h"
+#include "color.h"
+#include "game_language.h"
 #include "math_base.h"
+#include "players.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 enum class GameVersion : int
 {
     SUCCESSION_WARS = 0,
-    PRICE_OF_LOYALTY = 1
+    PRICE_OF_LOYALTY = 1,
+    RESURRECTION = 2
 };
 
 namespace Maps
 {
+    namespace Map_Format
+    {
+        struct BaseMapFormat;
+    }
+
     struct FileInfo
     {
-        FileInfo();
+    public:
+        FileInfo()
+        {
+            Reset();
+        }
+
         FileInfo( const FileInfo & ) = default;
         FileInfo( FileInfo && ) = default;
 
@@ -53,93 +69,93 @@ namespace Maps
         FileInfo & operator=( const FileInfo & ) = default;
         FileInfo & operator=( FileInfo && ) = default;
 
-        bool ReadMP2( const std::string & filePath );
-        bool ReadSAV( const std::string & filePath );
-
         bool operator==( const FileInfo & fi ) const
         {
-            return file == fi.file;
+            return filename == fi.filename;
         }
 
-        static bool NameSorting( const FileInfo & lhs, const FileInfo & rhs );
-        static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
+        bool readMP2Map( std::string filePath, const bool isForEditor );
 
-        bool isAllowCountPlayers( int playerCount ) const;
+        bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
-        int AllowCompHumanColors() const
+        bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
+
+        PlayerColorsSet AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
         }
 
-        int AllowHumanColors() const
-        {
-            return colorsAvailableForHumans;
-        }
-
-        int HumanOnlyColors() const
+        PlayerColorsSet HumanOnlyColors() const
         {
             return colorsAvailableForHumans & ~colorsAvailableForComp;
         }
 
-        int ComputerOnlyColors() const
+        PlayerColorsSet ComputerOnlyColors() const
         {
             return colorsAvailableForComp & ~colorsAvailableForHumans;
         }
 
-        int KingdomRace( int color ) const;
+        int KingdomRace( const PlayerColor color ) const;
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins() const;
-        int WinsFindArtifactID() const;
+
+        int WinsFindArtifactID() const
+        {
+            // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
+            return victoryConditionParams[0];
+        }
 
         bool WinsFindUltimateArtifact() const
         {
-            return 0 == victoryConditionsParam1;
+            return victoryConditionParams[0] == 0;
         }
 
         uint32_t getWinningGoldAccumulationValue() const
         {
-            return victoryConditionsParam1 * 1000;
+            return victoryConditionParams[0] * 1000;
         }
 
         fheroes2::Point WinsMapsPositionObject() const
         {
-            return { victoryConditionsParam1, victoryConditionsParam2 };
+            return { victoryConditionParams[0], victoryConditionParams[1] };
         }
 
         fheroes2::Point LossMapsPositionObject() const
         {
-            return { lossConditionsParam1, lossConditionsParam2 };
+            return { lossConditionParams[0], lossConditionParams[1] };
         }
 
         uint32_t LossCountDays() const
         {
-            return lossConditionsParam1;
+            return lossConditionParams[0];
         }
 
-        void removeHumanColors( const int colors )
+        void removeHumanColors( const PlayerColorsSet colors )
         {
             colorsAvailableForHumans &= ~colors;
         }
 
+        bool AllowChangeRace( const PlayerColor color ) const
+        {
+            return ( colorsOfRandomRaces & color ) != 0;
+        }
+
         void Reset();
 
-        std::string file;
-        std::string name;
-        std::string description;
+        // Only Resurrection Maps contain supported language.
+        std::optional<fheroes2::SupportedLanguage> getSupportedLanguage() const
+        {
+            if ( version == GameVersion::RESURRECTION ) {
+                return mainLanguage;
+            }
 
-        uint16_t width;
-        uint16_t height;
-        uint8_t difficulty;
+            return {};
+        }
 
-        std::array<uint8_t, KINGDOMMAX> races;
-        std::array<uint8_t, KINGDOMMAX> unions;
-
-        uint8_t kingdomColors;
-        uint8_t colorsAvailableForHumans;
-        uint8_t colorsAvailableForComp;
-        uint8_t colorsOfRandomRaces;
+        // This method is mostly used for Text Support mode or debug purposes.
+        std::string getSummary() const;
 
         enum VictoryCondition : uint8_t
         {
@@ -159,22 +175,71 @@ namespace Maps
             LOSS_OUT_OF_TIME = 3
         };
 
-        // Refer to the VictoryCondition
-        uint8_t victoryConditions;
+        // This comparator performs the case-insensitive comparison
+        struct CompareByFileName
+        {
+            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const;
+            bool operator()( const FileInfo & lhs, const std::string & rhs ) const;
+            bool operator()( const std::string & lhs, const FileInfo & rhs ) const;
+        };
+
+        // This comparator performs the case-insensitive comparison
+        struct CompareByMapName
+        {
+            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const;
+        };
+
+        // This comparator will place the newer FileInfo instances (with a bigger timestamp) first
+        struct CompareByTimestamp
+        {
+            bool operator()( const FileInfo & lhs, const FileInfo & rhs ) const
+            {
+                return lhs.timestamp > rhs.timestamp;
+            }
+
+            bool operator()( const FileInfo & lhs, uint32_t rhs ) const
+            {
+                return lhs.timestamp > rhs;
+            }
+
+            bool operator()( uint32_t lhs, const FileInfo & rhs ) const
+            {
+                return lhs > rhs.timestamp;
+            }
+        };
+
+        std::string filename;
+        std::string name;
+        std::string description;
+
+        uint16_t width;
+        uint16_t height;
+        uint8_t difficulty;
+
+        std::array<uint8_t, maxNumOfPlayers> races;
+        std::array<PlayerColorsSet, maxNumOfPlayers> unions;
+
+        static_assert( std::is_same_v<PlayerColorsSet, uint8_t> );
+        PlayerColorsSet kingdomColors{ 0 };
+        PlayerColorsSet colorsAvailableForHumans{ 0 };
+        PlayerColorsSet colorsAvailableForComp{ 0 };
+        PlayerColorsSet colorsOfRandomRaces{ 0 };
+
+        // Refer to the VictoryCondition enumeration.
+        uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
-        uint16_t victoryConditionsParam1;
-        uint16_t victoryConditionsParam2;
+        std::array<uint16_t, 2> victoryConditionParams;
 
-        // Refer to the LossCondition
-        uint8_t lossConditions;
-        uint16_t lossConditionsParam1;
-        uint16_t lossConditionsParam2;
+        // Refer to the LossCondition enumeration.
+        uint8_t lossConditionType;
+        std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;
 
-        bool startWithHeroInEachCastle;
+        // Only for maps made by the original Editor.
+        bool startWithHeroInFirstCastle;
 
         GameVersion version;
 
@@ -183,19 +248,25 @@ namespace Maps
         uint32_t worldWeek;
         uint32_t worldMonth;
 
+        // All maps made by the original Editor are marked as supporting English only,
+        // because it is unknown what language was used for these maps.
+        fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
+
     private:
-        void FillUnions( const int side1Colors, const int side2Colors );
+        void FillUnions( const PlayerColorsSet side1Colors, const PlayerColorsSet side2Colors );
     };
 
-    StreamBase & operator<<( StreamBase &, const FileInfo & );
-    StreamBase & operator>>( StreamBase &, FileInfo & );
+    OStreamBase & operator<<( OStreamBase & stream, const FileInfo & fi );
+    IStreamBase & operator>>( IStreamBase & stream, FileInfo & fi );
 }
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
 namespace Maps
 {
-    MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
-}
+    // For all map files.
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
 
-#endif
+    // Only for RESURRECTION map files.
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
+}

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,29 +18,15 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-if(USE_SYSTEM_LIBSMACKER)
-	include(FindPkgConfig)
+add_library(smacker STATIC libsmacker/smacker.c)
 
-	pkg_check_modules(smacker REQUIRED smacker)
-else(USE_SYSTEM_LIBSMACKER)
-	set(
-		LIBSMACKER_SOURCES
-		libsmacker/smacker.c
-		)
+target_include_directories(
+	smacker
+	PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libsmacker>
+	)
 
-	add_library(smacker STATIC ${LIBSMACKER_SOURCES})
-
-	target_include_directories(
-		smacker
-		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libsmacker>
-		$<INSTALL_INTERFACE:include>
-		)
-
-	target_link_libraries(
-		smacker
-		Threads::Threads # To match the build settings of the main app
-		)
-
-	export(TARGETS smacker FILE SmackerConfig.cmake)
-endif(USE_SYSTEM_LIBSMACKER)
+target_link_libraries(
+	smacker
+	Threads::Threads # To match the build settings of the main app
+	)

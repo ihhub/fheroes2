@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,10 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "player_info.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "color.h"
@@ -31,81 +35,14 @@
 #include "image.h"
 #include "localevent.h"
 #include "maps_fileinfo.h"
-#include "player_info.h"
 #include "players.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
-
-namespace
-{
-    void changeRaceToNext( Player & player )
-    {
-        switch ( player.GetRace() ) {
-        case Race::KNGT:
-            player.SetRace( Race::BARB );
-            break;
-        case Race::BARB:
-            player.SetRace( Race::SORC );
-            break;
-        case Race::SORC:
-            player.SetRace( Race::WRLK );
-            break;
-        case Race::WRLK:
-            player.SetRace( Race::WZRD );
-            break;
-        case Race::WZRD:
-            player.SetRace( Race::NECR );
-            break;
-        case Race::NECR:
-            player.SetRace( Race::RAND );
-            break;
-        case Race::RAND:
-            player.SetRace( Race::KNGT );
-            break;
-        default:
-            // Did you add a new race? Add the logic above
-            assert( 0 );
-            break;
-        }
-    }
-
-    void changeRaceToPrev( Player & player )
-    {
-        switch ( player.GetRace() ) {
-        case Race::KNGT:
-            player.SetRace( Race::RAND );
-            break;
-        case Race::BARB:
-            player.SetRace( Race::KNGT );
-            break;
-        case Race::SORC:
-            player.SetRace( Race::BARB );
-            break;
-        case Race::WRLK:
-            player.SetRace( Race::SORC );
-            break;
-        case Race::WZRD:
-            player.SetRace( Race::WRLK );
-            break;
-        case Race::NECR:
-            player.SetRace( Race::WZRD );
-            break;
-        case Race::RAND:
-            player.SetRace( Race::NECR );
-            break;
-        default:
-            // Did you add a new race? Add the logic above
-            assert( 0 );
-            break;
-        }
-    }
-}
 
 void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Point & playerTypeOffset, const fheroes2::Point & classOffset )
 {
@@ -139,18 +76,18 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) const
 {
     const Settings & conf = Settings::Get();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
-    const int player1Color = player1.GetColor();
-    const int player2Color = player2.GetColor();
+    const PlayerColor player1Color = player1.GetColor();
+    const PlayerColor player2Color = player2.GetColor();
 
     bool swap = false;
 
     if ( player1.isControlAI() == player2.isControlAI() ) {
         swap = true;
     }
-    else if ( ( player1Color & fi.AllowCompHumanColors() ) && ( player2Color & fi.AllowCompHumanColors() ) ) {
-        const int humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    else if ( ( mapInfo.AllowCompHumanColors() & player1Color ) && ( mapInfo.AllowCompHumanColors() & player2Color ) ) {
+        const PlayerColorsSet humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
         if ( humans & player1Color ) {
             Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
@@ -174,29 +111,16 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
         player2.setHandicapStatus( player1HandicapStatus );
         player1.setHandicapStatus( player2HandicapStatus );
 
-        if ( player1Race != player2Race && conf.AllowChangeRace( player1Color ) && conf.AllowChangeRace( player2Color ) ) {
+        if ( player1Race != player2Race && mapInfo.AllowChangeRace( player1Color ) && mapInfo.AllowChangeRace( player2Color ) ) {
             player1.SetRace( player2Race );
             player2.SetRace( player1Race );
         }
 
-        const std::string player1Name = player1.GetName();
-        const std::string player2Name = player2.GetName();
+        std::string player1NewName = player2.isDefaultName() ? player1.GetDefaultName() : player2.GetName();
+        std::string player2NewName = player1.isDefaultName() ? player2.GetDefaultName() : player1.GetName();
 
-        const std::string player1DefaultName = player1.GetDefaultName();
-        const std::string player2DefaultName = player2.GetDefaultName();
-
-        if ( player2Name == player2DefaultName ) {
-            player1.SetName( player1DefaultName );
-        }
-        else {
-            player1.SetName( player2Name );
-        }
-        if ( player1Name == player1DefaultName ) {
-            player2.SetName( player2DefaultName );
-        }
-        else {
-            player2.SetName( player1Name );
-        }
+        player1.SetName( std::move( player1NewName ) );
+        player2.SetName( std::move( player2NewName ) );
     }
 
     return swap;
@@ -250,10 +174,10 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 {
     const Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
-    const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    const PlayerColorsSet humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
@@ -264,7 +188,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
             // Current human.
             playerTypeIcnIndex = 9 + Color::GetIndex( info.player->GetColor() );
         }
-        else if ( fi.ComputerOnlyColors() & info.player->GetColor() ) {
+        else if ( mapInfo.ComputerOnlyColors() & info.player->GetColor() ) {
             // Computer only.
             playerTypeIcnIndex = 15 + Color::GetIndex( info.player->GetColor() );
         }
@@ -291,49 +215,16 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         }
 
         // draw player name
-        Text name( info.player->GetName(), Font::SMALL );
-
+        fheroes2::Text name( info.player->GetName(), fheroes2::FontType::smallWhite() );
         const int32_t maximumTextWidth = playerIcon.width() - 4;
-        const int32_t fitWidth = Text::getFitWidth( info.player->GetName(), Font::SMALL, maximumTextWidth );
-        name.Blit( info.playerTypeRoi.x + 2 + ( maximumTextWidth - fitWidth ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height - 1, maximumTextWidth );
+        name.fitToOneRow( maximumTextWidth );
+
+        name.draw( info.playerTypeRoi.x + 2 + ( maximumTextWidth - name.width() ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height + 1, display );
 
         // 2. redraw class
-        const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : conf.AllowChangeRace( info.player->GetColor() );
+        const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : mapInfo.AllowChangeRace( info.player->GetColor() );
 
-        uint32_t classIcnIndex = 0;
-        switch ( info.player->GetRace() ) {
-        case Race::KNGT:
-            classIcnIndex = isActivePlayer ? 51 : 70;
-            break;
-        case Race::BARB:
-            classIcnIndex = isActivePlayer ? 52 : 71;
-            break;
-        case Race::SORC:
-            classIcnIndex = isActivePlayer ? 53 : 72;
-            break;
-        case Race::WRLK:
-            classIcnIndex = isActivePlayer ? 54 : 73;
-            break;
-        case Race::WZRD:
-            classIcnIndex = isActivePlayer ? 55 : 74;
-            break;
-        case Race::NECR:
-            classIcnIndex = isActivePlayer ? 56 : 75;
-            break;
-        case Race::MULT:
-            classIcnIndex = isActivePlayer ? 57 : 76;
-            break;
-        case Race::RAND:
-            assert( !displayInGameInfo );
-            classIcnIndex = 58;
-            break;
-        default:
-            // Did you add a new race? Add the logic above!
-            assert( 0 );
-            continue;
-        }
-
-        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, classIcnIndex );
+        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( info.player->GetRace(), isActivePlayer ) );
         const fheroes2::Sprite & classIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
 
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
@@ -389,58 +280,42 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     Settings & conf = Settings::Get();
     const LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MousePressRight() ) {
-        const Player * player = GetFromOpponentClick( le.GetMouseCursor() );
+    if ( le.isMouseRightButtonPressed() ) {
+        const Player * player = GetFromOpponentClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Opponents" ),
                 _( "This lets you change player starting positions and colors. A particular color will always start in a particular location. Some positions may only be played by a computer player or only by a human player." ),
-                Font::BIG );
+                Dialog::ZERO );
             return true;
         }
 
-        player = GetFromClassClick( le.GetMouseCursor() );
+        player = GetFromClassClick( le.getMouseCursorPos() );
         if ( player != nullptr ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Class" ),
                 _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
-                Font::BIG );
+                Dialog::ZERO );
             return true;
         }
 
-        player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+        player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
         if ( player != nullptr ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "This lets you change the handicap of a particular player. Only humans may be handicapped. Handicapped players "
-                                                      "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                      "respectively." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
-            return true;
-        }
-
-        return false;
-    }
-
-    if ( le.MouseWheelUp() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToPrev( *player );
-            }
-
+            fheroes2::showStandardTextMessage( _( "Handicap" ),
+                                               _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
+                                                  "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
+                                                  "respectively." ),
+                                               Dialog::ZERO );
             return true;
         }
 
         return false;
     }
 
-    if ( le.MouseWheelDn() ) {
-        Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToNext( *player );
-            }
+    if ( le.isMouseWheelUp() ) {
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            player->SetRace( Race::getPreviousRace( player->GetRace() ) );
 
             return true;
         }
@@ -448,35 +323,55 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return false;
     }
 
-    Player * player = GetFromOpponentClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    if ( le.isMouseWheelDown() ) {
+        Player * player = GetFromClassClick( le.getMouseCursorPos() );
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            player->SetRace( Race::getNextRace( player->GetRace() ) );
+
+            return true;
+        }
+        return false;
+    }
+
+    Player * clickedPlayer = GetFromOpponentClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
+        const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
         if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
             if ( currentSelectedPlayer == nullptr ) {
-                currentSelectedPlayer = player;
+                currentSelectedPlayer = clickedPlayer;
             }
-            else if ( currentSelectedPlayer == player ) {
+            else if ( currentSelectedPlayer == clickedPlayer ) {
                 currentSelectedPlayer = nullptr;
             }
-            else if ( SwapPlayers( *player, *currentSelectedPlayer ) ) {
+            else if ( SwapPlayers( *clickedPlayer, *currentSelectedPlayer ) ) {
                 currentSelectedPlayer = nullptr;
             }
         }
         else {
-            const int playerColor = player->GetColor();
+            // Single-player game.
+            const PlayerColor clickedColor = clickedPlayer->GetColor();
 
-            if ( playerColor & fi.AllowHumanColors() ) {
-                const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+            if ( fi.colorsAvailableForHumans & clickedColor ) {
+                const PlayerColorsSet humanControlledColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
-                if ( playerColor != human ) {
-                    Player * currentPlayer = Players::Get( human );
-                    Player * nextPlayer = Players::Get( playerColor );
+                if ( Color::Count( humanControlledColors ) != 1 ) {
+                    // How could be more than one active human player in the single-player game?
+                    assert( 0 );
+
+                    return false;
+                }
+
+                const PlayerColor currentColor = static_cast<PlayerColor>( humanControlledColors );
+
+                if ( clickedColor != currentColor ) {
+                    Player * currentPlayer = Players::Get( currentColor );
+                    Player * nextPlayer = Players::Get( clickedColor );
                     assert( currentPlayer != nullptr && nextPlayer != nullptr );
                     const Player::HandicapStatus currentHandicapStatus = currentPlayer->getHandicapStatus();
 
-                    Players::SetPlayerControl( human, CONTROL_AI | CONTROL_HUMAN );
-                    Players::SetPlayerControl( playerColor, CONTROL_HUMAN );
+                    Players::SetPlayerControl( currentColor, CONTROL_AI | CONTROL_HUMAN );
+                    Players::SetPlayerControl( clickedColor, CONTROL_HUMAN );
 
                     nextPlayer->setHandicapStatus( currentHandicapStatus );
                     currentPlayer->setHandicapStatus( Player::HandicapStatus::NONE );
@@ -487,40 +382,38 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         return true;
     }
 
-    player = GetFromOpponentNameClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
+    clickedPlayer = GetFromOpponentNameClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
         std::string str = _( "%{color} player" );
-        StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
+        StringReplace( str, "%{color}", Color::String( clickedPlayer->GetColor() ) );
 
-        std::string res;
-        if ( Dialog::InputString( str, res ) && !res.empty() ) {
-            player->SetName( res );
+        std::string res = clickedPlayer->GetName();
+        if ( Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ str, fheroes2::FontType::normalWhite() }, res, 0, false, {} ) && !res.empty() ) {
+            clickedPlayer->SetName( std::move( res ) );
         }
 
         return true;
     }
 
-    player = GetFromClassClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        if ( conf.AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToNext( *player );
-        }
+    clickedPlayer = GetFromClassClick( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr && conf.getCurrentMapInfo().AllowChangeRace( clickedPlayer->GetColor() ) ) {
+        clickedPlayer->SetRace( Race::getNextRace( clickedPlayer->GetRace() ) );
 
         return true;
     }
 
-    player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        if ( !( player->GetControl() & CONTROL_AI ) ) {
-            switch ( player->getHandicapStatus() ) {
+    clickedPlayer = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
+    if ( clickedPlayer != nullptr ) {
+        if ( !( clickedPlayer->GetControl() & CONTROL_AI ) ) {
+            switch ( clickedPlayer->getHandicapStatus() ) {
             case Player::HandicapStatus::NONE:
-                player->setHandicapStatus( Player::HandicapStatus::MILD );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::MILD );
                 break;
             case Player::HandicapStatus::MILD:
-                player->setHandicapStatus( Player::HandicapStatus::SEVERE );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::SEVERE );
                 break;
             case Player::HandicapStatus::SEVERE:
-                player->setHandicapStatus( Player::HandicapStatus::NONE );
+                clickedPlayer->setHandicapStatus( Player::HandicapStatus::NONE );
                 break;
             default:
                 // Did you add a new handicap status? Add the logic above!
@@ -537,30 +430,24 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 bool Interface::PlayersInfo::readOnlyEventProcessing()
 {
     const LocalEvent & le = LocalEvent::Get();
-    if ( !le.MousePressRight() ) {
+    if ( !le.isMouseRightButtonPressed() ) {
         // Read only mode works only for right click events.
         return false;
     }
 
-    const Player * player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
+    const Player * player = getPlayerFromHandicapRoi( le.getMouseCursorPos() );
     if ( player != nullptr ) {
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
-            fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on start resources and earning them per turn." ), fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "No Handicap" ), _( "No special restrictions on starting resources and resource income per turn." ), Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:
-            fheroes2::showMessage( fheroes2::Text( _( "Mild Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Mild handicapped players start with fewer resources and earn 15% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Mild Handicap" ), _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
+                                               Dialog::ZERO );
             break;
         case Player::HandicapStatus::SEVERE:
-            fheroes2::showMessage( fheroes2::Text( _( "Severe Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Severe handicapped players start with fewer resources and earn 30% fewer resources per turn." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Severe Handicap" ),
+                                               _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ), Dialog::ZERO );
             break;
         default:
             // Did you add a new handicap status? Add the logic above!

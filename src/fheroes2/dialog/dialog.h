@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,21 +20,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2DIALOG_H
-#define H2DIALOG_H
 
+#pragma once
+
+#include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
+#include <optional>
 #include <string>
-#include <vector>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "image.h"
-
-#define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 244
+#include "math_base.h"
+#include "ui_constants.h"
 
 class Castle;
 class Kingdom;
@@ -44,7 +42,13 @@ class Monster;
 class Troop;
 
 struct ArtifactSetData;
-struct CapturedObject;
+
+namespace fheroes2
+{
+    class DialogElement;
+    class TextBase;
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace Skill
 {
@@ -53,7 +57,7 @@ namespace Skill
 
 namespace Maps
 {
-    class Tiles;
+    class Tile;
 }
 
 namespace Dialog
@@ -80,34 +84,54 @@ namespace Dialog
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
-    int AdventureOptions( bool enabledig );
+    int AdventureOptions( const bool enableDig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();
 
-    void QuickInfo( const Maps::Tiles & tile );
+    // Shows the quick info window for the given tile
+    void QuickInfo( const Maps::Tile & tile );
+    // Shows the quick info window for the given castle
+    void QuickInfo( const Castle & castle );
+    // Shows the quick info window for the given hero or captain. If the 'showFullInfo' parameter is specified,
+    // then whether full or abbreviated information will be displayed is determined according to its value,
+    // otherwise it is determined by the internal logic of this function. See the implementation for details.
+    void QuickInfo( const HeroBase & hero, const std::optional<bool> showFullInfo = {} );
 
-    // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
-    // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.
-    void QuickInfo( const Castle & castle, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
-    void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
+    // Shows the quick info window for the given castle, and also indicates the location of this castle on the radar.
+    // 'areaToRestore' defines the area whose contents should be restored when the radar is redrawn.
+    void QuickInfoWithIndicationOnRadar( const Castle & castle, const fheroes2::Rect & areaToRestore );
+    // Shows the quick info window for the given hero, and also indicates the location of this hero on the radar.
+    // 'areaToRestore' defines the area whose contents should be restored when the radar is redrawn.
+    void QuickInfoWithIndicationOnRadar( const HeroBase & hero, const fheroes2::Rect & areaToRestore );
 
-    int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
+    // Shows the quick info window for the given castle at the given position on the screen, and also indicates the
+    // location of this castle on the radar.
+    void QuickInfoAtPosition( const Castle & castle, const fheroes2::Point & position );
+    // Shows the quick info window for the given hero at the given position on the screen, and also indicates the
+    // location of this hero on the radar.
+    void QuickInfoAtPosition( const HeroBase & hero, const fheroes2::Point & position );
+
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
-    bool SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step = 1 );
-    bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
-    Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
-    void DwellingInfo( const Monster &, uint32_t available );
+    bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
+                      const fheroes2::DialogElement * topUiElement = nullptr, const fheroes2::DialogElement * bottomUiElement = nullptr );
+
+    // If character limit is set to 0, then no limitation for the resulting string will be applied.
+    bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
+                      const std::optional<fheroes2::SupportedLanguage> & textLanguage );
+
+    Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
+    void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
-    void ThievesGuild( bool oracle );
+    void ThievesGuild( const bool oracle );
     void GameInfo();
 
     // Displays a dialog box informing that an artifact set has been assembled
@@ -126,6 +150,8 @@ namespace Dialog
 
         void redraw();
 
+        static int32_t getButtonAreaHeight();
+
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         fheroes2::Rect area;
@@ -139,25 +165,51 @@ namespace Dialog
     class FrameBox : public NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false );
+        FrameBox( int height, bool buttons = false )
+            : Dialog::NonFixedFrameBox( height, -1, buttons )
+        {
+            // Do nothing.
+        }
+
         ~FrameBox() override = default;
     };
 
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = BORDERWIDTH );
-        explicit FrameBorder( const fheroes2::Size & );
-        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
+        explicit FrameBorder( int v = fheroes2::borderWidthPx );
 
-        int BorderWidth() const;
-        int BorderHeight() const;
+        int BorderWidth() const
+        {
+            return border;
+        }
+
+        int BorderHeight() const
+        {
+            return border;
+        }
+
         void SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench );
 
-        bool isValid() const;
-        const fheroes2::Rect & GetRect() const;
-        const fheroes2::Rect & GetArea() const;
-        const fheroes2::Rect & GetTop() const;
+        bool isValid() const
+        {
+            return rect.width != 0 && rect.height != 0;
+        }
+
+        const fheroes2::Rect & GetRect() const
+        {
+            return rect;
+        }
+
+        const fheroes2::Rect & GetArea() const
+        {
+            return area;
+        }
+
+        const fheroes2::Rect & GetTop() const
+        {
+            return top;
+        }
 
         static void RenderRegular( const fheroes2::Rect & dstrt );
         static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
@@ -172,5 +224,3 @@ namespace Dialog
         int border;
     };
 }
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,17 +27,31 @@ enum SaveFileFormat : uint16_t
     // !!! IMPORTANT !!!
     // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
     // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
+    FORMAT_VERSION_1111_RELEASE = 10032,
+    FORMAT_VERSION_1109_RELEASE = 10031,
+    FORMAT_VERSION_1108_RELEASE = 10030,
+    FORMAT_VERSION_PRE1_1108_RELEASE = 10029,
+    FORMAT_VERSION_1107_RELEASE = 10028,
+    FORMAT_VERSION_1106_RELEASE = 10027,
+    FORMAT_VERSION_PPRE1_1106_RELEASE = 10026,
+    FORMAT_VERSION_1104_RELEASE = 10025,
+    FORMAT_VERSION_1103_RELEASE = 10024,
+    FORMAT_VERSION_PRE2_1103_RELEASE = 10023,
+    FORMAT_VERSION_PRE1_1103_RELEASE = 10022,
+    FORMAT_VERSION_1101_RELEASE = 10021,
+    FORMAT_VERSION_PRE1_1101_RELEASE = 10020,
+    FORMAT_VERSION_1100_RELEASE = 10019,
+    FORMAT_VERSION_PRE3_1100_RELEASE = 10018,
+    FORMAT_VERSION_PRE2_1100_RELEASE = 10017,
+    FORMAT_VERSION_PRE1_1100_RELEASE = 10016,
+    FORMAT_VERSION_1010_RELEASE = 10015,
+    FORMAT_VERSION_1009_RELEASE = 10014,
+    FORMAT_VERSION_PRE2_1009_RELEASE = 10013,
+    FORMAT_VERSION_PRE1_1009_RELEASE = 10012,
+    FORMAT_VERSION_1007_RELEASE = 10011,
+    FORMAT_VERSION_1005_RELEASE = 10010,
 
-    FORMAT_VERSION_1003_RELEASE = 10007,
-    FORMAT_VERSION_1002_RELEASE = 10006,
-    FORMAT_VERSION_PRE2_1002_RELEASE = 10005,
-    FORMAT_VERSION_PRE1_1002_RELEASE = 10004,
-    FORMAT_VERSION_1001_RELEASE = 10003,
-    FORMAT_VERSION_PRE2_1001_RELEASE = 10002,
-    FORMAT_VERSION_PRE1_1001_RELEASE = 10001,
-    FORMAT_VERSION_1000_RELEASE = 10000,
+    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_1005_RELEASE,
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_1000_RELEASE,
-
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_1003_RELEASE
+    CURRENT_FORMAT_VERSION = FORMAT_VERSION_1111_RELEASE
 };

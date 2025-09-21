@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,14 +22,16 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
-#include "game_interface.h"
+#include "game_interface.h" // IWYU pragma: associated
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_status.h"
@@ -40,63 +42,98 @@
 #include "settings.h"
 #include "world.h"
 
-void Interface::Basic::SetFocus( Heroes * hero )
+void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
 {
+    assert( hero != nullptr );
+
     Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player == nullptr ) {
+        return;
+    }
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
 
-        if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
-            focus.GetHeroes()->SetMove( false );
-            focus.GetHeroes()->ShowPath( false );
-        }
+    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 
-        hero->ShowPath( true );
-        focus.Set( hero );
+    Focus & focus = player->GetFocus();
 
-        Redraw( REDRAW_BUTTONS );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero && focusedHero != hero ) {
+        // Focus has been changed to another hero. Hide the path of the previous hero.
+        focusedHero->ShowPath( false );
+    }
 
-        iconsPanel.Select( hero );
-        gameArea.SetCenter( hero->GetCenter() );
-        statusWindow.SetState( StatusType::STATUS_ARMY );
+    // Heroes::calculatePath() uses PlayerWorldPathfinder and should not be used for an AI-controlled hero
+    if ( !hero->isMoveEnabled() && hero->isControlHuman() ) {
+        hero->calculatePath( -1 );
+    }
 
-        const int heroIndex = hero->GetIndex();
-        if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
-            Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-        }
+    hero->ShowPath( true );
+    focus.Set( hero );
+
+    setRedraw( REDRAW_BUTTONS );
+
+    if ( !retainScrollBarPosition ) {
+        _iconsPanel.select( hero );
+    }
+
+    _gameArea.SetCenter( hero->GetCenter() );
+    _statusPanel.SetState( StatusType::STATUS_ARMY );
+
+    const int heroIndex = hero->GetIndex();
+    if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( heroIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 }
 
-void Interface::Basic::SetFocus( Castle * castle )
+void Interface::AdventureMap::SetFocus( Castle * castle )
 {
+    assert( castle != nullptr );
+
     Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player == nullptr ) {
+        return;
+    }
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
 
-        if ( focus.GetHeroes() ) {
-            focus.GetHeroes()->SetMove( false );
-            focus.GetHeroes()->ShowPath( false );
-        }
+    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 
-        focus.Set( castle );
+    Focus & focus = player->GetFocus();
 
-        Redraw( REDRAW_BUTTONS );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero ) {
+        focusedHero->ShowPath( false );
+    }
 
-        iconsPanel.Select( castle );
-        gameArea.SetCenter( castle->GetCenter() );
-        statusWindow.SetState( StatusType::STATUS_FUNDS );
+    focus.Set( castle );
 
-        if ( Game::UpdateSoundsOnFocusUpdate() ) {
-            Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-        }
+    setRedraw( REDRAW_BUTTONS );
+
+    _iconsPanel.select( castle );
+    _gameArea.SetCenter( castle->GetCenter() );
+    _statusPanel.SetState( StatusType::STATUS_FUNDS );
+
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 }
 
-void Interface::Basic::updateFocus()
+void Interface::AdventureMap::updateFocus()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -117,64 +154,85 @@ void Interface::Basic::updateFocus()
         Heroes * hero = GetFocusHeroes();
 
         if ( hero != nullptr ) {
-            SetFocus( hero );
+            SetFocus( hero, false );
         }
     }
 }
 
-void Interface::Basic::ResetFocus( int priority )
+void Interface::AdventureMap::ResetFocus( const int priority, const bool retainScrollBarPosition )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player == nullptr ) {
+        return;
+    }
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
-        Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
+    Focus & focus = player->GetFocus();
+    Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        iconsPanel.ResetIcons( ICON_ANY );
+    if ( !retainScrollBarPosition ) {
+        _iconsPanel.resetIcons( ICON_ANY );
+    }
 
-        switch ( priority ) {
-        case GameFocus::FIRSTHERO: {
-            const KingdomHeroes & heroes = myKingdom.GetHeroes();
-            // skip sleeping
-            KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
+    switch ( priority ) {
+    case GameFocus::FIRSTHERO: {
+        const VecHeroes & heroes = myKingdom.GetHeroes();
+        // Find first hero excluding sleeping ones.
+        const VecHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
-            if ( it != heroes.end() )
-                SetFocus( *it );
-            else
-                ResetFocus( GameFocus::CASTLE );
-            break;
+        if ( it != heroes.end() ) {
+            SetFocus( *it, false );
         }
+        else {
+            // There are no non-sleeping heroes. Focus on the castle instead.
+            ResetFocus( GameFocus::CASTLE, retainScrollBarPosition );
+        }
+        break;
+    }
 
-        case GameFocus::HEROES:
-            if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
-                SetFocus( focus.GetHeroes() );
-            else if ( !myKingdom.GetHeroes().empty() )
-                SetFocus( myKingdom.GetHeroes().front() );
-            else if ( !myKingdom.GetCastles().empty() ) {
-                iconsPanel.SetRedraw( ICON_HEROES );
-                SetFocus( myKingdom.GetCastles().front() );
-            }
-            else
-                focus.Reset();
-            break;
-
-        case GameFocus::CASTLE:
-            if ( focus.GetCastle() && focus.GetCastle()->GetColor() == player->GetColor() )
-                SetFocus( focus.GetCastle() );
-            else if ( !myKingdom.GetCastles().empty() )
-                SetFocus( myKingdom.GetCastles().front() );
-            else if ( !myKingdom.GetHeroes().empty() ) {
-                iconsPanel.SetRedraw( ICON_CASTLES );
-                SetFocus( myKingdom.GetHeroes().front() );
-            }
-            else
-                focus.Reset();
-            break;
-
-        default:
+    case GameFocus::HEROES:
+        if ( Heroes * hero = focus.GetHeroes(); ( hero != nullptr ) && ( hero->GetColor() == player->GetColor() ) ) {
+            // Set focus on the previously focused hero.
+            SetFocus( hero, retainScrollBarPosition );
+        }
+        else if ( !myKingdom.GetHeroes().empty() ) {
+            // Reset scrollbar here because the current focused hero might have
+            // lost a battle and is not in the heroes list anymore.
+            _iconsPanel.resetIcons( ICON_HEROES );
+            SetFocus( myKingdom.GetHeroes().front(), false );
+        }
+        else if ( !myKingdom.GetCastles().empty() ) {
+            // There are no heroes left in the kingdom. Reset the heroes scrollbar and focus on the first castle.
+            _iconsPanel.setRedraw( ICON_HEROES );
+            SetFocus( myKingdom.GetCastles().front() );
+        }
+        else {
             focus.Reset();
-            break;
         }
+        break;
+
+    case GameFocus::CASTLE:
+        if ( Castle * castle = focus.GetCastle(); ( castle != nullptr ) && ( castle->GetColor() == player->GetColor() ) ) {
+            // Focus on the previously focused castle.
+            SetFocus( castle );
+        }
+        else if ( !myKingdom.GetCastles().empty() ) {
+            // The previously focused castle is lost, so we update the castles scrollbar.
+            _iconsPanel.resetIcons( ICON_CASTLES );
+            SetFocus( myKingdom.GetCastles().front() );
+        }
+        else if ( !myKingdom.GetHeroes().empty() ) {
+            // There are no castles left in the kingdom. Reset the castles scrollbar and focus on the first hero.
+            _iconsPanel.setRedraw( ICON_CASTLES );
+            SetFocus( myKingdom.GetHeroes().front(), false );
+        }
+        else {
+            focus.Reset();
+        }
+        break;
+
+    default:
+        focus.Reset();
+        break;
     }
 }
 
@@ -185,10 +243,12 @@ int Interface::GetFocusType()
     if ( player ) {
         Focus & focus = player->GetFocus();
 
-        if ( focus.GetHeroes() )
+        if ( focus.GetHeroes() ) {
             return GameFocus::HEROES;
-        else if ( focus.GetCastle() )
+        }
+        if ( focus.GetCastle() ) {
             return GameFocus::CASTLE;
+        }
     }
 
     return GameFocus::UNSEL;
@@ -208,34 +268,36 @@ Heroes * Interface::GetFocusHeroes()
     return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
-void Interface::Basic::RedrawFocus()
+void Interface::AdventureMap::RedrawFocus()
 {
-    int type = GetFocusType();
+    const int type = GetFocusType();
 
-    if ( type != FOCUS_HEROES && iconsPanel.IsSelected( ICON_HEROES ) ) {
-        iconsPanel.ResetIcons( ICON_HEROES );
-        iconsPanel.SetRedraw();
+    if ( type != FOCUS_HEROES && _iconsPanel.isSelected( ICON_HEROES ) ) {
+        _iconsPanel.resetIcons( ICON_HEROES );
+        _iconsPanel.setRedraw();
     }
-    else if ( type == FOCUS_HEROES && !iconsPanel.IsSelected( ICON_HEROES ) ) {
-        iconsPanel.Select( GetFocusHeroes() );
-        iconsPanel.SetRedraw();
-    }
-
-    if ( type != FOCUS_CASTLE && iconsPanel.IsSelected( ICON_CASTLES ) ) {
-        iconsPanel.ResetIcons( ICON_CASTLES );
-        iconsPanel.SetRedraw();
-    }
-    else if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
-        iconsPanel.Select( GetFocusCastle() );
-        iconsPanel.SetRedraw();
+    else if ( type == FOCUS_HEROES && !_iconsPanel.isSelected( ICON_HEROES ) ) {
+        _iconsPanel.select( GetFocusHeroes() );
+        _iconsPanel.setRedraw();
     }
 
-    SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
+    if ( type != FOCUS_CASTLE && _iconsPanel.isSelected( ICON_CASTLES ) ) {
+        _iconsPanel.resetIcons( ICON_CASTLES );
+        _iconsPanel.setRedraw();
+    }
+    else if ( type == FOCUS_CASTLE && !_iconsPanel.isSelected( ICON_CASTLES ) ) {
+        _iconsPanel.select( GetFocusCastle() );
+        _iconsPanel.setRedraw();
+    }
 
-    if ( type == FOCUS_HEROES )
-        iconsPanel.SetRedraw( ICON_HEROES );
-    else if ( type == FOCUS_CASTLE )
-        iconsPanel.SetRedraw( ICON_CASTLES );
+    setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    statusWindow.SetRedraw();
+    if ( type == FOCUS_HEROES ) {
+        _iconsPanel.setRedraw( ICON_HEROES );
+    }
+    else if ( type == FOCUS_CASTLE ) {
+        _iconsPanel.setRedraw( ICON_CASTLES );
+    }
+
+    _statusPanel.setRedraw();
 }

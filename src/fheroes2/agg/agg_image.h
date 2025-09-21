@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,9 +26,8 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    enum class FontSize : uint8_t;
-    struct FontType;
-    enum class SupportedLanguage : int;
+
+    enum class SupportedLanguage : uint8_t;
 
     namespace AGG
     {
@@ -37,17 +36,8 @@ namespace fheroes2
 
         // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
 
-        // Returns the last supported ASCII character in existing font.
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
-
-        int32_t GetAbsoluteICNHeight( int icnId );
-
-        uint32_t getCharacterLimit( const FontSize fontSize );
-        const Sprite & getChar( const uint8_t character, const FontType & fontType );
-
-        // This function must be called only at the type of setting up a new language.
+        // This function must be called only at the time of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }
 }

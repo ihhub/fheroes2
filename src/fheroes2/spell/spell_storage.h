@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,30 +21,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SPELLSTORAGE_H
-#define H2SPELLSTORAGE_H
+#pragma once
 
 #include <string>
 #include <vector>
 
 #include "spell.h"
 
-class Artifact;
 class BagArtifacts;
 
 class SpellStorage : public std::vector<Spell>
 {
 public:
-    SpellStorage();
-
-    SpellStorage GetSpells( int lvl = -1 ) const;
-    void Append( const SpellStorage & );
-    void Append( const Spell & );
-    void Append( const BagArtifacts & );
-    void Append( const Artifact & );
-    bool isPresentSpell( const Spell & ) const;
-    bool hasAdventureSpell( const int lvl ) const;
+    SpellStorage GetSpells( const int level = -1 ) const;
+    void Append( const SpellStorage & storage );
+    void Append( const Spell & spell );
+    void Append( const BagArtifacts & bag );
+    bool removeSpell( const Spell & spell );
+    bool isPresentSpell( const Spell & spell ) const;
     std::string String() const;
 };
-
-#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,391 +21,234 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-#include <cassert>
-#include <cstring>
-#include <string>
-
-#include "endian_h2.h"
-#include "logging.h"
 #include "serialize.h"
+
+#include <algorithm>
+#include <cstring>
+#include <ostream>
+#include <string>
+#include <string_view>
+
+#ifdef __EMSCRIPTEN__
+#include <cstdio>
+
+#include <emscripten.h>
+#include <errno.h>
+#include <fcntl.h>
+
+#include "tools.h"
+#endif
+
+#include "logging.h"
 
 namespace
 {
     const size_t minBufferCapacity = 1024;
 }
 
-void StreamBase::setconstbuf( bool f )
+void StreamBase::setBigendian( bool f )
 {
-    if ( f )
-        flags |= 0x00001000;
-    else
-        flags &= ~0x00001000;
+    if ( f ) {
+        _flags |= BIGENDIAN;
+    }
+    else {
+        _flags &= ~BIGENDIAN;
+    }
 }
 
-void StreamBase::setbigendian( bool f )
+void StreamBase::setFail( bool f )
 {
-    if ( f )
-        flags |= 0x80000000;
-    else
-        flags &= ~0x80000000;
+    if ( f ) {
+        _flags |= FAILURE;
+    }
+    else {
+        _flags &= ~FAILURE;
+    }
 }
 
-void StreamBase::setfail( bool f )
-{
-    if ( f )
-        flags |= 0x00000001;
-    else
-        flags &= ~0x00000001;
-}
-
-uint16_t StreamBase::get16()
+uint16_t IStreamBase::get16()
 {
     return bigendian() ? getBE16() : getLE16();
 }
 
-uint32_t StreamBase::get32()
+uint32_t IStreamBase::get32()
 {
     return bigendian() ? getBE32() : getLE32();
 }
 
-StreamBase & StreamBase::operator>>( bool & v )
+IStreamBase & IStreamBase::operator>>( bool & v )
 {
     v = ( get8() != 0 );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( char & v )
+IStreamBase & IStreamBase::operator>>( char & v )
 {
     v = get8();
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint8_t & v )
+IStreamBase & IStreamBase::operator>>( int8_t & v )
+{
+    v = static_cast<int8_t>( get8() );
+
+    return *this;
+}
+
+IStreamBase & IStreamBase::operator>>( uint8_t & v )
 {
     v = get8();
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint16_t & v )
+IStreamBase & IStreamBase::operator>>( int16_t & v )
 {
     v = get16();
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int16_t & v )
+IStreamBase & IStreamBase::operator>>( uint16_t & v )
 {
     v = get16();
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( uint32_t & v )
+IStreamBase & IStreamBase::operator>>( int32_t & v )
 {
     v = get32();
+
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( int32_t & v )
+IStreamBase & IStreamBase::operator>>( uint32_t & v )
 {
     v = get32();
-    return *this;
-}
-
-StreamBase & StreamBase::operator>>( std::string & v )
-{
-    uint32_t size = get32();
-    v.resize( size );
-
-    for ( std::string::iterator it = v.begin(); it != v.end(); ++it )
-        *it = get8();
 
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( fheroes2::Point & point_ )
+IStreamBase & IStreamBase::operator>>( std::string & v )
 {
-    return *this >> point_.x >> point_.y;
+    v.resize( get32() );
+
+    std::for_each( v.begin(), v.end(), [this]( char & item ) { item = get8(); } );
+
+    return *this;
 }
 
-void StreamBase::put16( uint16_t v )
+IStreamBase & IStreamBase::operator>>( fheroes2::Point & v )
+{
+    return *this >> v.x >> v.y;
+}
+
+void OStreamBase::put16( uint16_t v )
 {
     bigendian() ? putBE16( v ) : putLE16( v );
 }
 
-void StreamBase::put32( uint32_t v )
+void OStreamBase::put32( uint32_t v )
 {
     bigendian() ? putBE32( v ) : putLE32( v );
 }
 
-StreamBase & StreamBase::operator<<( const bool v )
+OStreamBase & OStreamBase::operator<<( const bool v )
 {
     put8( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const char v )
+OStreamBase & OStreamBase::operator<<( const char v )
 {
     put8( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint8_t v )
+OStreamBase & OStreamBase::operator<<( const int8_t v )
 {
-    put8( v );
+    put8( static_cast<uint8_t>( v ) );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint16_t v )
+OStreamBase & OStreamBase::operator<<( const uint8_t v )
+{
+    put8( v );
+
+    return *this;
+}
+
+OStreamBase & OStreamBase::operator<<( const int16_t v )
 {
     put16( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int16_t v )
+OStreamBase & OStreamBase::operator<<( const uint16_t v )
 {
     put16( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const int32_t v )
+OStreamBase & OStreamBase::operator<<( const int32_t v )
 {
     put32( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const uint32_t v )
+OStreamBase & OStreamBase::operator<<( const uint32_t v )
 {
     put32( v );
+
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const std::string & v )
+OStreamBase & OStreamBase::operator<<( const std::string_view v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
 
-    for ( std::string::const_iterator it = v.begin(); it != v.end(); ++it )
-        put8( *it );
+    // A string is a container of bytes so it doesn't matter which endianess is being used.
+    putRaw( v.data(), v.size() );
 
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
+OStreamBase & OStreamBase::operator<<( const fheroes2::Point & v )
 {
-    return *this << point_.x << point_.y;
+    return *this << v.x << v.y;
 }
 
-StreamBuf::StreamBuf( const size_t sz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
+RWStreamBuf::RWStreamBuf( const size_t size )
 {
-    if ( sz )
-        reallocbuf( sz );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
-}
-
-StreamBuf::~StreamBuf()
-{
-    if ( itbeg && !isconstbuf() )
-        delete[] itbeg;
-}
-
-StreamBuf::StreamBuf( StreamBuf && st ) noexcept
-    : StreamBase( std::move( st ) )
-    , itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
-{
-    std::swap( itbeg, st.itbeg );
-    std::swap( itget, st.itget );
-    std::swap( itput, st.itput );
-    std::swap( itend, st.itend );
-}
-
-StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
-{
-    itbeg = const_cast<uint8_t *>( &buf[0] );
-    itend = itbeg + buf.size();
-    itget = itbeg;
-    itput = itend;
-    setconstbuf( true );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
-}
-
-StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
-{
-    itbeg = const_cast<uint8_t *>( buf );
-    itend = itbeg + bufsz;
-    itget = itbeg;
-    itput = itend;
-    setconstbuf( true );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
-}
-
-StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
-{
-    if ( &st != this ) {
-        StreamBase::operator=( std::move( st ) );
-
-        std::swap( itbeg, st.itbeg );
-        std::swap( itget, st.itget );
-        std::swap( itput, st.itput );
-        std::swap( itend, st.itend );
+    if ( size ) {
+        reallocBuf( size );
     }
 
-    return *this;
+    setBigendian( IS_BIGENDIAN );
 }
 
-size_t StreamBuf::capacity() const
-{
-    return itend - itbeg;
-}
-
-const uint8_t * StreamBuf::data() const
-{
-    return itget;
-}
-
-size_t StreamBuf::size() const
-{
-    return sizeg();
-}
-
-void StreamBuf::reset()
-{
-    itput = itbeg;
-    itget = itbeg;
-}
-
-size_t StreamBuf::tellg() const
-{
-    return itget - itbeg;
-}
-
-size_t StreamBuf::tellp() const
-{
-    return itput - itbeg;
-}
-
-size_t StreamBuf::sizeg() const
-{
-    return itput - itget;
-}
-
-size_t StreamBuf::sizep() const
-{
-    return itend - itput;
-}
-
-void StreamBuf::reallocbuf( size_t sz )
-{
-    setconstbuf( false );
-
-    if ( !itbeg ) {
-        if ( sz < minBufferCapacity )
-            sz = minBufferCapacity;
-
-        itbeg = new uint8_t[sz];
-        itend = itbeg + sz;
-        std::fill( itbeg, itend, static_cast<uint8_t>( 0 ) );
-
-        reset();
-    }
-    else if ( sizep() < sz ) {
-        if ( sz < minBufferCapacity )
-            sz = minBufferCapacity;
-
-        uint8_t * ptr = new uint8_t[sz];
-
-        std::fill( ptr, ptr + sz, static_cast<uint8_t>( 0 ) );
-        std::copy( itbeg, itput, ptr );
-
-        itput = ptr + tellp();
-        itget = ptr + tellg();
-
-        delete[] itbeg;
-
-        itbeg = ptr;
-        itend = itbeg + sz;
-    }
-}
-
-void StreamBuf::put8( const uint8_t v )
-{
-    if ( sizep() == 0 )
-        reallocbuf( capacity() + capacity() / 2 );
-
-    if ( sizep() > 0 )
-        *itput++ = v;
-}
-
-uint8_t StreamBuf::get8()
-{
-    if ( sizeg() )
-        return *itget++;
-    else
-        return 0u;
-}
-
-uint16_t StreamBuf::getBE16()
-{
-    uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
-    result |= get8();
-
-    return result;
-}
-
-uint16_t StreamBuf::getLE16()
-{
-    uint16_t result = get8();
-    result |= ( static_cast<uint16_t>( get8() ) << 8 );
-
-    return result;
-}
-
-uint32_t StreamBuf::getBE32()
-{
-    uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
-    result |= ( static_cast<uint32_t>( get8() ) << 16 );
-    result |= ( static_cast<uint32_t>( get8() ) << 8 );
-    result |= get8();
-
-    return result;
-}
-
-uint32_t StreamBuf::getLE32()
-{
-    uint32_t result = get8();
-    result |= ( static_cast<uint32_t>( get8() ) << 8 );
-    result |= ( static_cast<uint32_t>( get8() ) << 16 );
-    result |= ( static_cast<uint32_t>( get8() ) << 24 );
-
-    return result;
-}
-
-void StreamBuf::putBE16( uint16_t v )
+void RWStreamBuf::putBE16( uint16_t v )
 {
     put8( v >> 8 );
     put8( v & 0xFF );
 }
 
-void StreamBuf::putLE16( uint16_t v )
+void RWStreamBuf::putLE16( uint16_t v )
 {
     put8( v & 0xFF );
     put8( v >> 8 );
 }
 
-void StreamBuf::putBE32( uint32_t v )
+void RWStreamBuf::putBE32( uint32_t v )
 {
     put8( v >> 24 );
     put8( ( v >> 16 ) & 0xFF );
@@ -413,7 +256,7 @@ void StreamBuf::putBE32( uint32_t v )
     put8( v & 0xFF );
 }
 
-void StreamBuf::putLE32( uint32_t v )
+void RWStreamBuf::putLE32( uint32_t v )
 {
     put8( v & 0xFF );
     put8( ( v >> 8 ) & 0xFF );
@@ -421,138 +264,278 @@ void StreamBuf::putLE32( uint32_t v )
     put8( v >> 24 );
 }
 
-std::vector<uint8_t> StreamBuf::getRaw( size_t sz )
+void RWStreamBuf::putRaw( const void * ptr, size_t size )
+{
+    if ( size == 0 ) {
+        return;
+    }
+
+    if ( sizep() < size ) {
+        if ( size < capacity() / 2 ) {
+            reallocBuf( capacity() + capacity() / 2 );
+        }
+        else {
+            reallocBuf( capacity() + size );
+        }
+    }
+
+    if ( sizep() < size ) {
+        assert( 0 );
+        return;
+    }
+
+    memcpy( _itput, ptr, size );
+
+    _itput = _itput + size;
+}
+
+void RWStreamBuf::put8( const uint8_t v )
+{
+    if ( sizep() < 1 ) {
+        reallocBuf( capacity() + capacity() / 2 );
+    }
+
+    if ( sizep() < 1 ) {
+        assert( 0 );
+        return;
+    }
+
+    *_itput = v;
+    ++_itput;
+}
+
+size_t RWStreamBuf::tellp() const
+{
+    assert( _itbeg <= _itput );
+
+    return _itput - _itbeg;
+}
+
+size_t RWStreamBuf::sizep() const
+{
+    assert( _itput <= _itend );
+
+    return _itend - _itput;
+}
+
+void RWStreamBuf::reallocBuf( size_t size )
+{
+    if ( !_buf ) {
+        assert( ( []( const auto... args ) { return ( ( args == nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) );
+
+        size = std::max( size, minBufferCapacity );
+
+        _buf = std::make_unique<uint8_t[]>( size );
+
+        _itbeg = _buf.get();
+        _itend = _itbeg + size;
+
+        _itput = _itbeg;
+        _itget = _itbeg;
+
+        return;
+    }
+
+    assert( ( []( const auto... args ) { return ( ( args != nullptr ) && ... ); }( _itbeg, _itget, _itput, _itend ) ) && _itbeg <= _itget && _itget <= _itput
+            && _itput <= _itend );
+
+    if ( sizep() < size ) {
+        size = std::max( size, minBufferCapacity );
+
+        std::unique_ptr<uint8_t[]> newBuf = std::make_unique<uint8_t[]>( size );
+
+        std::copy( _itbeg, _itput, newBuf.get() );
+
+        _itput = newBuf.get() + tellp();
+        _itget = newBuf.get() + tellg();
+
+        _buf = std::move( newBuf );
+
+        _itbeg = _buf.get();
+        _itend = _itbeg + size;
+    }
+}
+
+ROStreamBuf::ROStreamBuf( const std::vector<uint8_t> & buf )
+{
+    _itbeg = buf.data();
+    _itend = _itbeg + buf.size();
+    _itget = _itbeg;
+    _itput = _itend;
+
+    setBigendian( IS_BIGENDIAN );
+}
+
+ROStreamBuf::ROStreamBuf( std::vector<uint8_t> && buf )
+    : _buf( std::move( buf ) )
+{
+    _itbeg = _buf.data();
+    _itend = _itbeg + _buf.size();
+    _itget = _itbeg;
+    _itput = _itend;
+
+    setBigendian( IS_BIGENDIAN );
+}
+
+std::pair<const uint8_t *, size_t> ROStreamBuf::getRawView( const size_t size /* = 0 */ )
 {
     const size_t remainSize = sizeg();
-    const size_t dataSize = sz > 0 ? sz : remainSize;
+    const size_t resultSize = size > 0 ? std::min( size, remainSize ) : remainSize;
 
-    std::vector<uint8_t> v( dataSize, 0 );
-    const size_t copySize = dataSize < remainSize ? dataSize : remainSize;
-    memcpy( v.data(), itget, copySize );
+    auto v = std::make_pair( _itget, resultSize );
 
-    itget += copySize;
+    _itget += resultSize;
 
     return v;
 }
 
-void StreamBuf::putRaw( const char * ptr, size_t sz )
+std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
 {
-    if ( sz == 0 ) {
-        return;
-    }
+    const size_t remainSize = sizeg();
+    const size_t sizeToSkip = size > 0 ? std::min( size, remainSize ) : remainSize;
 
-    if ( sizep() < sz ) {
-        if ( sz < capacity() / 2 ) {
-            reallocbuf( capacity() + capacity() / 2 );
-        }
-        else {
-            reallocbuf( capacity() + sz );
-        }
-    }
+    const uint8_t * strBeg = _itget;
+    _itget += sizeToSkip;
 
-    // Make sure that the possible previous memory reallocation was correct.
-    assert( sizep() >= sz );
+    const uint8_t * strEnd = std::find( strBeg, _itget, 0 );
+    assert( strBeg <= strEnd );
 
-    memcpy( itput, ptr, sz );
-    itput = itput + sz;
-}
+    static_assert( std::is_same_v<std::remove_const_t<std::remove_reference_t<decltype( *strBeg )>>, unsigned char> );
 
-std::string StreamBuf::toString( size_t sz )
-{
-    uint8_t * it1 = itget;
-    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
-    it2 = std::find( it1, it2, 0 );
-    itget = it1 + ( sz ? sz : sizeg() );
-    return std::string( it1, it2 );
-}
-
-void StreamBuf::skip( size_t sz )
-{
-    itget += sz <= sizeg() ? sz : sizeg();
-}
-
-void StreamBuf::seek( size_t sz )
-{
-    itget = itbeg + sz < itend ? itbeg + sz : itend;
-}
-
-StreamFile::StreamFile()
-    : _file( nullptr )
-{}
-
-StreamFile::~StreamFile()
-{
-    close();
+    return { reinterpret_cast<const char *>( strBeg ), static_cast<size_t>( strEnd - strBeg ) };
 }
 
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
-    _file = std::fopen( fn.c_str(), mode.c_str() );
-    if ( !_file )
-        ERROR_LOG( fn )
-    return _file != nullptr;
+    _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
+    // codechecker_false_positive [alpha.unix.Stream] Opened stream never closed. Potential resource leak
+    if ( !_file ) {
+        ERROR_LOG( "Error opening file " << fn )
+    }
+
+    setFail( !_file );
+
+    return !fail();
 }
 
 void StreamFile::close()
 {
-    if ( _file ) {
-        std::fclose( _file );
-        _file = nullptr;
-    }
+    _file.reset();
 }
 
-size_t StreamFile::size() const
+size_t StreamFile::size()
 {
-    if ( !_file )
+    if ( !_file ) {
         return 0;
-    const long pos = std::ftell( _file );
-    std::fseek( _file, 0, SEEK_END );
-    const long len = std::ftell( _file );
-    std::fseek( _file, pos, SEEK_SET );
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    const long len = std::ftell( _file.get() );
+    if ( len < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
+        setFail();
+
+        return 0;
+    }
+
     return static_cast<size_t>( len );
 }
 
-size_t StreamFile::tell() const
+size_t StreamFile::tell()
 {
-    return tellg();
-}
-
-void StreamFile::seek( size_t pos )
-{
-    if ( _file )
-        std::fseek( _file, static_cast<long>( pos ), SEEK_SET );
-}
-
-size_t StreamFile::sizeg() const
-{
-    if ( !_file )
+    if ( !_file ) {
         return 0;
-    const long pos = std::ftell( _file );
-    std::fseek( _file, 0, SEEK_END );
-    const long len = std::ftell( _file );
-    std::fseek( _file, pos, SEEK_SET );
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    return static_cast<size_t>( pos );
+}
+
+void StreamFile::seek( const size_t pos )
+{
+    if ( !_file ) {
+        return;
+    }
+
+    if ( std::fseek( _file.get(), static_cast<long>( pos ), SEEK_SET ) != 0 ) {
+        setFail();
+    }
+}
+
+size_t StreamFile::sizeg()
+{
+    if ( !_file ) {
+        return 0;
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    const long len = std::ftell( _file.get() );
+    if ( len < 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
+        setFail();
+
+        return 0;
+    }
+
+    // Something weird has happened
+    if ( len < pos ) {
+        setFail();
+
+        return 0;
+    }
+
     return static_cast<size_t>( len - pos );
 }
 
-size_t StreamFile::tellg() const
+void StreamFile::skip( size_t size )
 {
-    return _file ? static_cast<size_t>( std::ftell( _file ) ) : 0;
-}
+    if ( !_file ) {
+        return;
+    }
 
-size_t StreamFile::sizep() const
-{
-    return sizeg();
-}
-
-size_t StreamFile::tellp() const
-{
-    return tellg();
-}
-
-void StreamFile::skip( size_t pos )
-{
-    if ( _file )
-        std::fseek( _file, static_cast<long int>( pos ), SEEK_CUR );
+    if ( std::fseek( _file.get(), static_cast<long int>( size ), SEEK_CUR ) != 0 ) {
+        setFail();
+    }
 }
 
 uint8_t StreamFile::get8()
@@ -585,60 +568,116 @@ uint32_t StreamFile::getLE32()
     return le32toh( getUint<uint32_t>() );
 }
 
-void StreamFile::putBE16( uint16_t val )
+void StreamFile::putBE16( uint16_t v )
 {
-    putUint<uint16_t>( htobe16( val ) );
+    putUint<uint16_t>( htobe16( v ) );
 }
 
-void StreamFile::putLE16( uint16_t val )
+void StreamFile::putLE16( uint16_t v )
 {
-    putUint<uint16_t>( htole16( val ) );
+    putUint<uint16_t>( htole16( v ) );
 }
 
-void StreamFile::putBE32( uint32_t val )
+void StreamFile::putBE32( uint32_t v )
 {
-    putUint<uint32_t>( htobe32( val ) );
+    putUint<uint32_t>( htobe32( v ) );
 }
 
-void StreamFile::putLE32( uint32_t val )
+void StreamFile::putLE32( uint32_t v )
 {
-    putUint<uint32_t>( htole32( val ) );
+    putUint<uint32_t>( htole32( v ) );
 }
 
-std::vector<uint8_t> StreamFile::getRaw( size_t sz )
+std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 {
-    const size_t chunkSize = sz > 0 ? sz : sizeg();
+    const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
-        return std::vector<uint8_t>();
+        return {};
     }
 
-    std::vector<uint8_t> v( sz ? sz : sizeg() );
-    const size_t count = std::fread( &v[0], chunkSize, 1, _file );
-    if ( count != 1 ) {
-        setfail( true );
-        v.clear();
+    std::vector<uint8_t> v( chunkSize, 0 );
+
+    if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
+        setFail();
+
+        return {};
     }
 
     return v;
 }
 
-void StreamFile::putRaw( const char * ptr, size_t sz )
+void StreamFile::putRaw( const void * ptr, size_t size )
 {
-    if ( _file )
-        std::fwrite( ptr, sz, 1, _file );
+    if ( size == 0 ) {
+        // Nothing to write. Ignore it.
+        return;
+    }
+
+    if ( !_file ) {
+        return;
+    }
+
+    if ( std::fwrite( ptr, size, 1, _file.get() ) != 1 ) {
+        setFail();
+    }
 }
 
-StreamBuf StreamFile::toStreamBuf( size_t sz )
+ROStreamBuf StreamFile::getStreamBuf( const size_t size /* = 0 */ )
 {
-    std::vector<uint8_t> buf = getRaw( sz );
-    StreamBuf sb( buf.size() );
-    sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
-    return sb;
+    return ROStreamBuf{ getRaw( size ) };
 }
 
-std::string StreamFile::toString( size_t sz )
+std::string StreamFile::getString( const size_t size /* = 0 */ )
 {
-    const std::vector<uint8_t> buf = getRaw( sz );
-    std::vector<uint8_t>::const_iterator itend = std::find( buf.begin(), buf.end(), 0 );
-    return std::string( buf.begin(), itend != buf.end() ? itend : buf.end() );
+    const std::vector<uint8_t> buf = getRaw( size );
+
+    return { buf.begin(), std::find( buf.begin(), buf.end(), 0 ) };
+}
+
+int StreamFile::closeFile( std::FILE * f )
+{
+#ifdef __EMSCRIPTEN__
+    const bool needSyncFS = [f]() {
+        static_assert( CountBits( O_WRONLY ) == 1 && CountBits( O_RDWR ) == 1 );
+
+        const int fn = fileno( f );
+        if ( fn < 0 ) {
+            ERROR_LOG( "fileno() error: " << errno )
+            return false;
+        }
+
+        const int flags = fcntl( fn, F_GETFL );
+        if ( flags < 0 ) {
+            ERROR_LOG( "fcntl() error: " << errno )
+            return false;
+        }
+
+        return ( flags & O_WRONLY ) || ( flags & O_RDWR );
+    }();
+#endif
+
+    const int res = std::fclose( f );
+
+#ifdef __EMSCRIPTEN__
+    if ( needSyncFS ) {
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wvariadic-macro-arguments-omitted"
+#endif
+
+        EM_ASM(
+            // The following code is not C++ code, but JavaScript code.
+            // clang-format off
+            FS.syncfs( err => err && console.warn( "FS.syncfs() error:", err ) )
+            // clang-format on
+        );
+
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+    }
+#endif
+
+    return res;
 }

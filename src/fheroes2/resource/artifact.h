@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,29 +20,37 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2ARTIFACT_H
-#define H2ARTIFACT_H
 
+#pragma once
+
+#include <cstddef>
 #include <cstdint>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact_info.h"
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "ui_tool.h"
+
+class IStreamBase;
+class OStreamBase;
 
 class Heroes;
 class StatusBar;
-class StreamBase;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 class Artifact
 {
 public:
-    enum level_t
+    enum ArtLevel
     {
         ART_NONE = 0,
         ART_LEVEL_TREASURE = 0x01,
@@ -54,8 +62,13 @@ public:
         ART_NORANDOM = 0x20
     };
 
-    enum type_t : int
+    // All artifact IDs are by value 1 bigger than in the original game.
+    // This is done to support new artifact addition and also align with the rest of object types.
+    enum : int
     {
+        UNKNOWN = 0,
+
+        // The Succession Wars artifacts.
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
         ULTIMATE_CLOAK,
@@ -140,11 +153,17 @@ public:
 
         MAGIC_BOOK,
 
-        DUMMY1,
-        DUMMY2,
-        DUMMY3,
-        DUMMY4,
+        // This entry is used in Editor for the special victory conditions.
+        EDITOR_ANY_ULTIMATE_ARTIFACT,
 
+        // These four artifacts are used in original editor for the Ultimate and Random artifacts.
+        // They should not exist and used on the adventure map after the game is properly started.
+        // We do not use these or create extra entries for the Ultimate and Random artifacts in editor.
+        UNUSED_84,
+        UNUSED_85,
+        UNUSED_86,
+
+        // The Price of Loyalty artifacts.
         SPELL_SCROLL,
         ARM_MARTYR,
         BREASTPLATE_ANDURAN,
@@ -163,12 +182,14 @@ public:
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
 
+        // Resurrection artifacts.
+
         // IMPORTANT! Put all new artifacts just above this line.
-        UNKNOWN
+        ARTIFACT_COUNT
     };
 
     Artifact( int art = UNKNOWN )
-        : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
+        : id( art > UNKNOWN && art < ARTIFACT_COUNT ? art : UNKNOWN )
         , ext( 0 )
     {
         // Do nothing.
@@ -198,7 +219,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id != EDITOR_ANY_ULTIMATE_ARTIFACT && id < ARTIFACT_COUNT && ( id < UNUSED_84 || id > UNUSED_86 );
     }
 
     void Reset()
@@ -212,22 +233,20 @@ public:
 
     double getArtifactValue() const;
 
-    // return index of the sprite from objnarti.icn
-    uint32_t IndexSprite() const
-    {
-        return id < UNKNOWN ? id * 2 + 1 : 0;
-    }
-
     // artfx.icn
     uint32_t IndexSprite32() const
     {
-        return id;
+        if ( id == UNKNOWN ) {
+            return 255;
+        }
+
+        return id - 1;
     }
 
     // return index from artifact.icn
     uint32_t IndexSprite64() const
     {
-        return id + 1;
+        return id;
     }
 
     void SetSpell( const int v );
@@ -240,20 +259,17 @@ public:
         return fheroes2::getArtifactData( id ).getDescription( ext );
     }
 
-    static int Rand( level_t );
-    static Artifact FromMP2IndexSprite( uint32_t );
+    static int Rand( ArtLevel );
+    static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Artifact & );
-    friend StreamBase & operator>>( StreamBase &, Artifact & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Artifact & art );
+    friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
     int id;
     int ext;
 };
-
-StreamBase & operator<<( StreamBase &, const Artifact & );
-StreamBase & operator>>( StreamBase &, Artifact & );
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
@@ -267,9 +283,14 @@ namespace fheroes2
 
 struct ArtifactSetData
 {
-    ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
+    ArtifactSetData( const int32_t artifactID, std::string assembleMessage )
+        : _assembledArtifactID( artifactID )
+        , _assembleMessage( std::move( assembleMessage ) )
+    {
+        // Do nothing.
+    }
 
-    uint32_t _assembledArtifactID = Artifact::UNKNOWN;
+    int32_t _assembledArtifactID = Artifact::UNKNOWN;
     std::string _assembleMessage;
 
     bool operator<( const ArtifactSetData & other ) const;
@@ -278,10 +299,13 @@ struct ArtifactSetData
 class BagArtifacts : public std::vector<Artifact>
 {
 public:
+    // Maximum number of artifacts that can be placed in an artifact bag
+    static constexpr size_t maxCapacity{ 14 };
+
     BagArtifacts();
 
     bool ContainSpell( const int spellId ) const;
-    bool isPresentArtifact( const Artifact & ) const;
+    bool isPresentArtifact( const Artifact & art ) const;
 
     bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
     bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
@@ -301,19 +325,20 @@ public:
     Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
     Artifact getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const;
 
-    bool PushArtifact( const Artifact & );
+    bool PushArtifact( const Artifact & art );
 
+    // Removes the first found instance of the specified artifact from the artifact bag
     void RemoveArtifact( const Artifact & art );
 
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
     // Automatically exchange artifacts between two heroes. The taker should get the best possible artifacts.
-    void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
+    static void exchangeArtifacts( Heroes & taker, Heroes & giver );
 
     double getArtifactValue() const;
     uint32_t CountArtifacts() const;
-    uint32_t Count( const Artifact & ) const;
+    uint32_t Count( const Artifact & art ) const;
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
@@ -326,7 +351,7 @@ public:
     using Interface::ItemsActionBar<Artifact>::RedrawItem;
     using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
 
-    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
+    ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
@@ -349,7 +374,7 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool read_only;
@@ -362,5 +387,3 @@ private:
 
     void messageMagicBookAbortTrading() const;
 };
-
-#endif

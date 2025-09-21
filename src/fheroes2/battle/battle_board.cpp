@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,27 +21,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_board.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <memory>
-#include <ostream>
 #include <set>
 #include <utility>
 
-#include "battle.h"
 #include "battle_arena.h"
-#include "battle_army.h"
-#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
-#include "logging.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "rand.h"
@@ -50,9 +46,9 @@
 
 namespace
 {
-    int GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( Rand::PCG32 & gen )
     {
-        return Rand::GetWithGen( 3, 6, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
+        return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -79,22 +75,42 @@ namespace
 
         return false;
     }
+
+    bool isTallObject( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::COBJ0002:
+        case ICN::COBJ0009:
+        case ICN::COBJ0013:
+        case ICN::COBJ0021:
+        case ICN::COBJ0027:
+        case ICN::COBJ0028:
+        case ICN::COBJ0031:
+            return true;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 Battle::Board::Board()
 {
-    reserve( ARENASIZE );
-    for ( uint32_t ii = 0; ii < ARENASIZE; ++ii )
-        push_back( Cell( ii ) );
+    reserve( sizeInCells );
+
+    for ( int i = 0; i < sizeInCells; ++i ) {
+        emplace_back( i );
+    }
 }
 
 void Battle::Board::SetArea( const fheroes2::Rect & area )
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        ( *it ).SetArea( area );
+    std::for_each( begin(), end(), [&area]( Cell & cell ) { cell.SetArea( area ); } );
 }
 
-void Battle::Board::Reset()
+void Battle::Board::removeDeadUnits()
 {
     for ( Cell & cell : *this ) {
         Unit * unit = cell.GetUnit();
@@ -102,93 +118,76 @@ void Battle::Board::Reset()
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-
-        cell.ResetQuality();
     }
 }
 
-void Battle::Board::SetPositionQuality( const Unit & b ) const
+uint32_t Battle::Board::GetDistance( const int32_t index1, const int32_t index2 )
 {
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
-
-    // Make sure archers are first here, so melee unit's score won't be double counted
-    enemies.SortArchers();
-
-    for ( const Unit * unit : enemies ) {
-        if ( !unit || !unit->isValid() ) {
-            continue;
-        }
-
-        const Indexes around = GetAroundIndexes( *unit );
-        for ( const int32_t index : around ) {
-            Cell * cell2 = GetCell( index );
-            if ( !cell2 || !cell2->isPassableForUnit( b ) )
-                continue;
-
-            const int32_t quality = cell2->GetQuality();
-            const int32_t attackValue = OptimalAttackValue( b, *unit, index );
-
-            // Only sum up quality score if it's archers; otherwise just pick the highest
-            if ( unit->isArchers() )
-                cell2->SetQuality( quality + attackValue );
-            else if ( attackValue > quality )
-                cell2->SetQuality( attackValue );
-        }
+    if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
+        return 0;
     }
+
+    const int32_t x1 = index1 % widthInCells;
+    const int32_t y1 = index1 / widthInCells;
+
+    const int32_t x2 = index2 % widthInCells;
+    const int32_t y2 = index2 / widthInCells;
+
+    const int32_t du = y2 - y1;
+    const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+
+    if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
+        return std::max( std::abs( du ), std::abs( dv ) );
+    }
+
+    return std::abs( du ) + std::abs( dv );
 }
 
-void Battle::Board::SetEnemyQuality( const Unit & unit ) const
+uint32_t Battle::Board::GetDistance( const Position & pos1, const Position & pos2 )
 {
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
-    if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
-        enemies.insert( enemies.end(), allies.begin(), allies.end() );
+    if ( pos1.GetHead() == nullptr || pos2.GetHead() == nullptr ) {
+        return 0;
     }
 
-    for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        const Unit * enemy = *it;
+    const int32_t head1Idx = pos1.GetHead()->GetIndex();
+    const int32_t tail1Idx = pos1.GetTail() ? pos1.GetTail()->GetIndex() : -1;
 
-        if ( enemy && enemy->isValid() ) {
-            const int32_t score = enemy->GetScoreQuality( unit );
-            Cell * cell = GetCell( enemy->GetHeadIndex() );
+    const int32_t head2Idx = pos2.GetHead()->GetIndex();
+    const int32_t tail2Idx = pos2.GetTail() ? pos2.GetTail()->GetIndex() : -1;
 
-            cell->SetQuality( score );
+    uint32_t distance = Board::GetDistance( head1Idx, head2Idx );
 
-            if ( enemy->isWide() )
-                GetCell( enemy->GetTailIndex() )->SetQuality( score );
+    if ( tail2Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( head1Idx, tail2Idx ) );
+    }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() )
+    if ( tail1Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tail1Idx, head2Idx ) );
+
+        if ( tail2Idx != -1 ) {
+            distance = std::min( distance, Board::GetDistance( tail1Idx, tail2Idx ) );
         }
     }
+
+    return distance;
 }
 
-uint32_t Battle::Board::GetDistance( int32_t index1, int32_t index2 )
+uint32_t Battle::Board::GetDistance( const Position & pos, const int32_t index )
 {
-    if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int32_t x1 = index1 % ARENAW;
-        const int32_t y1 = index1 / ARENAW;
-
-        const int32_t x2 = index2 % ARENAW;
-        const int32_t y2 = index2 / ARENAW;
-
-        const int32_t du = y2 - y1;
-        const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
-
-        if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
-            return std::max( std::abs( du ), std::abs( dv ) );
-        }
-        else {
-            return std::abs( du ) + std::abs( dv );
-        }
+    if ( pos.GetHead() == nullptr || !isValidIndex( index ) ) {
+        return 0;
     }
 
-    return 0;
+    const int32_t headIdx = pos.GetHead()->GetIndex();
+    const int32_t tailIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
+
+    uint32_t distance = Board::GetDistance( headIdx, index );
+
+    if ( tailIdx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tailIdx, index ) );
+    }
+
+    return distance;
 }
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
@@ -203,7 +202,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
 
         const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
         if ( !isBlackListed ) {
-            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetPosition(), cellUnit->GetPosition() ) );
         }
     }
 
@@ -220,152 +219,82 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     return units;
 }
 
-int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
-{
-    const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
-    const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
-    if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
-        return secondaryTarget->GetScoreQuality( attacker );
-    }
-    return 0;
-}
-
-int32_t Battle::Board::OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    const int32_t headIndex = target.GetHeadIndex();
-    const int32_t tailIndex = target.GetTailIndex();
-
-    // isNearIndexes should return false if we pass in invalid tail index (-1)
-    if ( isNearIndexes( from, tailIndex ) ) {
-        if ( attacker.isDoubleCellAttack() && isNearIndexes( from, headIndex )
-             && DoubleCellAttackValue( attacker, target, from, headIndex ) > DoubleCellAttackValue( attacker, target, from, tailIndex ) ) {
-            // Special case when attacking wide unit from the middle cell and could turn around
-            return headIndex;
-        }
-        return tailIndex;
-    }
-    return headIndex;
-}
-
-int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    if ( attacker.isDoubleCellAttack() ) {
-        const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
-        return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
-    }
-
-    if ( attacker.isAllAdjacentCellsAttack() ) {
-        Position position = Position::GetPosition( attacker, from );
-
-        if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
-
-            return 0;
-        }
-
-        Indexes aroundAttacker = GetAroundIndexes( position );
-
-        std::set<const Unit *> unitsUnderAttack;
-        Board * board = Arena::GetBoard();
-        for ( const int32_t index : aroundAttacker ) {
-            const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
-                unitsUnderAttack.insert( unit );
-            }
-        }
-
-        int32_t attackValue = 0;
-        for ( const Unit * unit : unitsUnderAttack ) {
-            attackValue += unit->GetScoreQuality( attacker );
-        }
-
-        return attackValue;
-    }
-
-    return target.GetScoreQuality( attacker );
-}
-
-int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
+Battle::CellDirection Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
 {
     if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
-        return UNKNOWN;
+        return CellDirection::UNKNOWN;
     }
 
     if ( index1 == index2 ) {
-        return CENTER;
+        return CellDirection::CENTER;
     }
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = CellDirection::TOP_LEFT; dir < CellDirection::CENTER; ++dir ) {
         if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) ) {
             return dir;
         }
     }
 
-    return UNKNOWN;
+    return CellDirection::UNKNOWN;
 }
 
-bool Battle::Board::isNearIndexes( const int32_t index1, const int32_t index2 )
-{
-    return index1 != index2 && UNKNOWN != GetDirection( index1, index2 );
-}
-
-int Battle::Board::GetReflectDirection( const int dir )
+Battle::CellDirection Battle::Board::GetReflectDirection( const CellDirection dir )
 {
     switch ( dir ) {
-    case TOP_LEFT:
-        return BOTTOM_RIGHT;
-    case TOP_RIGHT:
-        return BOTTOM_LEFT;
-    case LEFT:
-        return RIGHT;
-    case RIGHT:
-        return LEFT;
-    case BOTTOM_LEFT:
-        return TOP_RIGHT;
-    case BOTTOM_RIGHT:
-        return TOP_LEFT;
+    case CellDirection::TOP_LEFT:
+        return CellDirection::BOTTOM_RIGHT;
+    case CellDirection::TOP_RIGHT:
+        return CellDirection::BOTTOM_LEFT;
+    case CellDirection::LEFT:
+        return CellDirection::RIGHT;
+    case CellDirection::RIGHT:
+        return CellDirection::LEFT;
+    case CellDirection::BOTTOM_LEFT:
+        return CellDirection::TOP_RIGHT;
+    case CellDirection::BOTTOM_RIGHT:
+        return CellDirection::TOP_LEFT;
     default:
         break;
     }
 
-    return UNKNOWN;
+    return CellDirection::UNKNOWN;
 }
 
-bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
+uint32_t Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( const int32_t index, const bool fromRightEdge )
 {
-    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
+    assert( isValidIndex( index ) );
+
+    const uint32_t x = index % widthInCells;
+
+    return ( fromRightEdge ? widthInCells - x : x + 1 );
 }
 
-int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
-{
-    const int xPos = index % ARENAW;
-    return std::max( 1, reflect ? ARENAW - xPos - 1 : xPos );
-}
-
-bool Battle::Board::isValidDirection( const int32_t index, const int dir )
+bool Battle::Board::isValidDirection( const int32_t index, const CellDirection dir )
 {
     if ( !isValidIndex( index ) ) {
         return false;
     }
 
-    const int32_t x = index % ARENAW;
-    const int32_t y = index / ARENAW;
+    if ( dir == CellDirection::CENTER ) {
+        return true;
+    }
+
+    const int32_t x = index % widthInCells;
+    const int32_t y = index / widthInCells;
 
     switch ( dir ) {
-    case CENTER:
-        return true;
-    case TOP_LEFT:
+    case CellDirection::TOP_LEFT:
         return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
-    case TOP_RIGHT:
-        return !( 0 == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
-    case LEFT:
+    case CellDirection::TOP_RIGHT:
+        return !( 0 == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
+    case CellDirection::LEFT:
         return !( 0 == x );
-    case RIGHT:
-        return !( ( ARENAW - 1 ) == x );
-    case BOTTOM_LEFT:
-        return !( ( ARENAH - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
-    case BOTTOM_RIGHT:
-        return !( ( ARENAH - 1 ) == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
+    case CellDirection::RIGHT:
+        return !( ( widthInCells - 1 ) == x );
+    case CellDirection::BOTTOM_LEFT:
+        return !( ( heightInCells - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
+    case CellDirection::BOTTOM_RIGHT:
+        return !( ( heightInCells - 1 ) == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
     default:
         break;
     }
@@ -373,29 +302,27 @@ bool Battle::Board::isValidDirection( const int32_t index, const int dir )
     return false;
 }
 
-int32_t Battle::Board::GetIndexDirection( const int32_t index, const int dir )
+int32_t Battle::Board::GetIndexDirection( const int32_t index, const CellDirection dir )
 {
     if ( !isValidIndex( index ) ) {
         return -1;
     }
 
-    const int32_t y = index / ARENAW;
-
     switch ( dir ) {
-    case CENTER:
+    case CellDirection::CENTER:
         return index;
-    case TOP_LEFT:
-        return index - ( ( y % 2 ) ? ARENAW + 1 : ARENAW );
-    case TOP_RIGHT:
-        return index - ( ( y % 2 ) ? ARENAW : ARENAW - 1 );
-    case LEFT:
+    case CellDirection::TOP_LEFT:
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells + 1 : widthInCells );
+    case CellDirection::TOP_RIGHT:
+        return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells - 1 );
+    case CellDirection::LEFT:
         return index - 1;
-    case RIGHT:
+    case CellDirection::RIGHT:
         return index + 1;
-    case BOTTOM_LEFT:
-        return index + ( ( y % 2 ) ? ARENAW - 1 : ARENAW );
-    case BOTTOM_RIGHT:
-        return index + ( ( y % 2 ) ? ARENAW : ARENAW + 1 );
+    case CellDirection::BOTTOM_LEFT:
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells - 1 : widthInCells );
+    case CellDirection::BOTTOM_RIGHT:
+        return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells + 1 );
     default:
         break;
     }
@@ -414,16 +341,11 @@ int32_t Battle::Board::GetIndexAbsPosition( const fheroes2::Point & pt ) const
     return it != end() ? ( *it ).GetIndex() : -1;
 }
 
-bool Battle::Board::isValidIndex( const int32_t index )
-{
-    return 0 <= index && index < ARENASIZE;
-}
-
 bool Battle::Board::isCastleIndex( const int32_t index )
 {
-    return ( ( 8 < index && index <= 10 ) || ( 19 < index && index <= 21 ) || ( 29 < index && index <= 32 ) || ( 40 < index && index <= 43 )
-             || ( 50 < index && index <= 54 ) || ( 62 < index && index <= 65 ) || ( 73 < index && index <= 76 ) || ( 85 < index && index <= 87 )
-             || ( 96 < index && index <= 98 ) );
+    return ( ( 8 <= index && index <= 10 ) || ( 19 < index && index <= 21 ) || ( 29 <= index && index <= 32 ) || ( 40 < index && index <= 43 )
+             || ( 50 < index && index <= 54 ) || ( 62 < index && index <= 65 ) || ( 73 <= index && index <= 76 ) || ( 85 < index && index <= 87 )
+             || ( 96 <= index && index <= 98 ) );
 }
 
 bool Battle::Board::isOutOfWallsIndex( const int32_t index )
@@ -456,19 +378,17 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, Rand::PCG32 & gen )
 {
-    bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
-    int ground = tile.GetGround();
     std::vector<int> objs;
 
-    if ( grave ) {
+    if ( tile.getMainObjectType( false ) == MP2::OBJ_GRAVEYARD ) {
         objs.push_back( ICN::COBJ0000 );
         objs.push_back( ICN::COBJ0001 );
         objs.push_back( ICN::COBJ0025 );
     }
-    else
-        switch ( ground ) {
+    else {
+        switch ( tile.GetGround() ) {
         case Maps::Ground::DESERT:
             objs.push_back( ICN::COBJ0009 );
             objs.push_back( ICN::COBJ0024 );
@@ -547,24 +467,65 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         default:
             break;
         }
+    }
 
     Rand::ShuffleWithGen( objs, gen );
 
-    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, 4, gen ) ) );
+    const auto largeObstacleHexCount = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
+
+    uint8_t maxSmallObstacleCount = 0;
+    uint8_t maxTwoHexObstacleCount = 0;
+
+    if ( largeObstacleHexCount == 0 ) {
+        maxSmallObstacleCount = 6;
+        maxTwoHexObstacleCount = 3;
+    }
+    else if ( largeObstacleHexCount <= 7 ) {
+        maxSmallObstacleCount = 4;
+        maxTwoHexObstacleCount = 2;
+    }
+    else if ( largeObstacleHexCount <= 13 ) {
+        maxSmallObstacleCount = 3;
+        maxTwoHexObstacleCount = 2;
+    }
+    else {
+        maxSmallObstacleCount = 2;
+        maxTwoHexObstacleCount = 1;
+    }
+
+    // Limit the number of two-hex obstacles to maxTwoHexObstacleCount
+    uint8_t twoHexCount = 0;
+    for ( auto iter = objs.begin(); iter != objs.end(); ) {
+        if ( isTwoHexObject( *iter ) ) {
+            ++twoHexCount;
+            if ( twoHexCount > maxTwoHexObstacleCount ) {
+                iter = objs.erase( iter );
+                continue;
+            }
+        }
+        ++iter;
+    }
+
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
+        // two-hex obstacles are not allowed on column 8 as they would cover column 9 which is reserved for units
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
-        int32_t dest = GetRandomObstaclePosition( gen );
-        while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
+        // tall obstacles like trees should not be placed on top 2 rows
+        const bool isTallObstacle = isTallObject( objs[i] );
+
+        uint32_t dest;
+        do {
             dest = GetRandomObstaclePosition( gen );
-        }
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % widthInCells ) == 8 ) )
+                  || ( isTallObstacle && dest < ( widthInCells * 2 ) ) );
 
         SetCobjObject( objs[i], dest );
     }
 }
 
-void Battle::Board::SetCobjObject( const int icn, const int32_t dst )
+void Battle::Board::SetCobjObject( const int icn, const uint32_t dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 
@@ -698,7 +659,23 @@ void Battle::Board::SetCovrObjects( int icn )
     }
 }
 
-Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* = CENTER */ )
+Battle::Cell * Battle::Board::GetCell( const int32_t position )
+{
+    if ( !isValidIndex( position ) ) {
+        return nullptr;
+    }
+
+    Board * board = Arena::GetBoard();
+    assert( board != nullptr );
+
+#ifdef WITH_DEBUG
+    return &board->at( position );
+#else
+    return &board->operator[]( position );
+#endif
+}
+
+Battle::Cell * Battle::Board::GetCell( const int32_t position, const CellDirection dir )
 {
     if ( !isValidDirection( position, dir ) ) {
         return nullptr;
@@ -710,7 +687,11 @@ Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* 
     const int32_t idx = GetIndexDirection( position, dir );
     assert( isValidIndex( idx ) );
 
+#ifdef WITH_DEBUG
     return &board->at( idx );
+#else
+    return &board->operator[]( idx );
+#endif
 }
 
 Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const bool reflect )
@@ -722,27 +703,27 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const boo
     Indexes result;
     result.reserve( 4 );
 
-    if ( isValidDirection( head, LEFT ) ) {
-        result.push_back( GetIndexDirection( head, LEFT ) );
+    if ( isValidDirection( head, CellDirection::LEFT ) ) {
+        result.push_back( GetIndexDirection( head, CellDirection::LEFT ) );
     }
-    if ( isValidDirection( head, RIGHT ) ) {
-        result.push_back( GetIndexDirection( head, RIGHT ) );
+    if ( isValidDirection( head, CellDirection::RIGHT ) ) {
+        result.push_back( GetIndexDirection( head, CellDirection::RIGHT ) );
     }
 
     if ( reflect ) {
-        if ( isValidDirection( head, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( head, TOP_LEFT ) );
+        if ( isValidDirection( head, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( head, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( head, BOTTOM_LEFT ) );
+        if ( isValidDirection( head, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::BOTTOM_LEFT ) );
         }
     }
     else {
-        if ( isValidDirection( head, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( head, TOP_RIGHT ) );
+        if ( isValidDirection( head, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( head, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( head, BOTTOM_RIGHT ) );
+        if ( isValidDirection( head, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::BOTTOM_RIGHT ) );
         }
     }
 
@@ -758,7 +739,7 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const int32_t center )
     Indexes result;
     result.reserve( 6 );
 
-    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = CellDirection::TOP_LEFT; dir < CellDirection::CENTER; ++dir ) {
         if ( !isValidDirection( center, dir ) ) {
             continue;
         }
@@ -774,19 +755,19 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & unit )
     return GetAroundIndexes( unit.GetPosition() );
 }
 
-Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
+Battle::Indexes Battle::Board::GetAroundIndexes( const Position & pos )
 {
-    if ( position.GetHead() == nullptr ) {
+    if ( pos.GetHead() == nullptr ) {
         return {};
     }
 
-    const int32_t headIdx = position.GetHead()->GetIndex();
+    const int32_t headIdx = pos.GetHead()->GetIndex();
 
-    if ( position.GetTail() == nullptr ) {
+    if ( pos.GetTail() == nullptr ) {
         return GetAroundIndexes( headIdx );
     }
 
-    const int32_t tailIdx = position.GetTail()->GetIndex();
+    const int32_t tailIdx = pos.GetTail()->GetIndex();
 
     if ( !isValidIndex( headIdx ) || !isValidIndex( tailIdx ) ) {
         return {};
@@ -797,55 +778,55 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
 
     // Traversing cells in a clockwise direction
     if ( headIdx > tailIdx ) {
-        if ( isValidDirection( tailIdx, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_LEFT ) );
         }
-        if ( isValidDirection( tailIdx, LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::LEFT ) );
         }
     }
     else if ( headIdx < tailIdx ) {
-        if ( isValidDirection( headIdx, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_LEFT ) );
         }
-        if ( isValidDirection( headIdx, LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::LEFT ) );
         }
     }
 
@@ -858,8 +839,8 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
         return {};
     }
 
-    const int32_t centerX = center % ARENAW;
-    const int32_t centerY = center / ARENAW;
+    const int32_t centerX = center % widthInCells;
+    const int32_t centerY = center / widthInCells;
 
     // Axial coordinates
     const int32_t centerQ = centerX - ( centerY + ( centerY % 2 ) ) / 2;
@@ -883,11 +864,11 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
             const int32_t x = q + ( r + ( r % 2 ) ) / 2;
             const int32_t y = r;
 
-            if ( x < 0 || x >= ARENAW || y < 0 || y >= ARENAH ) {
+            if ( x < 0 || x >= widthInCells || y < 0 || y >= heightInCells ) {
                 continue;
             }
 
-            const int32_t idx = y * ARENAW + x;
+            const int32_t idx = y * widthInCells + x;
             assert( isValidIndex( idx ) );
 
             result.push_back( idx );
@@ -897,6 +878,41 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
     return result;
 }
 
+Battle::Indexes Battle::Board::GetDistanceIndexes( const Position & pos, const uint32_t radius )
+{
+    const std::array<int32_t, 2> posIndexes = { pos.GetHead() ? pos.GetHead()->GetIndex() : -1, pos.GetTail() ? pos.GetTail()->GetIndex() : -1 };
+
+    std::set<int32_t> boardIndexes;
+
+    for ( const int32_t posIdx : posIndexes ) {
+        if ( !Board::isValidIndex( posIdx ) ) {
+            continue;
+        }
+
+        for ( const int32_t idx : Board::GetDistanceIndexes( posIdx, radius ) ) {
+            assert( Board::isValidIndex( idx ) );
+
+            if ( std::find( posIndexes.begin(), posIndexes.end(), idx ) != posIndexes.end() ) {
+                continue;
+            }
+
+            boardIndexes.insert( idx );
+        }
+    }
+
+    Indexes result;
+
+    result.reserve( boardIndexes.size() );
+    result.assign( boardIndexes.begin(), boardIndexes.end() );
+
+    return result;
+}
+
+Battle::Indexes Battle::Board::GetDistanceIndexes( const Unit & unit, const uint32_t radius )
+{
+    return GetDistanceIndexes( unit.GetPosition(), radius );
+}
+
 bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * unit )
 {
     if ( unit == nullptr ) {
@@ -904,8 +920,7 @@ bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * u
     }
 
     const Position mirrorPos = Position::GetPosition( *unit, index );
-
-    if ( mirrorPos.GetHead() == nullptr || ( unit->isWide() && mirrorPos.GetTail() == nullptr ) ) {
+    if ( !mirrorPos.isValidForUnit( unit ) ) {
         return false;
     }
 
@@ -928,7 +943,7 @@ bool Battle::Board::CanAttackFromCell( const Unit & unit, const int32_t from )
         return false;
     }
 
-    assert( !unit.isWide() || pos.GetTail() != nullptr );
+    assert( pos.isValidForUnit( unit ) );
 
     const Castle * castle = Arena::GetCastle();
 
@@ -969,77 +984,25 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
             continue;
         }
 
-        if ( !CanAttackFromCell( attacker, cell->GetIndex() ) ) {
+        const int32_t cellIdx = cell->GetIndex();
+
+        if ( Board::GetDistance( target.GetPosition(), cellIdx ) > 1 ) {
             continue;
         }
 
-        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * nearbyCell = GetCell( nearbyIdx );
-            assert( nearbyCell != nullptr );
-
-            if ( nearbyCell->GetUnit() == &target ) {
-                return true;
-            }
+        if ( !CanAttackFromCell( attacker, cellIdx ) ) {
+            continue;
         }
+
+        return true;
     }
 
     return false;
 }
 
-Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
-{
-    Indexes result;
-    const bool isWide = unit.isWide();
-    const int currentColor = unit.GetArmyColor();
-    result.reserve( isWide ? 8 : 6 );
-
-    const int leftmostIndex = ( isWide && !unit.isReflect() ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    const int x = leftmostIndex % ARENAW;
-    const int y = leftmostIndex / ARENAW;
-    const int mod = y % 2;
-
-    auto validateAndInsert = [&result, &currentColor]( const int index ) {
-        const Unit * vUnit = GetCell( index )->GetUnit();
-        if ( vUnit && currentColor != vUnit->GetArmyColor() )
-            result.push_back( index );
-    };
-
-    if ( y > 0 ) {
-        const int topRowIndex = ( y - 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( topRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( topRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( topRowIndex + 2 );
-    }
-
-    if ( x > 0 )
-        validateAndInsert( leftmostIndex - 1 );
-
-    if ( x < ARENAW - ( isWide ? 2 : 1 ) )
-        validateAndInsert( leftmostIndex + ( isWide ? 2 : 1 ) );
-
-    if ( y < ARENAH - 1 ) {
-        const int bottomRowIndex = ( y + 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( bottomRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( bottomRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( bottomRowIndex + 2 );
-    }
-
-    return result;
-}
-
 std::string Battle::Board::GetMoatInfo()
 {
-    std::string msg = _( "The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate." );
+    std::string msg = _( "The Moat interrupts any movement through it and reduces the defense skill of troops present in it by %{count}." );
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
 
     return msg;

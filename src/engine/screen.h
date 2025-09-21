@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -138,6 +139,16 @@ namespace fheroes2
             return _nearestScaling;
         }
 
+        virtual Point getWindowPos() const
+        {
+            return { -1, -1 };
+        }
+
+        virtual void setWindowPos( const Point /* pos */ )
+        {
+            // Do nothing
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -180,7 +191,7 @@ namespace fheroes2
         bool _nearestScaling;
     };
 
-    class Display : public Image
+    class Display final : public Image
     {
     public:
         friend class BaseRenderEngine;
@@ -195,13 +206,14 @@ namespace fheroes2
 
         ~Display() override = default;
 
-        // Render a full frame on screen.
+        // Render an entire frame on screen.
         void render()
         {
             render( { 0, 0, width(), height() } );
         }
 
-        void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
+        // Render a part of frame on screen.
+        void render( const Rect & roi );
 
         // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );
@@ -216,11 +228,18 @@ namespace fheroes2
             return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;
         }
 
-        // this function must return true if new palette has been generated
-        using PreRenderProcessing = bool ( * )( std::vector<uint8_t> & palette );
-        using PostRenderProcessing = void ( * )();
+        Point getWindowPos() const
+        {
+            return _engine->getWindowPos();
+        }
 
-        void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
+        void setWindowPos( const Point point );
+
+        // this function must return true if new palette has been generated
+        using PreRenderProcessing = std::function<bool( std::vector<uint8_t> & )>;
+        using PostRenderProcessing = std::function<void()>;
+
+        void subscribe( const PreRenderProcessing & preprocessing, const PostRenderProcessing & postprocessing )
         {
             _preprocessing = preprocessing;
             _postprocessing = postprocessing;
@@ -247,10 +266,10 @@ namespace fheroes2
     private:
         std::unique_ptr<BaseRenderEngine> _engine;
         std::unique_ptr<Cursor> _cursor;
-        PreRenderProcessing _preprocessing;
-        PostRenderProcessing _postprocessing;
+        PreRenderProcessing _preprocessing{ nullptr };
+        PostRenderProcessing _postprocessing{ nullptr };
 
-        uint8_t * _renderSurface;
+        uint8_t * _renderSurface{ nullptr };
 
         // Previous area drawn on the screen.
         Rect _prevRoi;
@@ -291,7 +310,7 @@ namespace fheroes2
             _image = Sprite( image, offsetX, offsetY );
         }
 
-        void setPosition( int32_t x, int32_t y )
+        void setPosition( const int32_t x, const int32_t y )
         {
             _image.setPosition( x, y );
         }
@@ -312,17 +331,19 @@ namespace fheroes2
             _cursorUpdater = cursorUpdater;
         }
 
+        void keepInScreenArea( const bool value )
+        {
+            _keepInScreenArea = value;
+        }
+
     protected:
         Sprite _image;
-        bool _emulation;
-        bool _show;
-        void ( *_cursorUpdater )();
+        void ( *_cursorUpdater )(){ nullptr };
+        bool _emulation{ false };
+        bool _show{ false };
+        bool _keepInScreenArea{ false };
 
-        Cursor()
-            : _emulation( true )
-            , _show( false )
-            , _cursorUpdater( nullptr )
-        {}
+        Cursor() = default;
     };
 
     BaseRenderEngine & engine();

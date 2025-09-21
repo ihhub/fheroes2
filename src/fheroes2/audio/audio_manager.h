@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,13 +25,16 @@
 #include <string>
 #include <vector>
 
-#include "audio.h"
-
 struct ListFiles;
 
 namespace M82
 {
     enum SoundType : int;
+}
+
+namespace Music
+{
+    enum class PlaybackMode : uint8_t;
 }
 
 namespace AudioManager
@@ -41,7 +44,8 @@ namespace AudioManager
     public:
         AudioInitializer() = delete;
 
-        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts );
+        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts,
+                          const std::string & timidityCfgPath );
         AudioInitializer( const AudioInitializer & ) = delete;
         AudioInitializer & operator=( const AudioInitializer & ) = delete;
 
@@ -71,26 +75,30 @@ namespace AudioManager
     {
         AudioLoopEffectInfo() = default;
 
-        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
+        AudioLoopEffectInfo( const int16_t angle_, const uint8_t distance_ )
             : angle( angle_ )
-            , volumePercentage( volumePercentage_ )
+            , distance( distance_ )
         {
             // Do nothing.
         }
 
         bool operator==( const AudioLoopEffectInfo & other ) const
         {
-            return other.angle == angle && other.volumePercentage == volumePercentage;
+            return other.angle == angle && other.distance == distance;
         }
 
         int16_t angle{ 0 };
-        uint8_t volumePercentage{ 0 };
+        uint8_t distance{ 0 };
     };
 
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
 
-    void PlaySound( const int m82 );
+    // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
+    int PlaySound( const int m82 );
     void PlaySoundAsync( const int m82 );
+
+    // Returns true if an external music file is available for the music track with the specified ID, otherwise returns false.
+    bool isExternalMusicFileAvailable( const int trackId );
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );

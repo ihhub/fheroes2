@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,20 +20,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPELL_H
-#define H2SPELL_H
+
+#pragma once
 
 #include <cstdint>
+#include <set>
+#include <vector>
 
-#define DEFAULT_SPELL_DURATION 3
+class IStreamBase;
+class OStreamBase;
 
 class HeroBase;
-class StreamBase;
 
 class Spell
 {
 public:
-    enum type_t : int32_t
+    enum : int32_t
     {
         NONE = 0,
         FIREBALL,
@@ -128,6 +130,11 @@ public:
         return id < s.id;
     }
 
+    bool operator>( const Spell & s ) const
+    {
+        return id > s.id;
+    }
+
     bool operator==( const Spell & s ) const
     {
         return s.id == id;
@@ -164,6 +171,10 @@ public:
     uint32_t Resurrect() const;
 
     uint32_t ExtraValue() const;
+
+    // Returns the weight of this spell for a specific race.
+    // See https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html for details.
+    uint32_t weightForRace( const int race ) const;
 
     bool isValid() const
     {
@@ -209,7 +220,6 @@ public:
     bool isApplyToFriends() const;
     bool isApplyToEnemies() const;
     bool isMassActions() const;
-    bool isRaceCompatible( int race ) const;
 
     bool isFire() const
     {
@@ -221,6 +231,22 @@ public:
         return id == COLDRAY || id == COLDRING;
     }
 
+    bool isElementalSpell() const
+    {
+        switch ( id ) {
+        case COLDRAY:
+        case COLDRING:
+        case FIREBALL:
+        case FIREBLAST:
+        case LIGHTNINGBOLT:
+        case CHAINLIGHTNING:
+        case ELEMENTALSTORM:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     bool isBuiltinOnly() const
     {
         return id == PETRIFY;
@@ -228,23 +254,20 @@ public:
 
     bool isGuardianType() const;
 
-    /* return index sprite spells.icn */
+    // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
-    static Spell RandCombat( int lvl );
-    static Spell RandAdventure( int lvl );
-    static Spell Rand( int lvl, bool adv );
+    static Spell getRandomSpell( const int level );
+
+    // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
+    // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
+    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
 
     static int32_t CalculateDimensionDoorDistance();
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const Spell & );
-    friend StreamBase & operator>>( StreamBase &, Spell & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
+    friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );
 
     int id;
 };
-
-StreamBase & operator<<( StreamBase &, const Spell & );
-StreamBase & operator>>( StreamBase &, Spell & );
-
-#endif

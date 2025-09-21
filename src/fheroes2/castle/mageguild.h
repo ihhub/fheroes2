@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,12 +21,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MAGEGUILD_H
-#define H2MAGEGUILD_H
+#pragma once
+
+#include <cstdint>
+#include <map>
+#include <vector>
 
 #include "spell_storage.h"
 
-class StreamBase;
+class IStreamBase;
+class OStreamBase;
 
 class HeroBase;
 
@@ -35,19 +39,20 @@ class MageGuild
 public:
     MageGuild() = default;
 
-    void initialize( int race, bool libraryCap );
-    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
-    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
+    // Initializes the Mage Guild according to the rules described in
+    // https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html
+    // except for the part related to the hidden AI-only bonuses.
+    void initialize( const int race, const bool hasLibrary );
+    void initialize( const int race, const bool hasLibrary, const std::map<uint8_t, int32_t> & mustHaveSpells, const std::vector<int32_t> & bannedSpells );
+    void trainHero( HeroBase & hero, const int guildLevel, const bool hasLibrary ) const;
+    SpellStorage GetSpells( const int guildLevel, const bool hasLibrary, const int spellLevel = -1 ) const;
+
+    static int32_t getMaxSpellsCount( const int spellLevel, const bool hasLibrary );
 
 private:
-    friend StreamBase & operator<<( StreamBase &, const MageGuild & );
-    friend StreamBase & operator>>( StreamBase &, MageGuild & );
+    friend OStreamBase & operator<<( OStreamBase & stream, const MageGuild & guild );
+    friend IStreamBase & operator>>( IStreamBase & stream, MageGuild & guild );
 
-    SpellStorage general;
-    SpellStorage library;
+    SpellStorage _general;
+    SpellStorage _library;
 };
-
-StreamBase & operator<<( StreamBase &, const MageGuild & );
-StreamBase & operator>>( StreamBase &, MageGuild & );
-
-#endif
