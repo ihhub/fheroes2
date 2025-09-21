@@ -139,7 +139,7 @@ namespace fheroes2::h2d
 
         if ( reader.getAllFileNames() != resurrectionH2DFileListSample ) {
             const std::string errorMessage{ "The list of files contained in '" + filePath
-                                            + "' does not match the sample. Make sure that you are using the latest version of the '" + fileName + "' file." };
+                                            + "' does not match the sample. Make sure that you are using the latest version of the '" + filePath + "' file." };
 
             VERBOSE_LOG( errorMessage )
             throw std::logic_error( errorMessage );
