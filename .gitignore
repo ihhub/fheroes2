@@ -95,7 +95,8 @@ android/.gradle
 android/app/src/main/assets/
 
 # Xcode per user files
-xcuserdata
+ios/*/xcuserdata
+ios/**/xcuserdata
 
 # Mac magic folders
 .DS_Store
