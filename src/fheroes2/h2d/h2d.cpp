@@ -102,20 +102,16 @@ namespace
 
     std::string get_resources_dir2()
     {
-        CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("h2d"), NULL);
-        CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
-      char resourcePath[PATH_MAX];
-      if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                           (UInt8 *)resourcePath,
-                                           PATH_MAX))
-      {
-        if (resourceURL != NULL)
-        {
-          CFRelease(resourceURL);
+        CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "h2d" ), NULL );
+        CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
+        char resourcePath[PATH_MAX];
+        if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+            if ( resourceURL != NULL ) {
+                CFRelease( resourceURL );
+            }
+            return resourcePath;
         }
-        return resourcePath;
-      }
-    
+
         return nil;
     }
 }

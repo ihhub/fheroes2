@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <utility>
+
 #include <CoreFoundation/CoreFoundation.h>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -677,129 +678,100 @@ const std::vector<std::string> & Settings::GetRootDirs()
     return rootDirs;
 }
 
-
 std::string get_resources_dir()
 {
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("agg"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "agg" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
 
 std::string get_resources_dir0()
 {
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("agg"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 1));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "agg" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 1 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
-
 
 std::string get_resources_dir2()
 {
-    
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("smk"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "smk" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
-
 
 std::string get_resources_dir3()
 {
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("hs"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "hs" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
 
-
 std::string get_resources_dir4()
 {
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("hs"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 1));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "hs" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 1 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
 
 std::string get_resources_dir5()
 {
-    CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("mp2"), NULL);
-    CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
-  char resourcePath[PATH_MAX];
-  if (CFURLGetFileSystemRepresentation(resourceURL, true,
-                                       (UInt8 *)resourcePath,
-                                       PATH_MAX))
-  {
-    if (resourceURL != NULL)
-    {
-      CFRelease(resourceURL);
+    CFArrayRef paths = CFBundleCopyResourceURLsOfType( CFBundleGetMainBundle(), CFSTR( "mp2" ), NULL );
+    CFURLRef resourceURL = static_cast<CFURLRef>( CFArrayGetValueAtIndex( paths, 0 ) );
+    char resourcePath[PATH_MAX];
+    if ( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *)resourcePath, PATH_MAX ) ) {
+        if ( resourceURL != NULL ) {
+            CFRelease( resourceURL );
+        }
+        return resourcePath;
     }
-    return resourcePath;
-  }
-    
+
     return nil;
 }
 
 ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )
 {
     ListFiles res;
-    
+
     res.emplace_back( std::move( get_resources_dir() ) );
     res.emplace_back( std::move( get_resources_dir0() ) );
     res.emplace_back( std::move( get_resources_dir2() ) );
