@@ -511,9 +511,6 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-
-
-
 const std::vector<std::string> & Settings::GetRootDirs()
 {
     static std::vector<std::string> dirs;
@@ -579,7 +576,6 @@ const std::vector<std::string> & Settings::GetRootDirs()
 
 std::string get_resources_dir()
 {
-    
     CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("agg"), NULL);
     CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
   char resourcePath[PATH_MAX];
@@ -599,7 +595,6 @@ std::string get_resources_dir()
 
 std::string get_resources_dir0()
 {
-    
     CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("agg"), NULL);
     CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 1));
   char resourcePath[PATH_MAX];
@@ -641,7 +636,6 @@ std::string get_resources_dir2()
 
 std::string get_resources_dir3()
 {
-    
     CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("hs"), NULL);
     CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
   char resourcePath[PATH_MAX];
@@ -662,7 +656,6 @@ std::string get_resources_dir3()
 
 std::string get_resources_dir4()
 {
-    
     CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("hs"), NULL);
     CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 1));
   char resourcePath[PATH_MAX];
@@ -682,7 +675,6 @@ std::string get_resources_dir4()
 
 std::string get_resources_dir5()
 {
-    
     CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("mp2"), NULL);
     CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
   char resourcePath[PATH_MAX];
