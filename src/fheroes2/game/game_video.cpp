@@ -209,7 +209,10 @@ namespace Video
                                 }
                             }
                             else {
-                                endVideo = true;
+                                // Play last frame as long as possible
+                                if ( minDelay > state.currentFrameDelay ) {
+                                    endVideo = true;
+                                }
                             }
                         }
 
