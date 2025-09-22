@@ -188,6 +188,7 @@ namespace Video
         }
 
         bool endVideo = false;
+        int32_t timePassed = 0;
         while ( le.HandleEvents( Game::isCustomDelayNeeded( minDelay ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 Mixer::Stop();
@@ -203,10 +204,8 @@ namespace Video
                             if ( state.control & VideoControl::PLAY_LOOP ) {
                                 video->resetFrame();
                                 // Restart audio
-                                if ( Audio::isValid() ) {
-                                    if ( state.control & VideoControl::PLAY_AUDIO ) {
-                                        playAudio( video->getAudioChannels() );
-                                    }
+                                if ( Audio::isValid() && ( state.control & VideoControl::PLAY_AUDIO ) ) {
+                                    playAudio( video->getAudioChannels() );
                                 }
                             }
                             else {
@@ -235,16 +234,16 @@ namespace Video
                             screenRestorer.changePalette( currPalette.data() );
                             std::swap( currPalette, prevPalette );
                         }
-
-                        // Render subtitles on the prepared next frame
-                        for ( const Subtitle & subtitle : subtitles ) {
-                            if ( subtitle.needRender( video->getCurrentFrameId() * minDelay ) ) {
-                                subtitle.render( display, firstFrameArea );
-                            }
-                        }
                     }
                     else if ( !( state.control & VideoControl::PLAY_WAIT ) ) {
                         endVideo = true;
+                    }
+                }
+                timePassed += minDelay;
+                // Render subtitles on the prepared next frame
+                for ( const Subtitle & subtitle : subtitles ) {
+                    if ( subtitle.needRender( timePassed ) ) {
+                        subtitle.render( display, firstFrameArea );
                     }
                 }
             }
