@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -35,21 +35,6 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "CELÝ"
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
-msgstr ""
 
 msgid "EXIT"
 msgstr "PREČ"
@@ -4807,7 +4792,7 @@ msgid "None."
 msgstr "Žiadny"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -35,21 +35,6 @@ msgstr "GG"
 
 msgid "ALL"
 msgstr "TUDO"
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
-msgstr ""
 
 msgid "EXIT"
 msgstr "SAIR"
@@ -4711,7 +4696,8 @@ msgstr "[%{pos}]: %{name}, castelo %{race}"
 msgid "None."
 msgstr "Nenhum."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Um lado derrota o outro."
 
 msgid "Accumulate gold."

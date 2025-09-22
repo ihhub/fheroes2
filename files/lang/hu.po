@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -35,21 +35,6 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "MIND"
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
-msgstr ""
 
 msgid "EXIT"
 msgstr "KILÉP"
@@ -4675,7 +4660,8 @@ msgstr "[%{pos}]: %{name}, %{race} vár"
 msgid "None."
 msgstr "Nincs."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Egyik oldal legyőzi a másikat."
 
 msgid "Accumulate gold."
