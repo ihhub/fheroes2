@@ -223,12 +223,13 @@ namespace Interface
         // If not selected monsters, frame don't draw.
         if ( _selectedInstrument == Instrument::MONSTERS ) {
             const int32_t objectType = getSelectedObjectType();
-                if ( objectType >= 0 ) {
-                    return { 0, 0, 1, 1 };
-                } 
+            if ( objectType >= 0 ) {
+                return { 0, 0, 1, 1 };
+            }
 
-                return {};
+            return {};
         }
+
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
             return { 0, 0, 1, 1 };
