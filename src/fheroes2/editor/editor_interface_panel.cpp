@@ -227,7 +227,7 @@ namespace Interface
                     return { 0, 0, 1, 1 };
                 } 
 
-		return {};
+                return {};
         }
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
