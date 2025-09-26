@@ -76,7 +76,7 @@ msgid "NO"
 msgstr "NEIN"
 
 msgid "DISMISS"
-msgstr "ABLEHNEN"
+msgstr "ENTLASSEN"
 
 msgid "UPGRADE"
 msgstr "AUFRÜSTEN"
