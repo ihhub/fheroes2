@@ -473,7 +473,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 }
 
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                Video::ShowVideo( { { "LOSE.SMK", Video::VideoControl::PLAY_CUTSCENE_LOOP } } );
 
                 return fheroes2::GameMode::MAIN_MENU;
             }
@@ -488,7 +488,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 }
 
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+                Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { standardGameResults() }, true );
 
                 // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
                 AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
@@ -593,7 +593,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
             if ( endGame ) {
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                Video::ShowVideo( { { "LOSE.SMK", Video::VideoControl::PLAY_CUTSCENE_LOOP } } );
 
                 return fheroes2::GameMode::MAIN_MENU;
             }
@@ -602,7 +602,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             DialogWins( result );
 
             AudioManager::ResetAudio();
-            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+            Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { standardGameResults() }, true );
 
             return fheroes2::GameMode::HIGHSCORES_STANDARD;
         }

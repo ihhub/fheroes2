@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,14 +20,30 @@
 
 #pragma once
 
+#include <cstdint>
+#include <type_traits>
+
 namespace Video
 {
-    enum class VideoAction : int
+    enum VideoControl : uint32_t
     {
-        PLAY_TILL_VIDEO_END,
-        LOOP_VIDEO,
-        WAIT_FOR_USER_INPUT,
-        PLAY_TILL_AUDIO_END,
-        IGNORE_VIDEO
+        PLAY_NONE = 0,
+        // Play file once and wait user's input
+        PLAY_WAIT = 1 << 0,
+        // Play file with infinite loop
+        PLAY_LOOP = 1 << 1,
+        // Play audio stream from file
+        PLAY_AUDIO = 1 << 2,
+        // Play video stream from file
+        PLAY_VIDEO = 1 << 3,
+        // Set of common flags for convenient
+        // Play only video in loop
+        PLAY_VIDEO_LOOP = PLAY_LOOP | PLAY_VIDEO,
+        // Play cutscene only once
+        PLAY_CUTSCENE = PLAY_AUDIO | PLAY_VIDEO,
+        // Play cutscene and wait for user input
+        PLAY_CUTSCENE_WAIT = PLAY_WAIT | PLAY_AUDIO | PLAY_VIDEO,
+        // Play cutscene in loop
+        PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
     };
 }
