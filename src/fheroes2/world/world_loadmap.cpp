@@ -131,7 +131,7 @@ namespace
 
         const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-        // do not let the player get a random artifact that allows him to win the game
+        // Do not let the player get a random artifact that allows him to win the game.
         if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
             fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
         }
@@ -145,19 +145,20 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename )
+        ERROR_LOG( "Map file " << filename << " is corrupted or missing." )
         return false;
     }
 
     // Read magic number.
     if ( fs.getBE32() != 0x5C000000 ) {
         // It is not a MP2 or MX2 file.
+        ERROR_LOG( "File " << filename << " is not a valid map." )
         return false;
     }
 
     const size_t totalFileSize = fs.size();
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -207,7 +208,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -220,7 +221,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -319,7 +320,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     fs.seek( afterAddonInfoPos );
 
     if ( totalFileSize < afterAddonInfoPos + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -381,7 +382,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     if ( totalFileSize
          < afterAddonInfoPos
                + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -446,7 +447,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const uint32_t h = fs.get();
 
         if ( fs.tell() == fs.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+            ERROR_LOG( "Map file " << filename << " is corrupted." )
             return false;
         }
 
@@ -714,7 +715,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     Maps::Map_Format::MapFormat map;
     if ( !Maps::Map_Format::loadMap( filename, map ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
+        ERROR_LOG( "Map file '" << filename << "' is corrupted or missing." )
         return false;
     }
 
@@ -1309,7 +1310,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
         auto iter = hiredHeroTileId.find( map.lossConditionMetadata[0] );
         if ( iter == hiredHeroTileId.end() ) {
-            VERBOSE_LOG( "A hero at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Loss Condition hero at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1317,7 +1318,7 @@ bool World::loadResurrectionMap( const std::string & filename )
         const Castle * castle
             = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.width ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
-            VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Loss Condition castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1325,7 +1326,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     if ( map.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO ) {
         auto iter = hiredHeroTileId.find( map.victoryConditionMetadata[0] );
         if ( iter == hiredHeroTileId.end() ) {
-            VERBOSE_LOG( "A hero at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Victory Condition hero at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1333,7 +1334,7 @@ bool World::loadResurrectionMap( const std::string & filename )
         const Castle * castle = vec_castles.Get(
             { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.width ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
-            VERBOSE_LOG( "A castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Victory Condition castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1342,7 +1343,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     updateArtifactStats();
 
-    if ( !ProcessNewMP2Map( filename, false ) ) {
+    if ( !_processNewResurrectionMap( filename ) ) {
         return false;
     }
 
@@ -1384,34 +1385,51 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
         }
     }
 
-    // add heroes to kingdoms
+    // Add heroes and castles to kingdoms.
     vec_kingdoms.AddHeroes( vec_heroes );
-
-    // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
-    setHeroIdsForMapConditions();
-
-    // Search for a tile with a predefined Ultimate Artifact
-    const auto ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
-    int32_t ultimateArtifactTileId = -1;
-    int32_t ultimateArtifactRadius = 0;
-    if ( ultArtTileIter != vec_tiles.end() ) {
-        ultimateArtifactTileId = ultArtTileIter->GetIndex();
-        ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
-
-        // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->getMainObjectPart()._uid );
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
     }
 
-    setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
+    // Set up Ultimate Artifact.
+    setUltimateArtifact();
 
     PostLoad( true, false );
 
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    addDebugHero();
+    tryAddDebugHero();
+
+    return true;
+}
+
+bool World::_processNewResurrectionMap( const std::string & filename )
+{
+    for ( Maps::Tile & tile : vec_tiles ) {
+        if ( !updateTileMetadata( tile, tile.getMainObjectType(), false ) ) {
+            ERROR_LOG( "Failed to load Resurrection map '" << filename << "'." )
+            return false;
+        }
+    }
+
+    // Add heroes and castles to kingdoms.
+    vec_kingdoms.AddHeroes( vec_heroes );
+    vec_kingdoms.AddCastles( vec_castles );
+
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
+    }
+
+    // Set up Ultimate Artifact.
+    setUltimateArtifact();
+
+    PostLoad( true, false );
+
+    vec_kingdoms.ApplyPlayWithStartingHero();
+
+    tryAddDebugHero();
 
     return true;
 }
@@ -1551,9 +1569,30 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     return true;
 }
 
-void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
+void World::setUltimateArtifact()
 {
-    assert( radius >= 0 );
+    int32_t tileId = -1;
+    int32_t radius = 0;
+
+    const auto existingUltimateArtIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+    if ( existingUltimateArtIter != vec_tiles.end() ) {
+        // An Ultimate Artifact exists on this map.
+#if defined( WITH_DEBUG )
+        // We need to make sure that only 1 Ultimate Artifact exists on the map.
+        auto artifactCount
+            = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+        assert( artifactCount == 1 );
+#endif
+
+        tileId = existingUltimateArtIter->GetIndex();
+        radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
+
+        assert( radius >= 0 );
+
+        // Remove the predefined Ultimate Artifact object.
+        existingUltimateArtIter->removeObjectPartsByUID( existingUltimateArtIter->getMainObjectPart()._uid );
+    }
 
     const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;
@@ -1587,10 +1626,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
 
             ultimate_artifact.Set( pos, getUltimateArtifact() );
 
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "No suitable tile to place the Ultimate Artifact was found" )
         }
 
         return;
@@ -1612,6 +1651,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
                                     [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
                     pool.end() );
 
+        // If this assertion blows up then the map is corrupted.
+        // The Editor has the same Ultimate Artifact placement conditions as the game.
+        assert( !pool.empty() );
+
         if ( !pool.empty() ) {
             pos = Rand::Get( pool );
         }
@@ -1622,7 +1665,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }
 
-void World::addDebugHero()
+void World::tryAddDebugHero()
 {
     if ( !IS_DEVEL() ) {
         return;
@@ -1647,7 +1690,7 @@ void World::addDebugHero()
     }
 }
 
-void World::setHeroIdsForMapConditions()
+bool World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
@@ -1656,13 +1699,11 @@ void World::setHeroIdsForMapConditions()
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsWinCondition = Heroes::UNKNOWN;
-
             ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsWinCondition = hero->GetID();
-        }
+
+        heroIdAsWinCondition = hero->GetID();
     }
 
     if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
@@ -1670,14 +1711,14 @@ void World::setHeroIdsForMapConditions()
 
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsLossCondition = Heroes::UNKNOWN;
-
             ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsLossCondition = hero->GetID();
 
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
-        }
+        heroIdAsLossCondition = hero->GetID();
+
+        hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
     }
+
+    return true;
 }
