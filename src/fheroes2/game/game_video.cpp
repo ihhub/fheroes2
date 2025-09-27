@@ -38,6 +38,7 @@
 #include "game_video_type.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_tools.h"
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
@@ -116,7 +117,7 @@ namespace Video
         int32_t minDelay = 1000;
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Rect firstFrameArea;
+        fheroes2::Rect videoRoi;
 
         for ( const auto & info : infos ) {
             std::string videoPath;
@@ -133,19 +134,27 @@ namespace Video
             }
             const int32_t delay = static_cast<int32_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
             minDelay = std::min( minDelay, delay );
-            VideoState state;
 
-            if ( firstFrameArea == fheroes2::Rect{} ) {
-                firstFrameArea = { ( display.width() - video->width() - infos.front().offset.x ) / 2, ( display.height() - video->height() - infos.front().offset.y ) / 2,
-                                   video->width(), video->height() };
-                state = { info.control, firstFrameArea, delay, delay };
+            const fheroes2::Rect frameRoi{ info.offset.x, info.offset.y, video->width(), video->height() };
+            VideoState state{ info.control, frameRoi, delay, delay };
+
+            if ( videoRoi == fheroes2::Rect{} ) {
+                videoRoi = frameRoi;
             }
             else {
-                const fheroes2::Rect frame{ firstFrameArea.getPosition() + info.offset, { video->width(), video->height() } };
-                state = { info.control, frame, delay, delay };
+                 videoRoi = fheroes2::getBoundaryRect( videoRoi, frameRoi );
             }
 
-            sequences.emplace_back( state, std::move( video ) );
+            sequences.emplace_back( std::move( state ), std::move( video ) );
+        }
+
+        // Center the video in the middle of the application.
+        const fheroes2::Point videoOffset{ ( display.width() - videoRoi.width ) / 2, ( display.height() - videoRoi.height ) / 2 };
+        videoRoi = { videoOffset.x + videoRoi.x, videoOffset.y + videoRoi.y, videoRoi.width, videoRoi.height };
+
+        for ( auto & [state, video] : sequences ) {
+            state.area.x += videoOffset.x;
+            state.area.y += videoOffset.y;
         }
 
         // Hide mouse cursor.
@@ -175,7 +184,7 @@ namespace Video
         // Render subtitles on the first frame
         for ( const Subtitle & subtitle : subtitles ) {
             if ( subtitle.needRender( 0 ) ) {
-                subtitle.render( display, firstFrameArea );
+                subtitle.render( display, videoRoi );
             }
         }
 
@@ -204,7 +213,7 @@ namespace Video
 
             if ( Game::validateCustomAnimationDelay( minDelay ) ) {
                 // Render the prepared frame.
-                display.render( firstFrameArea );
+                display.render( videoRoi );
                 for ( auto & [state, video] : sequences ) {
                     if ( video->getCurrentFrameId() < video->frameCount() ) {
                         if ( video->getCurrentFrameId() + 1 == video->frameCount() ) {
@@ -253,7 +262,7 @@ namespace Video
                 // Render subtitles on the prepared next frame
                 for ( const Subtitle & subtitle : subtitles ) {
                     if ( subtitle.needRender( timePassed ) ) {
-                        subtitle.render( display, firstFrameArea );
+                        subtitle.render( display, videoRoi );
                     }
                 }
             }
@@ -264,7 +273,7 @@ namespace Video
 
         if ( fadeColorsOnEnd ) {
             // Do color fade for 1 second with 15 FPS.
-            fheroes2::colorFade( currPalette, firstFrameArea, 1000, 15.0 );
+            fheroes2::colorFade( currPalette, videoRoi, 1000, 15.0 );
         }
         else {
             display.fill( 0 );
