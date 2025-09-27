@@ -144,7 +144,7 @@ namespace Video
                 videoRoi = fheroes2::getBoundaryRect( videoRoi, frameRoi );
             }
 
-            sequences.emplace_back( std::move( state ), std::move( video ) );
+            sequences.emplace_back( state, std::move( video ) );
         }
 
         // Center the video in the middle of the application.
@@ -155,6 +155,10 @@ namespace Video
             state.area.x += videoOffset.x;
             state.area.y += videoOffset.y;
         }
+
+        // TODO: if we need to play multiple videos with different framerate then we are going to slow down some of them
+        //       due to invalid refresh time which is now set to the lowest value.
+        //       We might need to use GCD (greatest common divisor) for this matter.
 
         // Hide mouse cursor.
         const CursorRestorer cursorRestorer( false );
@@ -262,13 +266,14 @@ namespace Video
                 }
 
                 timePassed += minDelayInMs;
-                // Render subtitles on the prepared next frame
+                // Render subtitles on the prepared frame.
                 for ( const Subtitle & subtitle : subtitles ) {
                     if ( subtitle.needRender( timePassed ) ) {
                         subtitle.render( display, videoRoi );
                     }
                 }
             }
+
             if ( endVideo ) {
                 break;
             }
