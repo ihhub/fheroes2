@@ -119,7 +119,7 @@ namespace Video
         fheroes2::Rect firstFrameArea;
 
         for ( size_t i = 0; i < infos.size(); ++i ) {
-            const auto& info = infos[i];
+            const auto & info = infos[i];
 
             std::string videoPath;
             if ( !getVideoFilePath( info.fileName, videoPath ) ) {
