@@ -467,24 +467,6 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
-                                                   const Padding padding )
-    {
-        Sprite released;
-        Sprite pressed;
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
-
-        const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
-
-        button.setSprite( released, pressed );
-        button.setPosition( pos.x, pos.y );
-        addGradientShadow( released, _output, button.area().getPosition(), { -5, 5 } );
-        button.draw();
-    }
-
     void StandardWindow::renderSymmetricButtons( ButtonGroup & buttons, const int32_t offsetY, const bool isSingleColumn )
     {
         const int32_t buttonsWidth = buttons.button( 0 ).area().width;
