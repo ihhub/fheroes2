@@ -687,15 +687,6 @@ namespace
             return _isDoubleClicked;
         }
 
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
-        }
-
         void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
         {
             const fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
@@ -824,15 +815,6 @@ namespace Dialog
 
         // Render dialog buttons.
         _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
-    }
-
-    void ItemSelectionWindow::updateScrollBarImage()
-    {
-        const int32_t scrollBarWidth = _scrollbar.width();
-
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                                              { 0, 7, scrollBarWidth, 8 } ) );
-        _scrollbar.moveToIndex( _topId );
     }
 
     // An image with text should have offset of 10 pixels from all left and right edges.

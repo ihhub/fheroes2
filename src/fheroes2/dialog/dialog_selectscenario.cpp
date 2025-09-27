@@ -646,6 +646,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
                 auto removedMapInfo = scenarioList.GetCurrent();
 
                 scenarioList.RemoveSelected();
+
+                scenarioList.updateScrollBarImage();
                 scenarioList.SetCurrent( std::max( selectedId - 1, 0 ) );
 
                 // Remove the map from all lists.

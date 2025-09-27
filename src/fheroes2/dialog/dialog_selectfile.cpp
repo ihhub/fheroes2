@@ -167,15 +167,6 @@ namespace
             return _isDoubleClicked;
         }
 
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
-        }
-
     private:
         bool _isDoubleClicked{ false };
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
