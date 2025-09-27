@@ -58,20 +58,19 @@ namespace
             }
         }
     }
+
+    // Internal video state structure during playback.
+    struct VideoState final
+    {
+        Video::VideoControl control{ Video::VideoControl::PLAY_NONE };
+        fheroes2::Rect area;
+        int32_t maxFrameDelay{ 0 };
+        int32_t currentFrameDelay{ 0 };
+    };
 }
 
 namespace Video
 {
-
-    // Internal video state structure
-    struct VideoState
-    {
-        VideoControl control = VideoControl::PLAY_NONE;
-        fheroes2::Rect area;
-        int32_t maxFrameDelay = 0;
-        int32_t currentFrameDelay = 0;
-    };
-
     bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
