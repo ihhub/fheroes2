@@ -135,7 +135,7 @@ namespace Video
             minDelayInMs = std::min( minDelayInMs, delay );
 
             const fheroes2::Rect frameRoi{ info.offset.x, info.offset.y, video->width(), video->height() };
-            VideoState state{ info.control, frameRoi, delay, delay };
+            const VideoState state{ info.control, frameRoi, delay, delay };
 
             if ( videoRoi == fheroes2::Rect{} ) {
                 videoRoi = frameRoi;
