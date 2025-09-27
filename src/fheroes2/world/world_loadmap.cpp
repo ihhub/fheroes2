@@ -1573,7 +1573,7 @@ void World::setUltimateArtifact()
 {
     int32_t tileId = -1;
     int32_t radius = 0;
-    
+
     const auto existingUltimateArtIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
     if ( existingUltimateArtIter != vec_tiles.end() ) {
