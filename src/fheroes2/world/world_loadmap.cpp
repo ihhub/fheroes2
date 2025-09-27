@@ -91,32 +91,6 @@ namespace
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 
-    void getUltimateArtifactInfo( std::vector<Maps::Tile> & tiles, int32_t & tileId, int32_t & radius )
-    {
-        tileId = -1;
-        radius = 0;
-
-        const auto iter
-            = std::find_if( tiles.begin(), tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
-        if ( iter == tiles.end() ) {
-            // No Ultimate Artifacts exist on this map.
-            return;
-        }
-
-#if defined( WITH_DEBUG )
-        // We need to make sure that only 1 Ultimate Artifact exists on the map.
-        auto artifactCount
-            = std::count_if( tiles.begin(), tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
-        assert( artifactCount == 1 );
-#endif
-
-        tileId = iter->GetIndex();
-        radius = static_cast<int32_t>( iter->metadata()[0] );
-
-        // Remove the predefined Ultimate Artifact object.
-        iter->removeObjectPartsByUID( iter->getMainObjectPart()._uid );
-    }
-
     void updateCastleNames( const AllCastles & castles )
     {
         // Find castles with no names.
@@ -1599,9 +1573,26 @@ void World::setUltimateArtifact()
 {
     int32_t tileId = -1;
     int32_t radius = 0;
-    getUltimateArtifactInfo( vec_tiles, tileId, radius );
+    
+    const auto existingUltimateArtIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+    if ( existingUltimateArtIter != vec_tiles.end() ) {
+        // An Ultimate Artifact exists on this map.
+#if defined( WITH_DEBUG )
+        // We need to make sure that only 1 Ultimate Artifact exists on the map.
+        auto artifactCount
+            = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+        assert( artifactCount == 1 );
+#endif
 
-    assert( radius >= 0 );
+        tileId = existingUltimateArtIter->GetIndex();
+        radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
+
+        assert( radius >= 0 );
+
+        // Remove the predefined Ultimate Artifact object.
+        existingUltimateArtIter->removeObjectPartsByUID( existingUltimateArtIter->getMainObjectPart()._uid );
+    }
 
     const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;
