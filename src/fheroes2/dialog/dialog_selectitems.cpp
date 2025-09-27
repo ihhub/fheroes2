@@ -59,7 +59,6 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -677,11 +676,6 @@ namespace
             fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
         }
 
-        int getCurrentId() const
-        {
-            return _currentId;
-        }
-
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
@@ -690,15 +684,6 @@ namespace
         bool isDoubleClicked() const
         {
             return _isDoubleClicked;
-        }
-
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
         }
 
         void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
@@ -829,15 +814,6 @@ namespace Dialog
 
         // Render dialog buttons.
         _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
-    }
-
-    void ItemSelectionWindow::updateScrollBarImage()
-    {
-        const int32_t scrollBarWidth = _scrollbar.width();
-
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                                              { 0, 7, scrollBarWidth, 8 } ) );
-        _scrollbar.moveToIndex( _topId );
     }
 
     // An image with text should have offset of 10 pixels from all left and right edges.

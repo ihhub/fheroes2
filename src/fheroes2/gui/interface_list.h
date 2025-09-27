@@ -121,6 +121,15 @@ namespace Interface
             _scrollbar.setImage( image );
         }
 
+        void updateScrollBarImage()
+        {
+            const int32_t scrollBarWidth = _scrollbar.width();
+
+            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
+                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
+            _scrollbar.moveToIndex( _topId );
+        }
+
         fheroes2::Scrollbar & GetScrollbar()
         {
             return _scrollbar;
@@ -203,6 +212,11 @@ namespace Interface
         Item & GetCurrent() // always call this function only after IsValid()!
         {
             return ( *content )[_currentId];
+        }
+
+        int getCurrentId() const
+        {
+            return _currentId;
         }
 
         Item * GetFromPosition( const fheroes2::Point & mp )
