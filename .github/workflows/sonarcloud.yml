@@ -43,7 +43,7 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5
+    - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
       env:
         SONAR_HOST_URL: https://sonarcloud.io
     - name: Prepare SonarCloud cfamily cache
@@ -67,16 +67,15 @@ jobs:
       run: |
         ln -s "$ANDROID_HOME" .sonar-android-sdk
         ln -s ~/.sonar-cfamily-cache .sonar-cfamily-cache
-        # TODO: add ".sonar-gradle/caches/**/*.jar" to sonar.java.libraries as soon as Sonar fixes the comma-separated paths
         ln -s ~/.gradle .sonar-gradle
-    - uses: SonarSource/sonarqube-scan-action@v5
+    - uses: SonarSource/sonarqube-scan-action@v6
       with:
         args: >-
           -Dsonar.cfamily.compile-commands=build/compile_commands.json
           -Dsonar.cfamily.analysisCache.mode=fs
           -Dsonar.cfamily.analysisCache.path=.sonar-cfamily-cache
-          -Dsonar.java.binaries="android/*/build/**/classes"
-          -Dsonar.java.libraries=".sonar-android-sdk/platforms/**/*.jar"
+          "-Dsonar.java.binaries=android/*/build/**/classes"
+          "-Dsonar.java.libraries=.sonar-android-sdk/platforms/**/*.jar,.sonar-gradle/caches/**/*.jar"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

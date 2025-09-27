@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -35,21 +35,6 @@ msgstr "НВ"
 
 msgid "ALL"
 msgstr "ВСІ"
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
-msgstr ""
 
 msgid "EXIT"
 msgstr "ВИХІД"
@@ -3597,9 +3582,8 @@ msgstr "Оберіть монстра:"
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
 
-#, fuzzy
 msgid "Select Monsters:"
-msgstr "Оберіть монстра:"
+msgstr "Оберіть монстрів:"
 
 msgid "race|Random"
 msgstr "Випадково"
@@ -3978,7 +3962,7 @@ msgid "Random Town Name"
 msgstr "Випадкова назва міста"
 
 msgid "BANNED SPELLS"
-msgstr ""
+msgstr "ЗАБОРОНЕНІ ЗАКЛИНАННЯ"
 
 msgid "Click to accept the changes made."
 msgstr "Тицьніть, щоб прийняти внесені зміни."
@@ -3987,17 +3971,16 @@ msgid "Exit this dialog, discarding the changes made."
 msgstr "Вийти з цього діалогу, відхиливши внесені зміни."
 
 msgid "Click to ban spells from appearing in the Mage Guild."
-msgstr ""
+msgstr "Тицьніть, щоб заборонити появу заклинань у Гільдії Магів."
 
-#, fuzzy
 msgid "Banned Spells"
-msgstr "Випадкове заклинання"
+msgstr "Заборонені заклинання"
 
 msgid "Select spells that will appear in the Mage Guild."
-msgstr ""
+msgstr "Виберіть заклинання, які з'являться в Гільдії Магів."
 
 msgid "SET SPELLS"
-msgstr ""
+msgstr "ВСТАНОВИТИ ЗАКЛИНАННЯ"
 
 msgid "Allow Castle build"
 msgstr "Дозволити замок"
@@ -4050,11 +4033,10 @@ msgid "Set custom Castle Army."
 msgstr "Встановити гарнізон замку."
 
 msgid "Set spells to appear in the Mage Guild."
-msgstr ""
+msgstr "Налаштуйте заклинання, які з'являтимуться в Гільдії Магів."
 
-#, fuzzy
 msgid "Set Spells"
-msgstr "Оберіть закляття:"
+msgstr "Встановити закляття:"
 
 msgid "Castle Settings"
 msgstr "Налаштування замку"
@@ -4199,9 +4181,8 @@ msgstr ""
 "не встановлено, подія спрацьовуватиме щоразу, коли один із зазначених "
 "гравців перетинатиме мітку події."
 
-#, fuzzy
 msgid "Click to make selection."
-msgstr "Тицьніть щоб обрати цей колір."
+msgstr "Тицьніть, щоб зробити вибір."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} неможливо розмістити на воді."
@@ -4692,7 +4673,8 @@ msgstr "[%{pos}]: %{name}, %{race} замок"
 msgid "None."
 msgstr "Нема."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Одна сторона перемагає іншу."
 
 msgid "Accumulate gold."
@@ -4950,11 +4932,10 @@ msgid "Click to save the current map."
 msgstr "Тицьніть, щоб зберегти поточну мапу."
 
 msgid "Click to show only level %{level} spells."
-msgstr ""
+msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
 
-#, fuzzy
 msgid "Spells level"
-msgstr "Чарівний Сувій"
+msgstr "Рівень заклинань"
 
 msgid "Riddle:"
 msgstr "Загадка:"
