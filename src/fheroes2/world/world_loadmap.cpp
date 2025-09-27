@@ -1156,11 +1156,11 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( object.index < treasuresObjects.size() );
                 const auto & objectInfo = treasuresObjects[object.index];
 
-                if ( objectInfo.objectType == MP2::OBJ_RESOURCE ) {
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.resourceMetadata.find( object.id ) != map.resourceMetadata.end() ) {
+                    // Some maps might be corrupted or broken due to issues in the older versions of the Editor.
 #if defined( WITH_DEBUG )
                     resourceMetadataUIDs.emplace( object.id );
 #endif
-                    assert( map.resourceMetadata.find( object.id ) != map.resourceMetadata.end() );
 
                     std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 

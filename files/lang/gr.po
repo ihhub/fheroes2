@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -33,21 +33,6 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr ""
-
-msgid "1"
-msgstr ""
-
-msgid "2"
-msgstr ""
-
-msgid "3"
-msgstr ""
-
-msgid "4"
-msgstr ""
-
-msgid "5"
 msgstr ""
 
 msgid "EXIT"
@@ -4242,7 +4227,7 @@ msgstr ""
 msgid "None."
 msgstr ""
 
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr ""
 
 msgid "Accumulate gold."

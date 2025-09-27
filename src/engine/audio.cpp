@@ -77,8 +77,8 @@ namespace
         uint16_t format = AUDIO_S16SYS;
         // Stereo audio support
         int channels = 2;
-#if defined( ANDROID )
-        // Value greater than 1024 causes audio distortion on Android
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
+        // Value greater than 1024 causes audio distortion on Android and on iOS.
         int chunkSize = 1024;
 #elif defined( __EMSCRIPTEN__ )
         // When a WebAssembly app is running in a browser, no background threads (emulated by the web workers) have

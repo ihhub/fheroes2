@@ -705,7 +705,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_1_EVIL );
 
-            const char * text = fheroes2::getSupportedText( gettext_noop( "1" ), fheroes2::FontType::buttonReleasedWhite() );
+            const char * text = fheroes2::getSupportedText( "1", fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
                                          isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -717,7 +717,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_2_EVIL );
 
-            const char * text = fheroes2::getSupportedText( gettext_noop( "2" ), fheroes2::FontType::buttonReleasedWhite() );
+            const char * text = fheroes2::getSupportedText( "2", fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
                                          isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -729,7 +729,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_3_EVIL );
 
-            const char * text = fheroes2::getSupportedText( gettext_noop( "3" ), fheroes2::FontType::buttonReleasedWhite() );
+            const char * text = fheroes2::getSupportedText( "3", fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
                                          isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -741,7 +741,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_4_EVIL );
 
-            const char * text = fheroes2::getSupportedText( gettext_noop( "4" ), fheroes2::FontType::buttonReleasedWhite() );
+            const char * text = fheroes2::getSupportedText( "4", fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
                                          isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
@@ -753,7 +753,7 @@ namespace
 
             const bool isEvilInterface = ( id == ICN::BUTTON_5_EVIL );
 
-            const char * text = fheroes2::getSupportedText( gettext_noop( "5" ), fheroes2::FontType::buttonReleasedWhite() );
+            const char * text = fheroes2::getSupportedText( "5", fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
                                          isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
