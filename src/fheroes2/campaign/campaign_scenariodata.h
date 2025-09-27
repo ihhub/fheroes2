@@ -166,12 +166,12 @@ namespace Campaign
             return _lossCondition;
         }
 
-        const std::vector<std::vector<Video::VideoInfo>> & getStartScenarioVideoPlayback() const
+        const VideoSequence & getStartScenarioVideoPlayback() const
         {
             return _startScenarioVideoPlayback;
         }
 
-        const std::vector<std::vector<Video::VideoInfo>> & getEndScenarioVideoPlayback() const
+        const VideoSequence & getEndScenarioVideoPlayback() const
         {
             return _endScenarioVideoPlayback;
         }
