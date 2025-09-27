@@ -411,6 +411,7 @@ namespace MP2
         OBJ_FROZEN_LAKE = 258,
         OBJ_NON_ACTION_BLACK_CAT = 259,
         OBJ_NON_ACTION_BARREL = 260,
+        OBJ_NON_ACTION_NEW_OBJECT = 261,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
@@ -420,12 +421,13 @@ namespace MP2
         OBJ_ACTION_FROZEN_LAKE = OBJ_FROZEN_LAKE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_BLACK_CAT = OBJ_NON_ACTION_BLACK_CAT + OBJ_ACTION_OBJECT_TYPE,
         OBJ_BARREL = OBJ_NON_ACTION_BARREL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_NEW_OBJECT = OBJ_NON_ACTION_NEW_OBJECT + OBJ_ACTION_OBJECT_TYPE,
     };
 
     enum ObjectIcnType : uint8_t
     {
         OBJ_ICN_TYPE_UNKNOWN, // Object does not exist.
-        OBJ_ICN_TYPE_UNUSED_1, // Unused
+        OBJ_ICN_TYPE_NEW_OBJECTS, // For fheroes2 new objects.
         OBJ_ICN_TYPE_UNUSED_2, // Unused
         OBJ_ICN_TYPE_UNUSED_3, // Unused
         OBJ_ICN_TYPE_UNUSED_4, // Unused

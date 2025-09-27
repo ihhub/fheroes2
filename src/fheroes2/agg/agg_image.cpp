@@ -4937,6 +4937,24 @@ namespace
 
             break;
         }
+        case ICN::NEW_OBJECTS: {
+            auto & images = _icnVsSprite[id];
+            images.resize( 16 );
+            fheroes2::h2d::readImage( "bottom.image", images[0] );
+            fheroes2::h2d::readImage( "shadow.image", images[1] );
+            fheroes2::h2d::readImage( "top.image", images[2] );
+
+            // TODO: This only serves to facilitate importing. Remove this and convert once upon importing when object is ready.
+            fheroes2::ReplaceColorIdByTransformId( images[1], 205, 3U );
+            fheroes2::ReplaceColorIdByTransformId( images[1], 206, 2U );
+            fheroes2::ReplaceColorIdByTransformId( images[0], 205, 3U );
+            fheroes2::ReplaceColorIdByTransformId( images[0], 206, 2U );
+
+            for ( size_t i = 1; i < 14; ++i ) {
+                fheroes2::h2d::readImage( "animated_part" + std::to_string( i ) + ".image", images[2 + i] );
+            }
+            break;
+        }
         case ICN::OBJNMUL2: {
             auto & images = _icnVsSprite[id];
             if ( images.size() == 218 ) {

@@ -4081,6 +4081,9 @@ void Heroes::Action( const int tileIndex )
         actionToBlackCat( *this, tileIndex );
         break;
 
+    case MP2::OBJ_NEW_OBJECT:
+        break;
+
     default:
         if ( isHeroDisembarking ) {
             ActionToCoast( *this, tileIndex );
