@@ -59,7 +59,6 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
