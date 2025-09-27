@@ -118,7 +118,9 @@ namespace Video
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Rect firstFrameArea;
 
-        for ( const auto & info : infos ) {
+        for ( size_t i = 0; i < infos.size(); ++i ) {
+            const auto& info = infos[i];
+
             std::string videoPath;
             if ( !getVideoFilePath( info.fileName, videoPath ) ) {
                 // File doesn't exist, so no need to even try to load it.
@@ -134,14 +136,14 @@ namespace Video
             const int32_t delay = static_cast<int32_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
             minDelay = std::min( minDelay, delay );
             VideoState state;
-            if ( info == infos.front() ) {
+            if ( i == 0 ) {
                 // First file is background video
                 firstFrameArea = { ( display.width() - video->width() - infos.front().offset.x ) / 2, ( display.height() - video->height() - infos.front().offset.y ) / 2,
                                    video->width(), video->height() };
                 state = { info.control, firstFrameArea, delay, delay };
             }
             else {
-                fheroes2::Rect const frame = { firstFrameArea.getPosition() + info.offset, { video->width(), video->height() } };
+                const fheroes2::Rect frame{ firstFrameArea.getPosition() + info.offset, { video->width(), video->height() } };
                 state = { info.control, frame, delay, delay };
             }
             sequences.emplace_back( state, std::move( video ) );
