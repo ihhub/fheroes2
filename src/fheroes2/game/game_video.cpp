@@ -105,7 +105,9 @@ namespace Video
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
-        // Minimal delay across all video files. Default 1000 is the smallest interval that engine handle to.
+        // Minimal delay for playback in microseconds.
+        // Since the engine operates only within millisecond range (see LocalEvent.cpp file)
+        // this value is set to a minimal possibly handled by the engine value - 1000.
         int32_t minDelay = 1000;
 
         fheroes2::Display & display = fheroes2::Display::instance();
