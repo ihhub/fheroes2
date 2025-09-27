@@ -439,7 +439,7 @@ namespace
         case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
             return GameOver::GetString( GameOver::WINS_ARTIFACT );
         case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
-            return _( "One side defeats another." );
+            return _( "One side defeats the other." );
         case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
             return _( "Accumulate gold." );
         default:

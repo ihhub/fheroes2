@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -38,21 +38,6 @@ msgstr "О-Б"
 
 msgid "ALL"
 msgstr "ВСЕ"
-
-msgid "1"
-msgstr "1"
-
-msgid "2"
-msgstr "2"
-
-msgid "3"
-msgstr "3"
-
-msgid "4"
-msgstr "4"
-
-msgid "5"
-msgstr "5"
 
 msgid "EXIT"
 msgstr "ВЫЙТИ"
@@ -4702,7 +4687,8 @@ msgstr "[%{pos}]: %{name}, %{race} (замок)"
 msgid "None."
 msgstr "Нет."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Один союз побеждает других."
 
 msgid "Accumulate gold."
@@ -12303,3 +12289,18 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
