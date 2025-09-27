@@ -36,16 +36,11 @@ namespace fheroes2
 
 namespace Video
 {
-    struct VideoInfo
+    struct VideoInfo final
     {
         std::string fileName;
-        VideoControl control = VideoControl::PLAY_NONE;
-        fheroes2::Point offset = { 0, 0 };
-
-        bool operator==( const VideoInfo & info ) const
-        {
-            return ( fileName == info.fileName ) && ( offset == info.offset ) && ( control == info.control );
-        }
+        VideoControl control{ VideoControl::PLAY_NONE };
+        fheroes2::Point offset;
     };
 
     class Subtitle
