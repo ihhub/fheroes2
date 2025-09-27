@@ -7034,7 +7034,7 @@ void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const U
 
     // TODO: Currently, this functionality only supports a simple single-target spell case
     // We should refactor this to apply to all cases
-    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+    if ( !spell.isDamage() ) {
         return;
     }
 
