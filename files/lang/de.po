@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3591,6 +3591,10 @@ msgstr "Monster auswählen:"
 msgid "Select Hero:"
 msgstr "Held auswählen:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Monster auswählen:"
+
 msgid "race|Random"
 msgstr "Zufällig"
 
@@ -3661,6 +3665,10 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} Darstellung:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Klickt, um diese Farbe zu wählen."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -3977,6 +3985,30 @@ msgstr "Zufälliges Burg"
 msgid "Random Town Name"
 msgstr "Zufällige Stadt"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Zufällig"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Wolkenburg"
@@ -4036,13 +4068,12 @@ msgstr "Entlassen der Armee."
 msgid "Set custom Castle Army."
 msgstr "Burg"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Klicken um die nächste Stadt anzuzeigen."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klicken um die nächste Stadt anzuzeigen."
+msgid "Set Spells"
+msgstr "Zauberspruch auswählen:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4181,6 +4212,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klickt, um diese Farbe zu wählen."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
@@ -4708,7 +4743,7 @@ msgid "None."
 msgstr "Niemand"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Bitte wählt einen anderen Helden aus."
 
 #, fuzzy
@@ -4917,6 +4952,12 @@ msgstr ""
 "schwieriger machen."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "Spieler %{color}"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Anzahl %{resource} wählen:"
 
@@ -4991,6 +5032,13 @@ msgstr "Karte speichern"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Die Spruchrolle"
 
 msgid "Riddle:"
 msgstr ""

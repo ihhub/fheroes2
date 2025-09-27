@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3633,6 +3633,10 @@ msgstr "Vælg væsen:"
 msgid "Select Hero:"
 msgstr "Vælg helt:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Vælg væsen:"
+
 msgid "race|Random"
 msgstr "Tilfældig"
 
@@ -3702,6 +3706,10 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} udseende:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Klik for at vælge denne farve."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -4009,6 +4017,29 @@ msgstr "Tilfældigt borgnavn"
 msgid "Random Town Name"
 msgstr "Tilfældigt bynavn"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klik for at acceptere de foretagne ændringer."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Tilfældig besværgelse"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
 
@@ -4065,12 +4096,12 @@ msgstr "Bortvis denne hær."
 msgid "Set custom Castle Army."
 msgstr "Borghær"
 
-msgid "Click to accept the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
+msgid "Set Spells"
+msgstr "Vælg magi:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4215,6 +4246,10 @@ msgstr ""
 "Hvis dette felt aktiveres, udløses begivenheden kun én gang; hvis ikke, "
 "udløses begivenheden hver gang en af de angivne spillere krydser "
 "begivenhedsfirkanten."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klik for at vælge denne farve."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} kan ikke placeres på vand."
@@ -4709,7 +4744,8 @@ msgstr "[%{pos}]: %{name}, %{race} borg"
 msgid "None."
 msgstr "Ingen."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "En side besejrer den anden."
 
 msgid "Accumulate gold."
@@ -4885,6 +4921,12 @@ msgstr ""
 "eller stærkere fjender, færre ressourcer eller andre særlige forhold, der "
 "gør tingene sværere for den menneskelige spiller."
 
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} spiller"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4953,6 +4995,13 @@ msgstr "Gem kort:"
 
 msgid "Click to save the current map."
 msgstr "Klik for at gemme det aktuelle kort."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Trolddomsrulle"
 
 msgid "Riddle:"
 msgstr "Gåde:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3499,6 +3499,10 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Selecteer spreuk doelwit"
+
 msgid "race|Random"
 msgstr ""
 
@@ -3572,6 +3576,11 @@ msgstr ""
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name} de %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -3865,6 +3874,32 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Spreuk uitspreken"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3917,15 +3952,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr ""
 
-#, fuzzy
-msgid "Click to accept the changes made."
+msgid "Set spells to appear in the Mage Guild."
 msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+msgid "Set Spells"
+msgstr "Spreuk uitspreken"
 
 msgid "Castle Settings"
 msgstr ""
@@ -4071,6 +4103,11 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "%{objects} cannot be placed on water."
 msgstr ""
@@ -4533,7 +4570,7 @@ msgid "None."
 msgstr "Geen"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Selecteer een andere held."
 
 msgid "Accumulate gold."
@@ -4725,6 +4762,11 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+
 msgid "editor|%{count} %{resource}"
 msgstr ""
 
@@ -4792,6 +4834,13 @@ msgstr ""
 msgid "Click to save the current map."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Spreuk gefaald!"
 
 msgid "Riddle:"
 msgstr ""

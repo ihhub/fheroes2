@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3624,6 +3624,10 @@ msgstr "Chọn Quái vật:"
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Chọn Quái vật:"
+
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
 
@@ -3697,6 +3701,10 @@ msgstr "Tài nguyên"
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name} cái %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -4015,6 +4023,30 @@ msgstr "Ngẫu nhiên Lâu đài"
 msgid "Random Town Name"
 msgstr "Ngẫu nhiên Thị trấn"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Ngẫu nhiên Phép"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Lâu đài Mây"
@@ -4074,13 +4106,12 @@ msgstr "Giải tán đội quân này."
 msgid "Set custom Castle Army."
 msgstr "Lâu đài"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Nhấp để xem thị trấn sau."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Nhấp để xem thị trấn sau."
+msgid "Set Spells"
+msgstr "Chọn Phép:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4237,6 +4268,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4759,7 +4794,7 @@ msgid "None."
 msgstr "Không"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Hãy chọn một tướng khác."
 
 #, fuzzy
@@ -4966,6 +5001,12 @@ msgstr ""
 "thứ trở nên khó khăn hơn đối với người chơi."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "người chơi mầu %{color}"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Chọn số lượng %{resource}:"
 
@@ -5042,6 +5083,13 @@ msgstr "Lưu Bản đồ"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Nhấp để lưu trò chơi hiện tại."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Sách Phép"
 
 msgid "Riddle:"
 msgstr ""

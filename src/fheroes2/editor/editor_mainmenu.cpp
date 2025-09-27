@@ -348,7 +348,7 @@ namespace Editor
 
         Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
         if ( !editorInterface.loadMap( fileInfo->filename ) ) {
-            return fheroes2::GameMode::CANCEL;
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         fheroes2::fadeOutDisplay();

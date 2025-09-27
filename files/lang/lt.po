@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3388,6 +3388,10 @@ msgstr "Pasirinkti %{name}"
 msgid "Select Hero:"
 msgstr "Pasirinkti %{name}"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Pasirinkti %{name}"
+
 msgid "race|Random"
 msgstr ""
 
@@ -3463,6 +3467,10 @@ msgstr "Ištekliai"
 
 msgid "%{mineName} appearance:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Rodyti kitą miestą"
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -3770,6 +3778,30 @@ msgstr "Atsitiktinė pilis"
 msgid "Random Town Name"
 msgstr "Atsitiktinis miestas"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Rodyti kitą miestą"
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Atsitiktinis miestas"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Dangaus pilis"
@@ -3826,13 +3858,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr "Pilis"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Rodyti kitą miestą"
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Rodyti kitą miestą"
+msgid "Set Spells"
+msgstr "Burtų galia"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -3977,6 +4008,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Rodyti kitą miestą"
 
 msgid "%{objects} cannot be placed on water."
 msgstr ""
@@ -4465,7 +4500,7 @@ msgstr "Žiūrėti %{name}"
 msgid "None."
 msgstr ""
 
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr ""
 
 #, fuzzy
@@ -4655,6 +4690,11 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+
 msgid "editor|%{count} %{resource}"
 msgstr ""
 
@@ -4720,6 +4760,13 @@ msgstr "Įkelti žaidimą"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Rodyti kitą miestą"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Burtų galia"
 
 msgid "Riddle:"
 msgstr ""

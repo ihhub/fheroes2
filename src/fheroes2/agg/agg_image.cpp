@@ -118,6 +118,16 @@ namespace
                                                 ICN::BUTTON_MAPSIZE_LARGE,
                                                 ICN::BUTTON_MAPSIZE_XLARGE,
                                                 ICN::BUTTON_MAPSIZE_ALL,
+                                                ICN::BUTTON_1_GOOD,
+                                                ICN::BUTTON_2_GOOD,
+                                                ICN::BUTTON_3_GOOD,
+                                                ICN::BUTTON_4_GOOD,
+                                                ICN::BUTTON_5_GOOD,
+                                                ICN::BUTTON_1_EVIL,
+                                                ICN::BUTTON_2_EVIL,
+                                                ICN::BUTTON_3_EVIL,
+                                                ICN::BUTTON_4_EVIL,
+                                                ICN::BUTTON_5_EVIL,
                                                 ICN::BUTTON_MAP_SELECT_GOOD,
                                                 ICN::BUTTON_MAP_SELECT_EVIL,
                                                 ICN::BUTTONS_NEW_GAME_MENU_GOOD,
@@ -155,7 +165,9 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
-                                                ICN::DISMISS_HERO_DISABLED_BUTTON };
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
+                                                ICN::BUTTON_SELECT_GOOD,
+                                                ICN::BUTTON_SELECT_EVIL };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -684,6 +696,66 @@ namespace
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "ALL" ), fheroes2::FontType::buttonReleasedWhite() );
             fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 58, 25 }, false, ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_1_GOOD:
+        case ICN::BUTTON_1_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_1_EVIL );
+
+            const char * text = fheroes2::getSupportedText( "1", fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_2_GOOD:
+        case ICN::BUTTON_2_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_2_EVIL );
+
+            const char * text = fheroes2::getSupportedText( "2", fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_3_GOOD:
+        case ICN::BUTTON_3_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_3_EVIL );
+
+            const char * text = fheroes2::getSupportedText( "3", fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_4_GOOD:
+        case ICN::BUTTON_4_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_4_EVIL );
+
+            const char * text = fheroes2::getSupportedText( "4", fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+            break;
+        }
+        case ICN::BUTTON_5_GOOD:
+        case ICN::BUTTON_5_EVIL: {
+            _icnVsSprite[id].resize( 2 );
+
+            const bool isEvilInterface = ( id == ICN::BUTTON_5_EVIL );
+
+            const char * text = fheroes2::getSupportedText( "5", fheroes2::FontType::buttonReleasedWhite() );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], text, { 46, 25 }, isEvilInterface,
+                                         isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
             break;
         }
@@ -1711,6 +1783,17 @@ namespace
             FillTransform( common, 1, common.height() - 1, 23, 1, 1 );
 
             fheroes2::Blit( common, output );
+            break;
+        }
+        case ICN::BUTTON_SELECT_GOOD:
+        case ICN::BUTTON_SELECT_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_SELECT_EVIL );
+
+            _icnVsSprite[id].resize( 2 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "SELECT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                  isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
         default:

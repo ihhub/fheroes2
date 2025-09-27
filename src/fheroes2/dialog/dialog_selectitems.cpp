@@ -30,7 +30,6 @@
 #include <iterator>
 #include <numeric>
 #include <utility>
-#include <vector>
 
 #include "agg_image.h"
 #include "army_troop.h"
@@ -69,6 +68,18 @@ namespace
 {
     const int32_t dialogHeightDeduction = 150;
 
+    fheroes2::Sprite renderMonsterOnBackground( const fheroes2::Sprite & monsterSprite )
+    {
+        const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        fheroes2::Sprite image = fheroes2::Crop( backgroundOriginal, 36, 267, 43, 43 );
+        image.setPosition( 0, 0 );
+
+        fheroes2::Blit( monsterSprite, 0, 0, image, ( image.width() - monsterSprite.width() ) / 2, ( image.height() - monsterSprite.height() ) / 2, monsterSprite.width(),
+                        monsterSprite.height() );
+
+        return image;
+    }
+
     // Returns the town type according the given player color, race and castle/town state.
     int getPackedTownType( const int townRace, const bool isCastle )
     {
@@ -76,7 +87,7 @@ namespace
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
 
-    class SelectEnumMonster final : public Dialog::ItemSelectionWindow
+    class SelectEnumMonster : public Dialog::ItemSelectionWindow
     {
     public:
         explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
@@ -89,10 +100,7 @@ namespace
 
         void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
         {
-            const Monster mons( index );
-            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-
-            renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+            renderItem( getImage( index ), Monster{ index }.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -108,6 +116,93 @@ namespace
 
     private:
         static const int32_t _offsetY{ 43 };
+
+        virtual fheroes2::Sprite getImage( const int index )
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            return renderMonsterOnBackground( monsterSprite );
+        }
+    };
+
+    class MultiMonsterSelection final : public SelectEnumMonster
+    {
+    public:
+        using SelectEnumMonster::SelectEnumMonster;
+
+        using Interface::ListBox<int>::ActionListDoubleClick;
+        using Interface::ListBox<int>::ActionListSingleClick;
+        using Interface::ListBox<int>::ActionListPressRight;
+
+        void setup( std::vector<int> allowed, const std::vector<int> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+
+            SetListContent( _ids );
+            // For multi-selection we don't have any current item.
+            SetCurrent( 0 );
+        }
+
+        std::vector<int> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+        void ActionListSingleClick( int & id ) override
+        {
+            updateStatus( id );
+        }
+
+        void ActionListDoubleClick( int & id ) override
+        {
+            updateStatus( id );
+        }
+
+    private:
+        std::vector<int> _ids;
+        std::set<int> _selected;
+
+        void updateStatus( const int id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        bool isDoubleClicked() override
+        {
+            return false;
+        }
+
+        fheroes2::Sprite getImage( const int index ) override
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            fheroes2::Sprite image = renderMonsterOnBackground( monsterSprite );
+
+            if ( _selected.count( index ) == 0 ) {
+                fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return image;
+        }
     };
 
     class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
@@ -289,7 +384,8 @@ namespace
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
-            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
+            const fheroes2::Sprite & image = getObjectImage( _objectInfo[objectId] );
+
             const int32_t imageHeight = image.height();
             const int32_t imageWidth = image.width();
             if ( imageHeight > fheroes2::tileWidthPx * 3 || imageWidth > fheroes2::tileWidthPx * 5 ) {
@@ -316,6 +412,11 @@ namespace
         virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
 
         virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
+
+        virtual fheroes2::Sprite getObjectImage( const Maps::ObjectInfo & object ) const
+        {
+            return fheroes2::generateMapObjectImage( object );
+        }
 
         const std::vector<Maps::ObjectInfo> & _objectInfo;
 
@@ -350,6 +451,12 @@ namespace
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
             return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+        }
+
+        fheroes2::Sprite getObjectImage( const Maps::ObjectInfo & object ) const override
+        {
+            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( object );
+            return renderMonsterOnBackground( image );
         }
     };
 
@@ -762,11 +869,11 @@ namespace Dialog
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( !_isDoubleClicked && le.HandleEvents() ) {
+        while ( !isDoubleClicked() && le.HandleEvents() ) {
             _buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonOk.area() ) );
             _buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( _buttonOk.isEnabled() && ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
                 return Dialog::OK;
             }
             if ( le.MouseClickLeft( _buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -790,7 +897,7 @@ namespace Dialog
             display.render( roi );
         }
 
-        if ( _isDoubleClicked ) {
+        if ( isDoubleClicked() ) {
             return Dialog::OK;
         }
 
@@ -832,14 +939,20 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
+                           const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
-        for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
-            spells.push_back( randomSpellId );
+        if ( spellsLevel == -1 ) {
+            for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
+                spells.push_back( randomSpellId );
+            }
+        }
+        else {
+            spells.push_back( Spell::RANDOM + spellsLevel );
         }
     }
 
@@ -943,6 +1056,17 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
     const int32_t result = listbox.selectItemsEventProcessing();
 
     return ( result == Dialog::OK ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
+}
+
+void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )
+{
+    MultiMonsterSelection monsterList( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
+    monsterList.setup( std::move( allowed ), selected );
+
+    const int32_t result = monsterList.selectItemsEventProcessing();
+    if ( result == Dialog::OK ) {
+        selected = monsterList.getSelected();
+    }
 }
 
 int Dialog::selectHeroType( const int heroType )
@@ -1681,7 +1805,7 @@ int32_t Dialog::selectMineType( const int32_t type )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
         }
         else {
             for ( uint32_t i = 0; i < resourceCount; ++i ) {
@@ -1856,7 +1980,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
         }
         else {
             for ( size_t i = 0; i < 7; ++i ) {

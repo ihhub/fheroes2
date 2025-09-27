@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3431,6 +3431,10 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Selectați ținta vrăjii"
+
 msgid "race|Random"
 msgstr "Aleatorie"
 
@@ -3506,6 +3510,10 @@ msgstr ""
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name} cel %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -3801,6 +3809,30 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Vrajă aleatorie"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3853,13 +3885,12 @@ msgstr ""
 msgid "Set custom Castle Army."
 msgstr ""
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+msgid "Set Spells"
+msgstr "Aruncă vraja"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4007,6 +4038,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "%{objects} cannot be placed on water."
 msgstr ""
@@ -4470,7 +4505,7 @@ msgid "None."
 msgstr "Nimic"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Te rog selectează un alt erou."
 
 msgid "Accumulate gold."
@@ -4652,6 +4687,11 @@ msgid ""
 "tougher for the human player."
 msgstr ""
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+
 msgid "editor|%{count} %{resource}"
 msgstr ""
 
@@ -4720,6 +4760,13 @@ msgstr "Salvează harta"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Pergament magic"
 
 msgid "Riddle:"
 msgstr ""

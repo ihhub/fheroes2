@@ -624,6 +624,11 @@ const std::vector<std::string> & Settings::GetRootDirs()
         result.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
+#if defined( __IPHONEOS__ )
+        // IOS application should have all resources within the application folder.
+        result.emplace_back( "." );
+#endif
+
         // Environment variable.
         const char * dataEnvPath = getenv( "FHEROES2_DATA" );
         if ( dataEnvPath != nullptr && std::find( result.begin(), result.end(), dataEnvPath ) == result.end() ) {

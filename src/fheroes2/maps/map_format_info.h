@@ -52,7 +52,7 @@ namespace Maps::Map_Format
         std::vector<TileObjectInfo> objects;
     };
 
-    // This structure should be used for any object that require simple data to be saved into map.
+    // This structure is deprecated. We are keeping it for backward compatibility.
     struct StandardObjectMetadata
     {
         std::array<int32_t, 3> metadata{ 0 };
@@ -79,10 +79,12 @@ namespace Maps::Map_Format
         // A list of buildings that cannot be built.
         std::vector<uint32_t> bannedBuildings;
 
-        // Spells that must appear in the Magic Guild.
-        std::vector<int32_t> mustHaveSpells;
+        // Spells that must appear in the Mage Guild in relation to position index.
+        // The spell index is written as a decimal number, where the tens digit indicates the spell level (0-4),
+        // and the units digit (0-4) represents its position from left to right.
+        std::map<uint8_t, int32_t> mustHaveSpells;
 
-        // Spells that must NOT appear the Magic Guild.
+        // Spells that must NOT appear the Mage Guild.
         std::vector<int32_t> bannedSpells;
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.
@@ -260,6 +262,37 @@ namespace Maps::Map_Format
         PlayerColor ownerColor{ 0 };
     };
 
+    struct MonsterMetadata
+    {
+        int32_t count{ 0 };
+
+        // This is not used and reserved for the future.
+        int32_t joinCondition{ 0 };
+
+        // This is not used and reserved for the future.
+        bool isWeeklyGrowthDisabled{ false };
+
+        // Only for random monsters.
+        std::vector<int> selected;
+    };
+
+    struct ArtifactMetadata
+    {
+        // Only for Random Ultimate Artifact.
+        int32_t radius{ 0 };
+
+        // This is not used and reserved for the future.
+        int32_t captureCondition{ 0 };
+
+        // Only for random artifacts and Scroll Spell.
+        std::vector<int> selected;
+    };
+
+    struct ResourceMetadata
+    {
+        int32_t count{ 0 };
+    };
+
     struct DailyEvent
     {
         std::string message;
@@ -330,8 +363,6 @@ namespace Maps::Map_Format
         std::vector<std::string> rumors;
 
         // These are metadata maps in relation to object UID.
-        std::map<uint32_t, StandardObjectMetadata> standardMetadata;
-
         std::map<uint32_t, CastleMetadata> castleMetadata;
 
         std::map<uint32_t, HeroMetadata> heroMetadata;
@@ -345,6 +376,12 @@ namespace Maps::Map_Format
         std::map<uint32_t, SelectionObjectMetadata> selectionObjectMetadata;
 
         std::map<uint32_t, CapturableObjectMetadata> capturableObjectsMetadata;
+
+        std::map<uint32_t, MonsterMetadata> monsterMetadata;
+
+        std::map<uint32_t, ArtifactMetadata> artifactMetadata;
+
+        std::map<uint32_t, ResourceMetadata> resourceMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

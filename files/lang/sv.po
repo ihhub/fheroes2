@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
-"PO-Revision-Date: 2025-08-01 14:47+0200\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"PO-Revision-Date: 2025-09-12 21:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -3457,17 +3457,14 @@ msgstr "Ange Spelupplösning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klicka här för att anta den valda upplösningen."
 
-#, fuzzy
 msgid "Click to select the maximum amount."
-msgstr "Klicka här för att välja denna klass."
+msgstr "Klicka för att ange maximalt antal."
 
-#, fuzzy
 msgid "Click to select the minimum amount."
-msgstr "Klicka här för att välja denna klass."
+msgstr "Klicka för att ange minimalt antal."
 
-#, fuzzy
 msgid "Click to apply the entered number."
-msgstr "Klicka här för att anta den inmatade texten."
+msgstr "Klicka här för att anta det angivna antalet."
 
 msgid "Click to apply the entered text."
 msgstr "Klicka här för att anta den inmatade texten."
@@ -3569,6 +3566,9 @@ msgstr "Välj Varelse:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+msgid "Select Monsters:"
+msgstr "Välj Varelser:"
+
 msgid "race|Random"
 msgstr "Slumpad"
 
@@ -3636,6 +3636,9 @@ msgstr "Resurstyp:"
 
 msgid "%{mineName} appearance:"
 msgstr "Utseende %{mineName}:"
+
+msgid "Click to select the color."
+msgstr "Klicka för att välja färg."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klicka här för att välja %{object} som resursalstrare för placering."
@@ -3945,6 +3948,27 @@ msgstr "Slumpat Borgnamn"
 msgid "Random Town Name"
 msgstr "Slumpat Stadsnamn"
 
+msgid "BANNED SPELLS"
+msgstr "BANNLYSTA BESVÄRJELSER"
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr "Klicka för att bannlysa besvärjelser från att visas i Magisamfundet."
+
+msgid "Banned Spells"
+msgstr "Bannlysta Besvärjelser"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser som kommer att visas i Magisamfundet"
+
+msgid "SET SPELLS"
+msgstr "ANGE BESVÄRJELSER"
+
 msgid "Allow Castle build"
 msgstr "Tillåt Borgbygge"
 
@@ -3995,11 +4019,11 @@ msgstr "Återställ armén."
 msgid "Set custom Castle Army."
 msgstr "Anpassa Borgarmén."
 
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
+msgid "Set spells to appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser att visas i Magisamfundet."
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+msgid "Set Spells"
+msgstr "Ange Besvärjelser"
 
 msgid "Castle Settings"
 msgstr "Borginställningar"
@@ -4143,6 +4167,9 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras en gång. Om "
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
+
+msgid "Click to make selection."
+msgstr "Klicka för att göra ett val."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."
@@ -4628,7 +4655,8 @@ msgstr "[%{pos}]: %{name}, %{race}borg"
 msgid "None."
 msgstr "Inga."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "En sida besegrar den andra."
 
 msgid "Accumulate gold."
@@ -4805,6 +4833,13 @@ msgstr ""
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+"%{object}\n"
+"(%{color} spelare"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4875,6 +4910,12 @@ msgstr "Spara Karta:"
 
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Click to show only level %{level} spells."
+msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
+
+msgid "Spells level"
+msgstr "Besvärjelsenivå"
 
 msgid "Riddle:"
 msgstr "Gåta:"
@@ -5048,9 +5089,8 @@ msgstr "Gångna dagar"
 msgid "The number of days spent on this campaign."
 msgstr "Antal gångna dagar för denna kampanj."
 
-#, fuzzy
 msgid "Scenario Title"
-msgstr "Scenario"
+msgstr "Scenarietitel"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination och huvudutveckling"
@@ -6060,13 +6100,11 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
-#, fuzzy
 msgid "All populations are halved."
-msgstr " Alla populationer är halverade."
+msgstr "Alla populationer är halverade."
 
-#, fuzzy
 msgid "All dwellings increase population."
-msgstr " Alla boningar ökar sin population."
+msgstr "Alla boningar ökar sin population."
 
 msgid "Beware!"
 msgstr "Varsko!"
@@ -8193,9 +8231,8 @@ msgstr "Slumpad hjälte (Nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-#, fuzzy
 msgid "Hero class:"
-msgstr "Hjälteklass"
+msgstr "Hjälteklass:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
@@ -8228,7 +8265,6 @@ msgstr "Ange patrullradie i antal rutor"
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
 
-#, fuzzy
 msgid "Click to change class."
 msgstr "Klicka för byta klass."
 
@@ -12218,6 +12254,21 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
 
 #~ msgid "Always retaliates"
 #~ msgstr "Vedergäller alltid"

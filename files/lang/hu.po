@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3005,7 +3005,7 @@ msgid "Music"
 msgstr "Zene"
 
 msgid "Effects"
-msgstr "Effektusok"
+msgstr "Hatások"
 
 msgid "MIDI"
 msgstr "MIDI"
@@ -3569,6 +3569,9 @@ msgstr "Lény kiválasztása:"
 msgid "Select Hero:"
 msgstr "Hős kiválasztása:"
 
+msgid "Select Monsters:"
+msgstr "Lények kiválasztása:"
+
 msgid "race|Random"
 msgstr "Véletlen"
 
@@ -3638,6 +3641,9 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} előfordulásai:"
+
+msgid "Click to select the color."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kattints ide az erőforrástermelő %{object} elhelyezéséhez."
@@ -3942,6 +3948,27 @@ msgstr "Véletlenszerű vár név"
 msgid "Random Town Name"
 msgstr "Véletlenszerű város neve"
 
+msgid "BANNED SPELLS"
+msgstr "TILTOTT VARÁZSLATOK"
+
+msgid "Click to accept the changes made."
+msgstr "Kattints a változtatások elfogadásához."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kilépés a párbeszédablakból és a változtatások elvetése."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr "Kattints a varázslatok Varázstoronyban való megjelenésének tiltásához."
+
+msgid "Banned Spells"
+msgstr "Tiltott varázslatok"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr "Válaszd ki a Varázstoronyban megjelenő varázslatokat."
+
+msgid "SET SPELLS"
+msgstr "VARÁZSLATOK BEÁLLÍTÁSA"
+
 msgid "Allow Castle build"
 msgstr "Vár építhetőség"
 
@@ -3991,11 +4018,11 @@ msgstr "Sereg alaphelyzetbe állítása."
 msgid "Set custom Castle Army."
 msgstr "Várvédők egyéni beállítása."
 
-msgid "Click to accept the changes made."
-msgstr "Kattints a változtatások elfogadásához."
+msgid "Set spells to appear in the Mage Guild."
+msgstr "Állítsd be a Varázstoronyban megjelenő varázslatokat."
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Kilépés a párbeszédablakból és a változtatások elvetése."
+msgid "Set Spells"
+msgstr "Varázslatok beállítása"
 
 msgid "Castle Settings"
 msgstr "Vár-beállítások"
@@ -4087,7 +4114,7 @@ msgid "Delete an existing event."
 msgstr "Meglévő esemény törlése."
 
 msgid "Effects:"
-msgstr "Effektusok:"
+msgstr "Hatások:"
 
 msgid "Conditions:"
 msgstr "Feltételek:"
@@ -4139,6 +4166,9 @@ msgstr ""
 "Ha ez a jelölőnégyzet meg van jelölve, akkor az esemény csak egyszer "
 "váltódik ki. Ha nincs bejelölve, akkor mindahányszor a megadott játékos "
 "rálép területre."
+
+msgid "Click to make selection."
+msgstr "Kattints a kiválasztáshoz."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "Vízen nem helyezhetők el %{objects}."
@@ -4625,7 +4655,8 @@ msgstr "[%{pos}]: %{name}, %{race} vár"
 msgid "None."
 msgstr "Nincs."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Egyik oldal legyőzi a másikat."
 
 msgid "Accumulate gold."
@@ -4810,6 +4841,13 @@ msgstr ""
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+"%{object}\n"
+"(%{color} játékos)"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4878,6 +4916,12 @@ msgstr "Térkép mentése:"
 
 msgid "Click to save the current map."
 msgstr "Kattints az aktuális térkép mentéséhez."
+
+msgid "Click to show only level %{level} spells."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+msgid "Spells level"
+msgstr "Varázslatok szintje"
 
 msgid "Riddle:"
 msgstr "Találós kérdés:"

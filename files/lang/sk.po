@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3613,6 +3613,10 @@ msgstr "Zvoľ bojovníka:"
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Zvoľ bojovníka:"
+
 msgid "race|Random"
 msgstr "Náhodná"
 
@@ -3698,6 +3702,10 @@ msgstr "Surovina"
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{race} %{name}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -4015,6 +4023,30 @@ msgstr "Náhodný hrad"
 msgid "Random Town Name"
 msgstr "Náhodné mesto"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Náhodná"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Oblačné mesto"
@@ -4074,13 +4106,12 @@ msgstr "Prepusti túto armádu."
 msgid "Set custom Castle Army."
 msgstr "Hrad"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Kliknutím zobraz ďalšie mesto."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Kliknutím zobraz ďalšie mesto."
+msgid "Set Spells"
+msgstr "Zvoľ kúzlo:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4237,6 +4268,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4757,7 +4792,7 @@ msgid "None."
 msgstr "Žiadny"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
 
 #, fuzzy
@@ -4964,6 +4999,12 @@ msgstr ""
 "hráča."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} hráč"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Zvoľ počet - %{resource}:"
 
@@ -5038,6 +5079,13 @@ msgstr "Ulož mapu"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klikni pre uloženie terajšej hry."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Zvitok s kúzlom"
 
 msgid "Riddle:"
 msgstr ""

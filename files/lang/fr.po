@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3632,6 +3632,10 @@ msgstr "Choisir créature :"
 msgid "Select Hero:"
 msgstr "Choisir héros :"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Choisir créature :"
+
 msgid "race|Random"
 msgstr "Aléatoire"
 
@@ -3702,6 +3706,10 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "Aspect de %{mineName} :"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Cliquez ici pour sélectionner cette couleur."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -4012,6 +4020,30 @@ msgstr "Nom du château aléatoire"
 msgid "Random Town Name"
 msgstr "Nom du village aléatoire"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Cliquez pour afficher le village suivant."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Sortilège aléatoire"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Château céleste"
@@ -4070,13 +4102,12 @@ msgstr "Ronvoyer cette armée."
 msgid "Set custom Castle Army."
 msgstr "Château"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Cliquez pour afficher le village suivant."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Cliquez pour afficher le village suivant."
+msgid "Set Spells"
+msgstr "Choisir sort :"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4233,6 +4264,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Cliquez ici pour sélectionner cette couleur."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4768,7 +4803,7 @@ msgid "None."
 msgstr "Aucune"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Veuillez choisir un autre héros."
 
 #, fuzzy
@@ -4976,6 +5011,12 @@ msgstr ""
 "joueur humain."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "Joueur %{color}"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Sélectionner %{resource} :"
 
@@ -5052,6 +5093,13 @@ msgstr "Sauvegarder la carte"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Enregistrer le jeu en cours."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Parchemin magique"
 
 msgid "Riddle:"
 msgstr ""

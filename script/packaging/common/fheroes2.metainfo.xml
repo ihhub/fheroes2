@@ -37,6 +37,51 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-09-14" version="v1.1.11">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.11</url>
+      <description>
+        <p>Changes in v1.1.11 (14 September 2025):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>allow to customize and ban spells for the Mage Guild in the Editor</li>
+          <li>update the Portuguese translation</li>
+          <li>allow to select monsters for Random Monster objects in the Editor</li>
+          <li>expand the pop-up message for objects with an owner in the Editor</li>
+          <li>fix invalid cursor while choosing an object in the Editor</li>
+          <li>fix Hero Dialog EXIT button flickering</li>
+          <li>fix incorrect sentence for Mines and Observation Tower popup message for OKAY button</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix logic for hero selection window in the Editor</li>
+          <li>add extra checks to avoid corrupted MP2 maps from being loaded</li>
+          <li>allow to cast the Summon Boat spell on more tiles</li>
+          <li>make the Toolset activities compatible with Android 15 edge-to-edge enforcements</li>
+          <li>show the creature image in the "Week of..." and "Month of..." dialog windows</li>
+          <li>update the Hungarian translation</li>
+          <li>reduce the size of the bundled resurrection.h2d resource file</li>
+          <li>update the configuration file to be more human-readable</li>
+          <li>fix the shifted by 16 pixels position of a map for the first opening in the Editor</li>
+          <li>limit all resolutions to the currently selected resolution in the system in software rendering mode</li>
+          <li>bring back compilation of x86_64 for macOS</li>
+          <li>add a pop-up window when right-clicking a scenario title in the campaign window</li>
+          <li>rename strings in the Editor to use "class" instead of "race"</li>
+          <li>fix Wagon object evaluation for the AI when it contains resources</li>
+          <li>improve video processing logic</li>
+          <li>fix incorrect boat setting logic on a map tile</li>
+          <li>save days spent value for each scenario of a campaign</li>
+          <li>add popup messages for buttons in the Count Selection dialog</li>
+          <li>update the Swedish translation</li>
+          <li>fix the desynchronization of results between instant combat and auto/quick combat</li>
+          <li>bring the logic of calculating experience and losses in line with the logic of the original game</li>
+          <li>rename the "always retaliates" unit ability to "unlimited retaliation"</li>
+          <li>don't let heroes reuse the Whirlpools while standing on them</li>
+          <li>add stack highlight on arena or in queue when user hovers over it</li>
+          <li>set the proper object layer when placing a digging hole</li>
+          <li>fix loss condition regression for MP2/MX2 maps</li>
+          <li>do not show "View previous/next page" message when no pages can be listed in the Magic Book</li>
+          <li>show the unit upgrade cost in the quick info window of the "UPGRADE" button</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-07-20" version="v1.1.10">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.10</url>
       <description>

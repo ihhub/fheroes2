@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 16:25+0000\n"
+"POT-Creation-Date: 2025-09-22 01:29+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3634,6 +3634,10 @@ msgstr "Избери чудовище:"
 msgid "Select Hero:"
 msgstr "Избери герой:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Избери чудовище:"
+
 msgid "race|Random"
 msgstr "Случаен"
 
@@ -3721,6 +3725,10 @@ msgstr "Ресурс"
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -4040,6 +4048,30 @@ msgstr "Случаен замък"
 msgid "Random Town Name"
 msgstr "Случаен град"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Кликни, за да покажеш следващия град."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Случаен"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Замък в облаците"
@@ -4099,13 +4131,12 @@ msgstr "Разпусни тази войска."
 msgid "Set custom Castle Army."
 msgstr "Замък"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Кликни, за да покажеш следващия град."
+msgid "Set Spells"
+msgstr "Избери заклинание:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4262,6 +4293,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4794,7 +4829,7 @@ msgid "None."
 msgstr "Без"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Моля, избери друг герой."
 
 #, fuzzy
@@ -5001,6 +5036,12 @@ msgstr ""
 "правят нещата по-трудни за играча."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} играч"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Избери брой %{resource}:"
 
@@ -5077,6 +5118,13 @@ msgstr "Запазване на картата"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Кликни, за да запазиш текущата игра."
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Свитък за заклинание"
 
 msgid "Riddle:"
 msgstr ""

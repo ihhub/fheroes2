@@ -417,13 +417,12 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        // Exit this dialog.
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
             break;
         }
+
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         // Manage hero's army.
         if ( le.isMouseCursorPosInArea( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
