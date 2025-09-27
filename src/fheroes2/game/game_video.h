@@ -40,7 +40,7 @@ namespace Video
     {
         std::string fileName;
         VideoControl control{ VideoControl::PLAY_NONE };
-        fheroes2::Point offset{ 0, 0};
+        fheroes2::Point offset{ 0, 0 };
     };
 
     class Subtitle
