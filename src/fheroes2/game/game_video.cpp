@@ -65,8 +65,8 @@ namespace
     {
         Video::VideoControl control{ Video::VideoControl::PLAY_NONE };
         fheroes2::Rect area;
-        int32_t maxFrameDelay{ 0 };
-        int32_t currentFrameDelay{ 0 };
+        int32_t delayBetweenFramesInMs{ 0 };
+        int32_t nextFrameInMs{ 0 };
     };
 }
 
@@ -111,10 +111,9 @@ namespace Video
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
-        // Minimal delay for playback in microseconds.
-        // Since the engine operates only within millisecond range (see LocalEvent.cpp file)
-        // this value is set to a minimal possibly handled by the engine value - 1000.
-        int32_t minDelay = 1000;
+        // Minimal delay for playback in millisecond.
+        // The framerate of each video is reasonably low so as a start point let's put 1 FPS as minimum.
+        int32_t minDelayInMs = 1000;
 
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Rect videoRoi;
@@ -128,12 +127,12 @@ namespace Video
             }
             auto video = std::make_unique<SMKVideoSequence>( videoPath );
             if ( video->frameCount() < 1 ) {
-                // Something wrong with file, exit now
+                // The file is corrupted.
                 DEBUG_LOG( DBG_GAME, DBG_INFO, info.fileName << " video file has no frames." )
                 return false;
             }
             const int32_t delay = static_cast<int32_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
-            minDelay = std::min( minDelay, delay );
+            minDelayInMs = std::min( minDelayInMs, delay );
 
             const fheroes2::Rect frameRoi{ info.offset.x, info.offset.y, video->width(), video->height() };
             VideoState state{ info.control, frameRoi, delay, delay };
@@ -142,7 +141,7 @@ namespace Video
                 videoRoi = frameRoi;
             }
             else {
-                 videoRoi = fheroes2::getBoundaryRect( videoRoi, frameRoi );
+                videoRoi = fheroes2::getBoundaryRect( videoRoi, frameRoi );
             }
 
             sequences.emplace_back( std::move( state ), std::move( video ) );
@@ -166,7 +165,7 @@ namespace Video
         std::vector<uint8_t> currPalette;
         std::vector<uint8_t> prevPalette;
 
-        // Construct first frame
+        // Render the first frame.
         for ( auto & [state, video] : sequences ) {
             video->resetFrame();
 
@@ -178,10 +177,10 @@ namespace Video
             }
             screenRestorer.changePalette( prevPalette.data() );
 
-            // Decrease counters
-            state.currentFrameDelay -= minDelay;
+            state.nextFrameInMs -= minDelayInMs;
         }
-        // Render subtitles on the first frame
+
+        // Render subtitles on the first frame.
         for ( const Subtitle & subtitle : subtitles ) {
             if ( subtitle.needRender( 0 ) ) {
                 subtitle.render( display, videoRoi );
@@ -190,9 +189,9 @@ namespace Video
 
         LocalEvent & le = LocalEvent::Get();
 
-        Game::passCustomAnimationDelay( minDelay );
+        Game::passCustomAnimationDelay( minDelayInMs );
         // Make sure that the first run is passed immediately.
-        assert( !Game::isCustomDelayNeeded( minDelay ) );
+        assert( !Game::isCustomDelayNeeded( minDelayInMs ) );
 
         // Play audio just before rendering the frame. This is important to minimize synchronization issues between audio and video.
         if ( Audio::isValid() ) {
@@ -205,48 +204,51 @@ namespace Video
 
         bool endVideo = false;
         int32_t timePassed = 0;
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( minDelay ) ) ) {
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( minDelayInMs ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 Mixer::Stop();
                 break;
             }
 
-            if ( Game::validateCustomAnimationDelay( minDelay ) ) {
+            if ( Game::validateCustomAnimationDelay( minDelayInMs ) ) {
                 // Render the prepared frame.
                 display.render( videoRoi );
+
                 for ( auto & [state, video] : sequences ) {
                     if ( video->getCurrentFrameId() < video->frameCount() ) {
                         if ( video->getCurrentFrameId() + 1 == video->frameCount() ) {
+                            // This is the last frame in the video sequence.
                             if ( state.control & VideoControl::PLAY_LOOP ) {
+                                // Since the video is in a loop we need to restart its video and audio.
                                 video->resetFrame();
-                                // Restart audio
+
                                 if ( Audio::isValid() && ( state.control & VideoControl::PLAY_AUDIO ) ) {
                                     playAudio( video->getAudioChannels() );
                                 }
                             }
                             else {
-                                // Play last frame as long as possible
-                                if ( minDelay > state.currentFrameDelay ) {
+                                // Play last frame as long as possible.
+                                if ( minDelayInMs > state.nextFrameInMs ) {
                                     endVideo = true;
                                 }
                             }
                         }
 
                         // Prepare the next frame for render.
-                        if ( state.currentFrameDelay <= minDelay ) {
+                        if ( state.nextFrameInMs <= minDelayInMs ) {
                             if ( state.control & VideoControl::PLAY_VIDEO ) {
                                 video->getNextFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
                             }
                             else {
                                 video->skipFrame();
                             }
-                            state.currentFrameDelay = state.maxFrameDelay;
+                            state.nextFrameInMs = state.delayBetweenFramesInMs;
                         }
                         else {
                             if ( state.control & VideoControl::PLAY_VIDEO ) {
                                 video->getCurrentFrame( display, state.area.x, state.area.y, state.area.width, state.area.height, currPalette );
                             }
-                            state.currentFrameDelay -= minDelay;
+                            state.nextFrameInMs -= minDelayInMs;
                         }
 
                         if ( prevPalette != currPalette ) {
@@ -258,7 +260,8 @@ namespace Video
                         endVideo = true;
                     }
                 }
-                timePassed += minDelay;
+
+                timePassed += minDelayInMs;
                 // Render subtitles on the prepared next frame
                 for ( const Subtitle & subtitle : subtitles ) {
                     if ( subtitle.needRender( timePassed ) ) {
