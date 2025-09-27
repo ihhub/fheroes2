@@ -101,6 +101,11 @@ namespace Video
 
     bool ShowVideo( const std::vector<VideoInfo> & infos, const std::vector<Subtitle> & subtitles /* = {} */, const bool fadeColorsOnEnd /* = false */ )
     {
+        if ( infos.empty() ) {
+            // What it is expected from an empty video?
+            return false;
+        }
+
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
