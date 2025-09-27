@@ -73,6 +73,6 @@ namespace Video
     // Returns true if the file exists.
     bool getVideoFilePath( const std::string & fileName, std::string & path );
 
-    // Returns false if some video are not present, or they are corrupted.
+    // Returns false if some videos are not present, or they are corrupted.
     bool ShowVideo( const std::vector<VideoInfo> & infos, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
 }

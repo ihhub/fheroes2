@@ -25,7 +25,7 @@
 
 namespace Video
 {
-    enum class VideoControl : uint32_t
+    enum VideoControl : uint32_t
     {
         PLAY_NONE = 0,
         // Play file once and wait user's input
@@ -46,16 +46,4 @@ namespace Video
         // Play cutscene in loop
         PLAY_CUTSCENE_LOOP = PLAY_LOOP | PLAY_AUDIO | PLAY_VIDEO,
     };
-
-    using VideoControlSet = std::underlying_type_t<VideoControl>;
-
-    constexpr VideoControlSet operator&( const VideoControlSet lhs, const VideoControl rhs )
-    {
-        return lhs & static_cast<VideoControlSet>( rhs );
-    }
-
-    constexpr VideoControlSet operator&( const VideoControl lhs, const VideoControl rhs )
-    {
-        return static_cast<VideoControlSet>( lhs ) & static_cast<VideoControlSet>( rhs );
-    }
 }
