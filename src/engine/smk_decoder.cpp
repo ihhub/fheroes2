@@ -304,12 +304,6 @@ void SMKVideoSequence::getCurrentFrame( fheroes2::Image & image, const int32_t x
     memcpy( palette.data(), paletteData, 256 * 3 );
 }
 
-void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
-{
-    getCurrentFrame( image, x, y, width, height, palette );
-    skipFrame();
-}
-
 void SMKVideoSequence::skipFrame()
 {
     ++_currentFrameId;
