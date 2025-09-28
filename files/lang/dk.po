@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
-"PO-Revision-Date: 2025-04-19 17:45+0200\n"
+"POT-Creation-Date: 2025-09-09 00:04+0000\n"
+"PO-Revision-Date: 2025-09-28 16:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -37,6 +37,21 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "ALT"
+
+msgid "1"
+msgstr "1"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "5"
+msgstr "5"
 
 msgid "EXIT"
 msgstr "UD"
@@ -227,7 +242,7 @@ msgstr ""
 "KAMP"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "INDSTILLINGER"
 
 msgid ""
 "STANDARD\n"
@@ -282,15 +297,17 @@ msgstr ""
 "FELTTOG"
 
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "TILBAGE"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
 msgstr ""
+"FRA\n"
+"BUNDEN"
 
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "TILFÆLDIG"
 
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
@@ -3519,17 +3536,14 @@ msgstr "Vælg spilopløsning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klik for at godkende valgte opløsning."
 
-#, fuzzy
 msgid "Click to select the maximum amount."
-msgstr "Klik for at vælge denne klasse."
+msgstr "Klik for at vælge det maksimale beløb."
 
-#, fuzzy
 msgid "Click to select the minimum amount."
-msgstr "Klik for at vælge denne klasse."
+msgstr "Klik for at vælge minimumsbeløbet."
 
-#, fuzzy
 msgid "Click to apply the entered number."
-msgstr "Klik for at anvende den indtastede tekst."
+msgstr "Klik for at anvende det indtastede tal."
 
 msgid "Click to apply the entered text."
 msgstr "Klik for at anvende den indtastede tekst."
@@ -3574,10 +3588,10 @@ msgstr ""
 "Placering: "
 
 msgid "saveLoadDialog|Name"
-msgstr ""
+msgstr "Navn"
 
 msgid "saveLoadDialog|Date"
-msgstr ""
+msgstr "Dato"
 
 msgid "Are you sure you want to delete file:"
 msgstr "Er du sikker på at du vil slette denne fil:"
@@ -3592,19 +3606,18 @@ msgid "Click to load a previously saved game."
 msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "Click here if you wish to sort save files by their name."
-msgstr ""
+msgstr "Klik her, hvis du ønsker at sortere gemte filer efter navn."
 
-#, fuzzy
 msgid "Sort by Name"
-msgstr "Dit navn"
+msgstr "Sortér efter navn"
 
 msgid ""
 "Click here if you you wish to sort save files by their last modified date."
 msgstr ""
+"Klik her, hvis du ønsker at sortere gemte filer efter sidste ændringsdato."
 
-#, fuzzy
 msgid "Sort by Date"
-msgstr "Støt os på"
+msgstr "Sortér efter dato"
 
 msgid "File to Save:"
 msgstr "Fil som skal gemmes:"
@@ -3633,9 +3646,8 @@ msgstr "Vælg væsen:"
 msgid "Select Hero:"
 msgstr "Vælg helt:"
 
-#, fuzzy
 msgid "Select Monsters:"
-msgstr "Vælg væsen:"
+msgstr "Vælg væsener:"
 
 msgid "race|Random"
 msgstr "Tilfældig"
@@ -3707,9 +3719,8 @@ msgstr ""
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} udseende:"
 
-#, fuzzy
 msgid "Click to select the color."
-msgstr "Klik for at vælge denne farve."
+msgstr "Klik for at vælge farven."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -3730,9 +3741,8 @@ msgstr "Vælg Power Up-objekt:"
 msgid "Select Adventure Object:"
 msgstr "Vælg Eventyr-objekt:"
 
-#, fuzzy
 msgid "Select color"
-msgstr "Vælg væsen:"
+msgstr "Vælg farve"
 
 msgid "Players Icon"
 msgstr "Spiller-ikon"
@@ -4018,27 +4028,25 @@ msgid "Random Town Name"
 msgstr "Tilfældigt bynavn"
 
 msgid "BANNED SPELLS"
-msgstr ""
+msgstr "FORBUDT MAGI"
 
 msgid "Click to accept the changes made."
 msgstr "Klik for at acceptere de foretagne ændringer."
 
-#, fuzzy
 msgid "Exit this dialog, discarding the changes made."
-msgstr "Klik for at acceptere de foretagne ændringer."
+msgstr "Afslut denne dialog, annuller foretagne ændringer."
 
 msgid "Click to ban spells from appearing in the Mage Guild."
-msgstr ""
+msgstr "Klik for at forbyde besværgelser i Magikerlauget."
 
-#, fuzzy
 msgid "Banned Spells"
-msgstr "Tilfældig besværgelse"
+msgstr "Forbudt magi"
 
 msgid "Select spells that will appear in the Mage Guild."
-msgstr ""
+msgstr "Vælg besværgelser, der skal vises i Magikerlauget."
 
 msgid "SET SPELLS"
-msgstr ""
+msgstr "INDSTIL MAGI"
 
 msgid "Allow Castle build"
 msgstr "Tillad borgbyggeri"
@@ -4060,16 +4068,14 @@ msgstr "Borghær"
 msgid "Town Army"
 msgstr "Byhær"
 
-#, fuzzy
 msgid "Click to change the Castle name."
-msgstr "Klik for at ændre kortnavn."
+msgstr "Klik for at ændre borgnavn."
 
 msgid "Enter Castle name"
 msgstr "Skriv borgnavn"
 
-#, fuzzy
 msgid "Reset the Castle name."
-msgstr "Mist borgen '%{name}'."
+msgstr "Nulstil borgnavn."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillad borgbyggeri i denne by."
@@ -4088,24 +4094,20 @@ msgstr "Begræns bygningskonstruktion"
 msgid "Use default defenders army."
 msgstr "Brug standard forsvarshær."
 
-#, fuzzy
 msgid "Reset the army."
-msgstr "Bortvis denne hær."
+msgstr "Nulstil hæren."
 
-#, fuzzy
 msgid "Set custom Castle Army."
-msgstr "Borghær"
+msgstr "Indstil brugerdefineret borghær"
 
 msgid "Set spells to appear in the Mage Guild."
-msgstr ""
+msgstr "Indstil magi til at vises i Magerlauget."
 
-#, fuzzy
 msgid "Set Spells"
-msgstr "Vælg magi:"
+msgstr "Vælg magi"
 
-#, fuzzy
 msgid "Castle Settings"
-msgstr "Spilindstillinger"
+msgstr "Borg-indstillinger"
 
 msgid "Message Text:"
 msgstr "Tekstbesked:"
@@ -4247,9 +4249,8 @@ msgstr ""
 "udløses begivenheden hver gang en af de angivne spillere krydser "
 "begivenhedsfirkanten."
 
-#, fuzzy
 msgid "Click to make selection."
-msgstr "Klik for at vælge denne farve."
+msgstr "Klik for at foretage et valg."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} kan ikke placeres på vand."
@@ -4270,9 +4271,8 @@ msgstr "Objekter kan ikke placeres udenfor kortet."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Handlingsobjekter skal placeres på rene felter."
 
-#, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
-msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
+msgstr "Der kan maksimalt placeres %{count} %{objects} på kortet."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4385,7 +4385,7 @@ msgid "The total number of obelisks is %{count}."
 msgstr "Det samlede antal obelisker er %{count}."
 
 msgid "There are no players on the map, so no one can own this object."
-msgstr ""
+msgstr "Der er ingen spillere på kortet, så ingen kan eje dette objekt."
 
 msgid "Roads"
 msgstr "Veje"
@@ -4393,11 +4393,12 @@ msgstr "Veje"
 msgid "Streams"
 msgstr "Å-tilstand"
 
-#, fuzzy
 msgid ""
 "A maximum of %{count} heroes including jailed heroes can be placed on the "
 "map."
-msgstr "Der kan maksimalt placeres %{count} helte af samme farve på kortet."
+msgstr ""
+"Der kan maksimalt placeres %{count} helte, inklusive fængslede helte, på "
+"kortet."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4694,9 +4695,8 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
-#, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
-msgstr "Vend tilbage til spillets hovedmenu."
+msgstr "Afslut Editoren og vend tilbage til hovedmenuen."
 
 msgid "From Scratch"
 msgstr "Fra bunden"
@@ -4711,11 +4711,10 @@ msgid "Random"
 msgstr "Tilfældigt"
 
 msgid "Back"
-msgstr ""
+msgstr "Tilbage"
 
-#, fuzzy
 msgid "Return to the Editor's main menu options."
-msgstr "Vend tilbage til spillets hovedmenu."
+msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
@@ -4744,8 +4743,7 @@ msgstr "[%{pos}]: %{name}, %{race} borg"
 msgid "None."
 msgstr "Ingen."
 
-#, fuzzy
-msgid "One side defeats the other."
+msgid "One side defeats another."
 msgstr "En side besejrer den anden."
 
 msgid "Accumulate gold."
@@ -4844,7 +4842,7 @@ msgid "LANGUAGE"
 msgstr "SPROG"
 
 msgid "ABOUT"
-msgstr ""
+msgstr "OM"
 
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
@@ -4869,7 +4867,7 @@ msgid "Change Map Description"
 msgstr "Skift kortbeskrivelse"
 
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 msgid "Click to edit custom rumors."
 msgstr "Klik for at redigere tilpassede rygter."
@@ -4890,6 +4888,8 @@ msgid ""
 "Click to edit notes from the map creator. These notes are optional and do "
 "not appear during gameplay."
 msgstr ""
+"Klik for at redigere noter fra kort-skaberen. Disse noter er valgfri og "
+"vises ikke under spillet."
 
 msgid "Click to change your map name."
 msgstr "Klik for at ændre kortnavn."
@@ -4921,11 +4921,12 @@ msgstr ""
 "eller stærkere fjender, færre ressourcer eller andre særlige forhold, der "
 "gør tingene sværere for den menneskelige spiller."
 
-#, fuzzy
 msgid ""
 "editor|%{object}\n"
 "(%{color} player)"
-msgstr "%{color} spiller"
+msgstr ""
+"editor|%{object}\n"
+"(%{color} player)"
 
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
@@ -4997,11 +4998,10 @@ msgid "Click to save the current map."
 msgstr "Klik for at gemme det aktuelle kort."
 
 msgid "Click to show only level %{level} spells."
-msgstr ""
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
 
-#, fuzzy
 msgid "Spells level"
-msgstr "Trolddomsrulle"
+msgstr "Magi-niveau"
 
 msgid "Riddle:"
 msgstr "Gåde:"
@@ -5175,9 +5175,8 @@ msgstr "Dage brugt"
 msgid "The number of days spent on this campaign."
 msgstr "Antal dage brugt på dette felttog."
 
-#, fuzzy
 msgid "Scenario Title"
-msgstr "Kort"
+msgstr "Scenarie-titel"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination og kerneudvikling"
@@ -5629,9 +5628,8 @@ msgstr "Skift tur i kamp"
 msgid "hotkey|cast battle spell"
 msgstr "Kast kampmagi"
 
-#, fuzzy
 msgid "hotkey|toggle display of battle turn order"
-msgstr "Autokamp (til/fra)"
+msgstr "skift visning af kampens turorden"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bosted niveau 1"
@@ -6001,13 +5999,12 @@ msgstr ""
 "Fjenden har erobret %{name}!\n"
 "De har sejret!"
 
-#, fuzzy
 msgid ""
 "The enemy has found the %{name}.\n"
 "Your quest is a failure."
 msgstr ""
-"Du har fundet %{name}!\n"
-"Din opgave er fuldført!"
+"Fjenden har fundet %{name}.\n"
+"Din mission er mislykket."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -6198,13 +6195,11 @@ msgstr ""
 "Tilvækst: +%{count}\n"
 "%{monster}"
 
-#, fuzzy
 msgid "All populations are halved."
-msgstr "Hele befolkningen er halveret."
+msgstr "Alle bosteders befolkning halveres."
 
-#, fuzzy
 msgid "All dwellings increase population."
-msgstr "Alle bosteder får øget deres befolkning."
+msgstr "Alle bosteders befolkning forøges."
 
 msgid "Beware!"
 msgstr "Pas på!"
@@ -6618,9 +6613,8 @@ msgstr "Slovensk"
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
 
-#, fuzzy
 msgid "Greek"
-msgstr "Grøn"
+msgstr "Græsk"
 
 msgid "Slow"
 msgstr "Langsom"
@@ -6854,6 +6848,8 @@ msgid ""
 "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
 "of lost treasure."
 msgstr ""
+"Dit skib støder ind i en tønde, der driver rundt på havet. Inde i tønden "
+"finder du et lager af tabte skatte."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -7415,13 +7411,12 @@ msgstr ""
 "Diskretion er den bedste del af tapperhed, og du beslutter dig for at undgå "
 "denne kamp for i dag."
 
-#, fuzzy
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it, "
 "only to find it empty."
 msgstr ""
-"Efter at have brugt timevis på at prøve at fiske kisten op af havet, åbner "
-"du den og finder %{gold} guldstykker."
+"Efter at have brugt timer på at forsøge at fiske kisten op af havet, åbner "
+"du den, kun for at finde den tom."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8208,12 +8203,17 @@ msgid ""
 "distance from the intimidating cat until you have regained your courage in "
 "battle."
 msgstr ""
+"Smerten fra dit tidligere møde sidder stadig i dig, og du holder afstand til "
+"den truende kat, indtil du har genvundet dit kampmod."
 
 msgid ""
 "You come upon a great cat, purring as it rubs against your leg. Charmed, you "
 "reach down, but it bites you and flees. At least the laughter at your "
 "misfortune lifts your troops' spirits."
 msgstr ""
+"Du møder en stor kat, der spinder, mens den gnider sig op ad dit ben. "
+"Charmeret bøjer du dig ned, men den bider dig og flygter. I det mindste "
+"løfter latteren over din uheldige situation dine troppers humør."
 
 msgid "No spell book is present."
 msgstr "Der er ingen magibog at finde."
@@ -8338,7 +8338,6 @@ msgstr "Tilfældig helt (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Tilfældig helt af klassen %{race} (Level %{level})"
 
-#, fuzzy
 msgid "Hero class:"
 msgstr "Helteklasse:"
 
@@ -8372,9 +8371,8 @@ msgstr "Indstil patruljeradius i feltantal"
 msgid "Enter hero's name"
 msgstr "Indtast heltens navn"
 
-#, fuzzy
 msgid "Click to change class."
-msgstr "Klik for at skifte race."
+msgstr "Klik for at skifte klasse."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -9616,13 +9614,11 @@ msgstr "Sumpsø"
 msgid "Frozen Lake"
 msgstr "Frossen sø"
 
-#, fuzzy
 msgid "Black Cat"
-msgstr "Den Sorte Perle"
+msgstr "Sort Kat"
 
-#, fuzzy
 msgid "Barrel"
-msgstr "Barriere"
+msgstr "Tønde"
 
 msgid "randomRace|level 1 creatures"
 msgstr "niveau 1 væsener"
@@ -10135,9 +10131,8 @@ msgstr "2-feltsangreb"
 msgid "Flyer"
 msgstr "Kan flyve"
 
-#, fuzzy
 msgid "Unlimited retaliation"
-msgstr "Fjender kan ikke slå igen"
+msgstr "Slår altid igen"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriber alle fjender omkring sig"
