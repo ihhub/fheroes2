@@ -40,7 +40,7 @@
 
 namespace
 {
-    const VideoSequence emptyPlayback;
+    const Campaign::VideoSequence emptyPlayback;
 
     std::vector<Campaign::CampaignAwardData> getRolandCampaignAwardData( const int scenarioID )
     {
