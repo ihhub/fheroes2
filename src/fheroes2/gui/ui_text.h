@@ -319,6 +319,8 @@ namespace fheroes2
             return _cursorArea;
         }
 
+        size_t getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool moveUp );
+
     private:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorAreaInText();
@@ -383,6 +385,7 @@ namespace fheroes2
         const Sprite & getSprite( const uint8_t character ) const;
 
         int32_t getWidth( const uint8_t character ) const;
+        int32_t getWidth( const std::string_view text ) const;
 
         int32_t getSpaceCharWidth() const
         {
