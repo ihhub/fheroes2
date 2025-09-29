@@ -118,6 +118,18 @@ namespace Video
         fheroes2::Rect videoRoi;
 
         for ( const auto & info : infos ) {
+            if ( info.fileName.empty() ) {
+                // What do you expect from an empty entry?
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "An empty file entry has been provided." )
+                return false;
+            }
+
+            if ( info.control == VideoControl::PLAY_NONE ) {
+                // This entry has no action.
+                DEBUG_LOG( DBG_GAME, DBG_INFO, info.fileName << " entry has no action." )
+                return false;
+            }
+            
             std::string videoPath;
             if ( !getVideoFilePath( info.fileName, videoPath ) ) {
                 // File doesn't exist, so no need to even try to load it.
