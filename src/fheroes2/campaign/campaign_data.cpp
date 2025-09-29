@@ -28,7 +28,6 @@
 
 #include "artifact.h"
 #include "color.h"
-#include "game_video.h"
 #include "game_video_type.h"
 #include "heroes.h"
 #include "maps_fileinfo.h"
