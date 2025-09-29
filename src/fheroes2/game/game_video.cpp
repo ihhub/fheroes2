@@ -129,7 +129,7 @@ namespace Video
                 DEBUG_LOG( DBG_GAME, DBG_INFO, info.fileName << " entry has no action." )
                 return false;
             }
-            
+
             std::string videoPath;
             if ( !getVideoFilePath( info.fileName, videoPath ) ) {
                 // File doesn't exist, so no need to even try to load it.
