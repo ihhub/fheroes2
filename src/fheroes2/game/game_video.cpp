@@ -111,11 +111,10 @@ namespace Video
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
-        // Minimal delay for playback in millisecond.
-        // The framerate of each video is reasonably low so as a start point let's put 1 FPS as minimum.
+        // Minimal delay for playback in milliseconds.
+        // The framerate of each video is reasonably low so let's put 1 FPS as a start point.
         int32_t minDelayInMs = 1000;
 
-        fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Rect videoRoi;
 
         for ( const auto & info : infos ) {
@@ -148,6 +147,7 @@ namespace Video
         }
 
         // Center the video in the middle of the application.
+        fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Point videoOffset{ ( display.width() - videoRoi.width ) / 2, ( display.height() - videoRoi.height ) / 2 };
         videoRoi = { videoOffset.x + videoRoi.x, videoOffset.y + videoRoi.y, videoRoi.width, videoRoi.height };
 
@@ -158,7 +158,7 @@ namespace Video
 
         // TODO: if we need to play multiple videos with different framerate then we are going to slow down some of them
         //       due to invalid refresh time which is now set to the lowest value.
-        //       We might need to use GCD (greatest common divisor) for this matter.
+        //       We need to use a set of custom delays.
 
         // Hide mouse cursor.
         const CursorRestorer cursorRestorer( false );
@@ -223,7 +223,7 @@ namespace Video
                         if ( video->getCurrentFrameId() + 1 == video->frameCount() ) {
                             // This is the last frame in the video sequence.
                             if ( state.control & VideoControl::PLAY_LOOP ) {
-                                // Since the video is in a loop we need to restart its video and audio.
+                                // Since the video is in a loop, we need to restart its video and audio.
                                 video->resetFrame();
 
                                 if ( Audio::isValid() && ( state.control & VideoControl::PLAY_AUDIO ) ) {
