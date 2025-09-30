@@ -220,7 +220,11 @@ namespace Interface
 
     fheroes2::Rect EditorPanel::getBrushArea() const
     {
-        // If not selected monsters, frame don't draw.
+        // Roads and streams are placed using only 1x1 brush.
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
+            return { 0, 0, 1, 1 };
+        }
+
         if ( _selectedInstrument == Instrument::MONSTERS ) {
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
@@ -228,11 +232,6 @@ namespace Interface
             }
 
             return {};
-        }
-
-        // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
-            return { 0, 0, 1, 1 };
         }
 
         if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS || _selectedInstrument == Instrument::ADVENTURE_OBJECTS
