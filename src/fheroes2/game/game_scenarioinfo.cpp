@@ -356,7 +356,7 @@ namespace
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
                 if ( lists.empty() ) {
-                    // This can happen is all maps have been deleted.
+                    // This can happen if all maps have been deleted.
                     result = fheroes2::GameMode::MAIN_MENU;
                     break;
                 }
