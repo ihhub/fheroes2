@@ -44,6 +44,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "screen.h"
@@ -53,7 +54,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -156,11 +156,6 @@ namespace
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
 
-        int getCurrentId() const
-        {
-            return _currentId;
-        }
-
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
@@ -169,15 +164,6 @@ namespace
         bool isDoubleClicked() const
         {
             return _isDoubleClicked;
-        }
-
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
         }
 
     private:
@@ -580,7 +566,10 @@ namespace
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().filename );
+                    if ( !System::Unlink( listbox.GetCurrent().filename ) ) {
+                        ERROR_LOG( "Unable to delete file " << listbox.GetCurrent().filename )
+                    }
+
                     listbox.RemoveSelected();
 
                     if ( lists.empty() ) {

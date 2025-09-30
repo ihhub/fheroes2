@@ -170,7 +170,7 @@ namespace
         return { textX, y, text.width(), text.height() };
     }
 
-    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists, const int humanPlayerCount )
+    fheroes2::GameMode ChooseNewMap( MapsFileInfoList & lists, const int humanPlayerCount )
     {
         assert( !lists.empty() );
 
@@ -355,6 +355,11 @@ namespace
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
+                if ( lists.empty() ) {
+                    // This can happen if all maps have been deleted.
+                    result = fheroes2::GameMode::MAIN_MENU;
+                    break;
+                }
 
                 // The previous dialog might still have a pressed button event. We have to clean the state.
                 le.reset();
@@ -482,7 +487,7 @@ namespace
             }
 
             fheroes2::drawMainMenuScreen();
-            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
             return fheroes2::GameMode::MAIN_MENU;
         }
 
@@ -492,7 +497,7 @@ namespace
         }
 
         fheroes2::drawMainMenuScreen();
-        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
@@ -503,7 +508,7 @@ fheroes2::GameMode Game::SelectScenario( const uint8_t humanPlayerCount )
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
+    MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
