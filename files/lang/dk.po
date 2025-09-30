@@ -38,21 +38,6 @@ msgstr "XL"
 msgid "ALL"
 msgstr "ALT"
 
-msgid "1"
-msgstr "1"
-
-msgid "2"
-msgstr "2"
-
-msgid "3"
-msgstr "3"
-
-msgid "4"
-msgstr "4"
-
-msgid "5"
-msgstr "5"
-
 msgid "EXIT"
 msgstr "UD"
 
