@@ -442,15 +442,15 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
     _isDoubleClicked = true;
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor )
+const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const bool isForEditor )
 {
-    if ( allMaps.empty() ) {
+    if ( all.empty() ) {
         outputNoMapInTextSupportMode();
         return nullptr;
     }
 
     if ( isForEditor ) {
-        for ( const auto & mapInfo : allMaps ) {
+        for ( const auto & mapInfo : all ) {
             // Only Resurrection maps must be accepted by the Editor.
             if ( mapInfo.version != GameVersion::RESURRECTION ) {
                 ERROR_LOG( "The fheroes2 engine is corrupted." )
@@ -469,7 +469,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
     MapsFileInfoList medium;
     MapsFileInfoList large;
     MapsFileInfoList xlarge;
-    MapsFileInfoList all( allMaps );
 
     small.reserve( all.size() );
     medium.reserve( all.size() );
@@ -617,8 +616,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
                 return nullptr;
             }
 
-            auto it = std::find( allMaps.begin(), allMaps.end(), scenarioList.GetCurrent() );
-            if ( it == allMaps.end() ) {
+            auto it = std::find( all.begin(), all.end(), scenarioList.GetCurrent() );
+            if ( it == all.end() ) {
                 // This is invalid logic. You are trying to load a map which is not in the list.
                 assert( 0 );
                 return nullptr;
