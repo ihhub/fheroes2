@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3774,6 +3774,10 @@ msgstr "Складність мапи:"
 msgid "N"
 msgstr "Н"
 
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ви впевнені, що хочете видалити файл:"
+
 msgid "No maps exist at that size."
 msgstr "Немає мап такого розміру."
 
@@ -6096,6 +6100,10 @@ msgstr "Тицьніть, щоб прийняти ці налаштування 
 
 msgid "Click to return to the main menu."
 msgstr "Тицьніть для повернення до головного меню."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Мапа пошкоджена."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи оголошують місяць %{name}."

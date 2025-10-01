@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3591,6 +3591,10 @@ msgstr ""
 msgid "N"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ar jūs tikrai norite ištrinti failą:"
+
 msgid "No maps exist at that size."
 msgstr ""
 
@@ -5871,6 +5875,9 @@ msgid "Click to accept these settings and start a new game."
 msgstr ""
 
 msgid "Click to return to the main menu."
+msgstr ""
+
+msgid "The map is corrupted or doesn't exist."
 msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
