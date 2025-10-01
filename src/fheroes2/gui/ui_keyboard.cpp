@@ -915,6 +915,102 @@ namespace
         }
     }
 
+    // Show a right click popup for any keyboard button.
+    // Returns true if a popup was shown.
+    static bool showRightClickHelpForAnyKey( const std::vector<std::vector<KeyboardButton>> & buttons, const std::vector<std::string> & buttonLetters,
+                                             const std::vector<std::string> & returnLetters, const LayoutType layoutType, const bool isExtraLanguageSupported,
+                                             LocalEvent & le, const fheroes2::ButtonSprite * okayBtn )
+    {
+
+        // Handle OKAY button
+        if ( okayBtn && le.isMouseRightButtonPressedInArea( okayBtn->area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the entered text and close the Virtual Keyboard." ), Dialog::ZERO );
+            return true;
+        }
+
+        const size_t letterRows = buttonLetters.size();
+
+        for ( size_t row = 0; row < buttons.size(); ++row ) {
+            for ( size_t col = 0; col < buttons[row].size(); ++col ) {
+                const auto & b = buttons[row][col];
+                if ( !b.button.isVisible() ) {
+                    continue;
+                }
+
+                if ( !le.isMouseRightButtonPressedInArea( b.button.area() ) ) {
+                    continue;
+                }
+
+                // Regular character keys (letters, digits, punctuation)
+                if ( row < letterRows && row < returnLetters.size() && col < returnLetters[row].size() ) {
+                    const char outCh = returnLetters[row][col];
+                    std::string title;
+                    title += '\'';
+                    title += outCh;
+                    title += '\'';
+
+                    fheroes2::showStandardTextMessage( title.c_str(), _( "Insert this character." ), Dialog::ZERO );
+                    return true;
+                }
+
+                // Special row
+                const size_t idx = col;
+
+                switch ( layoutType ) {
+                case LayoutType::LowerCase:
+                case LayoutType::UpperCase:
+                    switch ( idx ) {
+                    case 0: // case toggle
+                        fheroes2::showStandardTextMessage( _( "Shift" ), _( "Switch between uppercase and lowercase letters." ), Dialog::ZERO );
+                        return true;
+                    case 1: // "123"
+                        fheroes2::showStandardTextMessage( _( "Numbers & Symbols" ), _( "Switch to the numbers/symbols layout." ), Dialog::ZERO );
+                        return true;
+                    case 2: // "SPACE"
+                        fheroes2::showStandardTextMessage( _( "Space" ), _( "Insert a blank space." ), Dialog::ZERO );
+                        return true;
+                    case 3: // language (visible only when supported)
+                        if ( isExtraLanguageSupported ) {
+                            fheroes2::showStandardTextMessage( _( "Language" ), _( "Switch input language." ), Dialog::ZERO );
+                            return true;
+                        }
+                        break;
+                    case 4: // backspace
+                        fheroes2::showStandardTextMessage( _( "Backspace" ), _( "Delete the character to the left of the cursor." ), Dialog::ZERO );
+                        return true;
+                    default:
+                        break;
+                    }
+                    break;
+
+                case LayoutType::AlphaNumeric:
+                    switch ( idx ) {
+                    // idx 0 is hidden in this layout
+                    case 1: // "ABC"
+                        fheroes2::showStandardTextMessage( _( "Letters" ), _( "Switch to the alphabetic layout." ), Dialog::ZERO );
+                        return true;
+                    case 2: // "SPACE"
+                        fheroes2::showStandardTextMessage( _( "Space" ), _( "Insert a blank space." ), Dialog::ZERO );
+                        return true;
+                    // idx 3 (language) is hidden in this layout
+                    case 4: // backspace
+                        fheroes2::showStandardTextMessage( _( "Backspace" ), _( "Delete the character to the left of the cursor." ), Dialog::ZERO );
+                        return true;
+                    default:
+                        break;
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
     DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, const bool isExtraLanguageSupported,
                                               KeyboardRenderer & renderer )
     {
@@ -981,6 +1077,12 @@ namespace
 
             if ( le.MouseClickLeft( textRoi ) ) {
                 renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
+            }
+
+            // right click help for any key on the virtual keyboard.
+            if ( showRightClickHelpForAnyKey( buttons, buttonLetters, returnLetters, layoutType, isExtraLanguageSupported, le, &okayButton ) )
+            {
+                continue; // avoid multiple popups in one frame
             }
 
             // Text input cursor blink.
