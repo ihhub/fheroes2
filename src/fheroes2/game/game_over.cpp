@@ -295,7 +295,6 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
     // This should be populated only for strings that are set for objects within the Editor.
     std::optional<std::pair<std::string, fheroes2::LocalizedString>> translationReplacement;
 
-
     const Settings & conf = Settings::Get();
     const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
     std::string msg;

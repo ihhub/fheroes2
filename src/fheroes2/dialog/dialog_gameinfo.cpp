@@ -142,8 +142,8 @@ void Dialog::GameInfo()
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
-    std::unique_ptr<fheroes2::TextBase> conditionsText = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins() ),
-                                                                                     fheroes2::FontType::smallWhite() );
+    std::unique_ptr<fheroes2::TextBase> conditionsText
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins() ), fheroes2::FontType::smallWhite() );
     text.setUniformVerticalAlignment( false );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
