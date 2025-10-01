@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -44,6 +44,9 @@ msgstr ""
 msgid "smallerButton|EXIT"
 msgstr ""
 
+msgid "OKAY"
+msgstr ""
+
 msgid "HEROES"
 msgstr ""
 
@@ -53,9 +56,6 @@ msgid ""
 msgstr ""
 
 msgid "CANCEL"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -152,12 +152,22 @@ msgid "QUIT"
 msgstr ""
 
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
 msgstr ""
 
 msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
 "NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
 "MAP"
 msgstr ""
 
@@ -219,14 +229,6 @@ msgstr ""
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
-msgstr ""
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
 msgstr ""
 
 msgid "editorMainMenu|BACK"
@@ -719,6 +721,16 @@ msgstr ""
 msgid "Select spell target"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
 msgid "View Ballista info"
 msgstr ""
 
@@ -779,16 +791,6 @@ msgstr ""
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
-
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr ""
-"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
-
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr ""
-"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
 
 msgid ""
 "AUTO\n"
@@ -3275,6 +3277,18 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Rodyti kitą miestą"
+
 msgid "Click to apply the entered text."
 msgstr ""
 
@@ -3374,6 +3388,10 @@ msgstr "Pasirinkti %{name}"
 msgid "Select Hero:"
 msgstr "Pasirinkti %{name}"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Pasirinkti %{name}"
+
 msgid "race|Random"
 msgstr ""
 
@@ -3449,6 +3467,10 @@ msgstr "Ištekliai"
 
 msgid "%{mineName} appearance:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Rodyti kitą miestą"
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
@@ -3568,6 +3590,10 @@ msgstr ""
 
 msgid "N"
 msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ar jūs tikrai norite ištrinti failą:"
 
 msgid "No maps exist at that size."
 msgstr ""
@@ -3756,6 +3782,30 @@ msgstr "Atsitiktinė pilis"
 msgid "Random Town Name"
 msgstr "Atsitiktinis miestas"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Rodyti kitą miestą"
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Atsitiktinis miestas"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Dangaus pilis"
@@ -3778,12 +3828,17 @@ msgstr "Pilis"
 msgid "Town Army"
 msgstr "Miestelis"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Išeiti iš pilies"
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Prarasti pilį '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -3800,8 +3855,23 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
 msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Pilis"
+
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spells"
+msgstr "Burtų galia"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Išeiti iš pilies"
 
 msgid "Message Text:"
 msgstr ""
@@ -3943,6 +4013,10 @@ msgid ""
 "crosses the event tile."
 msgstr ""
 
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Rodyti kitą miestą"
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -3958,6 +4032,9 @@ msgid "Objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
+msgstr ""
+
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
 #, fuzzy
@@ -3986,11 +4063,6 @@ msgid ""
 msgstr ""
 "Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
 "prarastas, jei neįrašėte)"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
 
 msgid "Main Menu"
 msgstr ""
@@ -4087,6 +4159,11 @@ msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -4427,7 +4504,7 @@ msgstr "Žiūrėti %{name}"
 msgid "None."
 msgstr ""
 
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr ""
 
 #, fuzzy
@@ -4560,10 +4637,6 @@ msgid "About"
 msgstr ""
 
 #, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Rodyti kitą miestą"
-
-#, fuzzy
 msgid "Click to edit custom rumors."
 msgstr "Rodyti kitą miestą"
 
@@ -4619,6 +4692,11 @@ msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
+msgstr ""
+
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
 msgstr ""
 
 msgid "editor|%{count} %{resource}"
@@ -4686,6 +4764,13 @@ msgstr "Įkelti žaidimą"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Rodyti kitą miestą"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Burtų galia"
 
 msgid "Riddle:"
 msgstr ""
@@ -4845,6 +4930,9 @@ msgid "Days spent"
 msgstr ""
 
 msgid "The number of days spent on this campaign."
+msgstr ""
+
+msgid "Scenario Title"
 msgstr ""
 
 msgid "Project Coordination and Core Development"
@@ -5314,6 +5402,10 @@ msgstr ""
 
 msgid "hotkey|cast battle spell"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Rodyti kitą miestą"
 
 msgid "hotkey|dwelling level 1"
 msgstr ""
@@ -5785,10 +5877,19 @@ msgstr ""
 msgid "Click to return to the main menu."
 msgstr ""
 
+msgid "The map is corrupted or doesn't exist."
+msgstr ""
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
+msgstr ""
+
+msgid "New Week!"
 msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -5807,16 +5908,10 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr ""
 
-msgid " All populations are halved."
+msgid "All populations are halved."
 msgstr ""
 
-msgid " All dwellings increase population."
-msgstr ""
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
+msgid "All dwellings increase population."
 msgstr ""
 
 msgid "Beware!"
@@ -6223,12 +6318,6 @@ msgstr ""
 msgid ", FPS: "
 msgstr ""
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
-msgstr ""
-
 msgid "Ector"
 msgstr ""
 
@@ -6253,6 +6342,9 @@ msgstr ""
 msgid "Fineous"
 msgstr ""
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr ""
 
@@ -6260,9 +6352,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6352,6 +6441,9 @@ msgstr ""
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6370,13 +6462,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -6840,6 +6935,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -7518,7 +7618,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Greitis"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7553,7 +7653,7 @@ msgid "Enter hero's name"
 msgstr ""
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Rodyti kitą miestą"
 
 msgid ""
@@ -9300,7 +9400,7 @@ msgstr ""
 msgid "Flyer"
 msgstr ""
 
-msgid "Always retaliates"
+msgid "Unlimited retaliation"
 msgstr ""
 
 msgid "Attacks all adjacent enemies"

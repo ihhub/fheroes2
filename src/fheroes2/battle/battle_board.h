@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <random>
 #include <string>
 #include <vector>
 
@@ -37,17 +36,31 @@ namespace Maps
     class Tile;
 }
 
+namespace Rand
+{
+    class PCG32;
+}
+
 namespace Battle
 {
     class Unit;
 
     inline CellDirection & operator++( CellDirection & d )
     {
-        return d = ( CENTER == d ? TOP_LEFT : CellDirection( d << 1 ) );
+        return d = ( CellDirection::CENTER == d ? CellDirection::TOP_LEFT : d << 1 );
     }
     inline CellDirection & operator--( CellDirection & d )
     {
-        return d = ( TOP_LEFT == d ? CENTER : CellDirection( d >> 1 ) );
+        return d = ( CellDirection::TOP_LEFT == d ? CellDirection::CENTER : d >> 1 );
+    }
+
+    inline AttackDirection & operator++( AttackDirection & d )
+    {
+        return d = ( AttackDirection::CENTER == d ? AttackDirection::TOP_LEFT : d << 1 );
+    }
+    inline AttackDirection & operator--( AttackDirection & d )
+    {
+        return d = ( AttackDirection::TOP_LEFT == d ? AttackDirection::CENTER : d >> 1 );
     }
 
     using Indexes = std::vector<int32_t>;
@@ -74,17 +87,17 @@ namespace Battle
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
 
-        void SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen );
+        void SetCobjObjects( const Maps::Tile & tile, Rand::PCG32 & gen );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();
 
         static Cell * GetCell( const int32_t position );
-        static Cell * GetCell( const int32_t position, const int dir );
+        static Cell * GetCell( const int32_t position, const CellDirection dir );
 
         static bool isNearIndexes( const int32_t index1, const int32_t index2 )
         {
-            return ( index1 != index2 ) && ( GetDirection( index1, index2 ) != UNKNOWN );
+            return ( index1 != index2 ) && ( GetDirection( index1, index2 ) != CellDirection::UNKNOWN );
         }
 
         static bool isValidIndex( const int32_t index )
@@ -98,8 +111,8 @@ namespace Battle
         static bool isMoatIndex( const int32_t index, const Unit & unit );
         static bool isOutOfWallsIndex( const int32_t index );
 
-        static int GetReflectDirection( const int dir );
-        static int GetDirection( const int32_t index1, const int32_t index2 );
+        static CellDirection GetReflectDirection( const CellDirection dir );
+        static Battle::CellDirection GetDirection( const int32_t index1, const int32_t index2 );
 
         // Returns the distance to the cell with the given index from the given edge of the battlefield along the X axis. The
         // distance from the edges of the battlefield to the cells closest to them is counted as one.
@@ -117,8 +130,8 @@ namespace Battle
         // If either the position or the index is not valid, then returns 0.
         static uint32_t GetDistance( const Position & pos, const int32_t index );
 
-        static bool isValidDirection( const int32_t index, const int dir );
-        static int32_t GetIndexDirection( const int32_t index, const int dir );
+        static bool isValidDirection( const int32_t index, const CellDirection dir );
+        static int32_t GetIndexDirection( const int32_t index, const CellDirection dir );
 
         static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );
         static Indexes GetDistanceIndexes( const Unit & unit, const uint32_t radius );

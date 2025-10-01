@@ -39,6 +39,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -70,7 +71,9 @@ namespace
             }
 
             offset.x += ( fheroes2::Display::DEFAULT_WIDTH - static_cast<int32_t>( _spellsPerRow ) * spellItemWidth ) / 2;
-            offset.y += ( fheroes2::Display::DEFAULT_HEIGHT - 50 - spellRowOffsetY * static_cast<int32_t>( _spells.size() / _spellsPerRow ) ) / 2;
+
+            const int32_t rowCount{ static_cast<int32_t>( ( _spells.size() + _spellsPerRow - 1 ) / _spellsPerRow ) };
+            offset.y += ( fheroes2::Display::DEFAULT_HEIGHT - 50 - spellRowOffsetY * rowCount ) / 2;
 
             // Calculate all areas where we are going to render spells.
             _spellRoi.reserve( _spells.size() );
@@ -166,7 +169,8 @@ namespace
 
 namespace Editor
 {
-    bool openSpellSelectionWindow( std::string title, const int spellLevel, std::vector<int32_t> & selectedSpells )
+    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled,
+                                   const int32_t minimumEnabledSpells, const bool pickDisabledSpells )
     {
         if ( spellLevel < 1 || spellLevel > 5 ) {
             // What are you trying to achieve?!
@@ -184,7 +188,7 @@ namespace Editor
         bool isAnySpellEnabled = false;
 
         for ( const int spell : availableSpells ) {
-            const bool isSelected = ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() );
+            const bool isSelected = ( ( std::find( selectedSpells.begin(), selectedSpells.end(), spell ) != selectedSpells.end() ) != pickDisabledSpells );
 
             spells.emplace_back( spell, isSelected );
 
@@ -222,8 +226,36 @@ namespace Editor
         // Buttons.
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
-
         background.renderOkayCancelButtons( buttonOk, buttonCancel );
+
+        fheroes2::ButtonGroup levelSelection;
+
+        if ( isMultiLevelSelectionEnabled ) {
+            const int32_t levelSelectionStepX{ 62 };
+            const int32_t levelOffsetY{ 410 };
+            const int32_t widthInBetweenButtons{ buttonCancel.area().x - buttonOk.area().x - buttonOk.area().width };
+            const int32_t spellSelectionButtonOffsetX{ buttonOk.area().x + buttonOk.area().width + ( widthInBetweenButtons - levelSelectionStepX * 5 ) / 2 };
+
+            levelSelection.createButton( spellSelectionButtonOffsetX, activeArea.y + levelOffsetY, isEvilInterface ? ICN::BUTTON_1_EVIL : ICN::BUTTON_1_GOOD, 0, 1, 1 );
+            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX, activeArea.y + levelOffsetY,
+                                         isEvilInterface ? ICN::BUTTON_2_EVIL : ICN::BUTTON_2_GOOD, 0, 1, 2 );
+            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX * 2, activeArea.y + levelOffsetY,
+                                         isEvilInterface ? ICN::BUTTON_3_EVIL : ICN::BUTTON_3_GOOD, 0, 1, 3 );
+            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX * 3, activeArea.y + levelOffsetY,
+                                         isEvilInterface ? ICN::BUTTON_4_EVIL : ICN::BUTTON_4_GOOD, 0, 1, 4 );
+            levelSelection.createButton( spellSelectionButtonOffsetX + levelSelectionStepX * 4, activeArea.y + levelOffsetY,
+                                         isEvilInterface ? ICN::BUTTON_5_EVIL : ICN::BUTTON_5_GOOD, 0, 1, 5 );
+
+            levelSelection.drawShadows( display );
+
+            for ( int32_t i = 0; i < 5; ++i ) {
+                if ( i + 1 == spellLevel ) {
+                    levelSelection.button( i ).press();
+                }
+
+                levelSelection.button( i ).draw( display );
+            }
+        }
 
         fheroes2::ImageRestorer restorer( display, activeArea.x, activeArea.y, activeArea.width, activeArea.height );
 
@@ -235,18 +267,46 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            if ( buttonOk.isEnabled() ) {
-                buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
-            }
-
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
 
             if ( buttonOk.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) ) {
                 break;
+            }
+
+            if ( buttonOk.isEnabled() ) {
+                buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            }
+
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+
+            if ( isMultiLevelSelectionEnabled ) {
+                bool hasSpellLevelChanged = false;
+                for ( int32_t i = 0; i < 5; ++i ) {
+                    if ( le.isMouseRightButtonPressedInArea( levelSelection.button( i ).area() ) ) {
+                        std::string str = _( "Click to show only level %{level} spells." );
+                        StringReplace( str, "%{level}", i + 1 );
+                        fheroes2::showStandardTextMessage( _( "Spells level" ), std::move( str ), Dialog::ZERO );
+                        break;
+                    }
+
+                    if ( i + 1 == spellLevel || !levelSelection.button( i ).isEnabled() ) {
+                        continue;
+                    }
+
+                    if ( le.MouseClickLeft( levelSelection.button( i ).area() ) ) {
+                        spellLevel = i + 1;
+                        hasSpellLevelChanged = true;
+                        break;
+                    }
+
+                    levelSelection.button( i ).drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( levelSelection.button( i ).area() ) );
+                }
+
+                if ( hasSpellLevelChanged ) {
+                    break;
+                }
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
@@ -261,22 +321,41 @@ namespace Editor
 
                 spellContainer.draw( display );
 
-                // Check if all spells are being disabled. If they are disable the OKAY button.
-                bool areAllSpellsDisabled = true;
+                // Check if the count of non-disabled is mote then the minimum limit. If so then disable the OKAY button.
+                bool disableChangesConfirmation = true;
+                int32_t selectedSpellsCount = 0;
+
                 for ( const auto & [spell, isSelected] : spells ) {
                     if ( isSelected ) {
-                        areAllSpellsDisabled = false;
-                        break;
+                        ++selectedSpellsCount;
+                        if ( selectedSpellsCount >= minimumEnabledSpells ) {
+                            disableChangesConfirmation = false;
+                            break;
+                        }
                     }
                 }
 
-                if ( areAllSpellsDisabled ) {
+                if ( disableChangesConfirmation ) {
                     buttonOk.disable();
-                    buttonOk.draw();
                 }
                 else {
                     buttonOk.enable();
-                    buttonOk.draw();
+                }
+                buttonOk.draw( display );
+
+                if ( isMultiLevelSelectionEnabled ) {
+                    for ( int32_t i = 0; i < 5; ++i ) {
+                        if ( i + 1 == spellLevel ) {
+                            continue;
+                        }
+                        if ( disableChangesConfirmation ) {
+                            levelSelection.button( i ).disable();
+                        }
+                        else {
+                            levelSelection.button( i ).enable();
+                        }
+                        levelSelection.button( i ).draw( display );
+                    }
                 }
 
                 display.render( activeArea );
@@ -286,7 +365,7 @@ namespace Editor
         selectedSpells.clear();
 
         for ( const auto & [spell, isSelected] : spells ) {
-            if ( isSelected ) {
+            if ( isSelected != pickDisabledSpells ) {
                 selectedSpells.emplace_back( spell.GetID() );
             }
         }
@@ -295,6 +374,9 @@ namespace Editor
         if ( selectedSpells.size() == spells.size() ) {
             selectedSpells = {};
         }
+
+        // Do not restore since StandardWindow has its own restorer.
+        restorer.reset();
 
         return true;
     }

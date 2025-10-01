@@ -48,7 +48,7 @@ class HeroBase;
 
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
@@ -93,7 +93,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & attackingArmy, Army & defendingArmy, const int32_t tileIndex, const bool isShowInterface, Rand::PCG32 & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 
@@ -116,32 +116,32 @@ namespace Battle
 
         Result & GetResult()
         {
-            return result_game;
+            return _battleResult;
         }
 
-        HeroBase * GetCommander1() const;
-        HeroBase * GetCommander2() const;
+        HeroBase * getAttackingArmyCommander() const;
+        HeroBase * getDefendingArmyCommander() const;
 
         const HeroBase * getCommander( const PlayerColor color ) const;
         const HeroBase * getEnemyCommander( const PlayerColor color ) const;
         const HeroBase * GetCurrentCommander() const;
 
-        Force & GetForce1() const
+        Force & getAttackingForce() const
         {
-            return *_army1;
+            return *_attackingArmy;
         }
 
-        Force & GetForce2() const
+        Force & getDefendingForce() const
         {
-            return *_army2;
+            return *_defendingArmy;
         }
 
         Force & getForce( const PlayerColor color ) const;
         Force & getEnemyForce( const PlayerColor color ) const;
         Force & GetCurrentForce() const;
 
-        PlayerColor GetArmy1Color() const;
-        PlayerColor GetArmy2Color() const;
+        PlayerColor getAttackingArmyColor() const;
+        PlayerColor getDefendingArmyColor() const;
         PlayerColor GetCurrentColor() const;
         // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
         // returns the color of the attacking army.
@@ -278,7 +278,7 @@ namespace Battle
         // structure still has enough hitpoints.
         void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
-        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const Battle::CellDirection dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
@@ -299,11 +299,11 @@ namespace Battle
         void ApplyActionToggleAutoCombat( Command & cmd );
         void ApplyActionQuickCombat( const Command & cmd );
 
-        void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
-        void ApplyActionSpellMirrorImage( Command & cmd );
-        void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthquake( const Command & cmd );
-        void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
+        void _applyActionSpellSummonElemental( const Spell & spell );
+        void _applyActionSpellMirrorImage( Command & cmd );
+        void _applyActionSpellTeleport( Command & cmd );
+        void _applyActionSpellEarthquake();
+        void _applyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
         // then this method does nothing. Otherwise, it's the caller's responsibility to make sure that this position
@@ -325,8 +325,8 @@ namespace Battle
         // position, which should be updated separately.
         Unit * CreateMirrorImage( Unit & unit );
 
-        std::unique_ptr<Force> _army1;
-        std::unique_ptr<Force> _army2;
+        std::unique_ptr<Force> _attackingArmy;
+        std::unique_ptr<Force> _defendingArmy;
         std::shared_ptr<Units> _orderOfUnits;
 
         // The unit that is currently active. Please note that some battle actions (e.g. catapult or castle tower shots) can be performed without an active unit.
@@ -345,7 +345,7 @@ namespace Battle
         std::unique_ptr<Bridge> _bridge;
 
         std::unique_ptr<Interface> _interface;
-        Result result_game;
+        Result _battleResult;
 
         Graveyard _graveyard;
         SpellStorage _usedSpells;
@@ -363,7 +363,7 @@ namespace Battle
         // places (for example, in code that performs situation assessment or AI decision-making) because in this
         // case the battles performed by AI will not be reproducible by a human player when performing exactly the
         // same actions.
-        Rand::DeterministicRandomGenerator & _randomGenerator;
+        Rand::PCG32 & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;
 

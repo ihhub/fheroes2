@@ -46,7 +46,7 @@
 
 namespace
 {
-    uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( Rand::PCG32 & gen )
     {
         return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
@@ -219,45 +219,45 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     return units;
 }
 
-int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
+Battle::CellDirection Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
 {
     if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
-        return UNKNOWN;
+        return CellDirection::UNKNOWN;
     }
 
     if ( index1 == index2 ) {
-        return CENTER;
+        return CellDirection::CENTER;
     }
 
-    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = CellDirection::TOP_LEFT; dir < CellDirection::CENTER; ++dir ) {
         if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) ) {
             return dir;
         }
     }
 
-    return UNKNOWN;
+    return CellDirection::UNKNOWN;
 }
 
-int Battle::Board::GetReflectDirection( const int dir )
+Battle::CellDirection Battle::Board::GetReflectDirection( const CellDirection dir )
 {
     switch ( dir ) {
-    case TOP_LEFT:
-        return BOTTOM_RIGHT;
-    case TOP_RIGHT:
-        return BOTTOM_LEFT;
-    case LEFT:
-        return RIGHT;
-    case RIGHT:
-        return LEFT;
-    case BOTTOM_LEFT:
-        return TOP_RIGHT;
-    case BOTTOM_RIGHT:
-        return TOP_LEFT;
+    case CellDirection::TOP_LEFT:
+        return CellDirection::BOTTOM_RIGHT;
+    case CellDirection::TOP_RIGHT:
+        return CellDirection::BOTTOM_LEFT;
+    case CellDirection::LEFT:
+        return CellDirection::RIGHT;
+    case CellDirection::RIGHT:
+        return CellDirection::LEFT;
+    case CellDirection::BOTTOM_LEFT:
+        return CellDirection::TOP_RIGHT;
+    case CellDirection::BOTTOM_RIGHT:
+        return CellDirection::TOP_LEFT;
     default:
         break;
     }
 
-    return UNKNOWN;
+    return CellDirection::UNKNOWN;
 }
 
 uint32_t Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( const int32_t index, const bool fromRightEdge )
@@ -269,13 +269,13 @@ uint32_t Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( const int32_t index,
     return ( fromRightEdge ? widthInCells - x : x + 1 );
 }
 
-bool Battle::Board::isValidDirection( const int32_t index, const int dir )
+bool Battle::Board::isValidDirection( const int32_t index, const CellDirection dir )
 {
     if ( !isValidIndex( index ) ) {
         return false;
     }
 
-    if ( dir == CENTER ) {
+    if ( dir == CellDirection::CENTER ) {
         return true;
     }
 
@@ -283,17 +283,17 @@ bool Battle::Board::isValidDirection( const int32_t index, const int dir )
     const int32_t y = index / widthInCells;
 
     switch ( dir ) {
-    case TOP_LEFT:
+    case CellDirection::TOP_LEFT:
         return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
-    case TOP_RIGHT:
+    case CellDirection::TOP_RIGHT:
         return !( 0 == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
-    case LEFT:
+    case CellDirection::LEFT:
         return !( 0 == x );
-    case RIGHT:
+    case CellDirection::RIGHT:
         return !( ( widthInCells - 1 ) == x );
-    case BOTTOM_LEFT:
+    case CellDirection::BOTTOM_LEFT:
         return !( ( heightInCells - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
-    case BOTTOM_RIGHT:
+    case CellDirection::BOTTOM_RIGHT:
         return !( ( heightInCells - 1 ) == y || ( ( widthInCells - 1 ) == x && !( y % 2 ) ) );
     default:
         break;
@@ -302,26 +302,26 @@ bool Battle::Board::isValidDirection( const int32_t index, const int dir )
     return false;
 }
 
-int32_t Battle::Board::GetIndexDirection( const int32_t index, const int dir )
+int32_t Battle::Board::GetIndexDirection( const int32_t index, const CellDirection dir )
 {
     if ( !isValidIndex( index ) ) {
         return -1;
     }
 
     switch ( dir ) {
-    case CENTER:
+    case CellDirection::CENTER:
         return index;
-    case TOP_LEFT:
+    case CellDirection::TOP_LEFT:
         return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells + 1 : widthInCells );
-    case TOP_RIGHT:
+    case CellDirection::TOP_RIGHT:
         return index - ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells - 1 );
-    case LEFT:
+    case CellDirection::LEFT:
         return index - 1;
-    case RIGHT:
+    case CellDirection::RIGHT:
         return index + 1;
-    case BOTTOM_LEFT:
+    case CellDirection::BOTTOM_LEFT:
         return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells - 1 : widthInCells );
-    case BOTTOM_RIGHT:
+    case CellDirection::BOTTOM_RIGHT:
         return index + ( ( ( index / widthInCells ) % 2 ) ? widthInCells : widthInCells + 1 );
     default:
         break;
@@ -378,7 +378,7 @@ bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tile & tile, std::mt19937 & gen )
+void Battle::Board::SetCobjObjects( const Maps::Tile & tile, Rand::PCG32 & gen )
 {
     std::vector<int> objs;
 
@@ -675,7 +675,7 @@ Battle::Cell * Battle::Board::GetCell( const int32_t position )
 #endif
 }
 
-Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir )
+Battle::Cell * Battle::Board::GetCell( const int32_t position, const CellDirection dir )
 {
     if ( !isValidDirection( position, dir ) ) {
         return nullptr;
@@ -703,27 +703,27 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const boo
     Indexes result;
     result.reserve( 4 );
 
-    if ( isValidDirection( head, LEFT ) ) {
-        result.push_back( GetIndexDirection( head, LEFT ) );
+    if ( isValidDirection( head, CellDirection::LEFT ) ) {
+        result.push_back( GetIndexDirection( head, CellDirection::LEFT ) );
     }
-    if ( isValidDirection( head, RIGHT ) ) {
-        result.push_back( GetIndexDirection( head, RIGHT ) );
+    if ( isValidDirection( head, CellDirection::RIGHT ) ) {
+        result.push_back( GetIndexDirection( head, CellDirection::RIGHT ) );
     }
 
     if ( reflect ) {
-        if ( isValidDirection( head, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( head, TOP_LEFT ) );
+        if ( isValidDirection( head, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( head, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( head, BOTTOM_LEFT ) );
+        if ( isValidDirection( head, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::BOTTOM_LEFT ) );
         }
     }
     else {
-        if ( isValidDirection( head, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( head, TOP_RIGHT ) );
+        if ( isValidDirection( head, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( head, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( head, BOTTOM_RIGHT ) );
+        if ( isValidDirection( head, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, CellDirection::BOTTOM_RIGHT ) );
         }
     }
 
@@ -739,7 +739,7 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const int32_t center )
     Indexes result;
     result.reserve( 6 );
 
-    for ( CellDirection dir = TOP_LEFT; dir < CENTER; ++dir ) {
+    for ( CellDirection dir = CellDirection::TOP_LEFT; dir < CellDirection::CENTER; ++dir ) {
         if ( !isValidDirection( center, dir ) ) {
             continue;
         }
@@ -778,55 +778,55 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const Position & pos )
 
     // Traversing cells in a clockwise direction
     if ( headIdx > tailIdx ) {
-        if ( isValidDirection( tailIdx, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_LEFT ) );
         }
-        if ( isValidDirection( tailIdx, LEFT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, LEFT ) );
+        if ( isValidDirection( tailIdx, CellDirection::LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::LEFT ) );
         }
     }
     else if ( headIdx < tailIdx ) {
-        if ( isValidDirection( headIdx, TOP_LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_LEFT ) );
         }
-        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::TOP_RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::RIGHT ) );
         }
-        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_RIGHT ) );
         }
-        if ( isValidDirection( headIdx, BOTTOM_LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, BOTTOM_LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::BOTTOM_LEFT ) );
         }
-        if ( isValidDirection( headIdx, LEFT ) ) {
-            result.push_back( GetIndexDirection( headIdx, LEFT ) );
+        if ( isValidDirection( headIdx, CellDirection::LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, CellDirection::LEFT ) );
         }
     }
 

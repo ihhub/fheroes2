@@ -80,7 +80,7 @@
 
 namespace
 {
-    const size_t maximumCastles = 72;
+    constexpr size_t maximumCastles = 72;
 
     const std::array<const char *, maximumCastles> defaultCastleNames
         = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
@@ -389,6 +389,9 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     // Skip the rest of 29 bytes.
 
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability() );
+
     _postLoad();
 }
 
@@ -416,6 +419,9 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
     if ( !metadata.customName.empty() ) {
         _name = metadata.customName;
     }
+
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability(), metadata.mustHaveSpells, metadata.bannedSpells );
 
     _postLoad();
 }
@@ -497,8 +503,6 @@ void Castle::_postLoad()
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
     }
 
-    // MageGuild
-    _mageGuild.initialize( _race, HaveLibraryCapability() );
     _trainGuestHeroAndCaptainInMageGuild();
 
     // AI troops auto pack for gray towns
@@ -680,7 +684,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
     const int mageGuildLevel = GetLevelMageGuild();
     if ( mageGuildLevel > 0 ) {
         const int spellPower = hero.GetPower();
-        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuilt() );
         for ( const Spell & spell : guildSpells ) {
             if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
                 spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
@@ -2282,6 +2286,11 @@ AllCastles::AllCastles()
     _castles.reserve( maximumCastles );
 }
 
+size_t AllCastles::getMaximumAllowedCastles()
+{
+    return maximumCastles;
+}
+
 void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
     assert( castle );
@@ -2336,6 +2345,37 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     assert( iter->second < _castles.size() && _castles[iter->second] );
 
     return _castles[iter->second].get();
+}
+
+void AllCastles::removeCastle( const fheroes2::Point & position )
+{
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return;
+    }
+
+    const size_t castleId = iter->second;
+
+    _castles.erase( _castles.begin() + castleId );
+
+    _castleTiles.erase( iter );
+
+    // Castle is represented by more than 1 tile on the radar - remove the other tiles.
+    for ( auto it = _castleTiles.begin(); it != _castleTiles.end(); ) {
+        if ( it->second == castleId ) {
+            it = _castleTiles.erase( it );
+        }
+        else {
+            ++it;
+        }
+    }
+
+    // After the castle is removed we need to decrease the indices of the castles with "id" more than `castleId`.
+    for ( auto & [pos, id] : _castleTiles ) {
+        if ( id > castleId ) {
+            --id;
+        }
+    }
 }
 
 void AllCastles::Scout( const PlayerColorsSet colors ) const

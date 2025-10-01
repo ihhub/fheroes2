@@ -442,26 +442,33 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
     _isDoubleClicked = true;
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor )
+const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const bool isForEditor )
 {
-    if ( allMaps.empty() ) {
+    if ( all.empty() ) {
         outputNoMapInTextSupportMode();
         return nullptr;
     }
 
+    if ( isForEditor ) {
+        for ( const auto & mapInfo : all ) {
+            // Only Resurrection maps must be accepted by the Editor.
+            if ( mapInfo.version != GameVersion::RESURRECTION ) {
+                ERROR_LOG( "The fheroes2 engine is corrupted." )
+                assert( 0 );
+
+                return nullptr;
+            }
+        }
+    }
+
     outputMapSelectionInTextSupportMode();
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     MapsFileInfoList small;
     MapsFileInfoList medium;
     MapsFileInfoList large;
     MapsFileInfoList xlarge;
-    MapsFileInfoList all( allMaps );
 
     small.reserve( all.size() );
     medium.reserve( all.size() );
@@ -489,6 +496,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         }
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
@@ -532,13 +540,13 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         buttonSelectAll.draw();
     };
 
-    ScenarioListBox listbox( rt.getPosition() );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 217 } );
-    listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
-    listbox.SetAreaMaxItems( 9 ); // This has impact on displaying selected scenario info
-    listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
-    listbox.setForEditorMode( isForEditor );
+    ScenarioListBox scenarioList( rt.getPosition() );
+    scenarioList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
+    scenarioList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 217 } );
+    scenarioList.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
+    scenarioList.SetAreaMaxItems( 9 ); // This has impact on displaying selected scenario info
+    scenarioList.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
+    scenarioList.setForEditorMode( isForEditor );
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
 
@@ -581,33 +589,80 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
 
         assert( currentPressedButton != nullptr && currentMapsList != nullptr && !currentMapsList->empty() );
 
-        listbox.SelectMapSize( *currentMapsList, currentMapFilter );
-        listbox.SetCurrent( GetInitialMapId( *currentMapsList ) );
+        scenarioList.SelectMapSize( *currentMapsList, currentMapFilter );
+        scenarioList.SetCurrent( GetInitialMapId( *currentMapsList ) );
 
         currentPressedButton->press();
     }
 
-    listbox.RedrawBackground( rt.getPosition() );
-    listbox.Redraw();
+    scenarioList.RedrawBackground( rt.getPosition() );
+    scenarioList.Redraw();
 
     drawAllButtons();
 
     display.render();
 
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
-        listbox.QueueEventProcessing();
+        scenarioList.QueueEventProcessing();
 
         bool needRedraw = false;
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.isDoubleClicked() ) {
-            MapsFileInfoList::const_iterator it = std::find( allMaps.begin(), allMaps.end(), listbox.GetCurrent() );
-            return ( it != allMaps.end() ) ? &( *it ) : nullptr;
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || scenarioList.isDoubleClicked() ) {
+            if ( !scenarioList.IsValid() ) {
+                // This could happen when all maps in this section have been deleted.
+                return nullptr;
+            }
+
+            auto it = std::find( all.begin(), all.end(), scenarioList.GetCurrent() );
+            if ( it == all.end() ) {
+                // This is invalid logic. You are trying to load a map which is not in the list.
+                assert( 0 );
+                return nullptr;
+            }
+
+            return &( *it );
         }
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return nullptr;
+        }
+
+        if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && scenarioList.isSelected() ) {
+            std::string msg( _( "Are you sure you want to delete the map:" ) );
+            msg.append( "\n\n" );
+            msg.append( System::GetFileName( scenarioList.GetCurrent().filename ) );
+
+            if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
+                const int32_t selectedId = scenarioList.getCurrentId();
+
+                if ( !System::Unlink( scenarioList.GetCurrent().filename ) ) {
+                    ERROR_LOG( "Unable to delete file " << scenarioList.GetCurrent().filename );
+                }
+
+                auto removedMapInfo = scenarioList.GetCurrent();
+
+                scenarioList.RemoveSelected();
+
+                scenarioList.updateScrollBarImage();
+                scenarioList.SetCurrent( std::max( selectedId - 1, 0 ) );
+
+                // Remove the map from all lists.
+                small.erase( std::remove_if( small.begin(), small.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
+                             small.end() );
+                medium.erase( std::remove_if( medium.begin(), medium.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
+                              medium.end() );
+                large.erase( std::remove_if( large.begin(), large.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
+                             large.end() );
+                xlarge.erase( std::remove_if( xlarge.begin(), xlarge.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
+                              xlarge.end() );
+                all.erase( std::remove_if( all.begin(), all.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
+                           all.end() );
+            }
+
+            needRedraw = true;
         }
 
         if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) ) {
@@ -617,7 +672,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::SMALL;
 
-                listbox.SelectMapSize( small, Maps::SMALL );
+                scenarioList.SelectMapSize( small, Maps::SMALL );
 
                 currentPressedButton = &buttonSelectSmall;
                 needRedraw = true;
@@ -630,7 +685,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::MEDIUM;
 
-                listbox.SelectMapSize( medium, Maps::MEDIUM );
+                scenarioList.SelectMapSize( medium, Maps::MEDIUM );
 
                 currentPressedButton = &buttonSelectMedium;
                 needRedraw = true;
@@ -643,7 +698,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::LARGE;
 
-                listbox.SelectMapSize( large, Maps::LARGE );
+                scenarioList.SelectMapSize( large, Maps::LARGE );
 
                 currentPressedButton = &buttonSelectLarge;
                 needRedraw = true;
@@ -656,7 +711,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             else {
                 currentMapFilter = Maps::XLARGE;
 
-                listbox.SelectMapSize( xlarge, Maps::XLARGE );
+                scenarioList.SelectMapSize( xlarge, Maps::XLARGE );
 
                 currentPressedButton = &buttonSelectXLarge;
                 needRedraw = true;
@@ -665,7 +720,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             currentMapFilter = Maps::ZERO;
 
-            listbox.SelectMapSize( all, Maps::ZERO );
+            scenarioList.SelectMapSize( all, Maps::ZERO );
 
             currentPressedButton = &buttonSelectAll;
             needRedraw = true;
@@ -695,40 +750,40 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( countPlayers ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), PlayersToolTip );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), PlayersToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curCountPlayer ) ) {
             PlayersToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( sizeMaps ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), SizeToolTip );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), SizeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapSize ) ) {
             SizeToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( mapTypes ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), MapTypeToolTip );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), MapTypeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
             MapTypeToolTip();
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), mapInfo );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), mapInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapName ) ) {
             ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( victoryConds ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), VictoryConditionInfo );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), VictoryConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( lossConds ) ) {
-            ShowIfFound( listbox, le.getMouseCursorPos(), LossConditionInfo );
+            ShowIfFound( scenarioList, le.getMouseCursorPos(), LossConditionInfo );
         }
         else if ( le.isMouseRightButtonPressedInArea( curVictoryCond ) ) {
-            VictoryConditionInfo( &( listbox.GetCurrent() ) );
+            VictoryConditionInfo( &( scenarioList.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curLossCond ) ) {
-            LossConditionInfo( &( listbox.GetCurrent() ) );
+            LossConditionInfo( &( scenarioList.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curDifficulty ) ) {
             ShowToolTip(
@@ -742,11 +797,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps,
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
         }
 
-        if ( !needRedraw && !listbox.IsNeedRedraw() ) {
+        if ( !needRedraw && !scenarioList.IsNeedRedraw() ) {
             continue;
         }
 
-        listbox.Redraw();
+        scenarioList.Redraw();
 
         // The map list box redraws the entire window as a background (including all the buttons), so we have to redraw these buttons once again to correctly reflect
         // their current state and not mess up with localized labels on these buttons.

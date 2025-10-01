@@ -107,7 +107,7 @@ namespace
         return 0.0;
     }
 
-    std::pair<int32_t, int> optimalAttackVector( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
+    std::pair<int32_t, Battle::CellDirection> optimalAttackVector( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
     {
         assert( attackPos.isValidForUnit( attacker ) );
         assert( Battle::Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
@@ -117,7 +117,7 @@ namespace
         const std::array<const Battle::Cell *, 2> attackCells = { attackPos.GetHead(), attackPos.GetTail() };
         const std::array<const Battle::Cell *, 2> targetCells = { targetPos.GetHead(), targetPos.GetTail() };
 
-        std::pair<int32_t, int> bestAttackVector{ -1, Battle::UNKNOWN };
+        std::pair<int32_t, Battle::CellDirection> bestAttackVector{ -1, Battle::CellDirection::UNKNOWN };
         double bestAttackValue = 0.0;
 
         for ( const Battle::Cell * attackCell : attackCells ) {
@@ -612,8 +612,8 @@ void AI::BattlePlanner::battleBegins()
 {
     _currentTurnNumber = 0;
     _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
-    _attackerForceNumberOfDead = 0;
-    _defenderForceNumberOfDead = 0;
+    _attackerForceTotalNumberOfDeadUnits = 0;
+    _defenderForceTotalNumberOfDeadUnits = 0;
 }
 
 void AI::BattlePlanner::BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions )
@@ -632,7 +632,7 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
     const PlayerColor currentColor = arena.GetCurrentColor();
 
     // Not the attacker's turn, no further checks
-    if ( currentColor != arena.GetArmy1Color() ) {
+    if ( currentColor != arena.getAttackingArmyColor() ) {
         return false;
     }
 
@@ -641,13 +641,14 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths
     if ( currentTurnNumber > _currentTurnNumber && _numberOfRemainingTurnsWithoutDeaths > 0 ) {
-        auto prevNumbersOfDead = std::tie( _attackerForceNumberOfDead, _defenderForceNumberOfDead );
-        const auto currNumbersOfDead = std::make_tuple( arena.GetForce1().GetDeadCounts(), arena.GetForce2().GetDeadCounts() );
+        auto prevNumbersOfDeadUnits = std::tie( _attackerForceTotalNumberOfDeadUnits, _defenderForceTotalNumberOfDeadUnits );
+        const auto currNumbersOfDeadUnits
+            = std::make_tuple( arena.getAttackingForce().getTotalNumberOfDeadUnits(), arena.getDefendingForce().getTotalNumberOfDeadUnits() );
 
         // Either we don't have numbers of dead units from the previous turn, or there were changes in these numbers compared
         // to the previous turn, reset the counter
-        if ( _currentTurnNumber == 0 || currentTurnNumber - _currentTurnNumber != 1 || prevNumbersOfDead != currNumbersOfDead ) {
-            prevNumbersOfDead = currNumbersOfDead;
+        if ( _currentTurnNumber == 0 || currentTurnNumber - _currentTurnNumber != 1 || prevNumbersOfDeadUnits != currNumbersOfDeadUnits ) {
+            prevNumbersOfDeadUnits = currNumbersOfDeadUnits;
 
             _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
         }
@@ -908,7 +909,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
 
                 actions.emplace_back( Battle::Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                      ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, attackDirection );
+                                      ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, static_cast<int>( attackDirection ) );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx << ", attack vector: "
@@ -1051,7 +1052,7 @@ void AI::BattlePlanner::analyzeBattleState( const Battle::Arena & arena, const B
     // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
     if ( castle && Battle::Arena::isAnyTowerPresent() ) {
         const bool attackerIgnoresCover = [&arena]() {
-            const HeroBase * commander = arena.GetForce1().GetCommander();
+            const HeroBase * commander = arena.getAttackingForce().GetCommander();
             assert( commander != nullptr );
 
             if ( commander->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) ) {
@@ -1725,7 +1726,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     Battle::Indexes result;
                     result.reserve( 8 );
 
-                    const std::array<int, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<int, 6> {
+                    const std::array<Battle::CellDirection, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<Battle::CellDirection, 6> {
                         const bool preferToCoverFromTheSide = [&currentUnit, frnd]() {
                             // If the covering unit is not a wide unit, then using this unit to cover the shooter from the side does not give any advantage
                             if ( !currentUnit.isWide() ) {
@@ -1750,17 +1751,21 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
                         if ( preferToCoverFromTheSide ) {
                             if ( frnd->isReflect() ) {
-                                return { Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT };
+                                return { Battle::CellDirection::TOP_LEFT,  Battle::CellDirection::BOTTOM_LEFT,  Battle::CellDirection::LEFT,
+                                         Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT };
                             }
 
-                            return { Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT };
+                            return { Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT,
+                                     Battle::CellDirection::TOP_LEFT,  Battle::CellDirection::BOTTOM_LEFT,  Battle::CellDirection::LEFT };
                         }
 
                         if ( frnd->isReflect() ) {
-                            return { Battle::LEFT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::RIGHT };
+                            return { Battle::CellDirection::LEFT,      Battle::CellDirection::TOP_LEFT,     Battle::CellDirection::BOTTOM_LEFT,
+                                     Battle::CellDirection::TOP_RIGHT, Battle::CellDirection::BOTTOM_RIGHT, Battle::CellDirection::RIGHT };
                         }
 
-                        return { Battle::RIGHT, Battle::TOP_RIGHT, Battle::BOTTOM_RIGHT, Battle::TOP_LEFT, Battle::BOTTOM_LEFT, Battle::LEFT };
+                        return { Battle::CellDirection::RIGHT,    Battle::CellDirection::TOP_RIGHT,   Battle::CellDirection::BOTTOM_RIGHT,
+                                 Battle::CellDirection::TOP_LEFT, Battle::CellDirection::BOTTOM_LEFT, Battle::CellDirection::LEFT };
                     }();
 
                     for ( const int32_t idx : std::array<int32_t, 2>{ frnd->GetHeadIndex(), frnd->GetTailIndex() } ) {
@@ -1768,7 +1773,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                             continue;
                         }
 
-                        for ( const int dir : priorityDirections ) {
+                        for ( const Battle::CellDirection dir : priorityDirections ) {
                             if ( !Battle::Board::isValidDirection( idx, dir ) ) {
                                 continue;
                             }
@@ -1786,7 +1791,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
 
                                 if ( currentUnit.isWide() ) {
                                     // If the shooter is covered in front by a wide unit, then this unit should be located one more cell further away.
-                                    if ( dir == ( frnd->isReflect() ? Battle::LEFT : Battle::RIGHT ) ) {
+                                    if ( dir == ( frnd->isReflect() ? Battle::CellDirection::LEFT : Battle::CellDirection::RIGHT ) ) {
                                         if ( !Battle::Board::isValidDirection( nearbyIdx, dir ) ) {
                                             continue;
                                         }
@@ -1795,7 +1800,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                                     }
                                     // If a wide unit covers a shooter from behind (which is rare, but it can happen) it is necessary to check that the covering unit
                                     // will not be located close to the shooter - which can happen if there is any obstacle in place of the intended tail of the unit.
-                                    else if ( dir == ( frnd->isReflect() ? Battle::RIGHT : Battle::LEFT ) ) {
+                                    else if ( dir == ( frnd->isReflect() ? Battle::CellDirection::RIGHT : Battle::CellDirection::LEFT ) ) {
                                         const Battle::Position pos = Battle::Position::GetPosition( currentUnit, nearbyIdx );
                                         if ( pos.GetHead() == nullptr ) {
                                             continue;

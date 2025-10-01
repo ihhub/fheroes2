@@ -136,6 +136,7 @@ Battle::Unit::Unit( const Troop & troop, const Position & pos, const bool isRefl
     , _uid( uid )
     , _hitPoints( troop.GetHitPoints() )
     , _initialCount( troop.GetCount() )
+    , _maxCount( troop.GetCount() )
     , _shotsLeft( troop.GetShots() )
     , _idleTimer( animation.getIdleDelay() )
     , _isReflected( isReflected )
@@ -202,7 +203,7 @@ void Battle::Unit::UpdateDirection()
     const Arena * arena = GetArena();
     assert( arena != nullptr );
 
-    SetReflection( arena->GetArmy1Color() != GetArmyColor() );
+    SetReflection( arena->getAttackingArmyColor() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
@@ -257,7 +258,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
+    const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
     assert( totalHitPoints > _hitPoints );
     return totalHitPoints - _hitPoints;
 }
@@ -297,28 +298,25 @@ int32_t Battle::Unit::GetTailIndex() const
     return _position.GetTail() ? _position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomMorale( Rand::PCG32 & randomGenerator )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int>( Rand::GetWithGen( 1, 24, randomGenerator ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
-        if ( isControlHuman() ) {
-            SetModes( MORALE_BAD );
-        }
+    else if ( morale < 0 && static_cast<int>( Rand::GetWithGen( 1, 12, randomGenerator ) ) <= -morale ) {
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( randomGenerator.Get( 1, 4 ) != 1 ) {
+        if ( isControlHuman() || ( Rand::GetWithGen( 1, 4, randomGenerator ) != 1 ) ) {
             SetModes( MORALE_BAD );
         }
     }
 }
 
-void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomLuck( Rand::PCG32 & randomGenerator )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( Rand::GetWithGen( 1, 24, randomGenerator ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -392,7 +390,7 @@ void Battle::Unit::NewTurn()
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
-    ResetModes( TR_RESPONDED );
+    ResetModes( TR_RETALIATED );
     ResetModes( TR_MOVED );
     ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
@@ -456,12 +454,12 @@ uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) c
     }
 
     // Mirror images are destroyed anyway and hypnotized units never respond to an attack
-    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+    if ( Modes( TR_RETALIATED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
         return 0;
     }
 
     // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return 0;
     }
 
@@ -576,7 +574,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     return std::max( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
 }
 
-uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
+uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::PCG32 & randomGenerator ) const
 {
     uint32_t res = 0;
 
@@ -587,7 +585,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomG
         res = CalculateMinDamage( enemy );
     }
     else {
-        res = randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = Rand::GetWithGen( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ), randomGenerator );
     }
 
     if ( Modes( LUCK_GOOD ) ) {
@@ -623,8 +621,8 @@ uint32_t Battle::Unit::_applyDamage( const uint32_t dmg )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         // Units with this ability retaliate even when under the influence of paralyzing spells
-        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-            SetModes( TR_RESPONDED );
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+            SetModes( TR_RETALIATED );
         }
 
         SetModes( TR_MOVED );
@@ -720,19 +718,19 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary )
+uint32_t Battle::Unit::_resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, _hitPoints + points ) - GetCount();
 
     SetCount( GetCount() + resurrect );
     _hitPoints += points;
 
-    if ( allowToExceedInitialCount ) {
-        _initialCount = std::max( _initialCount, GetCount() );
+    if ( allowToExceedMaxCount ) {
+        _maxCount = std::max( _maxCount, GetCount() );
     }
-    else if ( GetCount() > _initialCount ) {
-        resurrect -= GetCount() - _initialCount;
-        SetCount( _initialCount );
+    else if ( GetCount() > _maxCount ) {
+        resurrect -= GetCount() - _maxCount;
+        SetCount( _maxCount );
         _hitPoints = ArmyTroop::GetHitPoints();
     }
 
@@ -900,7 +898,7 @@ std::string Battle::Unit::String( const bool more /* = false */ ) const
     return ss.str();
 }
 
-bool Battle::Unit::AllowResponse() const
+bool Battle::Unit::isRetaliationAllowed() const
 {
     // Hypnotized units never respond to an attack
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -917,16 +915,16 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    return ( !Modes( TR_RESPONDED ) );
+    return ( !Modes( TR_RETALIATED ) );
 }
 
-void Battle::Unit::SetResponse()
+void Battle::Unit::setRetaliationAsCompleted()
 {
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
         return;
     }
 
-    SetModes( TR_RESPONDED );
+    SetModes( TR_RETALIATED );
 }
 
 void Battle::Unit::PostAttackAction( const Unit & enemy )
@@ -1163,7 +1161,7 @@ double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
-    return GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
+    return GetCost() * ( GetDead() > GetMaxCount() ? 0 : GetMaxCount() - GetDead() );
 }
 
 int Battle::Unit::GetControl() const
@@ -1501,7 +1499,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == _initialCount ) {
+        if ( GetCount() == _maxCount ) {
             return 100;
         }
         break;
@@ -1533,7 +1531,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * app
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
+Spell Battle::Unit::GetSpellMagic( Rand::PCG32 & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
 
@@ -1543,7 +1541,7 @@ Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGe
         return Spell::NONE;
     }
 
-    if ( randomGenerator.Get( 1, 100 ) > abilityIter->percentage ) {
+    if ( Rand::GetWithGen( 1, 100, randomGenerator ) > abilityIter->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }
@@ -1553,7 +1551,7 @@ Spell Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGe
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return _hitPoints < _initialCount * Monster::GetHitPoints();
+    return _hitPoints < _maxCount * Monster::GetHitPoints();
 }
 
 bool Battle::Unit::SwitchAnimation( const int rule, const bool reverse /* = false */ )

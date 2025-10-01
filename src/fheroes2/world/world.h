@@ -296,6 +296,16 @@ public:
         return vec_castles.Get( tilePosition );
     }
 
+    size_t getCastleCount() const
+    {
+        return vec_castles.Size();
+    }
+
+    void removeCastle( const fheroes2::Point & tilePosition )
+    {
+        vec_castles.removeCastle( tilePosition );
+    }
+
     // Get castle based on its entrance tile. If the tile is not castle's entrance return nullptr.
     const Castle * getCastleEntrance( const fheroes2::Point & tilePosition ) const;
     Castle * getCastleEntrance( const fheroes2::Point & tilePosition );
@@ -445,19 +455,23 @@ private:
 
     void Defaults();
     void Reset();
-    void MonthOfMonstersAction( const Monster & mons );
+    void _monthOfMonstersAction( const Monster & mons );
+
     bool ProcessNewMP2Map( const std::string & filename, const bool checkPoLObjects );
+
+    bool _processNewResurrectionMap( const std::string & filename );
+
     void PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum );
 
     bool updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
-    void setUltimateArtifact( const int32_t tileId, const int32_t radius );
+    void setUltimateArtifact();
 
-    void addDebugHero();
+    void tryAddDebugHero();
 
-    void setHeroIdsForMapConditions();
+    bool setHeroIdsForMapConditions();
 
     friend class Radar;
     friend OStreamBase & operator<<( OStreamBase & stream, const World & w );

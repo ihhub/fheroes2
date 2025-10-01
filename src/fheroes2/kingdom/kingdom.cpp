@@ -531,7 +531,8 @@ const Recruits & Kingdom::GetRecruits()
         recruits.SetHero2( world.GetHeroForHire( Race::NONE, recruits.GetID1() ) );
     }
 
-    assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
+    // Heroes for recruitment must be different except if there are no heroes left (both are Heroes::UNKNOWN).
+    assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN ) );
 
     return recruits;
 }
@@ -903,7 +904,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
         assert( hero != nullptr );
 
         if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
-            const uint32_t crystalBallDistance = hero->GetVisionsDistance();
+            const uint32_t crystalBallDistance = Heroes::GetVisionsDistance();
 
             if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -41,6 +41,9 @@ msgstr ""
 msgid "smallerButton|EXIT"
 msgstr ""
 
+msgid "OKAY"
+msgstr "ΕΝΤΑΞΕΙ"
+
 msgid "HEROES"
 msgstr "ΗΡΩΕΣ"
 
@@ -53,9 +56,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ΑΚΥΡΩΣΗ"
-
-msgid "OKAY"
-msgstr "ΕΝΤΑΞΕΙ"
 
 msgid "ACCEPT"
 msgstr "ΑΠΟΔΟΧΗ"
@@ -151,12 +151,22 @@ msgid "QUIT"
 msgstr ""
 
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
 msgstr ""
 
 msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
 "NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
 "MAP"
 msgstr ""
 
@@ -218,14 +228,6 @@ msgstr ""
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
-msgstr ""
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid "EditorMainMenu|BACK"
 msgstr ""
 
 msgid "editorMainMenu|BACK"
@@ -698,6 +700,12 @@ msgstr ""
 msgid "Select spell target"
 msgstr ""
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr ""
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr ""
+
 msgid "View Ballista info"
 msgstr ""
 
@@ -757,12 +765,6 @@ msgid "Message Bar"
 msgstr ""
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr ""
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
 msgstr ""
 
 msgid ""
@@ -3104,6 +3106,15 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+msgid "Click to select the maximum amount."
+msgstr ""
+
+msgid "Click to select the minimum amount."
+msgstr ""
+
+msgid "Click to apply the entered number."
+msgstr ""
+
 msgid "Click to apply the entered text."
 msgstr ""
 
@@ -3198,6 +3209,9 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+msgid "Select Monsters:"
+msgstr ""
+
 msgid "race|Random"
 msgstr ""
 
@@ -3264,6 +3278,9 @@ msgid ""
 msgstr ""
 
 msgid "%{mineName} appearance:"
+msgstr ""
+
+msgid "Click to select the color."
 msgstr ""
 
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -3371,6 +3388,9 @@ msgid "Map difficulty:"
 msgstr ""
 
 msgid "N"
+msgstr ""
+
+msgid "Are you sure you want to delete the map:"
 msgstr ""
 
 msgid "No maps exist at that size."
@@ -3553,6 +3573,27 @@ msgstr ""
 msgid "Random Town Name"
 msgstr ""
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr ""
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr ""
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+msgid "Banned Spells"
+msgstr ""
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr ""
 
@@ -3571,10 +3612,13 @@ msgstr ""
 msgid "Town Army"
 msgstr ""
 
-msgid "Click to change the Castle name. Right-click to reset to default."
+msgid "Click to change the Castle name."
 msgstr ""
 
 msgid "Enter Castle name"
+msgstr ""
+
+msgid "Reset the Castle name."
 msgstr ""
 
 msgid "Allow to build a castle in this town."
@@ -3592,7 +3636,19 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+msgid "Reset the army."
+msgstr ""
+
+msgid "Set custom Castle Army."
+msgstr ""
+
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
+
+msgid "Set Spells"
+msgstr ""
+
+msgid "Castle Settings"
 msgstr ""
 
 msgid "Message Text:"
@@ -3728,6 +3784,9 @@ msgid ""
 "crosses the event tile."
 msgstr ""
 
+msgid "Click to make selection."
+msgstr ""
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -3743,6 +3802,9 @@ msgid "Objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
+msgstr ""
+
+msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
 msgid ""
@@ -3761,11 +3823,6 @@ msgstr ""
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
-msgstr ""
-
-msgid ""
-"START\n"
-"MAP"
 msgstr ""
 
 msgid "Main Menu"
@@ -3851,6 +3908,11 @@ msgid "Roads"
 msgstr ""
 
 msgid "Streams"
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
 msgstr ""
 
 msgid ""
@@ -4168,7 +4230,7 @@ msgstr ""
 msgid "None."
 msgstr ""
 
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr ""
 
 msgid "Accumulate gold."
@@ -4286,9 +4348,6 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-msgid "Click to accept the changes made."
-msgstr ""
-
 msgid "Click to edit custom rumors."
 msgstr ""
 
@@ -4334,6 +4393,11 @@ msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
+msgstr ""
+
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
 msgstr ""
 
 msgid "editor|%{count} %{resource}"
@@ -4397,6 +4461,12 @@ msgid "Save Map:"
 msgstr ""
 
 msgid "Click to save the current map."
+msgstr ""
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+msgid "Spells level"
 msgstr ""
 
 msgid "Riddle:"
@@ -4547,6 +4617,9 @@ msgid "Days spent"
 msgstr ""
 
 msgid "The number of days spent on this campaign."
+msgstr ""
+
+msgid "Scenario Title"
 msgstr ""
 
 msgid "Project Coordination and Core Development"
@@ -4997,6 +5070,9 @@ msgid "hotkey|skip turn in battle"
 msgstr ""
 
 msgid "hotkey|cast battle spell"
+msgstr ""
+
+msgid "hotkey|toggle display of battle turn order"
 msgstr ""
 
 msgid "hotkey|dwelling level 1"
@@ -5454,10 +5530,19 @@ msgstr ""
 msgid "Click to return to the main menu."
 msgstr ""
 
+msgid "The map is corrupted or doesn't exist."
+msgstr ""
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
+msgstr ""
+
+msgid "New Week!"
 msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -5475,16 +5560,10 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr ""
 
-msgid " All populations are halved."
+msgid "All populations are halved."
 msgstr ""
 
-msgid " All dwellings increase population."
-msgstr ""
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
+msgid "All dwellings increase population."
 msgstr ""
 
 msgid "Beware!"
@@ -5873,12 +5952,6 @@ msgstr ""
 msgid ", FPS: "
 msgstr ""
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
-
-msgid "pyramid|%{object} raided"
-msgstr ""
-
 msgid "Ector"
 msgstr ""
 
@@ -5903,6 +5976,9 @@ msgstr ""
 msgid "Fineous"
 msgstr ""
 
+msgid "Jaclyn"
+msgstr ""
+
 msgid "Jezebel"
 msgstr ""
 
@@ -5910,9 +5986,6 @@ msgid "Atlas"
 msgstr ""
 
 msgid "Ergon"
-msgstr ""
-
-msgid "Jaclyn"
 msgstr ""
 
 msgid "Gem"
@@ -6002,6 +6075,9 @@ msgstr ""
 msgid "Dainwin"
 msgstr ""
 
+msgid "Gallavant"
+msgstr ""
+
 msgid "Joseph"
 msgstr ""
 
@@ -6020,13 +6096,16 @@ msgstr ""
 msgid "Elderian"
 msgstr ""
 
-msgid "Gallavant"
-msgstr ""
-
 msgid "Jarkonas"
 msgstr ""
 
 msgid "Martine"
+msgstr ""
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr ""
+
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid " gives you maximum morale"
@@ -6484,6 +6563,11 @@ msgstr ""
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 
 msgid ""
@@ -7145,7 +7229,7 @@ msgstr ""
 msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -7178,7 +7262,7 @@ msgstr ""
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr ""
 
 msgid ""
@@ -8874,7 +8958,7 @@ msgstr ""
 msgid "Flyer"
 msgstr ""
 
-msgid "Always retaliates"
+msgid "Unlimited retaliation"
 msgstr ""
 
 msgid "Attacks all adjacent enemies"

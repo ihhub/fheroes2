@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-15 05:10+0000\n"
-"PO-Revision-Date: 2025-06-07 12:43+0200\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"PO-Revision-Date: 2025-09-12 21:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -42,6 +42,9 @@ msgstr "LÄMNA"
 msgid "smallerButton|EXIT"
 msgstr "LÄMN."
 
+msgid "OKAY"
+msgstr "OKEJ"
+
 msgid "HEROES"
 msgstr ""
 "HJÄLT-\n"
@@ -56,9 +59,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
-
-msgid "OKAY"
-msgstr "OKEJ"
 
 msgid "ACCEPT"
 msgstr "ACCEPTERA"
@@ -187,17 +187,31 @@ msgid "QUIT"
 msgstr "AVSLUTA"
 
 msgid ""
-"LOAD\n"
+"START\n"
 "MAP"
 msgstr ""
-"LADDA\n"
+"STARTA\n"
 "KARTA"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HUVUD-\n"
+"MENY"
 
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "NY\n"
+"KARTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LADDA\n"
 "KARTA"
 
 msgid ""
@@ -218,7 +232,7 @@ msgstr ""
 "STRID"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "INSTÄLLNINGAR"
 
 msgid ""
 "STANDARD\n"
@@ -270,26 +284,18 @@ msgstr ""
 "EXPANSIONS-\n"
 "KAMPANJ"
 
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HUVUD-\n"
-"MENY"
-
-msgid "EditorMainMenu|BACK"
-msgstr ""
-
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "TILLBAKA"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
 msgstr ""
+"BLANK\n"
+"KARTA"
 
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "SLUMPAD"
 
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
@@ -811,6 +817,12 @@ msgstr "Kasta %{spell}"
 msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
+
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
+
 msgid "View Ballista info"
 msgstr "Visa Ballistinformation"
 
@@ -875,12 +887,6 @@ msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
-
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Är du säker på att du vill aktivera automatisk strid?"
-
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Är du säker på att du vill avgöra striden med snabbstrid?"
 
 msgid ""
 "AUTO\n"
@@ -2322,10 +2328,10 @@ msgid "Upg. Armory"
 msgstr "Uppg. Rustkammare"
 
 msgid "Jousting Arena"
-msgstr "Turneringsarena"
+msgstr "Rännarbana"
 
 msgid "Upg. Jousting Arena"
-msgstr "Uppg. Turneringsarena"
+msgstr "Uppg. Rännarbana"
 
 msgid "Cathedral"
 msgstr "Katedral"
@@ -3451,6 +3457,15 @@ msgstr "Ange Spelupplösning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klicka här för att anta den valda upplösningen."
 
+msgid "Click to select the maximum amount."
+msgstr "Klicka för att ange maximalt antal."
+
+msgid "Click to select the minimum amount."
+msgstr "Klicka för att ange minimalt antal."
+
+msgid "Click to apply the entered number."
+msgstr "Klicka här för att anta det angivna antalet."
+
 msgid "Click to apply the entered text."
 msgstr "Klicka här för att anta den inmatade texten."
 
@@ -3494,10 +3509,10 @@ msgstr ""
 "Plats: "
 
 msgid "saveLoadDialog|Name"
-msgstr ""
+msgstr "NAMN"
 
 msgid "saveLoadDialog|Date"
-msgstr ""
+msgstr "DATUM"
 
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
@@ -3512,19 +3527,17 @@ msgid "Click to load a previously saved game."
 msgstr "Klicka för att ladda ett tidigare sparat spel."
 
 msgid "Click here if you wish to sort save files by their name."
-msgstr ""
+msgstr "Klicka här om du vill sortera sparfiler via dess namn."
 
-#, fuzzy
 msgid "Sort by Name"
-msgstr "Ditt Namn"
+msgstr "Sortera via Namn"
 
 msgid ""
 "Click here if you you wish to sort save files by their last modified date."
-msgstr ""
+msgstr "Klicka här om du vill sortera sparfiler via senaste ändringsdatum."
 
-#, fuzzy
 msgid "Sort by Date"
-msgstr "Stöd oss på"
+msgstr "Sortera via Datum"
 
 msgid "File to Save:"
 msgstr "Fil att Spara:"
@@ -3552,6 +3565,9 @@ msgstr "Välj Varelse:"
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
+
+msgid "Select Monsters:"
+msgstr "Välj Varelser:"
 
 msgid "race|Random"
 msgstr "Slumpad"
@@ -3620,6 +3636,9 @@ msgstr "Resurstyp:"
 
 msgid "%{mineName} appearance:"
 msgstr "Utseende %{mineName}:"
+
+msgid "Click to select the color."
+msgstr "Klicka för att välja färg."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klicka här för att välja %{object} som resursalstrare för placering."
@@ -3737,6 +3756,10 @@ msgstr "Kartsvårighet:"
 
 msgid "N"
 msgstr "N"
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Är du säker på att du vill radera filen:"
 
 msgid "No maps exist at that size."
 msgstr "Finns inga kartor av den storleken."
@@ -3929,6 +3952,27 @@ msgstr "Slumpat Borgnamn"
 msgid "Random Town Name"
 msgstr "Slumpat Stadsnamn"
 
+msgid "BANNED SPELLS"
+msgstr "BANNLYSTA BESVÄRJELSER"
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr "Klicka för att bannlysa besvärjelser från att visas i Magisamfundet."
+
+msgid "Banned Spells"
+msgstr "Bannlysta Besvärjelser"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser som kommer att visas i Magisamfundet"
+
+msgid "SET SPELLS"
+msgstr "ANGE BESVÄRJELSER"
+
 msgid "Allow Castle build"
 msgstr "Tillåt Borgbygge"
 
@@ -3947,12 +3991,14 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
-"Klicka för att ändra Borgnamn. Högerklicka för att återställa till standard."
+msgid "Click to change the Castle name."
+msgstr "Klicka för att ändra Borgens namn."
 
 msgid "Enter Castle name"
 msgstr "Skriv Borgnamn"
+
+msgid "Reset the Castle name."
+msgstr "Återställ Borgens namn."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillåt att en borg byggs i denna stad."
@@ -3971,8 +4017,20 @@ msgstr "Begränsa Byggnadskonstruktion"
 msgid "Use default defenders army."
 msgstr "Använd försvararnas standardarmé."
 
-msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
+msgid "Reset the army."
+msgstr "Återställ armén."
+
+msgid "Set custom Castle Army."
+msgstr "Anpassa Borgarmén."
+
+msgid "Set spells to appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser att visas i Magisamfundet."
+
+msgid "Set Spells"
+msgstr "Ange Besvärjelser"
+
+msgid "Castle Settings"
+msgstr "Borginställningar"
 
 msgid "Message Text:"
 msgstr "Meddelandetext:"
@@ -4114,6 +4172,9 @@ msgstr ""
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
 
+msgid "Click to make selection."
+msgstr "Klicka för att göra ett val."
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."
 
@@ -4130,6 +4191,9 @@ msgstr "Föremål kan inte placeras utanför kartan."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
+
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4154,13 +4218,6 @@ msgid ""
 msgstr ""
 "Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
 "nuvarande karta kommer försvinna.)"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"STARTA\n"
-"KARTA"
 
 msgid "Main Menu"
 msgstr "Huvudmeny"
@@ -4256,6 +4313,13 @@ msgstr "Vägar"
 
 msgid "Streams"
 msgstr "Floder"
+
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr ""
+"Maximalt %{count} hjältar (inklusive fängslade hjältar) kan placeras på "
+"kartan."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4547,9 +4611,8 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-#, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
-msgstr "Återgå till Huvudmenyn."
+msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
 
 msgid "From Scratch"
 msgstr "Blank karta"
@@ -4564,11 +4627,10 @@ msgid "Random"
 msgstr "Slumpad"
 
 msgid "Back"
-msgstr ""
+msgstr "Tillbaka"
 
-#, fuzzy
 msgid "Return to the Editor's main menu options."
-msgstr "Återgå till Huvudmenyn."
+msgstr "Återgå till Kartredigerarens huvudmeny."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
@@ -4597,7 +4659,8 @@ msgstr "[%{pos}]: %{name}, %{race}borg"
 msgid "None."
 msgstr "Inga."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "En sida besegrar den andra."
 
 msgid "Accumulate gold."
@@ -4722,9 +4785,6 @@ msgstr "Ändra Kartbeskrivning"
 msgid "About"
 msgstr "Om"
 
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
-
 msgid "Click to edit custom rumors."
 msgstr "Klicka för att redigera anpassade rykten."
 
@@ -4776,6 +4836,13 @@ msgstr ""
 "Klicka för att ange kartsvårighet. Svårare kartor kan inkludera fler och "
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
+
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+"%{object}\n"
+"(%{color} spelare"
 
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
@@ -4847,6 +4914,12 @@ msgstr "Spara Karta:"
 
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Click to show only level %{level} spells."
+msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
+
+msgid "Spells level"
+msgstr "Besvärjelsenivå"
 
 msgid "Riddle:"
 msgstr "Gåta:"
@@ -5019,6 +5092,9 @@ msgstr "Gångna dagar"
 
 msgid "The number of days spent on this campaign."
 msgstr "Antal gångna dagar för denna kampanj."
+
+msgid "Scenario Title"
+msgstr "Scenarietitel"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination och huvudutveckling"
@@ -5270,7 +5346,7 @@ msgid "hotkey|hot seat game"
 msgstr "Heta stolen"
 
 msgid "hotkey|battle only game"
-msgstr "Endast strid"
+msgstr "Stridsläge"
 
 msgid "hotkey|choose the original campaign"
 msgstr "Välj orginalkampanj"
@@ -5469,6 +5545,9 @@ msgstr "Hoppa över runda i strid"
 
 msgid "hotkey|cast battle spell"
 msgstr "Kasta stridsbesvärjelse"
+
+msgid "hotkey|toggle display of battle turn order"
+msgstr "Visa turordningen för strid"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bostad, nivå 1"
@@ -5996,11 +6075,21 @@ msgstr "Klicka för att acceptera dessa inställningar och starta ett nytt spel.
 msgid "Click to return to the main menu."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Kartan är korrupt."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
 
+msgid "New Month!"
+msgstr "Ny Månad!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologerna utropar %{name} vecka."
+
+msgid "New Week!"
+msgstr "Ny Vecka!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter en vanlig ökning har beståndet av %{monster} fördubblats!"
@@ -6019,17 +6108,11 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
-msgid " All populations are halved."
-msgstr " Alla populationer är halverade."
+msgid "All populations are halved."
+msgstr "Alla populationer är halverade."
 
-msgid " All dwellings increase population."
-msgstr " Alla boningar ökar sin population."
-
-msgid "New Month!"
-msgstr "Ny Månad!"
-
-msgid "New Week!"
-msgstr "Ny Vecka!"
+msgid "All dwellings increase population."
+msgstr "Alla boningar ökar sin population."
 
 msgid "Beware!"
 msgstr "Varsko!"
@@ -6465,12 +6548,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}splundrare"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plundrat"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6495,6 +6572,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6503,9 +6583,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6594,6 +6671,9 @@ msgstr "Broder Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6612,14 +6692,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}splundrare"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plundrat"
 
 msgid " gives you maximum morale"
 msgstr " ger dig maximalt med stridsmoral"
@@ -6678,6 +6761,8 @@ msgid ""
 "Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
 "of lost treasure."
 msgstr ""
+"Ditt fartyg stöter till en tunna som driver på sjön. Inuti upptäcker du en "
+"gömma med skatter."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -7230,6 +7315,13 @@ msgid ""
 msgstr ""
 "Det är bättre att fly än att illa fäkta, så du bestämmer dig för att undvika "
 "denna strid för idag."
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+"Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
+"öppnar du den bara för att upptäcka att den är tom."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8147,8 +8239,8 @@ msgstr "Slumpad hjälte (Nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-msgid "Hero race:"
-msgstr "Hjälteklass"
+msgid "Hero class:"
+msgstr "Hjälteklass:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
@@ -8181,7 +8273,7 @@ msgstr "Ange patrullradie i antal rutor"
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
 
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Klicka för byta klass."
 
 msgid ""
@@ -9425,9 +9517,8 @@ msgstr "Frusen Sjö"
 msgid "Black Cat"
 msgstr "Svart Katt"
 
-#, fuzzy
 msgid "Barrel"
-msgstr "Barriär"
+msgstr "Tunna"
 
 msgid "randomRace|level 1 creatures"
 msgstr "nivå 1 varelser"
@@ -9939,8 +10030,8 @@ msgstr "Två-rutsanfall"
 msgid "Flyer"
 msgstr "Flygare"
 
-msgid "Always retaliates"
-msgstr "Vedergäller alltid"
+msgid "Unlimited retaliation"
+msgstr "Obegränsad vedergällning"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
@@ -12171,6 +12262,36 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vedergäller alltid"
+
+#, fuzzy
+#~ msgid "A maximum of 72 %{objects} can be placed on the map."
+#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+
+#~ msgid "Click to change the Castle name. Right-click to reset to default."
+#~ msgstr ""
+#~ "Klicka för att ändra Borgnamn. Högerklicka för att återställa till "
+#~ "standard."
+
+#~ msgid "Set custom Castle Army. Right-click to reset unit."
+#~ msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
 
 #~ msgid "CONFIG"
 #~ msgstr ""

@@ -222,14 +222,14 @@ public:
         return _race == Race::WZRD;
     }
 
-    bool isLibraryBuild() const
+    bool isLibraryBuilt() const
     {
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
     void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuilt() );
     }
 
     bool isFortificationBuilt() const
@@ -556,9 +556,14 @@ public:
         return _castles.size();
     }
 
+    // Return the maximum allowed castles and towns on map limited by the count of castle default names.
+    static size_t getMaximumAllowedCastles();
+
     void AddCastle( std::unique_ptr<Castle> && castle );
 
     Castle * Get( const fheroes2::Point & position ) const;
+
+    void removeCastle( const fheroes2::Point & position );
 
     void Scout( const PlayerColorsSet colors ) const;
 

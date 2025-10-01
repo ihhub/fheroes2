@@ -283,7 +283,7 @@ bool Maps::isValidDirection( int32_t from, int vector )
 
 fheroes2::Point Maps::GetPoint( const int32_t index )
 {
-    return fheroes2::Point( index % world.w(), index / world.w() );
+    return { index % world.w(), index / world.w() };
 }
 
 bool Maps::isValidAbsIndex( const int32_t index )
@@ -364,7 +364,7 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t wid
 
 MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
 {
-    const uint32_t dist = hero.GetVisionsDistance();
+    const uint32_t dist = Heroes::GetVisionsDistance();
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const PlayerColor heroColor = hero.GetColor();

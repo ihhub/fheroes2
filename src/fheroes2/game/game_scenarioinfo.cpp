@@ -151,7 +151,7 @@ namespace
                 normalSpecificOffset = 1;
             }
 
-            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
@@ -170,7 +170,7 @@ namespace
         return { textX, y, text.width(), text.height() };
     }
 
-    fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists, const int humanPlayerCount )
+    fheroes2::GameMode ChooseNewMap( MapsFileInfoList & lists, const int humanPlayerCount )
     {
         assert( !lists.empty() );
 
@@ -204,7 +204,7 @@ namespace
         const int32_t difficultyCursorWidth = difficultyCursor.width();
         const int32_t difficultyCursorHeight = difficultyCursor.height();
 
-        // vector coord difficulty
+        // Difficulty selection areas vector.
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
@@ -233,6 +233,7 @@ namespace
 
         const Maps::FileInfo & mapInfo = [&lists, &conf = std::as_const( conf )]() {
             const Maps::FileInfo & currentMapinfo = conf.getCurrentMapInfo();
+
             if ( currentMapinfo.filename.empty() ) {
                 return lists.front();
             }
@@ -253,6 +254,8 @@ namespace
         showCurrentlySelectedMapInfoInTextSupportMode( mapInfo );
         conf.setCurrentMapInfo( mapInfo );
         updatePlayers( players, humanPlayerCount );
+
+        // Load players parameters saved from the previous call of the scenario info dialog.
         Game::LoadPlayers( mapInfo.filename, players );
 
         Interface::PlayersInfo playersInfo;
@@ -322,6 +325,7 @@ namespace
             assert( 0 );
             break;
         }
+
         levelCursor.redraw();
 
         fheroes2::validateFadeInAndRender();
@@ -351,20 +355,23 @@ namespace
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists, false );
+                if ( lists.empty() ) {
+                    // This can happen if all maps have been deleted.
+                    result = fheroes2::GameMode::MAIN_MENU;
+                    break;
+                }
 
                 // The previous dialog might still have a pressed button event. We have to clean the state.
                 le.reset();
 
-                const std::string currentMapName = conf.getCurrentMapInfo().filename;
-
-                if ( fi && fi->filename != currentMapName ) {
+                if ( fi && fi->filename != conf.getCurrentMapInfo().filename ) {
                     showCurrentlySelectedMapInfoInTextSupportMode( *fi );
-                    Game::SavePlayers( currentMapName, conf.GetPlayers() );
+
+                    // The map is changed. Update the map data and do default initialization of players.
                     conf.setCurrentMapInfo( *fi );
 
                     mapTitleArea.restore();
                     RedrawMapTitle( conf, maxTextRoi, centeredTextRoi );
-                    Game::LoadPlayers( fi->filename, players );
 
                     opponentsArea.restore();
                     classArea.restore();
@@ -460,7 +467,8 @@ namespace
             }
         }
 
-        Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
+        // Save the changes players parameters before closing this dialog.
+        Game::SavePlayers( conf.getCurrentMapInfo().filename, players );
 
         return result;
     }
@@ -479,7 +487,7 @@ namespace
             }
 
             fheroes2::drawMainMenuScreen();
-            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
             return fheroes2::GameMode::MAIN_MENU;
         }
 
@@ -489,7 +497,7 @@ namespace
         }
 
         fheroes2::drawMainMenuScreen();
-        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "The map is corrupted or doesn't exist." ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
@@ -500,7 +508,7 @@ fheroes2::GameMode Game::SelectScenario( const uint8_t humanPlayerCount )
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
+    MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;

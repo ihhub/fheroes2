@@ -29,7 +29,6 @@
 #include <limits>
 #include <optional>
 #include <ostream>
-#include <random>
 #include <set>
 #include <tuple>
 
@@ -68,30 +67,14 @@
 
 namespace
 {
-    bool isTileBlockedForSettingMonster( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    bool isTileBlockedForSettingMonster( const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
     {
         const MapsIndexes & indexes = Maps::getAroundIndexes( tileId, radius );
 
-        for ( const int32_t indexId : indexes ) {
-            if ( excludeTiles.count( indexId ) > 0 ) {
-                return true;
-            }
-
-            const Maps::Tile & indexedTile = mapTiles[indexId];
-            if ( indexedTile.isWater() ) {
-                continue;
-            }
-
-            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
-            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
-                return true;
-            }
-        }
-
-        return false;
+        return std::any_of( indexes.cbegin(), indexes.cend(), [&excludeTiles]( const int32_t indexId ) { return excludeTiles.count( indexId ) > 0; } );
     }
 
-    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, std::mt19937 & gen )
+    int32_t findSuitableNeighbouringTile( const std::vector<Maps::Tile> & mapTiles, const int32_t tileId, const bool allDirections, Rand::PCG32 & gen )
     {
         std::vector<int32_t> suitableIds;
 
@@ -109,8 +92,19 @@ namespace
                 continue;
             }
 
+            const MP2::MapObjectType objectType = indexedTile.getMainObjectType( true );
+
+            // TODO: Check if the original game can spawn a monster over an event and if so whether the event keeps working after the monster is killed.
+            if ( objectType == MP2::OBJ_EVENT ) {
+                // The event is not considered as in-game action object to avoid confusion with visible action objects.
+                // We skip the tile with an event because there cannot be two action objects (monster and event) on one tile.
+                // And we don't need to leave space between event and spawned monster so we don't add tile to `excludeTiles`.
+
+                continue;
+            }
+
             // If the candidate tile is a coast tile, it is suitable only if there are other coast tiles nearby
-            if ( indexedTile.getMainObjectType( false ) == MP2::OBJ_COAST ) {
+            if ( objectType == MP2::OBJ_COAST ) {
                 const MapsIndexes coastTiles = Maps::ScanAroundObject( indexId, MP2::OBJ_COAST );
 
                 if ( coastTiles.empty() ) {
@@ -542,11 +536,11 @@ void World::NewWeek()
 void World::NewMonth()
 {
     if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
+        _monthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
-void World::MonthOfMonstersAction( const Monster & mons )
+void World::_monthOfMonstersAction( const Monster & mons )
 {
     if ( !mons.isValid() ) {
         return;
@@ -563,7 +557,16 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    std::mt19937 seededGen( _seed + month );
+    Rand::PCG32 seededGen( _seed + month );
+
+    // First we scan for Heroes, Castles and Monsters to exclude these from tiles and nearby tiles.
+    // We must do this prior to checking the possibility for a monster to spawn in order to properly perform the check on nearby tiles.
+    std::for_each( vec_tiles.cbegin(), vec_tiles.cend(), [&excludeTiles]( const Maps::Tile & tile ) {
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
+            excludeTiles.emplace( tile.GetIndex() );
+        }
+    } );
 
     for ( const Maps::Tile & tile : vec_tiles ) {
         if ( tile.isWater() ) {
@@ -572,15 +575,15 @@ void World::MonthOfMonstersAction( const Monster & mons )
         }
 
         const int32_t tileId = tile.GetIndex();
-        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
 
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
-            excludeTiles.emplace( tileId );
+        if ( excludeTiles.count( tileId ) > 0 ) {
             continue;
         }
 
+        const MP2::MapObjectType objectType = tile.getMainObjectType( true );
+
         if ( MP2::isInGameActionObject( objectType ) ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 3, excludeTiles ) ) {
                 continue;
             }
 
@@ -591,7 +594,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             }
         }
         else if ( tile.isRoad() ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 4, excludeTiles ) ) {
                 continue;
             }
 
@@ -606,7 +609,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
             }
         }
         else if ( isClearGround( tile ) ) {
-            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+            if ( isTileBlockedForSettingMonster( tileId, 4, excludeTiles ) ) {
                 continue;
             }
 
@@ -927,7 +930,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
+    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1365,7 +1368,7 @@ uint32_t World::GetWeekSeed() const
 {
     uint32_t weekSeed = _seed;
 
-    fheroes2::hashCombine( weekSeed, week );
+    Rand::combineSeedWithValueHash( weekSeed, week );
 
     return weekSeed;
 }

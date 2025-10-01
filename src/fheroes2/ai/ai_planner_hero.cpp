@@ -1221,8 +1221,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     }
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SKELETON:
-    case MP2::OBJ_WAGON: {
+    case MP2::OBJ_SKELETON: {
         const Artifact art = getArtifactFromTile( tile );
         if ( !art.isValid() ) {
             // Don't waste time to go here.
@@ -1230,6 +1229,23 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         }
 
         return 1000.0 * art.getArtifactValue();
+    }
+    case MP2::OBJ_WAGON: {
+        const Artifact art = getArtifactFromTile( tile );
+        if ( art.isValid() ) {
+            return 1000.0 * art.getArtifactValue();
+        }
+
+        const Funds loot = getFundsFromTile( tile );
+
+        const double value = getFundsValueBasedOnPriority( loot );
+
+        // This object could have already been visited
+        if ( value < 1 ) {
+            return valueToIgnore;
+        }
+
+        return value;
     }
     case MP2::OBJ_BOTTLE: {
         // A bottle is useless to AI as it contains only a message but it might block path.
@@ -2628,11 +2644,11 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
     const Maps::Tile & currTile = world.getTile( heroIdx );
     const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isSuitableForSummoningBoat() ) {
         return;
     }
 
-    // If the hero goes to the water tile, then this should be his last movement
+    // If the hero summons a boat on a water tile and then moves to that tile, then this should be his last movement
     assert( path.size() == 1 );
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
@@ -2719,12 +2735,12 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
     const Maps::Tile & currTile = world.getTile( heroIdx );
     const Maps::Tile & nextTile = world.getTile( nextTileIdx );
 
-    if ( currTile.isWater() || !nextTile.isWater() || nextTile.getMainObjectType() != MP2::OBJ_NONE ) {
+    if ( currTile.isWater() || !nextTile.isSuitableForSummoningBoat() ) {
         return;
     }
 
-    // If the hero goes to the water tile, then this should be his last movement
-    // (not counting the current step, which is not yet completed at the moment)
+    // If the hero summons a boat on a water tile and then moves to that tile, then this should be his
+    // last movement (not counting the current step, which is not yet completed at the moment)
     assert( path.size() == 2 );
 
     // It may happen that although the hero at the beginning of his path had enough spell points to
