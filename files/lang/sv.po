@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-09-12 21:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3757,6 +3757,10 @@ msgstr "Kartsvårighet:"
 msgid "N"
 msgstr "N"
 
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Är du säker på att du vill radera filen:"
+
 msgid "No maps exist at that size."
 msgstr "Finns inga kartor av den storleken."
 
@@ -6070,6 +6074,10 @@ msgstr "Klicka för att acceptera dessa inställningar och starta ett nytt spel.
 
 msgid "Click to return to the main menu."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Kartan är korrupt."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."

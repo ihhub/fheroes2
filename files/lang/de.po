@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -76,7 +76,7 @@ msgid "NO"
 msgstr "NEIN"
 
 msgid "DISMISS"
-msgstr "ABLEHNEN"
+msgstr "ENTLASSEN"
 
 msgid "UPGRADE"
 msgstr "AUFRÜSTEN"
@@ -3791,6 +3791,10 @@ msgid "N"
 msgstr "N"
 
 #, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Seid Ihr sicher, dass Ihr die Datei löschen möchten:"
+
+#, fuzzy
 msgid "No maps exist at that size."
 msgstr "Es gibt keine Karten in dieser Größe"
 
@@ -6230,6 +6234,10 @@ msgstr "Diese Einstellungen übernehmen und ein neues Spiel beginnen."
 
 msgid "Click to return to the main menu."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Die Speicherdatei ist beschädigt."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologen verkündigen den Monat im Zeichen %{name}."

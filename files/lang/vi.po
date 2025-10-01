@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3833,6 +3833,10 @@ msgid "N"
 msgstr "N"
 
 #, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ngươi có chắc muốn xóa file:"
+
+#, fuzzy
 msgid "No maps exist at that size."
 msgstr "Không có bản đồ nào ở cỡ này"
 
@@ -6247,6 +6251,10 @@ msgstr "Nhấp để chấp nhận các cài đặt này và bắt đầu trò c
 
 msgid "Click to return to the main menu."
 msgstr "Nhấp để quay lại màn hình chính."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "File lưu bị hỏng."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tháng của %{name}."

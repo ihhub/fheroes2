@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3897,6 +3897,10 @@ msgid "N"
 msgstr ""
 
 #, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Er du sikker på at du vil slette filen:"
+
+#, fuzzy
 msgid "No maps exist at that size."
 msgstr "Det fins ingen kart i den størrelsen"
 
@@ -6346,6 +6350,10 @@ msgstr "Klikk her for å bekrefte disse valgene og begynne på et nytt parti."
 
 msgid "Click to return to the main menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Lagringsfilen er korrupt."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologene kunngjør at det er måneden av %{name}."

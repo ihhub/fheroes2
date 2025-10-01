@@ -23,8 +23,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <map>
 #include <memory>
+#include <numeric>
 
 #include "agg_image.h"
 #include "icn.h"
@@ -723,6 +725,66 @@ namespace fheroes2
         }
     }
 
+    size_t TextInput::getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool moveUp )
+    {
+        std::vector<TextLineInfo> tempLineInfos;
+        _getTextLineInfos( tempLineInfos, maxWidth, height(), true );
+        if ( tempLineInfos.empty() ) {
+            return currentPos;
+        }
+
+        size_t currentLineNumber = 0;
+        size_t numberOfCharacters = 0;
+        while ( numberOfCharacters + tempLineInfos[currentLineNumber].characterCount <= currentPos && currentLineNumber < tempLineInfos.size() - 1 ) {
+            numberOfCharacters += tempLineInfos[currentLineNumber].characterCount;
+            ++currentLineNumber;
+        }
+
+        size_t targetLineNumber = 0;
+        if ( moveUp ) {
+            if ( currentLineNumber == 0 ) {
+                return currentPos;
+            }
+            targetLineNumber = currentLineNumber - 1;
+        }
+        else {
+            if ( currentLineNumber == tempLineInfos.size() - 1 ) {
+                return currentPos;
+            }
+            targetLineNumber = currentLineNumber + 1;
+        }
+
+        const fheroes2::FontCharHandler charHandler( _fontType );
+
+        auto countCharacters = []( const size_t count, const TextLineInfo & textLineInfo ) { return count + textLineInfo.characterCount; };
+        const size_t currentLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[currentLineNumber], size_t{ 0 }, countCharacters );
+        const size_t targetLineStartPos = std::accumulate( tempLineInfos.data(), &tempLineInfos[targetLineNumber], size_t{ 0 }, countCharacters );
+
+        // TODO update those line once we support different alignment in multi-line text.
+        const int32_t currentXPos = ( ( maxWidth - tempLineInfos[currentLineNumber].lineWidth ) / 2 )
+                                    + charHandler.getWidth( std::string_view( &_text[currentLineStartPos], currentPos - currentLineStartPos ) );
+        const int32_t targetLineXOffset = ( maxWidth - tempLineInfos[targetLineNumber].lineWidth ) / 2;
+
+        size_t bestPos = targetLineStartPos;
+        int32_t bestDistance = std::abs( currentXPos - targetLineXOffset );
+
+        int32_t targetXPos = targetLineXOffset;
+        for ( int32_t i = 0; i < tempLineInfos[targetLineNumber].characterCount + 1; ++i ) {
+            const size_t textPos = targetLineStartPos + i;
+            const int32_t distance = std::abs( currentXPos - targetXPos );
+            if ( distance < bestDistance ) {
+                bestDistance = distance;
+                bestPos = textPos;
+            }
+
+            if ( textPos < _text.size() ) {
+                targetXPos += charHandler.getWidth( static_cast<uint8_t>( _text[textPos] ) );
+            }
+        }
+
+        return bestPos;
+    }
+
     void TextInput::fitToOneRow( const int32_t maxWidth )
     {
         assert( maxWidth > 0 );
@@ -1224,6 +1286,15 @@ namespace fheroes2
         assert( ( _fontType.size != FontSize::BUTTON_RELEASED && _fontType.size != FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
 
         return image.x() + image.width();
+    }
+
+    int32_t FontCharHandler::getWidth( const std::string_view text ) const
+    {
+        int32_t width = 0;
+        for ( const char c : text ) {
+            width += getWidth( c );
+        }
+        return width;
     }
 
     bool FontCharHandler::_isValid( const uint8_t character ) const

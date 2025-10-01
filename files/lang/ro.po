@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3628,6 +3628,10 @@ msgstr "Dificultatea hărții:"
 msgid "N"
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ești sigur că vrei să te retragi?"
+
 msgid "No maps exist at that size."
 msgstr ""
 
@@ -5853,6 +5857,10 @@ msgstr ""
 
 msgid "Click to return to the main menu."
 msgstr ""
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Acest fișier este corupt."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
