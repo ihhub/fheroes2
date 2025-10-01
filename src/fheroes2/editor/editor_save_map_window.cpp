@@ -81,23 +81,40 @@ namespace
         void ActionListDoubleClick( Maps::FileInfo & info ) override;
         void ActionListSingleClick( Maps::FileInfo & info ) override;
 
-        void ActionListPressRight( Maps::FileInfo & info ) override
+
+        void ActionListPressRight( Maps::FileInfo & info )
         {
-            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.getSupportedLanguage() );
 
             fheroes2::MultiFontText body;
 
-            body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
-            body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.description, fheroes2::FontType::normalWhite() } );
+            body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
+            switch ( info.version ) {
+            case GameVersion::SUCCESSION_WARS:
+                body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
+                break;
+            case GameVersion::PRICE_OF_LOYALTY:
+                body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
+                break;
+            case GameVersion::RESURRECTION:
+                body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            if ( info.version == GameVersion::RESURRECTION ) {
+                body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
+                body.add( { fheroes2::getLanguageName( info.mainLanguage ), fheroes2::FontType::normalWhite() } );
+            }
+
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
             body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
+
 
         int getCurrentId() const
         {
