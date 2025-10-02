@@ -24,15 +24,11 @@
 #include <string>
 #include <vector>
 
+#include "game_video.h"
 #include "maps_fileinfo.h"
 
 class IStreamBase;
 class OStreamBase;
-
-namespace Video
-{
-    enum class VideoAction : int;
-}
 
 namespace Campaign
 {
@@ -120,13 +116,7 @@ namespace Campaign
         static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
     };
 
-    struct ScenarioIntroVideoInfo
-    {
-        std::string fileName;
-        Video::VideoAction action;
-    };
-
-    using VideoSequence = std::vector<ScenarioIntroVideoInfo>;
+    using VideoSequence = std::vector<std::vector<Video::VideoInfo>>;
 
     class ScenarioData
     {
@@ -176,12 +166,12 @@ namespace Campaign
             return _lossCondition;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getStartScenarioVideoPlayback() const
+        const VideoSequence & getStartScenarioVideoPlayback() const
         {
             return _startScenarioVideoPlayback;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getEndScenarioVideoPlayback() const
+        const VideoSequence & getEndScenarioVideoPlayback() const
         {
             return _endScenarioVideoPlayback;
         }

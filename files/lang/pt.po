@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3792,6 +3792,10 @@ msgstr "Dificuldade do Mapa:"
 msgid "N"
 msgstr "N"
 
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Você tem certeza de que deseja apagar este arquivo:"
+
 msgid "No maps exist at that size."
 msgstr "Não existem mapas com esse tamanho."
 
@@ -6125,6 +6129,10 @@ msgstr "Clique para aceitar estas configurações e começar um novo jogo."
 
 msgid "Click to return to the main menu."
 msgstr "Clique para retornar ao menu principal."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "O mapa está corrompido."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Os astrólogos proclamam o Mês de %{name}."
