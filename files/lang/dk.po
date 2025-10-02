@@ -4732,7 +4732,8 @@ msgstr "[%{pos}]: %{name}, %{race} borg"
 msgid "None."
 msgstr "Ingen."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "En side besejrer den anden."
 
 msgid "Accumulate gold."
