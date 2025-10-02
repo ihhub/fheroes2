@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 01:29+0000\n"
+"POT-Creation-Date: 2025-10-01 00:02+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3844,6 +3844,10 @@ msgid "N"
 msgstr "N"
 
 #, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Czy na pewno chcesz usunąć plik:"
+
+#, fuzzy
 msgid "No maps exist at that size."
 msgstr "Brak map o tym rozmiarze"
 
@@ -6260,6 +6264,10 @@ msgstr "Kliknij, aby użyć tych ustawień i rozpocząć nową grę."
 
 msgid "Click to return to the main menu."
 msgstr "Kliknij, aby wrócić do głównego menu."
+
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Plik z zapisaną grą jest uszkodzony."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologowie ogłaszają, że symbolem tego miesiąca będzie %{name}."
