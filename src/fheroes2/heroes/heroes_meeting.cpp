@@ -316,6 +316,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
+    // shadow
+    if ( !isDefaultScreenSize ) {
+        fheroes2::addGradientShadowForArea( display, dst_pt, backSprite.width(), backSprite.height(), fheroes2::borderWidthPx );
+    }
+
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
@@ -385,7 +390,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.setTableSize( { 8, 1 } );
     secskill_bar1.setInBetweenItemsOffset( { -1, 0 } );
-    secskill_bar1.SetContent( secondary_skills.ToVector() );
+    secskill_bar1.SetContent( _secondarySkills.ToVector() );
     secskill_bar1.setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
     secskill_bar1.Redraw( display );
 
@@ -476,7 +481,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -61,10 +61,10 @@
 
 namespace
 {
-    struct ValueColors : std::pair<int, int>
+    struct ValueColors : std::pair<int, PlayerColorsSet>
     {
-        ValueColors( int value, int color )
-            : std::pair<int, int>( value, color )
+        ValueColors( int value, PlayerColorsSet colors )
+            : std::pair<int, PlayerColorsSet>( value, colors )
         {}
 
         static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
@@ -73,39 +73,39 @@ namespace
         }
     };
 
-    void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
+    void UpdateValuesColors( std::vector<ValueColors> & v, const int value, const PlayerColor color )
     {
         const auto it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.first == value; } );
 
         if ( it == v.end() ) {
-            v.emplace_back( value, color );
+            v.emplace_back( value, static_cast<PlayerColorsSet>( color ) );
         }
         else {
             ( *it ).second |= color;
         }
     }
 
-    void getInfo( std::vector<ValueColors> & v, const Colors & colors, const std::function<int( const int )> & getValue )
+    void getInfo( std::vector<ValueColors> & v, const PlayerColorsVector & colors, const std::function<int( const PlayerColor )> & getValue )
     {
         // 'getValue' should contain a callable function.
         assert( getValue );
 
         v.clear();
 
-        for ( const int color : colors ) {
+        for ( const PlayerColor color : colors ) {
             UpdateValuesColors( v, getValue( color ), color );
         }
 
         std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
     }
 
-    int getWoodOreValue( const int color )
+    int getWoodOreValue( const PlayerColor color )
     {
         const Funds & funds = world.GetKingdom( color ).GetFunds();
         return funds.Get( Resource::WOOD ) + funds.Get( Resource::ORE );
     }
 
-    int getGemsCrSlfMerValue( const int color )
+    int getGemsCrSlfMerValue( const PlayerColor color )
     {
         const Funds & funds = world.GetKingdom( color ).GetFunds();
         return funds.Get( Resource::GEMS ) + funds.Get( Resource::CRYSTAL ) + funds.Get( Resource::SULFUR ) + funds.Get( Resource::MERCURY );
@@ -123,11 +123,11 @@ namespace
         const int32_t offsetY = pos.y - 4;
 
         for ( size_t i = 0; i < flagGroups; ++i ) {
-            const Colors colors( v[i].second );
+            const PlayerColorsVector colors( v[i].second );
 
             int32_t offsetX = pos.x + static_cast<int32_t>( i ) * step - ( static_cast<int32_t>( colors.size() ) * sptireWidth ) / 2 + 3;
 
-            for ( const int color : colors ) {
+            for ( const PlayerColor color : colors ) {
                 const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( color ) );
                 fheroes2::Blit( flag, output, offsetX, offsetY );
                 offsetX += sptireWidth;
@@ -161,11 +161,12 @@ namespace
         text.draw( offsetX + 50 - text.width(), offsetY, output );
     }
 
-    void drawHeroIcons( const Colors & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID, fheroes2::Image & output )
+    void drawHeroIcons( const PlayerColorsVector & colors, const bool drawStats, const fheroes2::Point & pos, const int32_t step, const int frameIcnID,
+                        fheroes2::Image & output )
     {
         int32_t offsetX = pos.x + 1;
 
-        for ( const int color : colors ) {
+        for ( const PlayerColor color : colors ) {
             const Heroes * hero = world.GetKingdom( color ).GetBestHero();
             if ( hero == nullptr ) {
                 offsetX += step;
@@ -186,11 +187,11 @@ namespace
         }
     }
 
-    void drawPersonality( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    void drawPersonality( const PlayerColorsVector & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
     {
         int32_t offsetX = pos.x;
 
-        for ( const int color : colors ) {
+        for ( const PlayerColor color : colors ) {
             const Player * player = Players::Get( color );
             const fheroes2::Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), fheroes2::FontType::smallWhite() );
             text.draw( offsetX - text.width() / 2, pos.y, output );
@@ -199,11 +200,11 @@ namespace
         }
     }
 
-    void drawBestMonsterIcons( const Colors & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
+    void drawBestMonsterIcons( const PlayerColorsVector & colors, const fheroes2::Point & pos, const int32_t step, fheroes2::Image & output )
     {
         int32_t offsetX = pos.x;
 
-        for ( const int color : colors ) {
+        for ( const PlayerColor color : colors ) {
             const Monster monster = world.GetKingdom( color ).GetStrongestMonster();
             if ( monster.isValid() ) {
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
@@ -278,7 +279,7 @@ void Dialog::ThievesGuild( const bool oracle )
     const uint32_t thievesGuildCount = oracle ? 0xFF : world.GetKingdom( Settings::Get().CurrentColor() ).GetCountBuilding( BUILD_THIEVESGUILD );
 
     std::vector<ValueColors> valuesForPlayerColors;
-    const Colors colors( Game::GetActualKingdomColors() );
+    const PlayerColorsVector colors( Game::GetActualKingdomColors() );
     const size_t playersCount = colors.size();
     valuesForPlayerColors.reserve( playersCount );
     const int32_t textOffsetX = dialogRoi.x + 207;
@@ -320,21 +321,21 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     offset.x = startOffsetX;
-    getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).GetCountTown() ); } );
+    getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).GetCountTown() ); } );
     drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
 
     text.set( _( "Number of Castles:" ), fheroes2::FontType::normalWhite() );
     offset.y += 24;
     text.draw( textOffsetX - text.width(), offset.y, display );
 
-    getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).GetCountCastle() ); } );
+    getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).GetCountCastle() ); } );
     drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
 
     text.set( _( "Number of Heroes:" ), fheroes2::FontType::normalWhite() );
     offset.y += 24;
     text.draw( textOffsetX - text.width(), offset.y, display );
 
-    getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).GetHeroes().size() ); } );
+    getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).GetHeroes().size() ); } );
     drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
 
     text.set( _( "Gold in Treasury:" ), fheroes2::FontType::normalWhite() );
@@ -342,7 +343,7 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     if ( thievesGuildCount > 1 ) {
-        getInfo( valuesForPlayerColors, colors, []( const int color ) { return world.GetKingdom( color ).GetFunds().Get( Resource::GOLD ); } );
+        getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return world.GetKingdom( color ).GetFunds().Get( Resource::GOLD ); } );
         drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
     }
 
@@ -369,7 +370,8 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     if ( thievesGuildCount > 2 ) {
-        getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).CountVisitedObjects( MP2::OBJ_OBELISK ) ); } );
+        getInfo( valuesForPlayerColors, colors,
+                 []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).CountVisitedObjects( MP2::OBJ_OBELISK ) ); } );
         drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
     }
 
@@ -378,7 +380,7 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     if ( thievesGuildCount > 3 ) {
-        getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).GetCountArtifacts() ); } );
+        getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).GetCountArtifacts() ); } );
         drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
     }
 
@@ -387,7 +389,7 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     if ( thievesGuildCount > 3 ) {
-        getInfo( valuesForPlayerColors, colors, []( const int color ) { return static_cast<int>( world.GetKingdom( color ).GetArmiesStrength() ); } );
+        getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return static_cast<int>( world.GetKingdom( color ).GetArmiesStrength() ); } );
         drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
     }
 
@@ -396,14 +398,14 @@ void Dialog::ThievesGuild( const bool oracle )
     text.draw( textOffsetX - text.width(), offset.y, display );
 
     if ( thievesGuildCount > 4 ) {
-        getInfo( valuesForPlayerColors, colors, []( const int color ) { return world.GetKingdom( color ).GetIncome().gold; } );
+        getInfo( valuesForPlayerColors, colors, []( const PlayerColor color ) { return world.GetKingdom( color ).GetIncome().gold; } );
         drawFlags( valuesForPlayerColors, offset, stepX, playersCount, display );
     }
 
     // Render color's names for each player.
     offset.y += 24;
     bool shiftVertically = false;
-    for ( const int color : colors ) {
+    for ( const PlayerColor color : colors ) {
         text.set( Color::String( color ), fheroes2::FontType::normalWhite() );
         text.draw( offset.x - text.width() / 2, shiftVertically ? ( offset.y + 15 ) : offset.y, display );
         offset.x += stepX;
@@ -455,7 +457,7 @@ void Dialog::ThievesGuild( const bool oracle )
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;

@@ -1,69 +1,99 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
-.\" (C) Copyright 2022  fheroes2 team <fhomm2@gmail.com>
+.\" (C) Copyright 2022 - 2025 fheroes2 team <fhomm2@gmail.com>
 .\"
-.TH fheroes2 6 "May 2022"
+.TH fheroes2 6 "April 2025"
 .\" Please adjust this date whenever revising the manpage.
 .SH NAME
-fheroes2 \- free remake of Heroes of Might and Magic II game engine
+fheroes2 \- free remake of the Heroes of Might and Magic II game engine
 .SH SYNOPSIS
 .B fheroes2
 .SH DESCRIPTION
-\fBfheroes2\fR is a free implementation of Heroes of Might and Magic II game engine,
-a classic turn-based strategy, with significant improvements in the gameplay, graphics
+\fBfheroes2\fP is a free implementation of the Heroes of Might and Magic II game engine,
+a classic turn-based strategy game, with significant improvements in gameplay, graphics
 and logic (including support for high-resolution graphics, improved AI,
 numerous fixes and UI improvements).
 .PP
-To play the game, original resources from a demo or full version are needed.
+To play the game, the assets from the demo version or the full version of the original
+Heroes of Might and Magic II game are needed.
 .SH GAME DATA PATHS 
-The following directories are searched as data root:
+.SS The engine assets are searched for in the following directories:
 #_SG
 .TP
 .B @FHEROES2_DATA@
-The system-wide location that can be accessed by all users.
+System-wide data directory that can be accessed by all users.
 #_EG
 .TP
-.B FHEROES2_DATA
-This environment variable can contain a path to a directory with game files.
+.B $FHEROES2_DATA
+This environment variable may contain the path to a custom assets directory.
 .TP
-.B Current working directory
+.B Game engine executable directory
+Directory containing the executable file used to run the engine.
 .TP
 .B @data@
 Per-user data directory.
-This path can be overridden by XDG_DATA_HOME environment variable.
+This path can be overridden by \fIXDG_DATA_HOME\fP environment variable.
 .PP
-The game resources which searched in these directories:
+.SS The structure of engine assets is as follows:
+.TP
+.B anim/*.smk
+.TQ
+.B anim2/*.smk
+.TQ
+.B heroes2/anim/*.smk
+Video files of the original game.
 .TP
 .B data/*.agg
-Original assets (required).
+Assets of the original game (required).
 .TP
 .B files/data/*.h2d
-Additional non-original assets from fheroes2 project.
+Additional non-original assets from the fheroes2 project. These assets are inextricably linked
+to a specific version of the engine, and must be updated when the engine version changes.
 .TP
 .B files/lang/*.mo
-Translations from fheroes2 project.
+Translations of the fheroes2 project into different languages.
 .TP
-.B files/soundfonts/*
-Additional SoundFont files for MIDI synthesizer. sf2 and sf3 formats are supported.
+.B files/soundfonts/*.sf2
+.TQ
+.B files/soundfonts/*.sf3
+Additional SoundFont files for the MIDI synthesizer.
 .TP
-.B maps/*
-.br
-Single scenarios and campaigns (h2c, hxc, mp2, mx2 files).
+.B files/timidity/timidity.cfg
+Configuration file for the TiMidity MIDI synthesizer.
 .TP
-.B music/*
-CD audio music tracks which are ripped in mp3, ogg or flac formats.
-The tracks should be named as "homm2_XX.ext" or "TrackXX.ext" where XX is a track number and ext is an extension.
-Numeration starts from "01" for the "homm2_" prefix and from "02" for the "Track" prefix.
+.B files/timidity/instruments/*.pat
+GUS patches (samples of musical instruments) for the TiMidity MIDI synthesizer.
 .TP
-\fBanim/*.smk\fP or \fBanim2/*.smk\fP or \fBheroes2/anim/*.smk\fP
-Video files.
+.B maps/*.fh2m
+Map files in the fheroes2 format.
+.TP
+.B maps/*.h2c
+.TQ
+.B maps/*.hxc
+Campaign map files.
+.TP
+.B maps/*.mp2
+.TQ
+.B maps/*.mx2
+Map files in the original game format.
+.TP
+.B music/*.flac
+.TQ
+.B music/*.mp3
+.TQ
+.B music/*.ogg
+Music tracks ripped from the original game CD. These tracks should be named as \fIhomm2_XX.ext\fP
+or \fITrackXX.ext\fP where \fIXX\fP is a track number and \fIext\fP is an extension. Numeration
+starts from \fI01\fP for the \fIhomm2_\fP prefix and from \fI02\fP for the \fITrack\fP prefix.
 .SH ENVIRONMENT
 .TP
 .B FHEROES2_DATA
-See the section \fBGAME DATA PATHS\fR above.
+See the section \fBGAME DATA PATHS\fP above.
 .SH FILES
 .TP
 .B @config@
 This directory contains per-user configuration files.
-\fBfheroes2.cfg\fR is for game options and \fBfheroes2.key\fR is for hotkeys.
-This path can be overridden by the XDG_CONFIG_HOME environment variable.
-
+\fIfheroes2.cfg\fP is for game options and \fIfheroes2.key\fP is for hotkeys.
+This path can be overridden by the \fIXDG_CONFIG_HOME\fP environment variable.
+.TP
+.B @data@/files/save
+This directory contains per-user save files.

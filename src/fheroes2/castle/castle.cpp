@@ -74,12 +74,13 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
 #include "week.h"
 #include "world.h"
 
 namespace
 {
-    const size_t maximumCastles = 72;
+    constexpr size_t maximumCastles = 72;
 
     const std::array<const char *, maximumCastles> defaultCastleNames
         = { gettext_noop( "Blackridge" ),   gettext_noop( "Pinehurst" ),   gettext_noop( "Woodhaven" ),    gettext_noop( "Hillstone" ),  gettext_noop( "Whiteshield" ),
@@ -97,13 +98,6 @@ namespace
             gettext_noop( "Lankershire" ),  gettext_noop( "Lombard" ),     gettext_noop( "Timberhill" ),   gettext_noop( "Fenton" ),     gettext_noop( "Troy" ),
             gettext_noop( "Forder Oaks" ),  gettext_noop( "Meramec" ),     gettext_noop( "Quick Silver" ), gettext_noop( "Westmoor" ),   gettext_noop( "Willow" ),
             gettext_noop( "Sheltemburg" ),  gettext_noop( "Corackston" ) };
-}
-
-Castle::Castle( const int32_t posX, const int32_t posY, int race )
-    : MapPosition( { posX, posY } )
-    , _race( race )
-{
-    // Do nothing.
 }
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
@@ -222,25 +216,25 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     const uint8_t ownerColor = dataStream.get();
     switch ( ownerColor ) {
     case 0:
-        SetColor( Color::BLUE );
+        SetColor( PlayerColor::BLUE );
         break;
     case 1:
-        SetColor( Color::GREEN );
+        SetColor( PlayerColor::GREEN );
         break;
     case 2:
-        SetColor( Color::RED );
+        SetColor( PlayerColor::RED );
         break;
     case 3:
-        SetColor( Color::YELLOW );
+        SetColor( PlayerColor::YELLOW );
         break;
     case 4:
-        SetColor( Color::ORANGE );
+        SetColor( PlayerColor::ORANGE );
         break;
     case 5:
-        SetColor( Color::PURPLE );
+        SetColor( PlayerColor::PURPLE );
         break;
     default:
-        SetColor( Color::NONE );
+        SetColor( PlayerColor::NONE );
         break;
     }
 
@@ -372,8 +366,8 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         _race = Race::NECR;
         break;
     default: {
-        const uint32_t kingdomRace = Players::GetPlayerRace( GetColor() );
-        _race = ( Color::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
+        const int kingdomRace = Players::GetPlayerRace( GetColor() );
+        _race = ( PlayerColor::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
         break;
     }
     }
@@ -394,6 +388,9 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     }
 
     // Skip the rest of 29 bytes.
+
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability() );
 
     _postLoad();
 }
@@ -422,6 +419,9 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
     if ( !metadata.customName.empty() ) {
         _name = metadata.customName;
     }
+
+    // MageGuild
+    _mageGuild.initialize( _race, HaveLibraryCapability(), metadata.mustHaveSpells, metadata.bannedSpells );
 
     _postLoad();
 }
@@ -503,12 +503,10 @@ void Castle::_postLoad()
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
     }
 
-    // MageGuild
-    _mageGuild.initialize( _race, HaveLibraryCapability() );
     _trainGuestHeroAndCaptainInMageGuild();
 
     // AI troops auto pack for gray towns
-    if ( Color::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
+    if ( PlayerColor::NONE == GetColor() && !Modes( CUSTOM_ARMY ) ) {
         // towns get 4 reinforcements at the start of the game
         for ( int i = 0; i < 4; ++i )
             _joinRNDArmy();
@@ -664,6 +662,11 @@ Troops Castle::getAvailableArmy( Funds potentialBudget ) const
     return reinforcement;
 }
 
+void Castle::fixFrenchCharactersInName()
+{
+    fheroes2::fixFrenchCharactersForMP2Map( _name );
+}
+
 double Castle::getArmyRecruitmentValue() const
 {
     return getAvailableArmy( GetKingdom().GetFunds() ).GetStrength();
@@ -681,7 +684,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
     const int mageGuildLevel = GetLevelMageGuild();
     if ( mageGuildLevel > 0 ) {
         const int spellPower = hero.GetPower();
-        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+        const SpellStorage & guildSpells = _mageGuild.GetSpells( GetLevelMageGuild(), isLibraryBuilt() );
         for ( const Spell & spell : guildSpells ) {
             if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
                 spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
@@ -844,7 +847,7 @@ void Castle::ActionNewWeek()
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6,
             DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
 
-    const bool isNeutral = ( GetColor() == Color::NONE );
+    const bool isNeutral = ( GetColor() == PlayerColor::NONE );
     const bool isPlagueWeek = ( world.GetWeekType().GetType() == WeekName::PLAGUE );
     const bool isMonsterWeek = ( world.GetWeekType().GetType() == WeekName::MONSTERS );
 
@@ -943,7 +946,7 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ChangeColor( const int newColor )
+void Castle::ChangeColor( const PlayerColor newColor )
 {
     SetColor( newColor );
     _army.SetColor( newColor );
@@ -1283,9 +1286,7 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
         _captain.LoadDefaults( HeroBase::CAPTAIN, _race );
         _captain.SetSpellPoints( _captain.GetMaxSpellPoints() );
 
-        if ( GetLevelMageGuild() > 0 ) {
-            trainHeroInMageGuild( _captain );
-        }
+        trainHeroInMageGuild( _captain );
         break;
 
     case BUILD_SPEC:
@@ -2187,7 +2188,7 @@ void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 int Castle::GetControl() const
 {
     // Neutral castles & towns are always controlled by AI
-    return ( GetColor() & Color::ALL ) ? GetKingdom().GetControl() : CONTROL_AI;
+    return ( Color::allPlayerColors() & GetColor() ) ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
 uint32_t Castle::GetGrownWell()
@@ -2285,6 +2286,11 @@ AllCastles::AllCastles()
     _castles.reserve( maximumCastles );
 }
 
+size_t AllCastles::getMaximumAllowedCastles()
+{
+    return maximumCastles;
+}
+
 void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
     assert( castle );
@@ -2341,12 +2347,43 @@ Castle * AllCastles::Get( const fheroes2::Point & position ) const
     return _castles[iter->second].get();
 }
 
-void AllCastles::Scout( const int colors ) const
+void AllCastles::removeCastle( const fheroes2::Point & position )
+{
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() ) {
+        return;
+    }
+
+    const size_t castleId = iter->second;
+
+    _castles.erase( _castles.begin() + castleId );
+
+    _castleTiles.erase( iter );
+
+    // Castle is represented by more than 1 tile on the radar - remove the other tiles.
+    for ( auto it = _castleTiles.begin(); it != _castleTiles.end(); ) {
+        if ( it->second == castleId ) {
+            it = _castleTiles.erase( it );
+        }
+        else {
+            ++it;
+        }
+    }
+
+    // After the castle is removed we need to decrease the indices of the castles with "id" more than `castleId`.
+    for ( auto & [pos, id] : _castleTiles ) {
+        if ( id > castleId ) {
+            --id;
+        }
+    }
+}
+
+void AllCastles::Scout( const PlayerColorsSet colors ) const
 {
     for ( const Castle * castle : *this ) {
         assert( castle != nullptr );
 
-        if ( !( castle->GetColor() & colors ) ) {
+        if ( !( colors & castle->GetColor() ) ) {
             continue;
         }
 
@@ -2515,6 +2552,9 @@ std::string Castle::GetDescriptionBuilding( const uint32_t buildingType ) const
         }
         break;
     }
+    case BUILD_MOAT:
+        StringReplace( res, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
+        break;
 
     case BUILD_SPEC:
     case BUILD_STATUE: {

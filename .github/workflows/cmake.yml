@@ -27,7 +27,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies (Linux)
       if: ${{ startsWith( matrix.os, 'ubuntu-' ) }}
       run: |
@@ -56,7 +56,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Update vcpkg
       run: |
         cd "$VCPKG_INSTALLATION_ROOT"
@@ -75,7 +75,7 @@ jobs:
     - name: Build
       run: |
         cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON \
-                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE=C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake \
+                           -DENABLE_TOOLS=ON -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT\\scripts\\buildsystems\\vcpkg.cmake" \
                            -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake.exe --build build --config Debug
     - name: Install

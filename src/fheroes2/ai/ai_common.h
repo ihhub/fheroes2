@@ -27,6 +27,7 @@ class Army;
 class Castle;
 class Heroes;
 class Kingdom;
+class UltimateArtifact;
 
 struct Funds;
 
@@ -66,4 +67,9 @@ namespace AI
     // It is assumed that allied AI players can talk like human players do in real life.
     // The information is shared only if all allies are AI. If any of them is a human player then no information will be shared.
     void shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex );
+
+    // Returns true if Ultimate Artifact is available to the given hero for pickup, otherwise returns false. In short,
+    // the Ultimate Artifact is considered available to the given hero if this hero knows its exact location and there
+    // is a free slot in the hero's artifact bag. See the implementation for details.
+    bool isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero );
 }

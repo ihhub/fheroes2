@@ -20,7 +20,6 @@
 
 #include "maps_tiles_render.h"
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -433,29 +432,29 @@ namespace
     {
         icnId = ICN::UNKNOWN;
 
-        const int heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
         switch ( heroColor ) {
-        case Color::BLUE:
+        case PlayerColor::BLUE:
             icnId = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
             break;
-        case Color::GREEN:
+        case PlayerColor::GREEN:
             icnId = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
             break;
-        case Color::RED:
+        case PlayerColor::RED:
             icnId = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
             break;
-        case Color::YELLOW:
+        case PlayerColor::YELLOW:
             icnId = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
             break;
-        case Color::ORANGE:
+        case PlayerColor::ORANGE:
             icnId = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
             break;
-        case Color::PURPLE:
+        case PlayerColor::PURPLE:
             icnId = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << heroColor )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << static_cast<int>( heroColor ) )
             break;
         }
 
@@ -920,7 +919,7 @@ namespace Maps
         }
     }
 
-    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area, const bool isEditor )
+    void redrawPassable( const Tile & tile, fheroes2::Image & dst, const PlayerColorsSet friendColors, const Interface::GameArea & area, const bool isEditor )
     {
 #ifdef WITH_DEBUG
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {

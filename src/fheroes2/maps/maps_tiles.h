@@ -72,7 +72,7 @@ namespace Maps
 
         ~ObjectPart() = default;
 
-        // Returns true if it can be passed be hero/boat: part's layer type is SHADOW or TERRAIN.
+        // Returns true if it can be passed by a hero (or a hero on a boat): part's layer type is SHADOW or TERRAIN.
         bool isPassabilityTransparent() const
         {
             return layerType == SHADOW_LAYER || layerType == TERRAIN_LAYER;
@@ -114,7 +114,7 @@ namespace Maps
             return !operator==( tile );
         }
 
-        void Init( int32_t index, const MP2::MP2TileInfo & mp2 );
+        void Init( const MP2::MP2TileInfo & mp2 );
 
         void setIndex( const int32_t index )
         {
@@ -128,7 +128,15 @@ namespace Maps
 
         fheroes2::Point GetCenter() const;
 
-        MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType getMainObjectType() const
+        {
+            return _mainObjectType;
+        }
+
+        constexpr MP2::MapObjectType getMainObjectType( const bool ignoreObjectUnderHero ) const
+        {
+            return ignoreObjectUnderHero ? _mainObjectType : _getMainObjectTypeUnderHero();
+        }
 
         const ObjectPart & getMainObjectPart() const
         {
@@ -165,7 +173,7 @@ namespace Maps
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
-        bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const int heroColor ) const;
+        bool isPassableFrom( const int direction, const bool fromWater, const bool ignoreFog, const PlayerColor heroColor ) const;
 
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const
@@ -175,11 +183,21 @@ namespace Maps
 
         bool isRoad() const
         {
-            return _isTileMarkedAsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+            return _isTileMarkedAsRoad;
         }
 
         bool isStream() const;
-        bool GoodForUltimateArtifact() const;
+        bool isSuitableForUltimateArtifact() const;
+
+        // Checks whether it is possible to disembark on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the water. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForDisembarkation() const;
+
+        // Checks whether it is possible to summon a boat on this tile in principle.
+        // NOTE WELL: this method does not check whether the tile is actually located near the shore. If this needs to be
+        // taken into account, then it should be checked separately, independent of the call to this method.
+        bool isSuitableForSummoningBoat() const;
 
         ObjectPart * getGroundObjectPart( const uint32_t uid );
         ObjectPart * getTopObjectPart( const uint32_t uid );
@@ -190,15 +208,15 @@ namespace Maps
 
         void resetBoatOwnerColor()
         {
-            _boatOwnerColor = Color::NONE;
+            _boatOwnerColor = PlayerColor::NONE;
         }
 
-        int getBoatOwnerColor() const
+        PlayerColor getBoatOwnerColor() const
         {
             return _boatOwnerColor;
         }
 
-        void setBoat( const int direction, const int color );
+        void setBoat( const int direction, const PlayerColor color );
         int getBoatDirection() const;
 
         void resetMainObjectPart()
@@ -211,7 +229,10 @@ namespace Maps
             return _region;
         }
 
-        void UpdateRegion( uint32_t newRegionID );
+        void UpdateRegion( const uint32_t newRegionID )
+        {
+            _region = ( _tilePassabilityDirections != Direction::UNKNOWN ) ? newRegionID : static_cast<uint32_t>( REGION_NODE_BLOCKED );
+        }
 
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
@@ -219,7 +240,7 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        void setOwnershipFlag( const MP2::MapObjectType objectType, int color );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, PlayerColor color );
 
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
@@ -227,15 +248,11 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushGroundObjectPart( const MP2::MP2AddonInfo & ma );
+        void pushGroundObjectPart( ObjectPart part );
 
-        void pushGroundObjectPart( ObjectPart ta );
-
-        void pushTopObjectPart( const MP2::MP2AddonInfo & ma );
-
-        void pushTopObjectPart( ObjectPart ta )
+        void pushTopObjectPart( ObjectPart part )
         {
-            _topObjectPart.emplace_back( ta );
+            _topObjectPart.emplace_back( part );
         }
 
         const std::list<ObjectPart> & getGroundObjectParts() const
@@ -275,13 +292,18 @@ namespace Maps
 
         std::string String() const;
 
-        bool isFog( const int colors ) const
+        bool isFog( const PlayerColor color ) const
+        {
+            return ( _fogColors & color );
+        }
+
+        bool isFog( const PlayerColorsSet colors ) const
         {
             // colors may be the union friends
             return ( _fogColors & colors ) == colors;
         }
 
-        void ClearFog( const int colors );
+        void ClearFog( const PlayerColorsSet colors );
 
         const std::array<uint32_t, 3> & metadata() const
         {
@@ -302,8 +324,6 @@ namespace Maps
         {
             return _terrainImageIndex;
         }
-
-        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip );
 
         void setTerrain( const uint16_t terrainImageIndex, const uint8_t terrainFlags )
         {
@@ -346,7 +366,7 @@ namespace Maps
         ObjectPart * getObjectPartWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.
-        void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
+        void updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
 
         void _updateRoadFlag();
 
@@ -359,6 +379,8 @@ namespace Maps
         bool doesObjectExist( const uint32_t uid ) const;
 
         std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
+
+        MP2::MapObjectType _getMainObjectTypeUnderHero() const;
 
         friend OStreamBase & operator<<( OStreamBase & stream, const Tile & tile );
         friend IStreamBase & operator>>( IStreamBase & stream, Tile & tile );
@@ -392,10 +414,10 @@ namespace Maps
 
         // The following members are only used in the game.
 
-        uint8_t _fogColors{ Color::ALL };
+        PlayerColorsSet _fogColors{ Color::allPlayerColors() };
 
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
-        uint8_t _boatOwnerColor{ Color::NONE };
+        PlayerColor _boatOwnerColor{ PlayerColor::NONE };
 
         // Fog direction to render fog in Game Area.
         uint16_t _fogDirection{ DIRECTION_ALL };

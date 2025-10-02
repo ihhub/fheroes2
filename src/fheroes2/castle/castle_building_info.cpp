@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -931,7 +931,9 @@ namespace fheroes2
         case BUILD_MARKETPLACE:
             return _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." );
         case BUILD_MOAT:
-            return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
+            return _( "The Moat slows and weakens attacking units. "
+                      "Any walking unit entering the moat must end its turn there and can only move within the moat one hex at a time. "
+                      "Any creature present in the moat will have its defense skill reduced by %{count}." );
         case BUILD_CASTLE:
             return _( "The Castle improves the town's defense and increases its income to %{count} gold per day." );
         case BUILD_TENT:

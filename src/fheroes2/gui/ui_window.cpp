@@ -56,12 +56,12 @@ namespace
         const fheroes2::Rect & buttonArea = buttons.button( 0 ).area();
         const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
 
-        const int32_t widthPadding = isSingleColumn ? 50 : 60;
+        const int32_t widthPadding = isSingleColumn ? 52 : 60;
         int32_t dialogWidth = widthPadding;
 
-        const int32_t heightPadding = isSingleColumn ? 39 : 26;
+        const int32_t heightPadding = isSingleColumn ? 43 : 26;
         // We assume that the cancel button height for multiple columns is 25 px because this button should contain only a single line of text.
-        const int32_t cancelButtonAreaHeight = isSingleColumn ? buttonArea.height + buttonsVerticalGap : 25 + buttonsVerticalGap + 10 + 1;
+        const int32_t cancelButtonAreaHeight = isSingleColumn ? 0 : 25 + buttonsVerticalGap + 10 + 1;
         int32_t dialogHeight = cancelButtonAreaHeight + heightPadding + extraHeight;
 
         // When there's an odd number of buttons we always make a dialog for a single column of buttons.
@@ -74,11 +74,25 @@ namespace
             dialogHeight += buttonArea.height;
         }
         else {
-            dialogWidth += ( buttonCount / 2 ) * buttonArea.width + ( ( buttonCount / 2 - 1 ) * buttonsHorizontalGap );
-            dialogHeight += buttonArea.height * 2 + ( buttonsVerticalGap + 10 );
+            const int32_t buttonGaps = 2 * buttonsVerticalGap;
+            dialogWidth += ( buttonCount / 2 ) * buttonArea.width + ( ( buttonCount / 2 - 1 ) * buttonGaps );
+            // We apply equal gaps between buttons vertically and horizontally.
+            dialogHeight += buttonArea.height * 2 + buttonGaps;
+        }
+        fheroes2::Point placement;
+        if ( isSingleColumn ) {
+            const fheroes2::Sprite mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+            const int32_t panelXPos = output.width() - mainMenuBackground.x() - ( dialogWidth + fheroes2::borderWidthPx ) - 8;
+            const int32_t panelYPos = mainMenuBackground.y() + fheroes2::borderWidthPx + 8;
+            placement.x = panelXPos;
+            placement.y = panelYPos;
+        }
+        else {
+            placement.x = ( output.width() - dialogWidth ) / 2;
+            placement.y = ( output.height() - dialogHeight ) / 2;
         }
 
-        return { ( output.width() - dialogWidth ) / 2, ( output.height() - dialogHeight ) / 2, dialogWidth, dialogHeight };
+        return { placement.x, placement.y, dialogWidth, dialogHeight };
     }
 }
 
@@ -120,47 +134,6 @@ namespace fheroes2
         }
 
         render();
-
-        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
-        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
-
-        int32_t rows = 0;
-        int32_t columns = 0;
-        Point buttonsOffset;
-
-        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
-        // An odd number of buttons will be arranged on a single column.
-        if ( isSingleColumn || buttonCount % 2 != 0 ) {
-            rows = buttonCount;
-            columns = 1;
-            buttonsOffset = { 25, 22 };
-        }
-        else if ( buttonCount == 2 ) {
-            rows = 1;
-            columns = 2;
-            buttonsOffset = { 30, 15 };
-        }
-        else {
-            rows = 2;
-            columns = buttonCount / 2;
-            buttonsOffset = { 30, 15 };
-        }
-        // This assumes that the extra height always gets added above the buttons.
-        buttonsOffset.y += extraHeight;
-
-        const int32_t verticalGapOffset = ( columns > 1 ) ? buttonsVerticalGap : 2 * buttonsVerticalGap;
-
-        size_t buttonId = 0;
-        for ( int32_t row = 0; row < rows; ++row ) {
-            for ( int32_t column = 0; column < columns; ++column ) {
-                buttons.button( buttonId )
-                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * buttonsHorizontalGap,
-                                  _activeArea.y + ( row * ( buttonsHeight + verticalGapOffset ) ) + buttonsOffset.y );
-                ++buttonId;
-            }
-        }
-        buttons.drawShadows( output );
-        buttons.draw( output );
     }
 
     void StandardWindow::render()
@@ -345,29 +318,7 @@ namespace fheroes2
         CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomCornerOffsetY,
                                    transitionSize, cornerSize, true, false );
 
-        // Render shadow at the left side of the window.
-        int32_t offsetY = _windowArea.y + borderSize;
-        ApplyTransform( _output, _totalArea.x, offsetY, borderSize, 1, 5 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x, offsetY, 1, _windowArea.height - 2, 5 );
-        ApplyTransform( _output, _totalArea.x + 1, offsetY, borderSize - 1, 1, 4 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x + 1, offsetY, 1, _windowArea.height - 4, 4 );
-        ApplyTransform( _output, _totalArea.x + 2, offsetY, borderSize - 2, 1, 3 );
-        ++offsetY;
-        ApplyTransform( _output, _totalArea.x + 2, offsetY, 1, _windowArea.height - 6, 3 );
-        ApplyTransform( _output, _totalArea.x + 3, offsetY, borderSize - 3, _windowArea.height - borderSize - 3, 2 );
-
-        // Render shadow at the bottom side of the window.
-        offsetY = _windowArea.y + _windowArea.height;
-        const int32_t shadowBottomEdge = _windowArea.y + _totalArea.height;
-        ApplyTransform( _output, _totalArea.x + 3, offsetY, _windowArea.width - 6, borderSize - 3, 2 );
-        ApplyTransform( _output, _totalArea.x + 2, shadowBottomEdge - 3, _windowArea.width - 4, 1, 3 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 3, offsetY, 1, borderSize - 3, 3 );
-        ApplyTransform( _output, _totalArea.x + 1, shadowBottomEdge - 2, _windowArea.width - 2, 1, 4 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 2, offsetY, 1, borderSize - 2, 4 );
-        ApplyTransform( _output, _totalArea.x, shadowBottomEdge - 1, _windowArea.width, 1, 5 );
-        ApplyTransform( _output, _totalArea.x + _windowArea.width - 1, offsetY, 1, borderSize - 1, 5 );
+        fheroes2::addGradientShadowForArea( _output, { _windowArea.x, _windowArea.y }, _windowArea.width, _windowArea.height, borderSize );
     }
 
     void StandardWindow::applyTextBackgroundShading( const Rect & roi )
@@ -404,6 +355,40 @@ namespace fheroes2
         applyRectTransform( 6, 1, 3 );
         applyRectTransform( 7, 1, 4 );
         applyRectTransform( 8, 1, 5 );
+    }
+
+    void StandardWindow::applyGemDecoratedCorners()
+    {
+        fheroes2::Image gem;
+        const int32_t gemSideLength = 9;
+        gem.resize( gemSideLength, gemSideLength );
+        gem.reset();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        if ( !isEvilInterface ) {
+            const fheroes2::Sprite & gemDialog = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+            Copy( gemDialog, 20, 2, gem, 0, 0, gemSideLength, gemSideLength );
+        }
+        else {
+            const fheroes2::Sprite & corners = fheroes2::AGG::GetICN( ICN::EVIL_DIALOG_PLAIN_CORNERS, 0 );
+            const int32_t cornerSideLength = 43;
+            Copy( corners, 0, 0, _output, _windowArea.x, _windowArea.y, cornerSideLength, cornerSideLength );
+            Copy( corners, cornerSideLength, 0, _output, _windowArea.x + _windowArea.width - cornerSideLength, _windowArea.y, cornerSideLength, cornerSideLength );
+            Copy( corners, 0, cornerSideLength, _output, _windowArea.x, _windowArea.y + _windowArea.height - cornerSideLength, cornerSideLength, cornerSideLength );
+            Copy( corners, cornerSideLength, cornerSideLength, _output, _windowArea.x + _windowArea.width - cornerSideLength,
+                  _windowArea.y + _windowArea.height - cornerSideLength, cornerSideLength, cornerSideLength );
+
+            const fheroes2::Sprite & gemDialog = fheroes2::AGG::GetICN( ICN::WINLOSEE, 0 );
+            Copy( gemDialog, 32, 2, gem, 0, 0, gemSideLength, gemSideLength );
+            FillTransform( gem, 0, 0, 1, 1, 1 );
+            FillTransform( gem, gemSideLength - 1, 0, 1, 1, 1 );
+            FillTransform( gem, 0, gemSideLength - 1, 1, 1, 1 );
+            FillTransform( gem, gemSideLength - 1, gemSideLength - 1, 1, 1, 1 );
+        }
+        Blit( gem, 0, 0, _output, _windowArea.x + 4, _windowArea.y + 2, gemSideLength, gemSideLength );
+        Blit( gem, 0, 0, _output, _windowArea.x + _windowArea.width - 2 - gemSideLength, _windowArea.y + 2, gemSideLength, gemSideLength );
+        Blit( gem, 0, 0, _output, _windowArea.x + 4, _windowArea.y + _windowArea.height - gemSideLength - 4, gemSideLength, gemSideLength );
+        Blit( gem, 0, 0, _output, _windowArea.x + _windowArea.width - 2 - gemSideLength, _windowArea.y + _windowArea.height - gemSideLength - 4, gemSideLength,
+              gemSideLength );
     }
 
     void StandardWindow::renderScrollbarBackground( const Rect & roi, const bool isEvilInterface )
@@ -482,22 +467,51 @@ namespace fheroes2
         button.draw();
     }
 
-    void StandardWindow::renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
-                                                   const Padding padding )
+    void StandardWindow::renderSymmetricButtons( ButtonGroup & buttons, const int32_t offsetY, const bool isSingleColumn )
     {
-        Sprite released;
-        Sprite pressed;
+        const int32_t buttonsWidth = buttons.button( 0 ).area().width;
+        const int32_t buttonsHeight = buttons.button( 0 ).area().height;
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        int32_t rows = 0;
+        int32_t columns = 0;
+        Point buttonsOffset;
 
-        makeButtonSprites( released, pressed, buttonText, buttonSize, isEvilInterface, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+        const int32_t buttonCount = static_cast<int32_t>( buttons.getButtonsCount() );
+        int32_t horizontalGapBetweenButtons = buttonsHorizontalGap;
+        // An odd number of buttons will be arranged on a single column.
+        if ( isSingleColumn || buttonCount % 2 != 0 ) {
+            rows = buttonCount;
+            columns = 1;
+            buttonsOffset = { 25, 22 };
+        }
+        else if ( buttonCount == 2 ) {
+            rows = 1;
+            columns = 2;
+            buttonsOffset = { 30, 15 };
+        }
+        else {
+            rows = 2;
+            columns = buttonCount / 2;
+            buttonsOffset = { 30, 15 };
+            // We apply equal gaps between buttons vertically and horizontally.
+            horizontalGapBetweenButtons = 2 * buttonsVerticalGap;
+        }
+        // This assumes that the extra height always gets added above the buttons.
+        buttonsOffset.y += offsetY;
 
-        const Point pos = _getRenderPos( offset, { released.width(), released.height() }, padding );
+        const int32_t verticalGapOffset = isSingleColumn ? buttonsVerticalGap : 2 * buttonsVerticalGap;
 
-        button.setSprite( released, pressed );
-        button.setPosition( pos.x, pos.y );
-        addGradientShadow( released, _output, button.area().getPosition(), { -5, 5 } );
-        button.draw();
+        size_t buttonId = 0;
+        for ( int32_t row = 0; row < rows; ++row ) {
+            for ( int32_t column = 0; column < columns; ++column ) {
+                buttons.button( buttonId )
+                    .setPosition( _activeArea.x + column * buttonsWidth + buttonsOffset.x + column * horizontalGapBetweenButtons,
+                                  _activeArea.y + ( row * ( buttonsHeight + verticalGapOffset ) ) + buttonsOffset.y );
+                ++buttonId;
+            }
+        }
+        buttons.drawShadows( _output );
+        buttons.draw( _output );
     }
 
     Point StandardWindow::_getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const

@@ -31,6 +31,7 @@
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
+#include "ui_language.h"
 
 namespace
 {
@@ -1321,81 +1322,6 @@ namespace
             updateSmallFontLetterShadow( font[253 - 32] );
         }
     }
-    // The original French version replaces several ASCII special characters with language-specific characters.
-    // In the engine we use CP1252 for the French translation but we have to preserve the homegrown encoding
-    // for original map compatibility. The engine expects that letter indexes correspond to charcode - 0x20,
-    // but the original French Price of Loyalty maps use 0x09 for lowercase i with circumflex. This is currently
-    // not supported by the engine. See original maps' descriptions for Utopie and Sables du Temps.
-    void generateFrenchAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
-    {
-        // Normal font.
-        {
-            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
-
-            // Lowercase o with circumflex
-            font[35 - 32] = font[244 - 32];
-            // Lowercase u with circumflex
-            font[36 - 32] = font[251 - 32];
-            // Lowercase u with grave accent
-            font[38 - 32] = font[249 - 32];
-            // Lowercase a with circumflex
-            font[42 - 32] = font[226 - 32];
-            // Lowercase i with diaeresis
-            font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex <- Confirmed used in the OG Succession wars.
-            font[62 - 32] = font[238 - 32];
-            // Lowercase a with grave accent
-            font[64 - 32] = font[224 - 32];
-            // Lowercase c with cedilla
-            font[94 - 32] = font[231 - 32];
-            // Lowercase e with grave accent
-            font[96 - 32] = font[232 - 32];
-            // Lowercase i with diaeresis
-            font[123 - 32] = font[239 - 32];
-            // Lowercase e with circumflex
-            font[124 - 32] = font[234 - 32];
-            // Lowercase i with circumflex
-            font[125 - 32] = font[239 - 32];
-            // Lowercase e with acute
-            font[126 - 32] = font[233 - 32];
-            // Lowercase i with circumflex
-            font[127 - 32] = font[239 - 32];
-        }
-
-        // Small font.
-        {
-            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
-
-            // Lowercase o with circumflex
-            font[35 - 32] = font[244 - 32];
-            // Lowercase u with circumflex
-            font[36 - 32] = font[251 - 32];
-            // Lowercase u with grave accent
-            font[38 - 32] = font[249 - 32];
-            // Lowercase a with circumflex
-            font[42 - 32] = font[226 - 32];
-            // Lowercase i with diaeresis
-            font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex
-            font[62 - 32] = font[238 - 32];
-            // Lowercase a with grave accent
-            font[64 - 32] = font[224 - 32];
-            // Lowercase c with cedilla
-            font[94 - 32] = font[231 - 32];
-            // Lowercase e with grave accent
-            font[96 - 32] = font[232 - 32];
-            // Lowercase i with diaeresis
-            font[123 - 32] = font[239 - 32];
-            // Lowercase e with circumflex
-            font[124 - 32] = font[234 - 32];
-            // Lowercase i with circumflex
-            font[125 - 32] = font[239 - 32];
-            // Lowercase e with acute
-            font[126 - 32] = font[233 - 32];
-            // Lowercase i with circumflex
-            font[127 - 32] = font[239 - 32];
-        }
-    }
 
     // CP-1251 supports Russian, Ukrainian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
     void generateCP1251Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
@@ -2359,7 +2285,8 @@ namespace
         }
     }
 
-    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
+    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish, Danish and French
+    // (French localized maps have custom encoding that should be fixed by `fheroes2::fixFrenchCharactersForMP2Map()`)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -3421,6 +3348,198 @@ namespace
             updateSmallFontLetterShadow( font[252 - 32] );
         }
     }
+
+    // Greek uses CP1253
+    void generateCP1253Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        // Resize fonts.
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            icnVsSprite[icnId].resize( baseFontSize );
+
+            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
+        }
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // Greek capital letter alpha
+            font[193 - 32] = font[65 - 32];
+
+            // Greek capital letter beta
+            font[194 - 32] = font[66 - 32];
+
+            // Greek capital letter gamma
+            font[195 - 32] = font[38];
+            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
+
+            // Greek capital letter epsilon
+            font[197 - 32] = font[69 - 32];
+
+            // Greek capital letter zeta
+            font[198 - 32] = font[90 - 32];
+
+            // Greek capital letter eta
+            font[199 - 32] = font[72 - 32];
+
+            // Greek capital letter iota
+            font[201 - 32] = font[73 - 32];
+
+            // Greek capital letter kappa
+            font[202 - 32] = font[75 - 32];
+
+            // Greek capital letter mu
+            font[204 - 32] = font[77 - 32];
+
+            // Greek capital letter nu
+            font[205 - 32] = font[78 - 32];
+
+            // Greek capital letter omicron
+            font[207 - 32] = font[79 - 32];
+
+            // Greek capital letter pi
+            font[208 - 32] = font[195 - 32];
+            fheroes2::Copy( font[208 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[208 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[208 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+            updateNormalFontLetterShadow( font[208 - 32] );
+
+            // Greek capital letter rho
+            font[209 - 32] = font[80 - 32];
+
+            // Greek capital letter tau
+            font[212 - 32] = font[84 - 32];
+
+            // Greek capital letter upsilon
+            font[213 - 32] = font[89 - 32];
+
+            // Greek capital letter phi
+            font[214 - 32].resize( font[48].width() + 1, font[48].height() );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[48], 0, 0, font[214 - 32], 1, 0, font[48].width(), font[48].height() );
+            fheroes2::Flip( font[48], 6, 0, font[214 - 32], 1, 0, 5, 6, true, false );
+            font[214 - 32].setPosition( font[48].x(), font[48].y() );
+            updateNormalFontLetterShadow( font[214 - 32] );
+
+            // Greek capital letter chi
+            font[215 - 32] = font[88 - 32];
+
+            // Greek small letter kappa
+            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
+            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
+            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
+            updateNormalFontLetterShadow( font[234 - 32] );
+
+            // Greek small letter nu
+            font[237 - 32] = font[118 - 32];
+
+            // Greek small letter omicron
+            font[239 - 32] = font[111 - 32];
+
+            // Greek small letter omicron with tonos
+            font[243 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[243 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
+            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[243 - 32] );
+        }
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // Greek capital letter alpha
+            font[193 - 32] = font[65 - 32];
+
+            // Greek capital letter beta
+            font[194 - 32] = font[66 - 32];
+
+            // Greek capital letter gamma
+            font[195 - 32] = font[38];
+            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
+
+            // Greek capital letter epsilon
+            font[197 - 32] = font[69 - 32];
+
+            // Greek capital letter zeta
+            font[198 - 32] = font[90 - 32];
+
+            // Greek capital letter eta
+            font[199 - 32] = font[72 - 32];
+
+            // Greek capital letter iota
+            font[201 - 32] = font[73 - 32];
+
+            // Greek capital letter kappa
+            font[202 - 32] = font[75 - 32];
+
+            // Greek capital letter mu
+            font[204 - 32] = font[77 - 32];
+
+            // Greek capital letter nu
+            font[205 - 32] = font[78 - 32];
+
+            // Greek capital letter omicron
+            font[207 - 32] = font[79 - 32];
+
+            // Greek capital letter pi
+            font[208 - 32] = font[195 - 32];
+            fheroes2::Copy( font[208 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[208 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[208 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+            updateNormalFontLetterShadow( font[208 - 32] );
+
+            // Greek capital letter rho
+            font[209 - 32] = font[80 - 32];
+
+            // Greek capital letter tau
+            font[212 - 32] = font[84 - 32];
+
+            // Greek capital letter upsilon
+            font[213 - 32] = font[89 - 32];
+
+            // Greek capital letter phi
+            font[214 - 32].resize( font[48].width() + 1, font[48].height() );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[48], 0, 0, font[214 - 32], 1, 0, font[48].width(), font[48].height() );
+            fheroes2::Flip( font[48], 6, 0, font[214 - 32], 1, 0, 5, 6, true, false );
+            font[214 - 32].setPosition( font[48].x(), font[48].y() );
+            updateNormalFontLetterShadow( font[214 - 32] );
+
+            // Greek capital letter chi
+            font[215 - 32] = font[88 - 32];
+
+            // Greek small letter kappa
+            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
+            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
+            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
+            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
+            updateNormalFontLetterShadow( font[234 - 32] );
+
+            // Greek small letter nu
+            font[237 - 32] = font[118 - 32];
+
+            // Greek small letter omicron
+            font[239 - 32] = font[111 - 32];
+
+            // Greek small letter omicron with tonos
+            font[243 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[243 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
+            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[243 - 32] );
+        }
+    }
+
     // Turkish uses CP1254
     void generateCP1254Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
@@ -5676,6 +5795,8 @@ namespace
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
+        released[216 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 1 );
+
         // Offset A-related letters to have less space to neighboring letters. Keep the y-offset change from earlier.
         for ( const int & charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x - 2, released[charCode - 32].y() );
@@ -5842,6 +5963,12 @@ namespace
         fheroes2::SetPixel( released[214 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
 
+        // O with slash.
+        released[216 - 32].resize( released[79 - 32].width() + 2, released[79 - 32].height() + 2 );
+        released[216 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[216 - 32], 1, 1, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::DrawLine( released[216 - 32], { released[79 - 32].width() - 1, 2 }, { 2, released[79 - 32].height() - 1 }, buttonGoodReleasedColor );
+
         // U with grave.
         released[217 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 3 );
         released[217 - 32].reset();
@@ -5868,8 +5995,117 @@ namespace
         fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 2, released[85 - 32].width(), released[85 - 32].height() );
         fheroes2::SetPixel( released[220 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[220 - 32], offset + 8, offset + 0, buttonGoodReleasedColor );
+
+        // Eszett.
+        released[223 - 32].resize( 12 + offset * 2, 10 + offset * 2 );
+        released[223 - 32].reset();
+        fheroes2::DrawLine( released[223 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 2, offset + 9 }, { offset + 2, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[223 - 32], offset + 3, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 4, offset + 0 }, { offset + 10, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 11, offset + 1 }, { offset + 11, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[223 - 32], offset + 10, offset + 3, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 9, offset + 4 }, { offset + 6, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[223 - 32], offset + 10, offset + 5, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 11, offset + 6 }, { offset + 11, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[223 - 32], { offset + 10, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[223 - 32], offset + 5, offset + 8, buttonGoodReleasedColor );
     }
-    void generateGoodCP1254ButtonFont( std::vector<fheroes2::Sprite> & released )
+
+    void generateCP1253GoodButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
+        const fheroes2::Sprite firstSprite{ released[0] };
+        released.insert( released.end(), 160, firstSprite );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Greek capital letter alpha
+        released[193 - 32] = released[65 - 32];
+
+        // Greek capital letter beta
+        released[194 - 32] = released[66 - 32];
+
+        // Greek capital letter gamma
+        released[195 - 32].resize( 8 + offset * 2, 10 + offset * 2 );
+        released[195 - 32].reset();
+        fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+
+        // Greek capital letter epsilon
+        released[197 - 32] = released[69 - 32];
+
+        // Greek capital letter zeta
+        released[198 - 32] = released[90 - 32];
+
+        // Greek capital letter eta
+        released[199 - 32] = released[72 - 32];
+
+        // Greek capital letter iota
+        released[201 - 32] = released[73 - 32];
+
+        // Greek capital letter kappa
+        released[202 - 32] = released[75 - 32];
+
+        // Greek capital letter mu
+        released[204 - 32] = released[77 - 32];
+
+        // Greek capital letter nu
+        released[205 - 32] = released[78 - 32];
+
+        // Greek capital letter omicron
+        released[207 - 32] = released[79 - 32];
+
+        // Greek capital letter pi
+        released[208 - 32].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[208 - 32].reset();
+        fheroes2::DrawLine( released[208 - 32], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 7, offset + 1 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[208 - 32], { offset + 6, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+
+        // Greek capital letter rho
+        released[209 - 32] = released[80 - 32];
+
+        // Greek capital letter tau
+        released[212 - 32] = released[84 - 32];
+
+        // Greek capital letter upsilon
+        released[213 - 32] = released[89 - 32];
+
+        // Greek capital letter phi
+        released[214 - 32].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[214 - 32].reset();
+        fheroes2::DrawLine( released[214 - 32], { offset + 1, offset + 2 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 1, offset + 7 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 8, offset + 3 }, { offset + 8, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 4, offset + 1 }, { offset + 4, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 3, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 3, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
+
+        // Greek capital letter chi
+        released[215 - 32] = released[88 - 32];
+
+        // Greek capital letter iota with dialytika
+        released[218 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 2 );
+        released[218 - 32].reset();
+        fheroes2::Copy( released[73 - 32], 0, 0, released[218 - 32], 0, 2, released[73 - 32].width(), released[73 - 32].height() );
+        fheroes2::SetPixel( released[218 - 32], offset + 0, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[218 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+
+        // Greek small letter nu
+        released[237 - 32] = released[118 - 32];
+
+        // Greek small letter omicron
+        released[239 - 32] = released[111 - 32];
+    }
+
+    void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
@@ -5933,45 +6169,32 @@ namespace fheroes2
 {
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
-        switch ( language ) {
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::Slovak:
+        const CodePage codePage = getCodePage( language );
+
+        switch ( codePage ) {
+        case CodePage::CP1250:
             generateCP1250Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Belarusian:
-        case SupportedLanguage::Bulgarian:
-        case SupportedLanguage::Russian:
-        case SupportedLanguage::Ukrainian:
+        case CodePage::CP1251:
             generateCP1251Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::German:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Portuguese:
-        case SupportedLanguage::Spanish:
-        case SupportedLanguage::Swedish:
+        case CodePage::CP1252:
             generateCP1252Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::French:
-            generateCP1252Alphabet( icnVsSprite );
-            // This serves to make the font compatible with the original French custom encoding.
-            generateFrenchAlphabet( icnVsSprite );
+        case CodePage::CP1253:
+            generateCP1253Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Turkish:
+        case CodePage::CP1254:
             generateCP1254Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Vietnamese:
+        case CodePage::CP1258:
             generateCP1258Alphabet( icnVsSprite );
             break;
-        case SupportedLanguage::Romanian:
+        case CodePage::ISO8859_16:
             generateISO8859_16Alphabet( icnVsSprite );
             break;
         default:
-            // Add new language generation code!
+            // Add new code page generation code!
             assert( 0 );
             break;
         }
@@ -5990,25 +6213,26 @@ namespace fheroes2
     bool isAlphabetSupported( const SupportedLanguage language )
     {
         switch ( language ) {
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::German:
-        case SupportedLanguage::French:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Russian:
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Czech:
+        case SupportedLanguage::Danish:
+        case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
+        case SupportedLanguage::German:
+        case SupportedLanguage::Greek:
+        case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Polish:
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Romanian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Slovak:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
         case SupportedLanguage::Turkish:
         case SupportedLanguage::Ukrainian:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Slovak:
         case SupportedLanguage::Vietnamese:
             return true;
         default:
@@ -6030,45 +6254,36 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
 
-        switch ( language ) {
-        case SupportedLanguage::English:
+        const CodePage codePage = getCodePage( language );
+
+        switch ( codePage ) {
+        case CodePage::ASCII:
             generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                                     icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
             return;
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::Slovak:
+        case CodePage::CP1250:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Belarusian:
-        case SupportedLanguage::Bulgarian:
-        case SupportedLanguage::Russian:
-        case SupportedLanguage::Ukrainian:
+        case CodePage::CP1251:
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::French:
-        case SupportedLanguage::German:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Portuguese:
-        case SupportedLanguage::Spanish:
-        case SupportedLanguage::Swedish:
+        case CodePage::CP1252:
             generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Turkish:
-            generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+        case CodePage::CP1253:
+            generateCP1253GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Vietnamese:
-            // generateGoodCP1258ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+        case CodePage::CP1254:
+            generateCP1254GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::Romanian:
-            // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+        case CodePage::CP1258:
+            // generateCP1258GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case CodePage::ISO8859_16:
+            // generateISO8859_16GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
-            // Add new language generation code!
+            // Add new code page generation code!
             assert( 0 );
             break;
         }
@@ -6077,75 +6292,303 @@ namespace fheroes2
                           icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
     }
 
-    void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
+    void modifyBaseNormalFont( std::vector<Sprite> & icnVsSprite )
     {
         if ( icnVsSprite.size() < 96 ) {
             return;
         }
 
+        // $ (dollar sign). Fix position.
+        icnVsSprite[36 - 32].setPosition( 0, 2 );
+
         // Remove white line from % symbol
-        fheroes2::FillTransform( icnVsSprite[5], 5, 0, 5, 1, 1 );
-        fheroes2::FillTransform( icnVsSprite[5], 6, 2, 2, 1, 1 );
-        updateNormalFontLetterShadow( icnVsSprite[5] );
+        FillTransform( icnVsSprite[37 - 32], 5, 0, 5, 1, 1 );
+        FillTransform( icnVsSprite[37 - 32], 6, 2, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
+
+        // & (ampersand). Fix position.
+        icnVsSprite[38 - 32].setPosition( 0, 1 );
 
         // Move "-" further down
-        icnVsSprite[13].setPosition( icnVsSprite[13].x(), icnVsSprite[13].y() + 1 );
-        updateNormalFontLetterShadow( icnVsSprite[13] );
+        icnVsSprite[45 - 32].setPosition( icnVsSprite[45 - 32].x(), icnVsSprite[45 - 32].y() + 1 );
+        updateNormalFontLetterShadow( icnVsSprite[45 - 32] );
 
         // Add the '\' character.
-        icnVsSprite[60].resize( 8, 14 );
-        icnVsSprite[60].reset();
-        fheroes2::Blit( icnVsSprite[15], 0, 0, icnVsSprite[60], 1, 0, 7, 12, true );
-        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
-        updateNormalFontLetterShadow( icnVsSprite[60] );
+        icnVsSprite[92 - 32].resize( 8, 14 );
+        icnVsSprite[92 - 32].reset();
+        Blit( icnVsSprite[47 - 32], 0, 0, icnVsSprite[92 - 32], 1, 0, 7, 12, true );
+        icnVsSprite[92 - 32].setPosition( icnVsSprite[47 - 32].x(), icnVsSprite[47 - 32].y() );
+        updateNormalFontLetterShadow( icnVsSprite[92 - 32] );
 
         // Proper lowercase k.
-        fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
-        fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
-        fheroes2::Copy( icnVsSprite[43], 6, 4, icnVsSprite[75], 4, 6, 4, 1 );
-        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 6, 5, 3, 1 );
-        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 7, 4, 2, 1 );
-        fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
-        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
-        updateNormalFontLetterShadow( icnVsSprite[75] );
+        FillTransform( icnVsSprite[107 - 32], 4, 1, 5, 8, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 5, icnVsSprite[107 - 32], 4, 7, 3, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 4, icnVsSprite[107 - 32], 4, 6, 4, 1 );
+        Copy( icnVsSprite[75 - 32], 7, 4, icnVsSprite[107 - 32], 6, 5, 3, 1 );
+        Copy( icnVsSprite[75 - 32], 7, 4, icnVsSprite[107 - 32], 7, 4, 2, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 6, icnVsSprite[107 - 32], 4, 8, 4, 1 );
+        icnVsSprite[107 - 32].setPosition( icnVsSprite[107 - 32].x(), icnVsSprite[107 - 32].y() );
+        updateNormalFontLetterShadow( icnVsSprite[107 - 32] );
 
-        // System call 'DELETE' (0x7F) is never used as a text character in phrases.
-        // To make the blinking text cursor we have to make a transparent character with the width of the cursor '_'.
-        icnVsSprite[127 - 32].resize( icnVsSprite[95 - 32].width(), 1 );
-        icnVsSprite[127 - 32].reset();
+        // Add the vertical bar '|' character. It is also used for the text input cursor.
+        icnVsSprite[124 - 32].resize( 3, icnVsSprite[91 - 32].height() + 3 );
+        Copy( icnVsSprite[91 - 32], 0, 0, icnVsSprite[124 - 32], 0, 0, 3, icnVsSprite[91 - 32].height() - 4 );
+        Copy( icnVsSprite[91 - 32], 0, icnVsSprite[91 - 32].height() - 7, icnVsSprite[124 - 32], 0, icnVsSprite[91 - 32].height() - 4, 3, 7 );
+        icnVsSprite[124 - 32].setPosition( icnVsSprite[91 - 32].x(), icnVsSprite[91 - 32].y() );
+
+        // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
+        if ( getResourceLanguage() == SupportedLanguage::French ) {
+            // $ (dollar sign).
+            icnVsSprite[36 - 32].resize( 9, 12 );
+            icnVsSprite[36 - 32].reset();
+            SetPixel( icnVsSprite[36 - 32], 3, 0, 23 );
+            SetPixel( icnVsSprite[36 - 32], 4, 0, 18 );
+            SetPixel( icnVsSprite[36 - 32], 5, 0, 12 );
+            SetPixel( icnVsSprite[36 - 32], 6, 0, 23 );
+            SetPixel( icnVsSprite[36 - 32], 1, 1, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 1 }, { 7, 1 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 8, 1, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 1, 2 }, { 1, 3 }, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 2 }, { 2, 3 }, 16 );
+            SetPixel( icnVsSprite[36 - 32], 3, 2, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 4, 2 }, { 4, 3 }, 16 );
+            DrawLine( icnVsSprite[36 - 32], { 5, 2 }, { 5, 7 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 6, 2, 21 );
+            SetPixel( icnVsSprite[36 - 32], 7, 2, 16 );
+            SetPixel( icnVsSprite[36 - 32], 8, 2, 10 );
+            SetPixel( icnVsSprite[36 - 32], 1, 4, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 4 }, { 7, 4 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 8, 4, 21 );
+            SetPixel( icnVsSprite[36 - 32], 2, 5, 21 );
+            SetPixel( icnVsSprite[36 - 32], 3, 5, 16 );
+            DrawLine( icnVsSprite[36 - 32], { 4, 5 }, { 4, 7 }, 16 );
+            SetPixel( icnVsSprite[36 - 32], 1, 7, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 7, 16 );
+            SetPixel( icnVsSprite[36 - 32], 3, 7, 21 );
+            Copy( icnVsSprite[36 - 32], 3, 5, icnVsSprite[36 - 32], 6, 5, 3, 3 );
+            SetPixel( icnVsSprite[36 - 32], 1, 8, 23 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 8 }, { 7, 8 }, 12 );
+            SetPixel( icnVsSprite[36 - 32], 8, 8, 23 );
+            SetPixel( icnVsSprite[36 - 32], 3, 9, 25 );
+            SetPixel( icnVsSprite[36 - 32], 4, 9, 20 );
+            SetPixel( icnVsSprite[36 - 32], 5, 9, 14 );
+            SetPixel( icnVsSprite[36 - 32], 6, 9, 25 );
+            updateNormalFontLetterShadow( icnVsSprite[36 - 32] );
+
+            // & (ampersand).
+            icnVsSprite[38 - 32].resize( 11, 12 );
+            icnVsSprite[38 - 32].reset();
+            SetPixel( icnVsSprite[38 - 32], 1, 0, 25 );
+            SetPixel( icnVsSprite[38 - 32], 2, 0, 18 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 0 }, { 5, 0 }, 12 );
+            SetPixel( icnVsSprite[38 - 32], 6, 0, 25 );
+            DrawLine( icnVsSprite[38 - 32], { 1, 1 }, { 1, 3 }, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 1 }, { 2, 3 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 1 }, { 4, 1 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 5, 1 }, { 5, 2 }, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 6, 1 }, { 6, 2 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 3 }, { 3, 5 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 3, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 3, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 4 }, { 1, 5 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 4, 4 }, { 7, 7 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 4, 21 );
+            SetPixel( icnVsSprite[38 - 32], 8, 4, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 9, 4 }, { 10, 4 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 5 }, { 2, 7 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 4, 5, 16 );
+            SetPixel( icnVsSprite[38 - 32], 6, 5, 21 );
+            SetPixel( icnVsSprite[38 - 32], 7, 5, 16 );
+            SetPixel( icnVsSprite[38 - 32], 8, 5, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 9, 5 }, { 10, 5 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 1, 6 }, { 1, 7 }, 16 );
+            SetPixel( icnVsSprite[38 - 32], 5, 6, 16 );
+            SetPixel( icnVsSprite[38 - 32], 7, 6, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 7, 16 );
+            SetPixel( icnVsSprite[38 - 32], 8, 7, 21 );
+            SetPixel( icnVsSprite[38 - 32], 1, 8, 18 );
+            SetPixel( icnVsSprite[38 - 32], 2, 8, 12 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 8 }, { 5, 8 }, 23 );
+            SetPixel( icnVsSprite[38 - 32], 6, 8, 18 );
+            DrawLine( icnVsSprite[38 - 32], { 7, 8 }, { 8, 8 }, 12 );
+            SetPixel( icnVsSprite[38 - 32], 9, 8, 23 );
+            SetPixel( icnVsSprite[38 - 32], 1, 9, 25 );
+            SetPixel( icnVsSprite[38 - 32], 2, 9, 20 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 9 }, { 6, 9 }, 14 );
+            SetPixel( icnVsSprite[38 - 32], 7, 9, 25 );
+            SetPixel( icnVsSprite[38 - 32], 8, 9, 20 );
+            SetPixel( icnVsSprite[38 - 32], 9, 9, 14 );
+            updateNormalFontLetterShadow( icnVsSprite[38 - 32] );
+
+            // * (asterisk).
+            icnVsSprite[42 - 32].resize( 12, 15 );
+            icnVsSprite[42 - 32].reset();
+            icnVsSprite[42 - 32].setPosition( 0, 0 );
+            SetPixel( icnVsSprite[42 - 32], 6, 0, 16 );
+            SetPixel( icnVsSprite[42 - 32], 7, 0, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 6, 1 }, { 6, 11 }, 10 );
+            SetPixel( icnVsSprite[42 - 32], 7, 1, 19 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 2 }, { 2, 2 }, 12 );
+            SetPixel( icnVsSprite[42 - 32], 7, 2, 18 );
+            SetPixel( icnVsSprite[42 - 32], 10, 2, 18 );
+            SetPixel( icnVsSprite[42 - 32], 11, 2, 12 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 3 }, { 4, 6 }, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 2, 3 }, { 4, 5 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 3, 3 }, { 8, 8 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 7, 3 }, { 7, 4 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 9, 3 }, { 8, 4 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 10, 3 }, { 7, 6 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 11, 3 }, { 8, 6 }, 21 );
+            SetPixel( icnVsSprite[42 - 32], 7, 5, 10 );
+            SetPixel( icnVsSprite[42 - 32], 5, 6, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 4, 7 }, { 2, 9 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 5, 7 }, { 3, 9 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 8, 7 }, { 9, 8 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 5, 8 }, { 4, 9 }, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 7, 8 }, { 7, 9 }, 16 );
+            SetPixel( icnVsSprite[42 - 32], 8, 9, 23 );
+            SetPixel( icnVsSprite[42 - 32], 9, 9, 12 );
+            SetPixel( icnVsSprite[42 - 32], 10, 9, 18 );
+            SetPixel( icnVsSprite[42 - 32], 11, 9, 23 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 10 }, { 2, 10 }, 14 );
+            SetPixel( icnVsSprite[42 - 32], 3, 10, 25 );
+            SetPixel( icnVsSprite[42 - 32], 7, 10, 18 );
+            SetPixel( icnVsSprite[42 - 32], 9, 10, 25 );
+            DrawLine( icnVsSprite[42 - 32], { 10, 10 }, { 11, 10 }, 14 );
+            SetPixel( icnVsSprite[42 - 32], 7, 11, 19 );
+            SetPixel( icnVsSprite[42 - 32], 6, 12, 16 );
+            SetPixel( icnVsSprite[42 - 32], 7, 12, 21 );
+            updateNormalFontLetterShadow( icnVsSprite[42 - 32] );
+
+            // Put dots instead of the other replaced ASCII characters like it is done in the original English assets.
+            // TODO: make ASCII character's sprites for the printable characters instead of dots for all languages.
+            const Sprite & dotSprite = icnVsSprite[46 - 32];
+            // # (number sign).
+            icnVsSprite[35 - 32] = dotSprite;
+            // < (less than).
+            icnVsSprite[60 - 32] = dotSprite;
+            // > (greater than).
+            icnVsSprite[62 - 32] = dotSprite;
+            // @ (at sign).
+            icnVsSprite[64 - 32] = dotSprite;
+            // ^ (caret - circumflex).
+            icnVsSprite[94 - 32] = dotSprite;
+            // ` (grave accent).
+            icnVsSprite[96 - 32] = dotSprite;
+            // { (opening brace).
+            icnVsSprite[123 - 32] = dotSprite;
+            // } (closing brace).
+            icnVsSprite[125 - 32] = dotSprite;
+            // ~ (tilde).
+            icnVsSprite[126 - 32] = dotSprite;
+            // DEL (delete).
+            icnVsSprite[127 - 32] = dotSprite;
+        }
     }
 
-    void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )
+    void modifyBaseSmallFont( std::vector<Sprite> & icnVsSprite )
     {
         if ( icnVsSprite.size() < 96 ) {
             return;
         }
 
+        // $ (dollar sign). Fix position.
+        icnVsSprite[36 - 32].setPosition( 0, -1 );
+
         // Remove white line from % symbol
-        fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
-        fheroes2::FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
-        updateNormalFontLetterShadow( icnVsSprite[5] );
+        FillTransform( icnVsSprite[37 - 32], 3, 0, 4, 1, 1 );
+        FillTransform( icnVsSprite[37 - 32], 4, 1, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
+
+        // Add the '*' (asterisk) character.
+        icnVsSprite[42 - 32].resize( 6, 8 );
+        icnVsSprite[42 - 32].reset();
+        icnVsSprite[42 - 32].setPosition( 0, 0 );
+        DrawLine( icnVsSprite[42 - 32], { 3, 0 }, { 3, 6 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 1, 1 }, { 5, 5 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 5, 1 }, { 1, 5 }, 10 );
+        updateSmallFontLetterShadow( icnVsSprite[42 - 32] );
 
         // Add the '\' character.
-        icnVsSprite[60].resize( 5, 9 );
-        icnVsSprite[60].reset();
-        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 1, 0, 1, 2 );
-        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 2, 2, 1, 2 );
-        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 3, 4, 1, 2 );
-        fheroes2::Copy( icnVsSprite[15], 4, 0, icnVsSprite[60], 4, 6, 1, 2 );
-        icnVsSprite[60].setPosition( icnVsSprite[15].x(), icnVsSprite[15].y() );
-        updateSmallFontLetterShadow( icnVsSprite[60] );
+        icnVsSprite[92 - 32].resize( 5, 9 );
+        icnVsSprite[92 - 32].reset();
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 1, 0, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 2, 2, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 3, 4, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 4, 6, 1, 2 );
+        icnVsSprite[92 - 32].setPosition( icnVsSprite[47 - 32].x(), icnVsSprite[47 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[92 - 32] );
 
         // Proper lowercase k.
-        icnVsSprite[75].resize( 6, 8 );
-        icnVsSprite[75].reset();
-        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 0, 2, 7 );
-        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 6, 1, 1 );
-        fheroes2::Copy( icnVsSprite[56], 6, 0, icnVsSprite[75], 3, 2, 3, 3 );
-        fheroes2::Copy( icnVsSprite[65], 2, icnVsSprite[65].height() - 2, icnVsSprite[75], 5, 6, 2, 1 );
-        fheroes2::Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
-        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
-        updateSmallFontLetterShadow( icnVsSprite[75] );
+        icnVsSprite[107 - 32].resize( 6, 8 );
+        icnVsSprite[107 - 32].reset();
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 0, 2, 7 );
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 6, 1, 1 );
+        Copy( icnVsSprite[88 - 32], 6, 0, icnVsSprite[107 - 32], 3, 2, 3, 3 );
+        Copy( icnVsSprite[97 - 32], 2, icnVsSprite[97 - 32].height() - 2, icnVsSprite[107 - 32], 5, 6, 2, 1 );
+        Copy( icnVsSprite[97 - 32], 2, 0, icnVsSprite[107 - 32], 4, 5, 1, 1 );
+        icnVsSprite[107 - 32].setPosition( icnVsSprite[107 - 32].x(), icnVsSprite[107 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[107 - 32] );
+
+        // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
+        if ( getResourceLanguage() == SupportedLanguage::French ) {
+            // $ (dollar sign).
+            icnVsSprite[36 - 32].resize( 6, 10 );
+            icnVsSprite[36 - 32].reset();
+            DrawLine( icnVsSprite[36 - 32], { 3, 0 }, { 3, 8 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 1, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 1, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 1, 2 }, { 1, 3 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 5, 2, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 4, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 5, 5 }, { 5, 6 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 1, 6, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 7, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 7, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[36 - 32] );
+
+            // & (ampersand).
+            icnVsSprite[38 - 32].resize( 7, 8 );
+            icnVsSprite[38 - 32].reset();
+            icnVsSprite[38 - 32].setPosition( 0, 0 );
+            SetPixel( icnVsSprite[38 - 32], 3, 0, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 1 }, { 2, 2 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 4, 1 }, { 4, 2 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 3, 3, 10 );
+            SetPixel( icnVsSprite[38 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 4, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 1, 5, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 5, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 6 }, { 4, 6 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 6, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[38 - 32] );
+
+            // Put dots instead of the other replaced ASCII characters like it is done in the original English assets.
+            // TODO: make ASCII character's sprites for the printable characters instead of dots for all languages.
+            const Sprite & dotSprite = icnVsSprite[46 - 32];
+            // # (number sign).
+            icnVsSprite[35 - 32] = dotSprite;
+            // < (less than).
+            icnVsSprite[60 - 32] = dotSprite;
+            // > (greater than).
+            icnVsSprite[62 - 32] = dotSprite;
+            // @ (at sign).
+            icnVsSprite[64 - 32] = dotSprite;
+            // ^ (caret - circumflex).
+            icnVsSprite[94 - 32] = dotSprite;
+            // ` (grave accent).
+            icnVsSprite[96 - 32] = dotSprite;
+            // { (opening brace).
+            icnVsSprite[123 - 32] = dotSprite;
+            // } (closing brace).
+            icnVsSprite[125 - 32] = dotSprite;
+            // ~ (tilde).
+            icnVsSprite[126 - 32] = dotSprite;
+            // DEL (delete).
+            icnVsSprite[127 - 32] = dotSprite;
+        }
     }
 
     void applyFontVerticalGradient( Image & image, const uint8_t insideColor, const uint8_t outsideColor )
@@ -6183,6 +6626,80 @@ namespace fheroes2
                         *transformX = 1;
                     }
                 }
+            }
+        }
+    }
+
+    void fixFrenchCharactersForMP2Map( std::string & str )
+    {
+        for ( char & c : str ) {
+            switch ( c ) {
+            case 9:
+                // Horizontal tab. Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 35:
+                // Number sign (#). Used for lowercase o with circumflex.
+                c = static_cast<char>( 244 );
+                break;
+            case 36:
+                // Dollar ($). Used for lowercase u with circumflex.
+                c = static_cast<char>( 251 );
+                break;
+            case 38:
+                // Ampersand (&). Used for lowercase u with grave accent.
+                c = static_cast<char>( 249 );
+                break;
+            case 42:
+                // Asterisk (*). Used for lowercase a with circumflex.
+                c = static_cast<char>( 226 );
+                break;
+            case 60:
+                // Less sign (<). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 62:
+                // Greater sign (>). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            case 64:
+                // At sign (@). Used for lowercase a with grave accent.
+                c = static_cast<char>( 224 );
+                break;
+            case 92:
+                // Backslash (\). Used in some maps as the full stop '.'.
+                c = '.';
+                break;
+            case 94:
+                // Caret - circumflex (^). Used for lowercase c with cedilla.
+                c = static_cast<char>( 231 );
+                break;
+            case 96:
+                // Grave accent (`). Used for lowercase e with grave accent.
+                c = static_cast<char>( 232 );
+                break;
+            case 123:
+                // Opening brace ({). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 124:
+                // Vertical bar (|). Used for lowercase e with circumflex.
+                c = static_cast<char>( 234 );
+                break;
+            case 125:
+                // Closing brace (}). Used for lowercase i with diaeresis.
+                c = static_cast<char>( 239 );
+                break;
+            case 126:
+                // Tilde (~). Used for lowercase e with acute.
+                c = static_cast<char>( 233 );
+                break;
+            case 127:
+                // Delete (DEL). Used for lowercase i with circumflex.
+                c = static_cast<char>( 238 );
+                break;
+            default:
+                break;
             }
         }
     }

@@ -34,6 +34,7 @@
 
 #include "army.h"
 #include "army_troop.h"
+#include "artifact_ultimate.h"
 #include "castle.h"
 #include "color.h"
 #include "difficulty.h"
@@ -41,9 +42,11 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "payment.h"
 #include "players.h"
+#include "puzzle.h"
 #include "resource.h"
 #include "resource_trading.h"
 #include "world.h"
@@ -376,7 +379,7 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
         return;
     }
 
-    const int friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    const PlayerColorsSet friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
     if ( friendColors == 0 ) {
         // No allies.
         return;
@@ -389,8 +392,28 @@ void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t 
 
     const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( false );
 
-    const Colors playerColors( friendColors );
-    for ( const int color : playerColors ) {
+    const PlayerColorsVector playerColors( friendColors );
+    for ( const PlayerColor color : playerColors ) {
         ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
     }
+}
+
+bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero )
+{
+    if ( art.isFound() ) {
+        return false;
+    }
+
+    // The hero's kingdom must have a fully open obelisk map
+    if ( !hero.GetKingdom().PuzzleMaps().all() ) {
+        return false;
+    }
+
+    if ( hero.IsFullBagArtifacts() ) {
+        return false;
+    }
+
+    const int32_t idx = art.getPosition();
+
+    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
 }

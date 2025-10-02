@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,5 +26,6 @@
 
 namespace Editor
 {
-    bool openSpellSelectionWindow( std::string title, const int spellLevel, std::vector<int32_t> & selectedSpells );
+    bool openSpellSelectionWindow( std::string title, int & spellLevel, std::vector<int32_t> & selectedSpells, const bool isMultiLevelSelectionEnabled,
+                                   const int32_t minimumEnabledSpells, const bool pickDisabledSpells );
 }

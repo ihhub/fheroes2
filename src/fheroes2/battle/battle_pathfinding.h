@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "battle_board.h"
+#include "color.h"
 
 namespace Battle
 {
@@ -116,7 +117,7 @@ namespace Battle
         bool _isWide{ false };
         bool _isFlying{ false };
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
-        int _color{ 0 };
+        PlayerColor _color{ PlayerColor::NONE };
         // Board cells passability status at the time of current cache creation
         std::array<bool, Board::sizeInCells> _boardStatus{};
     };

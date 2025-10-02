@@ -145,7 +145,12 @@ public:
     };
 
     Castle() = default;
-    Castle( const int32_t posX, const int32_t posY, int race );
+    Castle( const int32_t posX, const int32_t posY, const int race )
+        : MapPosition( { posX, posY } )
+        , _race( race )
+    {
+        // Do nothing.
+    }
 
     Castle( const Castle & ) = delete;
 
@@ -217,14 +222,14 @@ public:
         return _race == Race::WZRD;
     }
 
-    bool isLibraryBuild() const
+    bool isLibraryBuilt() const
     {
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
     void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuilt() );
     }
 
     bool isFortificationBuilt() const
@@ -272,7 +277,7 @@ public:
     double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
-    void ChangeColor( const int newColor );
+    void ChangeColor( const PlayerColor newColor );
 
     void ActionNewDay();
     void ActionNewWeek();
@@ -369,6 +374,10 @@ public:
     {
         return ( _disabledBuildings & buildingType ) != 0;
     }
+
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
 
 private:
     enum class ConstructionDialogResult : int
@@ -547,11 +556,16 @@ public:
         return _castles.size();
     }
 
+    // Return the maximum allowed castles and towns on map limited by the count of castle default names.
+    static size_t getMaximumAllowedCastles();
+
     void AddCastle( std::unique_ptr<Castle> && castle );
 
     Castle * Get( const fheroes2::Point & position ) const;
 
-    void Scout( const int colors ) const;
+    void removeCastle( const fheroes2::Point & position );
+
+    void Scout( const PlayerColorsSet colors ) const;
 
     void NewDay() const;
     void NewWeek() const;

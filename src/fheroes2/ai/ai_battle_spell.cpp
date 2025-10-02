@@ -272,7 +272,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
     else {
         // Area of effect spells like Fireball
         const auto areaOfEffectCheck
-            = [this, &damageHeuristic, &bestOutcome, &currentUnit, retreating]( const Battle::TargetsInfo & targets, const int32_t index, int myColor ) {
+            = [this, &damageHeuristic, &bestOutcome, &currentUnit, retreating]( const Battle::TargetsInfo & targets, const int32_t index, PlayerColor myColor ) {
                   double spellHeuristic = 0;
 
                   for ( const Battle::TargetInfo & target : targets ) {
@@ -357,9 +357,9 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
         // Slow is useless against archers or troops defending castle
         return 0.01;
     }
-    const int currentSpeed = target.GetSpeed( false, true );
-    const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
-    const int lostSpeed = currentSpeed - newSpeed; // usually 2
+    const uint32_t currentSpeed = target.GetSpeed( false, true );
+    const uint32_t newSpeed = Speed::getSlowSpeedFromSpell( currentSpeed );
+    const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
     if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
@@ -376,9 +376,9 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 
 double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) const
 {
-    const int currentSpeed = target.GetSpeed( false, true );
-    const int newSpeed = Speed::GetHasteSpeedFromSpell( currentSpeed );
-    const int gainedSpeed = newSpeed - currentSpeed; // usually 2
+    const uint32_t currentSpeed = target.GetSpeed( false, true );
+    const uint32_t newSpeed = Speed::getHasteSpeedFromSpell( currentSpeed );
+    const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 
     if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
@@ -635,7 +635,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellResurrectValue( const Spell & spell
     return bestOutcome;
 }
 
-AI::SpellcastOutcome AI::BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const
+AI::SpellcastOutcome AI::BattlePlanner::spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const
 {
     if ( !spell.isSummon() ) {
         return {};

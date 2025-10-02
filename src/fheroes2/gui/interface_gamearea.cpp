@@ -34,6 +34,7 @@
 
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "direction.h"
 #include "game_delays.h"
@@ -758,7 +759,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
 
     if ( drawPassabilities ) {
-        const int32_t friendColors = Players::FriendColors();
+        const PlayerColorsSet friendColors = Players::FriendColors();
 
         for ( int32_t y = minY; y < maxY; ++y ) {
             const int32_t offset = y * worldWidth;
@@ -824,7 +825,7 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
 
 void Interface::GameArea::updateMapFogDirections()
 {
-    const int32_t friendColors = Players::FriendColors();
+    const PlayerColorsSet friendColors = Players::FriendColors();
 
     Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }
@@ -924,6 +925,8 @@ int Interface::GameArea::GetScrollCursor() const
 
 void Interface::GameArea::SetScroll( const int direction )
 {
+    assert( !isDragScroll() );
+
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
             scrollDirection |= direction;

@@ -47,6 +47,7 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "players.h"
@@ -98,30 +99,49 @@ namespace
         }
     }
 
-    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
+    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
     {
-        assert( map.size == world.w() && map.size == world.h() );
+        assert( map.width == world.w() && map.width == world.h() );
 
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
         const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            for ( const auto & object : map.tiles[i].objects ) {
+        // Capturable objects exist in Miscellaneous and Mines groups.
+        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            for ( const auto & object : map.tiles[tileId].objects ) {
                 if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
                     const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
 
-                    world.addCastle( static_cast<int32_t>( i ), race, color );
+                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
                 }
                 else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
                     const auto & metadata = heroObjects[object.index].metadata;
-                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
 
                     Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
                     if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
                         hero->SetColor( color );
                     }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( object.index < miscObjects.size() );
+
+                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    assert( object.index < minesObjects.size() );
+
+                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
                 }
             }
         }
@@ -134,7 +154,7 @@ namespace
                             []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
     }
 
-    bool isStreamToDeltaConnectionNeeded( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
+    bool isStreamToDeltaConnectionNeeded( const Maps::Map_Format::MapFormat & map, const int32_t tileId, const int direction )
     {
         if ( direction != Direction::TOP && direction != Direction::BOTTOM && direction != Direction::RIGHT && direction != Direction::LEFT ) {
             return false;
@@ -184,14 +204,604 @@ namespace
         return streamDirection;
     }
 
-    bool hasBits( const int value, const int bits )
+    // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
+    int getGroundDirecton( const Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int groundId )
+    {
+        if ( centerTileIndex < 0 || centerTileIndex >= static_cast<int32_t>( map.tiles.size() ) ) {
+            // Center tile is out of the map borders.
+            return Direction::UNKNOWN;
+        }
+
+        const fheroes2::Point centerTile( centerTileIndex % map.width, centerTileIndex / map.width );
+        const int32_t maxTilePos = map.width - 1;
+
+        int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
+
+        for ( const int & direction : Direction::All() ) {
+            // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
+            fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
+            tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );
+            tilePosition.y = std::min( maxTilePos, std::max( 0, tilePosition.y ) );
+
+            if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.width + tilePosition.x].terrainIndex ) == groundId ) {
+                groundDirection |= direction;
+            }
+        }
+
+        return groundDirection;
+    }
+
+    bool doesContainStreams( const Maps::Map_Format::TileInfo & tile )
+    {
+        return std::any_of( tile.objects.cbegin(), tile.objects.cend(),
+                            []( const Maps::Map_Format::TileObjectInfo & object ) { return object.group == Maps::ObjectGroup::STREAMS; } );
+    }
+
+    void setTerrain( Maps::Map_Format::MapFormat & map, const int32_t tileId, const uint16_t imageIndex, const bool horizontalFlip, const bool verticalFlip )
+    {
+        const int newGround = Maps::Ground::getGroundByImageIndex( imageIndex );
+        Maps::Map_Format::TileInfo & mapTile = map.tiles[tileId];
+
+        mapTile.terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
+
+        if ( ( newGround != Maps::Ground::WATER ) && ( Maps::doesContainRoads( mapTile ) || doesContainStreams( mapTile ) )
+             && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( imageIndex ) ) {
+            // There cannot be extra objects under the roads and streams.
+            mapTile.terrainIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::getGroundByImageIndex( imageIndex ), false );
+        }
+        else {
+            mapTile.terrainIndex = imageIndex;
+        }
+
+        world.getTile( tileId ).setTerrain( mapTile.terrainIndex, mapTile.terrainFlags );
+    }
+
+    constexpr bool hasBits( const int value, const int bits )
     {
         return ( value & bits ) == bits;
     }
 
-    bool hasNoBits( const int value, const int bits )
+    constexpr bool hasNoBits( const int value, const int bits )
     {
         return ( value & bits ) == 0;
+    }
+
+    // Returns true if terrain transition on tile was properly set or it is not needed.
+    bool setTerrainBoundaries( Maps::Map_Format::MapFormat & map, const int groundDirection, const int beachDirection, const int32_t tileId, const uint16_t imageOffset )
+    {
+        if ( groundDirection == DIRECTION_ALL ) {
+            // No transition is needed.
+            return true;
+        }
+
+        if ( groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
+            // All directions without the top-left corner.
+            uint16_t imageIndex = imageOffset + 12U;
+            imageIndex += hasNoBits( beachDirection, Direction::TOP_LEFT ) ? 0U : 16U;
+            imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
+            setTerrain( map, tileId, imageIndex, true, false );
+            return true;
+        }
+        if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
+            // All directions without the top-right corner.
+            uint16_t imageIndex = imageOffset + 12U;
+            imageIndex += hasNoBits( beachDirection, Direction::TOP_RIGHT ) ? 0U : 16U;
+            imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
+            setTerrain( map, tileId, imageIndex, false, false );
+            return true;
+        }
+        if ( groundDirection == ( Direction::BOTTOM_LEFT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
+            // All directions without the bottom-right corner.
+            uint16_t imageIndex = imageOffset + 12U;
+            imageIndex += hasNoBits( beachDirection, Direction::BOTTOM_RIGHT ) ? 0U : 16U;
+            imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
+            setTerrain( map, tileId, imageIndex, false, true );
+            return true;
+        }
+        if ( groundDirection == ( Direction::BOTTOM_RIGHT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
+            // All directions without the bottom-left corner.
+            uint16_t imageIndex = imageOffset + 12U;
+            imageIndex += hasNoBits( beachDirection, Direction::BOTTOM_LEFT ) ? 0U : 16U;
+            imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
+            setTerrain( map, tileId, imageIndex, true, true );
+            return true;
+        }
+
+        auto tileIsNotWater = [&map, tileId]() { return Maps::Ground::getGroundByImageIndex( map.tiles[tileId].terrainIndex ) != Maps::Ground::WATER; };
+
+        if ( hasBits( groundDirection, Direction::LEFT | Direction::TOP | Direction::BOTTOM )
+             && ( tileIsNotWater() || hasBits( groundDirection, Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
+            // There is no ground direction to the right.
+            // NOTICE: Initially the whole 'DIRECTION_LEFT_COL' should have direction bits.
+            // If ground is not Water we  do not check TOP_LEFT and BOTTOM_LEFT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
+
+            if ( hasBits( beachDirection, Direction::RIGHT ) ) {
+                // To the right there is a beach (or beach transition to the water).
+                setTerrain( map, tileId, imageOffset + 8U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::RIGHT ) ) {
+                // There is no beach and no current ground to the right.
+                if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
+                    // Top-right is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 35U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
+                    // Bottom-right is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 35U, false, true );
+                }
+                else {
+                    // Transition to the dirt to the right.
+                    setTerrain( map, tileId, imageOffset + 8U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::RIGHT | Direction::TOP | Direction::BOTTOM )
+             && ( tileIsNotWater() || hasBits( groundDirection, Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
+            // There is no ground direction to the left.
+            // NOTICE: Initially the whole 'DIRECTION_RIGHT_COL' should have direction bits.
+            // If ground is not Water we do not check TOP_RIGHT and BOTTOM_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
+
+            if ( hasBits( beachDirection, Direction::LEFT ) ) {
+                // To the left there is a beach (or beach transition to the water).
+                setTerrain( map, tileId, imageOffset + 8U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::LEFT ) ) {
+                // There is no beach and no current ground to the left.
+                if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
+                    // Top-left is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 35U, true, false );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
+                    // Bottom-left is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 35U, true, true );
+                }
+                else {
+                    // Transition to the dirt to the left.
+                    setTerrain( map, tileId, imageOffset + 8U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
+             && ( tileIsNotWater() || hasBits( groundDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+            // There is no ground direction to the top.
+            // NOTICE: Initially the whole 'DIRECTION_BOTTOM_ROW' should have direction bits.
+            // If ground is not Water we  do not check BOTTOM_LEFT and BOTTOM_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
+
+            if ( hasBits( beachDirection, Direction::TOP ) ) {
+                // To the top there is a beach (or beach transition to the water).
+                setTerrain( map, tileId, imageOffset + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::TOP ) ) {
+                // There is no beach and no current ground to the top.
+                if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
+                    // Top-right is beach transition and top is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 34U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
+                    // Top-left is beach transition and top is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 34U, true, false );
+                }
+                else {
+                    // Transition to the dirt to the top.
+                    setTerrain( map, tileId, imageOffset + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::TOP | Direction::LEFT | Direction::RIGHT )
+             && ( tileIsNotWater() || hasBits( groundDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+            // There is no ground direction to the bottom.
+            // NOTICE: Initially the whole 'DIRECTION_TOP_ROW' should have direction bits.
+            // If ground is not Water we  do not check TOP_LEFT and TOP_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
+
+            if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
+                // To the bottom there is a beach (or beach transition to the water).
+                setTerrain( map, tileId, imageOffset + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::BOTTOM ) ) {
+                // There is no beach and no current ground to the bottom.
+                if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
+                    // Bottom-right is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 34U, false, true );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
+                    // Bottom-left is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 34U, true, true );
+                }
+                else {
+                    // Transition to the dirt to the bottom.
+                    setTerrain( map, tileId, imageOffset + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM ) ) {
+            // There is no ground direction to the top, top-left and left tiles.
+
+            if ( hasBits( beachDirection, Direction::TOP | Direction::LEFT ) || hasBits( beachDirection, Direction::TOP | Direction::BOTTOM_LEFT )
+                 || hasBits( beachDirection, Direction::TOP_RIGHT | Direction::LEFT ) ) {
+                // To the top and left there is a beach/water.
+                setTerrain( map, tileId, imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::TOP | Direction::LEFT ) ) {
+                // There is no beach and no current ground to the top and left.
+
+                if ( hasBits( beachDirection, Direction::TOP ) ) {
+                    // Top is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 36U, true, false );
+                }
+                else if ( hasBits( beachDirection, Direction::LEFT ) ) {
+                    // Left is beach transition and top is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 37U, true, false );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
+                    // Top-right is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 33U, true, false );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
+                    // Bottom-left is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 32U, true, false );
+                }
+                else {
+                    // Transition to the dirt to the top and left.
+                    setTerrain( map, tileId, imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM ) ) {
+            // There is no ground direction to the top, top-right and right tiles.
+
+            if ( hasBits( beachDirection, Direction::TOP | Direction::RIGHT ) || hasBits( beachDirection, Direction::TOP | Direction::BOTTOM_RIGHT )
+                 || hasBits( beachDirection, Direction::TOP_LEFT | Direction::RIGHT ) ) {
+                // To the top and right there is a beach/water.
+                setTerrain( map, tileId, imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::TOP | Direction::RIGHT ) ) {
+                // There is no beach and no current ground to the top and right.
+
+                if ( hasBits( beachDirection, Direction::TOP ) ) {
+                    // Top is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 36U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
+                    // Right is beach transition and top is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 37U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
+                    // Top-left is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 33U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
+                    // Bottom-right is beach transition and top is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 32U, false, false );
+                }
+                else {
+                    // Transition to the dirt to the top and right.
+                    setTerrain( map, tileId, imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_LEFT | Direction::LEFT ) ) {
+            // There is no ground direction to the right, bottom-right and bottom tiles.
+
+            if ( hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM ) || hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM_LEFT )
+                 || hasBits( beachDirection, Direction::TOP_RIGHT | Direction::BOTTOM ) ) {
+                // To the bottom and right there is a beach/water.
+                setTerrain( map, tileId, imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::RIGHT | Direction::BOTTOM ) ) {
+                // There is no beach and no current ground to the bottom and right.
+
+                if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
+                    // Bottom is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 36U, false, true );
+                }
+                else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
+                    // Right is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 37U, false, true );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
+                    // Bottom-left is beach transition and right is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 33U, false, true );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
+                    // Top-right is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 32U, false, true );
+                }
+                else {
+                    // Transition to the dirt to the bottom and right.
+                    setTerrain( map, tileId, imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
+            // There is no ground direction to the left, bottom-left and bottom tiles.
+
+            if ( hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM ) || hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM_RIGHT )
+                 || hasBits( beachDirection, Direction::TOP_LEFT | Direction::BOTTOM ) ) {
+                // To the bottom and left there is a beach/water. Or a narrow path to the other land.
+                setTerrain( map, tileId, imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
+                return true;
+            }
+
+            if ( hasNoBits( groundDirection, Direction::LEFT | Direction::BOTTOM ) ) {
+                // There is no beach and no current ground to the bottom and left.
+
+                if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
+                    // Bottom is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 36U, true, true );
+                }
+                else if ( hasBits( beachDirection, Direction::LEFT ) ) {
+                    // Left is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 37U, true, true );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
+                    // Bottom-right is beach transition and left is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 33U, true, true );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
+                    // Top-left is beach transition and bottom is dirt transition.
+                    setTerrain( map, tileId, imageOffset + 32U, true, true );
+                }
+
+                else {
+                    // Transition to the dirt to the bottom and left.
+                    setTerrain( map, tileId, imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
+                }
+                return true;
+            }
+        }
+
+        if ( hasBits( groundDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::LEFT ) ) {
+            const int ground = Maps::Ground::getGroundByImageIndex( map.tiles[tileId].terrainIndex );
+            if ( ground != Maps::Ground::WATER ) {
+                // More than one corner needs ground transition.
+                // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
+                // TODO: Design tile images for these cases.
+
+                setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
+                return true;
+            }
+        }
+
+        // This terrain cannot be properly connected with the nearby terrains. There are no such ground images.
+        DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                   "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % map.width
+                                                            << ',' << tileId / map.width << " (" << tileId << ").\nDirections: " << Direction::String( groundDirection ) )
+        return false;
+    }
+
+    // Returns true if terrain transition was set or it is not needed.
+    bool updateTerrainTransitionOnTile( Maps::Map_Format::MapFormat & map, const int32_t tileId )
+    {
+        const Maps::Map_Format::TileInfo & mapTile = map.tiles[tileId];
+        const int ground = Maps::Ground::getGroundByImageIndex( mapTile.terrainIndex );
+
+        if ( ground == Maps::Ground::BEACH ) {
+            // Beach tile images do not have transition with the other terrains.
+            return true;
+        }
+
+        // Check the tiles around for the need of ground transition.
+        // Dirt has transitions only with Water and Beach, and these "Beach transitions" have image index offsets like "Dirt transitions" for all other terrains.
+        const int tileGroundDirection
+            = ( ground == Maps::Ground::DIRT )
+                  ? ( DIRECTION_ALL - ( getGroundDirecton( map, tileId, Maps::Ground::WATER ) | getGroundDirecton( map, tileId, Maps::Ground::BEACH ) ) )
+                  : ( getGroundDirecton( map, tileId, ground ) | Direction::CENTER );
+
+        if ( tileGroundDirection == DIRECTION_ALL ) {
+            // Current tile does not need a transition because there is no other terrain nearby.
+
+            if ( Maps::Ground::isTerrainTransitionImage( mapTile.terrainIndex ) ) {
+                // We change image with the transition to original terrain image without transition.
+                setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
+            }
+            return true;
+        }
+
+        switch ( ground ) {
+        case Maps::Ground::WATER:
+        case Maps::Ground::DIRT:
+            // Water has only "Beach transition" to all other terrains.
+            // Dirt has only "Beach transition" only with Water and/or Beach.
+            // TODO: Set waves on the water for 3 tiles from the ground with the wave direction to the center of the ground.
+            return setTerrainBoundaries( map, tileGroundDirection, 0, tileId, Maps::Ground::getTerrainStartImageIndex( ground ) );
+        case Maps::Ground::GRASS:
+        case Maps::Ground::SNOW:
+        case Maps::Ground::SWAMP:
+        case Maps::Ground::LAVA:
+        case Maps::Ground::DESERT:
+        case Maps::Ground::WASTELAND: {
+            // The transition to the Beach terrain is rendered when the near tile ground is Water or Beach.
+            const int beachDirection = getGroundDirecton( map, tileId, Maps::Ground::WATER ) | getGroundDirecton( map, tileId, Maps::Ground::BEACH );
+
+            return setTerrainBoundaries( map, tileGroundDirection, beachDirection, tileId, Maps::Ground::getTerrainStartImageIndex( ground ) );
+        }
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            return false;
+        }
+    }
+
+    void updateTerrainTransitionOnArea( Maps::Map_Format::MapFormat & map, const int newGroundId, const int32_t tileStart, const int32_t tileEnd, const int32_t tileStep )
+    {
+        for ( int32_t tileId = tileStart; tileId <= tileEnd; tileId += tileStep ) {
+            if ( updateTerrainTransitionOnTile( map, tileId ) ) {
+                // The terrain transition was correctly set or transition was not needed.
+                continue;
+            }
+
+            // Try to change the ground type to one of the others.
+            // TODO: Change this algorithm to a more proper one. E.g. remember the previous ground and try to UNDO it here.
+            const int groundOnTile = Maps::Ground::getGroundByImageIndex( map.tiles[tileId].terrainIndex );
+
+            DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                       "Ground " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
+                                 << ") should be replaced by some other one." )
+
+            std::vector<int> newGrounds;
+
+            if ( groundOnTile != newGroundId ) {
+                // Outside of filled area we can try to place the ground of this area.
+                newGrounds.push_back( newGroundId );
+            }
+
+            bool isWater = ( groundOnTile == Maps::Ground::WATER );
+            const Maps::Indexes around = Maps::getAroundIndexes( tileId );
+
+            // Get ground types from all tiles around to try them.
+            for ( const int32_t index : around ) {
+                const int32_t ground = Maps::Ground::getGroundByImageIndex( map.tiles[index].terrainIndex );
+                if ( ground != groundOnTile && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
+                    newGrounds.push_back( ground );
+                }
+
+                isWater = isWater || ( ground == Maps::Ground::WATER );
+            }
+
+            if ( isWater ) {
+                // As a last chance, we can try to place Beach to make a path on the water because Beach doesn't need to transition to the water.
+                if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::BEACH ) == newGrounds.end() ) {
+                    newGrounds.push_back( Maps::Ground::BEACH );
+                }
+            }
+            else {
+                // As a last chance, we can try to connect terrains by placing Dirt, because Dirt doesn't need to transition to other non-water terrains.
+                if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::DIRT ) == newGrounds.end() ) {
+                    newGrounds.push_back( Maps::Ground::DIRT );
+                }
+            }
+
+            bool needRevert = true;
+
+            for ( const int newGround : newGrounds ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId << ")." )
+
+                setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( newGround, true ), false, false );
+
+                if ( !updateTerrainTransitionOnTile( map, tileId ) ) {
+                    // The ground image has not been set properly. We move on to the next type of the ground.
+                    continue;
+                }
+
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Ground " << Maps::Ground::String( newGround ) << " was properly set to " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
+                                     << ")." )
+
+                // The ground on the tile has been changed, so we need to update the transitions on all the tiles around.
+                for ( const int32_t index : around ) {
+                    if ( !updateTerrainTransitionOnTile( map, index ) ) {
+                        // TODO: Find a better solution without using recursions. In example, undo the tiles in 1 tile radius.
+                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Recursive call for tile at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId << ")." )
+
+                        updateTerrainTransitionOnArea( map, newGroundId, index, index, 1 );
+                    }
+                }
+
+                needRevert = false;
+
+                break;
+            }
+
+            // If all ground replacements fail we revert the ground change to the initial ground type.
+            if ( needRevert && !newGrounds.empty() ) {
+                setTerrain( map, tileId, Maps::Ground::getRandomTerrainImageIndex( groundOnTile, true ), false, false );
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % map.width << ',' << tileId / map.width << " (" << tileId
+                                                  << ")." )
+            }
+        }
+    }
+
+    void updateTerrainTransitionOnAreaBoundaries( Maps::Map_Format::MapFormat & map, const int groundId, const int32_t startX, const int32_t endX, const int32_t startY,
+                                                  const int32_t endY )
+    {
+        const int32_t mapWidth = map.width;
+        const int32_t mapHeight = map.width;
+
+        // First we update the boundaries inside the filled area.
+        updateTerrainTransitionOnArea( map, groundId, startX + mapWidth * startY, endX + mapWidth * startY, 1 );
+        if ( startY != endY ) {
+            updateTerrainTransitionOnArea( map, groundId, startX + mapWidth * endY, endX + mapWidth * endY, 1 );
+            if ( endY - startY > 1 ) {
+                updateTerrainTransitionOnArea( map, groundId, startX + mapWidth * ( startY + 1 ), startX + mapWidth * ( endY - 1 ), mapWidth );
+                if ( startX != endX ) {
+                    updateTerrainTransitionOnArea( map, groundId, endX + mapWidth * ( startY + 1 ), endX + mapWidth * ( endY - 1 ), mapWidth );
+                }
+            }
+        }
+
+        // Then we update the boundaries outside the filled area, excluding the corners.
+        if ( startY > 0 ) {
+            const int32_t tileOffset = mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( map, groundId, startX + tileOffset, endX + tileOffset, 1 );
+        }
+        if ( endY < mapHeight - 1 ) {
+            const int32_t tileOffset = mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( map, groundId, startX + tileOffset, endX + tileOffset, 1 );
+        }
+        if ( startX > 0 ) {
+            const int32_t tileOffset = startX - 1;
+            updateTerrainTransitionOnArea( map, groundId, tileOffset + mapWidth * startY, tileOffset + mapWidth * endY, mapWidth );
+        }
+        if ( endX < mapWidth - 1 ) {
+            const int32_t tileOffset = endX + 1;
+            updateTerrainTransitionOnArea( map, groundId, tileOffset + mapWidth * startY, tileOffset + mapWidth * endY, mapWidth );
+        }
+
+        // Update the corners outside of filled area.
+        if ( startX > 0 && startY > 0 ) {
+            const int32_t tileId = startX - 1 + mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( map, groundId, tileId, tileId, 1 );
+        }
+        if ( startY > 0 && endX < mapWidth - 1 ) {
+            const int32_t tileId = endX + 1 + mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( map, groundId, tileId, tileId, 1 );
+        }
+        if ( startX > 0 && endY < mapHeight - 1 ) {
+            const int32_t tileId = startX - 1 + mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( map, groundId, tileId, tileId, 1 );
+        }
+        if ( endX < mapWidth - 1 && endY < mapHeight - 1 ) {
+            const int32_t tileId = endX + 1 + mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( map, groundId, tileId, tileId, 1 );
+        }
     }
 
     uint8_t getStreamIndex( const int streamDirection )
@@ -302,17 +912,6 @@ namespace
         world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
     }
 
-    bool doesContainStreams( const Maps::Map_Format::TileInfo & tile )
-    {
-        for ( const auto & object : tile.objects ) {
-            if ( object.group == Maps::ObjectGroup::STREAMS ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -339,10 +938,10 @@ namespace
             roadDirection = Direction::CENTER;
         }
 
-        const Maps::Indexes around = Maps::getAroundIndexes( mainTileIndex, map.size, map.size, 1 );
+        const Maps::Indexes around = Maps::getAroundIndexes( mainTileIndex, map.width, map.width, 1 );
 
         for ( const int32_t tileIndex : around ) {
-            assert( tileIndex >= 0 && tileIndex < map.size * map.size );
+            assert( tileIndex >= 0 && tileIndex < map.width * map.width );
 
             if ( Maps::doesContainRoads( map.tiles[tileIndex] ) ) {
                 roadDirection |= Maps::GetDirection( mainTileIndex, tileIndex );
@@ -374,7 +973,7 @@ namespace
         if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 7, 17, 20, 22, 24, 29 } ) ) {
                     return 8U;
                 }
@@ -382,7 +981,7 @@ namespace
 
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 16, 18, 19, 23, 25, 30 } ) ) {
                     return 15U;
                 }
@@ -391,21 +990,21 @@ namespace
                  && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
                       || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::TOP.
-                const int32_t upperTileIndex = tileIndex - map.size;
+                const int32_t upperTileIndex = tileIndex - map.width;
                 if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
                     return Rand::Get( 1 ) ? 1U : 27U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + map.size;
+                const int32_t lowerTileIndex = tileIndex + map.width;
                 if ( checkRoadIcnIndex( lowerTileIndex, { 8, 9, 18, 20, 30 } ) ) {
                     return Rand::Get( 1 ) ? 22U : 24U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
                 // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
-                const int32_t lowerTileIndex = tileIndex + map.size;
+                const int32_t lowerTileIndex = tileIndex + map.width;
                 if ( checkRoadIcnIndex( lowerTileIndex, { 12, 15, 17, 19, 29 } ) ) {
                     return Rand::Get( 1 ) ? 23U : 25U;
                 }
@@ -432,8 +1031,8 @@ namespace
         // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
 
         // There might be a castle entrance above. Check for it to properly connect the road to it.
-        if ( tileIndex >= map.size ) {
-            const auto & aboveTile = map.tiles[tileIndex - map.size];
+        if ( tileIndex >= map.width ) {
+            const auto & aboveTile = map.tiles[tileIndex - map.width];
             if ( doesContainCastleEntrance( aboveTile ) ) {
                 return 31U;
             }
@@ -465,7 +1064,7 @@ namespace
             return 3U;
         }
         if ( hasBits( roadDirection, Direction::TOP )
-             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - map.size, { 2, 28 } ) ) )
+             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - map.width, { 2, 28 } ) ) )
              && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
             // T - cross. Also used for 90 degrees turn from the bottom to the left/right.
             return 4U;
@@ -537,14 +1136,14 @@ namespace
                                   const bool updateNonRoadTilesFromEdgesToCenter )
     {
         // We should update road sprites step by step starting from the tiles close connected to the center tile.
-        const int32_t centerX = centerTileIndex % map.size;
-        const int32_t centerY = centerTileIndex / map.size;
+        const int32_t centerX = centerTileIndex % map.width;
+        const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
         const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
         const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.size );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.size );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 
@@ -552,7 +1151,7 @@ namespace
             const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
 
             for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-                const int32_t indexOffsetY = tileY * map.size;
+                const int32_t indexOffsetY = tileY * map.width;
                 const int32_t distanceY = std::abs( tileY - centerY );
 
                 for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
@@ -578,33 +1177,13 @@ namespace
         // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
         updateRoadSpritesInArea( map, centerTileIndex, 3, true );
     }
-
-    void setTerrain( Maps::Map_Format::TileInfo & tile, const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip, const int32_t tileIndex )
-    {
-        tile.terrainFlag = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
-
-        const int newGround = Maps::Ground::getGroundByImageIndex( terrainImageIndex );
-
-        if ( ( Maps::doesContainRoads( tile ) || doesContainStreams( tile ) ) && ( newGround != Maps::Ground::WATER )
-             && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
-            // There cannot be extra objects under the roads and streams.
-            tile.terrainIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::getGroundByImageIndex( terrainImageIndex ), false );
-        }
-        else {
-            tile.terrainIndex = terrainImageIndex;
-        }
-
-        if ( tileIndex >= 0 && tileIndex < world.w() * world.h() ) {
-            world.getTile( tileIndex ).setTerrain( tile.terrainIndex, tile.terrainFlag );
-        }
-    }
 }
 
 namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
     {
-        world.generateForEditor( map.size );
+        world.generateUninitializedMap( map.width );
 
         if ( !readAllTiles( map ) ) {
             return false;
@@ -612,63 +1191,99 @@ namespace Maps
 
         world.updatePassabilities();
 
-        updateWorldCastlesHeroes( map );
+        updatePlayerRelatedObjects( map );
 
         return true;
     }
 
     bool readAllTiles( const Map_Format::MapFormat & map )
     {
-        assert( map.size == world.w() && map.size == world.h() );
+        assert( map.width == world.w() && map.width == world.h() );
 
-        // We must clear all tiles before writing something on them.
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            auto & tile = world.getTile( static_cast<int32_t>( i ) );
-            tile = {};
+        const size_t tilesConut = map.tiles.size();
 
-            tile.setIndex( static_cast<int32_t>( i ) );
-        }
-
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+        for ( size_t i = 0; i < tilesConut; ++i ) {
             auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-            worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlag );
+
+            worldTile.setIndex( static_cast<int32_t>( i ) );
+            worldTile.setTerrain( map.tiles[i].terrainIndex, map.tiles[i].terrainFlags );
         }
 
         // Read objects from all tiles and place them based on their IDs.
         auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
         std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
 
-        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+#if defined( WITH_DEBUG )
+        std::map<uint32_t, IndexedObjectInfo> objectsUIDs;
+        std::multiset<IndexedObjectInfo, decltype( sortObjects )> incorrectObjects( sortObjects );
+#endif
+
+        for ( size_t i = 0; i < tilesConut; ++i ) {
             for ( const auto & object : map.tiles[i].objects ) {
                 IndexedObjectInfo info;
                 info.tileIndex = static_cast<int32_t>( i );
                 info.info = &object;
                 sortedObjects.emplace( info );
+
+#if defined( WITH_DEBUG )
+                if ( object.group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != Maps::ObjectGroup::LANDSCAPE_FLAGS ) {
+                    const auto [iter, inserted] = objectsUIDs.try_emplace( object.id, info );
+                    if ( !inserted ) {
+                        incorrectObjects.emplace( iter->second );
+                        incorrectObjects.emplace( info );
+                    }
+                }
+#endif
             }
         }
+
+#if defined( WITH_DEBUG )
+        uint32_t uid = 0;
+        for ( const IndexedObjectInfo & info : incorrectObjects ) {
+            if ( info.info->id != uid ) {
+                uid = info.info->id;
+                if ( map.resourceMetadata.find( uid ) != map.resourceMetadata.end() ) {
+                    VERBOSE_LOG( "`resourceMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.castleMetadata.find( uid ) != map.castleMetadata.end() ) {
+                    VERBOSE_LOG( "`castleMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.heroMetadata.find( uid ) != map.heroMetadata.end() ) {
+                    VERBOSE_LOG( "`heroMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.sphinxMetadata.find( uid ) != map.sphinxMetadata.end() ) {
+                    VERBOSE_LOG( "`sphinxMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.signMetadata.find( uid ) != map.signMetadata.end() ) {
+                    VERBOSE_LOG( "`signMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() ) {
+                    VERBOSE_LOG( "`adventureMapEventMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() ) {
+                    VERBOSE_LOG( "`selectionObjectMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.capturableObjectsMetadata.find( uid ) != map.capturableObjectsMetadata.end() ) {
+                    VERBOSE_LOG( "`capturableObjectsMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.monsterMetadata.find( uid ) != map.monsterMetadata.end() ) {
+                    VERBOSE_LOG( "`monsterMetadata` belongs to many objects with same UID: " << uid )
+                }
+                if ( map.artifactMetadata.find( uid ) != map.artifactMetadata.end() ) {
+                    VERBOSE_LOG( "`artifactMetadata` belongs to many objects with same UID: " << uid )
+                }
+            }
+
+            VERBOSE_LOG( "Non-unique UID " << info.info->id << " at " << info.tileIndex << " (" << info.tileIndex % map.width << ", " << info.tileIndex / map.width
+                                           << ") tile for object type: " << MP2::StringObject( getObjectInfo( info.info->group, info.info->index ).objectType ) )
+        }
+#endif
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );
             if ( !readTileObject( world.getTile( info.tileIndex ), *info.info ) ) {
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    bool saveMapInEditor( Map_Format::MapFormat & map )
-    {
-        assert( world.w() > 0 && world.w() == world.h() );
-
-        map.size = world.w();
-
-        const size_t size = static_cast<size_t>( map.size ) * map.size;
-
-        map.tiles.resize( size );
-
-        for ( size_t i = 0; i < size; ++i ) {
-            writeTile( world.getTile( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
@@ -696,10 +1311,43 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void writeTile( const Tile & tile, Map_Format::TileInfo & info )
+    void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
-        info.terrainIndex = tile.getTerrainImageIndex();
-        info.terrainFlag = tile.getTerrainFlags();
+        assert( map.width == world.w() && map.width == world.h() );
+
+        const int32_t maxTileId = static_cast<int32_t>( map.tiles.size() ) - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return;
+        }
+
+        const fheroes2::Point startTileOffset( startTileId % map.width, startTileId / map.width );
+
+        if ( startTileId == endTileId ) {
+            // In original editor these tiles are never flipped.
+            setTerrain( map, startTileId, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
+
+            updateTerrainTransitionOnAreaBoundaries( map, groundId, startTileOffset.x, startTileOffset.x, startTileOffset.y, startTileOffset.y );
+
+            return;
+        }
+
+        const fheroes2::Point endTileOffset( endTileId % map.width, endTileId / map.width );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * map.width;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                // In original editor these tiles are never flipped.
+                setTerrain( map, x + tileOffset, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
+            }
+        }
+
+        // Set ground transitions on the boundaries of filled terrain area.
+        updateTerrainTransitionOnAreaBoundaries( map, groundId, startX, endX, startY, endY );
     }
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index )
@@ -739,7 +1387,7 @@ namespace Maps
             heroMetadata->second.race = Race::RAND;
         }
         else if ( group == ObjectGroup::MONSTERS ) {
-            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.monsterMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
 #ifdef NDEBUG
@@ -801,7 +1449,7 @@ namespace Maps
         else if ( group == ObjectGroup::ADVENTURE_ARTIFACTS ) {
             assert( index < getObjectsByGroup( group ).size() );
 
-            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.artifactMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
 #ifdef NDEBUG
@@ -897,12 +1545,12 @@ namespace Maps
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
     {
-        static_assert( Color::BLUE == 1 << 0, "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( Color::GREEN == 1 << 1, "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( Color::RED == 1 << 2, "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( Color::YELLOW == 1 << 3, "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( Color::ORANGE == 1 << 4, "The kingdom color values have changed. You are going to break map format!" );
-        static_assert( Color::PURPLE == 1 << 5, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::BLUE == static_cast<PlayerColor>( 1 << 0 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::GREEN == static_cast<PlayerColor>( 1 << 1 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::RED == static_cast<PlayerColor>( 1 << 2 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::YELLOW == static_cast<PlayerColor>( 1 << 3 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::ORANGE == static_cast<PlayerColor>( 1 << 4 ), "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( PlayerColor::PURPLE == static_cast<PlayerColor>( 1 << 5 ), "The kingdom color values have changed. You are going to break map format!" );
 
         static_assert( Race::NONE == 0, "The race values have changed. You are going to break map format!" );
         static_assert( Race::KNGT == 1 << 0, "The race values have changed. You are going to break map format!" );
@@ -985,7 +1633,7 @@ namespace Maps
             map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
 
             if ( map.playerRace[i] != 0 ) {
-                map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
+                map.availablePlayerColors |= static_cast<PlayerColor>( 1 << i );
             }
 
             // Only one race can be present.
@@ -1012,10 +1660,10 @@ namespace Maps
         map.computerPlayerColors = map.computerPlayerColors & map.availablePlayerColors;
         map.humanPlayerColors = map.humanPlayerColors & map.availablePlayerColors;
 
-        if ( map.availablePlayerColors > 0 ) {
+        if ( map.availablePlayerColors != 0 ) {
             // Human and computer player colors might be set previously. If they are, do not update them.
             for ( size_t i = 0; i < mainColors; ++i ) {
-                const uint8_t color = static_cast<uint8_t>( 1 << i );
+                const PlayerColor color = static_cast<PlayerColor>( 1 << i );
                 if ( ( map.availablePlayerColors & color ) != 0 && ( map.computerPlayerColors & color ) == 0 && ( map.humanPlayerColors & color ) == 0 ) {
                     // This color was not set for anyone.
                     map.computerPlayerColors |= color;
@@ -1026,7 +1674,7 @@ namespace Maps
             // Make sure that at least one human color exist.
             if ( map.humanPlayerColors == 0 ) {
                 for ( size_t i = 0; i < mainColors; ++i ) {
-                    const uint8_t color = static_cast<uint8_t>( 1 << i );
+                    const PlayerColor color = static_cast<PlayerColor>( 1 << i );
                     if ( ( map.availablePlayerColors & color ) != 0 ) {
                         map.humanPlayerColors |= color;
                         break;
@@ -1041,13 +1689,13 @@ namespace Maps
                 std::array<bool, mainColors> usedAllianceColors{ false };
 
                 for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
-                    uint8_t & allianceColors = *iter;
+                    PlayerColorsSet & allianceColors = *iter;
 
                     // Only available players should be in the alliances.
                     allianceColors &= map.availablePlayerColors;
 
                     for ( size_t i = 0; i < mainColors; ++i ) {
-                        const uint8_t color = static_cast<uint8_t>( 1 << i );
+                        const PlayerColor color = static_cast<PlayerColor>( 1 << i );
                         if ( ( allianceColors & color ) != 0 ) {
                             if ( usedAllianceColors[i] ) {
                                 // This color is used in another alliance. Remove it from here.
@@ -1075,10 +1723,10 @@ namespace Maps
                 else {
                     // Check that all colors being used in alliances. If not then add missing colors to the last alliance.
                     for ( size_t i = 0; i < mainColors; ++i ) {
-                        const uint8_t color = static_cast<uint8_t>( 1 << i );
+                        const PlayerColor color = static_cast<PlayerColor>( 1 << i );
                         if ( ( map.availablePlayerColors & color ) != 0 && !usedAllianceColors[i] ) {
                             if ( map.alliances.empty() ) {
-                                map.alliances.push_back( color );
+                                map.alliances.push_back( static_cast<PlayerColorsSet>( color ) );
                             }
                             else {
                                 map.alliances.back() |= color;
@@ -1090,10 +1738,15 @@ namespace Maps
         }
         else {
             // No colors are set so no alliances should exist.
-            map.alliances = { 0 };
+            map.alliances.clear();
 
             // No races are set.
             map.playerRace = { 0 };
+        }
+
+        if ( map.alliances.empty() && map.victoryConditionType == FileInfo::VictoryCondition::VICTORY_DEFEAT_OTHER_SIDE ) {
+            // When there are no alliances there are no sides. Reset the victory condition to the default.
+            map.victoryConditionType = FileInfo::VictoryCondition::VICTORY_DEFEAT_EVERYONE;
         }
 
         // Update events according to the possible changes in human and/or AI player colors.
@@ -1127,8 +1780,8 @@ namespace Maps
                         continue;
                     }
 
-                    const uint32_t color = Color::IndexToColor( getTownColorIndex( map, tileIndex, object.id ) );
-                    if ( color != conditionMetadata[1] ) {
+                    const PlayerColor color = Color::IndexToColor( getTownColorIndex( map, tileIndex, object.id ) );
+                    if ( color != static_cast<PlayerColor>( conditionMetadata[1] ) ) {
                         // Current town color is incorrect.
                         continue;
                     }
@@ -1197,6 +1850,30 @@ namespace Maps
             break;
         }
 
+        // Check and update owner metadata to avoid non-used player color ownership.
+        auto capturableIter = map.capturableObjectsMetadata.begin();
+        while ( capturableIter != map.capturableObjectsMetadata.end() ) {
+            if ( !( map.availablePlayerColors & capturableIter->second.ownerColor ) ) {
+                // Reset the capture state in the `world` instance.
+                for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+                    const auto & tileObjects = map.tiles[tileIndex].objects;
+
+                    if ( std::any_of( tileObjects.cbegin(), tileObjects.cend(),
+                                      [objectUid = capturableIter->first]( const Map_Format::TileObjectInfo & info ) { return info.id == objectUid; } ) ) {
+                        world.CaptureObject( static_cast<int32_t>( tileIndex ), PlayerColor::NONE );
+
+                        break;
+                    }
+                }
+
+                // Remove the ownership metadata from map.
+                capturableIter = map.capturableObjectsMetadata.erase( capturableIter );
+            }
+            else {
+                ++capturableIter;
+            }
+        }
+
         return true;
     }
 
@@ -1252,6 +1929,31 @@ namespace Maps
     bool isJailObject( const ObjectGroup group, const uint32_t index )
     {
         return ( group == ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
+    }
+
+    bool isCapturableObject( const MP2::MapObjectType objectType )
+    {
+        switch ( objectType ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType )
+    {
+        if ( Maps::isCapturableObject( objectType ) ) {
+            auto ownershipMetadata = map.capturableObjectsMetadata.find( objectId );
+            if ( ownershipMetadata != map.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( tileIndex, ownershipMetadata->second.ownerColor );
+            }
+        }
     }
 
     uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )
@@ -1339,7 +2041,7 @@ namespace Maps
 
             if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
                 // We need to set terrain image without extra objects under the road.
-                setTerrain( tile, Ground::getRandomTerrainImageIndex( groundType, false ), false, false, tileIndex );
+                setTerrain( map, tileIndex, Ground::getRandomTerrainImageIndex( groundType, false ), false, false );
             }
         }
         else {

@@ -168,6 +168,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_keyboard.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_mage_guild.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_map_interface.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_map_object.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_monster.cpp" />
@@ -376,6 +377,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_keyboard.h" />
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_mage_guild.h" />
     <ClInclude Include="src\fheroes2\gui\ui_map_interface.h" />
     <ClInclude Include="src\fheroes2\gui\ui_map_object.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />

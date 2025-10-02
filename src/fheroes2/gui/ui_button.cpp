@@ -42,14 +42,11 @@ namespace
 
         assert( originalHeight > 0 && originalWidth > 0 );
 
-        fheroes2::Image output;
-
         if ( originalHeight == buttonSize.height && originalWidth == buttonSize.width ) {
-            fheroes2::Copy( original, output );
-            return output;
+            return original;
         }
 
-        output.resize( buttonSize.width, buttonSize.height );
+        fheroes2::Image output( buttonSize.width, buttonSize.height );
         output.reset();
 
         // Buttons that only are wider.
@@ -604,9 +601,10 @@ namespace fheroes2
     ButtonGroup::ButtonGroup( const std::vector<const char *> & texts )
     {
         const size_t textCount = texts.size();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         std::vector<Sprite> sprites;
-        makeSymmetricBackgroundSprites( sprites, texts, 86 );
+        makeSymmetricBackgroundSprites( sprites, texts, isEvilInterface, 86 );
 
         for ( size_t i = 0; i < textCount; ++i ) {
             createButton( 0, 0, std::move( sprites[i * 2] ), std::move( sprites[i * 2 + 1] ), static_cast<int>( i ) );
@@ -655,28 +653,64 @@ namespace fheroes2
         }
     }
 
+    void ButtonGroup::disable() const
+    {
+        for ( const auto & button : _button ) {
+            button->disable();
+        }
+    }
+
+    void ButtonGroup::enable() const
+    {
+        for ( const auto & button : _button ) {
+            button->enable();
+        }
+    }
+
+    void ButtonGroup::drawOnState( const LocalEvent & le ) const
+    {
+        for ( const auto & button : _button ) {
+            button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
+        }
+    }
+
     int ButtonGroup::processEvents()
     {
         LocalEvent & le = LocalEvent::Get();
 
         for ( const auto & button : _button ) {
             if ( button->isEnabled() ) {
-                button->drawOnState( le.isMouseLeftButtonPressedInArea( button->area() ) );
+                button->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button->area() ) );
             }
         }
 
-        for ( size_t i = 0; i < _button.size(); ++i ) {
+        const size_t buttonsCount = _button.size();
+
+        assert( buttonsCount == _value.size() );
+
+        for ( size_t i = 0; i < buttonsCount; ++i ) {
             if ( _button[i]->isEnabled() && le.MouseClickLeft( _button[i]->area() ) ) {
                 return _value[i];
             }
         }
 
-        for ( size_t i = 0; i < _button.size(); ++i ) {
+        if ( ( buttonsCount == 1 ) && ( _value[0] == Dialog::OK || _value[0] == Dialog::CANCEL ) && Game::HotKeyCloseWindow() ) {
+            // This dialog has only one OK or CANCEL button so allow to close it by any hotkey for these buttons.
+            // Reset the hotkey pressed state.
+            le.reset();
+            return _value[0];
+        }
+
+        for ( size_t i = 0; i < buttonsCount; ++i ) {
             if ( _button[i]->isEnabled() ) {
                 if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+                    // Reset the hotkey pressed state.
+                    le.reset();
                     return _value[i];
                 }
                 if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                    // Reset the hotkey pressed state.
+                    le.reset();
                     return _value[i];
                 }
             }
@@ -940,7 +974,8 @@ namespace fheroes2
         renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, buttonSize, buttonFontColor );
     }
 
-    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts, const int32_t minWidth )
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & texts, const bool isEvilInterface,
+                                         const int32_t minWidth )
     {
         if ( texts.size() < 2 ) {
             // You are trying to make a group of buttons with 0 or only one text.
@@ -950,7 +985,6 @@ namespace fheroes2
 
         backgroundSprites.resize( texts.size() * 2 );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const FontType buttonFontType = { FontSize::BUTTON_RELEASED, ( isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE ) };
 
         std::vector<Text> buttonTexts;
@@ -974,9 +1008,14 @@ namespace fheroes2
             maxHeight = std::max( maxHeight, text.height( finalWidth ) );
         }
 
-        // Add extra vertical margin only if the button text is on two lines.
-        const bool isTwoLinesText = ( maxHeight == ( getFontHeight( buttonFontType.size ) * 2 ) );
-        maxHeight += isTwoLinesText ? 26 : 10;
+        // Add extra vertical margin depending on how many lines of text there are.
+        if ( maxHeight > getFontHeight( buttonFontType.size ) ) {
+            const int32_t maxAllowedHeight = 200;
+            maxHeight = std::clamp( maxHeight, 56, maxAllowedHeight );
+        }
+        else {
+            maxHeight += 10;
+        }
 
         const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
