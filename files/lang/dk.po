@@ -4915,7 +4915,7 @@ msgid ""
 "editor|%{object}\n"
 "(%{color} player)"
 msgstr ""
-"editor|%{object}\n"
+"%{object}\n"
 "(%{color} player)"
 
 msgid "editor|%{count} %{resource}"
